@@ -76,9 +76,9 @@ Proof.
     simpl.
     unfold store_task_sorted_dll.
     eapply derivable1s_exp_r.
-    Exists a t (fun (p : addr) (taskID : glob_vars_and_defs.TaskID) =>
-    [|p = &( ((glob_vars_and_defs.g_taskCBArray sg) # "LosTaskCB" + taskID) ->ₛ "sortList")|] &&
-    emp) l.
+    Exists a_taskSpec t_taskSpec (fun (p : addr) (taskID : glob_vars_and_defs.TaskID) =>
+    [|p = &( ((glob_vars_and_defs.g_taskCBArray sg_taskSpec) # "LosTaskCB" + taskID) ->ₛ "sortList")|] &&
+    emp) l_taskSpec.
     Intros x.
     csimpl.
     simpl.

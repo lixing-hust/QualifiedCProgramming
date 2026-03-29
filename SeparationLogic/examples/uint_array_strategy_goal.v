@@ -71,7 +71,7 @@ Definition uint_array_strategy6 :=
   forall (p : Z) (y : Z) (l1 : (@list Z)) (x : Z),
     TT &&
     emp **
-    ((UIntArray.ceil p x y l1))
+    ((UIntArray.seg p x y l1))
     |--
     (
     TT &&
@@ -83,7 +83,7 @@ Definition uint_array_strategy6 :=
       emp -*
       TT &&
       emp **
-      ((UIntArray.ceil p x y l2))
+      ((UIntArray.seg p x y l2))
       ).
 
 Definition uint_array_strategy7 :=
@@ -92,7 +92,7 @@ Definition uint_array_strategy7 :=
     ([| (Z.le x i) |]) &&
     ([| (Z.lt i y) |]) &&
     emp **
-    ((UIntArray.ceil p x y l))
+    ((UIntArray.seg p x y l))
     |--
     (
     TT &&
@@ -114,8 +114,8 @@ Definition uint_array_strategy8 :=
     ([| (Z.le y z) |]) &&
     ([| (Z.le x y) |]) &&
     emp **
-    ((UIntArray.ceil p x y l1)) **
-    ((UIntArray.ceil p y z l2))
+    ((UIntArray.seg p x y l1)) **
+    ((UIntArray.seg p y z l2))
     |--
     (
     TT &&
@@ -127,7 +127,7 @@ Definition uint_array_strategy8 :=
       emp -*
       TT &&
       emp **
-      ((UIntArray.ceil p x z l3))
+      ((UIntArray.seg p x z l3))
       ).
 
 Definition uint_array_strategy9 :=
@@ -136,7 +136,7 @@ Definition uint_array_strategy9 :=
     ([| (Z.le y z) |]) &&
     ([| (Z.le x y) |]) &&
     emp **
-    ((UIntArray.ceil p x z l3))
+    ((UIntArray.seg p x z l3))
     |--
     (
     TT &&
@@ -149,8 +149,8 @@ Definition uint_array_strategy9 :=
       emp -*
       TT &&
       emp **
-      ((UIntArray.ceil p x y l1)) **
-      ((UIntArray.ceil p y z l2))
+      ((UIntArray.seg p x y l1)) **
+      ((UIntArray.seg p y z l2))
       ).
 
 Definition uint_array_strategy10 :=
@@ -167,7 +167,7 @@ Definition uint_array_strategy10 :=
     emp -*
     TT &&
     emp **
-    ((UIntArray.ceil p x x l))
+    ((UIntArray.seg p x x l))
     ).
 
 Definition uint_array_strategy13 :=
@@ -240,7 +240,7 @@ Definition uint_array_strategy11 :=
     (
     TT &&
     emp **
-    ((UIntArray.ceil p x y l))
+    ((UIntArray.seg p x y l))
     ) ** (
     TT &&
     emp -*
@@ -280,7 +280,7 @@ Definition uint_array_strategy12 :=
     (
     TT &&
     emp **
-    ((UIntArray.ceil p x y (@replace_Znth Z (Z.sub i x) v l)))
+    ((UIntArray.seg p x y (@replace_Znth Z (Z.sub i x) v l)))
     ) ** (
     TT &&
     emp -*

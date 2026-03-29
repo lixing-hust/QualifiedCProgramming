@@ -32,14 +32,14 @@ Proof.
     destruct trm; lia.
 Qed.
 
-Lemma proof_of_subst_var_return_wit_1_1 : subst_var_return_wit_1_1.
+Lemma proof_of_subst_var_return_wit_1 : subst_var_return_wit_1.
 Proof.    
     pre_process.
-    unfold list_Z_cmp in H0.
-    rewrite H in H0.
+    unfold list_Z_cmp in H.
+    rewrite H10 in H.
     destruct (list_Z_eqb qvar src_str) eqn:Heq; [ | discriminate ].
     unfold term_subst_v.
-    rewrite H2, Heq.
+    rewrite H1, Heq.
     unfold store_term at 2.
     simpl.
     fold store_term.
@@ -47,13 +47,13 @@ Proof.
     entailer!.
 Qed.  
 
-Lemma proof_of_subst_var_return_wit_1_2 : subst_var_return_wit_1_2.
+Lemma proof_of_subst_var_return_wit_2 : subst_var_return_wit_2.
 Proof. 
     pre_process.
-    unfold list_Z_cmp in H1.
+    unfold list_Z_cmp in H0.
     destruct (list_Z_eqb qvar src_str) eqn:Heq; [ contradiction | ].
     unfold term_subst_v.
-    rewrite H3, Heq.
+    rewrite H2, Heq.
     fold term_subst_v.
     unfold store_term at 2.
     simpl.
@@ -63,7 +63,7 @@ Proof.
     entailer!.
 Qed.
 
-Lemma proof_of_subst_var_return_wit_1_3 : subst_var_return_wit_1_3.
+Lemma proof_of_subst_var_return_wit_3 : subst_var_return_wit_3.
 Proof. 
     pre_process.
     unfold term_subst_v at 3.
@@ -77,7 +77,7 @@ Proof.
     entailer!.
 Qed. 
 
-Lemma proof_of_subst_var_return_wit_1_4 : subst_var_return_wit_1_4.
+Lemma proof_of_subst_var_return_wit_4 : subst_var_return_wit_4.
 Proof.
     pre_process.
     unfold term_subst_v.
@@ -86,7 +86,7 @@ Proof.
     entailer!.
 Qed. 
 
-Lemma proof_of_subst_var_return_wit_1_5 : subst_var_return_wit_1_5.
+Lemma proof_of_subst_var_return_wit_5 : subst_var_return_wit_5.
 Proof. 
     pre_process.
     unfold list_Z_cmp in H0.
@@ -98,7 +98,7 @@ Proof.
     entailer!.
 Qed.
 
-Lemma proof_of_subst_var_return_wit_1_6 : subst_var_return_wit_1_6.
+Lemma proof_of_subst_var_return_wit_6 : subst_var_return_wit_6.
 Proof.
     pre_process.
     unfold list_Z_cmp in H1.
@@ -196,27 +196,27 @@ Proof.
     destruct trm; lia.
 Qed.
 
-Lemma proof_of_subst_term_return_wit_1_1 : subst_term_return_wit_1_1.
+Lemma proof_of_subst_term_return_wit_1 : subst_term_return_wit_1.
 Proof. 
     pre_process.
-    unfold list_Z_cmp in H0.
-    rewrite H in H0.
+    unfold list_Z_cmp in H.
+    rewrite H10 in H.
     destruct (list_Z_eqb qvar src_str) eqn:Heq; [ | discriminate ].
     unfold term_subst_t.
-    rewrite H2, Heq.
+    rewrite H1, Heq.
     unfold store_term at 3.
     fold store_term.
     Exists y z. 
     entailer!.
 Qed.
 
-Lemma proof_of_subst_term_return_wit_1_2 : subst_term_return_wit_1_2.
+Lemma proof_of_subst_term_return_wit_2 : subst_term_return_wit_2.
 Proof.  
     pre_process.
-    unfold list_Z_cmp in H0.
+    unfold list_Z_cmp in H.
     destruct (list_Z_eqb qvar src_str) eqn:Heq; [ contradiction | ].
     unfold term_subst_t.
-    rewrite H2, Heq.
+    rewrite H1, Heq.
     fold term_subst_t.
     unfold store_term at 3.
     fold store_term.
@@ -224,7 +224,7 @@ Proof.
     entailer!.
 Qed.
 
-Lemma proof_of_subst_term_return_wit_1_3 : subst_term_return_wit_1_3.
+Lemma proof_of_subst_term_return_wit_3 : subst_term_return_wit_3.
 Proof. 
     pre_process.
     unfold term_subst_t at 3.
@@ -236,7 +236,7 @@ Proof.
     entailer!.
 Qed.
 
-Lemma proof_of_subst_term_return_wit_1_4 : subst_term_return_wit_1_4.
+Lemma proof_of_subst_term_return_wit_4 : subst_term_return_wit_4.
 Proof.  
     pre_process.
     unfold term_subst_t.
@@ -245,7 +245,7 @@ Proof.
     entailer!.
 Qed.
 
-Lemma proof_of_subst_term_return_wit_1_5 : subst_term_return_wit_1_5.
+Lemma proof_of_subst_term_return_wit_5 : subst_term_return_wit_5.
 Proof. 
     pre_process.
     unfold list_Z_cmp in H0.
@@ -257,7 +257,7 @@ Proof.
     entailer!.
 Qed.
 
-Lemma proof_of_subst_term_return_wit_1_6 : subst_term_return_wit_1_6.
+Lemma proof_of_subst_term_return_wit_6 : subst_term_return_wit_6.
 Proof. 
     pre_process.
     unfold list_Z_cmp in H1.
@@ -346,4 +346,3 @@ Proof.
     Exists z y typ v b.
     entailer!.
 Qed.
-

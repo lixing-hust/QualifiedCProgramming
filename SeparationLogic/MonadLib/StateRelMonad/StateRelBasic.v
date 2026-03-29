@@ -35,16 +35,7 @@ End StateRelMonad.
 Notation program := StateRelMonad.M.
 Notation MONAD := (program unit).
 
-Ltac unfold_monad := 
-  unfold bind, ret; simpl; 
-  unfold StateRelMonad.bind, StateRelMonad.ret; simpl.
-
-Ltac unfold_monad_in H := 
-  unfold bind, ret in H; simpl in H; 
-  unfold StateRelMonad.bind, StateRelMonad.ret in H; simpl in H.
-
-Tactic Notation "unfold_monad" "in" hyp(H) :=
-  unfold_monad_in H.
+Hint Unfold StateRelMonad.bind StateRelMonad.ret : monad_unfold.
 
 Section state_rel.
   Context {Σ: Type}.
@@ -94,6 +85,26 @@ Section  loop_monad.
   
   Context {Σ: Type}.
 
+Definition whileb_f (cond: (program Σ bool))  (body : (program Σ unit)) 
+                     (W : (program Σ unit)) 
+                        : (program Σ unit) :=
+  (x <- cond ;; (match x with 
+  | true => body;; W
+  | false => ret tt
+  end)).
+
+  Definition whileb (cond: (program Σ bool)) (body : program Σ unit)  := Lfix (whileb_f cond body).
+
+  Definition whileretb_f {A: Type}  (cond: A -> (program Σ bool)) (body : A -> (program Σ A)) 
+                     (W :  A -> program Σ A) 
+                        : A -> program Σ A :=
+  fun a => (x <- (cond a) ;; match x with 
+  | true =>  bind (body a) W
+  | false => (ret a)
+  end).
+
+  Definition whileretb {A: Type}  (cond: (A -> (program Σ bool))) (body : A -> (program Σ A))  := Lfix (whileretb_f cond body).
+  
   Definition while_f (cond: Σ -> Prop)  (body : (program Σ unit)) 
                      (W : program Σ unit) 
                         : program Σ unit :=
@@ -112,8 +123,8 @@ Section  loop_monad.
   Definition whileret {A: Type}  (cond: A -> Σ -> Prop) (body : A -> (program Σ A))  := Lfix (whileret_f cond body).
 
   Definition Repeat_f  (body : (program Σ unit)) 
-                      (W : program Σ Prop) 
-                          :program Σ Prop :=
+                      (W : program Σ unit) 
+                          :program Σ unit :=
     body;; W.
 
   Definition Repeat (body : (program Σ unit))  := Lfix (Repeat_f body).
@@ -156,6 +167,17 @@ Section  loop_monad.
     (universe: A -> Prop)
     (body: A -> program Σ unit): program Σ unit :=
     Lfix (forset_f body) universe.
+
+  Fixpoint list_iter {Σ A B: Type}
+    (body: A -> B -> program Σ B)
+    (universe : list A) (b: B)
+    : program Σ B :=
+    match universe with 
+      | nil => ret b
+      | cons a universe' =>
+          b0 <- body a b;;
+          list_iter body universe' b0
+    end.
 
 End  loop_monad.
 
@@ -359,6 +381,13 @@ Section monad_equiv_lemmas.
       destruct H0;auto.
       apply H in H0.
       contradiction.
+  Qed.
+
+  Lemma choice_idem_equiv {A: Type}:
+    forall (c: program Σ A),
+      choice c c == c.
+  Proof.
+    unfold choice. sets_unfold. intros. tauto.
   Qed.
 End monad_equiv_lemmas.
 

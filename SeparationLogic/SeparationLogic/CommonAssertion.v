@@ -683,6 +683,60 @@ Definition derivable1_wand_sepcon_adjoint := derivable1s_wand_sepcon_adjoint.
 
 (* The following are ltac to simplify proof *)
 
+Ltac set_String_name :=
+  repeat progress match goal with 
+    | |- context [FET_alias ?string_name] =>
+        match string_name with
+          | String _ _ => 
+            let name := fresh "s" in
+              set (name := string_name) in *
+        end
+    | |- context [FET_struct ?string_name] =>
+        match string_name with
+          | String _ _ => 
+            let name := fresh "s" in
+              set (name := string_name) in *
+        end
+    | |- context [FET_union ?string_name] =>
+        match string_name with
+          | String _ _ => 
+            let name := fresh "s" in
+              set (name := string_name) in *
+        end
+    | |- context [FET_enum ?string_name] =>
+        match string_name with
+          | String _ _ => 
+            let name := fresh "s" in
+              set (name := string_name) in *
+        end
+    | |- context [LE_var ?string_name] =>
+        match string_name with
+          | String _ _ => 
+            let name := fresh "s" in
+              set (name := string_name) in *
+        end
+    | |- context [LE_arrow_field _ ?string_name] =>
+        match string_name with
+          | String _ _ => 
+            let name := fresh "s" in
+              set (name := string_name) in *
+        end
+    | |- context [LE_dot_field _ ?string_name] =>
+        match string_name with
+          | String _ _ => 
+            let name := fresh "s" in
+              set (name := string_name) in *
+        end
+  end.
+
+Ltac subst_all_strings :=
+  repeat progress match goal with
+    | x := ?v |- _ =>
+        match type of v with
+        | string => subst x
+        end
+  end.
+
 Inductive all_list : Type :=
   | norm_asrt : expr -> all_list
   | dependent_asrt : forall (A : Type), (A -> expr) -> all_list.
@@ -1036,47 +1090,47 @@ Ltac simpl_entail := match goal with
 
 Ltac entailer_pure := asrt_simpl_pure; sepcon_assoc_change; andp_cancel.
 
-Tactic Notation "cancel" := Rename sepcon_cancel.
-Tactic Notation "entailer!"  := try poly_store_unfold ; Rename entailer_pure; simpl_entail.
-Tactic Notation "Intros" := pureIntros. 
-Tactic Notation "Intro_any" := pureIntros ; left_intro_any ; pureIntros.
-Tactic Notation "Intros" simple_intropattern(x0):= pureIntros ;  left_intro x0;pureIntros.
-Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) := pureIntros ; left_intro x0; left_intro x1;pureIntros.
-Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) := pureIntros ; left_intro x0; left_intro x1; left_intro x2;pureIntros.
-Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) := pureIntros ; left_intro x0; left_intro x1; left_intro x2; left_intro x3;pureIntros.
-Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) := pureIntros ; left_intro x0; left_intro x1; left_intro x2; left_intro x3; left_intro x4;pureIntros.
-Tactic Notation "Intros_r_any" := right_intro_any; pureIntros.
-Tactic Notation "Intros_r" simple_intropattern(x0):= right_intro x0;pureIntros.
-Tactic Notation "Intros_r" simple_intropattern(x0) simple_intropattern(x1) := right_intro x0; right_intro x1;pureIntros.
+Tactic Notation "cancel" := set_String_name ; Rename sepcon_cancel ; subst_all_strings.
+Tactic Notation "entailer!"  := set_String_name ; try poly_store_unfold ; Rename entailer_pure; simpl_entail ; subst_all_strings.
+Tactic Notation "Intros" := set_String_name ; pureIntros ; subst_all_strings. 
+Tactic Notation "Intro_any" := set_String_name ; pureIntros ; left_intro_any ; pureIntros ; subst_all_strings.
+Tactic Notation "Intros" simple_intropattern(x0):= set_String_name ; pureIntros ;  left_intro x0;pureIntros ; subst_all_strings.
+Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) := set_String_name ; pureIntros ; left_intro x0; left_intro x1;pureIntros; subst_all_strings.
+Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) := set_String_name ; pureIntros ; left_intro x0; left_intro x1; left_intro x2;pureIntros; subst_all_strings.
+Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) := set_String_name ; pureIntros ; left_intro x0; left_intro x1; left_intro x2; left_intro x3;pureIntros; subst_all_strings.
+Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) := set_String_name ; pureIntros ; left_intro x0; left_intro x1; left_intro x2; left_intro x3; left_intro x4;pureIntros; subst_all_strings.
+Tactic Notation "Intros_r_any" := set_String_name ; right_intro_any; pureIntros; subst_all_strings.
+Tactic Notation "Intros_r" simple_intropattern(x0):= set_String_name ; right_intro x0;pureIntros; subst_all_strings.
+Tactic Notation "Intros_r" simple_intropattern(x0) simple_intropattern(x1) := set_String_name ; right_intro x0; right_intro x1;pureIntros; subst_all_strings.
 Tactic Notation "Intros_r" simple_intropattern(x0) simple_intropattern(x1)
                           simple_intropattern(x2) simple_intropattern(x3)
                           simple_intropattern(x4) simple_intropattern(x5)
                           simple_intropattern(x6) simple_intropattern(x7)
                           simple_intropattern(x8) := 
-  right_intro x0; right_intro x1;right_intro x2; right_intro x3;right_intro x4; right_intro x5;
-  right_intro x6; right_intro x7;right_intro x8; pureIntros.
+  set_String_name ; right_intro x0; right_intro x1;right_intro x2; right_intro x3;right_intro x4; right_intro x5;
+  right_intro x6; right_intro x7;right_intro x8; pureIntros ; subst_all_strings.
 
-Tactic Notation "eExists" := asrt_simpl; reexists ; eexists.  
-Tactic Notation "Exists" uconstr(x0) := asrt_simpl;rexists x0.
-Tactic Notation "Exists" uconstr(x0) uconstr(x1) := asrt_simpl;rexists x0;asrt_simpl;rexists x1.
-Tactic Notation "Exists" uconstr(x0) uconstr(x1) uconstr(x2) := asrt_simpl;rexists x0;asrt_simpl;rexists x1;asrt_simpl;rexists x2.
-Tactic Notation "Exists" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) := asrt_simpl;rexists x0;asrt_simpl;rexists x1;asrt_simpl;rexists x2;asrt_simpl;rexists x3.
-Tactic Notation "Exists" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) := asrt_simpl;rexists x0;asrt_simpl;rexists x1;asrt_simpl;rexists x2;asrt_simpl;rexists x3;asrt_simpl;rexists x4.
+Tactic Notation "eExists" := set_String_name ; asrt_simpl; reexists ; eexists ; subst_all_strings.  
+Tactic Notation "Exists" uconstr(x0) := set_String_name ; asrt_simpl;rexists x0; subst_all_strings.
+Tactic Notation "Exists" uconstr(x0) uconstr(x1) := set_String_name ; asrt_simpl;rexists x0;asrt_simpl;rexists x1; subst_all_strings.
+Tactic Notation "Exists" uconstr(x0) uconstr(x1) uconstr(x2) := set_String_name ; asrt_simpl;rexists x0;asrt_simpl;rexists x1;asrt_simpl;rexists x2; subst_all_strings.
+Tactic Notation "Exists" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) := set_String_name ; asrt_simpl;rexists x0;asrt_simpl;rexists x1;asrt_simpl;rexists x2;asrt_simpl;rexists x3; subst_all_strings.
+Tactic Notation "Exists" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) := set_String_name ; asrt_simpl;rexists x0;asrt_simpl;rexists x1;asrt_simpl;rexists x2;asrt_simpl;rexists x3;asrt_simpl;rexists x4; subst_all_strings.
+Tactic Notation "Exists_l" uconstr(x0) := set_String_name ; asrt_simpl;lexists x0; subst_all_strings.
+Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) := set_String_name ; asrt_simpl;lexists x0;asrt_simpl;lexists x1; subst_all_strings.
+Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) uconstr(x2) := set_String_name ; asrt_simpl;lexists x0;asrt_simpl;lexists x1;asrt_simpl;lexists x2; subst_all_strings.
+Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) := set_String_name ; asrt_simpl;lexists x0;asrt_simpl;lexists x1;asrt_simpl;lexists x2;asrt_simpl;lexists x3; subst_all_strings.
+Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) := set_String_name ; asrt_simpl;lexists x0;asrt_simpl;lexists x1;asrt_simpl;lexists x2;asrt_simpl;lexists x3;asrt_simpl;lexists x4; subst_all_strings.
+Tactic Notation "normalize"  := set_String_name ; asrt_simpl ; subst_all_strings.
 
-Tactic Notation "Exists_l" uconstr(x0) := asrt_simpl;lexists x0.
-Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) := asrt_simpl;lexists x0;asrt_simpl;lexists x1.
-Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) uconstr(x2) := asrt_simpl;lexists x0;asrt_simpl;lexists x1;asrt_simpl;lexists x2.
-Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) := asrt_simpl;lexists x0;asrt_simpl;lexists x1;asrt_simpl;lexists x2;asrt_simpl;lexists x3.
-Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) := asrt_simpl;lexists x0;asrt_simpl;lexists x1;asrt_simpl;lexists x2;asrt_simpl;lexists x3;asrt_simpl;lexists x4.
-
-Tactic Notation "normalize"  := asrt_simpl.
-
-Tactic Notation "Left" := rewrite <- derivable1_orp_intros1.
-Tactic Notation "Right" := rewrite <- derivable1_orp_intros2.
+Tactic Notation "Left" := set_String_name ; rewrite <- derivable1_orp_intros1 ; subst_all_strings.
+Tactic Notation "Right" := set_String_name ; rewrite <- derivable1_orp_intros2 ; subst_all_strings.
 Tactic Notation "Split" := 
+  set_String_name ;
   repeat rewrite orp_sepcon_left_equiv;
   repeat rewrite orp_sepcon_right_equiv;
-  apply derivable1_orp_elim.
+  apply derivable1_orp_elim ; 
+  subst_all_strings.
 
 Notation "'Assertion'" := (expr) (at level 1).
 
@@ -1150,6 +1204,7 @@ Ltac sepconlistasrts P :=
 
 Ltac sep_apply H :=
   (let h:= fresh "Hlemma" in pose proof H as h;
+   set_String_name;
   let rec find_lemmapre_rec h :=
    (lazymatch type of h with
   | forall x:?T, _ => lazymatch type of T with
@@ -1167,10 +1222,11 @@ Ltac sep_apply H :=
                   | ?P |-- _ =>  let L:= (sepconlistasrts P) in sep_apply_L L h;clear  h
                   end
   | ?P --||-- ?Q => find_lemmapre_rec (P |-- Q)
-  end) in find_lemmapre_rec h) ; sepcon_assoc_change.
+  end) in find_lemmapre_rec h) ; sepcon_assoc_change ; subst_all_strings.
 
 Ltac prop_apply H :=
   (let h:= fresh "Hlemma" in pose proof H as h;
+    set_String_name;
   try repeat rewrite <- logic_equiv_coq_prop_and in h;
   let rec find_lemmapre_rec h :=
    (lazymatch type of h with
@@ -1188,7 +1244,7 @@ Ltac prop_apply H :=
                   match type of h with 
                   | ?P |-- _ =>  let L:= (sepconlistasrts P) in prop_apply_L L h;clear  h
                   end
-  end) in find_lemmapre_rec h) ; sepcon_assoc_change.
+  end) in find_lemmapre_rec h) ; sepcon_assoc_change ; subst_all_strings.
     
 Ltac Unfold :=
 match goal with

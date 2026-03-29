@@ -56,7 +56,7 @@ int inner(char *str, int *vnext, char ch, int j)
            IntArray::full(vnext, m, vnext0) 
 */
 {
-    /*@ Inv
+    /*@ Inv 
         safeExec(ATrue, inner_loop(0, str0, vnext0, ch, j), X) && 
         str == str@pre && vnext == vnext@pre &&
         CharArray::full(str, n + 1, app(str0, cons(0, nil))) *
@@ -99,7 +99,8 @@ int * constr(char *patn)
     vnext[0] = 0;
     int j = 0;
     int i = 1;
-    /*@ Inv Assert
+    /*@ Inv 
+    Assert
         exists vnext0 l0,
           safeExec(ATrue, constr_loop_from(0, str, i, vnext0, j), X) &&
           patn == patn@pre && 

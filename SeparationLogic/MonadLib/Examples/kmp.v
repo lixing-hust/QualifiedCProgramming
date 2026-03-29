@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
 From SetsClass Require Import SetsClass.
-From AUXLib Require Import List_lemma VMap ListLib.
+From AUXLib Require Import ListLib.
 Require Import MonadLib.MonadErr.StateRelMonadErr.
 
 

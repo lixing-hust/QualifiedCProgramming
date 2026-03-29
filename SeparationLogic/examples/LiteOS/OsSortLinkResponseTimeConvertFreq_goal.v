@@ -103,43 +103,43 @@ forall (oldFreq_pre: Z) (l2: (@list (@DL_Node (@sortedLinkNode Z)))) (l1: (@list
 Definition OsSortLinkResponseTimeConvertFreq_partial_solve_wit_2 := OsSortLinkResponseTimeConvertFreq_partial_solve_wit_2_pure -> OsSortLinkResponseTimeConvertFreq_partial_solve_wit_2_aux.
 
 Definition SortLinkNodeTimeUpdate_derive_swmtrSpec_by_highSpec := 
-forall (oldFreq_pre: Z) (sortLinkHead_pre: Z) (l: (@list (@DL_Node (@sortedLinkNode Z)))) (sg: StableGlobVars) (n: Z) ,
+forall (oldFreq_pre: Z) (sortLinkHead_pre: Z) (l_swmtrSpec: (@list (@DL_Node (@sortedLinkNode Z)))) (sg_swmtrSpec: StableGlobVars) (n_swmtrSpec: Z) ,
   [| (oldFreq_pre <> 0) |] 
   &&  [| (sortLinkHead_pre = ( &( "g_swtmrSortLink" ) )) |]
-  &&  (store_swtmr_sorted_dll sg l )
-  **  ((( &( "g_sysClock" ) )) # UInt64  |-> n)
+  &&  (store_swtmr_sorted_dll sg_swmtrSpec l_swmtrSpec )
+  **  ((( &( "g_sysClock" ) )) # UInt64  |-> n_swmtrSpec)
 |--
 EX (A: Type) ,
-EX (n_2: Z) (storeA: (Z -> (A -> Assertion))) (l_2: (@list (@DL_Node (@sortedLinkNode A)))) ,
+EX (n_highSpec: Z) (storeA_highSpec: (Z -> (A -> Assertion))) (l_highSpec: (@list (@DL_Node (@sortedLinkNode A)))) ,
   ([| (oldFreq_pre <> 0) |]
-  &&  (store_sorted_dll storeA &((sortLinkHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") l_2 )
-  **  ((( &( "g_sysClock" ) )) # UInt64  |-> n_2))
+  &&  (store_sorted_dll storeA_highSpec &((sortLinkHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") l_highSpec )
+  **  ((( &( "g_sysClock" ) )) # UInt64  |-> n_highSpec))
   **
-  (((store_sorted_dll storeA &((sortLinkHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") (updateNodeTime (l_2) (oldFreq_pre) (n_2)) )
-  **  ((( &( "g_sysClock" ) )) # UInt64  |-> n_2))
+  (((store_sorted_dll storeA_highSpec &((sortLinkHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") (updateNodeTime (l_highSpec) (oldFreq_pre) (n_highSpec)) )
+  **  ((( &( "g_sysClock" ) )) # UInt64  |-> n_highSpec))
   -*
-  ((store_swtmr_sorted_dll sg (updateNodeTime (l) (oldFreq_pre) (n)) )
-  **  ((( &( "g_sysClock" ) )) # UInt64  |-> n)))
+  ((store_swtmr_sorted_dll sg_swmtrSpec (updateNodeTime (l_swmtrSpec) (oldFreq_pre) (n_swmtrSpec)) )
+  **  ((( &( "g_sysClock" ) )) # UInt64  |-> n_swmtrSpec)))
 .
 
 Definition SortLinkNodeTimeUpdate_derive_taskSpec_by_highSpec := 
-forall (oldFreq_pre: Z) (sortLinkHead_pre: Z) (l: (@list (@DL_Node (@sortedLinkNode Z)))) (sg: StableGlobVars) (n: Z) ,
+forall (oldFreq_pre: Z) (sortLinkHead_pre: Z) (l_taskSpec: (@list (@DL_Node (@sortedLinkNode Z)))) (sg_taskSpec: StableGlobVars) (n_taskSpec: Z) ,
   [| (oldFreq_pre <> 0) |] 
   &&  [| (sortLinkHead_pre = ( &( "g_taskSortLink" ) )) |]
-  &&  (store_task_sorted_dll sg l )
-  **  ((( &( "g_sysClock" ) )) # UInt64  |-> n)
+  &&  (store_task_sorted_dll sg_taskSpec l_taskSpec )
+  **  ((( &( "g_sysClock" ) )) # UInt64  |-> n_taskSpec)
 |--
 EX (A: Type) ,
-EX (n_2: Z) (storeA: (Z -> (A -> Assertion))) (l_2: (@list (@DL_Node (@sortedLinkNode A)))) ,
+EX (n_highSpec: Z) (storeA_highSpec: (Z -> (A -> Assertion))) (l_highSpec: (@list (@DL_Node (@sortedLinkNode A)))) ,
   ([| (oldFreq_pre <> 0) |]
-  &&  (store_sorted_dll storeA &((sortLinkHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") l_2 )
-  **  ((( &( "g_sysClock" ) )) # UInt64  |-> n_2))
+  &&  (store_sorted_dll storeA_highSpec &((sortLinkHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") l_highSpec )
+  **  ((( &( "g_sysClock" ) )) # UInt64  |-> n_highSpec))
   **
-  (((store_sorted_dll storeA &((sortLinkHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") (updateNodeTime (l_2) (oldFreq_pre) (n_2)) )
-  **  ((( &( "g_sysClock" ) )) # UInt64  |-> n_2))
+  (((store_sorted_dll storeA_highSpec &((sortLinkHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") (updateNodeTime (l_highSpec) (oldFreq_pre) (n_highSpec)) )
+  **  ((( &( "g_sysClock" ) )) # UInt64  |-> n_highSpec))
   -*
-  ((store_task_sorted_dll sg (updateNodeTime (l) (oldFreq_pre) (n)) )
-  **  ((( &( "g_sysClock" ) )) # UInt64  |-> n)))
+  ((store_task_sorted_dll sg_taskSpec (updateNodeTime (l_taskSpec) (oldFreq_pre) (n_taskSpec)) )
+  **  ((( &( "g_sysClock" ) )) # UInt64  |-> n_taskSpec)))
 .
 
 Module Type VC_Correct.

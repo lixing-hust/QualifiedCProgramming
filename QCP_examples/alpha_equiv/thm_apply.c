@@ -130,7 +130,8 @@ term_list* check_list_gen(term* thm, term* target)
 {
   term_list* check_list = (void*)0;
   term_list** tail_ptr = &check_list;
-  /*@ Inv Assert exists t l, 
+  /*@ Inv 
+    Assert exists t l, 
           safeExec(ATrue, check_from_mid_rel(t, targ, l), X) &&
           target == target@pre &&
           store_term(thm, t) *

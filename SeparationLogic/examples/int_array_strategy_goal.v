@@ -71,7 +71,7 @@ Definition int_array_strategy6 :=
   forall (p : Z) (y : Z) (l1 : (@list Z)) (x : Z),
     TT &&
     emp **
-    ((IntArray.ceil p x y l1))
+    ((IntArray.seg p x y l1))
     |--
     (
     TT &&
@@ -83,7 +83,7 @@ Definition int_array_strategy6 :=
       emp -*
       TT &&
       emp **
-      ((IntArray.ceil p x y l2))
+      ((IntArray.seg p x y l2))
       ).
 
 Definition int_array_strategy7 :=
@@ -92,7 +92,7 @@ Definition int_array_strategy7 :=
     ([| (Z.le x i) |]) &&
     ([| (Z.lt i y) |]) &&
     emp **
-    ((IntArray.ceil p x y l))
+    ((IntArray.seg p x y l))
     |--
     (
     TT &&
@@ -114,8 +114,8 @@ Definition int_array_strategy8 :=
     ([| (Z.le y z) |]) &&
     ([| (Z.le x y) |]) &&
     emp **
-    ((IntArray.ceil p x y l1)) **
-    ((IntArray.ceil p y z l2))
+    ((IntArray.seg p x y l1)) **
+    ((IntArray.seg p y z l2))
     |--
     (
     TT &&
@@ -127,7 +127,7 @@ Definition int_array_strategy8 :=
       emp -*
       TT &&
       emp **
-      ((IntArray.ceil p x z l3))
+      ((IntArray.seg p x z l3))
       ).
 
 Definition int_array_strategy9 :=
@@ -136,7 +136,7 @@ Definition int_array_strategy9 :=
     ([| (Z.le y z) |]) &&
     ([| (Z.le x y) |]) &&
     emp **
-    ((IntArray.ceil p x z l3))
+    ((IntArray.seg p x z l3))
     |--
     (
     TT &&
@@ -149,8 +149,8 @@ Definition int_array_strategy9 :=
       emp -*
       TT &&
       emp **
-      ((IntArray.ceil p x y l1)) **
-      ((IntArray.ceil p y z l2))
+      ((IntArray.seg p x y l1)) **
+      ((IntArray.seg p y z l2))
       ).
 
 Definition int_array_strategy10 :=
@@ -167,7 +167,7 @@ Definition int_array_strategy10 :=
     emp -*
     TT &&
     emp **
-    ((IntArray.ceil p x x l))
+    ((IntArray.seg p x x l))
     ).
 
 Definition int_array_strategy2 :=
@@ -202,7 +202,7 @@ Definition int_array_strategy11 :=
     (
     TT &&
     emp **
-    ((IntArray.ceil p x y l))
+    ((IntArray.seg p x y l))
     ) ** (
     TT &&
     emp -*
@@ -242,7 +242,7 @@ Definition int_array_strategy12 :=
     (
     TT &&
     emp **
-    ((IntArray.ceil p x y (@replace_Znth Z (Z.sub i x) v l)))
+    ((IntArray.seg p x y (@replace_Znth Z (Z.sub i x) v l)))
     ) ** (
     TT &&
     emp -*

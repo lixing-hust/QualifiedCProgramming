@@ -225,29 +225,29 @@ forall (sg: StableGlobVars) (g: Z) (a: Z) (node: Z) (node_responseTime: Z) (star
 .
 
 Definition OsAddNode2SortLink_derive_taskSpec_by_highSpec := 
-forall (sortList_pre: Z) (sortLinkHead_pre: Z) (l: (@list (@DL_Node (@sortedLinkNode Z)))) (sg: StableGlobVars) (t: Z) (a: Z) ,
+forall (sortList_pre: Z) (sortLinkHead_pre: Z) (l_taskSpec: (@list (@DL_Node (@sortedLinkNode Z)))) (sg_taskSpec: StableGlobVars) (t_taskSpec: Z) (a_taskSpec: Z) ,
   EX un pu,
   [| (sortLinkHead_pre = ( &( "g_taskSortLink" ) )) |]
   &&  ((&((sortList_pre)  # "SortLinkList" ->ₛ "sortLinkNode" .ₛ "pstPrev")) # Ptr  |-> pu)
   **  ((&((sortList_pre)  # "SortLinkList" ->ₛ "sortLinkNode" .ₛ "pstNext")) # Ptr  |-> un)
-  **  (store_task_sorted_dll sg l )
-  **  (storesortedLinkTaskNode task_store sg &((sortList_pre)  # "SortLinkList" ->ₛ "sortLinkNode") (mksortedLinkNode (a) (t)) )
+  **  (store_task_sorted_dll sg_taskSpec l_taskSpec )
+  **  (storesortedLinkTaskNode task_store sg_taskSpec &((sortList_pre)  # "SortLinkList" ->ₛ "sortLinkNode") (mksortedLinkNode (a_taskSpec) (t_taskSpec)) )
 |--
 EX (A: Type) ,
-EX (a_2: A) (t_2: Z) (storeA: (Z -> (A -> Assertion))) (l_2: (@list (@DL_Node (@sortedLinkNode A)))) ,
+EX (a_highSpec: A) (t_highSpec: Z) (storeA_highSpec: (Z -> (A -> Assertion))) (l_highSpec: (@list (@DL_Node (@sortedLinkNode A)))) ,
   (EX un_2 pu_2,
   ((&((sortList_pre)  # "SortLinkList" ->ₛ "sortLinkNode" .ₛ "pstPrev")) # Ptr  |-> pu_2)
   **  ((&((sortList_pre)  # "SortLinkList" ->ₛ "sortLinkNode" .ₛ "pstNext")) # Ptr  |-> un_2)
-  **  (store_sorted_dll storeA &((sortLinkHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") l_2 )
-  **  (storesortedLinkNode storeA &((sortList_pre)  # "SortLinkList" ->ₛ "sortLinkNode") (mksortedLinkNode (a_2) (t_2)) ))
+  **  (store_sorted_dll storeA_highSpec &((sortLinkHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") l_highSpec )
+  **  (storesortedLinkNode storeA_highSpec &((sortList_pre)  # "SortLinkList" ->ₛ "sortLinkNode") (mksortedLinkNode (a_highSpec) (t_highSpec)) ))
   **
   ((EX l1_2 l2_2,
-  [| (l_2 = (app (l1_2) (l2_2))) |]
-  &&  (store_sorted_dll storeA &((sortLinkHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") (app (l1_2) ((cons ((Build_DL_Node ((mksortedLinkNode (a_2) (t_2))) (sortList_pre))) (l2_2)))) ))
+  [| (l_highSpec = (app (l1_2) (l2_2))) |]
+  &&  (store_sorted_dll storeA_highSpec &((sortLinkHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") (app (l1_2) ((cons ((Build_DL_Node ((mksortedLinkNode (a_highSpec) (t_highSpec))) (sortList_pre))) (l2_2)))) ))
   -*
   (EX l1 l2,
-  [| (l = (app (l1) (l2))) |]
-  &&  (store_task_sorted_dll sg (app (l1) ((cons ((Build_DL_Node ((mksortedLinkNode (a) (t))) (sortList_pre))) (l2)))) )))
+  [| (l_taskSpec = (app (l1) (l2))) |]
+  &&  (store_task_sorted_dll sg_taskSpec (app (l1) ((cons ((Build_DL_Node ((mksortedLinkNode (a_taskSpec) (t_taskSpec))) (sortList_pre))) (l2)))) )))
 .
 
 Module Type VC_Correct.

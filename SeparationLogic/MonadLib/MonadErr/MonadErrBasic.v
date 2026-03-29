@@ -68,16 +68,7 @@ Arguments MonadErr.err {Σ}%_type_scope [A]%_type_scope m.
 
 Notation program := MonadErr.M.
 
-Ltac unfold_monad := 
-  unfold bind, ret; simpl; 
-  unfold MonadErr.bind, MonadErr.ret; simpl.
-
-Ltac unfold_monad_in H := 
-  unfold bind, ret in H; simpl in H; 
-  unfold MonadErr.bind, MonadErr.ret in H; simpl in H.
-
-Tactic Notation "unfold_monad" "in" hyp(H) :=
-  unfold_monad_in H.
+Hint Unfold MonadErr.bind MonadErr.ret : monad_unfold.
 
 
 
@@ -130,6 +121,30 @@ Context {Σ: Type}.
     err := ∅;
   |}. 
 
+  Definition get {A: Type} (P: Σ -> A -> Prop): program Σ A :=
+  {|
+    nrm := fun s1 a s2 => P s1 a /\ s1 = s2 ;
+    err := ∅;
+  |}. 
+
+  Definition get' {A: Type} (f: Σ -> A): program Σ A :=
+    get (fun s a => a = f s).
+
+  Definition update (P: Σ -> Σ -> Prop): program Σ unit :=
+  {|
+    nrm := fun s1 _ s2 => P s1 s2;
+    err := ∅;
+  |}. 
+  
+  Definition update' (f: Σ -> Σ): program Σ unit :=
+    update (fun s s' => s' = f s).
+  
+  Definition read : program Σ Σ :=
+  {|
+    nrm := fun s1 a s2 =>  a = s1 /\ s1 = s2 ;
+    err := ∅;
+  |}. 
+  
 End monadop.
 
 Notation "'assume!!' P" := (testPure P) (at level 50).
@@ -531,6 +546,14 @@ Section monad_equiv_lemmas.
     apply choice_l_equiv; auto.
   Qed.
 
+  Lemma choice_idem_equiv {A: Type}:
+    forall (c: program Σ A),
+      choice c c == c.
+  Proof.
+    intros.
+    constructor; simpl; sets_unfold; intros; tauto.
+  Qed.
+
   Lemma assume_false_equiv {A: Type}:
     forall P (c: program Σ A),
       ~ P -> assume!! P;; c == ProgramPO.bot.
@@ -550,35 +573,62 @@ End monad_equiv_lemmas.
 
 
 Section  monad_nrm_err_lemmas.
-  Context {Σ : Type}.
+  Context {Σ A B : Type}.
   Import MonadErr.
   Import MonadNotation.
 
-  Lemma  bind_noerr_left {A B: Type}:  forall (c1: program Σ A) (c2: A -> program Σ B) σ,
-    ~ (x <- c1 ;; c2 x).(err) σ -> ~ c1.(err) σ.
+  Lemma bind_err_iff (c1: program Σ A) (c2: A -> program Σ B) σ :
+    (x <- c1 ;; c2 x).(err) σ <-> c1.(err) σ \/ exists a σ', c1.(nrm) σ a σ' /\ (c2 a).(err) σ'.
   Proof.
-    intros.
-    unfold bind in H.
-    cbn in H.
-    unfold not in *.
-    intros.
-    apply H.
-    left. auto.
+    reflexivity.
   Qed.
 
-  Lemma  bind_noerr_right {A B: Type}:  forall (c1: program Σ A) (c2: A -> program Σ B) σ,
-    ~ (x <- c1 ;; c2 x).(err) σ ->
-    forall σ' a, c1.(nrm) σ a σ' ->  ~ (c2 a).(err) σ'.
+  Lemma bind_noerr_iff (c1: program Σ A) (c2: A -> program Σ B) σ :
+    ~ (x <- c1 ;; c2 x).(err) σ <-> ~ c1.(err) σ /\ forall a σ', c1.(nrm) σ a σ' ->  ~ (c2 a).(err) σ'.
   Proof.
-    intros.
-    unfold bind in H.
-    cbn in H.
-    unfold not in *.
-    intros.
-    apply H.
-    right. do 2 eexists. split;eauto.
+    rewrite bind_err_iff.
+    split; intros.
+    - split.
+      + contradict H. tauto.
+      + intros. contradict H. right. eexists. eexists. split; eauto.
+    - destruct H as [Herr Hnrm].
+      intros Hfalse.
+      destruct Hfalse as [Herr' | Hnrm']; auto.
+      destruct Hnrm' as (a & σ' & ? & ?).
+      eapply Hnrm; eauto.
   Qed.
-  
+
+  Lemma bind_err_left (c1: program Σ A) (c2: A -> program Σ B) σ :
+    c1.(err) σ -> (x <- c1 ;; c2 x).(err) σ.
+  Proof.
+    intros. rewrite bind_err_iff. left; auto.
+  Qed.
+
+  Lemma bind_noerr_left (c1: program Σ A) (c2: A -> program Σ B) σ :
+    ~ (x <- c1 ;; c2 x).(err) σ -> ~ c1.(err) σ.
+  Proof.
+    intros H. apply bind_noerr_iff in H as [H _]. auto.
+  Qed.
+
+  Lemma bind_err_right (c1: program Σ A) (c2: A -> program Σ B) σ a σ' :
+    c1.(nrm) σ a σ' -> (c2 a).(err) σ' -> (x <- c1 ;; c2 x).(err) σ.
+  Proof.
+    intros. rewrite bind_err_iff. right. eexists. eexists. split; eauto.
+  Qed.
+
+  Lemma bind_noerr_right (c1: program Σ A) (c2: A -> program Σ B) σ :
+    ~ (x <- c1 ;; c2 x).(err) σ ->
+    forall a σ', c1.(nrm) σ a σ' ->  ~ (c2 a).(err) σ'.
+  Proof.
+    intros H. apply bind_noerr_iff in H as [? H]. intros; auto.
+  Qed.
+
+  Lemma bind_nrm_iff (c1: program Σ A) (c2: A -> program Σ B) σ1 b σ2 :
+    (x <- c1 ;; c2 x).(nrm) σ1 b σ2 <->
+    exists a σ', c1.(nrm) σ1 a σ' /\ (c2 a).(nrm) σ' b σ2.
+  Proof.
+    reflexivity.
+  Qed.
 
 End  monad_nrm_err_lemmas.
 

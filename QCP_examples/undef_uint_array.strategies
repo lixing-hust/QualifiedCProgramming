@@ -28,18 +28,18 @@ action : left_erase(1);
 
 id : 3
 priority : core(1)
-left : UIntArray::undef_ceil(?p, ?x, ?y) at 0
+left : UIntArray::undef_seg(?p, ?x, ?y) at 0
 right : undef_data_at(?p + (x * sizeof(U32)), U32) at 1
 check : infer(x < y);
 action : right_erase(1);
          left_erase(0);
-         left_add(UIntArray::undef_ceil(p, x + 1, y));
+         left_add(UIntArray::undef_seg(p, x + 1, y));
 
 id : 4
 priority : core(1)
-left : UIntArray::undef_ceil(?p, ?x, ?y) at 0 
-        UIntArray::undef_ceil(?p, ?y, ?z) at 1 
-right : UIntArray::undef_ceil(?p, ?x, ?z) at 2 
+left : UIntArray::undef_seg(?p, ?x, ?y) at 0 
+        UIntArray::undef_seg(?p, ?y, ?z) at 1 
+right : UIntArray::undef_seg(?p, ?x, ?z) at 2 
 check : infer(y <= z);
         infer(x <= y);
 action : right_erase(2);
@@ -48,9 +48,9 @@ action : right_erase(2);
 
 id : 5
 priority : core(1)
-left : UIntArray::undef_ceil(?p, ?x, ?z) at 2 
-right : UIntArray::undef_ceil(?p, ?x, ?y) at 0 
-        UIntArray::undef_ceil(?p, ?y, ?z) at 1 
+left : UIntArray::undef_seg(?p, ?x, ?z) at 2 
+right : UIntArray::undef_seg(?p, ?x, ?y) at 0 
+        UIntArray::undef_seg(?p, ?y, ?z) at 1 
 check : infer(y <= z);
         infer(x <= y);
 action : left_erase(2);
@@ -59,14 +59,14 @@ action : left_erase(2);
 
 id : 6
 priority : core(1)
-right : UIntArray::undef_ceil(?p, ?x, ?x) at 0
+right : UIntArray::undef_seg(?p, ?x, ?x) at 0
 action : right_erase(0);
 
 
 id : 7
 priority : core(1)
 left : UIntArray::undef_full(?p, ?n) at 0
-right : UIntArray::undef_ceil(?p, 0, ?n) at 1
+right : UIntArray::undef_seg(?p, 0, ?n) at 1
 action : right_erase(1);
          left_erase(0);
 
@@ -78,14 +78,14 @@ action : right_erase(0);
 
 id : 9
 priority : core(1)
-left : UIntArray::undef_ceil(?p, ?x, ?y) at 0
+left : UIntArray::undef_seg(?p, ?x, ?y) at 0
 check : infer(x == y);
 action : left_erase(0);
 
 id : 10
 priority : core(1)
-left : UIntArray::undef_ceil(?p, ?x, ?y) at 0
-right : UIntArray::undef_ceil(?p, ?x1, ?y1) at 1
+left : UIntArray::undef_seg(?p, ?x, ?y) at 0
+right : UIntArray::undef_seg(?p, ?x1, ?y1) at 1
 check : infer(y1 == y);
         infer(x1 == x);
 action : right_erase(1);
@@ -114,18 +114,18 @@ action : left_erase(1);
 
 id : 13
 priority : core(1)
-left : IntArray::undef_ceil(?p, ?x, ?y) at 0
+left : IntArray::undef_seg(?p, ?x, ?y) at 0
 right : undef_data_at(?p + (x * sizeof(I32)), I32) at 1
 check : infer(x < y);
 action : right_erase(1);
          left_erase(0);
-         left_add(IntArray::undef_ceil(p, x + 1, y));
+         left_add(IntArray::undef_seg(p, x + 1, y));
 
 id : 14
 priority : core(1)
-left : IntArray::undef_ceil(?p, ?x, ?y) at 0
-        IntArray::undef_ceil(?p, ?y, ?z) at 1
-right : IntArray::undef_ceil(?p, ?x, ?z) at 2
+left : IntArray::undef_seg(?p, ?x, ?y) at 0
+        IntArray::undef_seg(?p, ?y, ?z) at 1
+right : IntArray::undef_seg(?p, ?x, ?z) at 2
 check : infer(y <= z);
         infer(x <= y);
 action : right_erase(2);
@@ -134,9 +134,9 @@ action : right_erase(2);
 
 id : 15
 priority : core(1)
-left : IntArray::undef_ceil(?p, ?x, ?z) at 2
-right : IntArray::undef_ceil(?p, ?x, ?y) at 0
-        IntArray::undef_ceil(?p, ?y, ?z) at 1
+left : IntArray::undef_seg(?p, ?x, ?z) at 2
+right : IntArray::undef_seg(?p, ?x, ?y) at 0
+        IntArray::undef_seg(?p, ?y, ?z) at 1
 check : infer(y <= z);
         infer(x <= y);
 action : left_erase(2);
@@ -145,14 +145,14 @@ action : left_erase(2);
 
 id : 16
 priority : core(1)
-right : IntArray::undef_ceil(?p, ?x, ?x) at 0
+right : IntArray::undef_seg(?p, ?x, ?x) at 0
 action : right_erase(0);
 
 
 id : 17
 priority : core(1)
 left : IntArray::undef_full(?p, ?n) at 0
-right : IntArray::undef_ceil(?p, 0, ?n) at 1
+right : IntArray::undef_seg(?p, 0, ?n) at 1
 action : right_erase(1);
          left_erase(0);
 
@@ -165,15 +165,15 @@ action : right_erase(0);
 
 id : 19
 priority : core(1)
-left : IntArray::undef_ceil(?p, ?x, ?y) at 0
+left : IntArray::undef_seg(?p, ?x, ?y) at 0
 check : infer(x == y);
 action : left_erase(0);
 
 
 id : 20
 priority : core(1)
-left : IntArray::undef_ceil(?p, ?x, ?y) at 0
-right : IntArray::undef_ceil(?p, ?x1, ?y1) at 1
+left : IntArray::undef_seg(?p, ?x, ?y) at 0
+right : IntArray::undef_seg(?p, ?x1, ?y1) at 1
 check : infer(y1 == y);
         infer(x1 == x);
 action : right_erase(1);
@@ -186,7 +186,7 @@ right : undef_data_at(?p + (0 * sizeof(U32)), U32) at 1
 check : infer(0 < n);
 action : right_erase(1);
          left_erase(0);
-         left_add(UIntArray::undef_ceil(p, 1, n));
+         left_add(UIntArray::undef_seg(p, 1, n));
 
 id : 22
 priority : core(1)
@@ -195,4 +195,4 @@ right : undef_data_at(?p + (0 * sizeof(I32)), I32) at 1
 check : infer(0 < n);
 action : right_erase(1);
          left_erase(0);
-         left_add(IntArray::undef_ceil(p, 1, n));
+         left_add(IntArray::undef_seg(p, 1, n));

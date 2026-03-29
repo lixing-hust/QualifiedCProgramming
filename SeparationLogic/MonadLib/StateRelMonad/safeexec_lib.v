@@ -702,7 +702,7 @@ Ltac abs_ret_step :=
 
 Ltac safe_step H := prog_nf in H;
   match type of H with
-  | safeExec _ ((test' _ ) ;; _) _ => apply safeExec_test' in H; [try safe_step H | auto]
+  | safeExec _ ((assume!! _ ) ;; _) _ => apply safeExec_test_bind in H; [try safe_step H | auto]
   end.
 
 Ltac safe_choice_l H :=

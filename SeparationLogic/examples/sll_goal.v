@@ -38,10 +38,10 @@ forall (p_pre: Z) (l: (@list Z)) ,
 Definition length_safety_wit_2 := 
 forall (p_pre: Z) (l: (@list Z)) (p: Z) (n: Z) (l1: (@list Z)) (l2: (@list Z)) (p_next: Z) (p_data: Z) (l3: (@list Z)) ,
   [| (l2 = (cons (p_data) (l3))) |] 
-  &&  [| (p <> 0) |] 
   &&  [| (l = (app (l1) (l2))) |] 
   &&  [| (n = (Zlength (l1))) |] 
-  &&  [| ((Zlength (l)) <= INT_MAX) |]
+  &&  [| ((Zlength (l)) <= INT_MAX) |] 
+  &&  [| (p <> 0) |]
   &&  ((( &( "p" ) )) # Ptr  |-> p)
   **  ((&((p)  # "list" ->ₛ "data")) # Int  |-> p_data)
   **  ((&((p)  # "list" ->ₛ "next")) # Ptr  |-> p_next)
@@ -69,10 +69,10 @@ forall (p_pre: Z) (l: (@list Z)) ,
 Definition length_entail_wit_2 := 
 forall (p_pre: Z) (l: (@list Z)) (p: Z) (n: Z) (l1_2: (@list Z)) (l2_2: (@list Z)) (p_next: Z) (p_data: Z) (l3: (@list Z)) ,
   [| (l2_2 = (cons (p_data) (l3))) |] 
-  &&  [| (p <> 0) |] 
   &&  [| (l = (app (l1_2) (l2_2))) |] 
   &&  [| (n = (Zlength (l1_2))) |] 
-  &&  [| ((Zlength (l)) <= INT_MAX) |]
+  &&  [| ((Zlength (l)) <= INT_MAX) |] 
+  &&  [| (p <> 0) |]
   &&  ((&((p)  # "list" ->ₛ "data")) # Int  |-> p_data)
   **  ((&((p)  # "list" ->ₛ "next")) # Ptr  |-> p_next)
   **  (sll p_next l3 )
@@ -88,10 +88,10 @@ forall (p_pre: Z) (l: (@list Z)) (p: Z) (n: Z) (l1_2: (@list Z)) (l2_2: (@list Z
 
 Definition length_return_wit_1 := 
 forall (p_pre: Z) (l: (@list Z)) (p: Z) (n: Z) (l1: (@list Z)) (l2: (@list Z)) ,
-  [| (p = 0) |] 
-  &&  [| (l = (app (l1) (l2))) |] 
+  [| (l = (app (l1) (l2))) |] 
   &&  [| (n = (Zlength (l1))) |] 
-  &&  [| ((Zlength (l)) <= INT_MAX) |]
+  &&  [| ((Zlength (l)) <= INT_MAX) |] 
+  &&  [| (p = 0) |]
   &&  (sllseg p_pre p l1 )
   **  (sll p l2 )
 |--
@@ -101,10 +101,10 @@ forall (p_pre: Z) (l: (@list Z)) (p: Z) (n: Z) (l1: (@list Z)) (l2: (@list Z)) ,
 
 Definition length_partial_solve_wit_1_pure := 
 forall (p_pre: Z) (l: (@list Z)) (p: Z) (n: Z) (l1: (@list Z)) (l2: (@list Z)) ,
-  [| (p <> 0) |] 
-  &&  [| (l = (app (l1) (l2))) |] 
+  [| (l = (app (l1) (l2))) |] 
   &&  [| (n = (Zlength (l1))) |] 
-  &&  [| ((Zlength (l)) <= INT_MAX) |]
+  &&  [| ((Zlength (l)) <= INT_MAX) |] 
+  &&  [| (p <> 0) |]
   &&  ((( &( "n" ) )) # Int  |-> n)
   **  ((( &( "p" ) )) # Ptr  |-> p)
   **  (sllseg p_pre p l1 )
@@ -115,18 +115,18 @@ forall (p_pre: Z) (l: (@list Z)) (p: Z) (n: Z) (l1: (@list Z)) (l2: (@list Z)) ,
 
 Definition length_partial_solve_wit_1_aux := 
 forall (p_pre: Z) (l: (@list Z)) (p: Z) (n: Z) (l1: (@list Z)) (l2: (@list Z)) ,
-  [| (p <> 0) |] 
-  &&  [| (l = (app (l1) (l2))) |] 
+  [| (l = (app (l1) (l2))) |] 
   &&  [| (n = (Zlength (l1))) |] 
-  &&  [| ((Zlength (l)) <= INT_MAX) |]
+  &&  [| ((Zlength (l)) <= INT_MAX) |] 
+  &&  [| (p <> 0) |]
   &&  (sllseg p_pre p l1 )
   **  (sll p l2 )
 |--
   [| (p <> 0) |] 
-  &&  [| (p <> 0) |] 
   &&  [| (l = (app (l1) (l2))) |] 
   &&  [| (n = (Zlength (l1))) |] 
-  &&  [| ((Zlength (l)) <= INT_MAX) |]
+  &&  [| ((Zlength (l)) <= INT_MAX) |] 
+  &&  [| (p <> 0) |]
   &&  (sll p l2 )
   **  (sllseg p_pre p l1 )
 .
@@ -170,8 +170,8 @@ forall (p_pre: Z) (l: (@list Z)) ,
 Definition reverse_entail_wit_2 := 
 forall (l: (@list Z)) (v: Z) (w: Z) (l1_2: (@list Z)) (l2_2: (@list Z)) (v_next: Z) (v_data: Z) (l2_new: (@list Z)) ,
   [| (l2_2 = (cons (v_data) (l2_new))) |] 
-  &&  [| (v <> 0) |] 
-  &&  [| (l = (app ((rev (l1_2))) (l2_2))) |]
+  &&  [| (l = (app ((rev (l1_2))) (l2_2))) |] 
+  &&  [| (v <> 0) |]
   &&  ((&((v)  # "list" ->ₛ "data")) # Int  |-> v_data)
   **  ((&((v)  # "list" ->ₛ "next")) # Ptr  |-> w)
   **  (sll v_next l2_new )
@@ -185,8 +185,8 @@ forall (l: (@list Z)) (v: Z) (w: Z) (l1_2: (@list Z)) (l2_2: (@list Z)) (v_next:
 
 Definition reverse_return_wit_1 := 
 forall (l: (@list Z)) (v: Z) (w: Z) (l1: (@list Z)) (l2: (@list Z)) ,
-  [| (v = 0) |] 
-  &&  [| (l = (app ((rev (l1))) (l2))) |]
+  [| (l = (app ((rev (l1))) (l2))) |] 
+  &&  [| (v = 0) |]
   &&  (sll w l1 )
   **  (sll v l2 )
 |--
@@ -195,8 +195,8 @@ forall (l: (@list Z)) (v: Z) (w: Z) (l1: (@list Z)) (l2: (@list Z)) ,
 
 Definition reverse_partial_solve_wit_1_pure := 
 forall (p_pre: Z) (l: (@list Z)) (v: Z) (w: Z) (l1: (@list Z)) (l2: (@list Z)) ,
-  [| (v <> 0) |] 
-  &&  [| (l = (app ((rev (l1))) (l2))) |]
+  [| (l = (app ((rev (l1))) (l2))) |] 
+  &&  [| (v <> 0) |]
   &&  ((( &( "w" ) )) # Ptr  |-> w)
   **  (sll w l1 )
   **  ((( &( "v" ) )) # Ptr  |-> v)
@@ -208,14 +208,14 @@ forall (p_pre: Z) (l: (@list Z)) (v: Z) (w: Z) (l1: (@list Z)) (l2: (@list Z)) ,
 
 Definition reverse_partial_solve_wit_1_aux := 
 forall (l: (@list Z)) (v: Z) (w: Z) (l1: (@list Z)) (l2: (@list Z)) ,
-  [| (v <> 0) |] 
-  &&  [| (l = (app ((rev (l1))) (l2))) |]
+  [| (l = (app ((rev (l1))) (l2))) |] 
+  &&  [| (v <> 0) |]
   &&  (sll w l1 )
   **  (sll v l2 )
 |--
   [| (v <> 0) |] 
-  &&  [| (v <> 0) |] 
-  &&  [| (l = (app ((rev (l1))) (l2))) |]
+  &&  [| (l = (app ((rev (l1))) (l2))) |] 
+  &&  [| (v <> 0) |]
   &&  (sll v l2 )
   **  (sll w l1 )
 .
@@ -259,8 +259,8 @@ forall (p_pre: Z) (l: (@list Z)) ,
 Definition reverse_alter_style1_entail_wit_2 := 
 forall (l: (@list Z)) (v: Z) (w: Z) (l1_2: (@list Z)) (l2_2: (@list Z)) (vn: Z) (x: Z) (xs: (@list Z)) ,
   [| (l2_2 = (cons (x) (xs))) |] 
-  &&  [| (v <> 0) |] 
-  &&  [| (l = (app ((rev (l1_2))) (l2_2))) |]
+  &&  [| (l = (app ((rev (l1_2))) (l2_2))) |] 
+  &&  [| (v <> 0) |]
   &&  ((&((v)  # "list" ->ₛ "data")) # Int  |-> x)
   **  ((&((v)  # "list" ->ₛ "next")) # Ptr  |-> w)
   **  (sll vn xs )
@@ -274,8 +274,8 @@ forall (l: (@list Z)) (v: Z) (w: Z) (l1_2: (@list Z)) (l2_2: (@list Z)) (vn: Z) 
 
 Definition reverse_alter_style1_return_wit_1 := 
 forall (l: (@list Z)) (v: Z) (w: Z) (l1: (@list Z)) (l2: (@list Z)) ,
-  [| (v = 0) |] 
-  &&  [| (l = (app ((rev (l1))) (l2))) |]
+  [| (l = (app ((rev (l1))) (l2))) |] 
+  &&  [| (v = 0) |]
   &&  (sll w l1 )
   **  (sll v l2 )
 |--
@@ -284,8 +284,8 @@ forall (l: (@list Z)) (v: Z) (w: Z) (l1: (@list Z)) (l2: (@list Z)) ,
 
 Definition reverse_alter_style1_partial_solve_wit_1_pure := 
 forall (p_pre: Z) (l: (@list Z)) (v: Z) (w: Z) (l1: (@list Z)) (l2: (@list Z)) ,
-  [| (v <> 0) |] 
-  &&  [| (l = (app ((rev (l1))) (l2))) |]
+  [| (l = (app ((rev (l1))) (l2))) |] 
+  &&  [| (v <> 0) |]
   &&  ((( &( "w" ) )) # Ptr  |-> w)
   **  (sll w l1 )
   **  ((( &( "v" ) )) # Ptr  |-> v)
@@ -297,14 +297,14 @@ forall (p_pre: Z) (l: (@list Z)) (v: Z) (w: Z) (l1: (@list Z)) (l2: (@list Z)) ,
 
 Definition reverse_alter_style1_partial_solve_wit_1_aux := 
 forall (l: (@list Z)) (v: Z) (w: Z) (l1: (@list Z)) (l2: (@list Z)) ,
-  [| (v <> 0) |] 
-  &&  [| (l = (app ((rev (l1))) (l2))) |]
+  [| (l = (app ((rev (l1))) (l2))) |] 
+  &&  [| (v <> 0) |]
   &&  (sll w l1 )
   **  (sll v l2 )
 |--
   [| (v <> 0) |] 
-  &&  [| (v <> 0) |] 
-  &&  [| (l = (app ((rev (l1))) (l2))) |]
+  &&  [| (l = (app ((rev (l1))) (l2))) |] 
+  &&  [| (v <> 0) |]
   &&  (sll v l2 )
   **  (sll w l1 )
 .
@@ -348,8 +348,8 @@ forall (p_pre: Z) (l: (@list Z)) ,
 Definition reverse_alter_style2_entail_wit_2 := 
 forall (l: (@list Z)) (v_inv: Z) (w_inv: Z) (l1_2: (@list Z)) (l2_2: (@list Z)) (v_inv_next: Z) (x: Z) (xs: (@list Z)) ,
   [| (l2_2 = (cons (x) (xs))) |] 
-  &&  [| (v_inv <> 0) |] 
-  &&  [| (l = (app ((rev (l1_2))) (l2_2))) |]
+  &&  [| (l = (app ((rev (l1_2))) (l2_2))) |] 
+  &&  [| (v_inv <> 0) |]
   &&  ((&((v_inv)  # "list" ->ₛ "data")) # Int  |-> x)
   **  ((&((v_inv)  # "list" ->ₛ "next")) # Ptr  |-> w_inv)
   **  (sll v_inv_next xs )
@@ -363,8 +363,8 @@ forall (l: (@list Z)) (v_inv: Z) (w_inv: Z) (l1_2: (@list Z)) (l2_2: (@list Z)) 
 
 Definition reverse_alter_style2_return_wit_1 := 
 forall (l: (@list Z)) (v_inv: Z) (w_inv: Z) (l1: (@list Z)) (l2: (@list Z)) ,
-  [| (v_inv = 0) |] 
-  &&  [| (l = (app ((rev (l1))) (l2))) |]
+  [| (l = (app ((rev (l1))) (l2))) |] 
+  &&  [| (v_inv = 0) |]
   &&  (sll w_inv l1 )
   **  (sll v_inv l2 )
 |--
@@ -373,8 +373,8 @@ forall (l: (@list Z)) (v_inv: Z) (w_inv: Z) (l1: (@list Z)) (l2: (@list Z)) ,
 
 Definition reverse_alter_style2_partial_solve_wit_1_pure := 
 forall (p_pre: Z) (l: (@list Z)) (v_inv: Z) (w_inv: Z) (l1: (@list Z)) (l2: (@list Z)) ,
-  [| (v_inv <> 0) |] 
-  &&  [| (l = (app ((rev (l1))) (l2))) |]
+  [| (l = (app ((rev (l1))) (l2))) |] 
+  &&  [| (v_inv <> 0) |]
   &&  ((( &( "w" ) )) # Ptr  |-> w_inv)
   **  ((( &( "v" ) )) # Ptr  |-> v_inv)
   **  (sll w_inv l1 )
@@ -386,14 +386,14 @@ forall (p_pre: Z) (l: (@list Z)) (v_inv: Z) (w_inv: Z) (l1: (@list Z)) (l2: (@li
 
 Definition reverse_alter_style2_partial_solve_wit_1_aux := 
 forall (l: (@list Z)) (v_inv: Z) (w_inv: Z) (l1: (@list Z)) (l2: (@list Z)) ,
-  [| (v_inv <> 0) |] 
-  &&  [| (l = (app ((rev (l1))) (l2))) |]
+  [| (l = (app ((rev (l1))) (l2))) |] 
+  &&  [| (v_inv <> 0) |]
   &&  (sll w_inv l1 )
   **  (sll v_inv l2 )
 |--
   [| (v_inv <> 0) |] 
-  &&  [| (v_inv <> 0) |] 
-  &&  [| (l = (app ((rev (l1))) (l2))) |]
+  &&  [| (l = (app ((rev (l1))) (l2))) |] 
+  &&  [| (v_inv <> 0) |]
   &&  (sll v_inv l2 )
   **  (sll w_inv l1 )
 .
@@ -460,8 +460,8 @@ forall (p_pre: Z) (l: (@list Z)) (w: Z) (v: Z) ,
 Definition reverse_alter_style3_entail_wit_4 := 
 forall (l: (@list Z)) (v: Z) (w: Z) (l1_2: (@list Z)) (l2_2: (@list Z)) (v_next: Z) (v_data: Z) (l2_new: (@list Z)) ,
   [| (l2_2 = (cons (v_data) (l2_new))) |] 
-  &&  [| (v <> 0) |] 
-  &&  [| (l = (app ((rev (l1_2))) (l2_2))) |]
+  &&  [| (l = (app ((rev (l1_2))) (l2_2))) |] 
+  &&  [| (v <> 0) |]
   &&  ((&((v)  # "list" ->ₛ "data")) # Int  |-> v_data)
   **  ((&((v)  # "list" ->ₛ "next")) # Ptr  |-> w)
   **  (sll v_next l2_new )
@@ -475,8 +475,8 @@ forall (l: (@list Z)) (v: Z) (w: Z) (l1_2: (@list Z)) (l2_2: (@list Z)) (v_next:
 
 Definition reverse_alter_style3_return_wit_1 := 
 forall (l: (@list Z)) (v: Z) (w: Z) (l1: (@list Z)) (l2: (@list Z)) ,
-  [| (v = 0) |] 
-  &&  [| (l = (app ((rev (l1))) (l2))) |]
+  [| (l = (app ((rev (l1))) (l2))) |] 
+  &&  [| (v = 0) |]
   &&  (sll w l1 )
   **  (sll v l2 )
 |--
@@ -485,8 +485,8 @@ forall (l: (@list Z)) (v: Z) (w: Z) (l1: (@list Z)) (l2: (@list Z)) ,
 
 Definition reverse_alter_style3_partial_solve_wit_1_pure := 
 forall (p_pre: Z) (l: (@list Z)) (v: Z) (w: Z) (l1: (@list Z)) (l2: (@list Z)) ,
-  [| (v <> 0) |] 
-  &&  [| (l = (app ((rev (l1))) (l2))) |]
+  [| (l = (app ((rev (l1))) (l2))) |] 
+  &&  [| (v <> 0) |]
   &&  ((( &( "p" ) )) # Ptr  |-> p_pre)
   **  ((( &( "w" ) )) # Ptr  |-> w)
   **  (sll w l1 )
@@ -498,14 +498,14 @@ forall (p_pre: Z) (l: (@list Z)) (v: Z) (w: Z) (l1: (@list Z)) (l2: (@list Z)) ,
 
 Definition reverse_alter_style3_partial_solve_wit_1_aux := 
 forall (l: (@list Z)) (v: Z) (w: Z) (l1: (@list Z)) (l2: (@list Z)) ,
-  [| (v <> 0) |] 
-  &&  [| (l = (app ((rev (l1))) (l2))) |]
+  [| (l = (app ((rev (l1))) (l2))) |] 
+  &&  [| (v <> 0) |]
   &&  (sll w l1 )
   **  (sll v l2 )
 |--
   [| (v <> 0) |] 
-  &&  [| (v <> 0) |] 
-  &&  [| (l = (app ((rev (l1))) (l2))) |]
+  &&  [| (l = (app ((rev (l1))) (l2))) |] 
+  &&  [| (v <> 0) |]
   &&  (sll v l2 )
   **  (sll w l1 )
 .
@@ -1011,8 +1011,8 @@ forall (y_pre: Z) (x_pre: Z) (l2: (@list Z)) (l1: (@list Z)) ,
 
 Definition append_2p_entail_wit_2 := 
 forall (l2: (@list Z)) (l1: (@list Z)) (y: Z) (pt_v_2: Z) (pt: Z) (l1a_2: (@list Z)) (l1b_2: (@list Z)) ,
-  [| (pt_v_2 <> 0) |] 
-  &&  [| ((app (l1a_2) (l1b_2)) = l1) |]
+  [| ((app (l1a_2) (l1b_2)) = l1) |] 
+  &&  [| (pt_v_2 <> 0) |]
   &&  (sllbseg ( &( "x" ) ) pt l1a_2 )
   **  ((pt) # Ptr  |-> pt_v_2)
   **  (sll pt_v_2 l1b_2 )
@@ -1028,8 +1028,8 @@ forall (l2: (@list Z)) (l1: (@list Z)) (y: Z) (pt_v_2: Z) (pt: Z) (l1a_2: (@list
 
 Definition append_2p_return_wit_1 := 
 forall (l2: (@list Z)) (l1: (@list Z)) (y: Z) (pt_v: Z) (l1a: (@list Z)) (l1b: (@list Z)) (pres_v: Z) ,
-  [| (pt_v = 0) |] 
-  &&  [| ((app (l1a) (l1b)) = l1) |]
+  [| ((app (l1a) (l1b)) = l1) |] 
+  &&  [| (pt_v = 0) |]
   &&  (sllseg pres_v y l1a )
   **  (sll pt_v l1b )
   **  (sll y l2 )
@@ -1039,8 +1039,8 @@ forall (l2: (@list Z)) (l1: (@list Z)) (y: Z) (pt_v: Z) (l1a: (@list Z)) (l1b: (
 
 Definition append_2p_partial_solve_wit_1_pure := 
 forall (l2: (@list Z)) (l1: (@list Z)) (y: Z) (pt_v: Z) (pt: Z) (l1a: (@list Z)) (l1b: (@list Z)) ,
-  [| (pt_v = 0) |] 
-  &&  [| ((app (l1a) (l1b)) = l1) |]
+  [| ((app (l1a) (l1b)) = l1) |] 
+  &&  [| (pt_v = 0) |]
   &&  ((( &( "pres" ) )) # Ptr  |-> ( &( "x" ) ))
   **  ((( &( "pt" ) )) # Ptr  |-> pt)
   **  (sllbseg ( &( "x" ) ) pt l1a )
@@ -1054,16 +1054,16 @@ forall (l2: (@list Z)) (l1: (@list Z)) (y: Z) (pt_v: Z) (pt: Z) (l1a: (@list Z))
 
 Definition append_2p_partial_solve_wit_1_aux := 
 forall (l2: (@list Z)) (l1: (@list Z)) (y: Z) (pt_v: Z) (pt: Z) (l1a: (@list Z)) (l1b: (@list Z)) ,
-  [| (pt_v = 0) |] 
-  &&  [| ((app (l1a) (l1b)) = l1) |]
+  [| ((app (l1a) (l1b)) = l1) |] 
+  &&  [| (pt_v = 0) |]
   &&  (sllbseg ( &( "x" ) ) pt l1a )
   **  ((pt) # Ptr  |-> y)
   **  (sll pt_v l1b )
   **  (sll y l2 )
 |--
   [| (y = y) |] 
-  &&  [| (pt_v = 0) |] 
-  &&  [| ((app (l1a) (l1b)) = l1) |]
+  &&  [| ((app (l1a) (l1b)) = l1) |] 
+  &&  [| (pt_v = 0) |]
   &&  ((pt) # Ptr  |-> y)
   **  (sllbseg ( &( "x" ) ) pt l1a )
   **  (sll pt_v l1b )

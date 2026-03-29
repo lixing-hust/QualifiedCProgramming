@@ -60,20 +60,20 @@ Lemma proof_of_LOS_ListAdd_derive_high_level_spec_by_low_level_spec : LOS_ListAd
 Proof. 
     pre_process.
     Intros un pu.
-    Exists A storeA1 a.
+    Exists A storeA1_high_level_spec a_high_level_spec.
     unfold store_dll at 1.
     Intros h pt.
     Exists h un pu.
-    sep_apply(dllseg_to_dllseg_shift_rev storeA1).
+    sep_apply(dllseg_to_dllseg_shift_rev storeA1_high_level_spec).
     entailer!.
     rewrite <- derivable1_wand_sepcon_adjoint.
     unfold store_dll.
-    sep_apply(dllseg_shift_to_dllseg_shift_rev storeA1).
+    sep_apply(dllseg_shift_to_dllseg_shift_rev storeA1_high_level_spec).
     Intros x.
-    sep_apply (dllseg_shift_rev_concat storeA1).
-    assert(H:(({| data := a; ptr := node_pre |} :: nil) ++ l)=({| data := a; ptr := node_pre |} :: l)) by (auto).
+    sep_apply (dllseg_shift_rev_concat storeA1_high_level_spec).
+    assert(H:(({| data := a_high_level_spec; ptr := node_pre |} :: nil) ++ l_high_level_spec)=({| data := a_high_level_spec; ptr := node_pre |} :: l_high_level_spec)) by (auto).
     rewrite H.
-    sep_apply (dllseg_shift_rev_to_dllseg storeA1 x list_pre list_pre ).
+    sep_apply (dllseg_shift_rev_to_dllseg storeA1_high_level_spec x list_pre list_pre ).
     Intros py.
     Exists x py.
     entailer!.

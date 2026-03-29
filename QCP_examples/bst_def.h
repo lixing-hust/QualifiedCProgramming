@@ -14,7 +14,7 @@ struct tree {
   v : Z;
   l_tree : tree;
 } */
-/*@ Extern Coq (store_map : Z -> mapping -> Assertion)
+/*@ Extern Coq (Bst::store_map : Z -> mapping -> Assertion)
                (store_tree : Z -> tree -> Assertion)
                (store_ptb: Z -> Z -> partial_tree -> Assertion)
                (store_pt: Z -> Z -> partial_tree -> Assertion)

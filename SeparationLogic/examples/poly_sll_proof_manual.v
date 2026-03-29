@@ -38,8 +38,7 @@ Proof.
   + subst l2_2.
     simpl.
     rewrite <- app_assoc.
-    simpl.
-    apply H1.
+    simpl. auto.
 Qed.
 
 Lemma proof_of_reverse_return_wit_1 : reverse_return_wit_1.
@@ -48,7 +47,7 @@ Proof.
   sep_apply (sll_zero _ storeA v l2); [ | tauto].
   entailer!.
   subst l2.
-  rewrite app_nil_r in H0.
+  rewrite app_nil_r in H.
   subst l.
   rewrite rev_involutive.
   entailer!.

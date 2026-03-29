@@ -37,11 +37,11 @@ Proof.
     Intros y py z. subst.
     sep_apply (@dllseg_to_dllseg_shift_rev A).
     sep_apply (@dllseg_to_dllseg_shift A).
-    Exists A storeA1 a py z. entailer!. Exists node_pre. entailer!.
+    Exists A storeA1_mid_level_spec a_mid_level_spec py z. entailer!. Exists node_pre. entailer!.
     rewrite <- derivable1_wand_sepcon_adjoint.
     sep_apply (@dllseg_shift_to_dllseg A). Intros x.
     sep_apply (@dllseg_shift_rev_to_dllseg A). Intros py0.
-    sep_apply (dllseg_concat storeA1 x).
+    sep_apply (dllseg_concat storeA1_mid_level_spec x).
     Exists x py0. entailer!.
 Qed.
 

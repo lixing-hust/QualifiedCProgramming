@@ -38,13 +38,13 @@ Definition array_shape_strategy3 :=
     TT &&
     ([| (Z.lt x y) |]) &&
     emp **
-    ((UIntArray.ceil_shape p x y))
+    ((UIntArray.seg_shape p x y))
     |--
     EX (v0 : Z),
       (
       TT &&
       emp **
-      ((UIntArray.ceil_shape p (Z.add x 1) y)) **
+      ((UIntArray.seg_shape p (Z.add x 1) y)) **
       ((poly_store FET_uint (Z.add p (Z.mul x (@sizeof_front_end_type FET_uint))) v0))
       ) ** (
       ALL (v : Z),
@@ -61,7 +61,7 @@ Definition array_shape_strategy6 :=
     TT &&
     ([| (x = y) |]) &&
     emp **
-    ((UIntArray.ceil_shape p x y))
+    ((UIntArray.seg_shape p x y))
     |--
     (
     TT &&
@@ -88,7 +88,7 @@ Definition array_shape_strategy7 :=
       emp -*
       TT &&
       emp **
-      ((UIntArray.ceil_shape p x y))
+      ((UIntArray.seg_shape p x y))
       ).
 
 Definition array_shape_strategy8 :=
@@ -114,7 +114,7 @@ Definition array_shape_strategy9 :=
     TT &&
     ([| (i = n) |]) &&
     emp **
-    ((UIntArray.ceil_shape p 0 i))
+    ((UIntArray.seg_shape p 0 i))
     |--
     (
     TT &&
@@ -132,7 +132,7 @@ Definition array_shape_strategy10 :=
     TT &&
     ([| (y1 = y) |]) &&
     emp **
-    ((UIntArray.ceil_shape p x y))
+    ((UIntArray.seg_shape p x y))
     |--
     (
     TT &&
@@ -142,7 +142,7 @@ Definition array_shape_strategy10 :=
     emp -*
     TT &&
     emp **
-    ((UIntArray.ceil_shape p x y1))
+    ((UIntArray.seg_shape p x y1))
     ).
 
 Definition array_shape_strategy11 :=
@@ -174,14 +174,14 @@ Definition array_shape_strategy13 :=
     TT &&
     ([| (Z.lt x y) |]) &&
     emp **
-    ((IntArray.ceil_shape p x y))
+    ((IntArray.seg_shape p x y))
     |--
     EX (v0 : Z),
       (
       TT &&
       emp **
       ((poly_store FET_int (Z.add p (Z.mul x (@sizeof_front_end_type FET_int))) v0)) **
-      ((IntArray.ceil_shape p (Z.add x 1) y))
+      ((IntArray.seg_shape p (Z.add x 1) y))
       ) ** (
       ALL (v : Z),
         TT &&
@@ -197,7 +197,7 @@ Definition array_shape_strategy16 :=
     TT &&
     ([| (x = y) |]) &&
     emp **
-    ((IntArray.ceil_shape p x y))
+    ((IntArray.seg_shape p x y))
     |--
     (
     TT &&
@@ -224,7 +224,7 @@ Definition array_shape_strategy17 :=
       emp -*
       TT &&
       emp **
-      ((IntArray.ceil_shape p x y))
+      ((IntArray.seg_shape p x y))
       ).
 
 Definition array_shape_strategy18 :=
@@ -250,7 +250,7 @@ Definition array_shape_strategy19 :=
     TT &&
     ([| (i = n) |]) &&
     emp **
-    ((IntArray.ceil_shape p 0 i))
+    ((IntArray.seg_shape p 0 i))
     |--
     (
     TT &&
@@ -268,7 +268,7 @@ Definition array_shape_strategy20 :=
     TT &&
     ([| (y1 = y) |]) &&
     emp **
-    ((IntArray.ceil_shape p x y))
+    ((IntArray.seg_shape p x y))
     |--
     (
     TT &&
@@ -278,7 +278,7 @@ Definition array_shape_strategy20 :=
     emp -*
     TT &&
     emp **
-    ((IntArray.ceil_shape p x y1))
+    ((IntArray.seg_shape p x y1))
     ).
 
 Definition array_shape_strategy2 :=
@@ -306,13 +306,13 @@ Definition array_shape_strategy4 :=
     TT &&
     ([| (x = (Z.add i 1)) |]) &&
     emp **
-    ((UIntArray.ceil_shape p x y)) **
+    ((UIntArray.seg_shape p x y)) **
     ((poly_store FET_uint (Z.add p (Z.mul i (@sizeof_front_end_type FET_uint))) v))
     |--
     (
     TT &&
     emp **
-    ((UIntArray.ceil_shape p i y))
+    ((UIntArray.seg_shape p i y))
     ) ** (
     TT &&
     emp -*
@@ -324,13 +324,13 @@ Definition array_shape_strategy5 :=
   forall (y : Z) (v : Z) (z : Z) (p : Z),
     TT &&
     emp **
-    ((UIntArray.ceil_shape p y z)) **
+    ((UIntArray.seg_shape p y z)) **
     ((poly_store FET_uint (Z.add p (Z.mul z (@sizeof_front_end_type FET_uint))) v))
     |--
     (
     TT &&
     emp **
-    ((UIntArray.ceil_shape p y (Z.add z 1)))
+    ((UIntArray.seg_shape p y (Z.add z 1)))
     ) ** (
     TT &&
     emp -*
@@ -363,13 +363,13 @@ Definition array_shape_strategy14 :=
     TT &&
     ([| (x = (Z.add i 1)) |]) &&
     emp **
-    ((IntArray.ceil_shape p x y)) **
+    ((IntArray.seg_shape p x y)) **
     ((poly_store FET_int (Z.add p (Z.mul i (@sizeof_front_end_type FET_int))) v))
     |--
     (
     TT &&
     emp **
-    ((IntArray.ceil_shape p i y))
+    ((IntArray.seg_shape p i y))
     ) ** (
     TT &&
     emp -*
@@ -381,13 +381,13 @@ Definition array_shape_strategy15 :=
   forall (y : Z) (v : Z) (z : Z) (p : Z),
     TT &&
     emp **
-    ((IntArray.ceil_shape p y z)) **
+    ((IntArray.seg_shape p y z)) **
     ((poly_store FET_int (Z.add p (Z.mul z (@sizeof_front_end_type FET_int))) v))
     |--
     (
     TT &&
     emp **
-    ((IntArray.ceil_shape p y (Z.add z 1)))
+    ((IntArray.seg_shape p y (Z.add z 1)))
     ) ** (
     TT &&
     emp -*

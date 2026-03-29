@@ -65,14 +65,14 @@ action : right_add(l == nil{Z});
       
 id : 8
 priority : core(1)
-right : CharArray::undef_ceil(?p, ?l, ?r) at 0
+right : CharArray::undef_seg(?p, ?l, ?r) at 0
 check : infer(l == 0);
 action : right_erase(0);
          right_add(CharArray::undef_full(p, r));
 
 id : 9
 priority : core(1)
-left : CharArray::undef_ceil(?p, ?l, ?n) at 0
+left : CharArray::undef_seg(?p, ?l, ?n) at 0
 right : undef_data_at(?p + (?i * sizeof(I8)), I8) at 1
 check : infer(l <= i);
         infer(i < n);
@@ -95,4 +95,4 @@ left : CharArray::undef_missing_i(?p, ?l, ?r, ?n) at 0
 check : infer(l == r);
         infer(r < n);
 action : left_erase(0);
-         left_add(CharArray::undef_ceil(p, (l + 1), n));
+         left_add(CharArray::undef_seg(p, (l + 1), n));

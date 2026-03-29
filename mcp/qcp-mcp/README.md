@@ -1,0 +1,62 @@
+# qcp-mcp 安装（linux）
+
+## 1. 安装 Python 依赖
+
+进入目录：
+
+```bash
+cd qcp-mcp
+```
+
+使用uv配置环境, uv安装方式: 
+  - `curl -LsSf https://astral.sh/uv/install.sh | sh`
+  - `nano ~/.bashrc`
+  - 在文件末尾添加`export PATH="$HOME/.local/bin:$PATH"`，随后ctrl+O,ctrl+X保存并退出
+  - `source ~/.bashrc`
+
+  - 通过`uv --version`检查是否成功安装
+
+```bash
+uv venv .venv
+uv sync
+```
+
+## 2. 配置 `CONFIGURE` 文件（推荐）
+
+在 `qcp-mcp/CONFIGURE` 中配置：
+
+```ini
+# mcp binary 路径
+QCP_MCP_BIN=/absolute/path/to/sac_c_parser/build/release/mcp
+```
+
+说明：
+- 不同用户只需要修改自己的 `CONFIGURE` 文件，也可以继续使用环境变量覆盖 `QCP_MCP_BIN`。
+
+## 3. 配置client
+
+### 在vscode copilot中配置：
+
+在当前根目录的 `.vscode/mcp.json` 中配置：
+
+```json
+{
+  "servers": {
+    "qcp": {
+      "type": "stdio",
+      "command": "/absolute/path/to/sac_c_parser/qcp-mcp/.venv/bin/python",
+      "args": [
+        "/absolute/path/to/sac_c_parser/qcp-mcp/server.py"
+      ]
+    }
+  }
+}
+```
+配置完后需要在设置的MCP: list server中开启QCP server；或者在mcp.json中会有一个启动按钮，点击启动server。
+
+### 在claude code中配置：
+
+命令行指令: 
+```bash
+claude mcp add -s project qcp -- /absolute/path/to/sac_c_parser/qcp-mcp/.venv/bin/python /absolute/path/to/sac_c_parser/qcp-mcp/server.py
+```

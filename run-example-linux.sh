@@ -16,7 +16,6 @@ linux-binary/symexec --goal-file=SeparationLogic/examples/sll_insert_sort_goal.v
 linux-binary/symexec --goal-file=SeparationLogic/examples/dll_queue_goal.v --proof-auto-file=SeparationLogic/examples/dll_queue_proof_auto.v --proof-manual-file=SeparationLogic/examples/dll_queue_proof_manual.v --coq-logic-path=SimpleC.EE -slp QCP_examples/ SimpleC.EE --input-file=QCP_examples/dll_queue.c --no-exec-info;
 linux-binary/symexec --goal-file=SeparationLogic/examples/functional_queue_goal.v --proof-auto-file=SeparationLogic/examples/functional_queue_proof_auto.v --proof-manual-file=SeparationLogic/examples/functional_queue_proof_manual.v --coq-logic-path=SimpleC.EE -slp QCP_examples/ SimpleC.EE --input-file=QCP_examples/functional_queue.c --no-exec-info;
 linux-binary/symexec --goal-file=SeparationLogic/examples/sll_queue_goal.v --proof-auto-file=SeparationLogic/examples/sll_queue_proof_auto.v --proof-manual-file=SeparationLogic/examples/sll_queue_proof_manual.v --coq-logic-path=SimpleC.EE -slp QCP_examples/ SimpleC.EE --input-file=QCP_examples/sll_queue.c --no-exec-info;
-linux-binary/symexec --goal-file=SeparationLogic/examples/sll_merge_goal.v --proof-auto-file=SeparationLogic/examples/sll_merge_proof_auto.v --proof-manual-file=SeparationLogic/examples/sll_merge_proof_manual.v --coq-logic-path=SimpleC.EE -slp QCP_examples/ SimpleC.EE --input-file=QCP_examples/sll_merge.c --no-exec-info;
 linux-binary/symexec --goal-file=SeparationLogic/examples/sum_goal.v --proof-auto-file=SeparationLogic/examples/sum_proof_auto.v --proof-manual-file=SeparationLogic/examples/sum_proof_manual.v --coq-logic-path=SimpleC.EE -slp QCP_examples/ SimpleC.EE --input-file=QCP_examples/sum.c --no-exec-info;
 linux-binary/symexec --goal-file=SeparationLogic/examples/swap_goal.v --proof-auto-file=SeparationLogic/examples/swap_proof_auto.v --proof-manual-file=SeparationLogic/examples/swap_proof_manual.v --coq-logic-path=SimpleC.EE -slp QCP_examples/ SimpleC.EE --input-file=QCP_examples/swap.c --no-exec-info;
 linux-binary/symexec --goal-file=SeparationLogic/examples/bst_insert_goal.v --proof-auto-file=SeparationLogic/examples/bst_insert_proof_auto.v --proof-manual-file=SeparationLogic/examples/bst_insert_proof_manual.v --coq-logic-path=SimpleC.EE -slp QCP_examples/ SimpleC.EE --input-file=QCP_examples/bst_insert.c --no-exec-info;
@@ -108,5 +107,7 @@ linux-binary/symexec --goal-file=SeparationLogic/examples/sll_split_while_goal.v
 linux-binary/symexec --goal-file=SeparationLogic/examples/kmp_rel_goal.v --proof-auto-file=SeparationLogic/examples/kmp_rel_proof_auto.v --proof-manual-file=SeparationLogic/examples/kmp_rel_proof_manual.v --coq-logic-path=SimpleC.EE -slp QCP_examples/ SimpleC.EE --input-file=QCP_examples/kmp_rel.c --no-exec-info;
 
 linux-binary/StrategyCheck --strategy-folder-path=SeparationLogic/examples/  --coq-logic-path=SimpleC.EE --input-file=QCP_examples/safeexecE.strategies --no-exec-info;
+
+linux-binary/StrategyCheck --strategy-folder-path=SeparationLogic/examples/  --coq-logic-path=SimpleC.EE --input-file=QCP_examples/ptr_array.strategies --no-exec-info;
 
 echo "All tests finished";

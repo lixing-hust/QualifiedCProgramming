@@ -31,29 +31,29 @@ Proof.
   cbn. entailer!.
 Qed.  
 
-Lemma proof_of_merge_entail_wit_2_1 : merge_entail_wit_2_1.
+Lemma proof_of_merge_entail_wit_2_2 : merge_entail_wit_2_2.
 Proof. 
   pre_process.
   replace (k - k) with 0 in * by lia.
   replace (j - j) with 0 in * by lia.
   replace (i - i) with 0 in * by lia.
-  prop_apply (IntArray.ceil_length arr_pre j).
+  prop_apply (IntArray.seg_length arr_pre j).
   Intros.
   destruct l2_2; [simpl in H10 ; lia | ].
   clear H10.
-  prop_apply (IntArray.ceil_length ret_pre k).
+  prop_apply (IntArray.seg_length ret_pre k).
   Intros.
   destruct l6_2;[simpl in H10 ; lia | ].
   clear H10.
   rewrite Znth0_cons.
   replace (replace_Znth 0 z (z0 :: l6_2)) with (z :: l6_2) by easy.
-  rewrite (IntArray.ceil_unfold ret_pre).
-  rewrite (IntArray.ceil_unfold arr_pre).
-  sep_apply (IntArray.ceil_single arr_pre).
-  sep_apply (IntArray.ceil_single ret_pre).
-  sep_apply (IntArray.ceil_merge_to_ceil arr_pre (q_pre + 1) j (j + 1));[ | lia].
-  sep_apply (IntArray.ceil_merge_to_ceil ret_pre p_pre k (k + 1));[ | lia].
-  prop_apply (IntArray.ceil_length arr_pre i).
+  rewrite (IntArray.seg_unfold ret_pre).
+  rewrite (IntArray.seg_unfold arr_pre).
+  sep_apply (IntArray.seg_single arr_pre).
+  sep_apply (IntArray.seg_single ret_pre).
+  sep_apply (IntArray.seg_merge_to_seg arr_pre (q_pre + 1) j (j + 1));[ | lia].
+  sep_apply (IntArray.seg_merge_to_seg ret_pre p_pre k (k + 1));[ | lia].
+  prop_apply (IntArray.seg_length arr_pre i).
   Exists l6_2 (l5_2 ++ z :: nil) l4_2.
   Exists l1_2 l2_2 (l3_2 ++ z :: nil).
   entailer!.
@@ -68,29 +68,29 @@ Proof.
   abs_ret_step.
 Qed. 
 
-Lemma proof_of_merge_entail_wit_2_2 : merge_entail_wit_2_2.
+Lemma proof_of_merge_entail_wit_2_1 : merge_entail_wit_2_1.
 Proof. 
   pre_process.
   replace (k - k) with 0 in * by lia.
   replace (j - j) with 0 in * by lia.
   replace (i - i) with 0 in * by lia.
-  prop_apply (IntArray.ceil_length arr_pre i).
+  prop_apply (IntArray.seg_length arr_pre i).
   Intros.
   destruct l1_2;[simpl in H10;lia | ].
   clear H10.
-  prop_apply (IntArray.ceil_length ret_pre k).
+  prop_apply (IntArray.seg_length ret_pre k).
   Intros.
   destruct l6_2;[simpl in H10;lia | ].
   clear H10.
   rewrite Znth0_cons.
   replace (replace_Znth 0 z (z0 :: l6_2)) with (z :: l6_2) by easy.
-  rewrite (IntArray.ceil_unfold ret_pre).
-  rewrite (IntArray.ceil_unfold arr_pre).
-  sep_apply (IntArray.ceil_single arr_pre).
-  sep_apply (IntArray.ceil_single ret_pre).
-  sep_apply (IntArray.ceil_merge_to_ceil arr_pre p_pre i (i + 1));[ | lia].
-  sep_apply (IntArray.ceil_merge_to_ceil ret_pre p_pre k (k + 1));[ | lia].
-  prop_apply (IntArray.ceil_length arr_pre j).
+  rewrite (IntArray.seg_unfold ret_pre).
+  rewrite (IntArray.seg_unfold arr_pre).
+  sep_apply (IntArray.seg_single arr_pre).
+  sep_apply (IntArray.seg_single ret_pre).
+  sep_apply (IntArray.seg_merge_to_seg arr_pre p_pre i (i + 1));[ | lia].
+  sep_apply (IntArray.seg_merge_to_seg ret_pre p_pre k (k + 1));[ | lia].
+  prop_apply (IntArray.seg_length arr_pre j).
   Exists l6_2 l5_2 (l4_2 ++ z :: nil).
   Exists l1_2 l2_2 (l3_2 ++ z :: nil).
   entailer!.
@@ -111,7 +111,7 @@ Proof.
   Left.
   Exists l6_2 l5_2 l4_2.
   Exists l1_2 l2_2 l3_2.
-  prop_apply (IntArray.ceil_length arr_pre j).
+  prop_apply (IntArray.seg_length arr_pre j).
   Intros.
   assert (j > r_pre + 1 \/ j <= r_pre + 1) as [ | ] by lia. 
   lia.
@@ -124,7 +124,7 @@ Proof.
   rewrite <- derivable1_orp_intros2.
   Exists l6_2 l5_2 l4_2.
   Exists l1_2 l2_2 l3_2.
-  prop_apply (IntArray.ceil_length arr_pre i).
+  prop_apply (IntArray.seg_length arr_pre i).
   Intros.
   assert (i > q_pre + 1 \/ i <= q_pre + 1) as [ | ] by lia. 
   lia.
@@ -137,23 +137,23 @@ Proof.
   replace (k - k) with 0 in * by lia.
   replace (j - j) with 0 in * by lia.
   replace (i - i) with 0 in * by lia.
-  prop_apply (IntArray.ceil_length arr_pre i).
+  prop_apply (IntArray.seg_length arr_pre i).
   Intros.
   destruct l1_2;[simpl in H9;lia | ].
   clear H9.
-  prop_apply (IntArray.ceil_length ret_pre k).
+  prop_apply (IntArray.seg_length ret_pre k).
   Intros.
   destruct l6_2;[simpl in H9;lia | ].
   clear H9.
   rewrite Znth0_cons.
   replace (replace_Znth 0 z (z0 :: l6_2)) with (z :: l6_2) by easy.
-  rewrite (IntArray.ceil_unfold ret_pre).
-  rewrite (IntArray.ceil_unfold arr_pre).
-  sep_apply (IntArray.ceil_single arr_pre).
-  sep_apply (IntArray.ceil_single ret_pre).
-  sep_apply (IntArray.ceil_merge_to_ceil arr_pre p_pre i (i + 1));[ | lia].
-  sep_apply (IntArray.ceil_merge_to_ceil ret_pre p_pre k (k + 1));[ | lia].
-  prop_apply (IntArray.ceil_length arr_pre j).
+  rewrite (IntArray.seg_unfold ret_pre).
+  rewrite (IntArray.seg_unfold arr_pre).
+  sep_apply (IntArray.seg_single arr_pre).
+  sep_apply (IntArray.seg_single ret_pre).
+  sep_apply (IntArray.seg_merge_to_seg arr_pre p_pre i (i + 1));[ | lia].
+  sep_apply (IntArray.seg_merge_to_seg ret_pre p_pre k (k + 1));[ | lia].
+  prop_apply (IntArray.seg_length arr_pre j).
   Left.
   Exists l6_2 l5_2 (l4_2 ++ z :: nil).
   Exists l1_2 l2_2 (l3_2 ++ z :: nil).
@@ -172,23 +172,23 @@ Qed.
 Lemma proof_of_merge_entail_wit_5_1 : merge_entail_wit_5_1.
 Proof. 
   pre_process.
-  prop_apply (IntArray.ceil_length arr_pre i).
+  prop_apply (IntArray.seg_length arr_pre i).
   Intros.
   destruct l1. 2:{ simpl in H9.  lia. }
   Exists l6_2 l5_2 l4_2.
   Exists l2_2 l3_2.
-  rewrite (IntArray.ceil_empty). entailer!.
+  rewrite (IntArray.seg_empty). entailer!.
 Qed. 
 
 Lemma proof_of_merge_entail_wit_5_2 : merge_entail_wit_5_2.
 Proof. 
   pre_process.
-  prop_apply (IntArray.ceil_length arr_pre i).
+  prop_apply (IntArray.seg_length arr_pre i).
   Intros.
   destruct l1. 2:{  simpl in H9. lia. }
   Exists l6_2 l5_2 l4_2.
   Exists l2_2 l3_2.
-  rewrite (IntArray.ceil_empty). 
+  rewrite (IntArray.seg_empty). 
   entailer!.
 Qed.
 
@@ -198,22 +198,22 @@ Proof.
   replace (k - k) with 0 in * by lia.
   replace (j - j) with 0 in * by lia.
   replace (i - i) with 0 in * by lia.
-  prop_apply (IntArray.ceil_length arr_pre j).
+  prop_apply (IntArray.seg_length arr_pre j).
   Intros.
   destruct l2_2;[simpl in H9;lia | ].
   clear H9.
-  prop_apply (IntArray.ceil_length ret_pre k).
+  prop_apply (IntArray.seg_length ret_pre k).
   Intros.
   destruct l6_2;[simpl in H9;lia | ].
   clear H9.
   rewrite Znth0_cons.
   replace (replace_Znth 0 z (z0 :: l6_2)) with (z :: l6_2) by easy.
-  rewrite (IntArray.ceil_unfold ret_pre).
-  rewrite (IntArray.ceil_unfold arr_pre).
-  sep_apply (IntArray.ceil_single arr_pre).
-  sep_apply (IntArray.ceil_single ret_pre).
-  sep_apply (IntArray.ceil_merge_to_ceil arr_pre (q_pre + 1) j (j + 1));[ | lia].
-  sep_apply (IntArray.ceil_merge_to_ceil ret_pre p_pre k (k + 1));[ | lia].
+  rewrite (IntArray.seg_unfold ret_pre).
+  rewrite (IntArray.seg_unfold arr_pre).
+  sep_apply (IntArray.seg_single arr_pre).
+  sep_apply (IntArray.seg_single ret_pre).
+  sep_apply (IntArray.seg_merge_to_seg arr_pre (q_pre + 1) j (j + 1));[ | lia].
+  sep_apply (IntArray.seg_merge_to_seg ret_pre p_pre k (k + 1));[ | lia].
   Exists l6_2 (l5_2 ++ z :: nil) l4_2.
   Exists l2_2 (l3_2 ++ z :: nil).
   entailer!.
@@ -228,18 +228,18 @@ Lemma proof_of_merge_return_wit_1 : merge_return_wit_1.
 Proof. 
   pre_process.
   subst i.
-  prop_apply (IntArray.ceil_length arr_pre j).
+  prop_apply (IntArray.seg_length arr_pre j).
   Intros.
   destruct l2 ; simpl in H8 ; try lia.
   replace j with (r_pre + 1) in * by lia.
   replace k with (r_pre + 1) in * by lia.
-  prop_apply (IntArray.ceil_length ret_pre (r_pre + 1)).
+  prop_apply (IntArray.seg_length ret_pre (r_pre + 1)).
   Intros.
   destruct l6.
   2: { simpl in H9. lia.  }
-  do 2 rewrite (IntArray.ceil_empty).
+  do 2 rewrite (IntArray.seg_empty).
   Intros.
-  sep_apply (IntArray.ceil_merge_to_ceil) ; try lia.
+  sep_apply (IntArray.seg_merge_to_seg) ; try lia.
   Exists (l4 ++ l5) l3.
   entailer!.
   unfold merge_from_mid_rel in H0.
@@ -262,14 +262,16 @@ Qed.
 Lemma proof_of_mergeSort_entail_wit_1 : mergeSort_entail_wit_1.
 Proof. 
   pre_process.
+  rename s1_low_level_spec into s1.
+  rename X_low_level_spec into X.
   assert (0 <= (r_pre - l_pre) ÷ 2 < r_pre - l_pre ).
   { split.
     apply Z.quot_pos; lia.
     apply Z.quot_lt;lia. }
-  prop_apply IntArray.ceil_length.
+  prop_apply IntArray.seg_length.
   Intros.
-  rewrite IntArray.ceil_split_to_ceil with (mid :=  (l_pre + (r_pre - l_pre) ÷ 2 + 1)) by lia.
-  rewrite IntArray.ceil_split_to_ceil with (x:= ret_pre) (mid :=  (l_pre + (r_pre - l_pre) ÷ 2 + 1)) by lia.
+  rewrite IntArray.seg_split_to_seg with (mid :=  (l_pre + (r_pre - l_pre) ÷ 2 + 1)) by lia.
+  rewrite IntArray.seg_split_to_seg with (x:= ret_pre) (mid :=  (l_pre + (r_pre - l_pre) ÷ 2 + 1)) by lia.
   Exists (sublist 0 (l_pre + (r_pre - l_pre) ÷ 2 + 1 - l_pre) s1) (sublist (l_pre + (r_pre - l_pre) ÷ 2 + 1 - l_pre) (r_pre + 1 - l_pre) s1).
   entailer!.
   replace ((l_pre + (r_pre - l_pre) ÷ 2 + 1 - l_pre)) with ((r_pre - l_pre) ÷ 2 + 1) by lia.
@@ -283,7 +285,6 @@ Proof.
   rewrite (gmergesortrec_unfold s1) in H0.
   unfold gmergesortrec_f in H0.
   safe_choice_r H0.
-  apply safeExec_test_bind in H0 ; try lia.
   prove_by_one_abs_step ((sublist 0 ((r_pre - l_pre) ÷ 2 + 1) s1), (z::l)).
   apply hseval_stateless_ret.
   unfold ext_split.
@@ -308,18 +309,19 @@ Proof.
   pre_process.
   Exists (l3 ++ l2) l1 l1_2.
   entailer!.
-  prop_apply (IntArray.ceil_length ret_pre (m + 1)).
-  prop_apply (IntArray.ceil_length ret_pre l_pre).
+  prop_apply (IntArray.seg_length ret_pre (m + 1)).
+  prop_apply (IntArray.seg_length ret_pre l_pre).
   Intros.
-  apply (IntArray.ceil_merge_to_ceil); try lia.
+  apply (IntArray.seg_merge_to_seg); try lia.
 Qed.
 
-Lemma proof_of_mergeSort_return_wit_1_1 : mergeSort_return_wit_1_1.
+Lemma proof_of_mergeSort_return_wit_1 : mergeSort_return_wit_1.
 Proof. 
   pre_process.
-  prop_apply (IntArray.ceil_length arr_pre l_pre).
+  rename X_low_level_spec into X.
+  rename s1_low_level_spec into s1.
+  prop_apply (IntArray.seg_length arr_pre l_pre).
   Intros.
-  replace (r_pre + 1 - l_pre) with 1 in * by lia.
   Exists s1 s1.
   entailer!.
   destruct s1. simpl in H4. lia.
@@ -342,7 +344,7 @@ Qed.
 Lemma proof_of_mergeSort_derive_low_level_spec_aux_by_low_level_spec : mergeSort_derive_low_level_spec_aux_by_low_level_spec.
 Proof. 
   pre_process.
-  Exists l0.
+  Exists l0_low_level_spec_aux.
   eapply safeExec_bind in H as (X' & ? & ?).
   Exists X'.
   entailer!.

@@ -20,7 +20,7 @@ Require Import sound_pv.
 Import naive_C_Rules.
 Local Open Scope sac.
 
-Lemma proof_of_atype_unify_return_wit_1_1 : atype_unify_return_wit_1_1.
+Lemma proof_of_atype_unify_return_wit_2 : atype_unify_return_wit_2.
 Proof.
   pre_process.
   Right.
@@ -31,7 +31,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_atype_unify_return_wit_1_2 : atype_unify_return_wit_1_2.
+Lemma proof_of_atype_unify_return_wit_1 : atype_unify_return_wit_1.
 Proof.
   pre_process.
   Left.
@@ -116,7 +116,7 @@ Lemma proof_of_atype_unify_which_implies_wit_2 : atype_unify_which_implies_wit_2
 Proof. 
   pre_process.
   subst.
-  destruct tr1.
+  destruct tr1_verify.
   + entailer!.
     simpl store_type_aux.
     Exists n.
@@ -142,7 +142,7 @@ Proof.
   unfold solution_at.
   entailer!.
   Exists L.
-  rename s_pre into s.
+  rename s_pre_verify into s.
   assert ((&( "res") + n * sizeof ( PTR )) # Ptr |-> tp **
     (store_option_type tp (Some t)) |-- (store_type_addr s) &( "res") n tp). {
     unfold store_type_addr.
@@ -167,7 +167,7 @@ Proof.
   unfold store_solution_aux.
   unfold store_solution_aux.
   Intros L.
-  rename s_pre into s.
+  rename s_pre_verify into s.
   destruct tr_opt.
   1: unfold store_option_type; entailer!.
   assert ((&( "res") + n * sizeof ( PTR )) # Ptr |-> tp **
@@ -185,7 +185,7 @@ Proof.
   + assert(
     (&( t1 # "atype" ->ₛ "t") # Int |-> t1_t **
     &( t1 # "atype" ->ₛ "d" .ₛ "VAR" .ₛ "name") # Int |-> n)
-    |-- store_type t1 tr1
+    |-- store_type t1 tr1_verify
     ). {
       subst.
       simpl store_type.
@@ -236,7 +236,7 @@ Proof.
   tauto.
 Qed.
 
-Lemma proof_of_atype_unify1_return_wit_1_1 : atype_unify1_return_wit_1_1.
+Lemma proof_of_atype_unify1_return_wit_2 : atype_unify1_return_wit_2.
 Proof.
   pre_process.
   Right.
@@ -247,7 +247,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_atype_unify1_return_wit_1_2 : atype_unify1_return_wit_1_2.
+Lemma proof_of_atype_unify1_return_wit_1 : atype_unify1_return_wit_1.
 Proof.
   pre_process.
   Left.
@@ -449,7 +449,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_atype_unify2_return_wit_7_1 : atype_unify2_return_wit_7_1.
+Lemma proof_of_atype_unify2_return_wit_8 : atype_unify2_return_wit_8.
 Proof.
   pre_process.
   Right.
@@ -462,7 +462,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_atype_unify2_return_wit_7_2 : atype_unify2_return_wit_7_2.
+Lemma proof_of_atype_unify2_return_wit_7 : atype_unify2_return_wit_7.
 Proof.
   pre_process.
   Left.
@@ -477,7 +477,7 @@ Proof.
   eapply unify_rel_arrow; eauto.
 Qed.
 
-Lemma proof_of_atype_unify2_return_wit_8 : atype_unify2_return_wit_8.
+Lemma proof_of_atype_unify2_return_wit_9 : atype_unify2_return_wit_9.
 Proof.
   pre_process.
   Right.
@@ -490,7 +490,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_atype_unify2_return_wit_9_1 : atype_unify2_return_wit_9_1.
+Lemma proof_of_atype_unify2_return_wit_11 : atype_unify2_return_wit_11.
 Proof.
   pre_process.
   Right.
@@ -503,7 +503,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_atype_unify2_return_wit_9_2 : atype_unify2_return_wit_9_2.
+Lemma proof_of_atype_unify2_return_wit_10 : atype_unify2_return_wit_10.
 Proof.
   pre_process.
   Left.
@@ -518,7 +518,7 @@ Proof.
   eapply unify_rel_apply; eauto.
 Qed.
 
-Lemma proof_of_atype_unify2_return_wit_10 : atype_unify2_return_wit_10.
+Lemma proof_of_atype_unify2_return_wit_12 : atype_unify2_return_wit_12.
 Proof.
   pre_process.
   Left.
@@ -531,7 +531,7 @@ Proof.
   eapply unify_rel_atom; eauto.
 Qed.
 
-Lemma proof_of_atype_unify2_return_wit_11 : atype_unify2_return_wit_11.
+Lemma proof_of_atype_unify2_return_wit_13 : atype_unify2_return_wit_13.
 Proof.
   pre_process.
   Right.
@@ -711,10 +711,10 @@ Lemma proof_of_atype_unify_derive_final_by_verify :
   atype_unify_derive_final_by_verify.
 Proof.
   pre_process.
-  rename s_pre into s_cpre.
+  rename s_pre_final into s_cpre.
   unfold store_compressed_solution at 1.
   Intros s_pre.
-  Exists s_pre tr1 tr2.
+  Exists s_pre tr1_final tr2_final.
   entailer!.
   pre_process_default.
   Split.
@@ -723,7 +723,7 @@ Proof.
     entailer!.
   - Intros s_post retval.
     Right. 
-    pose proof (unify_soundness tr1 tr2 s_pre s_post s_cpre H H1 H0 H3).
+    pose proof (unify_soundness tr1_final tr2_final s_pre s_post s_cpre H H1 H0 H3).
     destruct H4 as [s_cpost ?].
     Exists s_cpost retval.
     unfold store_compressed_solution.

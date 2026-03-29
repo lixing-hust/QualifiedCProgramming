@@ -54,7 +54,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |]
+  &&  [| (0 <> (termtypeID (trm))) |]
   &&  ((( &( "t" ) )) # Ptr  |-> t_pre)
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
@@ -73,8 +73,8 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |]
   &&  ((( &( "t" ) )) # Ptr  |-> t_pre)
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
@@ -93,9 +93,9 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) <> 2) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 <> (termtypeID (trm))) |]
   &&  ((( &( "t" ) )) # Ptr  |-> t_pre)
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
@@ -114,10 +114,10 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) <> 2) |] 
-  &&  [| ((termtypeID (trm)) <> 3) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 <> (termtypeID (trm))) |] 
+  &&  [| (3 <> (termtypeID (trm))) |]
   &&  ((( &( "t" ) )) # Ptr  |-> t_pre)
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
@@ -129,20 +129,20 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   [| False |]
 .
 
-Definition subst_var_return_wit_1_1 := 
+Definition subst_var_return_wit_1 := 
 forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@list Z)) (trm: term) (z: Z) (y: Z) (qt: quant_type) (qvar: (@list Z)) (qterm: term) (retval: Z) ,
-  [| (retval = 0) |] 
-  &&  [| (retval = (list_Z_cmp (qvar) (src_str))) |] 
+  [| (retval = (list_Z_cmp (qvar) (src_str))) |] 
   &&  [| (t_pre <> 0) |] 
   &&  [| (trm = (TermQuant (qt) (qvar) (qterm))) |] 
   &&  [| (t_pre <> 0) |] 
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) <> 2) |] 
-  &&  [| ((termtypeID (trm)) = 3) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 <> (termtypeID (trm))) |] 
+  &&  [| (3 = (termtypeID (trm))) |] 
+  &&  [| (retval = 0) |]
   &&  (store_string y qvar )
   **  (store_string src_pre src_str )
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
@@ -158,10 +158,9 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   **  (store_string src_pre src_str )
 .
 
-Definition subst_var_return_wit_1_2 := 
+Definition subst_var_return_wit_2 := 
 forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@list Z)) (trm: term) (z: Z) (y: Z) (qt: quant_type) (qvar: (@list Z)) (qterm: term) (retval: Z) (retval_2: Z) ,
   [| (retval_2 = z) |] 
-  &&  [| (retval <> 0) |] 
   &&  [| (retval = (list_Z_cmp (qvar) (src_str))) |] 
   &&  [| (t_pre <> 0) |] 
   &&  [| (trm = (TermQuant (qt) (qvar) (qterm))) |] 
@@ -169,10 +168,11 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) <> 2) |] 
-  &&  [| ((termtypeID (trm)) = 3) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 <> (termtypeID (trm))) |] 
+  &&  [| (3 = (termtypeID (trm))) |] 
+  &&  [| (retval <> 0) |]
   &&  (store_term z (term_subst_v (den_str) (src_str) (qterm)) )
   **  (store_string den_pre den_str )
   **  (store_string src_pre src_str )
@@ -188,7 +188,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   **  (store_string src_pre src_str )
 .
 
-Definition subst_var_return_wit_1_3 := 
+Definition subst_var_return_wit_3 := 
 forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@list Z)) (trm: term) (z: Z) (y: Z) (lt: term) (rt: term) (retval: Z) (retval_2: Z) ,
   [| (retval_2 = z) |] 
   &&  [| (retval = y) |] 
@@ -198,9 +198,9 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) = 2) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 = (termtypeID (trm))) |]
   &&  (store_term z (term_subst_v (den_str) (src_str) (rt)) )
   **  (store_string den_pre den_str )
   **  (store_string src_pre src_str )
@@ -215,7 +215,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   **  (store_string src_pre src_str )
 .
 
-Definition subst_var_return_wit_1_4 := 
+Definition subst_var_return_wit_4 := 
 forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@list Z)) (trm: term) (typ: const_type) (con: Z) ,
   [| (t_pre <> 0) |] 
   &&  [| (trm = (TermConst (typ) (con))) |] 
@@ -223,8 +223,8 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 1) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 = (termtypeID (trm))) |]
   &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "type")) # Int  |-> (ctID (typ)))
   **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "content")) # Int  |-> con)
@@ -237,7 +237,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   **  (store_string src_pre src_str )
 .
 
-Definition subst_var_return_wit_1_5 := 
+Definition subst_var_return_wit_5 := 
 forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@list Z)) (trm: term) (y: Z) (var: (@list Z)) (retval: Z) ,
   [| (retval <> 0) |] 
   &&  [| (retval = (list_Z_cmp (var) (src_str))) |] 
@@ -247,7 +247,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 0) |]
+  &&  [| (0 = (termtypeID (trm))) |]
   &&  (store_string y var )
   **  (store_string src_pre src_str )
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
@@ -260,7 +260,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   **  (store_string src_pre src_str )
 .
 
-Definition subst_var_return_wit_1_6 := 
+Definition subst_var_return_wit_6 := 
 forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@list Z)) (trm: term) (var: (@list Z)) (retval: Z) (retval_2: Z) ,
   [| (retval_2 <> 0) |] 
   &&  [| (retval = 0) |] 
@@ -271,7 +271,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 0) |]
+  &&  [| (0 = (termtypeID (trm))) |]
   &&  (store_string den_pre den_str )
   **  (store_string retval_2 den_str )
   **  (store_string src_pre src_str )
@@ -307,7 +307,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 0) |]
+  &&  [| (0 = (termtypeID (trm))) |]
   &&  ((( &( "t" ) )) # Ptr  |-> t_pre)
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
@@ -326,7 +326,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 0) |]
+  &&  [| (0 = (termtypeID (trm))) |]
   &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
   **  (store_string src_pre src_str )
@@ -338,7 +338,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 0) |]
+  &&  [| (0 = (termtypeID (trm))) |]
   &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
   **  (store_string src_pre src_str )
@@ -355,7 +355,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 0) |]
+  &&  [| (0 = (termtypeID (trm))) |]
   &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Var")) # Ptr  |-> y)
   **  (store_string y var )
@@ -368,7 +368,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 0) |]
+  &&  [| (0 = (termtypeID (trm))) |]
   &&  (store_string y var )
   **  (store_string src_pre src_str )
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
@@ -386,7 +386,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 0) |]
+  &&  [| (0 = (termtypeID (trm))) |]
   &&  (store_string y var )
   **  (store_string src_pre src_str )
   **  ((( &( "t" ) )) # Ptr  |-> t_pre)
@@ -409,7 +409,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 0) |]
+  &&  [| (0 = (termtypeID (trm))) |]
   &&  (store_string y var )
   **  (store_string src_pre src_str )
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
@@ -425,7 +425,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 0) |]
+  &&  [| (0 = (termtypeID (trm))) |]
   &&  (store_string y var )
   **  (store_string src_pre src_str )
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
@@ -445,7 +445,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 0) |]
+  &&  [| (0 = (termtypeID (trm))) |]
   &&  (store_string src_pre src_str )
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Var")) # Ptr  |-> y)
@@ -459,7 +459,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 0) |]
+  &&  [| (0 = (termtypeID (trm))) |]
   &&  (store_string den_pre den_str )
   **  (store_string src_pre src_str )
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
@@ -472,8 +472,8 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 1) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 = (termtypeID (trm))) |]
   &&  ((( &( "t" ) )) # Ptr  |-> t_pre)
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
@@ -492,8 +492,8 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 1) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 = (termtypeID (trm))) |]
   &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
   **  (store_string src_pre src_str )
@@ -505,8 +505,8 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 1) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 = (termtypeID (trm))) |]
   &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
   **  (store_string src_pre src_str )
@@ -521,9 +521,9 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) = 2) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 = (termtypeID (trm))) |]
   &&  ((( &( "t" ) )) # Ptr  |-> t_pre)
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
@@ -542,9 +542,9 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) = 2) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 = (termtypeID (trm))) |]
   &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
   **  (store_string src_pre src_str )
@@ -556,9 +556,9 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) = 2) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 = (termtypeID (trm))) |]
   &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
   **  (store_string src_pre src_str )
@@ -575,9 +575,9 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) = 2) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 = (termtypeID (trm))) |]
   &&  ((( &( "t" ) )) # Ptr  |-> t_pre)
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "left")) # Ptr  |-> y)
@@ -602,9 +602,9 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) = 2) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 = (termtypeID (trm))) |]
   &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "left")) # Ptr  |-> y)
   **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "right")) # Ptr  |-> z)
@@ -622,9 +622,9 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) = 2) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 = (termtypeID (trm))) |]
   &&  (store_term y lt )
   **  (store_string src_pre src_str )
   **  (store_string den_pre den_str )
@@ -645,9 +645,9 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) = 2) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 = (termtypeID (trm))) |]
   &&  (store_term y (term_subst_v (den_str) (src_str) (lt)) )
   **  (store_string den_pre den_str )
   **  (store_string src_pre src_str )
@@ -673,9 +673,9 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) = 2) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 = (termtypeID (trm))) |]
   &&  (store_term y (term_subst_v (den_str) (src_str) (lt)) )
   **  (store_string den_pre den_str )
   **  (store_string src_pre src_str )
@@ -694,9 +694,9 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) = 2) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 = (termtypeID (trm))) |]
   &&  (store_term z rt )
   **  (store_string src_pre src_str )
   **  (store_string den_pre den_str )
@@ -714,10 +714,10 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) <> 2) |] 
-  &&  [| ((termtypeID (trm)) = 3) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 <> (termtypeID (trm))) |] 
+  &&  [| (3 = (termtypeID (trm))) |]
   &&  ((( &( "t" ) )) # Ptr  |-> t_pre)
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
@@ -736,10 +736,10 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) <> 2) |] 
-  &&  [| ((termtypeID (trm)) = 3) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 <> (termtypeID (trm))) |] 
+  &&  [| (3 = (termtypeID (trm))) |]
   &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
   **  (store_string src_pre src_str )
@@ -751,10 +751,10 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) <> 2) |] 
-  &&  [| ((termtypeID (trm)) = 3) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 <> (termtypeID (trm))) |] 
+  &&  [| (3 = (termtypeID (trm))) |]
   &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
   **  (store_string src_pre src_str )
@@ -771,10 +771,10 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) <> 2) |] 
-  &&  [| ((termtypeID (trm)) = 3) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 <> (termtypeID (trm))) |] 
+  &&  [| (3 = (termtypeID (trm))) |]
   &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "type")) # Int  |-> (qtID (qt)))
   **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "var")) # Ptr  |-> y)
@@ -790,10 +790,10 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) <> 2) |] 
-  &&  [| ((termtypeID (trm)) = 3) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 <> (termtypeID (trm))) |] 
+  &&  [| (3 = (termtypeID (trm))) |]
   &&  (store_string y qvar )
   **  (store_string src_pre src_str )
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
@@ -806,18 +806,18 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
 
 Definition subst_var_partial_solve_wit_12_pure := 
 forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@list Z)) (trm: term) (z: Z) (y: Z) (qt: quant_type) (qvar: (@list Z)) (qterm: term) (retval: Z) ,
-  [| (retval <> 0) |] 
-  &&  [| (retval = (list_Z_cmp (qvar) (src_str))) |] 
+  [| (retval = (list_Z_cmp (qvar) (src_str))) |] 
   &&  [| (t_pre <> 0) |] 
   &&  [| (trm = (TermQuant (qt) (qvar) (qterm))) |] 
   &&  [| (t_pre <> 0) |] 
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) <> 2) |] 
-  &&  [| ((termtypeID (trm)) = 3) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 <> (termtypeID (trm))) |] 
+  &&  [| (3 = (termtypeID (trm))) |] 
+  &&  [| (retval <> 0) |]
   &&  (store_string y qvar )
   **  (store_string src_pre src_str )
   **  ((( &( "t" ) )) # Ptr  |-> t_pre)
@@ -837,18 +837,18 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
 
 Definition subst_var_partial_solve_wit_12_aux := 
 forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@list Z)) (trm: term) (z: Z) (y: Z) (qt: quant_type) (qvar: (@list Z)) (qterm: term) (retval: Z) ,
-  [| (retval <> 0) |] 
-  &&  [| (retval = (list_Z_cmp (qvar) (src_str))) |] 
+  [| (retval = (list_Z_cmp (qvar) (src_str))) |] 
   &&  [| (t_pre <> 0) |] 
   &&  [| (trm = (TermQuant (qt) (qvar) (qterm))) |] 
   &&  [| (t_pre <> 0) |] 
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) <> 2) |] 
-  &&  [| ((termtypeID (trm)) = 3) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 <> (termtypeID (trm))) |] 
+  &&  [| (3 = (termtypeID (trm))) |] 
+  &&  [| (retval <> 0) |]
   &&  (store_string y qvar )
   **  (store_string src_pre src_str )
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
@@ -861,7 +861,6 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (z <> 0) |] 
-  &&  [| (retval <> 0) |] 
   &&  [| (retval = (list_Z_cmp (qvar) (src_str))) |] 
   &&  [| (t_pre <> 0) |] 
   &&  [| (trm = (TermQuant (qt) (qvar) (qterm))) |] 
@@ -869,10 +868,11 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) <> 2) |] 
-  &&  [| ((termtypeID (trm)) = 3) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 <> (termtypeID (trm))) |] 
+  &&  [| (3 = (termtypeID (trm))) |] 
+  &&  [| (retval <> 0) |]
   &&  (store_term z qterm )
   **  (store_string src_pre src_str )
   **  (store_string den_pre den_str )
@@ -985,7 +985,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |]
+  &&  [| (0 <> (termtypeID (trm))) |]
   &&  ((( &( "t" ) )) # Ptr  |-> t_pre)
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
@@ -1004,8 +1004,8 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |]
   &&  ((( &( "t" ) )) # Ptr  |-> t_pre)
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
@@ -1024,9 +1024,9 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) <> 2) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 <> (termtypeID (trm))) |]
   &&  ((( &( "t" ) )) # Ptr  |-> t_pre)
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
@@ -1045,10 +1045,10 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) <> 2) |] 
-  &&  [| ((termtypeID (trm)) <> 3) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 <> (termtypeID (trm))) |] 
+  &&  [| (3 <> (termtypeID (trm))) |]
   &&  ((( &( "t" ) )) # Ptr  |-> t_pre)
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
@@ -1060,20 +1060,20 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   [| False |]
 .
 
-Definition subst_term_return_wit_1_1 := 
+Definition subst_term_return_wit_1 := 
 forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)) (trm: term) (z: Z) (y: Z) (qt: quant_type) (qvar: (@list Z)) (qterm: term) (retval: Z) ,
-  [| (retval = 0) |] 
-  &&  [| (retval = (list_Z_cmp (qvar) (src_str))) |] 
+  [| (retval = (list_Z_cmp (qvar) (src_str))) |] 
   &&  [| (t_pre <> 0) |] 
   &&  [| (trm = (TermQuant (qt) (qvar) (qterm))) |] 
   &&  [| (t_pre <> 0) |] 
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) <> 2) |] 
-  &&  [| ((termtypeID (trm)) = 3) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 <> (termtypeID (trm))) |] 
+  &&  [| (3 = (termtypeID (trm))) |] 
+  &&  [| (retval = 0) |]
   &&  (store_string y qvar )
   **  (store_string src_pre src_str )
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
@@ -1088,20 +1088,20 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   **  (store_string src_pre src_str )
 .
 
-Definition subst_term_return_wit_1_2 := 
+Definition subst_term_return_wit_2 := 
 forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)) (trm: term) (y: Z) (qt: quant_type) (qvar: (@list Z)) (qterm: term) (retval: Z) (retval_2: Z) ,
-  [| (retval <> 0) |] 
-  &&  [| (retval = (list_Z_cmp (qvar) (src_str))) |] 
+  [| (retval = (list_Z_cmp (qvar) (src_str))) |] 
   &&  [| (t_pre <> 0) |] 
   &&  [| (trm = (TermQuant (qt) (qvar) (qterm))) |] 
   &&  [| (t_pre <> 0) |] 
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) <> 2) |] 
-  &&  [| ((termtypeID (trm)) = 3) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 <> (termtypeID (trm))) |] 
+  &&  [| (3 = (termtypeID (trm))) |] 
+  &&  [| (retval <> 0) |]
   &&  (store_term retval_2 (term_subst_t (den_term) (src_str) (qterm)) )
   **  (store_term den_pre den_term )
   **  (store_string src_pre src_str )
@@ -1116,7 +1116,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   **  (store_string src_pre src_str )
 .
 
-Definition subst_term_return_wit_1_3 := 
+Definition subst_term_return_wit_3 := 
 forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)) (trm: term) (lt: term) (rt: term) (retval: Z) (retval_2: Z) ,
   [| (t_pre <> 0) |] 
   &&  [| (trm = (TermApply (lt) (rt))) |] 
@@ -1124,9 +1124,9 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) = 2) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 = (termtypeID (trm))) |]
   &&  (store_term retval_2 (term_subst_t (den_term) (src_str) (rt)) )
   **  (store_term den_pre den_term )
   **  (store_string src_pre src_str )
@@ -1140,7 +1140,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   **  (store_string src_pre src_str )
 .
 
-Definition subst_term_return_wit_1_4 := 
+Definition subst_term_return_wit_4 := 
 forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)) (trm: term) (typ: const_type) (con: Z) ,
   [| (t_pre <> 0) |] 
   &&  [| (trm = (TermConst (typ) (con))) |] 
@@ -1148,8 +1148,8 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 1) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 = (termtypeID (trm))) |]
   &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "type")) # Int  |-> (ctID (typ)))
   **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "content")) # Int  |-> con)
@@ -1161,7 +1161,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   **  (store_string src_pre src_str )
 .
 
-Definition subst_term_return_wit_1_5 := 
+Definition subst_term_return_wit_5 := 
 forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)) (trm: term) (y: Z) (var: (@list Z)) (retval: Z) ,
   [| (retval <> 0) |] 
   &&  [| (retval = (list_Z_cmp (var) (src_str))) |] 
@@ -1171,7 +1171,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 0) |]
+  &&  [| (0 = (termtypeID (trm))) |]
   &&  (store_string y var )
   **  (store_string src_pre src_str )
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
@@ -1183,7 +1183,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   **  (store_string src_pre src_str )
 .
 
-Definition subst_term_return_wit_1_6 := 
+Definition subst_term_return_wit_6 := 
 forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)) (trm: term) (var: (@list Z)) (retval_2: Z) (retval: Z) ,
   [| (retval <> 0) |] 
   &&  [| (retval_2 = 0) |] 
@@ -1194,7 +1194,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 0) |]
+  &&  [| (0 = (termtypeID (trm))) |]
   &&  (store_term den_pre den_term )
   **  (store_term retval den_term )
   **  (store_string src_pre src_str )
@@ -1227,7 +1227,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 0) |]
+  &&  [| (0 = (termtypeID (trm))) |]
   &&  ((( &( "t" ) )) # Ptr  |-> t_pre)
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
@@ -1246,7 +1246,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 0) |]
+  &&  [| (0 = (termtypeID (trm))) |]
   &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
   **  (store_string src_pre src_str )
@@ -1258,7 +1258,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 0) |]
+  &&  [| (0 = (termtypeID (trm))) |]
   &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
   **  (store_string src_pre src_str )
@@ -1275,7 +1275,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 0) |]
+  &&  [| (0 = (termtypeID (trm))) |]
   &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Var")) # Ptr  |-> y)
   **  (store_string y var )
@@ -1288,7 +1288,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 0) |]
+  &&  [| (0 = (termtypeID (trm))) |]
   &&  (store_string y var )
   **  (store_string src_pre src_str )
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
@@ -1306,7 +1306,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 0) |]
+  &&  [| (0 = (termtypeID (trm))) |]
   &&  (store_string y var )
   **  (store_string src_pre src_str )
   **  ((( &( "t" ) )) # Ptr  |-> t_pre)
@@ -1330,7 +1330,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 0) |]
+  &&  [| (0 = (termtypeID (trm))) |]
   &&  (store_string y var )
   **  (store_string src_pre src_str )
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
@@ -1347,7 +1347,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 0) |]
+  &&  [| (0 = (termtypeID (trm))) |]
   &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Var")) # Ptr  |-> y)
   **  (store_string y var )
@@ -1367,7 +1367,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 0) |]
+  &&  [| (0 = (termtypeID (trm))) |]
   &&  (store_term t_pre trm )
   **  (store_string src_pre src_str )
   **  (store_term den_pre den_term )
@@ -1380,7 +1380,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 0) |]
+  &&  [| (0 = (termtypeID (trm))) |]
   &&  (store_term t_pre trm )
   **  (store_string src_pre src_str )
   **  (store_term den_pre den_term )
@@ -1396,7 +1396,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 0) |]
+  &&  [| (0 = (termtypeID (trm))) |]
   &&  (store_string src_pre src_str )
   **  (store_term den_pre den_term )
 |--
@@ -1408,7 +1408,7 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 0) |]
+  &&  [| (0 = (termtypeID (trm))) |]
   &&  (store_term den_pre den_term )
   **  (store_string src_pre src_str )
 .
@@ -1419,8 +1419,8 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 1) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 = (termtypeID (trm))) |]
   &&  ((( &( "t" ) )) # Ptr  |-> t_pre)
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
@@ -1439,8 +1439,8 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 1) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 = (termtypeID (trm))) |]
   &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
   **  (store_string src_pre src_str )
@@ -1452,8 +1452,8 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) = 1) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 = (termtypeID (trm))) |]
   &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
   **  (store_string src_pre src_str )
@@ -1468,9 +1468,9 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) = 2) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 = (termtypeID (trm))) |]
   &&  ((( &( "t" ) )) # Ptr  |-> t_pre)
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
@@ -1489,9 +1489,9 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) = 2) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 = (termtypeID (trm))) |]
   &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
   **  (store_string src_pre src_str )
@@ -1503,9 +1503,9 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) = 2) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 = (termtypeID (trm))) |]
   &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
   **  (store_string src_pre src_str )
@@ -1522,9 +1522,9 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) = 2) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 = (termtypeID (trm))) |]
   &&  ((( &( "t" ) )) # Ptr  |-> t_pre)
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "left")) # Ptr  |-> y)
@@ -1549,9 +1549,9 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) = 2) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 = (termtypeID (trm))) |]
   &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "left")) # Ptr  |-> y)
   **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "right")) # Ptr  |-> z)
@@ -1569,9 +1569,9 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) = 2) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 = (termtypeID (trm))) |]
   &&  (store_term y lt )
   **  (store_string src_pre src_str )
   **  (store_term den_pre den_term )
@@ -1591,9 +1591,9 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) = 2) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 = (termtypeID (trm))) |]
   &&  (store_term retval (term_subst_t (den_term) (src_str) (lt)) )
   **  (store_term den_pre den_term )
   **  (store_string src_pre src_str )
@@ -1618,9 +1618,9 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) = 2) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 = (termtypeID (trm))) |]
   &&  (store_term retval (term_subst_t (den_term) (src_str) (lt)) )
   **  (store_term den_pre den_term )
   **  (store_string src_pre src_str )
@@ -1638,9 +1638,9 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) = 2) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 = (termtypeID (trm))) |]
   &&  (store_term z rt )
   **  (store_string src_pre src_str )
   **  (store_term den_pre den_term )
@@ -1658,10 +1658,10 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) <> 2) |] 
-  &&  [| ((termtypeID (trm)) = 3) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 <> (termtypeID (trm))) |] 
+  &&  [| (3 = (termtypeID (trm))) |]
   &&  ((( &( "t" ) )) # Ptr  |-> t_pre)
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
@@ -1680,10 +1680,10 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) <> 2) |] 
-  &&  [| ((termtypeID (trm)) = 3) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 <> (termtypeID (trm))) |] 
+  &&  [| (3 = (termtypeID (trm))) |]
   &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
   **  (store_string src_pre src_str )
@@ -1695,10 +1695,10 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) <> 2) |] 
-  &&  [| ((termtypeID (trm)) = 3) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 <> (termtypeID (trm))) |] 
+  &&  [| (3 = (termtypeID (trm))) |]
   &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  (store_term' t_pre trm )
   **  (store_string src_pre src_str )
@@ -1715,10 +1715,10 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) <> 2) |] 
-  &&  [| ((termtypeID (trm)) = 3) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 <> (termtypeID (trm))) |] 
+  &&  [| (3 = (termtypeID (trm))) |]
   &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
   **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "type")) # Int  |-> (qtID (qt)))
   **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "var")) # Ptr  |-> y)
@@ -1734,10 +1734,10 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) <> 2) |] 
-  &&  [| ((termtypeID (trm)) = 3) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 <> (termtypeID (trm))) |] 
+  &&  [| (3 = (termtypeID (trm))) |]
   &&  (store_string y qvar )
   **  (store_string src_pre src_str )
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
@@ -1750,18 +1750,18 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
 
 Definition subst_term_partial_solve_wit_13_pure := 
 forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)) (trm: term) (z: Z) (y: Z) (qt: quant_type) (qvar: (@list Z)) (qterm: term) (retval: Z) ,
-  [| (retval <> 0) |] 
-  &&  [| (retval = (list_Z_cmp (qvar) (src_str))) |] 
+  [| (retval = (list_Z_cmp (qvar) (src_str))) |] 
   &&  [| (t_pre <> 0) |] 
   &&  [| (trm = (TermQuant (qt) (qvar) (qterm))) |] 
   &&  [| (t_pre <> 0) |] 
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) <> 2) |] 
-  &&  [| ((termtypeID (trm)) = 3) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 <> (termtypeID (trm))) |] 
+  &&  [| (3 = (termtypeID (trm))) |] 
+  &&  [| (retval <> 0) |]
   &&  (store_string y qvar )
   **  (store_string src_pre src_str )
   **  ((( &( "t" ) )) # Ptr  |-> t_pre)
@@ -1781,18 +1781,18 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
 
 Definition subst_term_partial_solve_wit_13_aux := 
 forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)) (trm: term) (z: Z) (y: Z) (qt: quant_type) (qvar: (@list Z)) (qterm: term) (retval: Z) ,
-  [| (retval <> 0) |] 
-  &&  [| (retval = (list_Z_cmp (qvar) (src_str))) |] 
+  [| (retval = (list_Z_cmp (qvar) (src_str))) |] 
   &&  [| (t_pre <> 0) |] 
   &&  [| (trm = (TermQuant (qt) (qvar) (qterm))) |] 
   &&  [| (t_pre <> 0) |] 
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) <> 2) |] 
-  &&  [| ((termtypeID (trm)) = 3) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 <> (termtypeID (trm))) |] 
+  &&  [| (3 = (termtypeID (trm))) |] 
+  &&  [| (retval <> 0) |]
   &&  (store_string y qvar )
   **  (store_string src_pre src_str )
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
@@ -1805,7 +1805,6 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (z <> 0) |] 
-  &&  [| (retval <> 0) |] 
   &&  [| (retval = (list_Z_cmp (qvar) (src_str))) |] 
   &&  [| (t_pre <> 0) |] 
   &&  [| (trm = (TermQuant (qt) (qvar) (qterm))) |] 
@@ -1813,10 +1812,11 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 0) |] 
-  &&  [| ((termtypeID (trm)) <> 1) |] 
-  &&  [| ((termtypeID (trm)) <> 2) |] 
-  &&  [| ((termtypeID (trm)) = 3) |]
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 <> (termtypeID (trm))) |] 
+  &&  [| (3 = (termtypeID (trm))) |] 
+  &&  [| (retval <> 0) |]
   &&  (store_term z qterm )
   **  (store_string src_pre src_str )
   **  (store_term den_pre den_term )
@@ -1924,12 +1924,12 @@ Axiom proof_of_subst_var_safety_wit_2 : subst_var_safety_wit_2.
 Axiom proof_of_subst_var_safety_wit_3 : subst_var_safety_wit_3.
 Axiom proof_of_subst_var_safety_wit_4 : subst_var_safety_wit_4.
 Axiom proof_of_subst_var_safety_wit_5 : subst_var_safety_wit_5.
-Axiom proof_of_subst_var_return_wit_1_1 : subst_var_return_wit_1_1.
-Axiom proof_of_subst_var_return_wit_1_2 : subst_var_return_wit_1_2.
-Axiom proof_of_subst_var_return_wit_1_3 : subst_var_return_wit_1_3.
-Axiom proof_of_subst_var_return_wit_1_4 : subst_var_return_wit_1_4.
-Axiom proof_of_subst_var_return_wit_1_5 : subst_var_return_wit_1_5.
-Axiom proof_of_subst_var_return_wit_1_6 : subst_var_return_wit_1_6.
+Axiom proof_of_subst_var_return_wit_1 : subst_var_return_wit_1.
+Axiom proof_of_subst_var_return_wit_2 : subst_var_return_wit_2.
+Axiom proof_of_subst_var_return_wit_3 : subst_var_return_wit_3.
+Axiom proof_of_subst_var_return_wit_4 : subst_var_return_wit_4.
+Axiom proof_of_subst_var_return_wit_5 : subst_var_return_wit_5.
+Axiom proof_of_subst_var_return_wit_6 : subst_var_return_wit_6.
 Axiom proof_of_subst_var_partial_solve_wit_1 : subst_var_partial_solve_wit_1.
 Axiom proof_of_subst_var_partial_solve_wit_2_pure : subst_var_partial_solve_wit_2_pure.
 Axiom proof_of_subst_var_partial_solve_wit_2 : subst_var_partial_solve_wit_2.
@@ -1960,12 +1960,12 @@ Axiom proof_of_subst_term_safety_wit_2 : subst_term_safety_wit_2.
 Axiom proof_of_subst_term_safety_wit_3 : subst_term_safety_wit_3.
 Axiom proof_of_subst_term_safety_wit_4 : subst_term_safety_wit_4.
 Axiom proof_of_subst_term_safety_wit_5 : subst_term_safety_wit_5.
-Axiom proof_of_subst_term_return_wit_1_1 : subst_term_return_wit_1_1.
-Axiom proof_of_subst_term_return_wit_1_2 : subst_term_return_wit_1_2.
-Axiom proof_of_subst_term_return_wit_1_3 : subst_term_return_wit_1_3.
-Axiom proof_of_subst_term_return_wit_1_4 : subst_term_return_wit_1_4.
-Axiom proof_of_subst_term_return_wit_1_5 : subst_term_return_wit_1_5.
-Axiom proof_of_subst_term_return_wit_1_6 : subst_term_return_wit_1_6.
+Axiom proof_of_subst_term_return_wit_1 : subst_term_return_wit_1.
+Axiom proof_of_subst_term_return_wit_2 : subst_term_return_wit_2.
+Axiom proof_of_subst_term_return_wit_3 : subst_term_return_wit_3.
+Axiom proof_of_subst_term_return_wit_4 : subst_term_return_wit_4.
+Axiom proof_of_subst_term_return_wit_5 : subst_term_return_wit_5.
+Axiom proof_of_subst_term_return_wit_6 : subst_term_return_wit_6.
 Axiom proof_of_subst_term_partial_solve_wit_1 : subst_term_partial_solve_wit_1.
 Axiom proof_of_subst_term_partial_solve_wit_2_pure : subst_term_partial_solve_wit_2_pure.
 Axiom proof_of_subst_term_partial_solve_wit_2 : subst_term_partial_solve_wit_2.

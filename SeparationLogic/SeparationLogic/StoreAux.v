@@ -291,52 +291,6 @@ Proof.
     entailer!.
 Qed.
 
-
-(* Definition isvalidptr_n_bytes (n: nat) (x: addr) : Prop :=
-  x >= 0 /\ x + Z.of_nat n - 1 <= Int.max_unsigned /\ x mod Z.of_nat n = 0.
-
-Definition store_unsigned_integer_n_bytes (x: addr) n (v: Z) : CRules.expr :=
-  CRules.andp
-    (CRules.coq_prop (isvalidptr_n_bytes n x /\ v >= 0 /\ v < 2 ^ (8 * Z.of_nat n)))
-    (store_n_bytes_Z x n v).
-
-Lemma store_uchar_equiv_store_unsigned_integer_n_bytes a v :
-    (store_uchar a v) --||-- (store_unsigned_integer_n_bytes a 1 v).
-Proof.
-  unfold store_uchar, isvalidptr_char, store_unsigned_integer_n_bytes, isvalidptr_n_bytes.
-  cbn. split.
-  - entailer!.
-    + apply store_byte_equiv_store_n_bytes_Z.
-    + apply Z.mod_1_r.
-  - entailer!. apply store_byte_equiv_store_n_bytes_Z.
-Qed.
-
-Lemma store_ushort_equiv_store_unsigned_integer_n_bytes a v :
-    (store_ushort a v) --||-- (store_unsigned_integer_n_bytes a 2 v).
-Proof.
-  unfold store_ushort, isvalidptr_short, store_unsigned_integer_n_bytes, isvalidptr_n_bytes.
-  cbn. split.
-  - entailer!. apply store_2byte_equiv_store_n_bytes_Z.
-  - entailer!. apply store_2byte_equiv_store_n_bytes_Z.
-Qed.
-
-Lemma store_uint_equiv_store_unsigned_integer_n_bytes a v :
-    (store_uint a v) --||-- (store_unsigned_integer_n_bytes a 4 v).
-Proof.
-  unfold store_uint, isvalidptr_int, store_unsigned_integer_n_bytes, isvalidptr_n_bytes.
-  cbn. split.
-  - entailer!. apply store_4byte_equiv_store_n_bytes_Z.
-  - entailer!. apply store_4byte_equiv_store_n_bytes_Z.
-Qed.
-
-Lemma store_uint64_equiv_store_unsigned_integer_n_bytes a v :
-    (store_uint64 a v) --||-- (store_unsigned_integer_n_bytes a 8 v).
-Proof.
-  unfold store_uint64, isvalidptr_int64, store_unsigned_integer_n_bytes, isvalidptr_n_bytes.
-  cbn. split.
-  - entailer!. (* Wrong! *)
-Abort. *)
-
 End generic_n_bytes.
 
 
@@ -817,6 +771,16 @@ Proof.
   apply derivable1_sepcon_mono; entailer!.
 Qed.
 
+Lemma dup_undef_store_uint: forall x,
+  (x # UInt |->_) ** (x # UInt |->_) |-- [| False |].
+Proof.
+  intros.
+  unfold undef_store_uint.
+  eapply derivable1_trans.
+  2: apply (dup_store_4bytes_noninit x).
+  apply derivable1_sepcon_mono; entailer!.
+Qed.
+
 Lemma dup_store_int: forall x v1 v2,
   (x # Int |-> v1) ** (x # Int |-> v2) |-- [| False |].
 Proof.
@@ -824,6 +788,15 @@ Proof.
   eapply derivable1_trans.
   2: apply (dup_undef_store_int x).
   apply derivable1_sepcon_mono; apply store_int_undef_store_int.
+Qed.
+
+Lemma dup_store_uint : forall x v1 v2,
+  (x # UInt |-> v1) ** (x # UInt |-> v2) |-- [| False |].
+Proof.
+  intros.
+  eapply derivable1_trans.
+  2: apply (dup_undef_store_uint x).
+  apply derivable1_sepcon_mono; apply store_uint_undef_store_uint.
 Qed.
 
 Lemma dup_undef_store_ptr: forall x,
@@ -1160,14 +1133,36 @@ Proof.
   entailer!.
 Qed.
 
+Lemma undef_store_int_align4 :
+  forall x, x # Int |->_ |-- store_align4_n 1.
+Proof.
+  intros.
+  unfold undef_store_int, store_align4_n. simpl.
+  Intros. Exists [x]. 
+  simpl. 
+  entailer!.
+  unfold isvalidptr_int , aligned_4 in H.
+  constructor ; auto ; try lia.
+  constructor.
+Qed.
+
 Lemma store_int_align4 : forall x v, x # Int |-> v |-- store_align4_n 1.
 Proof.
   intros.
-  unfold store_int , store_align4_n.
+  sep_apply store_int_undef_store_int.
+  sep_apply undef_store_int_align4.
+  entailer!.
+Qed.
+
+Lemma undef_store_uint_align4 :
+  forall x, x # UInt |->_ |-- store_align4_n 1.
+Proof.
+  intros.
+  unfold undef_store_uint, store_align4_n. simpl.
   Intros. Exists [x]. 
-  sep_apply store_4byte_store_4byte_noinit.
-  simpl.
-  entailer!. unfold isvalidptr_int , aligned_4 in H.
+  simpl. 
+  entailer!.
+  unfold isvalidptr_int , aligned_4 in H.
   constructor ; auto ; try lia.
   constructor.
 Qed.
@@ -1175,22 +1170,16 @@ Qed.
 Lemma store_uint_align4 : forall x v, x # UInt |-> v |-- store_align4_n 1.
 Proof.
   intros.
-  unfold store_uint, store_align4_n. simpl.
-  Intros. Exists [x]. 
-  sep_apply store_4byte_store_4byte_noinit.
-  simpl.
+  sep_apply store_uint_undef_store_uint.
+  sep_apply undef_store_uint_align4.
   entailer!.
-  unfold isvalidptr_int , aligned_4 in H.
-  constructor ; auto ; try lia.
-  constructor.
 Qed.
 
-Lemma store_int64_align1 : forall x v, x # Int64 |-> v |-- store_align4_n 2.
+Lemma undef_store_int64_align4 : forall x, x # Int64 |->_ |-- store_align4_n 2.
 Proof.
   intros.
-  unfold store_int64, store_align4_n. simpl.
+  unfold undef_store_int64, store_align4_n. simpl.
   Intros. Exists (x :: [x + 4]). 
-  sep_apply store_8byte_store_8byte_noinit.
   simpl.
   entailer!.
   - unfold store_8byte_noninit.
@@ -1203,7 +1192,7 @@ Proof.
     unfold aligned_4 in *. 
     repeat split ; try lia. 
     rewrite <- Zplus_mod_idemp_l.
-    destruct H as [[? [? ?]] [? ?]].
+    destruct H as [? [? ?]].
     rewrite H1. reflexivity.
   - unfold isvalidptr_int64 in H. unfold isvalidptr. 
     unfold aligned_4 in *. 
@@ -1212,12 +1201,19 @@ Proof.
     repeat constructor ; try lia. 
 Qed.
 
-Lemma store_uint64_align1 : forall x v, x # UInt64 |-> v |-- store_align4_n 2.
+Lemma store_int64_align4 : forall x v, x # Int64 |-> v |-- store_align4_n 2.
 Proof.
   intros.
-  unfold store_uint64, store_align4_n. simpl.
+  sep_apply store_int64_undef_store_int64.
+  sep_apply undef_store_int64_align4.
+  entailer!.
+Qed.
+
+Lemma undef_store_uint64_align4 : forall x, x # UInt64 |->_ |-- store_align4_n 2.
+Proof.
+  intros.
+  unfold undef_store_uint64, store_align4_n. simpl.
   Intros. Exists (x :: [x + 4]). 
-  sep_apply store_8byte_store_8byte_noinit.
   simpl.
   entailer!.
   - unfold store_8byte_noninit.
@@ -1230,7 +1226,7 @@ Proof.
     unfold aligned_4 in *. 
     repeat split ; try lia. 
     rewrite <- Zplus_mod_idemp_l.
-    destruct H as [[? [? ?]] [? ?]].
+    destruct H as [? [? ?]].
     rewrite H1. reflexivity.
   - unfold isvalidptr_int64 in H. unfold isvalidptr. 
     unfold aligned_4 in *. 
@@ -1239,17 +1235,32 @@ Proof.
     repeat constructor ; try lia. 
 Qed.
 
-Lemma store_ptr_align4 : forall x v, x # Ptr |-> v |-- store_align4_n 1.
+Lemma store_uint64_align4 : forall x v, x # UInt64 |-> v |-- store_align4_n 2.
 Proof.
   intros.
-  unfold store_ptr, store_align4_n. simpl.
+  sep_apply store_uint64_undef_store_uint64.
+  sep_apply undef_store_uint64_align4.
+  entailer!.
+Qed.
+
+Lemma undef_store_ptr_align4 : forall x, x # Ptr |->_ |-- store_align4_n 1.
+Proof.
+  intros.
+  unfold undef_store_ptr, store_align4_n. simpl.
   Intros. Exists [x]. 
-  sep_apply store_4byte_store_4byte_noinit.
   simpl. 
   entailer!.
   unfold isvalidptr , aligned_4 in H.
   constructor ; auto ; try lia.
   constructor.
+Qed.
+
+Lemma store_ptr_align4 : forall x v, x # Ptr |-> v |-- store_align4_n 1.
+Proof.
+  intros.
+  sep_apply store_ptr_undef_store_ptr.
+  sep_apply undef_store_ptr_align4.
+  entailer!.
 Qed.
 
 Lemma store_4byte_valid : forall x y, store_4byte_noninit x ** store_4byte_noninit y |-- [| x + 3 < y \/ y + 3 < x |].

@@ -47,16 +47,16 @@ Proof. Admitted.
 Lemma proof_of_check_add_safe_safety_wit_6 : check_add_safe_safety_wit_6.
 Proof. Admitted. 
 
-Lemma proof_of_check_add_safe_return_wit_1_1 : check_add_safe_return_wit_1_1.
+Lemma proof_of_check_add_safe_return_wit_1 : check_add_safe_return_wit_1.
 Proof. Admitted. 
 
-Lemma proof_of_check_add_safe_return_wit_1_2 : check_add_safe_return_wit_1_2.
+Lemma proof_of_check_add_safe_return_wit_2 : check_add_safe_return_wit_2.
 Proof. Admitted. 
 
-Lemma proof_of_check_add_safe_return_wit_2_1 : check_add_safe_return_wit_2_1.
+Lemma proof_of_check_add_safe_return_wit_3 : check_add_safe_return_wit_3.
 Proof. Admitted. 
 
-Lemma proof_of_check_add_safe_return_wit_2_2 : check_add_safe_return_wit_2_2.
+Lemma proof_of_check_add_safe_return_wit_4 : check_add_safe_return_wit_4.
 Proof. Admitted. 
 
 Lemma proof_of_NilInequList_safety_wit_1 : NilInequList_safety_wit_1.
@@ -83,7 +83,7 @@ Proof. Admitted.
 Lemma proof_of_free_InequList_safety_wit_4 : free_InequList_safety_wit_4.
 Proof. Admitted. 
 
-Lemma proof_of_free_InequList_return_wit_2_1 : free_InequList_return_wit_2_1.
+Lemma proof_of_free_InequList_return_wit_1 : free_InequList_return_wit_1.
 Proof. Admitted. 
 
 Lemma proof_of_free_InequList_partial_solve_wit_1 : free_InequList_partial_solve_wit_1.
@@ -209,16 +209,16 @@ Proof. Admitted.
 Lemma proof_of_generate_new_constr_return_wit_1 : generate_new_constr_return_wit_1.
 Proof. Admitted. 
 
-Lemma proof_of_generate_new_constr_return_wit_2_1 : generate_new_constr_return_wit_2_1.
+Lemma proof_of_generate_new_constr_return_wit_2 : generate_new_constr_return_wit_2.
 Proof. Admitted. 
 
-Lemma proof_of_generate_new_constr_return_wit_2_2 : generate_new_constr_return_wit_2_2.
+Lemma proof_of_generate_new_constr_return_wit_3 : generate_new_constr_return_wit_3.
 Proof. Admitted. 
 
-Lemma proof_of_generate_new_constr_return_wit_3_1 : generate_new_constr_return_wit_3_1.
+Lemma proof_of_generate_new_constr_return_wit_4 : generate_new_constr_return_wit_4.
 Proof. Admitted. 
 
-Lemma proof_of_generate_new_constr_return_wit_3_2 : generate_new_constr_return_wit_3_2.
+Lemma proof_of_generate_new_constr_return_wit_5 : generate_new_constr_return_wit_5.
 Proof. Admitted. 
 
 Lemma proof_of_generate_new_constr_partial_solve_wit_1 : generate_new_constr_partial_solve_wit_1.
@@ -389,13 +389,13 @@ Proof. Admitted.
 Lemma proof_of_real_shadow_safety_wit_25 : real_shadow_safety_wit_25.
 Proof. Admitted. 
 
-Lemma proof_of_real_shadow_return_wit_3_1 : real_shadow_return_wit_3_1.
+Lemma proof_of_real_shadow_return_wit_3 : real_shadow_return_wit_3.
 Proof. Admitted. 
 
-Lemma proof_of_real_shadow_return_wit_3_3 : real_shadow_return_wit_3_3.
+Lemma proof_of_real_shadow_return_wit_5 : real_shadow_return_wit_5.
 Proof. Admitted. 
 
-Lemma proof_of_real_shadow_return_wit_4 : real_shadow_return_wit_4.
+Lemma proof_of_real_shadow_return_wit_7 : real_shadow_return_wit_7.
 Proof. Admitted. 
 
 Lemma proof_of_real_shadow_partial_solve_wit_1_pure : real_shadow_partial_solve_wit_1_pure.
@@ -485,10 +485,10 @@ Proof. Admitted.
 Lemma proof_of_lia_deduction_safety_wit_13 : lia_deduction_safety_wit_13.
 Proof. Admitted. 
 
-Lemma proof_of_lia_deduction_return_wit_2 : lia_deduction_return_wit_2.
+Lemma proof_of_lia_deduction_return_wit_1 : lia_deduction_return_wit_1.
 Proof. Admitted. 
 
-Lemma proof_of_lia_deduction_return_wit_3 : lia_deduction_return_wit_3.
+Lemma proof_of_lia_deduction_return_wit_2 : lia_deduction_return_wit_2.
 Proof. Admitted. 
 
 Lemma proof_of_lia_deduction_partial_solve_wit_1_pure : lia_deduction_partial_solve_wit_1_pure.

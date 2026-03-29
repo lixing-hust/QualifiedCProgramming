@@ -103,25 +103,25 @@ forall (A: Type) (list_pre: Z) (next: Z) (prev: Z) (a: A) (storeA: (Z -> (A -> A
 
 Definition LOS_ListDelete_derive_mid_level_spec_by_low_level_spec := 
 forall (A: Type) ,
-forall (node_pre: Z) (l2: (@list (@DL_Node A))) (l1: (@list (@DL_Node A))) (a: A) (p: Z) (storeA1: (Z -> (A -> Assertion))) ,
-  (store_dll storeA1 p (app (l1) ((cons ((Build_DL_Node (a) (node_pre))) (l2)))) )
+forall (node_pre: Z) (l2_mid_level_spec: (@list (@DL_Node A))) (l1_mid_level_spec: (@list (@DL_Node A))) (a_mid_level_spec: A) (p_mid_level_spec: Z) (storeA1_mid_level_spec: (Z -> (A -> Assertion))) ,
+  (store_dll storeA1_mid_level_spec p_mid_level_spec (app (l1_mid_level_spec) ((cons ((Build_DL_Node (a_mid_level_spec) (node_pre))) (l2_mid_level_spec)))) )
 |--
 EX (A: Type) ,
-EX (storeA: (Z -> (A -> Assertion))) (a_2: A) (prev: Z) (next: Z) ,
-  (((&((node_pre)  # "LOS_DL_LIST" ->ₛ "pstNext")) # Ptr  |-> next)
-  **  ((&((next)  # "LOS_DL_LIST" ->ₛ "pstPrev")) # Ptr  |-> node_pre)
-  **  (dllseg_shift storeA prev node_pre (cons ((Build_DL_Node (a_2) (node_pre))) (nil)) ))
+EX (storeA_low_level_spec: (Z -> (A -> Assertion))) (a_low_level_spec: A) (prev_low_level_spec: Z) (next_low_level_spec: Z) ,
+  (((&((node_pre)  # "LOS_DL_LIST" ->ₛ "pstNext")) # Ptr  |-> next_low_level_spec)
+  **  ((&((next_low_level_spec)  # "LOS_DL_LIST" ->ₛ "pstPrev")) # Ptr  |-> node_pre)
+  **  (dllseg_shift storeA_low_level_spec prev_low_level_spec node_pre (cons ((Build_DL_Node (a_low_level_spec) (node_pre))) (nil)) ))
   **
   ((((&((node_pre)  # "LOS_DL_LIST" ->ₛ "pstNext")) # Ptr  |->_)
   **  ((&((node_pre)  # "LOS_DL_LIST" ->ₛ "pstPrev")) # Ptr  |->_)
-  **  (storeA node_pre a_2 )
-  **  ((&((prev)  # "LOS_DL_LIST" ->ₛ "pstNext")) # Ptr  |-> next)
-  **  ((&((next)  # "LOS_DL_LIST" ->ₛ "pstPrev")) # Ptr  |-> prev))
+  **  (storeA_low_level_spec node_pre a_low_level_spec )
+  **  ((&((prev_low_level_spec)  # "LOS_DL_LIST" ->ₛ "pstNext")) # Ptr  |-> next_low_level_spec)
+  **  ((&((next_low_level_spec)  # "LOS_DL_LIST" ->ₛ "pstPrev")) # Ptr  |-> prev_low_level_spec))
   -*
-  ((store_dll storeA1 p (app (l1) (l2)) )
+  ((store_dll storeA1_mid_level_spec p_mid_level_spec (app (l1_mid_level_spec) (l2_mid_level_spec)) )
   **  ((&((node_pre)  # "LOS_DL_LIST" ->ₛ "pstNext")) # Ptr  |->_)
   **  ((&((node_pre)  # "LOS_DL_LIST" ->ₛ "pstPrev")) # Ptr  |->_)
-  **  (storeA1 node_pre a )))
+  **  (storeA1_mid_level_spec node_pre a_mid_level_spec )))
 .
 
 Module Type VC_Correct.

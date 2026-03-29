@@ -115,46 +115,46 @@ forall (tickPrecision_pre: Z) (startTime_pre: Z) (l2: (@list (@DL_Node (@sortedL
 Definition OsGetNextExpireTime_partial_solve_wit_2 := OsGetNextExpireTime_partial_solve_wit_2_pure -> OsGetNextExpireTime_partial_solve_wit_2_aux.
 
 Definition GetSortLinkNextExpireTime_derive_swmtrSpec_by_highSpec := 
-forall (tickPrecision_pre: Z) (startTime_pre: Z) (sortHead_pre: Z) (l: (@list (@DL_Node (@sortedLinkNode Z)))) (sg: StableGlobVars) ,
+forall (tickPrecision_pre: Z) (startTime_pre: Z) (sortHead_pre: Z) (l_swmtrSpec: (@list (@DL_Node (@sortedLinkNode Z)))) (sg_swmtrSpec: StableGlobVars) ,
   [| (sortHead_pre = ( &( "g_swtmrSortLink" ) )) |]
-  &&  (store_swtmr_sorted_dll sg l )
+  &&  (store_swtmr_sorted_dll sg_swmtrSpec l_swmtrSpec )
   **  ((( &( "OS_SORT_LINK_UINT64_MAX" ) )) # UInt64  |-> ((Z.lxor 2 64) - 1 ))
 |--
 EX (A: Type) ,
-EX (storeA: (Z -> (A -> Assertion))) (l_2: (@list (@DL_Node (@sortedLinkNode A)))) ,
-  ((store_sorted_dll storeA &((sortHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") l_2 )
+EX (storeA_highSpec: (Z -> (A -> Assertion))) (l_highSpec: (@list (@DL_Node (@sortedLinkNode A)))) ,
+  ((store_sorted_dll storeA_highSpec &((sortHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") l_highSpec )
   **  ((( &( "OS_SORT_LINK_UINT64_MAX" ) )) # UInt64  |-> ((Z.lxor 2 64) - 1 )))
   **
   ((EX retval_2,
-  [| (retval_2 = (getFirstNodeExpireTime (l_2) (startTime_pre) (tickPrecision_pre))) |]
-  &&  (store_sorted_dll storeA &((sortHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") l_2 )
+  [| (retval_2 = (getFirstNodeExpireTime (l_highSpec) (startTime_pre) (tickPrecision_pre))) |]
+  &&  (store_sorted_dll storeA_highSpec &((sortHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") l_highSpec )
   **  ((( &( "OS_SORT_LINK_UINT64_MAX" ) )) # UInt64  |-> ((Z.lxor 2 64) - 1 )))
   -*
   (EX retval,
-  [| (retval = (getFirstNodeExpireTime (l) (startTime_pre) (tickPrecision_pre))) |]
-  &&  (store_swtmr_sorted_dll sg l )
+  [| (retval = (getFirstNodeExpireTime (l_swmtrSpec) (startTime_pre) (tickPrecision_pre))) |]
+  &&  (store_swtmr_sorted_dll sg_swmtrSpec l_swmtrSpec )
   **  ((( &( "OS_SORT_LINK_UINT64_MAX" ) )) # UInt64  |-> ((Z.lxor 2 64) - 1 ))))
 .
 
 Definition GetSortLinkNextExpireTime_derive_taskSpec_by_highSpec := 
-forall (tickPrecision_pre: Z) (startTime_pre: Z) (sortHead_pre: Z) (l: (@list (@DL_Node (@sortedLinkNode Z)))) (sg: StableGlobVars) ,
+forall (tickPrecision_pre: Z) (startTime_pre: Z) (sortHead_pre: Z) (l_taskSpec: (@list (@DL_Node (@sortedLinkNode Z)))) (sg_taskSpec: StableGlobVars) ,
   [| (sortHead_pre = ( &( "g_taskSortLink" ) )) |]
-  &&  (store_task_sorted_dll sg l )
+  &&  (store_task_sorted_dll sg_taskSpec l_taskSpec )
   **  ((( &( "OS_SORT_LINK_UINT64_MAX" ) )) # UInt64  |-> ((Z.lxor 2 64) - 1 ))
 |--
 EX (A: Type) ,
-EX (storeA: (Z -> (A -> Assertion))) (l_2: (@list (@DL_Node (@sortedLinkNode A)))) ,
-  ((store_sorted_dll storeA &((sortHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") l_2 )
+EX (storeA_highSpec: (Z -> (A -> Assertion))) (l_highSpec: (@list (@DL_Node (@sortedLinkNode A)))) ,
+  ((store_sorted_dll storeA_highSpec &((sortHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") l_highSpec )
   **  ((( &( "OS_SORT_LINK_UINT64_MAX" ) )) # UInt64  |-> ((Z.lxor 2 64) - 1 )))
   **
   ((EX retval_2,
-  [| (retval_2 = (getFirstNodeExpireTime (l_2) (startTime_pre) (tickPrecision_pre))) |]
-  &&  (store_sorted_dll storeA &((sortHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") l_2 )
+  [| (retval_2 = (getFirstNodeExpireTime (l_highSpec) (startTime_pre) (tickPrecision_pre))) |]
+  &&  (store_sorted_dll storeA_highSpec &((sortHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") l_highSpec )
   **  ((( &( "OS_SORT_LINK_UINT64_MAX" ) )) # UInt64  |-> ((Z.lxor 2 64) - 1 )))
   -*
   (EX retval,
-  [| (retval = (getFirstNodeExpireTime (l) (startTime_pre) (tickPrecision_pre))) |]
-  &&  (store_task_sorted_dll sg l )
+  [| (retval = (getFirstNodeExpireTime (l_taskSpec) (startTime_pre) (tickPrecision_pre))) |]
+  &&  (store_task_sorted_dll sg_taskSpec l_taskSpec )
   **  ((( &( "OS_SORT_LINK_UINT64_MAX" ) )) # UInt64  |-> ((Z.lxor 2 64) - 1 ))))
 .
 

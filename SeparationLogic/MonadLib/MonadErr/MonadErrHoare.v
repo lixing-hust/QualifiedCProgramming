@@ -56,6 +56,20 @@ Proof.
   - apply Hoare_proequiv with y; easy.
 Qed.
 
+#[export] Instance Hoare_setsequiv_iff_Proper {Σ: Type} {A: Type} :
+  Proper (Sets.equiv ==> eq ==> Sets.equiv ==> iff) (@Hoare Σ A).
+Proof.
+  unfold Proper, respectful; intros P1 P2 HP c c' <- Q1 Q2 HQ.
+  unfold Hoare.
+  match goal with
+  | |- (?A /\ ?B) <-> (?C /\ ?D) =>
+    enough ((A <-> C) /\ (B <-> D)) by firstorder
+  end.
+  split.
+  - split; intros; apply HQ; firstorder.
+  - split; intros ? ? HPσ ?; apply HP in HPσ; firstorder.
+Qed.
+
 Lemma Hoare_bind {A B Σ: Type}: 
   forall (P: Σ -> Prop) (Q : A -> Σ -> Prop) (R: B -> Σ -> Prop)
   (c1: program Σ A) (c2: A -> program Σ B) ,
@@ -86,11 +100,61 @@ Lemma Hoare_assert {Σ: Type}:
     Q ->
     Hoare P (assert Q) (fun _ => P).
 Proof.
-  intros.
-  unfold Hoare, assert; simpl; split; intros.
-  + destruct H1; subst; tauto.
-  + tauto.
+  firstorder. congruence.
 Qed. 
+
+Lemma Hoare_assertS {Σ: Type}:
+  forall (P: Σ -> Prop) (Q: Σ -> Prop),
+    (forall s, P s -> Q s) ->
+    Hoare P (assertS Q) (fun _ => P).
+Proof.
+  firstorder. congruence. 
+Qed.
+
+Theorem Hoare_any {Σ A: Type}:
+  forall (P: Σ -> Prop),
+    Hoare P (any A) (fun _ => P).
+Proof.
+  unfold any.
+  firstorder. 
+  simpl in H0.
+  congruence. 
+Qed.
+
+Theorem Hoare_any_bind {Σ A B: Type}:
+  forall (P: Σ -> Prop) (f: A -> program Σ B) (Q: B -> Σ -> Prop),
+    (forall a, Hoare P (f a) Q) ->
+    Hoare P (a <- any A;; f a) Q.
+Proof.
+  intros.
+  eapply Hoare_bind.
+  apply Hoare_any.
+  simpl; auto.
+Qed.
+
+Theorem Hoare_get {A Σ: Type}:
+  forall (P: Σ -> Prop) (Pa: Σ -> A -> Prop),
+    Hoare P (get Pa) (fun a s2 => Pa s2 a /\ P s2).
+Proof.
+  unfold get.
+  simpl. 
+  firstorder;try congruence. 
+Qed.
+
+Theorem Hoare_update {Σ: Type}:
+  forall (P: Σ -> Prop) (Q: Σ -> Σ -> Prop),
+    Hoare P (update Q) (fun a s2 => exists s1, Q s1 s2 /\ P s1).
+Proof. firstorder. Qed.
+
+
+Theorem Hoare_conseq {Σ A: Type}:
+  forall (P1 P2: Σ -> Prop) f (Q1 Q2: A -> Σ -> Prop),
+    (forall s, P1 s -> P2 s) ->
+    (forall b s, Q2 b s -> Q1 b s) ->
+    Hoare P2 f Q2 ->
+    Hoare P1 f Q1.
+Proof. firstorder. Qed.
+
 
 Lemma Hoare_implies {A Σ: Type}:
   forall (P P': Σ -> Prop) (P0: Prop)
@@ -98,55 +162,27 @@ Lemma Hoare_implies {A Σ: Type}:
     (forall σ, P σ -> P0 /\ P' σ) ->
     (P0 -> Hoare P' c Q) ->
     Hoare P c Q.
-Proof.
-  unfold Hoare; intros.
-  split; intros.
-  + specialize (H _ H1).
-    destruct (H0 ltac:(tauto)); clear H0.
-    eapply H3; eauto.
-    tauto.
-  + specialize (H _ H1).
-    destruct (H0 ltac:(tauto)); clear H0.
-    eapply H4; eauto.
-    tauto.
-Qed.
+Proof. firstorder. Qed.
 
 Lemma Hoare_unit_pre {A: Type} :
   forall (P: Prop) (c: program unit A) (Q: A -> unit -> Prop),
     (P -> Hoare (fun _ => True) c Q) ->
     Hoare (fun _ => P) c Q.
-Proof.
-  intros.
-  eapply Hoare_implies; eauto.
-  intros; tauto.
-Qed.
+Proof. firstorder. Qed.
 
 Lemma Hoare_cons_pre {B Σ: Type} : 
   forall (P P': Σ -> Prop) (c: program Σ B) (Q: B -> Σ -> Prop),
     (forall σ, P' σ -> P σ) ->
     Hoare P c Q ->
     Hoare P' c Q.
-Proof.
-  unfold Hoare; intros.
-  destruct H0; split.
-  + intros.
-    eapply H0; eauto.
-  + intros.
-    eapply H1; eauto.
-Qed.
+Proof. firstorder. Qed.
 
 Lemma Hoare_cons_post {A Σ: Type}:
   forall (P: Σ -> Prop) (c: program Σ A) (Q Q': A -> Σ -> Prop),
     (forall a σ, Q a σ -> Q' a σ) ->
     Hoare P c Q ->
     Hoare P c Q'.
-Proof.
-  unfold Hoare; intros.
-  split; try tauto.
-  intros. destruct H0 as [H0 _].
-  specialize (H0 a σ1 σ2).
-  specialize (H a σ2). tauto.
-Qed.
+Proof. firstorder. Qed.
 
 Lemma Hoare_choice {A Σ: Type}:
   forall (P: Σ -> Prop) (c1 c2: program Σ A) (Q: A -> Σ -> Prop),
@@ -159,6 +195,32 @@ Proof.
     destruct H0; [apply H1 | apply H3]; auto.
   - specialize (H2 σ1); specialize (H4 σ1).
     destruct H0; [apply H2 | apply H4]; auto.
+Qed.
+
+(* A disjunctive version of choice for Hoare triples. *)
+Lemma Hoare_choice_disj {Σ A}
+      (P: Σ -> Prop) (c1 c2: program Σ A)
+      (Q1 Q2: A -> Σ -> Prop):
+  Hoare P c1 Q1 ->
+  Hoare P c2 Q2 ->
+  Hoare P (choice c1 c2) (fun a s => Q1 a s \/ Q2 a s).
+Proof.
+  intros H1 H2; unfold Hoare in *.
+  destruct H1 as [H1n H1e], H2 as [H2n H2e].
+  split; intros.
+  - unfold choice in H0; simpl in H0.
+    destruct H0; [left; eapply H1n | right; eapply H2n]; eauto.
+  - unfold choice in H0; simpl in H0.
+    destruct H0; [eapply H1e | eapply H2e]; eauto.
+Qed.
+
+Lemma Hoare_assume' {Σ: Type}:
+  forall (P: Σ -> Prop) (Q: Prop),
+    Q -> Hoare P (assume!! Q) (fun _ s => P s /\ Q).
+Proof.
+  intros P Q HQ.
+  unfold Hoare; simpl; split; intros; try tauto.
+  destruct H0; subst; tauto.
 Qed.
 
 Lemma Hoare_assume_bind {A Σ: Type}:
@@ -180,9 +242,7 @@ Lemma Hoare_assumeS {Σ: Type}:
     Hoare P1 (assume P2) (fun _ s => P1 s /\ P2 s).
 Proof.
   intros.
-  unfold Hoare; simpl; split; intros.
-  - destruct H0; subst; easy.
-  - tauto.
+  firstorder; congruence.
 Qed.
 
 Lemma Hoare_assumeS_bind {A Σ: Type}:
@@ -212,14 +272,113 @@ Proof.
     specialize (H0 s). tauto.
 Qed.
 
+Lemma Hoare_assertS_bind {A Σ: Type}:
+  forall (P: Σ -> Prop) (Q: Σ -> Prop) (c: program Σ A) (R: A -> Σ -> Prop),
+    (forall s, P s -> Q s) ->
+    Hoare P (assertS Q ;; c) R <-> Hoare P c R.
+Proof.
+  intros * Himp; split; intros Hhoare.
+  - unfold Hoare in *.
+    destruct Hhoare as [Hn Herr].
+    split; intros.
+    + apply (Hn a σ1 σ2 H).
+      unfold bind; simpl.
+      unfold MonadErr.bind; simpl.
+      exists tt; exists σ1; split; [| assumption].
+      split; [reflexivity | apply Himp; assumption].
+    + apply (Herr σ1 H).
+      unfold bind; simpl.
+      unfold MonadErr.bind; simpl.
+      right.
+      exists tt; exists σ1; split; [| assumption].
+      split; [reflexivity | apply Himp; assumption].
+  - eapply Hoare_bind; [apply Hoare_assertS; exact Himp|].
+    intros []; simpl; assumption.
+Qed.
+
+(* Additional basic lemmas mirrored from StateRelMonad/StateRelHoare.v *)
+Lemma Hoare_step {Σ A: Type}:
+  forall (P: Σ -> Prop) (f: program Σ A),
+    (forall s, P s -> ~ err f s) ->
+    Hoare P f (fun a s2 => exists s1, f.(nrm) s1 a s2 /\ P s1).
+Proof. firstorder. Qed.
+
+
+Lemma Hoare_forall {Σ A: Type}:
+  forall (X: Type) (P: Σ -> Prop) (f: program Σ A) (Q: X -> A -> Σ -> Prop),
+    (forall x, Hoare P f (Q x)) ->
+    Hoare P f (fun a s => forall x, Q x a s).
+Proof.
+  unfold Hoare; intros X P f Q  Hforall.
+  split.
+  - intros a σ1 σ2 HP Hrun x.
+    destruct (Hforall x) as [Hn _].
+    eapply Hn; eauto.
+  - intros σ1 HP.
+Abort.
+
+Lemma Hoare_state_intro {A Σ}:
+  forall (P: Σ -> Prop) (c: program Σ A) (Q: A -> Σ -> Prop),
+    (forall s0, P s0 -> Hoare (fun s => s = s0) c Q)->
+    Hoare P c Q.
+Proof. firstorder. Qed.
+
 Lemma Hoare_ret {A Σ: Type}:
   forall (P: Σ -> Prop) (a: A) (Q: A -> Σ -> Prop),
     (forall σ, P σ -> Q a σ) ->
     Hoare P (ret a) Q.
+Proof. firstorder. subst. auto. Qed.
+
+Lemma Hoare_post_true:
+  forall {A Σ} (P: Σ -> Prop) (c: program Σ A),
+    (forall s, P s -> ~ err c s) ->
+    Hoare P c (fun _ _ => True).
+Proof. firstorder. Qed.
+
+
+Lemma Hoare_progrefine:
+  forall {A Σ: Type} (c1 c2: program Σ A) (P: Σ -> Prop) (Q: A -> Σ -> Prop),
+    (nrm c2 ⊆ nrm c1) ->
+    (err c2 ⊆ err c1) ->
+    Hoare P c1 Q -> Hoare P c2 Q.
 Proof.
-  intros; unfold Hoare; simpl; split; intros; try tauto.
-  destruct H1; subst. 
-  specialize (H σ1); tauto.
+  intros * Hn HerrInc [Hnrm Herr].
+  unfold Hoare.
+  split; intros.
+  - apply (Hnrm a σ1 σ2 H); eapply Hn; eauto.
+  - apply (Herr σ1 H); eapply HerrInc; eauto.
+Qed.
+
+
+Lemma Hoare_equiv_iff {Σ A: Type}:
+  forall (P: Σ -> Prop) (c1 c2: program Σ A) (Q: A -> Σ -> Prop),
+    c1 == c2 ->
+    Hoare P c1 Q <-> Hoare P c2 Q.
+Proof.
+  intros; split; intro Hhoare;
+    eapply Hoare_proequiv; eauto; try rewrite H; reflexivity.
+Qed.
+
+Lemma Hoare_step_s {A Σ: Type}:
+  forall (s0: Σ) (c: program Σ A),
+    (~ err c s0) ->
+    Hoare (fun s => s = s0) c (fun a s1 => c.(nrm) s0 a s1).
+Proof.
+  intros s0 c Herr.
+  unfold Hoare; split; intros; subst; auto.
+Qed.
+
+
+Lemma Hoare_assume_s {Σ}:
+  forall (s0: Σ) (Q: Σ -> Prop),
+    Q s0 ->
+    Hoare (fun s => s = s0) (assume Q) (fun _ s1 => s1 = s0 /\ Q s0).
+Proof.
+  intros s0 Q HQ.
+  eapply Hoare_cons_post.
+  2: apply Hoare_assumeS.
+  simpl; intros [] σ [HP HQ'].
+  subst; tauto.
 Qed.
 
 Definition continue_case {A B Σ: Type} (ab: CntOrBrk A B): (program Σ A) := 
@@ -325,33 +484,20 @@ Lemma Hoare_conj {A Σ: Type}:
     Hoare P c Q ->
     Hoare P c R ->
     Hoare P c (fun a σ => Q a σ /\ R a σ).
-Proof.
-  intros.
-  unfold Hoare in *.
-  split; try tauto.
-  intros.
-  destruct H as [H _], H0 as [H0 _].
-  specialize (H a σ1 σ2).
-  specialize (H0 a σ1 σ2).
-  tauto.
-Qed.
+Proof. firstorder. Qed.
+
+Theorem Hoare_disj {Σ A: Type}:
+  forall (P1 P2: Σ -> Prop) f (Q: A -> Σ -> Prop),
+    Hoare P1 f Q ->
+    Hoare P2 f Q ->
+    Hoare (fun s => P1 s \/ P2 s) f Q.
+Proof. firstorder. Qed.
 
 Lemma Hoare_pre_ex {Σ A: Type}:
   forall (X: Type) (P: X -> Σ -> Prop) f (Q: A -> Σ -> Prop),
     (forall x, Hoare (P x) f Q) ->
     Hoare (fun s => exists x, P x s) f Q.
-Proof.
-  unfold Hoare; intros.
-  split.
-  - intros a s1 s2 (x & ?) ?.
-    specialize (H x).
-    destruct H.
-    apply (H a s1 s2); auto.
-  - intros s1 (x & ?) ?.
-    specialize (H x).
-    destruct H.
-    apply (H2 s1); auto.
-Qed.
+Proof. firstorder. Qed.
 
 Lemma Hoare_stateless:
   forall {A Σ} (P: Prop) (c: program Σ A) Q,
@@ -389,13 +535,48 @@ Proof.
     apply (H2 σ1); tauto.
 Qed.
 
-Lemma Hoare_empty {Σ A: Type}:
+Lemma Hoare_bot {Σ A: Type}:
   forall (P: Σ -> Prop) (Q: A -> Σ -> Prop),
-    Hoare P {|nrm:=∅; err:=∅; |} Q.
+    Hoare P bot Q.
+Proof. firstorder. Qed.
+
+
+Lemma Hoare_update_bind {Σ A: Type}:
+  forall (P: Σ -> Prop) (f: Σ -> Σ -> Prop) (c: program Σ A) (Q: A -> Σ -> Prop),
+    (forall s1,  P s1 -> Hoare (fun s2 => f s1 s2) c Q) ->
+    Hoare P (update f;; c) Q.
+Proof. firstorder. Qed.
+
+
+Lemma Hoare_update_s {Σ}:
+  forall (s0: Σ) (f: Σ -> Σ -> Prop),
+    Hoare (fun s => s = s0) (update f) (fun _ s1 => f s0 s1).
 Proof.
-  unfold Hoare; sets_unfold.
+  firstorder.
+  unfold update in H0. simpl in H0. subst. auto.
+Qed.
+
+Lemma Hoare_update' {Σ}:
+  forall (s0: Σ) (f: Σ -> Σ),
+    Hoare (fun s => s = s0) (update' f) (fun _ s1 => s1 = f s0).
+Proof.
   intros.
-  split; simpl; intros; tauto.
+  eapply Hoare_update_s.
+Qed.
+
+Lemma Hoare_get_s {Σ A}:
+  forall (s0: Σ) (Pa: Σ -> A -> Prop),
+    Hoare (fun s => s = s0) (get Pa) (fun a s1 => s1 = s0 /\ Pa s0 a).
+Proof.
+  firstorder; congruence. 
+Qed.
+
+Lemma Hoare_get' {Σ A}:
+  forall (s0: Σ) (fa: Σ -> A),
+    Hoare (fun s => s = s0) (get' fa) (fun a s1 => s1 = s0 /\ a = fa s0).
+Proof.
+  intros.
+  eapply Hoare_get_s.
 Qed.
 
 End HoareBasic.
@@ -444,16 +625,40 @@ Ltac hoare_auto :=
     | |- Hoare _ (bind (bind _ _) _) _ => rewrite bind_assoc; try hoare_auto
     | |- Hoare _ (bind (choice _ _) _) _ => rewrite bind_choice_equiv; try hoare_auto
     | |- Hoare _ (bind (ret _) _) _ => rewrite bind_ret_l; try hoare_auto
+    | |- Hoare _ (bind (assert _) _) _ => hoare_bind' Hoare_assert; try hoare_auto
+    | |- Hoare _ (bind (assertS _) _) _ => hoare_bind' Hoare_assertS; try hoare_auto
     | |- Hoare _ (assume!! _;; _) _ => apply Hoare_assume_bind; intros; try hoare_auto
     | |- Hoare _ (assume _ ;; _) _ => apply Hoare_assumeS_bind; try hoare_auto
     | |- Hoare _ (assert _;; _) _ => apply Hoare_assert_bind; [auto |intros; try hoare_auto]
     | |- Hoare _ (choice _ _) _ => apply Hoare_choice; try hoare_auto
+    | |- Hoare _ (bind _ _) _ => apply Hoare_bind; intros; try hoare_auto
     | |- Hoare _ (ret _) _ => apply Hoare_ret; intros
     | |- Hoare _ (continue_case (by_continue _)) _ => apply Hoare_cnt_cnt; intros
     | |- Hoare _ (continue_case (by_break _)) _ => apply Hoare_cnt_brk
     | |- Hoare _ (break_case (by_continue _)) _ => apply Hoare_brk_cnt
     | |- Hoare _ (break_case (by_break _)) _ => apply Hoare_brk_brk; intros
     | |- Hoare _ (match ?a with _ => _ end) _ => destruct a; try hoare_auto
+  end; auto.
+
+Ltac hoare_auto_s :=
+  unfold continue, break;
+  match goal with
+    | |- Hoare _ (bind (bind _ _) _) _ => rewrite bind_assoc; try hoare_auto_s
+    | |- Hoare _ (bind (choice _ _) _) _ => rewrite bind_choice_equiv; try hoare_auto_s
+    | |- Hoare _ (bind (ret _) _) _ => rewrite bind_ret_l; try hoare_auto_s
+    | |- Hoare _ (bind (assert _) _) _ => hoare_bind' Hoare_assert; try hoare_auto_s
+    | |- Hoare _ (bind (assertS _) _) _ => hoare_bind' Hoare_assertS; try hoare_auto_s
+    | |- Hoare _ (assume!! _;; _) _ => apply Hoare_assume_bind; intros; try hoare_auto_s
+    | |- Hoare _ (assume _ ;; _) _ => apply Hoare_assumeS_bind; try hoare_auto_s
+    | |- Hoare _ (assert _;; _) _ => apply Hoare_assert_bind; [auto | intros; try hoare_auto_s]
+    | |- Hoare _ (choice _ _) _ => apply Hoare_choice; try hoare_auto_s
+    | |- Hoare _ (bind _ _) _ => apply Hoare_bind; intros; try hoare_auto_s
+    | |- Hoare _ (ret _) _ => apply Hoare_ret; intros
+    | |- Hoare _ (continue_case (by_continue _)) _ => apply Hoare_cnt_cnt; intros
+    | |- Hoare _ (continue_case (by_break _)) _ => apply Hoare_cnt_brk
+    | |- Hoare _ (break_case (by_continue _)) _ => apply Hoare_brk_cnt
+    | |- Hoare _ (break_case (by_break _)) _ => apply Hoare_brk_brk; intros
+    | |- Hoare _ (match ?a with _ => _ end) _ => destruct a; try hoare_auto_s
   end; auto.
 
 Ltac monad_law :=
@@ -474,6 +679,15 @@ Tactic Notation "hoare_apply" uconstr(H) :=
   eapply Hoare_proequiv;
   [ | apply H; try tauto];
   monad_equiv.
+
+Tactic Notation "hoare_cons_pre" uconstr(H) :=
+  eapply Hoare_cons_pre; [| apply H]; simpl; try tauto.
+
+Tactic Notation "hoare_cons_post" uconstr(H) :=
+  eapply Hoare_cons_post; [| apply H]; simpl; try tauto.
+
+Tactic Notation "hoare_cons" uconstr(H) :=
+  eapply Hoare_cons_pre; [|eapply Hoare_cons_post; [| apply H] ]; simpl; try tauto.
 
 
 (** Hoare Logic For Recursions and Loops *)
@@ -508,6 +722,274 @@ Proof.
   apply H; auto.
 Qed.
 
+Lemma Hoare_BW_fix_logicv {Σ A B C: Type}:
+  forall (f: (A -> program Σ B) -> (A -> program Σ B))
+         (P: A -> C -> Σ -> Prop) (Q: A -> C -> B -> Σ -> Prop) (a: A) c,
+    (forall W: A -> program Σ B,
+        (forall a c, Hoare (P a c) (W a) (fun b s => Q a c b s)) ->
+        forall a c, Hoare (P a c) (f W a) (fun b s => Q a c b s)) ->
+    Hoare (P a c) (BW_fix f a) (fun b s => Q a c b s).
+Proof.
+  intros.
+  unfold Hoare.
+  unfold BW_fix, omega_lub, oLub_lift, LiftConstructors.lift_binder,
+    omega_lub, oLub_program, ProgramPO.indexed_union; simpl.
+  sets_unfold.
+  assert (Hiter: forall i a c,
+             Hoare (P a c) (Init.Nat.iter i f bot a) (fun b s => Q a c b s)).
+  { intro i; induction i; intros a0 c0; simpl.
+    - split; simpl; easy.
+    - apply H; auto. }
+  split.
+  - intros b s1 s2 HP Hrun.
+    destruct Hrun as [i Hi].
+    specialize (Hiter i a c) as [Hnrm _].
+    eapply Hnrm; eauto.
+  - intros s1 HP Herr.
+    destruct Herr as [i Hi].
+    specialize (Hiter i a c) as [_ Herr'].
+    eapply Herr'; eauto.
+Qed.
+
+Lemma Hoare_BW_fix_prog {Σ A: Type}:
+  forall (f: program Σ A -> program Σ A)
+         (P: Σ -> Prop) (Q: A -> Σ -> Prop),
+    (forall W, Hoare P W Q -> Hoare P (f W) Q) ->
+    Hoare P (BW_fix f) Q.
+Proof.
+  intros f * Hmono.
+  unfold Hoare.
+  unfold BW_fix, omega_lub, oLub_lift, LiftConstructors.lift_binder,
+    omega_lub, oLub_program, ProgramPO.indexed_union; simpl.
+  sets_unfold.
+  assert (Hiter: forall i, Hoare P (Init.Nat.iter i f bot) Q).
+  { intro i; induction i; simpl.
+    - split; simpl; easy.
+    - apply Hmono; auto. }
+  split.
+  - intros a σ1 σ2 HP Hrun.
+    destruct Hrun as [i Hi].
+    specialize (Hiter i) as [Hnrm _].
+    eapply Hnrm; eauto.
+  - intros σ1 HP Herr.
+    destruct Herr as [i Hi].
+    specialize (Hiter i) as [_ Herr'].
+    eapply Herr'; eauto.
+Qed.
+
+Theorem Hoare_BW_fix_logicv_conj' {Σ A B C: Type}:
+forall (F: (A -> program Σ B)-> (A -> program Σ B))
+       (P1 : A -> C -> Σ -> Prop)
+       (Q1 : A -> C -> B -> Σ -> Prop) 
+       a c,
+forall {D: Type}
+       (P2 : A -> D -> Σ -> Prop) (Q2 : A -> D -> B -> Σ -> Prop),
+  (forall a d, Hoare (P2 a d) (BW_fix F a) (Q2 a d)) ->
+  (forall W: A -> program Σ B, 
+    (forall a d, Hoare (P2 a d) (W a) (Q2 a d)) ->
+    (forall a c, Hoare (P1 a c) (W a) (Q1 a c)) ->
+    (forall a c, Hoare (P2 a c) (F W a) (Q2 a c)) ->
+    (forall a c, Hoare (P1 a c) (F W a) (Q1 a c))) ->  
+  (Hoare (P1 a c) (BW_fix F a) (Q1 a c)).
+Proof.
+  intros *  HT1; intros.
+  unfold Hoare.
+  unfold BW_fix, omega_lub, oLub_lift, LiftConstructors.lift_binder,
+    omega_lub, oLub_program, ProgramPO.indexed_union; simpl.
+  sets_unfold.
+  assert (Hiter: forall i a c,
+             Hoare (P1 a c) (Init.Nat.iter i F bot a) (fun b s => Q1 a c b s)).
+  { assert (forall n a d, Hoare (P2 a d) (Nat.iter n F bot a) (Q2 a d)).
+  { intros.
+    specialize (HT1 a0 d).
+    unfold Hoare.
+    unfold Hoare, BW_fix in HT1.
+    destruct HT1 as [HT1nrm HT1err].
+    split.
+    - 
+    intros.
+    eapply (HT1nrm _ _ σ2 H0).
+    exists n.
+    auto.
+    - 
+    intros.
+    eapply (HT1err _ H0).
+    exists n.
+    auto.
+  }
+    intro i; induction i; intros a0 c0; simpl.
+    - split; simpl; easy.
+    - apply H.
+      apply H0.
+      apply IHi.
+      specialize (H0 (S i)).
+      simpl in H0.
+      apply H0. }
+  split.
+  - intros b s1 s2 HP Hrun.
+    destruct Hrun as [i Hi].
+    specialize (Hiter i a c) as [Hnrm _].
+    eapply Hnrm; eauto.
+  - intros s1 HP Herr.
+    destruct Herr as [i Hi].
+    specialize (Hiter i a c) as [_ Herr'].
+    eapply Herr'; eauto.
+Qed.
+
+(* we consider a recursive monadic program (A -> program Σ R) may have multiple specifications *)
+Record monad_funcspec {Σ A R: Type}: Type := mk_mfs { 
+  mFS_lv : Type;
+  mFS_pre : A -> mFS_lv -> Σ -> Prop;
+  mFS_Post : A -> mFS_lv -> R -> Σ -> Prop;
+  }.
+
+Definition monad_funcspecs {Σ A R: Type} : Type := list (@monad_funcspec Σ A R).
+Definition monad_sat_funcspec  {Σ A R: Type} 
+  (m: (A -> program Σ R)) (fs: monad_funcspec) : Prop :=
+  forall (a: A) (lv: mFS_lv fs),
+    Hoare ((mFS_pre fs) a lv) (m a) ((mFS_Post fs) a lv).
+
+Theorem Hoare_fix_logicv_fspecs {Σ A R: Type}:
+forall (F: (A -> program Σ R) -> (A -> program Σ R)) Fspecs fs,
+  Forall (fun fs => monad_sat_funcspec (fun a => BW_fix F a) fs) Fspecs ->
+  (forall W: A -> program Σ R, 
+    (Forall (fun fs => monad_sat_funcspec W fs) Fspecs) ->
+    (forall a lv, Hoare ((mFS_pre fs) a lv) (W a) ((mFS_Post fs) a lv)) ->
+    (forall a lv, Hoare ((mFS_pre fs) a lv) (F W a) ((mFS_Post fs) a lv))) ->  
+  (forall (a: A) (lv: mFS_lv fs),
+    Hoare ((mFS_pre fs) a lv) (BW_fix F a) ((mFS_Post fs) a lv)).
+Proof.
+  intros F Fspecs fs Hsat Hstep a lv.
+  unfold Hoare.
+  unfold BW_fix, omega_lub, oLub_lift, LiftConstructors.lift_binder,
+    omega_lub, oLub_program, ProgramPO.indexed_union; simpl.
+  sets_unfold.
+  (* Every finite iterate of F satisfies all specs in Fspecs. *)
+  assert (Hforall: forall n,
+            Forall (fun fs0 =>
+              monad_sat_funcspec (fun a => Init.Nat.iter n F bot a) fs0) Fspecs).
+  { intros n.
+    apply Forall_forall.
+    rewrite Forall_forall in Hsat.
+    intros fs0 Hmem a0 lv0.
+    specialize (Hsat fs0 Hmem a0 lv0).
+    (* refine BW_fix spec to the n-th iterate *)
+    eapply Hoare_progrefine; [ | | exact Hsat].
+    - intros s1' r' s2' Hnrm; exists n; exact Hnrm.
+    - intros s1' Herr; exists n; exact Herr.
+  }
+  assert (Hiter: forall i a c,
+             Hoare ((mFS_pre fs)  a c) (Init.Nat.iter i F bot a) (fun b s => (mFS_Post fs) a c b s)).
+  { intro i; induction i; intros a0 c0; simpl.
+    - split; simpl; easy.
+    - apply Hstep.
+      apply Hforall.
+      apply IHi.
+  }
+  split.
+  - intros b s1 s2 HP Hrun.
+    destruct Hrun as [i Hi].
+    specialize (Hiter i a lv) as [Hnrm _].
+    eapply Hnrm; eauto.
+  - intros s1 HP Herr.
+    destruct Herr as [i Hi].
+    specialize (Hiter i a lv) as [_ Herr'].
+    eapply Herr'; eauto.
+Qed.
+
+Ltac hoare_fix_nolv_auto A :=
+   match goal with 
+  | |- @Hoare ?Σ ?R ?P1 (BW_fix ?F ?a) ?P2 =>
+    let P := fresh "P" in evar (P: A -> Σ  -> Prop);
+    let Q := fresh "Q" in evar (Q: A -> R -> Σ  -> Prop);
+     let h := fresh "h" in assert (P = P) as h;[ 
+       let P' := eval pattern (a) in P1 in
+      match P' with  
+      | ?P''  _ => exact (Logic.eq_refl P'') end | ];
+    clear h;
+    let h := fresh "h" in assert (Q = Q) as h;[
+     let Q' := eval pattern (a) in P2 in
+      match Q' with  
+      | ?Q''  _ => exact (Logic.eq_refl Q'') end |];
+    clear h;
+    eapply Hoare_BW_fix with (P:= P) (Q := Q);
+    subst P Q
+  end.
+
+Ltac hoare_fix_lv_auto A C c:=
+   match goal with 
+  | |- @Hoare ?Σ ?R ?P1 (BW_fix ?F ?a) ?Q1 =>
+     let P := fresh "P" in evar (P: A -> C -> Σ  -> Prop);
+     let Q := fresh "Q" in evar (Q: A -> C -> R -> Σ -> Prop);
+     let h := fresh "h" in assert (P = P) as h;[ 
+      let P0 := eval pattern (c) in P1 in
+      match P0 with 
+      | ?P0' _ => 
+      let P' := eval pattern (a) in P0' in
+      match P' with  
+      | ?P'' _  => exact (Logic.eq_refl P'') end end| ];
+     clear h;
+     let h := fresh "h" in assert (Q = Q) as h;[ 
+      let Q0 := eval pattern (c) in Q1 in
+      match Q0 with 
+      | ?Q0' _ => 
+      let Q' := eval pattern (a) in Q0' in
+      match Q' with  
+      | ?Q'' _  => exact (Logic.eq_refl Q'') end end| ];
+    clear h;
+    eapply Hoare_BW_fix_logicv with  (P:= P) (Q := Q); subst P Q
+  end.
+
+Ltac hoare_fix_lv_auto_conj A C c:=
+  match goal with 
+| |- @Hoare ?Σ ?R ?P (BW_fix ?F ?a) ?Q =>
+    let P1 := fresh "P" in evar (P1: A -> C -> Σ  -> Prop);
+    let Q1 := fresh "Q" in evar (Q1: A -> C -> R -> Σ -> Prop);
+    let h := fresh "h" in assert (P1 = P1) as h;[ 
+    let P0 := eval pattern (c) in P in
+    match P0 with 
+    | ?P0' _ => 
+    let P' := eval pattern (a) in P0' in
+    match P' with  
+    | ?P'' _  => exact (Logic.eq_refl P'') end end| ];
+    clear h;
+    let h := fresh "h" in assert (Q1 = Q1) as h;[ 
+    let Q0 := eval pattern (c) in Q in
+    match Q0 with 
+    | ?Q0' _ => 
+    let Q' := eval pattern (a) in Q0' in
+    match Q' with  
+    | ?Q'' _  => exact (Logic.eq_refl Q'') end end| ];
+  clear h;
+  eapply (Hoare_BW_fix_logicv_conj' _ P1 Q1 a c);
+  subst P1 Q1
+end.
+
+Ltac hoare_fix_lv_auto_conj' A C c:=
+  match goal with 
+| |- @Hoare ?Σ ?R ?P (BW_fix ?F ?a) ?Q =>
+    let P1 := fresh "P" in evar (P1: A -> C -> Σ  -> Prop);
+    let Q1 := fresh "Q" in evar (Q1: A -> C -> R -> Σ -> Prop);
+    let h := fresh "h" in assert (P1 = P1) as h;[ 
+    let P0 := eval pattern (c) in P in
+    match P0 with 
+    | ?P0' _ => 
+    let P' := eval pattern (a) in P0' in
+    match P' with  
+    | ?P'' _  => exact (Logic.eq_refl P'') end end| ];
+    clear h;
+    let h := fresh "h" in assert (Q1 = Q1) as h;[ 
+    let Q0 := eval pattern (c) in Q in
+    match Q0 with 
+    | ?Q0' _ => 
+    let Q' := eval pattern (a) in Q0' in
+    match Q' with  
+    | ?Q'' _  => exact (Logic.eq_refl Q'') end end| ];
+  clear h;
+  eapply (Hoare_BW_fix_logicv_conj' _ P1 Q1 a c);
+  subst P1 Q1
+end.
+
 Lemma Hoare_repeat_break {Σ A B: Type}:
 forall (f: A -> program Σ (CntOrBrk A B)) (P: A -> Σ -> Prop) (Q: B -> Σ -> Prop),
   (forall a, Hoare (P a) (f a) (fun ab σ =>
@@ -521,6 +1003,35 @@ Proof.
   apply Hoare_BW_fix with (Q:= fun _ => Q).
   intros.
   unfold repeat_break_f.
+  hoare_bind H.
+  hoare_auto.
+Qed.
+
+Lemma Hoare_repeat_break' {Σ A B: Type}:
+  forall (body: A -> program Σ (CntOrBrk A B))
+         (P: A -> Σ -> Prop)
+         (Q: B -> Σ -> Prop),
+    (forall a, Hoare (P a) (x <- body a;; continue_case x) P) ->
+    (forall a, Hoare (P a) (x <- body a;; break_case x) Q) -> 
+    (forall a, Hoare (P a) (repeat_break body a) Q).
+Proof.
+  intros.
+  apply Hoare_repeat_break.
+  intros; apply Hoare_sum; auto.
+Qed.
+
+Lemma Hoare_repeat_break_noin {Σ B: Type}:
+  forall (body: program Σ (CntOrBrk unit B)) (P: Σ -> Prop) (Q: B -> Σ -> Prop),
+    Hoare P body (fun ab σ =>
+  match ab with
+  | by_continue _ => P σ
+  | by_break b => Q b σ
+  end) -> Hoare P (repeat_break_noin body) Q.
+Proof.
+  intros.
+  eapply Hoare_BW_fix_prog.
+  intros W HW.
+  unfold repeat_break_noin, repeat_break_f_noinput in *.
   hoare_bind H.
   hoare_auto.
 Qed.
@@ -654,6 +1165,65 @@ Proof.
   auto.
 Qed.
 
+Lemma app_singleton_tail {A} (prefix: list A) (a: A) (l: list A):
+  ((prefix ++ a :: nil) ++ l) = prefix ++ a :: l.
+Proof.
+  induction prefix as [| x prefix IHprefix]; simpl.
+  - reflexivity.
+  - rewrite IHprefix.
+    reflexivity.
+Qed.
+
+Lemma Hoare_list_iter_aux {Σ A B}
+  (P: list A -> B -> Σ -> Prop)
+  (body: A -> B -> program Σ B)
+  (prefix: list A):
+  (forall pfx x b,
+    Hoare (fun s => P pfx b s) (body x b) (fun b' s => P (pfx ++ x :: nil) b' s)) ->
+  forall l b,
+    Hoare (fun s => P prefix b s) (list_iter body l b) (fun b' s => P (prefix ++ l) b' s).
+Proof.
+  intros H l.
+  revert prefix.
+  induction l; intros prefix b.
+  - simpl.
+    rewrite app_nil_r.
+    apply Hoare_ret.
+    auto.
+  - simpl.
+    eapply Hoare_bind.
+    + apply H.
+    + intros b'.
+      specialize (IHl (prefix ++ a :: nil) b').
+      eapply (@Hoare_cons_post B Σ
+        (fun s => P (prefix ++ a :: nil) b' s)
+        (list_iter body l b')
+        (fun b'' s => P ((prefix ++ a :: nil) ++ l) b'' s)
+        (fun b'' s => P (prefix ++ a :: l) b'' s)).
+      * intros b'' s HP.
+        rewrite app_singleton_tail in HP.
+        exact HP.
+      * exact IHl.
+Qed.
+
+Theorem Hoare_list_iter {Σ A B}
+  (P: list A -> B -> Σ -> Prop)
+  (body: A -> B -> program Σ B):
+  (forall prefix x b,
+    Hoare (fun s => P prefix b s) (body x b) (fun b' s => P (prefix ++ x :: nil) b' s)) ->
+  forall l b,
+    Hoare (fun s => P nil b s) (list_iter body l b) (fun b' s => P l b' s).
+Proof.
+  intros H l b.
+  eapply (@Hoare_cons_post B Σ
+    (fun s => P nil b s)
+    (list_iter body l b)
+    (fun b' s => P (nil ++ l) b' s)
+    (fun b' s => P l b' s)).
+  - intros b' s HP. simpl in HP. exact HP.
+  - apply Hoare_list_iter_aux; auto.
+Qed.
+
 Lemma range_iter_no_iter {A Σ: Type} : 
   forall (f: Z -> A -> program Σ A) (P: A -> Σ -> Prop) (lo hi: Z),
   hi < lo ->
@@ -663,6 +1233,26 @@ Proof.
   rewrite range_iter_unfold.
   hoare_auto.
   lia.
+Qed.
+
+Theorem Hoare_whileP {Σ: Type} (cond: Σ -> Prop) 
+  (body : program Σ unit) (P: Σ -> Prop):
+  Hoare (fun s => P s /\ cond s) body (fun _ s => P s) ->
+  Hoare P (whileP cond body) (fun _ s => P s /\ ~ cond s).
+Proof.
+  intros Hbody.
+  unfold whileP.
+  apply Hoare_BW_fix_prog.
+  intros W HW.
+  unfold whileP_f.
+  apply Hoare_choice.
+  - eapply Hoare_assumeS_bind.
+    eapply Hoare_bind; [apply Hbody|].
+    intros []; simpl.
+    eapply Hoare_cons_pre; [| apply HW].
+    intros; tauto.
+  - eapply Hoare_assumeS_bind.
+    apply Hoare_ret; intros; tauto.
 Qed.
 
 
@@ -757,6 +1347,18 @@ Import MonadErr.
       intros. apply H0. apply nrmequiv. auto.
     - split. unfold not in *. intros. apply H. apply errequiv;auto. 
       intros. apply H0. apply nrmequiv. auto.
+  Qed.
+
+  Lemma wp_progrefine (c1 c2: program Σ A) (Q: A -> Σ -> Prop):
+    (nrm c2 ⊆ nrm c1) ->
+    (err c2 ⊆ err c1) ->
+    weakestpre c1 Q ⊆ weakestpre c2 Q.
+  Proof.
+    unfold weakestpre; intros Hn Herr s1 [Hnoerr Hpost].
+    split.
+    - intros Herr2; apply Hnoerr; apply Herr; auto.
+    - intros a s2 Hin.
+      apply Hpost. apply Hn; auto.
   Qed.
 
   Lemma wp_conseq (c: program Σ A) (Q1 Q2: A -> Σ -> Prop):
@@ -909,6 +1511,77 @@ Import MonadErr.
       tauto.
   Qed.
 
+  Lemma wp_assertS (P: Σ -> Prop) (Q: unit -> Σ -> Prop):
+    (weakestpre (assertS P) Q == (fun s => P s /\ Q tt s))%sets.
+  Proof.
+    intros s1.
+    split;intros.
+    - unfold weakestpre in H.
+      destruct H.
+      unfold assertS in *. 
+      cbn in *.
+      split;[tauto | ].
+      apply H0.
+      sets_unfold.
+      tauto.
+    - unfold weakestpre, assertS.
+      simpl. split;[tauto | ].
+      intros ? ? [? ?].
+      subst. destruct r.
+      tauto.
+  Qed.
+
+  Lemma wp_get (Pa: Σ -> A -> Prop)  (Q: A -> Σ -> Prop):
+    (weakestpre (get Pa) Q == (fun s => forall a, Pa s a -> Q a s))%sets.
+  Proof.
+    intros s1.
+    split;intros.
+    - unfold weakestpre in H.
+      apply H.
+      unfold get. simpl.
+      sets_unfold.
+      auto.
+    - unfold weakestpre.
+      unfold get.
+      simpl. split;auto.
+      intros ? ? [? ?].
+      subst.
+      apply H;auto.
+  Qed.
+
+  Lemma wp_get' (f: Σ -> A)  (Q: A -> Σ -> Prop):
+    (weakestpre (get' f) Q == (fun s => forall a,  a = f s -> Q a s))%sets.
+  Proof.
+    intros.
+    unfold get'.
+    rewrite wp_get.
+    reflexivity.
+  Qed.
+
+  Lemma wp_update (P: Σ -> Σ -> Prop)  (Q: unit -> Σ -> Prop):
+    (weakestpre (update P) Q == (fun s =>  forall s', P s s' -> Q tt s'))%sets.
+  Proof.
+    intros s1.
+    split;intros.
+    - unfold weakestpre in H.
+      unfold update in H.
+      apply H. simpl. 
+      auto.
+    - unfold weakestpre.
+      unfold update.
+      simpl. split;auto.
+      intros.
+      destruct r.
+      apply H;auto.
+  Qed.
+
+  Lemma wp_update' (f: Σ -> Σ)  (Q: unit -> Σ -> Prop):
+    (weakestpre (update' f) Q == (fun s => forall s',  s' = f s -> Q tt s'))%sets.
+  Proof.
+    intros.
+    unfold update'.
+    rewrite wp_update.
+    reflexivity.
+  Qed.
 
 End WLPrules.
-

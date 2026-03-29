@@ -69,8 +69,8 @@ Proof.
     entailer!.
     Exists Z.
     Exists (fun (p : addr) (swmtrID : glob_vars_and_defs.SwtmrID) =>
-   [|p = &( ((glob_vars_and_defs.g_swtmrCBArray sg) # "SWTMR_CTRL_S" + swmtrID % 5) ->ₛ "stSortList")|] &&
-   emp) l.
+   [|p = &( ((glob_vars_and_defs.g_swtmrCBArray sg_swmtrSpec) # "SWTMR_CTRL_S" + swmtrID % 5) ->ₛ "stSortList")|] &&
+   emp) l_swmtrSpec.
    unfold store_swtmr_sorted_dll. Intros y. subst y.
    rewrite H.
    unfold glob_vars_and_defs.SwtmrID. unfold SwtmrID.
@@ -91,8 +91,8 @@ Proof.
     entailer!.
     eapply derivable1s_exp_r.
     Exists (fun (p : addr) (taskID : glob_vars_and_defs.TaskID) =>
-   [|p = &( ((glob_vars_and_defs.g_taskCBArray sg) # "LosTaskCB" + taskID) ->ₛ "sortList")|] &&
-   emp) l.
+   [|p = &( ((glob_vars_and_defs.g_taskCBArray sg_taskSpec) # "LosTaskCB" + taskID) ->ₛ "sortList")|] &&
+   emp) l_taskSpec.
    unfold store_task_sorted_dll.
    rewrite H.
    csimpl.

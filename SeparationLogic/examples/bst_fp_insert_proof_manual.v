@@ -22,13 +22,13 @@ Local Open Scope sac.
 Lemma proof_of_insert_entail_wit_1 : insert_entail_wit_1.
 Proof.
   pre_process.
-  Exists b_pre_v nil tr.
+  Exists b_pre_v nil tr_low_level_spec.
   entailer!.
   simpl store_ptb.
   entailer!.
 Qed.
 
-Lemma proof_of_insert_entail_wit_2_1 : insert_entail_wit_2_1.
+Lemma proof_of_insert_entail_wit_2_2 : insert_entail_wit_2_2.
 Proof.
   pre_process.
   sep_apply (store_ptb_LH b b_v_2); [ | try tauto .. ].
@@ -46,7 +46,7 @@ Proof.
     first [reflexivity | Key.order].
 Qed.
 
-Lemma proof_of_insert_entail_wit_2_2 : insert_entail_wit_2_2.
+Lemma proof_of_insert_entail_wit_2_1 : insert_entail_wit_2_1.
 Proof.
   pre_process.
   sep_apply (store_ptb_RH b b_v_2); [ | try tauto .. ].
@@ -113,7 +113,7 @@ Lemma proof_of_insert_derive_high_level_spec_by_low_level_spec : insert_derive_h
 Proof.
   pre_process.
   Intros b_pre_v.
-  unfold store_map.
+  unfold Bst.store_map.
   Intros tr.
   Exists tr.
   Exists b_pre_v.

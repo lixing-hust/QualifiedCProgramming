@@ -38,12 +38,12 @@ forall (x_pre: Z) ,
 
 Definition sll_copy_safety_wit_2 := 
 forall (x_pre: Z) (retval_next: Z) (retval: Z) (y: Z) (p: Z) (t_data: Z) (t_next: Z) (t: Z) (x: Z) (y_2: Z) ,
-  [| (p <> 0) |] 
-  &&  [| (t <> 0) |] 
+  [| (t <> 0) |] 
   &&  [| (t_next = 0) |] 
   &&  [| (t_data = 0) |] 
   &&  [| (retval <> 0) |] 
-  &&  [| (retval_next = 0) |]
+  &&  [| (retval_next = 0) |] 
+  &&  [| (p <> 0) |]
   &&  ((&((p)  # "list" ->ₛ "data")) # Int  |-> x)
   **  (listrep y_2 )
   **  ((&((p)  # "list" ->ₛ "next")) # Ptr  |-> y_2)
@@ -85,12 +85,12 @@ Definition sll_copy_entail_wit_2 :=
 forall (x_pre: Z) (retval_next: Z) (retval: Z) (y: Z) (p: Z) (t_data_2: Z) (t_next_2: Z) (t: Z) (x: Z) (y_2: Z) (retval_next_2: Z) (retval_2: Z) ,
   [| (retval_2 <> 0) |] 
   &&  [| (retval_next_2 = 0) |] 
-  &&  [| (p <> 0) |] 
   &&  [| (t <> 0) |] 
   &&  [| (t_next_2 = 0) |] 
   &&  [| (t_data_2 = 0) |] 
   &&  [| (retval <> 0) |] 
-  &&  [| (retval_next = 0) |]
+  &&  [| (retval_next = 0) |] 
+  &&  [| (p <> 0) |]
   &&  ((&((retval_2)  # "list" ->ₛ "data")) # Int  |-> 0)
   **  ((&((retval_2)  # "list" ->ₛ "next")) # Ptr  |-> retval_next_2)
   **  ((&((p)  # "list" ->ₛ "data")) # Int  |-> x)
@@ -116,12 +116,12 @@ forall (x_pre: Z) (retval_next: Z) (retval: Z) (y: Z) (p: Z) (t_data_2: Z) (t_ne
 
 Definition sll_copy_return_wit_1 := 
 forall (x_pre: Z) (retval_next: Z) (retval: Z) (y: Z) (p: Z) (t_data: Z) (t_next: Z) (t: Z) ,
-  [| (p = 0) |] 
-  &&  [| (t <> 0) |] 
+  [| (t <> 0) |] 
   &&  [| (t_next = 0) |] 
   &&  [| (t_data = 0) |] 
   &&  [| (retval <> 0) |] 
-  &&  [| (retval_next = 0) |]
+  &&  [| (retval_next = 0) |] 
+  &&  [| (p = 0) |]
   &&  ((&((t)  # "list" ->ₛ "next")) # Ptr  |-> t_next)
   **  ((&((t)  # "list" ->ₛ "data")) # Int  |-> t_data)
   **  (lseg x_pre p )
@@ -154,26 +154,26 @@ forall (x_pre: Z) ,
 Definition sll_copy_partial_solve_wit_1 := sll_copy_partial_solve_wit_1_pure -> sll_copy_partial_solve_wit_1_aux.
 
 Definition sll_copy_partial_solve_wit_2 := 
-forall (x_pre: Z) (retval_next: Z) (retval: Z) (y: Z) (p: Z) (t_data: Z) (t_next: Z) (t: Z) (x: Z) ,
-  [| (p <> 0) |] 
-  &&  [| (t <> 0) |] 
+forall (x_pre: Z) (retval_next: Z) (retval: Z) (y: Z) (p: Z) (t_data: Z) (t_next: Z) (t: Z) ,
+  [| (t <> 0) |] 
   &&  [| (t_next = 0) |] 
   &&  [| (t_data = 0) |] 
   &&  [| (retval <> 0) |] 
-  &&  [| (retval_next = 0) |]
+  &&  [| (retval_next = 0) |] 
+  &&  [| (p <> 0) |]
   &&  ((&((t)  # "list" ->ₛ "next")) # Ptr  |-> t_next)
   **  ((&((t)  # "list" ->ₛ "data")) # Int  |-> t_data)
   **  (lseg x_pre p )
   **  (listrep p )
   **  (lseg y t )
 |--
-  EX (y_2: Z) ,
-  [| (p <> 0) |] 
-  &&  [| (t <> 0) |] 
+  EX (x: Z)  (y_2: Z) ,
+  [| (t <> 0) |] 
   &&  [| (t_next = 0) |] 
   &&  [| (t_data = 0) |] 
   &&  [| (retval <> 0) |] 
-  &&  [| (retval_next = 0) |]
+  &&  [| (retval_next = 0) |] 
+  &&  [| (p <> 0) |]
   &&  ((&((p)  # "list" ->ₛ "data")) # Int  |-> x)
   **  (listrep y_2 )
   **  ((&((p)  # "list" ->ₛ "next")) # Ptr  |-> y_2)
@@ -185,12 +185,12 @@ forall (x_pre: Z) (retval_next: Z) (retval: Z) (y: Z) (p: Z) (t_data: Z) (t_next
 
 Definition sll_copy_partial_solve_wit_3_pure := 
 forall (x_pre: Z) (retval_next: Z) (retval: Z) (y: Z) (p: Z) (t_data: Z) (t_next: Z) (t: Z) (x: Z) (y_2: Z) ,
-  [| (p <> 0) |] 
-  &&  [| (t <> 0) |] 
+  [| (t <> 0) |] 
   &&  [| (t_next = 0) |] 
   &&  [| (t_data = 0) |] 
   &&  [| (retval <> 0) |] 
-  &&  [| (retval_next = 0) |]
+  &&  [| (retval_next = 0) |] 
+  &&  [| (p <> 0) |]
   &&  ((&((p)  # "list" ->ₛ "data")) # Int  |-> x)
   **  (listrep y_2 )
   **  ((&((p)  # "list" ->ₛ "next")) # Ptr  |-> y_2)
@@ -208,12 +208,12 @@ forall (x_pre: Z) (retval_next: Z) (retval: Z) (y: Z) (p: Z) (t_data: Z) (t_next
 
 Definition sll_copy_partial_solve_wit_3_aux := 
 forall (x_pre: Z) (retval_next: Z) (retval: Z) (y: Z) (p: Z) (t_data: Z) (t_next: Z) (t: Z) (x: Z) (y_2: Z) ,
-  [| (p <> 0) |] 
-  &&  [| (t <> 0) |] 
+  [| (t <> 0) |] 
   &&  [| (t_next = 0) |] 
   &&  [| (t_data = 0) |] 
   &&  [| (retval <> 0) |] 
-  &&  [| (retval_next = 0) |]
+  &&  [| (retval_next = 0) |] 
+  &&  [| (p <> 0) |]
   &&  ((&((p)  # "list" ->ₛ "data")) # Int  |-> x)
   **  (listrep y_2 )
   **  ((&((p)  # "list" ->ₛ "next")) # Ptr  |-> y_2)
@@ -223,12 +223,12 @@ forall (x_pre: Z) (retval_next: Z) (retval: Z) (y: Z) (p: Z) (t_data: Z) (t_next
   **  (lseg y t )
 |--
   [| (0 = 0) |] 
-  &&  [| (p <> 0) |] 
   &&  [| (t <> 0) |] 
   &&  [| (t_next = 0) |] 
   &&  [| (t_data = 0) |] 
   &&  [| (retval <> 0) |] 
-  &&  [| (retval_next = 0) |]
+  &&  [| (retval_next = 0) |] 
+  &&  [| (p <> 0) |]
   &&  ((&((p)  # "list" ->ₛ "data")) # Int  |-> x)
   **  (listrep y_2 )
   **  ((&((p)  # "list" ->ₛ "next")) # Ptr  |-> y_2)
@@ -382,9 +382,9 @@ forall (y_pre: Z) (x_pre: Z) (x: Z) (y: Z) ,
 
 Definition append_entail_wit_2 := 
 forall (x_pre: Z) (x: Z) (y: Z) (w_2: Z) (u: Z) (t: Z) (x_2: Z) (y_2: Z) ,
-  [| (u <> 0) |] 
-  &&  [| (t <> 0) |] 
-  &&  [| (x_pre <> 0) |]
+  [| (t <> 0) |] 
+  &&  [| (x_pre <> 0) |] 
+  &&  [| (u <> 0) |]
   &&  ((&((u)  # "list" ->ₛ "next")) # Ptr  |-> y_2)
   **  (listrep y_2 )
   **  ((&((u)  # "list" ->ₛ "data")) # Int  |-> x_2)
@@ -414,9 +414,9 @@ forall (y_pre: Z) (x_pre: Z) ,
 
 Definition append_return_wit_2 := 
 forall (x_pre: Z) (x: Z) (y: Z) (w: Z) (u: Z) (t: Z) ,
-  [| (u = 0) |] 
-  &&  [| (t <> 0) |] 
-  &&  [| (x_pre <> 0) |]
+  [| (t <> 0) |] 
+  &&  [| (x_pre <> 0) |] 
+  &&  [| (u = 0) |]
   &&  ((&((t)  # "list" ->ₛ "next")) # Ptr  |-> y)
   **  ((&((t)  # "list" ->ₛ "data")) # Int  |-> w)
   **  (listrep y )
@@ -442,9 +442,9 @@ forall (y_pre: Z) (x_pre: Z) ,
 
 Definition append_partial_solve_wit_2 := 
 forall (x_pre: Z) (x: Z) (y: Z) (w: Z) (u: Z) (t: Z) ,
-  [| (u <> 0) |] 
-  &&  [| (t <> 0) |] 
-  &&  [| (x_pre <> 0) |]
+  [| (t <> 0) |] 
+  &&  [| (x_pre <> 0) |] 
+  &&  [| (u <> 0) |]
   &&  ((&((t)  # "list" ->ₛ "next")) # Ptr  |-> u)
   **  ((&((t)  # "list" ->ₛ "data")) # Int  |-> w)
   **  (listrep y )
@@ -452,9 +452,9 @@ forall (x_pre: Z) (x: Z) (y: Z) (w: Z) (u: Z) (t: Z) ,
   **  (lseg x t )
 |--
   EX (y_2: Z)  (x_2: Z) ,
-  [| (u <> 0) |] 
-  &&  [| (t <> 0) |] 
-  &&  [| (x_pre <> 0) |]
+  [| (t <> 0) |] 
+  &&  [| (x_pre <> 0) |] 
+  &&  [| (u <> 0) |]
   &&  ((&((u)  # "list" ->ₛ "next")) # Ptr  |-> y_2)
   **  (listrep y_2 )
   **  ((&((u)  # "list" ->ₛ "data")) # Int  |-> x_2)
@@ -481,10 +481,10 @@ forall (y_pre: Z) (x_pre: Z) ,
 
 Definition merge_safety_wit_2 := 
 forall (x_pre: Z) (z: Z) (x: Z) (t: Z) (y: Z) (x_2: Z) (y_2: Z) (x_3: Z) (y_3: Z) ,
-  [| (y <> 0) |] 
-  &&  [| (y = t) |] 
+  [| (y = t) |] 
   &&  [| (x <> 0) |] 
-  &&  [| (x_pre <> 0) |]
+  &&  [| (x_pre <> 0) |] 
+  &&  [| (y <> 0) |]
   &&  ((&((x)  # "list" ->ₛ "next")) # Ptr  |-> y)
   **  (listrep y_3 )
   **  ((&((x)  # "list" ->ₛ "data")) # Int  |-> x_3)
@@ -518,10 +518,10 @@ forall (y_pre: Z) (x_pre: Z) ,
 Definition merge_entail_wit_2 := 
 forall (x_pre: Z) (z: Z) (x: Z) (t: Z) (y_3: Z) (x_2: Z) (y: Z) (x_3: Z) (y_2: Z) ,
   [| (y_2 <> 0) |] 
-  &&  [| (y_3 <> 0) |] 
   &&  [| (y_3 = t) |] 
   &&  [| (x <> 0) |] 
-  &&  [| (x_pre <> 0) |]
+  &&  [| (x_pre <> 0) |] 
+  &&  [| (y_3 <> 0) |]
   &&  ((&((x)  # "list" ->ₛ "next")) # Ptr  |-> y_3)
   **  (listrep y_2 )
   **  ((&((x)  # "list" ->ₛ "data")) # Int  |-> x_3)
@@ -539,12 +539,21 @@ forall (x_pre: Z) (z: Z) (x: Z) (t: Z) (y_3: Z) (x_2: Z) (y: Z) (x_3: Z) (y_2: Z
 .
 
 Definition merge_return_wit_1 := 
+forall (y_pre: Z) (x_pre: Z) ,
+  [| (x_pre = 0) |]
+  &&  (listrep x_pre )
+  **  (listrep y_pre )
+|--
+  (listrep y_pre )
+.
+
+Definition merge_return_wit_2 := 
 forall (x_pre: Z) (z: Z) (x: Z) (t: Z) (y: Z) (x_2: Z) (y_2: Z) (x_3: Z) (y_3: Z) ,
   [| (y_3 = 0) |] 
-  &&  [| (y <> 0) |] 
   &&  [| (y = t) |] 
   &&  [| (x <> 0) |] 
-  &&  [| (x_pre <> 0) |]
+  &&  [| (x_pre <> 0) |] 
+  &&  [| (y <> 0) |]
   &&  ((&((x)  # "list" ->ₛ "next")) # Ptr  |-> y)
   **  (listrep y_3 )
   **  ((&((x)  # "list" ->ₛ "data")) # Int  |-> x_3)
@@ -556,21 +565,12 @@ forall (x_pre: Z) (z: Z) (x: Z) (t: Z) (y: Z) (x_2: Z) (y_2: Z) (x_3: Z) (y_3: Z
   (listrep z )
 .
 
-Definition merge_return_wit_2 := 
-forall (y_pre: Z) (x_pre: Z) ,
-  [| (x_pre = 0) |]
-  &&  (listrep x_pre )
-  **  (listrep y_pre )
-|--
-  (listrep y_pre )
-.
-
 Definition merge_return_wit_3 := 
 forall (x_pre: Z) (z: Z) (x: Z) (t: Z) (y: Z) ,
-  [| (y = 0) |] 
-  &&  [| (y = t) |] 
+  [| (y = t) |] 
   &&  [| (x <> 0) |] 
-  &&  [| (x_pre <> 0) |]
+  &&  [| (x_pre <> 0) |] 
+  &&  [| (y = 0) |]
   &&  (lseg z x )
   **  (listrep x )
   **  (listrep y )
@@ -580,19 +580,19 @@ forall (x_pre: Z) (z: Z) (x: Z) (t: Z) (y: Z) ,
 
 Definition merge_partial_solve_wit_1 := 
 forall (x_pre: Z) (z: Z) (x: Z) (t: Z) (y: Z) ,
-  [| (y <> 0) |] 
-  &&  [| (y = t) |] 
+  [| (y = t) |] 
   &&  [| (x <> 0) |] 
-  &&  [| (x_pre <> 0) |]
+  &&  [| (x_pre <> 0) |] 
+  &&  [| (y <> 0) |]
   &&  (lseg z x )
   **  (listrep x )
   **  (listrep y )
 |--
   EX (y_2: Z)  (x_2: Z) ,
-  [| (y <> 0) |] 
-  &&  [| (y = t) |] 
+  [| (y = t) |] 
   &&  [| (x <> 0) |] 
-  &&  [| (x_pre <> 0) |]
+  &&  [| (x_pre <> 0) |] 
+  &&  [| (y <> 0) |]
   &&  ((&((y)  # "list" ->ₛ "next")) # Ptr  |-> y_2)
   **  (listrep y_2 )
   **  ((&((y)  # "list" ->ₛ "data")) # Int  |-> x_2)
@@ -602,10 +602,10 @@ forall (x_pre: Z) (z: Z) (x: Z) (t: Z) (y: Z) ,
 
 Definition merge_partial_solve_wit_2 := 
 forall (x_pre: Z) (z: Z) (x: Z) (t: Z) (y: Z) (x_2: Z) (y_2: Z) ,
-  [| (y <> 0) |] 
-  &&  [| (y = t) |] 
+  [| (y = t) |] 
   &&  [| (x <> 0) |] 
-  &&  [| (x_pre <> 0) |]
+  &&  [| (x_pre <> 0) |] 
+  &&  [| (y <> 0) |]
   &&  ((&((y)  # "list" ->ₛ "next")) # Ptr  |-> y_2)
   **  (listrep y_2 )
   **  ((&((y)  # "list" ->ₛ "data")) # Int  |-> x_2)
@@ -613,10 +613,10 @@ forall (x_pre: Z) (z: Z) (x: Z) (t: Z) (y: Z) (x_2: Z) (y_2: Z) ,
   **  (listrep x )
 |--
   EX (y_3: Z)  (x_3: Z) ,
-  [| (y <> 0) |] 
-  &&  [| (y = t) |] 
+  [| (y = t) |] 
   &&  [| (x <> 0) |] 
-  &&  [| (x_pre <> 0) |]
+  &&  [| (x_pre <> 0) |] 
+  &&  [| (y <> 0) |]
   &&  ((&((x)  # "list" ->ₛ "next")) # Ptr  |-> y_3)
   **  (listrep y_3 )
   **  ((&((x)  # "list" ->ₛ "data")) # Int  |-> x_3)
@@ -665,10 +665,10 @@ forall (z_pre: Z) (y_pre: Z) (x_pre: Z) (x: Z) (y: Z) ,
 
 Definition multi_append_entail_wit_2 := 
 forall (x_pre: Z) (x: Z) (z: Z) (y_3: Z) (u: Z) (v_2: Z) (t: Z) (x_2: Z) (y: Z) (x_3: Z) (y_2: Z) ,
-  [| (y_3 <> 0) |] 
+  [| (t <> 0) |] 
+  &&  [| (x_pre <> 0) |] 
   &&  [| (u <> 0) |] 
-  &&  [| (t <> 0) |] 
-  &&  [| (x_pre <> 0) |]
+  &&  [| (y_3 <> 0) |]
   &&  ((&((u)  # "list" ->ₛ "next")) # Ptr  |-> y_2)
   **  (listrep y_2 )
   **  ((&((u)  # "list" ->ₛ "data")) # Int  |-> x_3)
@@ -692,11 +692,19 @@ forall (x_pre: Z) (x: Z) (z: Z) (y_3: Z) (u: Z) (v_2: Z) (t: Z) (x_2: Z) (y: Z) 
 .
 
 Definition multi_append_return_wit_1 := 
+forall (x_pre: Z) (retval: Z) ,
+  [| (x_pre = 0) |]
+  &&  (listrep retval )
+|--
+  (listrep retval )
+.
+
+Definition multi_append_return_wit_2 := 
 forall (x_pre: Z) (x: Z) (y: Z) (u: Z) (v: Z) (t: Z) (retval: Z) ,
-  [| (y = 0) |] 
+  [| (t <> 0) |] 
+  &&  [| (x_pre <> 0) |] 
   &&  [| (u <> 0) |] 
-  &&  [| (t <> 0) |] 
-  &&  [| (x_pre <> 0) |]
+  &&  [| (y = 0) |]
   &&  (listrep retval )
   **  ((&((t)  # "list" ->ₛ "data")) # Int  |-> v)
   **  ((&((t)  # "list" ->ₛ "next")) # Ptr  |-> retval)
@@ -705,19 +713,11 @@ forall (x_pre: Z) (x: Z) (y: Z) (u: Z) (v: Z) (t: Z) (retval: Z) ,
   (listrep x )
 .
 
-Definition multi_append_return_wit_2 := 
-forall (x_pre: Z) (retval: Z) ,
-  [| (x_pre = 0) |]
-  &&  (listrep retval )
-|--
-  (listrep retval )
-.
-
 Definition multi_append_return_wit_3 := 
 forall (x_pre: Z) (x: Z) (u: Z) (v: Z) (t: Z) (retval: Z) ,
-  [| (u = 0) |] 
-  &&  [| (t <> 0) |] 
-  &&  [| (x_pre <> 0) |]
+  [| (t <> 0) |] 
+  &&  [| (x_pre <> 0) |] 
+  &&  [| (u = 0) |]
   &&  (listrep retval )
   **  ((&((t)  # "list" ->ₛ "data")) # Int  |-> v)
   **  ((&((t)  # "list" ->ₛ "next")) # Ptr  |-> retval)
@@ -756,10 +756,10 @@ forall (z_pre: Z) (y_pre: Z) (x_pre: Z) ,
 
 Definition multi_append_partial_solve_wit_3 := 
 forall (x_pre: Z) (x: Z) (z: Z) (y: Z) (u: Z) (v: Z) (t: Z) ,
-  [| (y <> 0) |] 
+  [| (t <> 0) |] 
+  &&  [| (x_pre <> 0) |] 
   &&  [| (u <> 0) |] 
-  &&  [| (t <> 0) |] 
-  &&  [| (x_pre <> 0) |]
+  &&  [| (y <> 0) |]
   &&  ((&((t)  # "list" ->ₛ "data")) # Int  |-> v)
   **  ((&((t)  # "list" ->ₛ "next")) # Ptr  |-> y)
   **  (listrep y )
@@ -768,10 +768,10 @@ forall (x_pre: Z) (x: Z) (z: Z) (y: Z) (u: Z) (v: Z) (t: Z) ,
   **  (lseg x t )
 |--
   EX (y_2: Z)  (x_2: Z) ,
-  [| (y <> 0) |] 
+  [| (t <> 0) |] 
+  &&  [| (x_pre <> 0) |] 
   &&  [| (u <> 0) |] 
-  &&  [| (t <> 0) |] 
-  &&  [| (x_pre <> 0) |]
+  &&  [| (y <> 0) |]
   &&  ((&((y)  # "list" ->ₛ "next")) # Ptr  |-> y_2)
   **  (listrep y_2 )
   **  ((&((y)  # "list" ->ₛ "data")) # Int  |-> x_2)
@@ -784,10 +784,10 @@ forall (x_pre: Z) (x: Z) (z: Z) (y: Z) (u: Z) (v: Z) (t: Z) ,
 
 Definition multi_append_partial_solve_wit_4 := 
 forall (x_pre: Z) (x: Z) (z: Z) (y: Z) (u: Z) (v: Z) (t: Z) (x_2: Z) (y_2: Z) ,
-  [| (y <> 0) |] 
+  [| (t <> 0) |] 
+  &&  [| (x_pre <> 0) |] 
   &&  [| (u <> 0) |] 
-  &&  [| (t <> 0) |] 
-  &&  [| (x_pre <> 0) |]
+  &&  [| (y <> 0) |]
   &&  ((&((y)  # "list" ->ₛ "next")) # Ptr  |-> u)
   **  (listrep y_2 )
   **  ((&((y)  # "list" ->ₛ "data")) # Int  |-> x_2)
@@ -798,10 +798,10 @@ forall (x_pre: Z) (x: Z) (z: Z) (y: Z) (u: Z) (v: Z) (t: Z) (x_2: Z) (y_2: Z) ,
   **  (lseg x t )
 |--
   EX (y_3: Z)  (x_3: Z) ,
-  [| (y <> 0) |] 
+  [| (t <> 0) |] 
+  &&  [| (x_pre <> 0) |] 
   &&  [| (u <> 0) |] 
-  &&  [| (t <> 0) |] 
-  &&  [| (x_pre <> 0) |]
+  &&  [| (y <> 0) |]
   &&  ((&((u)  # "list" ->ₛ "next")) # Ptr  |-> y_3)
   **  (listrep y_3 )
   **  ((&((u)  # "list" ->ₛ "data")) # Int  |-> x_3)
@@ -816,10 +816,10 @@ forall (x_pre: Z) (x: Z) (z: Z) (y: Z) (u: Z) (v: Z) (t: Z) (x_2: Z) (y_2: Z) ,
 
 Definition multi_append_partial_solve_wit_5 := 
 forall (x_pre: Z) (x: Z) (z: Z) (y: Z) (u: Z) (v: Z) (t: Z) ,
-  [| (y = 0) |] 
+  [| (t <> 0) |] 
+  &&  [| (x_pre <> 0) |] 
   &&  [| (u <> 0) |] 
-  &&  [| (t <> 0) |] 
-  &&  [| (x_pre <> 0) |]
+  &&  [| (y = 0) |]
   &&  ((&((t)  # "list" ->ₛ "data")) # Int  |-> v)
   **  ((&((t)  # "list" ->ₛ "next")) # Ptr  |-> u)
   **  (listrep y )
@@ -827,10 +827,10 @@ forall (x_pre: Z) (x: Z) (z: Z) (y: Z) (u: Z) (v: Z) (t: Z) ,
   **  (listrep u )
   **  (lseg x t )
 |--
-  [| (y = 0) |] 
+  [| (t <> 0) |] 
+  &&  [| (x_pre <> 0) |] 
   &&  [| (u <> 0) |] 
-  &&  [| (t <> 0) |] 
-  &&  [| (x_pre <> 0) |]
+  &&  [| (y = 0) |]
   &&  (listrep u )
   **  (listrep z )
   **  ((&((t)  # "list" ->ₛ "data")) # Int  |-> v)
@@ -840,9 +840,9 @@ forall (x_pre: Z) (x: Z) (z: Z) (y: Z) (u: Z) (v: Z) (t: Z) ,
 
 Definition multi_append_partial_solve_wit_6 := 
 forall (x_pre: Z) (x: Z) (z: Z) (y: Z) (u: Z) (v: Z) (t: Z) ,
-  [| (u = 0) |] 
-  &&  [| (t <> 0) |] 
-  &&  [| (x_pre <> 0) |]
+  [| (t <> 0) |] 
+  &&  [| (x_pre <> 0) |] 
+  &&  [| (u = 0) |]
   &&  ((&((t)  # "list" ->ₛ "data")) # Int  |-> v)
   **  ((&((t)  # "list" ->ₛ "next")) # Ptr  |-> u)
   **  (listrep y )
@@ -850,9 +850,9 @@ forall (x_pre: Z) (x: Z) (z: Z) (y: Z) (u: Z) (v: Z) (t: Z) ,
   **  (listrep u )
   **  (lseg x t )
 |--
-  [| (u = 0) |] 
-  &&  [| (t <> 0) |] 
-  &&  [| (x_pre <> 0) |]
+  [| (t <> 0) |] 
+  &&  [| (x_pre <> 0) |] 
+  &&  [| (u = 0) |]
   &&  (listrep y )
   **  (listrep z )
   **  ((&((t)  # "list" ->ₛ "data")) # Int  |-> v)

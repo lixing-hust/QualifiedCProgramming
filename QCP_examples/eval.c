@@ -118,6 +118,7 @@ int eval(struct expr * e, int * var_value)
         case T_NE:
           return left_val != right_val;
         }
+        /*@ Branch clear all */
       }
     }
     case T_UNOP: {
@@ -135,4 +136,5 @@ int eval(struct expr * e, int * var_value)
       }
     }
   }
+  /*@ Branch clear all */
 }

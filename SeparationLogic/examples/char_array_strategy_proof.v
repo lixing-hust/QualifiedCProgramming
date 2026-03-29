@@ -65,7 +65,7 @@ Qed.
 
 Lemma char_array_strategy8_correctness : char_array_strategy8.
   pre_process_default.
-  sep_apply (CharArray.undef_full_to_undef_ceil p r).
+  sep_apply (CharArray.undef_full_to_undef_seg p r).
   subst.
   entailer!. 
 Qed.
@@ -73,7 +73,7 @@ Qed.
 Lemma char_array_strategy9_correctness : char_array_strategy9.
   pre_process_default.
   simpl.
-  sep_apply (CharArray.undef_ceil_split_to_undef_missing_i p l i n); [ | tauto].
+  sep_apply (CharArray.undef_seg_split_to_undef_missing_i p l i n); [ | tauto].
   entailer!. 
   rewrite <- derivable1_wand_sepcon_adjoint. 
   entailer!.
@@ -83,9 +83,9 @@ Lemma char_array_strategy10_correctness : char_array_strategy10.
   pre_process_default.
   subst.
   prop_apply (CharArray.full_length). Intros.
-  sep_apply (CharArray.full_to_ceil).
-  sep_apply (CharArray.ceil_single).
-  sep_apply (CharArray.ceil_merge_to_full p 0 n (n + 1)) ; try lia.
+  sep_apply (CharArray.full_to_seg).
+  sep_apply (CharArray.seg_single).
+  sep_apply (CharArray.seg_merge_to_full p 0 n (n + 1)) ; try lia.
   replace (p + 0 * sizeof (CHAR)) with p by lia.
   replace (n + 1 - 0) with (n + 1) by lia.
   entailer!.
@@ -94,6 +94,6 @@ Qed.
 Lemma char_array_strategy11_correctness : char_array_strategy11.
   pre_process_default.
   simpl. subst.
-  sep_apply (CharArray.undef_missing_i_to_undef_ceil_head ); try lia.
+  sep_apply (CharArray.undef_missing_i_to_undef_seg_head ); try lia.
   entailer!.
 Qed.

@@ -23,7 +23,7 @@ Proof.
   pre_process. 
   entailer!. 
   unfold repeat_Z. simpl. 
-  sep_apply CharArray.undef_full_to_undef_ceil.
+  sep_apply CharArray.undef_full_to_undef_seg.
   entailer!.
   cbn.
   entailer!. 
@@ -42,7 +42,7 @@ Proof.
   pre_process.
   assert (i = n_pre) by lia. 
   subst.
-  rewrite (CharArray.undef_ceil_empty a_pre n_pre).
+  rewrite (CharArray.undef_seg_empty a_pre n_pre).
   entailer!.
 Qed.
 

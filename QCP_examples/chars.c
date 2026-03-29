@@ -11,7 +11,7 @@ void chars_initialize(char *a, int n, char m)
   /*@ Inv
       0 <= i && i <= n@pre &&
       CharArray::full(a@pre, i, repeat_Z(m@pre, i)) *
-      CharArray::undef_ceil(a@pre, i, n@pre)
+      CharArray::undef_seg(a@pre, i, n@pre)
   */
   for (i = 0; i < n; i++)
   {

@@ -136,4 +136,5 @@ bool alpha_equiv(term *t1, term *t2)
       }
     }
   }
+  /*@ Branch clear all */
 }

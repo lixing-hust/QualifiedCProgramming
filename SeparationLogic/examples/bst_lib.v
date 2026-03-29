@@ -368,9 +368,15 @@ Fixpoint store_pt (p p_root: Z) (pt: partial_tree): Assertion :=
   end.
 
 
+Module Bst.
+
 Definition store_map (p: addr) (m: mapping): Assertion :=
   EX tr: tree,
     [| SearchTree tr |] && [| Abs tr m |] && store_tree p tr.
+
+End Bst.
+
+Import Bst.
 
 Theorem insert_SearchTree: forall tr k v,
   SearchTree tr ->

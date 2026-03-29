@@ -359,9 +359,15 @@ Fixpoint store_ptb
         store_ptb p2_fa p2_root p_gfa p_root_fa pt'
   end.
 
+Module Bst.
+
 Definition store_map (p: addr) (m: mapping): Assertion :=
   EX tr: tree,
     [| SearchTree tr |] && [| Abs tr m |] && store_tree p 0 tr.
+
+End Bst.
+
+Import Bst.
 
 Theorem insert_SearchTree: forall tr k v,
   SearchTree tr ->

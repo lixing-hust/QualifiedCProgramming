@@ -45,7 +45,7 @@ forall (m_pre: Z) (n_pre: Z) (a_pre: Z) (i: Z) ,
   &&  [| (0 <= n_pre) |] 
   &&  [| (n_pre < INT_MAX) |]
   &&  (CharArray.full a_pre (i + 1 ) (app ((repeat_Z (m_pre) (i))) ((cons (m_pre) (nil)))) )
-  **  (CharArray.undef_ceil a_pre (i + 1 ) n_pre )
+  **  (CharArray.undef_seg a_pre (i + 1 ) n_pre )
   **  ((( &( "i" ) )) # Int  |-> i)
   **  ((( &( "m" ) )) # Char  |-> m_pre)
   **  ((( &( "n" ) )) # Int  |-> n_pre)
@@ -66,7 +66,7 @@ forall (m_pre: Z) (n_pre: Z) (a_pre: Z) ,
   &&  [| (0 <= n_pre) |] 
   &&  [| (n_pre < INT_MAX) |]
   &&  (CharArray.full a_pre 0 (repeat_Z (m_pre) (0)) )
-  **  (CharArray.undef_ceil a_pre 0 n_pre )
+  **  (CharArray.undef_seg a_pre 0 n_pre )
 .
 
 Definition chars_initialize_entail_wit_2 := 
@@ -77,14 +77,14 @@ forall (m_pre: Z) (n_pre: Z) (a_pre: Z) (i: Z) ,
   &&  [| (0 <= n_pre) |] 
   &&  [| (n_pre < INT_MAX) |]
   &&  (CharArray.full a_pre (i + 1 ) (app ((repeat_Z (m_pre) (i))) ((cons (m_pre) (nil)))) )
-  **  (CharArray.undef_ceil a_pre (i + 1 ) n_pre )
+  **  (CharArray.undef_seg a_pre (i + 1 ) n_pre )
 |--
   [| (0 <= (i + 1 )) |] 
   &&  [| ((i + 1 ) <= n_pre) |] 
   &&  [| (0 <= n_pre) |] 
   &&  [| (n_pre < INT_MAX) |]
   &&  (CharArray.full a_pre (i + 1 ) (repeat_Z (m_pre) ((i + 1 ))) )
-  **  (CharArray.undef_ceil a_pre (i + 1 ) n_pre )
+  **  (CharArray.undef_seg a_pre (i + 1 ) n_pre )
 .
 
 Definition chars_initialize_return_wit_1 := 
@@ -95,7 +95,7 @@ forall (m_pre: Z) (n_pre: Z) (a_pre: Z) (i: Z) ,
   &&  [| (0 <= n_pre) |] 
   &&  [| (n_pre < INT_MAX) |]
   &&  (CharArray.full a_pre i (repeat_Z (m_pre) (i)) )
-  **  (CharArray.undef_ceil a_pre i n_pre )
+  **  (CharArray.undef_seg a_pre i n_pre )
 |--
   (CharArray.full a_pre n_pre (repeat_Z (m_pre) (n_pre)) )
 .
@@ -108,7 +108,7 @@ forall (m_pre: Z) (n_pre: Z) (a_pre: Z) (i: Z) ,
   &&  [| (0 <= n_pre) |] 
   &&  [| (n_pre < INT_MAX) |]
   &&  (CharArray.full a_pre i (repeat_Z (m_pre) (i)) )
-  **  (CharArray.undef_ceil a_pre i n_pre )
+  **  (CharArray.undef_seg a_pre i n_pre )
 |--
   [| (i < n_pre) |] 
   &&  [| (0 <= i) |] 

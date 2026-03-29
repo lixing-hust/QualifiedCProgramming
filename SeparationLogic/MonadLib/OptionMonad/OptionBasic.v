@@ -64,3 +64,26 @@ Proof.
 Qed.
 Lemma bind_with_Some {A} (mx : option A) : mx ≫= Some = mx.
 Proof. by destruct mx. Qed.
+
+Lemma bind_Some_l {A B} (f : A -> option B) x :
+  Some x ≫= f = f x.
+Proof. reflexivity. Qed.
+Lemma bind_None_l {A B} (f : A -> option B) :
+  None ≫= f = None.
+Proof. reflexivity. Qed.
+
+Ltac simpl_option_monad :=
+  repeat match goal with
+  | [ H: context [ Some _ ≫= _ ] |- _ ] => rewrite bind_Some_l in H
+  | [ H: context [ None ≫= _ ] |- _ ] => rewrite bind_None_l in H
+  | [ |- context [ Some _ ≫= _ ] ] => rewrite bind_Some_l
+  | [ |- context [ None ≫= _ ] ] => rewrite bind_None_l
+  end.
+
+(* Test the tactic *)
+Lemma test_simpl_option_monad (A B: Type) (f: A -> option B) (x: A) :
+  (Some x ≫= f) = f x ∧ (None ≫= f) = None.
+Proof. simpl_option_monad. split; reflexivity. Qed.
+Lemma test_simpl_option_monad_in_hyp (A B: Type) (f: A -> option B) (x: A) :
+  (Some x ≫= f) = f x -> (None ≫= f) = None -> True.
+Proof. intros. simpl_option_monad. tauto. Qed.

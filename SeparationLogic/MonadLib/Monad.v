@@ -11,6 +11,18 @@ Class Monad (M: Type -> Type): Type := {
 Arguments Monad.bind: simpl never.
 Arguments Monad.ret: simpl never.
 
+Create HintDb monad_unfold.
+Hint Unfold Monad.bind Monad.ret : monad_unfold.
+(* Print HintDb monad_unfold. *)
+
+Ltac unfold_monad :=
+  repeat (autounfold with monad_unfold; simpl).
+
+Ltac unfold_monad_in H :=
+  repeat (autounfold with monad_unfold in H; simpl in H).
+
+Tactic Notation "unfold_monad" "in" hyp(H) := unfold_monad_in H.
+
 Class FMap (M : Type -> Type) := fmap : forall {A B}, (A -> B) -> M A -> M B.
 Global Arguments fmap {_ _ _ _} _ !_ / : assert.
 Global Hint Mode FMap ! : typeclass_instances.
@@ -40,17 +52,18 @@ Notation "(≫=)" := (fun m f => bind f m) (only parsing) : monad_scope.
 
 Notation "x <- c1 ;; c2" := (bind c1 (fun x => c2))
   (at level 61, c1 at next level, right associativity,
-    format "'[' x  <-  '[' c1 ']'  ;;  '/' c2 ']'") : monad_scope.
+    format "'[hv' x  <-  c1  ;;  '/' c2 ']'") : monad_scope.
 
 Notation "' pat <- c1 ;; c2" :=
-  (bind c1 (fun x => match x with pat => c2 end))
-  (at level 61, pat pattern, c1 at next level, right associativity,
-    format "'[' ' pat  <-  '[' c1 ']'  ;;  '/' c2 ']'") : monad_scope.
+  (bind c1 (fun pat => c2))
+  (at level 61, pat strict pattern, c1 at next level, right associativity,
+    format "'[hv' ' pat  <-  c1  ;;  '/' c2 ']'") : monad_scope.
 
 Notation "e1 ;; e2" := (bind e1 (fun _ => e2))
-  (at level 61, right associativity, format "e1  ;;  e2") : monad_scope.
+  (at level 61, right associativity, format "'[hv' e1  ;;  '/' e2 ']'") : monad_scope.
 
-Notation "'return' v" := (ret v) (at level 60, no associativity) : monad_scope.
+Notation "'return' v" := (ret v)
+  (at level 60, no associativity, format "'[hv' 'return'  v ']'") : monad_scope.
 
 Infix "<$>" := fmap (at level 62, left associativity) : monad_scope.
 

@@ -21,7 +21,7 @@ Require Import sll_merge_rel_lib.
 Local Open Scope monad.
 Local Open Scope sac.
 
-Lemma proof_of_split_while_entail_wit_2_2 : split_while_entail_wit_2_2.
+Lemma proof_of_split_while_entail_wit_2_1 : split_while_entail_wit_2_1.
 Proof. 
   pre_process.
   sepcon_lift  (sll x_next l1_new ).

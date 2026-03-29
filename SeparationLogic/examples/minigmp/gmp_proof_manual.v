@@ -20,32 +20,22 @@ Require Import GmpAux GmpNumber.
 Import Aux.
 Local Open Scope sac.
 
-Lemma proof_of_gmp_abs_return_wit_1_1 : gmp_abs_return_wit_1_1.
+Lemma proof_of_gmp_abs_return_wit_2 : gmp_abs_return_wit_2.
 Proof. pre_process. Qed. 
 
-Lemma proof_of_gmp_abs_return_wit_1_2 : gmp_abs_return_wit_1_2.
+Lemma proof_of_gmp_abs_return_wit_1 : gmp_abs_return_wit_1.
 Proof. pre_process. Qed.  
 
-Lemma proof_of_gmp_max_return_wit_1_1 : gmp_max_return_wit_1_1.
+Lemma proof_of_gmp_max_return_wit_2 : gmp_max_return_wit_2.
 Proof. pre_process. Qed. 
 
-Lemma proof_of_gmp_max_return_wit_1_2 : gmp_max_return_wit_1_2.
+Lemma proof_of_gmp_max_return_wit_1 : gmp_max_return_wit_1.
 Proof. pre_process. Qed.
 
-Lemma proof_of_gmp_cmp_return_wit_1_2 : gmp_cmp_return_wit_1_2.
+Lemma proof_of_gmp_cmp_return_wit_2 : gmp_cmp_return_wit_2.
 Proof.
   pre_process. 
   Left. Left. entailer!.
-Qed.
-
-Lemma proof_of_mpn_copyi_safety_wit_2 : mpn_copyi_safety_wit_2.
-Proof.
-  pre_process.
-  prop_apply (store_int_range (&("i"))). 
-  prop_apply (store_int_range (&("n"))).
-  Intros.
-  replace (Int.max_signed) with (2147483647) in * by reflexivity.
-  entailer!.
 Qed.
 
 Lemma proof_of_mpn_copyi_entail_wit_1 : mpn_copyi_entail_wit_1.
@@ -54,7 +44,7 @@ Proof.
   pose proof (Zlength_nonneg l).
   entailer!.
   rewrite UIntArray.full_empty.
-  sep_apply UIntArray.undef_full_to_undef_ceil.
+  sep_apply UIntArray.undef_full_to_undef_seg.
   entailer!.
 Qed.
 
@@ -62,9 +52,9 @@ Lemma proof_of_mpn_copyi_entail_wit_2 : mpn_copyi_entail_wit_2.
 Proof.
   pre_process.
   entailer!.
-  sep_apply UIntArray.ceil_single.
-  sep_apply UIntArray.full_to_ceil.
-  sep_apply UIntArray.ceil_merge_to_full ; try lia.
+  sep_apply UIntArray.seg_single.
+  sep_apply UIntArray.full_to_seg.
+  sep_apply UIntArray.seg_merge_to_full ; try lia.
   replace (d_pre + 0 * sizeof ( UINT )) with (d_pre) by lia.
   replace (i + 1 - 0) with (i + 1) by lia.
   rewrite Zlength_correct in H2.
@@ -82,7 +72,7 @@ Proof.
   subst i.
   rewrite sublist_self ; try lia.
   entailer!.
-  rewrite UIntArray.undef_ceil_empty.
+  rewrite UIntArray.undef_seg_empty.
   subst n_pre.
   entailer!.
 Qed.
@@ -120,28 +110,7 @@ Proof.
   reflexivity.
 Qed.
 
-
-Lemma proof_of_mpn_cmp_safety_wit_1 : mpn_cmp_safety_wit_1.
-Proof.
-  pre_process.
-  prop_apply (store_int_range (&("n"))).
-  Intros.
-  entailer!.
-  replace (Int.max_signed) with (2147483647) in * by reflexivity.
-  lia.
-Qed.
-
-Lemma proof_of_mpn_cmp_safety_wit_6 : mpn_cmp_safety_wit_6.
-Proof.
-  pre_process.
-  prop_apply (store_int_range (&("n"))).
-  Intros.
-  entailer!.
-  replace (Int.max_signed) with (2147483647) in * by reflexivity.
-  lia.
-Qed.
-
-Lemma proof_of_mpn_cmp_return_wit_1_1 : mpn_cmp_return_wit_1_1.
+Lemma proof_of_mpn_cmp_return_wit_2 : mpn_cmp_return_wit_2.
 Proof. 
   pre_process.
   Left. Left.
@@ -160,7 +129,7 @@ Proof.
     auto.
 Qed. 
 
-Lemma proof_of_mpn_cmp_return_wit_1_2 : mpn_cmp_return_wit_1_2.
+Lemma proof_of_mpn_cmp_return_wit_1 : mpn_cmp_return_wit_1.
 Proof.
   pre_process.
   Right.
@@ -179,7 +148,7 @@ Proof.
     lia.
 Qed.
 
-Lemma proof_of_mpn_cmp_return_wit_2 : mpn_cmp_return_wit_2.
+Lemma proof_of_mpn_cmp_return_wit_3 : mpn_cmp_return_wit_3.
 Proof. 
   pre_process.
   Left. Right.
@@ -205,7 +174,7 @@ Proof.
   entailer!.
 Qed. 
 
-Lemma proof_of_mpn_cmp4_return_wit_1_1 : mpn_cmp4_return_wit_1_1.
+Lemma proof_of_mpn_cmp4_return_wit_2 : mpn_cmp4_return_wit_2.
 Proof.
   pre_process.
   Right.
@@ -218,7 +187,7 @@ Proof.
   lia. 
 Qed. 
 
-Lemma proof_of_mpn_cmp4_return_wit_1_2 : mpn_cmp4_return_wit_1_2.
+Lemma proof_of_mpn_cmp4_return_wit_1 : mpn_cmp4_return_wit_1.
 Proof.
   pre_process.
   Left. Left.
@@ -231,21 +200,21 @@ Proof.
   lia.
 Qed.
 
-Lemma proof_of_mpn_cmp4_return_wit_2_1 : mpn_cmp4_return_wit_2_1.
+Lemma proof_of_mpn_cmp4_return_wit_5 : mpn_cmp4_return_wit_5.
 Proof.
   pre_process.
   Right. subst.
   entailer!.
 Qed.
 
-Lemma proof_of_mpn_cmp4_return_wit_2_2 : mpn_cmp4_return_wit_2_2.
+Lemma proof_of_mpn_cmp4_return_wit_4 : mpn_cmp4_return_wit_4.
 Proof.
   pre_process.
   Left. Right. subst.
   entailer!.
 Qed. 
 
-Lemma proof_of_mpn_cmp4_return_wit_2_3 : mpn_cmp4_return_wit_2_3.
+Lemma proof_of_mpn_cmp4_return_wit_3 : mpn_cmp4_return_wit_3.
 Proof.
   pre_process.
   Left. Left. subst.
@@ -256,7 +225,7 @@ Lemma proof_of_mpn_normalized_size_entail_wit_2 : mpn_normalized_size_entail_wit
 Proof.
   pre_process.
   rewrite sublist_self ; try lia.
-  rewrite UIntArray.undef_ceil_empty.
+  rewrite UIntArray.undef_seg_empty.
   entailer!.
 Qed.
 
@@ -273,10 +242,10 @@ Proof.
   rewrite H in *.
   unfold UINT_MOD in *.
   rewrite list_to_Z_concat in H3 ; [ | lia | apply list_within_bound_sublist ; [ lia | rewrite Zlength_correct ; lia | tauto] | simpl ; lia].
-  sep_apply (UIntArray.full_split_to_ceil xp_pre m) ; try lia.
-  sep_apply (UIntArray.ceil_to_undef_ceil xp_pre m ).
-  sep_apply UIntArray.undef_ceil_merge_to_undef_ceil ; try lia.
-  sep_apply UIntArray.ceil_to_full.
+  sep_apply (UIntArray.full_split_to_seg xp_pre m) ; try lia.
+  sep_apply (UIntArray.seg_to_undef_seg xp_pre m ).
+  sep_apply UIntArray.undef_seg_merge_to_undef_seg ; try lia.
+  sep_apply UIntArray.seg_to_full.
   replace (xp_pre + 0 * sizeof ( UINT )) with (xp_pre) by lia.
   replace (m - 0) with m by lia.
   assert (m = Zlength(sublist 0 m l)).
@@ -291,7 +260,7 @@ Proof.
   rewrite Zlength_correct. lia.
 Qed. 
 
-Lemma proof_of_mpn_normalized_size_return_wit_1_1 : mpn_normalized_size_return_wit_1_1.
+Lemma proof_of_mpn_normalized_size_return_wit_2 : mpn_normalized_size_return_wit_2.
 Proof.
   pre_process.
   unfold mpd_store_Z_compact.
@@ -303,7 +272,7 @@ Proof.
   entailer!.
 Qed. 
 
-Lemma proof_of_mpn_normalized_size_return_wit_1_2 : mpn_normalized_size_return_wit_1_2.
+Lemma proof_of_mpn_normalized_size_return_wit_1 : mpn_normalized_size_return_wit_1.
 Proof.
   pre_process.
   unfold mpd_store_Z_compact.
@@ -335,12 +304,12 @@ Proof.
 Qed. 
 
 
-Lemma proof_of_mpn_add_1_entail_wit_1_1 : mpn_add_1_entail_wit_1_1.
+Lemma proof_of_mpn_add_1_entail_wit_2_1 : mpn_add_1_entail_wit_2_1.
 Proof.
   pre_process.
   replace (0 + 1) with 1 by lia.
-  rewrite UIntArray.ceil_single.
-  rewrite UIntArray.ceil_to_full.
+  rewrite UIntArray.seg_single.
+  rewrite UIntArray.seg_to_full.
   replace (rp_pre + 0 * sizeof ( UINT )) with (rp_pre) by lia.
   replace (0 + 1 - 0) with 1 by lia.
   Exists (unsigned_last_nbits (Znth 0 l 0 + b_pre) 32 :: nil).
@@ -357,11 +326,11 @@ Proof.
   apply list_within_bound_Znth ; try lia. auto.
 Qed.
 
-Lemma proof_of_mpn_add_1_entail_wit_1_2 : mpn_add_1_entail_wit_1_2.
+Lemma proof_of_mpn_add_1_entail_wit_2_2 : mpn_add_1_entail_wit_2_2.
 Proof.
   pre_process.
-  rewrite UIntArray.ceil_single.
-  rewrite UIntArray.ceil_to_full.
+  rewrite UIntArray.seg_single.
+  rewrite UIntArray.seg_to_full.
   replace (rp_pre + 0 * sizeof ( UINT )) with (rp_pre) by lia.
   replace (0 + 1 - 0) with 1 by lia.
   Exists (unsigned_last_nbits (Znth 0 l 0 + b_pre) 32 :: nil).
@@ -378,11 +347,11 @@ Proof.
   apply list_within_bound_Znth ; try lia. auto.
 Qed.
 
-Lemma proof_of_mpn_add_1_entail_wit_2_1 : mpn_add_1_entail_wit_2_1.
+Lemma proof_of_mpn_add_1_entail_wit_1_1 : mpn_add_1_entail_wit_1_1.
 Proof.
   pre_process.
-  rewrite UIntArray.ceil_single.
-  rewrite UIntArray.ceil_to_full.
+  rewrite UIntArray.seg_single.
+  rewrite UIntArray.seg_to_full.
   sep_apply (UIntArray.full_merge_to_full rp_pre) ; try lia.
   Exists (l'_2 ++ unsigned_last_nbits (Znth i l 0 + b) 32
 :: nil).
@@ -422,11 +391,11 @@ Proof.
     + simpl. split ; try tauto. apply list_within_bound_Znth ; try lia. auto.
 Qed.
 
-Lemma proof_of_mpn_add_1_entail_wit_2_2 : mpn_add_1_entail_wit_2_2.
+Lemma proof_of_mpn_add_1_entail_wit_1_2 : mpn_add_1_entail_wit_1_2.
 Proof.
   pre_process.
-  rewrite UIntArray.ceil_single.
-  rewrite UIntArray.ceil_to_full.
+  rewrite UIntArray.seg_single.
+  rewrite UIntArray.seg_to_full.
   sep_apply (UIntArray.full_merge_to_full rp_pre) ; try lia.
   Exists (l'_2 ++ unsigned_last_nbits (Znth i l 0 + b) 32
 :: nil).
@@ -469,7 +438,7 @@ Proof.
   unfold mpd_store_Z , mpd_store_list.
   assert (i = n_pre) by lia. subst i.
   rewrite H12.
-  rewrite UIntArray.undef_ceil_empty.
+  rewrite UIntArray.undef_seg_empty.
   rewrite sublist_self in H6 ; try lia.
   assert (val = val1) by lia. subst val1.
   Exists val2.
@@ -490,42 +459,22 @@ Proof.
   entailer!.
 Qed. 
 
-Lemma proof_of_mpn_add_1_safety_wit_4 : mpn_add_1_safety_wit_4.
-Proof.
-  pre_process.
-  prop_apply (store_int_range (&("n"))).
-  Intros.
-  entailer!.
-  replace (Int.max_signed) with (2147483647) in * by reflexivity.
-  lia.
-Qed.
-
-Lemma proof_of_mpn_add_1_safety_wit_5 : mpn_add_1_safety_wit_5.
-Proof.
-  pre_process.
-  prop_apply (store_int_range (&("n"))).
-  Intros.
-  entailer!.
-  replace (Int.max_signed) with (2147483647) in * by reflexivity.
-  lia.
-Qed.
-
 Lemma proof_of_mpn_add_n_entail_wit_1 : mpn_add_n_entail_wit_1.
 Proof. 
   pre_process.
   Exists 0 nil.
   Exists 0 0.
   entailer!.
-  sep_apply UIntArray.undef_full_to_undef_ceil.
+  sep_apply UIntArray.undef_full_to_undef_seg.
   rewrite UIntArray.full_empty.
   entailer!.
 Qed.
 
-Lemma proof_of_mpn_add_n_entail_wit_2_1 : mpn_add_n_entail_wit_2_1.
+Lemma proof_of_mpn_add_n_entail_wit_2_2 : mpn_add_n_entail_wit_2_2.
 Proof.
   pre_process.
-  sep_apply (UIntArray.ceil_single rp_pre i).
-  sep_apply UIntArray.ceil_to_full.
+  sep_apply (UIntArray.seg_single rp_pre i).
+  sep_apply UIntArray.seg_to_full.
   sep_apply (UIntArray.full_merge_to_full rp_pre) ; try lia.
   Exists (val_r_2 + unsigned_last_nbits (unsigned_last_nbits (Znth i l_a 0 + cy) 32 + Znth i l_b 0) 32 * 4294967296 ^ Zlength l_r_2).
   Exists (l_r_2 ++ unsigned_last_nbits (unsigned_last_nbits (Znth i l_a 0 + cy) 32 + Znth i l_b 0) 32 :: nil).
@@ -578,11 +527,11 @@ Proof.
     - simpl. split ; try tauto. 
 Qed.
 
-Lemma proof_of_mpn_add_n_entail_wit_2_2 : mpn_add_n_entail_wit_2_2.
+Lemma proof_of_mpn_add_n_entail_wit_2_1 : mpn_add_n_entail_wit_2_1.
 Proof. 
   pre_process.
-  sep_apply (UIntArray.ceil_single rp_pre i).
-  sep_apply UIntArray.ceil_to_full.
+  sep_apply (UIntArray.seg_single rp_pre i).
+  sep_apply UIntArray.seg_to_full.
   sep_apply (UIntArray.full_merge_to_full rp_pre) ; try lia.
   Exists (val_r_2 + unsigned_last_nbits (unsigned_last_nbits (Znth i l_a 0 + cy) 32 + Znth i l_b 0) 32 * 4294967296 ^ Zlength l_r_2).
   Exists (l_r_2 ++ unsigned_last_nbits (unsigned_last_nbits (Znth i l_a 0 + cy) 32 + Znth i l_b 0) 32 :: nil).
@@ -636,11 +585,11 @@ Proof.
     - simpl. split ; try tauto. 
 Qed. 
 
-Lemma proof_of_mpn_add_n_entail_wit_2_3 : mpn_add_n_entail_wit_2_3.
+Lemma proof_of_mpn_add_n_entail_wit_2_4 : mpn_add_n_entail_wit_2_4.
 Proof.
   pre_process.
-  sep_apply (UIntArray.ceil_single rp_pre i).
-  sep_apply UIntArray.ceil_to_full.
+  sep_apply (UIntArray.seg_single rp_pre i).
+  sep_apply UIntArray.seg_to_full.
   sep_apply (UIntArray.full_merge_to_full rp_pre) ; try lia.
   Exists (val_r_2 + unsigned_last_nbits (unsigned_last_nbits (Znth i l_a 0 + cy) 32 + Znth i l_b 0) 32 * 4294967296 ^ Zlength l_r_2).
   Exists (l_r_2 ++ unsigned_last_nbits (unsigned_last_nbits (Znth i l_a 0 + cy) 32 + Znth i l_b 0) 32 :: nil).
@@ -690,11 +639,11 @@ Proof.
     - simpl. split ; try tauto. 
 Qed. 
 
-Lemma proof_of_mpn_add_n_entail_wit_2_4 : mpn_add_n_entail_wit_2_4.
+Lemma proof_of_mpn_add_n_entail_wit_2_3 : mpn_add_n_entail_wit_2_3.
 Proof. 
   pre_process.
-  sep_apply (UIntArray.ceil_single rp_pre i).
-  sep_apply UIntArray.ceil_to_full.
+  sep_apply (UIntArray.seg_single rp_pre i).
+  sep_apply UIntArray.seg_to_full.
   sep_apply (UIntArray.full_merge_to_full rp_pre) ; try lia.
   Exists (val_r_2 + unsigned_last_nbits (unsigned_last_nbits (Znth i l_a 0 + cy) 32 + Znth i l_b 0) 32 * 4294967296 ^ Zlength l_r_2).
   Exists (l_r_2 ++ unsigned_last_nbits (unsigned_last_nbits (Znth i l_a 0 + cy) 32 + Znth i l_b 0) 32 :: nil).
@@ -754,7 +703,7 @@ Proof.
   assert (i = n_pre) by lia. subst i.
   rewrite H17 in *.
   unfold mpd_store_Z , mpd_store_list.
-  rewrite UIntArray.undef_ceil_empty.
+  rewrite UIntArray.undef_seg_empty.
   rewrite sublist_self in H5 ; try lia.
   rewrite sublist_self in H4 ; try lia.
   Exists val_r.
@@ -774,47 +723,7 @@ Proof.
 Qed. 
 
 
-Lemma proof_of_mpn_add_n_safety_wit_3 : mpn_add_n_safety_wit_3.
-Proof.
-  pre_process.
-  prop_apply (store_int_range (&("n"))).
-  Intros.
-  entailer!.
-  replace (Int.max_signed) with (2147483647) in * by reflexivity.
-  lia.
-Qed.
-
-Lemma proof_of_mpn_add_n_safety_wit_4 : mpn_add_n_safety_wit_4.
-Proof.
-  pre_process.
-  prop_apply (store_int_range (&("n"))).
-  Intros.
-  entailer!.
-  replace (Int.max_signed) with (2147483647) in * by reflexivity.
-  lia.
-Qed.
-
-Lemma proof_of_mpn_add_n_safety_wit_5 : mpn_add_n_safety_wit_5.
-Proof.
-  pre_process.
-  prop_apply (store_int_range (&("n"))).
-  Intros.
-  entailer!.
-  replace (Int.max_signed) with (2147483647) in * by reflexivity.
-  lia.
-Qed.
-
-Lemma proof_of_mpn_add_n_safety_wit_6 : mpn_add_n_safety_wit_6.
-Proof.
-  pre_process.
-  prop_apply (store_int_range (&("n"))).
-  Intros.
-  entailer!.
-  replace (Int.max_signed) with (2147483647) in * by reflexivity.
-  lia.
-Qed.
-
-Lemma proof_of_mpn_add_return_wit_1_1 : mpn_add_return_wit_1_1.
+Lemma proof_of_mpn_add_return_wit_1 : mpn_add_return_wit_1.
 Proof.
   pre_process.
   assert (an_pre = bn_pre) by lia. subst an_pre.
@@ -835,7 +744,7 @@ Proof.
   entailer!.
 Qed. 
 
-Lemma proof_of_mpn_add_return_wit_1_2 : mpn_add_return_wit_1_2.
+Lemma proof_of_mpn_add_return_wit_2 : mpn_add_return_wit_2.
 Proof. 
   pre_process.
   Exists (val_r_out_2 + val' * UINT_MOD ^ bn_pre).
@@ -903,7 +812,7 @@ Proof.
   entailer!.
 Qed. 
 
-Lemma proof_of_mpz_clear_return_wit_1_1 : mpz_clear_return_wit_1_1.
+Lemma proof_of_mpz_clear_return_wit_2 : mpz_clear_return_wit_2.
 Proof.
   pre_process.
   subst cap_2.
@@ -917,11 +826,11 @@ Proof.
   apply Zlength_nil_inv in H3.
   subst l.
   rewrite UIntArray.full_empty.
-  rewrite UIntArray.undef_ceil_empty.
+  rewrite UIntArray.undef_seg_empty.
   entailer!.
 Qed.
 
-Lemma proof_of_mpz_clear_return_wit_1_2 : mpz_clear_return_wit_1_2.
+Lemma proof_of_mpz_clear_return_wit_1 : mpz_clear_return_wit_1.
 Proof. pre_process. Qed. 
 
 Lemma proof_of_mpz_clear_which_implies_wit_1 : mpz_clear_which_implies_wit_1.
@@ -932,58 +841,111 @@ Proof.
   Split ; Intros ; [Left | Right ] ; Exists ptr cap size ;  entailer!.
 Qed. 
 
-Lemma proof_of_mpz_realloc_return_wit_1_3 : mpz_realloc_return_wit_1_3.
+Lemma proof_of_mpz_realloc_return_wit_8_pos : mpz_realloc_return_wit_8_pos.
 Proof. 
   pre_process.
-  sep_apply (UIntArray.undef_full_to_undef_ceil retval) ; try lia.
-  assert (old = 0) by lia.
-  subst old cap.
+  sep_apply (UIntArray.undef_full_to_undef_seg retval) ; try lia.
+  assert (old_pos = 0) by lia.
+  subst old_pos cap_pos.
   unfold mpd_store_Z_compact , mpd_store_list.
   Intros l.
   symmetry in H10.
   apply Zlength_nil_inv in H10.
   subst l.
-  Left. Exists retval_2 nil.
+  Exists retval_2 nil.
   subst retval_2.
   do 2 rewrite UIntArray.full_empty.
-  rewrite UIntArray.undef_ceil_empty.
+  rewrite UIntArray.undef_seg_empty.
   entailer!.
 Qed.
 
-Lemma proof_of_mpz_realloc_return_wit_1_4 : mpz_realloc_return_wit_1_4.
+Lemma proof_of_mpz_realloc_return_wit_7_neg : mpz_realloc_return_wit_7_neg.
 Proof. pre_process. Qed. 
 
-Lemma proof_of_mpz_realloc_return_wit_1_5 : mpz_realloc_return_wit_1_5.
+Lemma proof_of_mpz_realloc_return_wit_4_neg : mpz_realloc_return_wit_4_neg.
 Proof. pre_process. Qed. 
 
-Lemma proof_of_mpz_realloc_return_wit_1_6 : mpz_realloc_return_wit_1_6.
+Lemma proof_of_mpz_realloc_return_wit_3_pos : mpz_realloc_return_wit_3_pos.
 Proof. pre_process. Qed.
 
-Lemma proof_of_mpz_realloc_return_wit_1_7 : mpz_realloc_return_wit_1_7.
+Lemma proof_of_mpz_realloc_return_wit_2_neg : mpz_realloc_return_wit_2_neg.
 Proof. pre_process. Qed. 
 
-Lemma proof_of_mpz_realloc_return_wit_1_8 : mpz_realloc_return_wit_1_8.
+Lemma proof_of_mpz_realloc_return_wit_1_pos : mpz_realloc_return_wit_1_pos.
 Proof. pre_process. Qed. 
 
-Lemma proof_of_mpz_realloc_partial_solve_wit_3_pure : mpz_realloc_partial_solve_wit_3_pure.
+Lemma proof_of_mpz_realloc_partial_solve_wit_3_neg_pure : mpz_realloc_partial_solve_wit_3_neg_pure.
 Proof. pre_process. Qed. 
 
-Lemma proof_of_mpz_realloc_partial_solve_wit_4_pure : mpz_realloc_partial_solve_wit_4_pure.
+Lemma proof_of_mpz_realloc_partial_solve_wit_4_pos_pure : mpz_realloc_partial_solve_wit_4_pos_pure.
 Proof. pre_process. Qed. 
 
-Lemma proof_of_mpz_realloc_partial_solve_wit_5_pure : mpz_realloc_partial_solve_wit_5_pure.
+Lemma proof_of_mpz_realloc_partial_solve_wit_5_neg_pure : mpz_realloc_partial_solve_wit_5_neg_pure.
 Proof. pre_process. Qed.
 
-Lemma proof_of_mpz_realloc_partial_solve_wit_6_pure : mpz_realloc_partial_solve_wit_6_pure.
+Lemma proof_of_mpz_realloc_partial_solve_wit_6_pos_pure : mpz_realloc_partial_solve_wit_6_pos_pure.
 Proof. pre_process. Qed. 
 
-Lemma proof_of_mpz_realloc_partial_solve_wit_7_pure : mpz_realloc_partial_solve_wit_7_pure.
+Lemma proof_of_mpz_realloc_partial_solve_wit_7_neg_pure : mpz_realloc_partial_solve_wit_7_neg_pure.
 Proof. pre_process. Qed.
 
-Lemma proof_of_mpz_realloc_partial_solve_wit_9_pure : mpz_realloc_partial_solve_wit_9_pure.
+Lemma proof_of_mpz_realloc_partial_solve_wit_9_neg_pure : mpz_realloc_partial_solve_wit_9_neg_pure.
 Proof. pre_process. Qed. 
 
-Lemma proof_of_mpz_sgn_return_wit_1_1 : mpz_sgn_return_wit_1_1.
+
+Lemma proof_of_mrz_realloc_if_return_wit_1_pos : mrz_realloc_if_return_wit_1_pos.
+Proof.
+  pre_process.
+  Exists r_callee__mp_alloc.
+  assert (Z.max (Z.max n_pre 1) cap_pos = Z.max n_pre 1).
+  {
+    apply Zmax_left.
+    lia.
+  }
+  rewrite H8.
+  entailer!.
+Qed.
+
+Lemma proof_of_mrz_realloc_if_return_wit_2_neg : mrz_realloc_if_return_wit_2_neg.
+Proof.
+  pre_process.
+  Exists r_callee__mp_alloc.
+  assert (Z.max (Z.max n_pre 1) cap_neg = Z.max n_pre 1).
+  {
+    apply Zmax_left.
+    lia.
+  }
+  rewrite H8.
+  entailer!.
+Qed.
+
+Lemma proof_of_mrz_realloc_if_return_wit_4_pos : mrz_realloc_if_return_wit_4_pos.
+Proof.
+  pre_process.
+  Exists cap_pos.
+  assert (Z.max (Z.max n_pre 1) cap_pos = cap_pos).
+  {
+    apply Zmax_right.
+    apply Z.max_lub ; try lia.
+  }
+  rewrite H6.
+  entailer!.
+Qed.
+
+Lemma proof_of_mrz_realloc_if_return_wit_3_neg : mrz_realloc_if_return_wit_3_neg.
+Proof.
+  pre_process.
+  Exists cap_neg.
+  assert (Z.max (Z.max n_pre 1) cap_neg = cap_neg).
+  {
+    apply Zmax_right.
+    apply Z.max_lub ; try lia.
+  }
+  rewrite H6.
+  entailer!.
+Qed.
+
+Lemma proof_of_mpz_sgn_return_wit_3 : mpz_sgn_return_wit_3.
 Proof. 
   pre_process. 
   Right. unfold store_Z.
@@ -994,7 +956,7 @@ Proof.
   unfold UINT_MOD. lia.
 Qed. 
 
-Lemma proof_of_mpz_sgn_return_wit_1_2 : mpz_sgn_return_wit_1_2.
+Lemma proof_of_mpz_sgn_return_wit_2 : mpz_sgn_return_wit_2.
 Proof.
   pre_process. 
   Left. Right. unfold store_Z.
@@ -1004,7 +966,7 @@ Proof.
   Intros. entailer!.
 Qed. 
 
-Lemma proof_of_mpz_sgn_return_wit_1_3 : mpz_sgn_return_wit_1_3.
+Lemma proof_of_mpz_sgn_return_wit_1 : mpz_sgn_return_wit_1.
 Proof. 
   pre_process. 
   Left. Left. unfold store_Z.
@@ -1020,7 +982,7 @@ Proof.
   Split ; Intros ; [Left | Right ] ; Exists ptr cap size ;  entailer!.
 Qed. 
 
-Lemma proof_of_mpz_swap_return_wit_1_1 : mpz_swap_return_wit_1_1.
+Lemma proof_of_mpz_swap_return_wit_4 : mpz_swap_return_wit_4.
 Proof. 
   pre_process.
   unfold store_Z.
@@ -1029,7 +991,7 @@ Proof.
   Left. Left. entailer!.
 Qed. 
 
-Lemma proof_of_mpz_swap_return_wit_1_2 : mpz_swap_return_wit_1_2.
+Lemma proof_of_mpz_swap_return_wit_3 : mpz_swap_return_wit_3.
 Proof. 
   pre_process.
   unfold store_Z.
@@ -1038,7 +1000,7 @@ Proof.
   Left. Right. entailer!.
 Qed. 
 
-Lemma proof_of_mpz_swap_return_wit_1_3 : mpz_swap_return_wit_1_3.
+Lemma proof_of_mpz_swap_return_wit_2 : mpz_swap_return_wit_2.
 Proof. 
   pre_process.
   unfold store_Z.
@@ -1047,7 +1009,7 @@ Proof.
   Right. Left. entailer!.
 Qed.
 
-Lemma proof_of_mpz_swap_return_wit_1_4 : mpz_swap_return_wit_1_4.
+Lemma proof_of_mpz_swap_return_wit_1 : mpz_swap_return_wit_1.
 Proof. 
   pre_process.
   unfold store_Z.

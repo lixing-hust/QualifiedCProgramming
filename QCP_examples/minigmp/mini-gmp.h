@@ -84,10 +84,10 @@ gmp_realloc_limbs (unsigned int *old, int old_size, int size)
   Require
     old_size >= 0 && size >= old_size &&
     mpd_store_Z_compact(UINT_MOD, old, n, len) *
-    UIntArray::undef_ceil(old, len, old_size)
+    UIntArray::undef_seg(old, len, old_size)
   Ensure
     mpd_store_Z_compact(UINT_MOD,__return, n, len) *
-    UIntArray::undef_ceil(__return, len, size)
+    UIntArray::undef_seg(__return, len, size)
 */;
 
 static void
@@ -97,7 +97,7 @@ gmp_free_limbs (unsigned int *old, int size)
     n len
   Require
     mpd_store_Z_compact(UINT_MOD,old, n, len) *
-    UIntArray::undef_ceil(old, len, size)
+    UIntArray::undef_seg(old, len, size)
   Ensure
     emp
 */

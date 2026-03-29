@@ -145,8 +145,8 @@ Qed.
     eapply H; eauto.
   Qed.
 
-  Lemma mono_bind {A B D: Type}:
-    forall  (c1: (A -> program Σ B) -> program Σ D) (c2: (A -> program Σ B) -> D -> program Σ B),
+  Lemma mono_bind {A B C D: Type}:
+    forall  (c1: (A -> program Σ B) -> program Σ D) (c2: (A -> program Σ B) -> D -> program Σ C),
       mono c1 ->
       (forall d, mono (fun W => c2 W d)) -> 
       mono (fun (W: A -> program Σ B) => bind (c1 W) (c2 W)).
@@ -163,8 +163,8 @@ Qed.
     eapply H0; eauto.
   Qed.
 
-  Lemma mono_bind' {B D: Type}:
-    forall  (c1: (program Σ B) -> program Σ D) (c2: (program Σ B) -> D -> program Σ B),
+  Lemma mono_bind' {B C D: Type}:
+    forall  (c1: (program Σ B) -> program Σ D) (c2: (program Σ B) -> D -> program Σ C),
       mono c1 ->
       (forall d, mono (fun W => c2 W d)) -> 
       mono (fun (W: program Σ B) => bind (c1 W) (c2 W)).
@@ -241,8 +241,8 @@ Qed.
     - destruct H0; auto.
   Qed.
 
-  Lemma continuous_bind {A B D: Type}:
-    forall  (c1: (A -> program Σ B) -> program Σ D) (c2: (A -> program Σ B) -> D -> program Σ B),
+  Lemma continuous_bind {A B C D: Type}:
+    forall  (c1: (A -> program Σ B) -> program Σ D) (c2: (A -> program Σ B) -> D -> program Σ C),
       mono c1 -> continuous c1 ->
       (forall d, mono (fun W => c2 W d)) -> (forall d, continuous (fun W => c2 W d)) -> 
       continuous (fun (W: A -> program Σ B) => bind (c1 W) (c2 W)).
@@ -278,8 +278,8 @@ Qed.
         exists i; auto.
   Qed.
 
-  Lemma continuous_bind' {B D: Type}:
-    forall  (c1: program Σ B -> program Σ D) (c2: program Σ B -> D -> program Σ B),
+  Lemma continuous_bind' {B C D: Type}:
+    forall  (c1: program Σ B -> program Σ D) (c2: program Σ B -> D -> program Σ C),
       mono c1 -> continuous c1 ->
       (forall d, mono (fun W => c2 W d)) -> (forall d, continuous (fun W => c2 W d)) -> 
       continuous (fun (W: program Σ B) => bind (c1 W) (c2 W)).
@@ -392,8 +392,8 @@ Qed.
     apply continuous_const'.
   Qed.
 
-  Lemma mono_cont_bind {A B D: Type}:
-    forall  (c1: (A -> program Σ B) -> program Σ D) (c2: (A -> program Σ B) -> D -> program Σ B),
+  Lemma mono_cont_bind {A B C D: Type}:
+    forall  (c1: (A -> program Σ B) -> program Σ D) (c2: (A -> program Σ B) -> D -> program Σ C),
       mono_cont c1 ->
       (forall d, mono_cont (fun W => c2 W d)) ->
       mono_cont (fun (W: A -> program Σ B) => bind (c1 W) (c2 W)).
@@ -406,8 +406,8 @@ Qed.
       intros d; apply H0.
   Qed.
 
-  Lemma mono_cont_bind' {B D: Type}:
-    forall  (c1: program Σ B -> program Σ D) (c2: program Σ B -> D -> program Σ B),
+  Lemma mono_cont_bind' {B C D: Type}:
+    forall  (c1: program Σ B -> program Σ D) (c2: program Σ B -> D -> program Σ C),
       mono_cont c1 ->
       (forall d, mono_cont (fun W => c2 W d)) ->
       mono_cont (fun (W: program Σ B) => bind (c1 W) (c2 W)).
@@ -483,7 +483,35 @@ Ltac mono_cont_auto :=
 Section loop_unfold.
 Context {Σ: Type}.
 
-Lemma while_unfold: forall (cond: Σ -> Prop) (body : program Σ unit), 
+  Lemma whileb_unfold: forall (cond: (program Σ bool)) (body : program Σ unit), 
+  whileb cond body == (x <- cond ;;
+                      match x with
+                      | true => body ;; (whileb cond body)
+                      | false => ret tt
+                      end).
+  Proof.
+    intros.
+    unfold whileb.
+    apply (Lfix_fixpoint' (whileb_f cond body)).
+    unfold whileb_f.
+    mono_cont_auto.
+  Qed.
+
+  Lemma whileretb_unfold: forall {A: Type} (cond: (A -> (program Σ bool))) (body : A -> (program Σ A))  (a: A), 
+      whileretb cond body == fun a => (x <- (cond a);; 
+                              match x with 
+                              | true => y <- body a ;; whileretb cond body y
+                              | false => ret a
+                              end).
+  Proof.
+    intros.
+    unfold whileretb.
+    apply (Lfix_fixpoint' (whileretb_f cond body)).
+    unfold whileretb_f.
+    mono_cont_auto.
+  Qed.
+
+  Lemma while_unfold: forall (cond: Σ -> Prop) (body : program Σ unit), 
     while cond body == choice 
                          (assume cond;; body;; while cond body)
                          (assume (fun s => ~ cond s);; ret tt).
@@ -495,7 +523,7 @@ Lemma while_unfold: forall (cond: Σ -> Prop) (body : program Σ unit),
     mono_cont_auto.
   Qed.
 
-  Lemma whileret_unfold: forall {A: Type} (cond: A -> Σ -> Prop) (body : A -> (program Σ A))  (a: A), 
+  Lemma whileret_unfold: forall {A: Type} (cond: A -> Σ -> Prop) (body : A -> (program Σ A)), 
     whileret cond body == 
     fun a => 
       choice (assume (fun s => cond a s);; a' <- body a;; whileret cond body a') 
@@ -563,3 +591,25 @@ Lemma while_unfold: forall (cond: Σ -> Prop) (body : program Σ unit),
   Qed.
 
 End loop_unfold.
+
+Ltac unfold_loop:=
+  rewrite ?(whileb_unfold _ _) ;
+  rewrite ?(whileretb_unfold _ _ _) ;
+  rewrite ?(while_unfold _ _) ;
+  rewrite ?(whileret_unfold _ _ _) ;
+  rewrite ?(Repeat_unfold _) ;
+  rewrite ?(repeat_break_unfold _ _) ;
+  rewrite ?(forset_unfold _ _) .
+
+Ltac unfold_loop_in H :=
+  rewrite ?(whileb_unfold _ _) in H;
+  rewrite ?(whileretb_unfold _ _ _) in H;
+  rewrite ?(while_unfold _ _) in H;
+  rewrite ?(whileret_unfold _ _ _) in H;
+  rewrite ?(Repeat_unfold _) in H;
+  rewrite ?(repeat_break_unfold _ _) in H;
+  rewrite ?(forset_unfold _ _) in H.
+
+
+Tactic Notation "unfold_loop" "in" hyp(H) :=
+  unfold_loop_in H.

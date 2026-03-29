@@ -53,7 +53,7 @@ Proof.
     entailer!.
 Qed.
 
-Lemma proof_of_OsDeleteSortLink_return_wit_1_1 : OsDeleteSortLink_return_wit_1_1.
+Lemma proof_of_OsDeleteSortLink_return_wit_1: OsDeleteSortLink_return_wit_1.
 Proof. 
   pre_process.
   Right.
@@ -62,7 +62,7 @@ Proof.
   entailer!.
   unfold store_dll.
   pose proof dllseg_shift_rev_to_dllseg (storesortedLinkNode storeA) v_5 v_pstPrev x (map sortedLinkNodeMapping l2).
-  sep_apply(H3).
+  sep_apply (H3).
   Intros py.
   pose proof dllseg_shift_to_dllseg (storesortedLinkNode storeA) x v_6 v_pstNext (map sortedLinkNodeMapping l1).
   sep_apply(H4).

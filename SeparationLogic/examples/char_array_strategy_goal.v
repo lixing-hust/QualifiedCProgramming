@@ -120,7 +120,7 @@ Definition char_array_strategy8 :=
       ((CharArray.undef_full p r)) -*
       TT &&
       emp **
-      ((CharArray.undef_ceil p l r))
+      ((CharArray.undef_seg p l r))
       ).
 
 Definition char_array_strategy9 :=
@@ -129,7 +129,7 @@ Definition char_array_strategy9 :=
     ([| (Z.le l i) |]) &&
     ([| (Z.lt i n) |]) &&
     emp **
-    ((CharArray.undef_ceil p l n))
+    ((CharArray.undef_seg p l n))
     |--
     (
     TT &&
@@ -174,7 +174,7 @@ Definition char_array_strategy11 :=
     (
     TT &&
     emp **
-    ((CharArray.undef_ceil p (Z.add l 1) n))
+    ((CharArray.undef_seg p (Z.add l 1) n))
     ) ** (
     TT &&
     emp -*

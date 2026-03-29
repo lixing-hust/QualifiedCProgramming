@@ -80,7 +80,7 @@ Proof.
     entailer!.
 Qed.
 
-Lemma proof_of_arr_sum_do_while_entail_wit_1 : arr_sum_do_while_entail_wit_1.
+Lemma proof_of_arr_sum_do_while_entail_wit_2 : arr_sum_do_while_entail_wit_2.
 Proof.
    pre_process.
    prop_apply IntArray.full_length.
@@ -90,7 +90,7 @@ Proof.
    lia.
 Qed.
 
-Lemma proof_of_arr_sum_do_while_entail_wit_2 : arr_sum_do_while_entail_wit_2.
+Lemma proof_of_arr_sum_do_while_entail_wit_1 : arr_sum_do_while_entail_wit_1.
 Proof.
    pre_process.
    prop_apply IntArray.full_length.
@@ -114,7 +114,7 @@ Proof.
    simpl. rewrite firstn_all2 ; lia.
 Qed. 
 
-Lemma proof_of_arr_sum_do_while_safety_wit_5 : arr_sum_do_while_safety_wit_5.
+Lemma proof_of_arr_sum_do_while_safety_wit_6 : arr_sum_do_while_safety_wit_6.
 Proof.
    pre_process.
    prop_apply IntArray.full_length.

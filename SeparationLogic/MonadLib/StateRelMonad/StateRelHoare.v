@@ -172,12 +172,32 @@ Theorem Hoare_conj {Σ A: Type}:
     Hoare P f (fun a s => Q1 a s /\ Q2 a s).
 Proof. firstorder. Qed.
 
+Theorem Hoare_conj' {Σ A: Type}:
+  forall (P1 P2: Σ -> Prop) f (Q: A -> Σ -> Prop),
+    Hoare P1 f Q ->
+    Hoare P2 f Q ->
+    Hoare (fun s => P1 s /\ P2 s) f Q.
+Proof. firstorder. Qed.
+
 Theorem Hoare_disj {Σ A: Type}:
   forall (P1 P2: Σ -> Prop) f (Q: A -> Σ -> Prop),
     Hoare P1 f Q ->
     Hoare P2 f Q ->
     Hoare (fun s => P1 s \/ P2 s) f Q.
 Proof. firstorder. Qed.
+
+Theorem Hoare_disj_l {Σ A: Type}:
+  forall (P: Σ -> Prop) f (Q1 Q2: A -> Σ -> Prop),
+    Hoare P f Q1 ->
+    Hoare P f (fun a s => Q1 a s \/ Q2 a s).
+Proof. firstorder. Qed.
+  
+Theorem Hoare_disj_r {Σ A: Type}:
+  forall (P: Σ -> Prop) f (Q1 Q2: A -> Σ -> Prop),
+    Hoare P f Q2 ->
+    Hoare P f (fun a s => Q1 a s \/ Q2 a s).
+Proof. firstorder. Qed.
+
 
 Theorem Hoare_forall {Σ A: Type}:
   forall (X: Type) (P: Σ -> Prop) f (Q: X -> A -> Σ -> Prop),
@@ -806,7 +826,7 @@ Proof.
     apply Hf.
     exists n; auto.
 Qed.
-
+    
 (* we consider a recursive monadic program (A -> program Σ R) may have multiple specifications *)
 
 Record monad_funcspec {Σ A R: Type}: Type := mk_mfs { 
@@ -821,7 +841,7 @@ Definition monad_sat_funcspec  {Σ A R: Type}
     Hoare ((mFS_pre fs) a lv) (m a) ((mFS_Post fs) a lv).
 
 Theorem Hoare_fix_logicv_fspecs {Σ A R: Type}:
-forall (F: (A -> program Σ R) -> (A -> program Σ R)) Fspecs fs,
+forall (F: (A -> program Σ R) -> (A -> program Σ R)) fs Fspecs,
   Forall (fun fs => monad_sat_funcspec (fun a => Lfix F a) fs) Fspecs ->
   (forall W: A -> program Σ R, 
     (Forall (fun fs => monad_sat_funcspec W fs) Fspecs) ->
@@ -1090,6 +1110,74 @@ Proof.
     subst; split; try tauto.
     apply H2; auto.
 Qed.
+
+
+Lemma app_singleton_tail {A} (prefix: list A) (a: A) (l: list A):
+  ((prefix ++ a :: nil) ++ l) = prefix ++ a :: l.
+Proof.
+  induction prefix as [| x prefix IHprefix]; simpl.
+  - reflexivity.
+  - rewrite IHprefix.
+    reflexivity.
+Qed.
+
+Lemma Hoare_list_iter_aux {Σ A B}
+  (P: list A -> B -> Σ -> Prop)
+  (body: A -> B -> program Σ B)
+  (prefix: list A):
+  (forall pfx x b,
+    Hoare (fun s => P pfx b s) (body x b) (fun b' s => P (pfx ++ x :: nil) b' s)) ->
+  forall l b,
+    Hoare (fun s => P prefix b s) (list_iter body l b) (fun b' s => P (prefix ++ l) b' s).
+Proof.
+  intros H l.
+  revert prefix.
+  induction l; intros prefix b.
+  - simpl.
+    rewrite app_nil_r.
+    apply Hoare_ret'.
+    auto.
+  - simpl.
+    eapply Hoare_bind.
+    + apply H.
+    + intros b'.
+      specialize (IHl (prefix ++ a :: nil) b').
+      eapply (@Hoare_conseq_post Σ B
+        (fun s => P (prefix ++ a :: nil) b' s)
+        (list_iter body l b')
+        (fun b'' s => P (prefix ++ a :: l) b'' s)
+        (fun b'' s => P ((prefix ++ a :: nil) ++ l) b'' s)).
+      * intros b'' s HP.
+        rewrite app_singleton_tail in HP.
+        exact HP.
+      * exact IHl.
+Qed.
+
+Theorem Hoare_list_iter {Σ A B}
+  (P: list A -> B -> Σ -> Prop)
+  (body: A -> B -> program Σ B):
+  (forall prefix x b,
+    Hoare (fun s => P prefix b s) (body x b) (fun b' s => P (prefix ++ x :: nil) b' s)) ->
+  forall l b,
+    Hoare (fun s => P nil b s) (list_iter body l b) (fun b' s => P l b' s).
+Proof.
+  intros H l b.
+  hoare_cons (Hoare_list_iter_aux P body nil).
+Qed.
+
+(* Theorem Hoare_list_iter' {Σ A B}
+  (P: list A -> B -> Σ -> Prop)
+  (l: list A)
+  (body: A -> B -> program Σ B)
+  (b: B):
+  (forall n a b0,
+    Some a = nth_error l n ->
+    Hoare (fun s => P (firstn n l) b0 s) (body a b0) (fun b1 s => P (firstn (n + 1) l) b1 s)) ->
+  Hoare (fun s => P nil b s) (list_iter body l b) (fun b' s => P l b' s).
+Proof.
+
+Qed. *)
+
 
 Module StateRelMonadExample.
 
@@ -1378,4 +1466,3 @@ Section WLPrules.
 
 
 End WLPrules.
-

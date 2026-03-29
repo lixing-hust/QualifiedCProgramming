@@ -22,16 +22,16 @@ Local Open Scope sac.
 Lemma proof_of_atype_unify_safety_wit_1 : atype_unify_safety_wit_1.
 Proof. Admitted. 
 
-Lemma proof_of_atype_unify_return_wit_2_1 : atype_unify_return_wit_2_1.
+Lemma proof_of_atype_unify_return_wit_3 : atype_unify_return_wit_3.
 Proof. Admitted. 
 
-Lemma proof_of_atype_unify_return_wit_2_2 : atype_unify_return_wit_2_2.
+Lemma proof_of_atype_unify_return_wit_4 : atype_unify_return_wit_4.
 Proof. Admitted. 
 
-Lemma proof_of_atype_unify_return_wit_3_1 : atype_unify_return_wit_3_1.
+Lemma proof_of_atype_unify_return_wit_5 : atype_unify_return_wit_5.
 Proof. Admitted. 
 
-Lemma proof_of_atype_unify_return_wit_3_2 : atype_unify_return_wit_3_2.
+Lemma proof_of_atype_unify_return_wit_6 : atype_unify_return_wit_6.
 Proof. Admitted. 
 
 Lemma proof_of_atype_unify_partial_solve_wit_1 : atype_unify_partial_solve_wit_1.
@@ -100,16 +100,16 @@ Proof. Admitted.
 Lemma proof_of_atype_unify1_safety_wit_1 : atype_unify1_safety_wit_1.
 Proof. Admitted. 
 
-Lemma proof_of_atype_unify1_return_wit_2_1 : atype_unify1_return_wit_2_1.
+Lemma proof_of_atype_unify1_return_wit_3 : atype_unify1_return_wit_3.
 Proof. Admitted. 
 
-Lemma proof_of_atype_unify1_return_wit_2_2 : atype_unify1_return_wit_2_2.
+Lemma proof_of_atype_unify1_return_wit_4 : atype_unify1_return_wit_4.
 Proof. Admitted. 
 
-Lemma proof_of_atype_unify1_return_wit_3_1 : atype_unify1_return_wit_3_1.
+Lemma proof_of_atype_unify1_return_wit_5 : atype_unify1_return_wit_5.
 Proof. Admitted. 
 
-Lemma proof_of_atype_unify1_return_wit_3_2 : atype_unify1_return_wit_3_2.
+Lemma proof_of_atype_unify1_return_wit_6 : atype_unify1_return_wit_6.
 Proof. Admitted. 
 
 Lemma proof_of_atype_unify1_partial_solve_wit_1 : atype_unify1_partial_solve_wit_1.

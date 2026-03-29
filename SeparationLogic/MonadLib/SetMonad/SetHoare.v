@@ -402,3 +402,33 @@ Proof.
   apply (Hoare_range_iter_break' _ P); auto.
   intros; apply Hoare_sum; auto.
 Qed.
+
+Lemma Hoare_list_iter {A B} (f : A -> B -> program B) (P : list A -> B -> Prop) :
+  (forall b l' a, P l' b -> Hoare (f a b) (P (l' ++ a :: nil))) ->
+  forall b l, 
+    P nil b -> 
+    Hoare (list_iter f l b) (P l). 
+Proof.
+  intros ? ?.
+  assert (H_gen: forall l b prefix, 
+            P prefix b -> 
+            Hoare (list_iter f l b) (P (prefix ++ l))).
+  {
+    induction l; intros.
+    - simpl.
+      rewrite app_nil_r. 
+      apply Hoare_ret.
+      auto.
+    - simpl.
+      apply (Hoare_bind _ _ (P (prefix ++ cons a nil))).
+      + auto. 
+      + intros b' H_mid.
+        specialize (IHl b' (prefix ++ cons a nil) H_mid).
+        rewrite <- app_assoc in IHl.
+        auto. 
+  }
+  intros.  
+  specialize (H_gen l b nil H0).
+  simpl in H_gen.
+  apply H_gen.
+Qed.

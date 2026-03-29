@@ -101,7 +101,7 @@ forall (x_pre: Z) (q_pre: Z) (l: (@list Z)) (q_head: Z) (q_tail: Z) (retval: Z) 
   &&  [| ((INT_MIN) <= 0) |]
 .
 
-Definition enqueue_return_wit_1_1 := 
+Definition enqueue_return_wit_1 := 
 forall (x_pre: Z) (q_pre: Z) (l: (@list Z)) (q_head: Z) (q_tail: Z) (retval: Z) (q_tail_prev: Z) (q_tail_next: Z) (l0: (@list Z)) (q_tail_data: Z) ,
   [| (q_tail <> 0) |] 
   &&  [| (l = (app (l0) ((cons (q_tail_data) (nil))))) |] 
@@ -121,7 +121,7 @@ forall (x_pre: Z) (q_pre: Z) (l: (@list Z)) (q_head: Z) (q_tail: Z) (retval: Z) 
   (store_queue q_pre (app (l) ((cons (x_pre) (nil)))) )
 .
 
-Definition enqueue_return_wit_1_2 := 
+Definition enqueue_return_wit_2 := 
 forall (x_pre: Z) (q_pre: Z) (l: (@list Z)) (q_head: Z) (q_tail: Z) (retval: Z) ,
   [| (q_head = 0) |] 
   &&  [| (retval <> 0) |]
@@ -273,7 +273,7 @@ forall (q_pre: Z) (l: (@list Z)) (x: Z) (q_head_next: Z) (q_tail: Z) (q_head_pre
   &&  [| ((INT_MIN) <= 0) |]
 .
 
-Definition dequeue_return_wit_1_1 := 
+Definition dequeue_return_wit_1 := 
 forall (q_pre: Z) (l: (@list Z)) (x: Z) (q_head_next: Z) (q_tail: Z) (q_head_prev: Z) (q_head_next_2: Z) (q_head_data: Z) (l0: (@list Z)) ,
   [| (l = (cons (q_head_data) (l0))) |] 
   &&  [| (q_head_next <> 0) |] 
@@ -289,7 +289,7 @@ forall (q_pre: Z) (l: (@list Z)) (x: Z) (q_head_next: Z) (q_tail: Z) (q_head_pre
   &&  (store_queue q_pre l )
 .
 
-Definition dequeue_return_wit_1_2 := 
+Definition dequeue_return_wit_2 := 
 forall (q_pre: Z) (l: (@list Z)) (x: Z) (q_head_next: Z) (q_tail: Z) (q_head_prev: Z) (q_head: Z) ,
   [| (q_head_next = 0) |] 
   &&  [| (q_head_prev = 0) |]
@@ -399,8 +399,8 @@ Axiom proof_of_enqueue_safety_wit_1 : enqueue_safety_wit_1.
 Axiom proof_of_enqueue_safety_wit_2 : enqueue_safety_wit_2.
 Axiom proof_of_enqueue_safety_wit_3 : enqueue_safety_wit_3.
 Axiom proof_of_enqueue_safety_wit_4 : enqueue_safety_wit_4.
-Axiom proof_of_enqueue_return_wit_1_1 : enqueue_return_wit_1_1.
-Axiom proof_of_enqueue_return_wit_1_2 : enqueue_return_wit_1_2.
+Axiom proof_of_enqueue_return_wit_1 : enqueue_return_wit_1.
+Axiom proof_of_enqueue_return_wit_2 : enqueue_return_wit_2.
 Axiom proof_of_enqueue_partial_solve_wit_1 : enqueue_partial_solve_wit_1.
 Axiom proof_of_enqueue_partial_solve_wit_2 : enqueue_partial_solve_wit_2.
 Axiom proof_of_enqueue_partial_solve_wit_3_pure : enqueue_partial_solve_wit_3_pure.
@@ -410,8 +410,8 @@ Axiom proof_of_enqueue_which_implies_wit_2 : enqueue_which_implies_wit_2.
 Axiom proof_of_dequeue_safety_wit_1 : dequeue_safety_wit_1.
 Axiom proof_of_dequeue_safety_wit_2 : dequeue_safety_wit_2.
 Axiom proof_of_dequeue_safety_wit_3 : dequeue_safety_wit_3.
-Axiom proof_of_dequeue_return_wit_1_1 : dequeue_return_wit_1_1.
-Axiom proof_of_dequeue_return_wit_1_2 : dequeue_return_wit_1_2.
+Axiom proof_of_dequeue_return_wit_1 : dequeue_return_wit_1.
+Axiom proof_of_dequeue_return_wit_2 : dequeue_return_wit_2.
 Axiom proof_of_dequeue_partial_solve_wit_1 : dequeue_partial_solve_wit_1.
 Axiom proof_of_dequeue_partial_solve_wit_2 : dequeue_partial_solve_wit_2.
 Axiom proof_of_dequeue_partial_solve_wit_3_pure : dequeue_partial_solve_wit_3_pure.

@@ -14,12 +14,12 @@ Definition undef_uint_array_strategy3 :=
     TT &&
     ([| (Z.lt x y) |]) &&
     emp **
-    ((UIntArray.undef_ceil p x y))
+    ((UIntArray.undef_seg p x y))
     |--
     (
     TT &&
     emp **
-    ((UIntArray.undef_ceil p (Z.add x 1) y))
+    ((UIntArray.undef_seg p (Z.add x 1) y))
     ) ** (
     TT &&
     emp -*
@@ -34,8 +34,8 @@ Definition undef_uint_array_strategy4 :=
     ([| (Z.le y z) |]) &&
     ([| (Z.le x y) |]) &&
     emp **
-    ((UIntArray.undef_ceil p x y)) **
-    ((UIntArray.undef_ceil p y z))
+    ((UIntArray.undef_seg p x y)) **
+    ((UIntArray.undef_seg p y z))
     |--
     (
     TT &&
@@ -45,7 +45,7 @@ Definition undef_uint_array_strategy4 :=
     emp -*
     TT &&
     emp **
-    ((UIntArray.undef_ceil p x z))
+    ((UIntArray.undef_seg p x z))
     ).
 
 Definition undef_uint_array_strategy5 :=
@@ -54,7 +54,7 @@ Definition undef_uint_array_strategy5 :=
     ([| (Z.le y z) |]) &&
     ([| (Z.le x y) |]) &&
     emp **
-    ((UIntArray.undef_ceil p x z))
+    ((UIntArray.undef_seg p x z))
     |--
     (
     TT &&
@@ -64,8 +64,8 @@ Definition undef_uint_array_strategy5 :=
     emp -*
     TT &&
     emp **
-    ((UIntArray.undef_ceil p x y)) **
-    ((UIntArray.undef_ceil p y z))
+    ((UIntArray.undef_seg p x y)) **
+    ((UIntArray.undef_seg p y z))
     ).
 
 Definition undef_uint_array_strategy6 :=
@@ -81,7 +81,7 @@ Definition undef_uint_array_strategy6 :=
     emp -*
     TT &&
     emp **
-    ((UIntArray.undef_ceil p x x))
+    ((UIntArray.undef_seg p x x))
     ).
 
 Definition undef_uint_array_strategy7 :=
@@ -98,7 +98,7 @@ Definition undef_uint_array_strategy7 :=
     emp -*
     TT &&
     emp **
-    ((UIntArray.undef_ceil p 0 n))
+    ((UIntArray.undef_seg p 0 n))
     ).
 
 Definition undef_uint_array_strategy8 :=
@@ -124,7 +124,7 @@ Definition undef_uint_array_strategy9 :=
     TT &&
     ([| (x = y) |]) &&
     emp **
-    ((UIntArray.undef_ceil p x y))
+    ((UIntArray.undef_seg p x y))
     |--
     (
     TT &&
@@ -142,7 +142,7 @@ Definition undef_uint_array_strategy10 :=
     ([| (y1 = y) |]) &&
     ([| (x1 = x) |]) &&
     emp **
-    ((UIntArray.undef_ceil p x y))
+    ((UIntArray.undef_seg p x y))
     |--
     (
     TT &&
@@ -152,7 +152,7 @@ Definition undef_uint_array_strategy10 :=
     emp -*
     TT &&
     emp **
-    ((UIntArray.undef_ceil p x1 y1))
+    ((UIntArray.undef_seg p x1 y1))
     ).
 
 Definition undef_uint_array_strategy13 :=
@@ -160,12 +160,12 @@ Definition undef_uint_array_strategy13 :=
     TT &&
     ([| (Z.lt x y) |]) &&
     emp **
-    ((IntArray.undef_ceil p x y))
+    ((IntArray.undef_seg p x y))
     |--
     (
     TT &&
     emp **
-    ((IntArray.undef_ceil p (Z.add x 1) y))
+    ((IntArray.undef_seg p (Z.add x 1) y))
     ) ** (
     TT &&
     emp -*
@@ -180,8 +180,8 @@ Definition undef_uint_array_strategy14 :=
     ([| (Z.le y z) |]) &&
     ([| (Z.le x y) |]) &&
     emp **
-    ((IntArray.undef_ceil p x y)) **
-    ((IntArray.undef_ceil p y z))
+    ((IntArray.undef_seg p x y)) **
+    ((IntArray.undef_seg p y z))
     |--
     (
     TT &&
@@ -191,7 +191,7 @@ Definition undef_uint_array_strategy14 :=
     emp -*
     TT &&
     emp **
-    ((IntArray.undef_ceil p x z))
+    ((IntArray.undef_seg p x z))
     ).
 
 Definition undef_uint_array_strategy15 :=
@@ -200,7 +200,7 @@ Definition undef_uint_array_strategy15 :=
     ([| (Z.le y z) |]) &&
     ([| (Z.le x y) |]) &&
     emp **
-    ((IntArray.undef_ceil p x z))
+    ((IntArray.undef_seg p x z))
     |--
     (
     TT &&
@@ -210,8 +210,8 @@ Definition undef_uint_array_strategy15 :=
     emp -*
     TT &&
     emp **
-    ((IntArray.undef_ceil p x y)) **
-    ((IntArray.undef_ceil p y z))
+    ((IntArray.undef_seg p x y)) **
+    ((IntArray.undef_seg p y z))
     ).
 
 Definition undef_uint_array_strategy16 :=
@@ -227,7 +227,7 @@ Definition undef_uint_array_strategy16 :=
     emp -*
     TT &&
     emp **
-    ((IntArray.undef_ceil p x x))
+    ((IntArray.undef_seg p x x))
     ).
 
 Definition undef_uint_array_strategy17 :=
@@ -244,7 +244,7 @@ Definition undef_uint_array_strategy17 :=
     emp -*
     TT &&
     emp **
-    ((IntArray.undef_ceil p 0 n))
+    ((IntArray.undef_seg p 0 n))
     ).
 
 Definition undef_uint_array_strategy18 :=
@@ -270,7 +270,7 @@ Definition undef_uint_array_strategy19 :=
     TT &&
     ([| (x = y) |]) &&
     emp **
-    ((IntArray.undef_ceil p x y))
+    ((IntArray.undef_seg p x y))
     |--
     (
     TT &&
@@ -288,7 +288,7 @@ Definition undef_uint_array_strategy20 :=
     ([| (y1 = y) |]) &&
     ([| (x1 = x) |]) &&
     emp **
-    ((IntArray.undef_ceil p x y))
+    ((IntArray.undef_seg p x y))
     |--
     (
     TT &&
@@ -298,7 +298,7 @@ Definition undef_uint_array_strategy20 :=
     emp -*
     TT &&
     emp **
-    ((IntArray.undef_ceil p x1 y1))
+    ((IntArray.undef_seg p x1 y1))
     ).
 
 Definition undef_uint_array_strategy21 :=
@@ -311,7 +311,7 @@ Definition undef_uint_array_strategy21 :=
     (
     TT &&
     emp **
-    ((UIntArray.undef_ceil p 1 n))
+    ((UIntArray.undef_seg p 1 n))
     ) ** (
     TT &&
     emp -*
@@ -330,7 +330,7 @@ Definition undef_uint_array_strategy22 :=
     (
     TT &&
     emp **
-    ((IntArray.undef_ceil p 1 n))
+    ((IntArray.undef_seg p 1 n))
     ) ** (
     TT &&
     emp -*

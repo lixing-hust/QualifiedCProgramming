@@ -9,7 +9,7 @@ struct tree {
 /*@ Extern Coq (tree :: *) */
 /*@ Extern Coq (partial_tree :: *) */
 /*@ Extern Coq (mapping :: *) */
-/*@ Extern Coq (store_map : Z -> mapping -> Assertion)
+/*@ Extern Coq (Bst::store_map : Z -> mapping -> Assertion)
                (store_tree : Z -> Z -> tree -> Assertion)
                (store_ptb: Z -> Z -> Z -> Z -> partial_tree -> Assertion)
                (empty_partial_tree: partial_tree)

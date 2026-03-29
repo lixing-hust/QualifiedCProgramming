@@ -49,9 +49,9 @@ void delete(struct tree **b, int x)
       With m
       Require
         INT_MIN <= x && x <= INT_MAX &&
-        store_map(* b, m)
+        Bst::store_map(* b, m)
       Ensure
-        store_map(* b, map_delete(x, m))
+        Bst::store_map(* b, map_delete(x, m))
    */
 ;
 

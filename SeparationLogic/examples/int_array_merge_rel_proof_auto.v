@@ -131,7 +131,7 @@ Proof. Admitted.
 Lemma proof_of_mergeSort_safety_wit_6 : mergeSort_safety_wit_6.
 Proof. Admitted. 
 
-Lemma proof_of_mergeSort_return_wit_1_2 : mergeSort_return_wit_1_2.
+Lemma proof_of_mergeSort_return_wit_2 : mergeSort_return_wit_2.
 Proof. Admitted. 
 
 Lemma proof_of_mergeSort_partial_solve_wit_1 : mergeSort_partial_solve_wit_1.

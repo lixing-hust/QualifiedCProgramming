@@ -114,14 +114,14 @@ Proof.
     pose proof map_eq_nil sortedLinkNodeMapping l.
     assert (l = nil).
     apply H5.
-    apply H0.
+    auto.
     Exists SysTick_4.
     entailer!.
     unfold store_sorted_dll.
     entailer!.
 Qed. 
 
-Lemma proof_of_OsSortLinkGetNextExpireTime_return_wit_2_1 : OsSortLinkGetNextExpireTime_return_wit_2_1.
+Lemma proof_of_OsSortLinkGetNextExpireTime_return_wit_3 : OsSortLinkGetNextExpireTime_return_wit_3.
 Proof. 
     pre_process.
     intros.
@@ -141,14 +141,14 @@ Proof.
     entailer!.
     csimpl.
     simpl.
-    assert (x_pstNext = h).
+    assert (x_lSpec_pstNext = h).
     lia.
     rewrite H16.
     entailer!.
     assert (l <> nil).
     pose proof map_sortedLinkNodeMapping_not_nil sortedLinkNodeMapping l.
     apply H14.
-    apply H8.
+    auto.
     assert (getFirstNodeResponseTime l = getFirstNodeResponseTime (map sortedLinkNodeMapping l)).
     unfold getFirstNodeResponseTime.
     destruct l.
@@ -171,10 +171,10 @@ Proof.
     apply H.
     pose proof map_sortedLinkNodeMapping_not_nil sortedLinkNodeMapping l.
     apply H14.
-    apply H8.
+    auto.
 Qed. 
 
-Lemma proof_of_OsSortLinkGetNextExpireTime_return_wit_2_2 : OsSortLinkGetNextExpireTime_return_wit_2_2.
+Lemma proof_of_OsSortLinkGetNextExpireTime_return_wit_2 : OsSortLinkGetNextExpireTime_return_wit_2.
 Proof. 
     pre_process.
     intros.
@@ -194,14 +194,14 @@ Proof.
     entailer!.
     csimpl.
     simpl.
-    assert (x_pstNext = h).
+    assert (x_lSpec_pstNext = h).
     lia.
     rewrite H16.
     entailer!.
     assert (l <> nil).
     pose proof map_sortedLinkNodeMapping_not_nil sortedLinkNodeMapping l.
     apply H14.
-    apply H8.
+    auto.
     assert (getFirstNodeResponseTime l = getFirstNodeResponseTime (map sortedLinkNodeMapping l)).
     unfold getFirstNodeResponseTime.
     destruct l.
@@ -218,7 +218,7 @@ Proof.
     +
     pose proof map_sortedLinkNodeMapping_not_nil sortedLinkNodeMapping l.
     apply H14.
-    apply H8.
+    auto.
 Qed. 
 
 
@@ -352,9 +352,9 @@ Proof.
     pre_process.
     intros.
     Intros x_pstNext.
-    Exists A storeA.
+    Exists A storeA_lSpec.
     rewrite <- H.
-    pose proof dllseg_shift_rev_split_a (storesortedLinkNode storeA) x x_pstNext l.
+    pose proof dllseg_shift_rev_split_a (storesortedLinkNode storeA_lSpec) x_lSpec x_pstNext l_lSpec.
     sep_apply H1.
     Intros a t y l1.
     Exists a t.
@@ -372,14 +372,14 @@ Proof.
     Exists x_pstNext x0.
     entailer!.
     rewrite H3.
-    pose proof dllseg_shift_rev_concat_a (storesortedLinkNode storeA) x y x_pstNext a t l l1.
+    pose proof dllseg_shift_rev_concat_a (storesortedLinkNode storeA_lSpec) x_lSpec y x_pstNext a t l_lSpec l1.
     sep_apply H6.
     entailer!.
     apply H2.
     unfold getFirstNodeResponseTime.
     simpl.
     csimpl.
-    destruct l.
+    destruct l_lSpec.
     congruence.
     assert (responseTime d.(dll_data) = t).
     inversion H3.
@@ -395,14 +395,14 @@ Proof.
     Exists x_pstNext x0.
     entailer!.
     rewrite H3.
-    pose proof dllseg_shift_rev_concat_a (storesortedLinkNode storeA) x y x_pstNext a t l l1.
+    pose proof dllseg_shift_rev_concat_a (storesortedLinkNode storeA_lSpec) x_lSpec y x_pstNext a t l_lSpec l1.
     sep_apply H6.
     entailer!.
     apply H2.
     unfold getFirstNodeResponseTime.
     simpl.
     csimpl.
-    destruct l.
+    destruct l_lSpec.
     congruence.
     assert (responseTime d.(dll_data) = t).
     inversion H3.
@@ -414,7 +414,7 @@ Proof.
     unfold getFirstNodeResponseTime.
     simpl.
     csimpl.
-    destruct l.
+    destruct l_lSpec.
     congruence.
     assert (responseTime d.(dll_data) = t).
     inversion H3.
@@ -430,7 +430,7 @@ Qed.
 Lemma proof_of_LOS_ListEmpty_derive_getfirstSpec_by_highSpec : LOS_ListEmpty_derive_getfirstSpec_by_highSpec.
 Proof. 
     pre_process.
-    Exists A storeA l.
+    Exists A storeA_getfirstSpec l_getfirstSpec.
     entailer!.
     rewrite <- derivable1_wand_sepcon_adjoint.
     entailer!.
@@ -444,10 +444,10 @@ Proof.
     unfold store_dll.
     Intros h pt.
     unfold dllseg.
-    destruct l.
+    destruct l_getfirstSpec.
     + entailer!.
     + Intros z.
-    Exists d l retval_2.
+    Exists d l_getfirstSpec retval_2.
     Exists h pt.
     Exists z.
     entailer!.

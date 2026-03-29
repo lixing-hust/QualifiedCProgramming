@@ -22,9 +22,8 @@ Require Import SimpleC.EE.LiteOS.lib.dll.
 Require Import SimpleC.EE.LiteOS.lib.tick_backup.
 Local Open Scope sac.
 
-Lemma proof_of_LOS_ListEmpty_return_wit_1_1 : LOS_ListEmpty_return_wit_1_1.
+Lemma proof_of_LOS_ListEmpty_return_wit_2 : LOS_ListEmpty_return_wit_2.
 Proof. 
-    unfold LOS_ListEmpty_return_wit_1_1.
     pre_process.
     intros.
     Right.  
@@ -63,9 +62,8 @@ Proof.
 Qed.
 
 
-Lemma proof_of_LOS_ListEmpty_return_wit_1_2 : LOS_ListEmpty_return_wit_1_2.
+Lemma proof_of_LOS_ListEmpty_return_wit_1 : LOS_ListEmpty_return_wit_1.
 Proof. 
-    unfold LOS_ListEmpty_return_wit_1_2.
     pre_process.
     intros.
     Left.

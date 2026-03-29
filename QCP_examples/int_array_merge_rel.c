@@ -20,12 +20,12 @@ void merge(int *arr, int p, int q, int r, int *ret)
   Require safeExec(ATrue, merge_rel(s1, s2), X) && 
           0 <= p && p <= q && 
           q < r && r + 1 <= INT_MAX &&
-          IntArray::ceil(arr, p, q + 1, s1) * 
-          IntArray::ceil(arr, q + 1, r + 1, s2) * 
-          IntArray::ceil(ret, p, r + 1, l0) 
+          IntArray::seg(arr, p, q + 1, s1) * 
+          IntArray::seg(arr, q + 1, r + 1, s2) * 
+          IntArray::seg(ret, p, r + 1, l0) 
   Ensure exists s3 l1, safeExec(ATrue, return(s3), X) && 
-          IntArray::ceil(arr, p, r + 1, l1) * 
-          IntArray::ceil(ret, p, r + 1, s3)
+          IntArray::seg(arr, p, r + 1, l1) * 
+          IntArray::seg(ret, p, r + 1, s3)
 */
 {
 
@@ -41,12 +41,12 @@ void merge(int *arr, int p, int q, int r, int *ret)
         p <= i &&
         q + 1 <= j &&       
         k == p + (i - p) + (j - (q + 1)) &&
-        IntArray::ceil(arr, p, i, l4) * 
-        IntArray::ceil(arr, i, q + 1, l1) * 
-        IntArray::ceil(arr, q + 1, j, l5) * 
-        IntArray::ceil(arr, j, r + 1, l2) * 
-        IntArray::ceil(ret, p, k, l3) *
-        IntArray::ceil(ret, k, r + 1, l6) 
+        IntArray::seg(arr, p, i, l4) * 
+        IntArray::seg(arr, i, q + 1, l1) * 
+        IntArray::seg(arr, q + 1, j, l5) * 
+        IntArray::seg(arr, j, r + 1, l2) * 
+        IntArray::seg(ret, p, k, l3) *
+        IntArray::seg(ret, k, r + 1, l6) 
   */
   while (i < q + 1 && j < r + 1) {
     if (arr[i] <= arr[j]) {
@@ -71,12 +71,12 @@ void merge(int *arr, int p, int q, int r, int *ret)
           q + 1 <= j &&
           k == p + (i - p) + (j - (q + 1)) && 
           (i == q + 1 || j == r + 1) &&
-          IntArray::ceil(arr, p, i, l4) * 
-          IntArray::ceil(arr, i, q + 1, l1) * 
-          IntArray::ceil(arr, q + 1, j, l5) * 
-          IntArray::ceil(arr, j, r + 1, l2) * 
-          IntArray::ceil(ret, p, k, l3) *
-          IntArray::ceil(ret, k, r + 1, l6) 
+          IntArray::seg(arr, p, i, l4) * 
+          IntArray::seg(arr, i, q + 1, l1) * 
+          IntArray::seg(arr, q + 1, j, l5) * 
+          IntArray::seg(arr, j, r + 1, l2) * 
+          IntArray::seg(ret, p, k, l3) *
+          IntArray::seg(ret, k, r + 1, l6) 
   */
   while (i < q + 1) {
     ret[k] = arr[i];
@@ -95,11 +95,11 @@ void merge(int *arr, int p, int q, int r, int *ret)
           q + 1 <= j &&
           k == p + (i - p) + (j - (q + 1)) && 
           i == q + 1 && 
-          IntArray::ceil(arr, p, i, l4) * 
-          IntArray::ceil(arr, q + 1, j, l5) * 
-          IntArray::ceil(arr, j, r + 1, l2) * 
-          IntArray::ceil(ret, p, k, l3) *
-          IntArray::ceil(ret, k, r + 1, l6) 
+          IntArray::seg(arr, p, i, l4) * 
+          IntArray::seg(arr, q + 1, j, l5) * 
+          IntArray::seg(arr, j, r + 1, l2) * 
+          IntArray::seg(ret, p, k, l3) *
+          IntArray::seg(ret, k, r + 1, l6) 
   */
   while (j < r + 1) {
     ret[k] = arr[j];
@@ -115,12 +115,12 @@ void  mergeSort(int *arr, int l, int r, int *ret)
       With {B} l0 (c: list Z -> program unit B) X
       Require safeExec(ATrue, bind(gmergesortrec(l0), c), X) &&
               0 <= l && l <= r && r + 1 <= INT_MAX &&
-              IntArray::ceil(arr, l, r + 1, l0) *
-              IntArray::ceil(ret, l, r + 1, l0)
+              IntArray::seg(arr, l, r + 1, l0) *
+              IntArray::seg(ret, l, r + 1, l0)
       Ensure exists l1 l2,
               safeExec(ATrue, applyf(c, l1), X) && 
-              IntArray::ceil(arr, l, r + 1, l2) *
-              IntArray::ceil(ret, l, r + 1, l1)
+              IntArray::seg(arr, l, r + 1, l2) *
+              IntArray::seg(ret, l, r + 1, l1)
    */
 ;
 
@@ -130,12 +130,12 @@ void mergeSort(int *arr, int l, int r, int *ret)
       With s1 X
       Require safeExec(ATrue, gmergesortrec(s1), X) && 
               0 <= l && l <= r && r + 1 <= INT_MAX &&
-              IntArray::ceil(arr, l, r + 1, s1) *
-              IntArray::ceil(ret, l, r + 1, s1)
+              IntArray::seg(arr, l, r + 1, s1) *
+              IntArray::seg(ret, l, r + 1, s1)
       Ensure exists s2 s3,
               safeExec(ATrue, return(s2), X) &&
-              IntArray::ceil(arr, l, r + 1, s3) *
-              IntArray::ceil(ret, l, r + 1, s2) 
+              IntArray::seg(arr, l, r + 1, s3) *
+              IntArray::seg(ret, l, r + 1, s2) 
 */
 {
   if (l < r) {
@@ -147,23 +147,23 @@ void mergeSort(int *arr, int l, int r, int *ret)
                       0 <= l && l <= r && r + 1 <= INT_MAX &&
                       l < r &&
                       l <= m  && m < r && 
-                      IntArray::ceil(arr, l, m + 1, l1)  *
-                      IntArray::ceil(arr, m + 1, r + 1, l2) *
-                      IntArray::ceil(ret, l, m + 1, l1)  *
-                      IntArray::ceil(ret, m + 1, r + 1, l2)     */
+                      IntArray::seg(arr, l, m + 1, l1)  *
+                      IntArray::seg(arr, m + 1, r + 1, l2) *
+                      IntArray::seg(ret, l, m + 1, l1)  *
+                      IntArray::seg(ret, m + 1, r + 1, l2)     */
     mergeSort(ret, l, m, arr) /*@ where(low_level_spec_aux) X = X  ; B = (list Z) */;
 
      /*@ exists l1 l2 l3, safeExec(ATrue, bind(gmergesortrec(l2), mergesortrec_loc2(l1)), X) && 
-                      IntArray::ceil(arr, l, m + 1, l1)  *
-                      IntArray::ceil(arr, m + 1, r + 1, l2) *
-                      IntArray::ceil(ret, l, m + 1, l3)  *
-                      IntArray::ceil(ret, m + 1, r + 1, l2)   */
+                      IntArray::seg(arr, l, m + 1, l1)  *
+                      IntArray::seg(arr, m + 1, r + 1, l2) *
+                      IntArray::seg(ret, l, m + 1, l3)  *
+                      IntArray::seg(ret, m + 1, r + 1, l2)   */
     mergeSort(ret, m + 1, r, arr) /*@ where(low_level_spec_aux) X = X ; B = (list Z) */;
 
      /*@ exists s1 s2 l0, safeExec(ATrue, merge_rel(s1, s2), X) && 
-                      IntArray::ceil(arr, l, m + 1, s1) * 
-                      IntArray::ceil(arr, m + 1, r + 1, s2) * 
-                      IntArray::ceil(ret, l, r + 1, l0)    */
+                      IntArray::seg(arr, l, m + 1, s1) * 
+                      IntArray::seg(arr, m + 1, r + 1, s2) * 
+                      IntArray::seg(ret, l, r + 1, l0)    */
     merge(arr, l, m, r, ret) /*@ where X = X  */;
 
 

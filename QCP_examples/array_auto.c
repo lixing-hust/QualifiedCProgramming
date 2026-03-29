@@ -27,7 +27,7 @@ void array_copy1(int *dest, int *src, int n)
   int i;
   /*@ Inv
       0 <= i && i <= n@pre && 
-      IntArray::ceil_shape(dest@pre, 0, i) * IntArray::undef_ceil(dest@pre, i, n@pre)
+      IntArray::seg_shape(dest@pre, 0, i) * IntArray::undef_seg(dest@pre, i, n@pre)
   */
   for (i = 0; i < n; ++i) {
     dest[i] = src[i];
@@ -42,14 +42,14 @@ void array_concat(int * ret, int *a, int n, int *b, int m)
   int i;
   /*@ Inv
       0 <= i && i <= n@pre && 
-      IntArray::ceil_shape(ret@pre, 0, i) * IntArray::undef_ceil(ret@pre, i, n@pre + m@pre)
+      IntArray::seg_shape(ret@pre, 0, i) * IntArray::undef_seg(ret@pre, i, n@pre + m@pre)
   */
   for (i = 0; i < n; ++i) {
     ret[i] = a[i];
   }
   /*@ Inv
       0 <= i && i <= m@pre && 
-      IntArray::ceil_shape(ret@pre, 0, n@pre + i) * IntArray::undef_ceil(ret@pre, n@pre + i, n@pre + m@pre)
+      IntArray::seg_shape(ret@pre, 0, n@pre + i) * IntArray::undef_seg(ret@pre, n@pre + i, n@pre + m@pre)
   */
   for (i = 0; i < m; ++i) {
     ret[n + i] = b[i];
@@ -80,7 +80,7 @@ void array_vector_sum(unsigned int *ret, unsigned int *a, unsigned int *b, int n
   int i;
   /*@ Inv
       0 <= i && i <= n@pre && 
-      UIntArray::ceil_shape(ret@pre, 0, i) * UIntArray::undef_ceil(ret@pre, i, n@pre)
+      UIntArray::seg_shape(ret@pre, 0, i) * UIntArray::undef_seg(ret@pre, i, n@pre)
   */
   for (i = 0; i < n; ++i) {
     ret[i] = a[i] + b[i];
@@ -95,7 +95,7 @@ void pointwise_mul(unsigned int *a, unsigned int *b, unsigned int *c, int n)
   int i;
   /*@ Inv
       0 <= i && i <= n@pre &&
-      UIntArray::ceil_shape(c@pre, 0, i) * UIntArray::undef_ceil(c@pre, i, n@pre)
+      UIntArray::seg_shape(c@pre, 0, i) * UIntArray::undef_seg(c@pre, i, n@pre)
   */
   for (i = 0; i < n; ++i) {
     c[i] = a[i] * b[i];
@@ -128,7 +128,7 @@ void memset(int *a, int n, int value)
   int i;
   /*@ Inv
       0 <= i && i <= n@pre &&
-      IntArray::ceil_shape(a@pre, 0, i) * IntArray::undef_ceil(a@pre, i, n@pre)
+      IntArray::seg_shape(a@pre, 0, i) * IntArray::undef_seg(a@pre, i, n@pre)
   */
   for (i = 0; i < n; ++i) {
     a[i] = value;

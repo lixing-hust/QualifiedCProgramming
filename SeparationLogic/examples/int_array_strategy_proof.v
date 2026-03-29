@@ -41,7 +41,7 @@ Qed.
 
 Lemma int_array_strategy7_correctness : int_array_strategy7.
   pre_process_default.
-  sep_apply (IntArray.ceil_split_to_missing_i p x i y); [ | tauto].
+  sep_apply (IntArray.seg_split_to_missing_i p x i y); [ | tauto].
   entailer!.
   Intros_r_any.
   entailer!.
@@ -53,19 +53,19 @@ Qed.
 Lemma int_array_strategy8_correctness : int_array_strategy8.
   pre_process_default.
   Intros; subst.
-  prop_apply (IntArray.ceil_length p x y).
-  prop_apply (IntArray.ceil_length p y z).
+  prop_apply (IntArray.seg_length p x y).
+  prop_apply (IntArray.seg_length p y z).
   Intros.
-  sep_apply (IntArray.ceil_merge_to_ceil p x y z l1 l2) ; try lia.
+  sep_apply (IntArray.seg_merge_to_seg p x y z l1 l2) ; try lia.
   entailer!.
 Qed.
 
 Lemma int_array_strategy9_correctness : int_array_strategy9.
   pre_process_default.
   Intros. subst.
-  prop_apply (IntArray.ceil_length p x z).
+  prop_apply (IntArray.seg_length p x z).
   Intros.
-  sep_apply (IntArray.ceil_split_to_ceil p x y z (l1 ++ l2)) ; try lia.
+  sep_apply (IntArray.seg_split_to_seg p x y z (l1 ++ l2)) ; try lia.
   rewrite <- H2.
   rewrite sublist_app_exact1 by lia.
   rewrite sublist_split_app_r with (len := Zlength l1) by lia.
@@ -96,7 +96,7 @@ Qed.
 Lemma int_array_strategy11_correctness : int_array_strategy11.
   pre_process_default.
   simpl.
-  sep_apply (IntArray.missing_i_merge_to_ceil); [ | tauto].
+  sep_apply (IntArray.missing_i_merge_to_seg); [ | tauto].
   rewrite replace_Znth_Znth by tauto.
   entailer!.
 Qed.
@@ -111,6 +111,6 @@ Qed.
 Lemma int_array_strategy12_correctness : int_array_strategy12.
   pre_process_default.
   simpl.
-  sep_apply (IntArray.missing_i_merge_to_ceil); [ | tauto].
+  sep_apply (IntArray.missing_i_merge_to_seg); [ | tauto].
   entailer!.
 Qed.

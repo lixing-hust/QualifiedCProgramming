@@ -170,29 +170,7 @@ Proof.
   apply (exgcd_reduction' _ _ _ _ H H0 H1).
 Qed.
 
-Lemma proof_of_exgcd_return_wit_1_1 : exgcd_return_wit_1_1.
-Proof.
-  pre_process.
-  subst b_pre.
-  Left. Left.
-  Exists 0 (-1).
-  entailer!.
-  + rewrite Z.gcd_0_r; lia.
-  + rewrite Z.gcd_0_r; exact H.
-Qed.
-
-Lemma proof_of_exgcd_return_wit_1_2 : exgcd_return_wit_1_2.
-Proof.
-  pre_process.
-  subst b_pre.
-  Left. Left.
-  Exists 0 0.
-  entailer!.
-  + rewrite Z.gcd_0_r; lia.
-  + rewrite Z.gcd_0_r; exact H.
-Qed.
-
-Lemma proof_of_exgcd_return_wit_1_3 : exgcd_return_wit_1_3.
+Lemma proof_of_exgcd_return_wit_3 : exgcd_return_wit_3.
 Proof.
   pre_process.
   subst b_pre.
@@ -203,22 +181,40 @@ Proof.
   + rewrite Z.gcd_0_r; exact H.
 Qed.
 
-Lemma proof_of_exgcd_return_wit_2_1 : exgcd_return_wit_2_1.
+Lemma proof_of_exgcd_return_wit_2 : exgcd_return_wit_2.
 Proof.
   pre_process.
-  Right.
-  Exists (x_callee_v - a_pre ÷ b_pre * y_callee_v) y_callee_v .
-  rewrite Z.gcd_comm.
-  rewrite <- (Z.gcd_rem a_pre b_pre H5).
-  rewrite Z.gcd_comm.
+  subst b_pre.
+  Left. Left.
+  Exists 0 0.
   entailer!.
-  + apply (exgcd_reduction _ _ _ _ H5 H3 H4).
-  + rewrite <- H0.
-    pose proof (Z.quot_rem a_pre b_pre ltac:(lia)).
-    lia.
+  + rewrite Z.gcd_0_r; lia.
+  + rewrite Z.gcd_0_r; exact H.
 Qed.
 
-Lemma proof_of_exgcd_return_wit_2_2 : exgcd_return_wit_2_2.
+Lemma proof_of_exgcd_return_wit_1 : exgcd_return_wit_1.
+Proof.
+  pre_process.
+  subst b_pre.
+  Left. Left.
+  Exists 0 (-1).
+  entailer!.
+  + rewrite Z.gcd_0_r; lia.
+  + rewrite Z.gcd_0_r; exact H.
+Qed.
+
+Lemma proof_of_exgcd_return_wit_4 : exgcd_return_wit_4.
+Proof.
+  pre_process.
+  Left. Right.
+  Exists (x_callee_v - a_pre ÷ b_pre * y_callee_v) y_callee_v .
+  rewrite Z.gcd_comm.
+  rewrite <- (Z.gcd_rem a_pre b_pre H4).
+  rewrite Z.gcd_comm.
+  entailer!.
+Qed.
+
+Lemma proof_of_exgcd_return_wit_5 : exgcd_return_wit_5.
 Proof.
   pre_process.
   Right.
@@ -253,15 +249,19 @@ Proof.
     lia.
 Qed.
 
-Lemma proof_of_exgcd_return_wit_2_3 : exgcd_return_wit_2_3.
+Lemma proof_of_exgcd_return_wit_6 : exgcd_return_wit_6.
 Proof.
   pre_process.
-  Left. Right.
+  Right.
   Exists (x_callee_v - a_pre ÷ b_pre * y_callee_v) y_callee_v .
   rewrite Z.gcd_comm.
-  rewrite <- (Z.gcd_rem a_pre b_pre H4).
+  rewrite <- (Z.gcd_rem a_pre b_pre H5).
   rewrite Z.gcd_comm.
   entailer!.
+  + apply (exgcd_reduction _ _ _ _ H5 H3 H4).
+  + rewrite <- H0.
+    pose proof (Z.quot_rem a_pre b_pre ltac:(lia)).
+    lia.
 Qed.
 
 Lemma proof_of_exgcd_partial_solve_wit_4_pure : exgcd_partial_solve_wit_4_pure.

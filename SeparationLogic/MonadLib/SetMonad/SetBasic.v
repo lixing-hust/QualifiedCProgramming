@@ -32,16 +32,7 @@ End SetMonad.
 
 Notation program := SetMonad.M.
 
-Ltac unfold_monad := 
-  unfold bind, ret; simpl; 
-  unfold SetMonad.bind, SetMonad.ret; simpl.
-
-Ltac unfold_monad_in H := 
-  unfold bind, ret in H; simpl in H; 
-  unfold SetMonad.bind, SetMonad.ret in H; simpl in H.
-
-Tactic Notation "unfold_monad" "in" hyp(H) :=
-  unfold_monad_in H.
+Hint Unfold SetMonad.bind SetMonad.ret : monad_unfold.
 
 Import SetMonad.
 
@@ -284,6 +275,14 @@ Definition range_iter_break
   (body: nat -> A -> program (CntOrBrk A B)) :=
   fun a => Lfix (range_iter_break_f hi body) (lo, a).
 
+Fixpoint list_iter {A B: Type} (body: A -> B -> SetMonad.M B) (l: list A) (default: B): SetMonad.M B :=
+  match l with
+  | nil => ret default
+  | cons a l' => 
+      b <- body a default;;
+      list_iter body l' b
+  end.
+  
 Module SetMonadExamples'.
 Local Open Scope Z.
 

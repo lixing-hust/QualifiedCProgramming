@@ -26,7 +26,8 @@ From SimpleC.EE Require Import common_strategy_proof.
 
 Definition update_height_safety_wit_1 := 
 forall (root_pre: Z) ,
-  ((( &( "lh" ) )) # UChar  |->_)
+  ((( &( "rh" ) )) # UChar  |->_)
+  **  ((( &( "lh" ) )) # UChar  |-> 0)
   **  ((( &( "root" ) )) # Ptr  |-> root_pre)
   **  (store_non_empty_tree root_pre )
 |--
@@ -36,8 +37,7 @@ forall (root_pre: Z) ,
 
 Definition update_height_safety_wit_2 := 
 forall (root_pre: Z) ,
-  ((( &( "rh" ) )) # UChar  |->_)
-  **  ((( &( "lh" ) )) # UChar  |-> 0)
+  ((( &( "lh" ) )) # UChar  |->_)
   **  ((( &( "root" ) )) # Ptr  |-> root_pre)
   **  (store_non_empty_tree root_pre )
 |--
@@ -65,6 +65,26 @@ forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (
 .
 
 Definition update_height_safety_wit_4 := 
+forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) ,
+  [| (tr1 = empty) |] 
+  &&  [| (l = 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (root_pre <> 0) |] 
+  &&  [| (0 <= 255) |] 
+  &&  [| (0 >= 0) |]
+  &&  (single_tree_node root_pre k v h l r )
+  **  (store_tree r tr2 )
+  **  ((( &( "rh" ) )) # UChar  |-> 0)
+  **  ((( &( "lh" ) )) # UChar  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> root_pre)
+|--
+  [| (0 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 0) |]
+.
+
+Definition update_height_safety_wit_5 := 
 forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) ,
   [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
@@ -83,26 +103,6 @@ forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (
   **  (store_tree r tr2 )
   **  ((( &( "rh" ) )) # UChar  |-> 0)
   **  ((( &( "lh" ) )) # UChar  |-> h_2)
-  **  ((( &( "root" ) )) # Ptr  |-> root_pre)
-|--
-  [| (0 <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= 0) |]
-.
-
-Definition update_height_safety_wit_5 := 
-forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) ,
-  [| (tr1 = empty) |] 
-  &&  [| (l = 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (root_pre <> 0) |] 
-  &&  [| (0 <= 255) |] 
-  &&  [| (0 >= 0) |]
-  &&  (single_tree_node root_pre k v h l r )
-  **  (store_tree r tr2 )
-  **  ((( &( "rh" ) )) # UChar  |-> 0)
-  **  ((( &( "lh" ) )) # UChar  |-> 0)
   **  ((( &( "root" ) )) # Ptr  |-> root_pre)
 |--
   [| (0 <= INT_MAX) |] 
@@ -254,60 +254,6 @@ forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (
 .
 
 Definition update_height_safety_wit_11 := 
-forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h_2: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) ,
-  [| (0 <= h) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (tr2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (tr1 = empty) |] 
-  &&  [| (l = 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (root_pre <> 0) |] 
-  &&  [| (0 <= 255) |] 
-  &&  [| (0 >= 0) |]
-  &&  (single_tree_node r k_2 v_2 h l_2 r_2 )
-  **  (single_tree_node root_pre k v h_2 l r )
-  **  (store_tree r_2 tr2_2 )
-  **  (store_tree l_2 tr1_2 )
-  **  ((( &( "rh" ) )) # UChar  |-> h)
-  **  ((( &( "lh" ) )) # UChar  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> root_pre)
-|--
-  [| ((h + 1 ) <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= (h + 1 )) |]
-.
-
-Definition update_height_safety_wit_12 := 
-forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) ,
-  [| (0 <= h_2) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (tr2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (tr1 = empty) |] 
-  &&  [| (l = 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (root_pre <> 0) |] 
-  &&  [| (0 <= 255) |] 
-  &&  [| (0 >= 0) |]
-  &&  (single_tree_node r k_2 v_2 h_2 l_2 r_2 )
-  **  (single_tree_node root_pre k v h l r )
-  **  (store_tree r_2 tr2_2 )
-  **  (store_tree l_2 tr1_2 )
-  **  ((( &( "rh" ) )) # UChar  |-> h_2)
-  **  ((( &( "lh" ) )) # UChar  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> root_pre)
-|--
-  [| (1 <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= 1) |]
-.
-
-Definition update_height_safety_wit_13 := 
 forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h_2: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h: Z) (l_3: Z) (r_3: Z) (tr1_3: tree) (tr2_3: tree) ,
   [| (h_3 <= h) |] 
   &&  [| (h <= 255) |] 
@@ -339,7 +285,7 @@ forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h_2: Z) (l: Z) (r: Z) (tr1: tree)
   &&  [| ((INT_MIN) <= (h + 1 )) |]
 .
 
-Definition update_height_safety_wit_14 := 
+Definition update_height_safety_wit_12 := 
 forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_3: Z) (l_3: Z) (r_3: Z) (tr1_3: tree) (tr2_3: tree) ,
   [| (h_2 <= h_3) |] 
   &&  [| (h_3 <= 255) |] 
@@ -371,27 +317,75 @@ forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (
   &&  [| ((INT_MIN) <= 1) |]
 .
 
-Definition update_height_safety_wit_15 := 
-forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) ,
-  [| (h_2 <= 0) |] 
-  &&  [| (r = 0) |] 
+Definition update_height_safety_wit_13 := 
+forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h_2: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) ,
+  [| (0 <= h) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (tr2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (tr1 = empty) |] 
+  &&  [| (l = 0) |] 
   &&  [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
-  &&  [| (tr1 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (l <> 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (root_pre <> 0) |] 
+  &&  [| (0 <= 255) |] 
+  &&  [| (0 >= 0) |]
+  &&  (single_tree_node r k_2 v_2 h l_2 r_2 )
+  **  (single_tree_node root_pre k v h_2 l r )
+  **  (store_tree r_2 tr2_2 )
+  **  (store_tree l_2 tr1_2 )
+  **  ((( &( "rh" ) )) # UChar  |-> h)
+  **  ((( &( "lh" ) )) # UChar  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> root_pre)
+|--
+  [| ((h + 1 ) <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= (h + 1 )) |]
+.
+
+Definition update_height_safety_wit_14 := 
+forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) ,
+  [| (0 <= h_2) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (tr1 = empty) |] 
+  &&  [| (l = 0) |] 
   &&  [| (h <= 255) |] 
   &&  [| (h >= 0) |] 
   &&  [| (tr = (make_tree (tr1) (tr2))) |] 
   &&  [| (root_pre <> 0) |] 
   &&  [| (0 <= 255) |] 
   &&  [| (0 >= 0) |]
-  &&  (single_tree_node l k_2 v_2 h_2 l_2 r_2 )
+  &&  (single_tree_node r k_2 v_2 h_2 l_2 r_2 )
   **  (single_tree_node root_pre k v h l r )
   **  (store_tree r_2 tr2_2 )
   **  (store_tree l_2 tr1_2 )
+  **  ((( &( "rh" ) )) # UChar  |-> h_2)
+  **  ((( &( "lh" ) )) # UChar  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> root_pre)
+|--
+  [| (1 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 1) |]
+.
+
+Definition update_height_safety_wit_15 := 
+forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) ,
+  [| (r = 0) |] 
+  &&  [| (tr1 = empty) |] 
+  &&  [| (l = 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (root_pre <> 0) |] 
+  &&  [| (0 <= 255) |] 
+  &&  [| (0 >= 0) |]
+  &&  (single_tree_node root_pre k v h l r )
   **  (store_tree r tr2 )
   **  ((( &( "rh" ) )) # UChar  |-> 0)
-  **  ((( &( "lh" ) )) # UChar  |-> h_2)
+  **  ((( &( "lh" ) )) # UChar  |-> 0)
   **  ((( &( "root" ) )) # Ptr  |-> root_pre)
 |--
   [| ((0 + 1 ) <= INT_MAX) |] 
@@ -399,6 +393,54 @@ forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (
 .
 
 Definition update_height_safety_wit_16 := 
+forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) ,
+  [| (r = 0) |] 
+  &&  [| (tr1 = empty) |] 
+  &&  [| (l = 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (root_pre <> 0) |] 
+  &&  [| (0 <= 255) |] 
+  &&  [| (0 >= 0) |]
+  &&  (single_tree_node root_pre k v h l r )
+  **  (store_tree r tr2 )
+  **  ((( &( "rh" ) )) # UChar  |-> 0)
+  **  ((( &( "lh" ) )) # UChar  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> root_pre)
+|--
+  [| (1 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 1) |]
+.
+
+Definition update_height_safety_wit_17 := 
+forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) ,
+  [| (h_2 <= 0) |] 
+  &&  [| (r = 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr1 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (root_pre <> 0) |] 
+  &&  [| (0 <= 255) |] 
+  &&  [| (0 >= 0) |]
+  &&  (single_tree_node l k_2 v_2 h_2 l_2 r_2 )
+  **  (single_tree_node root_pre k v h l r )
+  **  (store_tree r_2 tr2_2 )
+  **  (store_tree l_2 tr1_2 )
+  **  (store_tree r tr2 )
+  **  ((( &( "rh" ) )) # UChar  |-> 0)
+  **  ((( &( "lh" ) )) # UChar  |-> h_2)
+  **  ((( &( "root" ) )) # Ptr  |-> root_pre)
+|--
+  [| ((0 + 1 ) <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= (0 + 1 )) |]
+.
+
+Definition update_height_safety_wit_18 := 
 forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) ,
   [| (h_2 <= 0) |] 
   &&  [| (r = 0) |] 
@@ -425,9 +467,33 @@ forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (
   &&  [| ((INT_MIN) <= 1) |]
 .
 
-Definition update_height_safety_wit_17 := 
+Definition update_height_return_wit_1 := 
+forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) ,
+  [| (tr2 = empty) |] 
+  &&  [| (h_2 <= 0) |] 
+  &&  [| (r = 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr1 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (root_pre <> 0) |] 
+  &&  [| (0 <= 255) |] 
+  &&  [| (0 >= 0) |]
+  &&  (single_tree_node l k_2 v_2 h_2 l_2 r_2 )
+  **  (single_tree_node root_pre k v (0 + 1 ) l r )
+  **  (store_tree r_2 tr2_2 )
+  **  (store_tree l_2 tr1_2 )
+|--
+  (store_non_empty_tree root_pre )
+.
+
+Definition update_height_return_wit_2 := 
 forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) ,
-  [| (r = 0) |] 
+  [| (tr2 = empty) |] 
+  &&  [| (r = 0) |] 
   &&  [| (tr1 = empty) |] 
   &&  [| (l = 0) |] 
   &&  [| (h <= 255) |] 
@@ -436,38 +502,12 @@ forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (
   &&  [| (root_pre <> 0) |] 
   &&  [| (0 <= 255) |] 
   &&  [| (0 >= 0) |]
-  &&  (single_tree_node root_pre k v h l r )
-  **  (store_tree r tr2 )
-  **  ((( &( "rh" ) )) # UChar  |-> 0)
-  **  ((( &( "lh" ) )) # UChar  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> root_pre)
+  &&  (single_tree_node root_pre k v (0 + 1 ) l r )
 |--
-  [| ((0 + 1 ) <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= (0 + 1 )) |]
+  (store_non_empty_tree root_pre )
 .
 
-Definition update_height_safety_wit_18 := 
-forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) ,
-  [| (r = 0) |] 
-  &&  [| (tr1 = empty) |] 
-  &&  [| (l = 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (root_pre <> 0) |] 
-  &&  [| (0 <= 255) |] 
-  &&  [| (0 >= 0) |]
-  &&  (single_tree_node root_pre k v h l r )
-  **  (store_tree r tr2 )
-  **  ((( &( "rh" ) )) # UChar  |-> 0)
-  **  ((( &( "lh" ) )) # UChar  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> root_pre)
-|--
-  [| (1 <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= 1) |]
-.
-
-Definition update_height_return_wit_1_1 := 
+Definition update_height_return_wit_3 := 
 forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) ,
   [| (0 <= h_2) |] 
   &&  [| (h_2 <= 255) |] 
@@ -490,7 +530,7 @@ forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (
   (store_non_empty_tree root_pre )
 .
 
-Definition update_height_return_wit_1_2 := 
+Definition update_height_return_wit_4 := 
 forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_3: Z) (l_3: Z) (r_3: Z) (tr1_3: tree) (tr2_3: tree) ,
   [| (h_2 <= h_3) |] 
   &&  [| (h_3 <= 255) |] 
@@ -518,10 +558,10 @@ forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (
   (store_non_empty_tree root_pre )
 .
 
-Definition update_height_return_wit_1_3 := 
+Definition update_height_return_wit_5 := 
 forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) ,
   [| (tr2 = empty) |] 
-  &&  [| (h_2 <= 0) |] 
+  &&  [| (h_2 > 0) |] 
   &&  [| (r = 0) |] 
   &&  [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
@@ -534,31 +574,14 @@ forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (
   &&  [| (0 <= 255) |] 
   &&  [| (0 >= 0) |]
   &&  (single_tree_node l k_2 v_2 h_2 l_2 r_2 )
-  **  (single_tree_node root_pre k v (0 + 1 ) l r )
+  **  (single_tree_node root_pre k v (unsigned_last_nbits ((h_2 + 1 )) (8)) l r )
   **  (store_tree r_2 tr2_2 )
   **  (store_tree l_2 tr1_2 )
 |--
   (store_non_empty_tree root_pre )
 .
 
-Definition update_height_return_wit_1_4 := 
-forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) ,
-  [| (tr2 = empty) |] 
-  &&  [| (r = 0) |] 
-  &&  [| (tr1 = empty) |] 
-  &&  [| (l = 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (root_pre <> 0) |] 
-  &&  [| (0 <= 255) |] 
-  &&  [| (0 >= 0) |]
-  &&  (single_tree_node root_pre k v (0 + 1 ) l r )
-|--
-  (store_non_empty_tree root_pre )
-.
-
-Definition update_height_return_wit_1_5 := 
+Definition update_height_return_wit_6 := 
 forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_3: Z) (l_3: Z) (r_3: Z) (tr1_3: tree) (tr2_3: tree) ,
   [| (h_2 > h_3) |] 
   &&  [| (h_3 <= 255) |] 
@@ -580,29 +603,6 @@ forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (
   **  (single_tree_node root_pre k v (unsigned_last_nbits ((h_2 + 1 )) (8)) l r )
   **  (store_tree r_3 tr2_3 )
   **  (store_tree l_3 tr1_3 )
-  **  (store_tree r_2 tr2_2 )
-  **  (store_tree l_2 tr1_2 )
-|--
-  (store_non_empty_tree root_pre )
-.
-
-Definition update_height_return_wit_1_6 := 
-forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) ,
-  [| (tr2 = empty) |] 
-  &&  [| (h_2 > 0) |] 
-  &&  [| (r = 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (tr1 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (root_pre <> 0) |] 
-  &&  [| (0 <= 255) |] 
-  &&  [| (0 >= 0) |]
-  &&  (single_tree_node l k_2 v_2 h_2 l_2 r_2 )
-  **  (single_tree_node root_pre k v (unsigned_last_nbits ((h_2 + 1 )) (8)) l r )
   **  (store_tree r_2 tr2_2 )
   **  (store_tree l_2 tr1_2 )
 |--
@@ -712,6 +712,35 @@ forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (
 .
 
 Definition update_height_partial_solve_wit_4 := 
+forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) ,
+  [| (l = 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (root_pre <> 0) |] 
+  &&  [| (0 <= 255) |] 
+  &&  [| (0 >= 0) |]
+  &&  (single_tree_node root_pre k v h l r )
+  **  (store_tree r tr2 )
+  **  (store_tree l tr1 )
+|--
+  [| (tr1 = empty) |] 
+  &&  [| (l = 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (root_pre <> 0) |] 
+  &&  [| (0 <= 255) |] 
+  &&  [| (0 >= 0) |]
+  &&  ((&((root_pre)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((root_pre)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((root_pre)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((root_pre)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((root_pre)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  (store_tree r tr2 )
+.
+
+Definition update_height_partial_solve_wit_5 := 
 forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) ,
   [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
@@ -751,35 +780,6 @@ forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (
   **  ((&((l)  # "tree" ->ₛ "key")) # Int  |-> k_2)
   **  (store_tree r_2 tr2_2 )
   **  (store_tree l_2 tr1_2 )
-  **  (store_tree r tr2 )
-.
-
-Definition update_height_partial_solve_wit_5 := 
-forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) ,
-  [| (l = 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (root_pre <> 0) |] 
-  &&  [| (0 <= 255) |] 
-  &&  [| (0 >= 0) |]
-  &&  (single_tree_node root_pre k v h l r )
-  **  (store_tree r tr2 )
-  **  (store_tree l tr1 )
-|--
-  [| (tr1 = empty) |] 
-  &&  [| (l = 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (root_pre <> 0) |] 
-  &&  [| (0 <= 255) |] 
-  &&  [| (0 >= 0) |]
-  &&  ((&((root_pre)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((root_pre)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((root_pre)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((root_pre)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((root_pre)  # "tree" ->ₛ "key")) # Int  |-> k)
   **  (store_tree r tr2 )
 .
 
@@ -1092,53 +1092,6 @@ forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (
 .
 
 Definition update_height_partial_solve_wit_12 := 
-forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) ,
-  [| (0 <= h_2) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (tr2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (tr1 = empty) |] 
-  &&  [| (l = 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (root_pre <> 0) |] 
-  &&  [| (0 <= 255) |] 
-  &&  [| (0 >= 0) |]
-  &&  (single_tree_node r k_2 v_2 h_2 l_2 r_2 )
-  **  (single_tree_node root_pre k v h l r )
-  **  (store_tree r_2 tr2_2 )
-  **  (store_tree l_2 tr1_2 )
-|--
-  [| (0 <= h_2) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (tr2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (tr1 = empty) |] 
-  &&  [| (l = 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (root_pre <> 0) |] 
-  &&  [| (0 <= 255) |] 
-  &&  [| (0 >= 0) |]
-  &&  ((&((root_pre)  # "tree" ->ₛ "height")) # UChar  |->_)
-  **  ((&((root_pre)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((root_pre)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((root_pre)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((root_pre)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  ((&((r)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
-  **  ((&((r)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
-  **  ((&((r)  # "tree" ->ₛ "height")) # UChar  |-> h_2)
-  **  ((&((r)  # "tree" ->ₛ "value")) # Int  |-> v_2)
-  **  ((&((r)  # "tree" ->ₛ "key")) # Int  |-> k_2)
-  **  (store_tree r_2 tr2_2 )
-  **  (store_tree l_2 tr1_2 )
-.
-
-Definition update_height_partial_solve_wit_13 := 
 forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_3: Z) (l_3: Z) (r_3: Z) (tr1_3: tree) (tr2_3: tree) ,
   [| (h_2 <= h_3) |] 
   &&  [| (h_3 <= 255) |] 
@@ -1199,7 +1152,85 @@ forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (
   **  (store_tree l_2 tr1_2 )
 .
 
+Definition update_height_partial_solve_wit_13 := 
+forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) ,
+  [| (0 <= h_2) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (tr1 = empty) |] 
+  &&  [| (l = 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (root_pre <> 0) |] 
+  &&  [| (0 <= 255) |] 
+  &&  [| (0 >= 0) |]
+  &&  (single_tree_node r k_2 v_2 h_2 l_2 r_2 )
+  **  (single_tree_node root_pre k v h l r )
+  **  (store_tree r_2 tr2_2 )
+  **  (store_tree l_2 tr1_2 )
+|--
+  [| (0 <= h_2) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (tr1 = empty) |] 
+  &&  [| (l = 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (root_pre <> 0) |] 
+  &&  [| (0 <= 255) |] 
+  &&  [| (0 >= 0) |]
+  &&  ((&((root_pre)  # "tree" ->ₛ "height")) # UChar  |->_)
+  **  ((&((root_pre)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((root_pre)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((root_pre)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((root_pre)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  ((&((r)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
+  **  ((&((r)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
+  **  ((&((r)  # "tree" ->ₛ "height")) # UChar  |-> h_2)
+  **  ((&((r)  # "tree" ->ₛ "value")) # Int  |-> v_2)
+  **  ((&((r)  # "tree" ->ₛ "key")) # Int  |-> k_2)
+  **  (store_tree r_2 tr2_2 )
+  **  (store_tree l_2 tr1_2 )
+.
+
 Definition update_height_partial_solve_wit_14 := 
+forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) ,
+  [| (r = 0) |] 
+  &&  [| (tr1 = empty) |] 
+  &&  [| (l = 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (root_pre <> 0) |] 
+  &&  [| (0 <= 255) |] 
+  &&  [| (0 >= 0) |]
+  &&  (single_tree_node root_pre k v h l r )
+  **  (store_tree r tr2 )
+|--
+  [| (tr2 = empty) |] 
+  &&  [| (r = 0) |] 
+  &&  [| (tr1 = empty) |] 
+  &&  [| (l = 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (root_pre <> 0) |] 
+  &&  [| (0 <= 255) |] 
+  &&  [| (0 >= 0) |]
+  &&  ((&((root_pre)  # "tree" ->ₛ "height")) # UChar  |->_)
+  **  ((&((root_pre)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((root_pre)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((root_pre)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((root_pre)  # "tree" ->ₛ "key")) # Int  |-> k)
+.
+
+Definition update_height_partial_solve_wit_15 := 
 forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) ,
   [| (h_2 <= 0) |] 
   &&  [| (r = 0) |] 
@@ -1244,37 +1275,6 @@ forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (
   **  ((&((l)  # "tree" ->ₛ "key")) # Int  |-> k_2)
   **  (store_tree r_2 tr2_2 )
   **  (store_tree l_2 tr1_2 )
-.
-
-Definition update_height_partial_solve_wit_15 := 
-forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) ,
-  [| (r = 0) |] 
-  &&  [| (tr1 = empty) |] 
-  &&  [| (l = 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (root_pre <> 0) |] 
-  &&  [| (0 <= 255) |] 
-  &&  [| (0 >= 0) |]
-  &&  (single_tree_node root_pre k v h l r )
-  **  (store_tree r tr2 )
-|--
-  [| (tr2 = empty) |] 
-  &&  [| (r = 0) |] 
-  &&  [| (tr1 = empty) |] 
-  &&  [| (l = 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (root_pre <> 0) |] 
-  &&  [| (0 <= 255) |] 
-  &&  [| (0 >= 0) |]
-  &&  ((&((root_pre)  # "tree" ->ₛ "height")) # UChar  |->_)
-  **  ((&((root_pre)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((root_pre)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((root_pre)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((root_pre)  # "tree" ->ₛ "key")) # Int  |-> k)
 .
 
 (*----- Function rotateR -----*)
@@ -2127,7 +2127,8 @@ Definition rotateLR_partial_solve_wit_3 := rotateLR_partial_solve_wit_3_pure -> 
 
 Definition balance_factor_safety_wit_1 := 
 forall (root_pre: Z) ,
-  ((( &( "lh" ) )) # UChar  |->_)
+  ((( &( "rh" ) )) # UChar  |->_)
+  **  ((( &( "lh" ) )) # UChar  |-> 0)
   **  ((( &( "root" ) )) # Ptr  |-> root_pre)
   **  (store_tree_shape root_pre )
 |--
@@ -2137,8 +2138,7 @@ forall (root_pre: Z) ,
 
 Definition balance_factor_safety_wit_2 := 
 forall (root_pre: Z) ,
-  ((( &( "rh" ) )) # UChar  |->_)
-  **  ((( &( "lh" ) )) # UChar  |-> 0)
+  ((( &( "lh" ) )) # UChar  |->_)
   **  ((( &( "root" ) )) # Ptr  |-> root_pre)
   **  (store_tree_shape root_pre )
 |--
@@ -2189,6 +2189,26 @@ forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (
 .
 
 Definition balance_factor_safety_wit_6 := 
+forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) ,
+  [| (tr1 = empty) |] 
+  &&  [| (l = 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (0 <= 255) |] 
+  &&  [| (0 >= 0) |] 
+  &&  [| (root_pre <> 0) |]
+  &&  (single_tree_node root_pre k v h l r )
+  **  (store_tree r tr2 )
+  **  ((( &( "rh" ) )) # UChar  |-> 0)
+  **  ((( &( "lh" ) )) # UChar  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> root_pre)
+|--
+  [| (0 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 0) |]
+.
+
+Definition balance_factor_safety_wit_7 := 
 forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) ,
   [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
@@ -2213,53 +2233,7 @@ forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (
   &&  [| ((INT_MIN) <= 0) |]
 .
 
-Definition balance_factor_safety_wit_7 := 
-forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) ,
-  [| (tr1 = empty) |] 
-  &&  [| (l = 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (0 <= 255) |] 
-  &&  [| (0 >= 0) |] 
-  &&  [| (root_pre <> 0) |]
-  &&  (single_tree_node root_pre k v h l r )
-  **  (store_tree r tr2 )
-  **  ((( &( "rh" ) )) # UChar  |-> 0)
-  **  ((( &( "lh" ) )) # UChar  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> root_pre)
-|--
-  [| (0 <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= 0) |]
-.
-
 Definition balance_factor_safety_wit_8 := 
-forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h_2: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) ,
-  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (tr2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (tr1 = empty) |] 
-  &&  [| (l = 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (0 <= 255) |] 
-  &&  [| (0 >= 0) |] 
-  &&  [| (root_pre <> 0) |]
-  &&  (single_tree_node r k_2 v_2 h l_2 r_2 )
-  **  (single_tree_node root_pre k v h_2 l r )
-  **  (store_tree r_2 tr2_2 )
-  **  (store_tree l_2 tr1_2 )
-  **  ((( &( "rh" ) )) # UChar  |-> h)
-  **  ((( &( "lh" ) )) # UChar  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> root_pre)
-|--
-  [| ((0 - h ) <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= (0 - h )) |]
-.
-
-Definition balance_factor_safety_wit_9 := 
 forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h_3: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_2: Z) (l_3: Z) (r_3: Z) (tr1_3: tree) (tr2_3: tree) ,
   [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
@@ -2290,7 +2264,54 @@ forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h_3: Z) (l: Z) (r: Z) (tr1: tree)
   &&  [| ((INT_MIN) <= (h - h_2 )) |]
 .
 
+Definition balance_factor_safety_wit_9 := 
+forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h_2: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) ,
+  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (tr2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (tr1 = empty) |] 
+  &&  [| (l = 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (0 <= 255) |] 
+  &&  [| (0 >= 0) |] 
+  &&  [| (root_pre <> 0) |]
+  &&  (single_tree_node r k_2 v_2 h l_2 r_2 )
+  **  (single_tree_node root_pre k v h_2 l r )
+  **  (store_tree r_2 tr2_2 )
+  **  (store_tree l_2 tr1_2 )
+  **  ((( &( "rh" ) )) # UChar  |-> h)
+  **  ((( &( "lh" ) )) # UChar  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> root_pre)
+|--
+  [| ((0 - h ) <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= (0 - h )) |]
+.
+
 Definition balance_factor_safety_wit_10 := 
+forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) ,
+  [| (r = 0) |] 
+  &&  [| (tr1 = empty) |] 
+  &&  [| (l = 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (0 <= 255) |] 
+  &&  [| (0 >= 0) |] 
+  &&  [| (root_pre <> 0) |]
+  &&  (single_tree_node root_pre k v h l r )
+  **  (store_tree r tr2 )
+  **  ((( &( "rh" ) )) # UChar  |-> 0)
+  **  ((( &( "lh" ) )) # UChar  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> root_pre)
+|--
+  [| ((0 - 0 ) <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= (0 - 0 )) |]
+.
+
+Definition balance_factor_safety_wit_11 := 
 forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h_2: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) ,
   [| (r = 0) |] 
   &&  [| (h <= 255) |] 
@@ -2314,27 +2335,6 @@ forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h_2: Z) (l: Z) (r: Z) (tr1: tree)
 |--
   [| ((h - 0 ) <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= (h - 0 )) |]
-.
-
-Definition balance_factor_safety_wit_11 := 
-forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) ,
-  [| (r = 0) |] 
-  &&  [| (tr1 = empty) |] 
-  &&  [| (l = 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (0 <= 255) |] 
-  &&  [| (0 >= 0) |] 
-  &&  [| (root_pre <> 0) |]
-  &&  (single_tree_node root_pre k v h l r )
-  **  (store_tree r tr2 )
-  **  ((( &( "rh" ) )) # UChar  |-> 0)
-  **  ((( &( "lh" ) )) # UChar  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> root_pre)
-|--
-  [| ((0 - 0 ) <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= (0 - 0 )) |]
 .
 
 Definition balance_factor_return_wit_1 := 
@@ -2367,46 +2367,7 @@ forall (root_pre: Z) ,
   **  (store_non_empty_tree r_3 ))
 .
 
-Definition balance_factor_return_wit_2_1 := 
-forall (root_pre: Z) (tr: tree) (k_4: Z) (v_4: Z) (h_4: Z) (l_4: Z) (r_4: Z) (tr1: tree) (tr2: tree) ,
-  [| (r_4 = 0) |] 
-  &&  [| (tr1 = empty) |] 
-  &&  [| (l_4 = 0) |] 
-  &&  [| (h_4 <= 255) |] 
-  &&  [| (h_4 >= 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (0 <= 255) |] 
-  &&  [| (0 >= 0) |] 
-  &&  [| (root_pre <> 0) |]
-  &&  (single_tree_node root_pre k_4 v_4 h_4 l_4 r_4 )
-  **  (store_tree r_4 tr2 )
-|--
-  ([| ((0 - 0 ) = 0) |]
-  &&  (store_tree_shape root_pre ))
-  ||
-  (EX (k: Z)  (v: Z)  (h: Z)  (l: Z)  (r: Z) ,
-  [| ((0 - 0 ) >= 0) |] 
-  &&  [| (root_pre <> 0) |]
-  &&  (single_tree_node root_pre k v h l r )
-  **  (store_non_empty_tree l )
-  **  (store_tree_shape r ))
-  ||
-  (EX (k_2: Z)  (v_2: Z)  (h_2: Z)  (l_2: Z)  (r_2: Z) ,
-  [| ((0 - 0 ) <= 0) |] 
-  &&  [| (root_pre <> 0) |]
-  &&  (single_tree_node root_pre k_2 v_2 h_2 l_2 r_2 )
-  **  (store_tree_shape l_2 )
-  **  (store_non_empty_tree r_2 ))
-  ||
-  (EX (k_3: Z)  (v_3: Z)  (h_3: Z)  (l_3: Z)  (r_3: Z)  (x: Z) ,
-  [| ((0 - 0 ) = x) |] 
-  &&  [| (root_pre <> 0) |]
-  &&  (single_tree_node root_pre k_3 v_3 h_3 l_3 r_3 )
-  **  (store_non_empty_tree l_3 )
-  **  (store_non_empty_tree r_3 ))
-.
-
-Definition balance_factor_return_wit_2_2 := 
+Definition balance_factor_return_wit_2 := 
 forall (root_pre: Z) (tr: tree) (k_4: Z) (v_4: Z) (h_5: Z) (l_4: Z) (r_4: Z) (tr1: tree) (tr2: tree) (k_5: Z) (v_5: Z) (h: Z) (l_5: Z) (r_5: Z) (tr1_2: tree) (tr2_2: tree) ,
   [| (r_4 = 0) |] 
   &&  [| (h <= 255) |] 
@@ -2450,7 +2411,90 @@ forall (root_pre: Z) (tr: tree) (k_4: Z) (v_4: Z) (h_5: Z) (l_4: Z) (r_4: Z) (tr
   **  (store_non_empty_tree r_3 ))
 .
 
-Definition balance_factor_return_wit_2_3 := 
+Definition balance_factor_return_wit_3 := 
+forall (root_pre: Z) (tr: tree) (k_4: Z) (v_4: Z) (h_4: Z) (l_4: Z) (r_4: Z) (tr1: tree) (tr2: tree) ,
+  [| (r_4 = 0) |] 
+  &&  [| (tr1 = empty) |] 
+  &&  [| (l_4 = 0) |] 
+  &&  [| (h_4 <= 255) |] 
+  &&  [| (h_4 >= 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (0 <= 255) |] 
+  &&  [| (0 >= 0) |] 
+  &&  [| (root_pre <> 0) |]
+  &&  (single_tree_node root_pre k_4 v_4 h_4 l_4 r_4 )
+  **  (store_tree r_4 tr2 )
+|--
+  ([| ((0 - 0 ) = 0) |]
+  &&  (store_tree_shape root_pre ))
+  ||
+  (EX (k: Z)  (v: Z)  (h: Z)  (l: Z)  (r: Z) ,
+  [| ((0 - 0 ) >= 0) |] 
+  &&  [| (root_pre <> 0) |]
+  &&  (single_tree_node root_pre k v h l r )
+  **  (store_non_empty_tree l )
+  **  (store_tree_shape r ))
+  ||
+  (EX (k_2: Z)  (v_2: Z)  (h_2: Z)  (l_2: Z)  (r_2: Z) ,
+  [| ((0 - 0 ) <= 0) |] 
+  &&  [| (root_pre <> 0) |]
+  &&  (single_tree_node root_pre k_2 v_2 h_2 l_2 r_2 )
+  **  (store_tree_shape l_2 )
+  **  (store_non_empty_tree r_2 ))
+  ||
+  (EX (k_3: Z)  (v_3: Z)  (h_3: Z)  (l_3: Z)  (r_3: Z)  (x: Z) ,
+  [| ((0 - 0 ) = x) |] 
+  &&  [| (root_pre <> 0) |]
+  &&  (single_tree_node root_pre k_3 v_3 h_3 l_3 r_3 )
+  **  (store_non_empty_tree l_3 )
+  **  (store_non_empty_tree r_3 ))
+.
+
+Definition balance_factor_return_wit_4 := 
+forall (root_pre: Z) (tr: tree) (k_4: Z) (v_4: Z) (h_5: Z) (l_4: Z) (r_4: Z) (tr1: tree) (tr2: tree) (k_5: Z) (v_5: Z) (h: Z) (l_5: Z) (r_5: Z) (tr1_2: tree) (tr2_2: tree) ,
+  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (tr2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (r_4 <> 0) |] 
+  &&  [| (tr1 = empty) |] 
+  &&  [| (l_4 = 0) |] 
+  &&  [| (h_5 <= 255) |] 
+  &&  [| (h_5 >= 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (0 <= 255) |] 
+  &&  [| (0 >= 0) |] 
+  &&  [| (root_pre <> 0) |]
+  &&  (single_tree_node r_4 k_5 v_5 h l_5 r_5 )
+  **  (single_tree_node root_pre k_4 v_4 h_5 l_4 r_4 )
+  **  (store_tree r_5 tr2_2 )
+  **  (store_tree l_5 tr1_2 )
+|--
+  ([| ((0 - h ) = 0) |]
+  &&  (store_tree_shape root_pre ))
+  ||
+  (EX (k: Z)  (v: Z)  (h_2: Z)  (l: Z)  (r: Z) ,
+  [| ((0 - h ) >= 0) |] 
+  &&  [| (root_pre <> 0) |]
+  &&  (single_tree_node root_pre k v h_2 l r )
+  **  (store_non_empty_tree l )
+  **  (store_tree_shape r ))
+  ||
+  (EX (k_2: Z)  (v_2: Z)  (h_3: Z)  (l_2: Z)  (r_2: Z) ,
+  [| ((0 - h ) <= 0) |] 
+  &&  [| (root_pre <> 0) |]
+  &&  (single_tree_node root_pre k_2 v_2 h_3 l_2 r_2 )
+  **  (store_tree_shape l_2 )
+  **  (store_non_empty_tree r_2 ))
+  ||
+  (EX (k_3: Z)  (v_3: Z)  (h_4: Z)  (l_3: Z)  (r_3: Z)  (x: Z) ,
+  [| ((0 - h ) = x) |] 
+  &&  [| (root_pre <> 0) |]
+  &&  (single_tree_node root_pre k_3 v_3 h_4 l_3 r_3 )
+  **  (store_non_empty_tree l_3 )
+  **  (store_non_empty_tree r_3 ))
+.
+
+Definition balance_factor_return_wit_5 := 
 forall (root_pre: Z) (tr: tree) (k_4: Z) (v_4: Z) (h_6: Z) (l_4: Z) (r_4: Z) (tr1: tree) (tr2: tree) (k_5: Z) (v_5: Z) (h: Z) (l_5: Z) (r_5: Z) (tr1_2: tree) (tr2_2: tree) (k_6: Z) (v_6: Z) (h_2: Z) (l_6: Z) (r_6: Z) (tr1_3: tree) (tr2_3: tree) ,
   [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
@@ -2495,50 +2539,6 @@ forall (root_pre: Z) (tr: tree) (k_4: Z) (v_4: Z) (h_6: Z) (l_4: Z) (r_4: Z) (tr
   [| ((h - h_2 ) = x) |] 
   &&  [| (root_pre <> 0) |]
   &&  (single_tree_node root_pre k_3 v_3 h_5 l_3 r_3 )
-  **  (store_non_empty_tree l_3 )
-  **  (store_non_empty_tree r_3 ))
-.
-
-Definition balance_factor_return_wit_2_4 := 
-forall (root_pre: Z) (tr: tree) (k_4: Z) (v_4: Z) (h_5: Z) (l_4: Z) (r_4: Z) (tr1: tree) (tr2: tree) (k_5: Z) (v_5: Z) (h: Z) (l_5: Z) (r_5: Z) (tr1_2: tree) (tr2_2: tree) ,
-  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (tr2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r_4 <> 0) |] 
-  &&  [| (tr1 = empty) |] 
-  &&  [| (l_4 = 0) |] 
-  &&  [| (h_5 <= 255) |] 
-  &&  [| (h_5 >= 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (0 <= 255) |] 
-  &&  [| (0 >= 0) |] 
-  &&  [| (root_pre <> 0) |]
-  &&  (single_tree_node r_4 k_5 v_5 h l_5 r_5 )
-  **  (single_tree_node root_pre k_4 v_4 h_5 l_4 r_4 )
-  **  (store_tree r_5 tr2_2 )
-  **  (store_tree l_5 tr1_2 )
-|--
-  ([| ((0 - h ) = 0) |]
-  &&  (store_tree_shape root_pre ))
-  ||
-  (EX (k: Z)  (v: Z)  (h_2: Z)  (l: Z)  (r: Z) ,
-  [| ((0 - h ) >= 0) |] 
-  &&  [| (root_pre <> 0) |]
-  &&  (single_tree_node root_pre k v h_2 l r )
-  **  (store_non_empty_tree l )
-  **  (store_tree_shape r ))
-  ||
-  (EX (k_2: Z)  (v_2: Z)  (h_3: Z)  (l_2: Z)  (r_2: Z) ,
-  [| ((0 - h ) <= 0) |] 
-  &&  [| (root_pre <> 0) |]
-  &&  (single_tree_node root_pre k_2 v_2 h_3 l_2 r_2 )
-  **  (store_tree_shape l_2 )
-  **  (store_non_empty_tree r_2 ))
-  ||
-  (EX (k_3: Z)  (v_3: Z)  (h_4: Z)  (l_3: Z)  (r_3: Z)  (x: Z) ,
-  [| ((0 - h ) = x) |] 
-  &&  [| (root_pre <> 0) |]
-  &&  (single_tree_node root_pre k_3 v_3 h_4 l_3 r_3 )
   **  (store_non_empty_tree l_3 )
   **  (store_non_empty_tree r_3 ))
 .
@@ -2647,6 +2647,35 @@ forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (
 .
 
 Definition balance_factor_partial_solve_wit_4 := 
+forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) ,
+  [| (l = 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (0 <= 255) |] 
+  &&  [| (0 >= 0) |] 
+  &&  [| (root_pre <> 0) |]
+  &&  (single_tree_node root_pre k v h l r )
+  **  (store_tree r tr2 )
+  **  (store_tree l tr1 )
+|--
+  [| (tr1 = empty) |] 
+  &&  [| (l = 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (0 <= 255) |] 
+  &&  [| (0 >= 0) |] 
+  &&  [| (root_pre <> 0) |]
+  &&  ((&((root_pre)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((root_pre)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((root_pre)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((root_pre)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((root_pre)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  (store_tree r tr2 )
+.
+
+Definition balance_factor_partial_solve_wit_5 := 
 forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) ,
   [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
@@ -2686,35 +2715,6 @@ forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (
   **  ((&((l)  # "tree" ->ₛ "key")) # Int  |-> k_2)
   **  (store_tree r_2 tr2_2 )
   **  (store_tree l_2 tr1_2 )
-  **  (store_tree r tr2 )
-.
-
-Definition balance_factor_partial_solve_wit_5 := 
-forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) ,
-  [| (l = 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (0 <= 255) |] 
-  &&  [| (0 >= 0) |] 
-  &&  [| (root_pre <> 0) |]
-  &&  (single_tree_node root_pre k v h l r )
-  **  (store_tree r tr2 )
-  **  (store_tree l tr1 )
-|--
-  [| (tr1 = empty) |] 
-  &&  [| (l = 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (0 <= 255) |] 
-  &&  [| (0 >= 0) |] 
-  &&  [| (root_pre <> 0) |]
-  &&  ((&((root_pre)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((root_pre)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((root_pre)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((root_pre)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((root_pre)  # "tree" ->ₛ "key")) # Int  |-> k)
   **  (store_tree r tr2 )
 .
 
@@ -2922,7 +2922,8 @@ forall (root_pre: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (
 
 Definition balance_safety_wit_1 := 
 forall (p_pre: Z) (p_pre_v: Z) ,
-  ((( &( "lh" ) )) # Int  |->_)
+  ((( &( "rh" ) )) # Int  |->_)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
   **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
   **  ((( &( "p" ) )) # Ptr  |-> p_pre)
   **  ((p_pre) # Ptr  |-> p_pre_v)
@@ -2934,8 +2935,7 @@ forall (p_pre: Z) (p_pre_v: Z) ,
 
 Definition balance_safety_wit_2 := 
 forall (p_pre: Z) (p_pre_v: Z) ,
-  ((( &( "rh" ) )) # Int  |->_)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
+  ((( &( "lh" ) )) # Int  |->_)
   **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
   **  ((( &( "p" ) )) # Ptr  |-> p_pre)
   **  ((p_pre) # Ptr  |-> p_pre_v)
@@ -2983,24 +2983,6 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) ,
 
 Definition balance_safety_wit_5 := 
 forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) ,
-  [| (retval > 1) |] 
-  &&  [| (retval <= 0) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node p_pre_v k v h l r )
-  **  (store_tree_shape l )
-  **  (store_non_empty_tree r )
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| False |]
-.
-
-Definition balance_safety_wit_6 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) ,
   [| (retval >= 0) |] 
   &&  [| (p_pre_v <> 0) |]
   &&  (single_tree_node p_pre_v k v h l r )
@@ -3017,7 +2999,7 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) ,
   &&  [| ((INT_MIN) <= 1) |]
 .
 
-Definition balance_safety_wit_7 := 
+Definition balance_safety_wit_6 := 
 forall (p_pre: Z) (p_pre_v: Z) (retval: Z) ,
   [| (retval = 0) |]
   &&  (store_tree_shape p_pre_v )
@@ -3030,6 +3012,24 @@ forall (p_pre: Z) (p_pre_v: Z) (retval: Z) ,
 |--
   [| (1 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 1) |]
+.
+
+Definition balance_safety_wit_7 := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) ,
+  [| (retval > 1) |] 
+  &&  [| (retval <= 0) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (single_tree_node p_pre_v k v h l r )
+  **  (store_tree_shape l )
+  **  (store_non_empty_tree r )
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| False |]
 .
 
 Definition balance_safety_wit_8 := 
@@ -3048,204 +3048,6 @@ forall (p_pre: Z) (p_pre_v: Z) (retval: Z) ,
 .
 
 Definition balance_safety_wit_9 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (x: Z) (retval_2: Z) ,
-  [| (retval_2 = x) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval > 1) |] 
-  &&  [| (retval >= 0) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node l k_2 v_2 h_3 l_2 r_2 )
-  **  (store_non_empty_tree l_2 )
-  **  (store_non_empty_tree r_2 )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree r tr )
-  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| (0 <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= 0) |]
-.
-
-Definition balance_safety_wit_10 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
-  [| (retval_2 <= 0) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval > 1) |] 
-  &&  [| (retval >= 0) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node l k_2 v_2 h_3 l_2 r_2 )
-  **  (store_tree_shape l_2 )
-  **  (store_non_empty_tree r_2 )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree r tr )
-  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| (0 <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= 0) |]
-.
-
-Definition balance_safety_wit_11 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
-  [| (retval_2 > 0) |] 
-  &&  [| (retval_2 <= 0) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval > 1) |] 
-  &&  [| (retval >= 0) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node l k_2 v_2 h_3 l_2 r_2 )
-  **  (store_tree_shape l_2 )
-  **  (store_non_empty_tree r_2 )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree r tr )
-  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| False |]
-.
-
-Definition balance_safety_wit_12 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
-  [| (retval_2 >= 0) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval > 1) |] 
-  &&  [| (retval >= 0) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node l k_2 v_2 h_3 l_2 r_2 )
-  **  (store_non_empty_tree l_2 )
-  **  (store_tree_shape r_2 )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree r tr )
-  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| (0 <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= 0) |]
-.
-
-Definition balance_safety_wit_13 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (retval_2: Z) ,
-  [| (retval_2 = 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval > 1) |] 
-  &&  [| (retval >= 0) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (store_tree_shape l )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree r tr )
-  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| (0 <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= 0) |]
-.
-
-Definition balance_safety_wit_14 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (retval_2: Z) ,
-  [| (retval_2 > 0) |] 
-  &&  [| (retval_2 = 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval > 1) |] 
-  &&  [| (retval >= 0) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (store_tree_shape l )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree r tr )
-  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| False |]
-.
-
-Definition balance_safety_wit_15 := 
 forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (x_2: Z) (retval_2: Z) ,
   [| (retval_2 = x_2) |] 
   &&  [| (l <> 0) |] 
@@ -3289,7 +3091,7 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval
   &&  [| ((INT_MIN) <= 0) |]
 .
 
-Definition balance_safety_wit_16 := 
+Definition balance_safety_wit_10 := 
 forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
   [| (retval_2 <= 0) |] 
   &&  [| (l <> 0) |] 
@@ -3321,6 +3123,224 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval
   **  ((&((r)  # "tree" ->ₛ "key")) # Int  |-> k_2)
   **  (store_tree r_2 tr2_2 )
   **  (store_tree l_2 tr1_2 )
+  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| (0 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 0) |]
+.
+
+Definition balance_safety_wit_11 := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
+  [| (retval_2 >= 0) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval > 1) |] 
+  &&  [| (retval = x) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (single_tree_node l k_3 v_3 h_4 l_3 r_3 )
+  **  (store_non_empty_tree l_3 )
+  **  (store_tree_shape r_3 )
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  ((&((r)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
+  **  ((&((r)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
+  **  ((&((r)  # "tree" ->ₛ "height")) # UChar  |-> h_3)
+  **  ((&((r)  # "tree" ->ₛ "value")) # Int  |-> v_2)
+  **  ((&((r)  # "tree" ->ₛ "key")) # Int  |-> k_2)
+  **  (store_tree r_2 tr2_2 )
+  **  (store_tree l_2 tr1_2 )
+  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| (0 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 0) |]
+.
+
+Definition balance_safety_wit_12 := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (retval_2: Z) ,
+  [| (retval_2 = 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval > 1) |] 
+  &&  [| (retval = x) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (store_tree_shape l )
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  ((&((r)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
+  **  ((&((r)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
+  **  ((&((r)  # "tree" ->ₛ "height")) # UChar  |-> h_3)
+  **  ((&((r)  # "tree" ->ₛ "value")) # Int  |-> v_2)
+  **  ((&((r)  # "tree" ->ₛ "key")) # Int  |-> k_2)
+  **  (store_tree r_2 tr2_2 )
+  **  (store_tree l_2 tr1_2 )
+  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| (0 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 0) |]
+.
+
+Definition balance_safety_wit_13 := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (x: Z) (retval_2: Z) ,
+  [| (retval_2 = x) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval > 1) |] 
+  &&  [| (retval >= 0) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (single_tree_node l k_2 v_2 h_3 l_2 r_2 )
+  **  (store_non_empty_tree l_2 )
+  **  (store_non_empty_tree r_2 )
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  (store_tree r tr )
+  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| (0 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 0) |]
+.
+
+Definition balance_safety_wit_14 := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
+  [| (retval_2 <= 0) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval > 1) |] 
+  &&  [| (retval >= 0) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (single_tree_node l k_2 v_2 h_3 l_2 r_2 )
+  **  (store_tree_shape l_2 )
+  **  (store_non_empty_tree r_2 )
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  (store_tree r tr )
+  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| (0 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 0) |]
+.
+
+Definition balance_safety_wit_15 := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
+  [| (retval_2 >= 0) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval > 1) |] 
+  &&  [| (retval >= 0) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (single_tree_node l k_2 v_2 h_3 l_2 r_2 )
+  **  (store_non_empty_tree l_2 )
+  **  (store_tree_shape r_2 )
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  (store_tree r tr )
+  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| (0 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 0) |]
+.
+
+Definition balance_safety_wit_16 := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (retval_2: Z) ,
+  [| (retval_2 = 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval > 1) |] 
+  &&  [| (retval >= 0) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (store_tree_shape l )
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  (store_tree r tr )
   **  ((( &( "lbf" ) )) # Int  |-> retval_2)
   **  ((( &( "bf" ) )) # Int  |-> retval)
   **  ((( &( "rh" ) )) # Int  |-> 0)
@@ -3378,8 +3398,294 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval
 .
 
 Definition balance_safety_wit_18 := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (retval_2: Z) ,
+  [| (retval_2 > 0) |] 
+  &&  [| (retval_2 = 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval > 1) |] 
+  &&  [| (retval = x) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (store_tree_shape l )
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  ((&((r)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
+  **  ((&((r)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
+  **  ((&((r)  # "tree" ->ₛ "height")) # UChar  |-> h_3)
+  **  ((&((r)  # "tree" ->ₛ "value")) # Int  |-> v_2)
+  **  ((&((r)  # "tree" ->ₛ "key")) # Int  |-> k_2)
+  **  (store_tree r_2 tr2_2 )
+  **  (store_tree l_2 tr1_2 )
+  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| False |]
+.
+
+Definition balance_safety_wit_19 := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
+  [| (retval_2 > 0) |] 
+  &&  [| (retval_2 <= 0) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval > 1) |] 
+  &&  [| (retval >= 0) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (single_tree_node l k_2 v_2 h_3 l_2 r_2 )
+  **  (store_tree_shape l_2 )
+  **  (store_non_empty_tree r_2 )
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  (store_tree r tr )
+  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| False |]
+.
+
+Definition balance_safety_wit_20 := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (retval_2: Z) ,
+  [| (retval_2 > 0) |] 
+  &&  [| (retval_2 = 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval > 1) |] 
+  &&  [| (retval >= 0) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (store_tree_shape l )
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  (store_tree r tr )
+  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| False |]
+.
+
+Definition balance_safety_wit_21 := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (retval_2: Z) ,
+  [| (retval_2 <= 0) |] 
+  &&  [| (retval_2 = 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval > 1) |] 
+  &&  [| (retval >= 0) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (store_tree_shape l )
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  (store_tree r tr )
+  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| (0 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 0) |]
+.
+
+Definition balance_safety_wit_22 := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
+  [| (retval_2 <= 0) |] 
+  &&  [| (retval_2 >= 0) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval > 1) |] 
+  &&  [| (retval >= 0) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (single_tree_node l k_2 v_2 h_3 l_2 r_2 )
+  **  (store_non_empty_tree l_2 )
+  **  (store_tree_shape r_2 )
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  (store_tree r tr )
+  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| (0 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 0) |]
+.
+
+Definition balance_safety_wit_23 := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
+  [| (retval_2 <= 0) |] 
+  &&  [| (retval_2 <= 0) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval > 1) |] 
+  &&  [| (retval >= 0) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (single_tree_node l k_2 v_2 h_3 l_2 r_2 )
+  **  (store_tree_shape l_2 )
+  **  (store_non_empty_tree r_2 )
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  (store_tree r tr )
+  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| (0 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 0) |]
+.
+
+Definition balance_safety_wit_24 := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (x: Z) (retval_2: Z) ,
+  [| (retval_2 <= 0) |] 
+  &&  [| (retval_2 = x) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval > 1) |] 
+  &&  [| (retval >= 0) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (single_tree_node l k_2 v_2 h_3 l_2 r_2 )
+  **  (store_non_empty_tree l_2 )
+  **  (store_non_empty_tree r_2 )
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  (store_tree r tr )
+  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| (0 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 0) |]
+.
+
+Definition balance_safety_wit_25 := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (retval_2: Z) ,
+  [| (retval_2 <= 0) |] 
+  &&  [| (retval_2 = 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval > 1) |] 
+  &&  [| (retval = x) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (store_tree_shape l )
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  ((&((r)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
+  **  ((&((r)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
+  **  ((&((r)  # "tree" ->ₛ "height")) # UChar  |-> h_3)
+  **  ((&((r)  # "tree" ->ₛ "value")) # Int  |-> v_2)
+  **  ((&((r)  # "tree" ->ₛ "key")) # Int  |-> k_2)
+  **  (store_tree r_2 tr2_2 )
+  **  (store_tree l_2 tr1_2 )
+  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| (0 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 0) |]
+.
+
+Definition balance_safety_wit_26 := 
 forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
-  [| (retval_2 >= 0) |] 
+  [| (retval_2 <= 0) |] 
+  &&  [| (retval_2 >= 0) |] 
   &&  [| (l <> 0) |] 
   &&  [| (h <= 255) |] 
   &&  [| (h >= 0) |] 
@@ -3421,338 +3727,7 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval
   &&  [| ((INT_MIN) <= 0) |]
 .
 
-Definition balance_safety_wit_19 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (retval_2: Z) ,
-  [| (retval_2 = 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval > 1) |] 
-  &&  [| (retval = x) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (store_tree_shape l )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  ((&((r)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
-  **  ((&((r)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
-  **  ((&((r)  # "tree" ->ₛ "height")) # UChar  |-> h_3)
-  **  ((&((r)  # "tree" ->ₛ "value")) # Int  |-> v_2)
-  **  ((&((r)  # "tree" ->ₛ "key")) # Int  |-> k_2)
-  **  (store_tree r_2 tr2_2 )
-  **  (store_tree l_2 tr1_2 )
-  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| (0 <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= 0) |]
-.
-
-Definition balance_safety_wit_20 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (retval_2: Z) ,
-  [| (retval_2 > 0) |] 
-  &&  [| (retval_2 = 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval > 1) |] 
-  &&  [| (retval = x) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (store_tree_shape l )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  ((&((r)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
-  **  ((&((r)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
-  **  ((&((r)  # "tree" ->ₛ "height")) # UChar  |-> h_3)
-  **  ((&((r)  # "tree" ->ₛ "value")) # Int  |-> v_2)
-  **  ((&((r)  # "tree" ->ₛ "key")) # Int  |-> k_2)
-  **  (store_tree r_2 tr2_2 )
-  **  (store_tree l_2 tr1_2 )
-  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| False |]
-.
-
-Definition balance_safety_wit_21 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (x: Z) (retval_2: Z) ,
-  [| (retval_2 <= 0) |] 
-  &&  [| (retval_2 = x) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval > 1) |] 
-  &&  [| (retval >= 0) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node l k_2 v_2 h_3 l_2 r_2 )
-  **  (store_non_empty_tree l_2 )
-  **  (store_non_empty_tree r_2 )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree r tr )
-  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| (0 <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= 0) |]
-.
-
-Definition balance_safety_wit_22 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
-  [| (retval_2 <= 0) |] 
-  &&  [| (retval_2 <= 0) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval > 1) |] 
-  &&  [| (retval >= 0) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node l k_2 v_2 h_3 l_2 r_2 )
-  **  (store_tree_shape l_2 )
-  **  (store_non_empty_tree r_2 )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree r tr )
-  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| (0 <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= 0) |]
-.
-
-Definition balance_safety_wit_23 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
-  [| (retval_2 <= 0) |] 
-  &&  [| (retval_2 >= 0) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval > 1) |] 
-  &&  [| (retval >= 0) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node l k_2 v_2 h_3 l_2 r_2 )
-  **  (store_non_empty_tree l_2 )
-  **  (store_tree_shape r_2 )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree r tr )
-  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| (0 <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= 0) |]
-.
-
-Definition balance_safety_wit_24 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
-  [| (retval_2 < 0) |] 
-  &&  [| (retval_2 <= 0) |] 
-  &&  [| (retval_2 >= 0) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval > 1) |] 
-  &&  [| (retval >= 0) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node l k_2 v_2 h_3 l_2 r_2 )
-  **  (store_non_empty_tree l_2 )
-  **  (store_tree_shape r_2 )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree r tr )
-  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| False |]
-.
-
-Definition balance_safety_wit_25 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (retval_2: Z) ,
-  [| (retval_2 <= 0) |] 
-  &&  [| (retval_2 = 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval > 1) |] 
-  &&  [| (retval >= 0) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (store_tree_shape l )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree r tr )
-  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| (0 <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= 0) |]
-.
-
-Definition balance_safety_wit_26 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (retval_2: Z) ,
-  [| (retval_2 < 0) |] 
-  &&  [| (retval_2 <= 0) |] 
-  &&  [| (retval_2 = 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval > 1) |] 
-  &&  [| (retval >= 0) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (store_tree_shape l )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree r tr )
-  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| False |]
-.
-
 Definition balance_safety_wit_27 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (x_2: Z) (retval_2: Z) ,
-  [| (retval_2 <= 0) |] 
-  &&  [| (retval_2 = x_2) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval > 1) |] 
-  &&  [| (retval = x) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node l k_3 v_3 h_4 l_3 r_3 )
-  **  (store_non_empty_tree l_3 )
-  **  (store_non_empty_tree r_3 )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  ((&((r)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
-  **  ((&((r)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
-  **  ((&((r)  # "tree" ->ₛ "height")) # UChar  |-> h_3)
-  **  ((&((r)  # "tree" ->ₛ "value")) # Int  |-> v_2)
-  **  ((&((r)  # "tree" ->ₛ "key")) # Int  |-> k_2)
-  **  (store_tree r_2 tr2_2 )
-  **  (store_tree l_2 tr1_2 )
-  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| (0 <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= 0) |]
-.
-
-Definition balance_safety_wit_28 := 
 forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
   [| (retval_2 <= 0) |] 
   &&  [| (retval_2 <= 0) |] 
@@ -3797,10 +3772,10 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval
   &&  [| ((INT_MIN) <= 0) |]
 .
 
-Definition balance_safety_wit_29 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
+Definition balance_safety_wit_28 := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (x_2: Z) (retval_2: Z) ,
   [| (retval_2 <= 0) |] 
-  &&  [| (retval_2 >= 0) |] 
+  &&  [| (retval_2 = x_2) |] 
   &&  [| (l <> 0) |] 
   &&  [| (h <= 255) |] 
   &&  [| (h >= 0) |] 
@@ -3817,7 +3792,7 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval
   &&  [| (p_pre_v <> 0) |]
   &&  (single_tree_node l k_3 v_3 h_4 l_3 r_3 )
   **  (store_non_empty_tree l_3 )
-  **  (store_tree_shape r_3 )
+  **  (store_non_empty_tree r_3 )
   **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
   **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
   **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
@@ -3842,12 +3817,78 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval
   &&  [| ((INT_MIN) <= 0) |]
 .
 
+Definition balance_safety_wit_29 := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (retval_2: Z) ,
+  [| (retval_2 < 0) |] 
+  &&  [| (retval_2 <= 0) |] 
+  &&  [| (retval_2 = 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval > 1) |] 
+  &&  [| (retval >= 0) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (store_tree_shape l )
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  (store_tree r tr )
+  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| False |]
+.
+
 Definition balance_safety_wit_30 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
   [| (retval_2 < 0) |] 
   &&  [| (retval_2 <= 0) |] 
   &&  [| (retval_2 >= 0) |] 
   &&  [| (l <> 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval > 1) |] 
+  &&  [| (retval >= 0) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (single_tree_node l k_2 v_2 h_3 l_2 r_2 )
+  **  (store_non_empty_tree l_2 )
+  **  (store_tree_shape r_2 )
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  (store_tree r tr )
+  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| False |]
+.
+
+Definition balance_safety_wit_31 := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (retval_2: Z) ,
+  [| (retval_2 < 0) |] 
+  &&  [| (retval_2 <= 0) |] 
+  &&  [| (retval_2 = 0) |] 
   &&  [| (h <= 255) |] 
   &&  [| (h >= 0) |] 
   &&  [| (h_2 <= 255) |] 
@@ -3861,9 +3902,7 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval
   &&  [| (retval > 1) |] 
   &&  [| (retval = x) |] 
   &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node l k_3 v_3 h_4 l_3 r_3 )
-  **  (store_non_empty_tree l_3 )
-  **  (store_tree_shape r_3 )
+  &&  (store_tree_shape l )
   **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
   **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
   **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
@@ -3887,53 +3926,12 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval
   [| False |]
 .
 
-Definition balance_safety_wit_31 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (retval_2: Z) ,
-  [| (retval_2 <= 0) |] 
-  &&  [| (retval_2 = 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval > 1) |] 
-  &&  [| (retval = x) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (store_tree_shape l )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  ((&((r)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
-  **  ((&((r)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
-  **  ((&((r)  # "tree" ->ₛ "height")) # UChar  |-> h_3)
-  **  ((&((r)  # "tree" ->ₛ "value")) # Int  |-> v_2)
-  **  ((&((r)  # "tree" ->ₛ "key")) # Int  |-> k_2)
-  **  (store_tree r_2 tr2_2 )
-  **  (store_tree l_2 tr1_2 )
-  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| (0 <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= 0) |]
-.
-
 Definition balance_safety_wit_32 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (retval_2: Z) ,
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
   [| (retval_2 < 0) |] 
   &&  [| (retval_2 <= 0) |] 
-  &&  [| (retval_2 = 0) |] 
+  &&  [| (retval_2 >= 0) |] 
+  &&  [| (l <> 0) |] 
   &&  [| (h <= 255) |] 
   &&  [| (h >= 0) |] 
   &&  [| (h_2 <= 255) |] 
@@ -3947,7 +3945,9 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval
   &&  [| (retval > 1) |] 
   &&  [| (retval = x) |] 
   &&  [| (p_pre_v <> 0) |]
-  &&  (store_tree_shape l )
+  &&  (single_tree_node l k_3 v_3 h_4 l_3 r_3 )
+  **  (store_non_empty_tree l_3 )
+  **  (store_tree_shape r_3 )
   **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
   **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
   **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
@@ -3990,25 +3990,6 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval
 .
 
 Definition balance_safety_wit_34 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) ,
-  [| (retval <= 1) |] 
-  &&  [| (retval = x) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node p_pre_v k v h l r )
-  **  (store_non_empty_tree l )
-  **  (store_non_empty_tree r )
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| (1 <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= 1) |]
-.
-
-Definition balance_safety_wit_35 := 
 forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) ,
   [| (retval <= 1) |] 
   &&  [| (retval <= 0) |] 
@@ -4026,26 +4007,7 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) ,
   [| (1 <> (INT_MIN)) |]
 .
 
-Definition balance_safety_wit_36 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) ,
-  [| (retval <= 1) |] 
-  &&  [| (retval <= 0) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node p_pre_v k v h l r )
-  **  (store_tree_shape l )
-  **  (store_non_empty_tree r )
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| (1 <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= 1) |]
-.
-
-Definition balance_safety_wit_37 := 
+Definition balance_safety_wit_35 := 
 forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) ,
   [| (retval <= 1) |] 
   &&  [| (retval >= 0) |] 
@@ -4061,6 +4023,37 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) ,
   **  ((p_pre) # Ptr  |-> p_pre_v)
 |--
   [| (1 <> (INT_MIN)) |]
+.
+
+Definition balance_safety_wit_36 := 
+forall (p_pre: Z) (p_pre_v: Z) (retval: Z) ,
+  [| (retval <= 1) |] 
+  &&  [| (retval = 0) |]
+  &&  (store_tree_shape p_pre_v )
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| (1 <> (INT_MIN)) |]
+.
+
+Definition balance_safety_wit_37 := 
+forall (p_pre: Z) (p_pre_v: Z) (retval: Z) ,
+  [| (retval <= 1) |] 
+  &&  [| (retval = 0) |]
+  &&  (store_tree_shape p_pre_v )
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| (1 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 1) |]
 .
 
 Definition balance_safety_wit_38 := 
@@ -4084,43 +4077,12 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) ,
 
 Definition balance_safety_wit_39 := 
 forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) ,
-  [| (retval < (-1)) |] 
-  &&  [| (retval <= 1) |] 
-  &&  [| (retval >= 0) |] 
+  [| (retval <= 1) |] 
+  &&  [| (retval <= 0) |] 
   &&  [| (p_pre_v <> 0) |]
   &&  (single_tree_node p_pre_v k v h l r )
-  **  (store_non_empty_tree l )
-  **  (store_tree_shape r )
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| False |]
-.
-
-Definition balance_safety_wit_40 := 
-forall (p_pre: Z) (p_pre_v: Z) (retval: Z) ,
-  [| (retval <= 1) |] 
-  &&  [| (retval = 0) |]
-  &&  (store_tree_shape p_pre_v )
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| (1 <> (INT_MIN)) |]
-.
-
-Definition balance_safety_wit_41 := 
-forall (p_pre: Z) (p_pre_v: Z) (retval: Z) ,
-  [| (retval <= 1) |] 
-  &&  [| (retval = 0) |]
-  &&  (store_tree_shape p_pre_v )
+  **  (store_tree_shape l )
+  **  (store_non_empty_tree r )
   **  ((( &( "bf" ) )) # Int  |-> retval)
   **  ((( &( "rh" ) )) # Int  |-> 0)
   **  ((( &( "lh" ) )) # Int  |-> 0)
@@ -4132,12 +4094,50 @@ forall (p_pre: Z) (p_pre_v: Z) (retval: Z) ,
   &&  [| ((INT_MIN) <= 1) |]
 .
 
-Definition balance_safety_wit_42 := 
+Definition balance_safety_wit_40 := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) ,
+  [| (retval <= 1) |] 
+  &&  [| (retval = x) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (single_tree_node p_pre_v k v h l r )
+  **  (store_non_empty_tree l )
+  **  (store_non_empty_tree r )
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| (1 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 1) |]
+.
+
+Definition balance_safety_wit_41 := 
 forall (p_pre: Z) (p_pre_v: Z) (retval: Z) ,
   [| (retval < (-1)) |] 
   &&  [| (retval <= 1) |] 
   &&  [| (retval = 0) |]
   &&  (store_tree_shape p_pre_v )
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| False |]
+.
+
+Definition balance_safety_wit_42 := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) ,
+  [| (retval < (-1)) |] 
+  &&  [| (retval <= 1) |] 
+  &&  [| (retval >= 0) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (single_tree_node p_pre_v k v h l r )
+  **  (store_non_empty_tree l )
+  **  (store_tree_shape r )
   **  ((( &( "bf" ) )) # Int  |-> retval)
   **  ((( &( "rh" ) )) # Int  |-> 0)
   **  ((( &( "lh" ) )) # Int  |-> 0)
@@ -4254,41 +4254,6 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (t
 .
 
 Definition balance_safety_wit_46 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
-  [| (retval_2 < 0) |] 
-  &&  [| (retval_2 >= 0) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (retval < (-1)) |] 
-  &&  [| (retval <= 1) |] 
-  &&  [| (retval <= 0) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node r k_2 v_2 h_3 l_2 r_2 )
-  **  (store_non_empty_tree l_2 )
-  **  (store_tree_shape r_2 )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree l tr )
-  **  ((( &( "rbf" ) )) # Int  |-> retval_2)
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| False |]
-.
-
-Definition balance_safety_wit_47 := 
 forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (retval_2: Z) ,
   [| (retval_2 = 0) |] 
   &&  [| (h <= 255) |] 
@@ -4320,39 +4285,7 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (t
   &&  [| ((INT_MIN) <= 0) |]
 .
 
-Definition balance_safety_wit_48 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (retval_2: Z) ,
-  [| (retval_2 < 0) |] 
-  &&  [| (retval_2 = 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (retval < (-1)) |] 
-  &&  [| (retval <= 1) |] 
-  &&  [| (retval <= 0) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (store_tree_shape r )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree l tr )
-  **  ((( &( "rbf" ) )) # Int  |-> retval_2)
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| False |]
-.
-
-Definition balance_safety_wit_49 := 
+Definition balance_safety_wit_47 := 
 forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (x_2: Z) (retval_2: Z) ,
   [| (retval_2 = x_2) |] 
   &&  [| (r <> 0) |] 
@@ -4397,7 +4330,7 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval
   &&  [| ((INT_MIN) <= 0) |]
 .
 
-Definition balance_safety_wit_50 := 
+Definition balance_safety_wit_48 := 
 forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
   [| (retval_2 <= 0) |] 
   &&  [| (r <> 0) |] 
@@ -4442,7 +4375,7 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval
   &&  [| ((INT_MIN) <= 0) |]
 .
 
-Definition balance_safety_wit_51 := 
+Definition balance_safety_wit_49 := 
 forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
   [| (retval_2 >= 0) |] 
   &&  [| (r <> 0) |] 
@@ -4487,7 +4420,116 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval
   &&  [| ((INT_MIN) <= 0) |]
 .
 
+Definition balance_safety_wit_50 := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (retval_2: Z) ,
+  [| (retval_2 = 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval < (-1)) |] 
+  &&  [| (retval <= 1) |] 
+  &&  [| (retval = x) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (store_tree_shape r )
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  ((&((l)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
+  **  ((&((l)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
+  **  ((&((l)  # "tree" ->ₛ "height")) # UChar  |-> h_2)
+  **  ((&((l)  # "tree" ->ₛ "value")) # Int  |-> v_2)
+  **  ((&((l)  # "tree" ->ₛ "key")) # Int  |-> k_2)
+  **  (store_tree r_2 tr2 )
+  **  (store_tree l_2 tr1 )
+  **  ((( &( "rbf" ) )) # Int  |-> retval_2)
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| (0 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 0) |]
+.
+
+Definition balance_safety_wit_51 := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
+  [| (retval_2 < 0) |] 
+  &&  [| (retval_2 >= 0) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (retval < (-1)) |] 
+  &&  [| (retval <= 1) |] 
+  &&  [| (retval <= 0) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (single_tree_node r k_2 v_2 h_3 l_2 r_2 )
+  **  (store_non_empty_tree l_2 )
+  **  (store_tree_shape r_2 )
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  (store_tree l tr )
+  **  ((( &( "rbf" ) )) # Int  |-> retval_2)
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| False |]
+.
+
 Definition balance_safety_wit_52 := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (retval_2: Z) ,
+  [| (retval_2 < 0) |] 
+  &&  [| (retval_2 = 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (retval < (-1)) |] 
+  &&  [| (retval <= 1) |] 
+  &&  [| (retval <= 0) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (store_tree_shape r )
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  (store_tree l tr )
+  **  ((( &( "rbf" ) )) # Int  |-> retval_2)
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| False |]
+.
+
+Definition balance_safety_wit_53 := 
 forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
   [| (retval_2 < 0) |] 
   &&  [| (retval_2 >= 0) |] 
@@ -4530,48 +4572,6 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval
   **  ((p_pre) # Ptr  |-> p_pre_v)
 |--
   [| False |]
-.
-
-Definition balance_safety_wit_53 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (retval_2: Z) ,
-  [| (retval_2 = 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval < (-1)) |] 
-  &&  [| (retval <= 1) |] 
-  &&  [| (retval = x) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (store_tree_shape r )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  ((&((l)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
-  **  ((&((l)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
-  **  ((&((l)  # "tree" ->ₛ "height")) # UChar  |-> h_2)
-  **  ((&((l)  # "tree" ->ₛ "value")) # Int  |-> v_2)
-  **  ((&((l)  # "tree" ->ₛ "key")) # Int  |-> k_2)
-  **  (store_tree r_2 tr2 )
-  **  (store_tree l_2 tr1 )
-  **  ((( &( "rbf" ) )) # Int  |-> retval_2)
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| (0 <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= 0) |]
 .
 
 Definition balance_safety_wit_54 := 
@@ -4617,29 +4617,36 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval
 .
 
 Definition balance_safety_wit_55 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (x: Z) (retval_2: Z) ,
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (retval_2: Z) ,
   [| (retval_2 >= 0) |] 
-  &&  [| (retval_2 = x) |] 
-  &&  [| (r <> 0) |] 
+  &&  [| (retval_2 = 0) |] 
   &&  [| (h <= 255) |] 
   &&  [| (h >= 0) |] 
   &&  [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
   &&  [| (r <> 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
   &&  [| (retval < (-1)) |] 
   &&  [| (retval <= 1) |] 
-  &&  [| (retval <= 0) |] 
+  &&  [| (retval = x) |] 
   &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node r k_2 v_2 h_3 l_2 r_2 )
-  **  (store_non_empty_tree l_2 )
-  **  (store_non_empty_tree r_2 )
+  &&  (store_tree_shape r )
   **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
   **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
   **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
   **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
   **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree l tr )
+  **  ((&((l)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
+  **  ((&((l)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
+  **  ((&((l)  # "tree" ->ₛ "height")) # UChar  |-> h_2)
+  **  ((&((l)  # "tree" ->ₛ "value")) # Int  |-> v_2)
+  **  ((&((l)  # "tree" ->ₛ "key")) # Int  |-> k_2)
+  **  (store_tree r_2 tr2 )
+  **  (store_tree l_2 tr1 )
   **  ((( &( "rbf" ) )) # Int  |-> retval_2)
   **  ((( &( "bf" ) )) # Int  |-> retval)
   **  ((( &( "rh" ) )) # Int  |-> 0)
@@ -4653,29 +4660,39 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (t
 .
 
 Definition balance_safety_wit_56 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
   [| (retval_2 >= 0) |] 
-  &&  [| (retval_2 <= 0) |] 
+  &&  [| (retval_2 >= 0) |] 
   &&  [| (r <> 0) |] 
   &&  [| (h <= 255) |] 
   &&  [| (h >= 0) |] 
   &&  [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
   &&  [| (r <> 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
   &&  [| (retval < (-1)) |] 
   &&  [| (retval <= 1) |] 
-  &&  [| (retval <= 0) |] 
+  &&  [| (retval = x) |] 
   &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node r k_2 v_2 h_3 l_2 r_2 )
-  **  (store_tree_shape l_2 )
-  **  (store_non_empty_tree r_2 )
+  &&  (single_tree_node r k_3 v_3 h_4 l_3 r_3 )
+  **  (store_non_empty_tree l_3 )
+  **  (store_tree_shape r_3 )
   **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
   **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
   **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
   **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
   **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree l tr )
+  **  ((&((l)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
+  **  ((&((l)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
+  **  ((&((l)  # "tree" ->ₛ "height")) # UChar  |-> h_2)
+  **  ((&((l)  # "tree" ->ₛ "value")) # Int  |-> v_2)
+  **  ((&((l)  # "tree" ->ₛ "key")) # Int  |-> k_2)
+  **  (store_tree r_2 tr2 )
+  **  (store_tree l_2 tr1 )
   **  ((( &( "rbf" ) )) # Int  |-> retval_2)
   **  ((( &( "bf" ) )) # Int  |-> retval)
   **  ((( &( "rh" ) )) # Int  |-> 0)
@@ -4689,30 +4706,39 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (t
 .
 
 Definition balance_safety_wit_57 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
-  [| (retval_2 > 0) |] 
-  &&  [| (retval_2 >= 0) |] 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
+  [| (retval_2 >= 0) |] 
   &&  [| (retval_2 <= 0) |] 
   &&  [| (r <> 0) |] 
   &&  [| (h <= 255) |] 
   &&  [| (h >= 0) |] 
   &&  [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
   &&  [| (r <> 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
   &&  [| (retval < (-1)) |] 
   &&  [| (retval <= 1) |] 
-  &&  [| (retval <= 0) |] 
+  &&  [| (retval = x) |] 
   &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node r k_2 v_2 h_3 l_2 r_2 )
-  **  (store_tree_shape l_2 )
-  **  (store_non_empty_tree r_2 )
+  &&  (single_tree_node r k_3 v_3 h_4 l_3 r_3 )
+  **  (store_tree_shape l_3 )
+  **  (store_non_empty_tree r_3 )
   **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
   **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
   **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
   **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
   **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree l tr )
+  **  ((&((l)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
+  **  ((&((l)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
+  **  ((&((l)  # "tree" ->ₛ "height")) # UChar  |-> h_2)
+  **  ((&((l)  # "tree" ->ₛ "value")) # Int  |-> v_2)
+  **  ((&((l)  # "tree" ->ₛ "key")) # Int  |-> k_2)
+  **  (store_tree r_2 tr2 )
+  **  (store_tree l_2 tr1 )
   **  ((( &( "rbf" ) )) # Int  |-> retval_2)
   **  ((( &( "bf" ) )) # Int  |-> retval)
   **  ((( &( "rh" ) )) # Int  |-> 0)
@@ -4721,33 +4747,44 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (t
   **  ((( &( "p" ) )) # Ptr  |-> p_pre)
   **  ((p_pre) # Ptr  |-> p_pre_v)
 |--
-  [| False |]
+  [| (0 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 0) |]
 .
 
 Definition balance_safety_wit_58 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (x_2: Z) (retval_2: Z) ,
   [| (retval_2 >= 0) |] 
-  &&  [| (retval_2 >= 0) |] 
+  &&  [| (retval_2 = x_2) |] 
   &&  [| (r <> 0) |] 
   &&  [| (h <= 255) |] 
   &&  [| (h >= 0) |] 
   &&  [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
   &&  [| (r <> 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
   &&  [| (retval < (-1)) |] 
   &&  [| (retval <= 1) |] 
-  &&  [| (retval <= 0) |] 
+  &&  [| (retval = x) |] 
   &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node r k_2 v_2 h_3 l_2 r_2 )
-  **  (store_non_empty_tree l_2 )
-  **  (store_tree_shape r_2 )
+  &&  (single_tree_node r k_3 v_3 h_4 l_3 r_3 )
+  **  (store_non_empty_tree l_3 )
+  **  (store_non_empty_tree r_3 )
   **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
   **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
   **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
   **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
   **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree l tr )
+  **  ((&((l)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
+  **  ((&((l)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
+  **  ((&((l)  # "tree" ->ₛ "height")) # UChar  |-> h_2)
+  **  ((&((l)  # "tree" ->ₛ "value")) # Int  |-> v_2)
+  **  ((&((l)  # "tree" ->ₛ "key")) # Int  |-> k_2)
+  **  (store_tree r_2 tr2 )
+  **  (store_tree l_2 tr1 )
   **  ((( &( "rbf" ) )) # Int  |-> retval_2)
   **  ((( &( "bf" ) )) # Int  |-> retval)
   **  ((( &( "rh" ) )) # Int  |-> 0)
@@ -4794,6 +4831,203 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (t
 .
 
 Definition balance_safety_wit_60 := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
+  [| (retval_2 >= 0) |] 
+  &&  [| (retval_2 >= 0) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (retval < (-1)) |] 
+  &&  [| (retval <= 1) |] 
+  &&  [| (retval <= 0) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (single_tree_node r k_2 v_2 h_3 l_2 r_2 )
+  **  (store_non_empty_tree l_2 )
+  **  (store_tree_shape r_2 )
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  (store_tree l tr )
+  **  ((( &( "rbf" ) )) # Int  |-> retval_2)
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| (0 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 0) |]
+.
+
+Definition balance_safety_wit_61 := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
+  [| (retval_2 >= 0) |] 
+  &&  [| (retval_2 <= 0) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (retval < (-1)) |] 
+  &&  [| (retval <= 1) |] 
+  &&  [| (retval <= 0) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (single_tree_node r k_2 v_2 h_3 l_2 r_2 )
+  **  (store_tree_shape l_2 )
+  **  (store_non_empty_tree r_2 )
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  (store_tree l tr )
+  **  ((( &( "rbf" ) )) # Int  |-> retval_2)
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| (0 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 0) |]
+.
+
+Definition balance_safety_wit_62 := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (x: Z) (retval_2: Z) ,
+  [| (retval_2 >= 0) |] 
+  &&  [| (retval_2 = x) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (retval < (-1)) |] 
+  &&  [| (retval <= 1) |] 
+  &&  [| (retval <= 0) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (single_tree_node r k_2 v_2 h_3 l_2 r_2 )
+  **  (store_non_empty_tree l_2 )
+  **  (store_non_empty_tree r_2 )
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  (store_tree l tr )
+  **  ((( &( "rbf" ) )) # Int  |-> retval_2)
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| (0 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 0) |]
+.
+
+Definition balance_safety_wit_63 := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (retval_2: Z) ,
+  [| (retval_2 > 0) |] 
+  &&  [| (retval_2 >= 0) |] 
+  &&  [| (retval_2 = 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval < (-1)) |] 
+  &&  [| (retval <= 1) |] 
+  &&  [| (retval = x) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (store_tree_shape r )
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  ((&((l)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
+  **  ((&((l)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
+  **  ((&((l)  # "tree" ->ₛ "height")) # UChar  |-> h_2)
+  **  ((&((l)  # "tree" ->ₛ "value")) # Int  |-> v_2)
+  **  ((&((l)  # "tree" ->ₛ "key")) # Int  |-> k_2)
+  **  (store_tree r_2 tr2 )
+  **  (store_tree l_2 tr1 )
+  **  ((( &( "rbf" ) )) # Int  |-> retval_2)
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| False |]
+.
+
+Definition balance_safety_wit_64 := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
+  [| (retval_2 > 0) |] 
+  &&  [| (retval_2 >= 0) |] 
+  &&  [| (retval_2 <= 0) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval < (-1)) |] 
+  &&  [| (retval <= 1) |] 
+  &&  [| (retval = x) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (single_tree_node r k_3 v_3 h_4 l_3 r_3 )
+  **  (store_tree_shape l_3 )
+  **  (store_non_empty_tree r_3 )
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  ((&((l)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
+  **  ((&((l)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
+  **  ((&((l)  # "tree" ->ₛ "height")) # UChar  |-> h_2)
+  **  ((&((l)  # "tree" ->ₛ "value")) # Int  |-> v_2)
+  **  ((&((l)  # "tree" ->ₛ "key")) # Int  |-> k_2)
+  **  (store_tree r_2 tr2 )
+  **  (store_tree l_2 tr1 )
+  **  ((( &( "rbf" ) )) # Int  |-> retval_2)
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| False |]
+.
+
+Definition balance_safety_wit_65 := 
 forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (retval_2: Z) ,
   [| (retval_2 > 0) |] 
   &&  [| (retval_2 >= 0) |] 
@@ -4826,265 +5060,31 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (t
   [| False |]
 .
 
-Definition balance_safety_wit_61 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (x_2: Z) (retval_2: Z) ,
-  [| (retval_2 >= 0) |] 
-  &&  [| (retval_2 = x_2) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval < (-1)) |] 
-  &&  [| (retval <= 1) |] 
-  &&  [| (retval = x) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node r k_3 v_3 h_4 l_3 r_3 )
-  **  (store_non_empty_tree l_3 )
-  **  (store_non_empty_tree r_3 )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  ((&((l)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
-  **  ((&((l)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
-  **  ((&((l)  # "tree" ->ₛ "height")) # UChar  |-> h_2)
-  **  ((&((l)  # "tree" ->ₛ "value")) # Int  |-> v_2)
-  **  ((&((l)  # "tree" ->ₛ "key")) # Int  |-> k_2)
-  **  (store_tree r_2 tr2 )
-  **  (store_tree l_2 tr1 )
-  **  ((( &( "rbf" ) )) # Int  |-> retval_2)
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| (0 <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= 0) |]
-.
-
-Definition balance_safety_wit_62 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
-  [| (retval_2 >= 0) |] 
-  &&  [| (retval_2 <= 0) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval < (-1)) |] 
-  &&  [| (retval <= 1) |] 
-  &&  [| (retval = x) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node r k_3 v_3 h_4 l_3 r_3 )
-  **  (store_tree_shape l_3 )
-  **  (store_non_empty_tree r_3 )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  ((&((l)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
-  **  ((&((l)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
-  **  ((&((l)  # "tree" ->ₛ "height")) # UChar  |-> h_2)
-  **  ((&((l)  # "tree" ->ₛ "value")) # Int  |-> v_2)
-  **  ((&((l)  # "tree" ->ₛ "key")) # Int  |-> k_2)
-  **  (store_tree r_2 tr2 )
-  **  (store_tree l_2 tr1 )
-  **  ((( &( "rbf" ) )) # Int  |-> retval_2)
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| (0 <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= 0) |]
-.
-
-Definition balance_safety_wit_63 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
-  [| (retval_2 > 0) |] 
-  &&  [| (retval_2 >= 0) |] 
-  &&  [| (retval_2 <= 0) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval < (-1)) |] 
-  &&  [| (retval <= 1) |] 
-  &&  [| (retval = x) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node r k_3 v_3 h_4 l_3 r_3 )
-  **  (store_tree_shape l_3 )
-  **  (store_non_empty_tree r_3 )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  ((&((l)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
-  **  ((&((l)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
-  **  ((&((l)  # "tree" ->ₛ "height")) # UChar  |-> h_2)
-  **  ((&((l)  # "tree" ->ₛ "value")) # Int  |-> v_2)
-  **  ((&((l)  # "tree" ->ₛ "key")) # Int  |-> k_2)
-  **  (store_tree r_2 tr2 )
-  **  (store_tree l_2 tr1 )
-  **  ((( &( "rbf" ) )) # Int  |-> retval_2)
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| False |]
-.
-
-Definition balance_safety_wit_64 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
-  [| (retval_2 >= 0) |] 
-  &&  [| (retval_2 >= 0) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval < (-1)) |] 
-  &&  [| (retval <= 1) |] 
-  &&  [| (retval = x) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node r k_3 v_3 h_4 l_3 r_3 )
-  **  (store_non_empty_tree l_3 )
-  **  (store_tree_shape r_3 )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  ((&((l)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
-  **  ((&((l)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
-  **  ((&((l)  # "tree" ->ₛ "height")) # UChar  |-> h_2)
-  **  ((&((l)  # "tree" ->ₛ "value")) # Int  |-> v_2)
-  **  ((&((l)  # "tree" ->ₛ "key")) # Int  |-> k_2)
-  **  (store_tree r_2 tr2 )
-  **  (store_tree l_2 tr1 )
-  **  ((( &( "rbf" ) )) # Int  |-> retval_2)
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| (0 <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= 0) |]
-.
-
-Definition balance_safety_wit_65 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (retval_2: Z) ,
-  [| (retval_2 >= 0) |] 
-  &&  [| (retval_2 = 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval < (-1)) |] 
-  &&  [| (retval <= 1) |] 
-  &&  [| (retval = x) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (store_tree_shape r )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  ((&((l)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
-  **  ((&((l)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
-  **  ((&((l)  # "tree" ->ₛ "height")) # UChar  |-> h_2)
-  **  ((&((l)  # "tree" ->ₛ "value")) # Int  |-> v_2)
-  **  ((&((l)  # "tree" ->ₛ "key")) # Int  |-> k_2)
-  **  (store_tree r_2 tr2 )
-  **  (store_tree l_2 tr1 )
-  **  ((( &( "rbf" ) )) # Int  |-> retval_2)
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| (0 <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= 0) |]
-.
-
 Definition balance_safety_wit_66 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (retval_2: Z) ,
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
   [| (retval_2 > 0) |] 
   &&  [| (retval_2 >= 0) |] 
-  &&  [| (retval_2 = 0) |] 
+  &&  [| (retval_2 <= 0) |] 
+  &&  [| (r <> 0) |] 
   &&  [| (h <= 255) |] 
   &&  [| (h >= 0) |] 
   &&  [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
   &&  [| (r <> 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
   &&  [| (retval < (-1)) |] 
   &&  [| (retval <= 1) |] 
-  &&  [| (retval = x) |] 
+  &&  [| (retval <= 0) |] 
   &&  [| (p_pre_v <> 0) |]
-  &&  (store_tree_shape r )
+  &&  (single_tree_node r k_2 v_2 h_3 l_2 r_2 )
+  **  (store_tree_shape l_2 )
+  **  (store_non_empty_tree r_2 )
   **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
   **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
   **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
   **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
   **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  ((&((l)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
-  **  ((&((l)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
-  **  ((&((l)  # "tree" ->ₛ "height")) # UChar  |-> h_2)
-  **  ((&((l)  # "tree" ->ₛ "value")) # Int  |-> v_2)
-  **  ((&((l)  # "tree" ->ₛ "key")) # Int  |-> k_2)
-  **  (store_tree r_2 tr2 )
-  **  (store_tree l_2 tr1 )
+  **  (store_tree l tr )
   **  ((( &( "rbf" ) )) # Int  |-> retval_2)
   **  ((( &( "bf" ) )) # Int  |-> retval)
   **  ((( &( "rh" ) )) # Int  |-> 0)
@@ -5096,69 +5096,68 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval
   [| False |]
 .
 
-Definition balance_return_wit_1_1 := 
-forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (l: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (h_3: Z) (l_2: Z) (r: Z) (x: Z) (retval_2: Z) (tr_2: tree) (h_4: Z) (tr1_2: tree) (tr2_2: tree) (tr_3: tree) (h_5: Z) (tr1_3: tree) (tr2_3: tree) (retval_3: Z) ,
-  [| (retval_3 = l) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (h_4 <= 255) |] 
-  &&  [| (h_4 >= 0) |] 
-  &&  [| (h_5 <= 255) |] 
-  &&  [| (h_5 >= 0) |] 
-  &&  [| (tr_3 = (make_tree (tr1_3) (tr2_3))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (l_2 <> 0) |] 
-  &&  [| (retval_2 > 0) |] 
-  &&  [| (retval_2 = x) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval > 1) |] 
-  &&  [| (retval >= 0) |] 
+Definition balance_return_wit_1 := 
+forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) ,
+  [| (retval >= (-1)) |] 
+  &&  [| (retval <= 1) |] 
+  &&  [| (retval = x) |] 
   &&  [| (p_pre_v_2 <> 0) |]
-  &&  (store_non_empty_tree l )
-  **  ((p_pre) # Ptr  |-> retval_3)
+  &&  (single_tree_node p_pre_v_2 k v h l r )
+  **  (store_non_empty_tree l )
+  **  (store_non_empty_tree r )
+  **  ((p_pre) # Ptr  |-> p_pre_v_2)
 |--
   EX (p_pre_v: Z) ,
   ((p_pre) # Ptr  |-> p_pre_v)
   **  (store_tree_shape p_pre_v )
 .
 
-Definition balance_return_wit_1_2 := 
-forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (l: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (h_3: Z) (l_2: Z) (retval_2: Z) (tr_2: tree) (h_4: Z) (tr1_2: tree) (tr2_2: tree) (retval_3: Z) ,
-  [| (retval_3 = l) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (h_4 <= 255) |] 
-  &&  [| (h_4 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (l_2 <> 0) |] 
-  &&  [| (retval_2 > 0) |] 
-  &&  [| (retval_2 >= 0) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval > 1) |] 
-  &&  [| (retval >= 0) |] 
+Definition balance_return_wit_2 := 
+forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) ,
+  [| (retval >= (-1)) |] 
+  &&  [| (retval <= 1) |] 
+  &&  [| (retval <= 0) |] 
   &&  [| (p_pre_v_2 <> 0) |]
-  &&  (store_non_empty_tree l )
-  **  ((p_pre) # Ptr  |-> retval_3)
+  &&  (single_tree_node p_pre_v_2 k v h l r )
+  **  (store_tree_shape l )
+  **  (store_non_empty_tree r )
+  **  ((p_pre) # Ptr  |-> p_pre_v_2)
 |--
   EX (p_pre_v: Z) ,
   ((p_pre) # Ptr  |-> p_pre_v)
   **  (store_tree_shape p_pre_v )
 .
 
-Definition balance_return_wit_1_3 := 
+Definition balance_return_wit_3 := 
+forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) ,
+  [| (retval >= (-1)) |] 
+  &&  [| (retval <= 1) |] 
+  &&  [| (retval >= 0) |] 
+  &&  [| (p_pre_v_2 <> 0) |]
+  &&  (single_tree_node p_pre_v_2 k v h l r )
+  **  (store_non_empty_tree l )
+  **  (store_tree_shape r )
+  **  ((p_pre) # Ptr  |-> p_pre_v_2)
+|--
+  EX (p_pre_v: Z) ,
+  ((p_pre) # Ptr  |-> p_pre_v)
+  **  (store_tree_shape p_pre_v )
+.
+
+Definition balance_return_wit_4 := 
+forall (p_pre: Z) (p_pre_v_2: Z) (retval: Z) ,
+  [| (retval >= (-1)) |] 
+  &&  [| (retval <= 1) |] 
+  &&  [| (retval = 0) |]
+  &&  (store_tree_shape p_pre_v_2 )
+  **  ((p_pre) # Ptr  |-> p_pre_v_2)
+|--
+  EX (p_pre_v: Z) ,
+  ((p_pre) # Ptr  |-> p_pre_v)
+  **  (store_tree_shape p_pre_v )
+.
+
+Definition balance_return_wit_5 := 
 forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (h_4: Z) (l_2: Z) (r_2: Z) (x_2: Z) (retval_2: Z) (tr_3: tree) (h_5: Z) (tr1_3: tree) (tr2_3: tree) (tr_4: tree) (h_6: Z) (tr1_4: tree) (tr2_4: tree) (retval_3: Z) ,
   [| (retval_3 = l) |] 
   &&  [| (h_4 <= 255) |] 
@@ -5195,7 +5194,7 @@ forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tr
   **  (store_tree_shape p_pre_v )
 .
 
-Definition balance_return_wit_1_4 := 
+Definition balance_return_wit_6 := 
 forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (h_4: Z) (l_2: Z) (retval_2: Z) (tr_3: tree) (h_5: Z) (tr1_3: tree) (tr2_3: tree) (retval_3: Z) ,
   [| (retval_3 = l) |] 
   &&  [| (h_4 <= 255) |] 
@@ -5228,7 +5227,95 @@ forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tr
   **  (store_tree_shape p_pre_v )
 .
 
-Definition balance_return_wit_2_1 := 
+Definition balance_return_wit_7 := 
+forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (l: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (h_3: Z) (l_2: Z) (r: Z) (x: Z) (retval_2: Z) (tr_2: tree) (h_4: Z) (tr1_2: tree) (tr2_2: tree) (tr_3: tree) (h_5: Z) (tr1_3: tree) (tr2_3: tree) (retval_3: Z) ,
+  [| (retval_3 = l) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (h_4 <= 255) |] 
+  &&  [| (h_4 >= 0) |] 
+  &&  [| (h_5 <= 255) |] 
+  &&  [| (h_5 >= 0) |] 
+  &&  [| (tr_3 = (make_tree (tr1_3) (tr2_3))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (l_2 <> 0) |] 
+  &&  [| (retval_2 > 0) |] 
+  &&  [| (retval_2 = x) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval > 1) |] 
+  &&  [| (retval >= 0) |] 
+  &&  [| (p_pre_v_2 <> 0) |]
+  &&  (store_non_empty_tree l )
+  **  ((p_pre) # Ptr  |-> retval_3)
+|--
+  EX (p_pre_v: Z) ,
+  ((p_pre) # Ptr  |-> p_pre_v)
+  **  (store_tree_shape p_pre_v )
+.
+
+Definition balance_return_wit_8 := 
+forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (l: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (h_3: Z) (l_2: Z) (retval_2: Z) (tr_2: tree) (h_4: Z) (tr1_2: tree) (tr2_2: tree) (retval_3: Z) ,
+  [| (retval_3 = l) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (h_4 <= 255) |] 
+  &&  [| (h_4 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (l_2 <> 0) |] 
+  &&  [| (retval_2 > 0) |] 
+  &&  [| (retval_2 >= 0) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval > 1) |] 
+  &&  [| (retval >= 0) |] 
+  &&  [| (p_pre_v_2 <> 0) |]
+  &&  (store_non_empty_tree l )
+  **  ((p_pre) # Ptr  |-> retval_3)
+|--
+  EX (p_pre_v: Z) ,
+  ((p_pre) # Ptr  |-> p_pre_v)
+  **  (store_tree_shape p_pre_v )
+.
+
+Definition balance_return_wit_9 := 
+forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (l: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (h_3: Z) (r: Z) (retval_2: Z) (retval_3: Z) ,
+  [| (retval_3 = r) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (retval_2 < 0) |] 
+  &&  [| (retval_2 <= 0) |] 
+  &&  [| (retval_2 <= 0) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval > 1) |] 
+  &&  [| (retval >= 0) |] 
+  &&  [| (p_pre_v_2 <> 0) |]
+  &&  (store_non_empty_tree r )
+  **  ((p_pre) # Ptr  |-> retval_3)
+|--
+  EX (p_pre_v: Z) ,
+  ((p_pre) # Ptr  |-> p_pre_v)
+  **  (store_tree_shape p_pre_v )
+.
+
+Definition balance_return_wit_10 := 
 forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (l: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (h_3: Z) (l_2: Z) (r: Z) (x: Z) (retval_2: Z) (tr_2: tree) (h_4: Z) (tr1_2: tree) (tr2_2: tree) (retval_3: Z) ,
   [| (retval_3 = r) |] 
   &&  [| (h_3 <= 255) |] 
@@ -5258,11 +5345,11 @@ forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (l: Z) (retval: Z) (tr: tree) (h_2: Z) (
   **  (store_tree_shape p_pre_v )
 .
 
-Definition balance_return_wit_2_2 := 
-forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (l: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (h_3: Z) (r: Z) (retval_2: Z) (retval_3: Z) ,
-  [| (retval_3 = r) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
+Definition balance_return_wit_11 := 
+forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (h_4: Z) (r_2: Z) (retval_2: Z) (retval_3: Z) ,
+  [| (retval_3 = r_2) |] 
+  &&  [| (h_4 <= 255) |] 
+  &&  [| (h_4 >= 0) |] 
   &&  [| (retval_2 < 0) |] 
   &&  [| (retval_2 <= 0) |] 
   &&  [| (retval_2 <= 0) |] 
@@ -5271,12 +5358,16 @@ forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (l: Z) (retval: Z) (tr: tree) (h_2: Z) (
   &&  [| (h >= 0) |] 
   &&  [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (r <> 0) |] 
   &&  [| (tr = (make_tree (tr1) (tr2))) |] 
   &&  [| (l <> 0) |] 
   &&  [| (retval > 1) |] 
-  &&  [| (retval >= 0) |] 
+  &&  [| (retval = x) |] 
   &&  [| (p_pre_v_2 <> 0) |]
-  &&  (store_non_empty_tree r )
+  &&  (store_non_empty_tree r_2 )
   **  ((p_pre) # Ptr  |-> retval_3)
 |--
   EX (p_pre_v: Z) ,
@@ -5284,7 +5375,7 @@ forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (l: Z) (retval: Z) (tr: tree) (h_2: Z) (
   **  (store_tree_shape p_pre_v )
 .
 
-Definition balance_return_wit_2_3 := 
+Definition balance_return_wit_12 := 
 forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (h_4: Z) (l_2: Z) (r_2: Z) (x_2: Z) (retval_2: Z) (tr_3: tree) (h_5: Z) (tr1_3: tree) (tr2_3: tree) (retval_3: Z) ,
   [| (retval_3 = r_2) |] 
   &&  [| (h_4 <= 255) |] 
@@ -5318,157 +5409,7 @@ forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tr
   **  (store_tree_shape p_pre_v )
 .
 
-Definition balance_return_wit_2_4 := 
-forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (h_4: Z) (r_2: Z) (retval_2: Z) (retval_3: Z) ,
-  [| (retval_3 = r_2) |] 
-  &&  [| (h_4 <= 255) |] 
-  &&  [| (h_4 >= 0) |] 
-  &&  [| (retval_2 < 0) |] 
-  &&  [| (retval_2 <= 0) |] 
-  &&  [| (retval_2 <= 0) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval > 1) |] 
-  &&  [| (retval = x) |] 
-  &&  [| (p_pre_v_2 <> 0) |]
-  &&  (store_non_empty_tree r_2 )
-  **  ((p_pre) # Ptr  |-> retval_3)
-|--
-  EX (p_pre_v: Z) ,
-  ((p_pre) # Ptr  |-> p_pre_v)
-  **  (store_tree_shape p_pre_v )
-.
-
-Definition balance_return_wit_3_1 := 
-forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (retval_2: Z) ,
-  [| (retval_2 >= 0) |] 
-  &&  [| (retval_2 <= 0) |] 
-  &&  [| (retval_2 = 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval > 1) |] 
-  &&  [| (retval = x) |] 
-  &&  [| (p_pre_v_2 <> 0) |]
-  &&  (store_tree_shape l )
-  **  ((&((p_pre_v_2)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v_2)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v_2)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v_2)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v_2)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  ((&((r)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
-  **  ((&((r)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
-  **  ((&((r)  # "tree" ->ₛ "height")) # UChar  |-> h_3)
-  **  ((&((r)  # "tree" ->ₛ "value")) # Int  |-> v_2)
-  **  ((&((r)  # "tree" ->ₛ "key")) # Int  |-> k_2)
-  **  (store_tree r_2 tr2_2 )
-  **  (store_tree l_2 tr1_2 )
-  **  ((p_pre) # Ptr  |-> p_pre_v_2)
-|--
-  EX (p_pre_v: Z) ,
-  ((p_pre) # Ptr  |-> p_pre_v)
-  **  (store_tree_shape p_pre_v )
-.
-
-Definition balance_return_wit_3_2 := 
-forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
-  [| (retval_2 >= 0) |] 
-  &&  [| (retval_2 <= 0) |] 
-  &&  [| (retval_2 >= 0) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval > 1) |] 
-  &&  [| (retval = x) |] 
-  &&  [| (p_pre_v_2 <> 0) |]
-  &&  (single_tree_node l k_3 v_3 h_4 l_3 r_3 )
-  **  (store_non_empty_tree l_3 )
-  **  (store_tree_shape r_3 )
-  **  ((&((p_pre_v_2)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v_2)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v_2)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v_2)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v_2)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  ((&((r)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
-  **  ((&((r)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
-  **  ((&((r)  # "tree" ->ₛ "height")) # UChar  |-> h_3)
-  **  ((&((r)  # "tree" ->ₛ "value")) # Int  |-> v_2)
-  **  ((&((r)  # "tree" ->ₛ "key")) # Int  |-> k_2)
-  **  (store_tree r_2 tr2_2 )
-  **  (store_tree l_2 tr1_2 )
-  **  ((p_pre) # Ptr  |-> p_pre_v_2)
-|--
-  EX (p_pre_v: Z) ,
-  ((p_pre) # Ptr  |-> p_pre_v)
-  **  (store_tree_shape p_pre_v )
-.
-
-Definition balance_return_wit_3_3 := 
-forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
-  [| (retval_2 >= 0) |] 
-  &&  [| (retval_2 <= 0) |] 
-  &&  [| (retval_2 <= 0) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval > 1) |] 
-  &&  [| (retval = x) |] 
-  &&  [| (p_pre_v_2 <> 0) |]
-  &&  (single_tree_node l k_3 v_3 h_4 l_3 r_3 )
-  **  (store_tree_shape l_3 )
-  **  (store_non_empty_tree r_3 )
-  **  ((&((p_pre_v_2)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v_2)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v_2)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v_2)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v_2)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  ((&((r)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
-  **  ((&((r)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
-  **  ((&((r)  # "tree" ->ₛ "height")) # UChar  |-> h_3)
-  **  ((&((r)  # "tree" ->ₛ "value")) # Int  |-> v_2)
-  **  ((&((r)  # "tree" ->ₛ "key")) # Int  |-> k_2)
-  **  (store_tree r_2 tr2_2 )
-  **  (store_tree l_2 tr1_2 )
-  **  ((p_pre) # Ptr  |-> p_pre_v_2)
-|--
-  EX (p_pre_v: Z) ,
-  ((p_pre) # Ptr  |-> p_pre_v)
-  **  (store_tree_shape p_pre_v )
-.
-
-Definition balance_return_wit_3_4 := 
+Definition balance_return_wit_13 := 
 forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (x_2: Z) (retval_2: Z) ,
   [| (retval_2 >= 0) |] 
   &&  [| (retval_2 <= 0) |] 
@@ -5509,27 +5450,40 @@ forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retv
   **  (store_tree_shape p_pre_v )
 .
 
-Definition balance_return_wit_3_5 := 
-forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (retval_2: Z) ,
+Definition balance_return_wit_14 := 
+forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
   [| (retval_2 >= 0) |] 
   &&  [| (retval_2 <= 0) |] 
-  &&  [| (retval_2 = 0) |] 
+  &&  [| (retval_2 <= 0) |] 
+  &&  [| (l <> 0) |] 
   &&  [| (h <= 255) |] 
   &&  [| (h >= 0) |] 
   &&  [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
   &&  [| (l <> 0) |] 
   &&  [| (retval > 1) |] 
-  &&  [| (retval >= 0) |] 
+  &&  [| (retval = x) |] 
   &&  [| (p_pre_v_2 <> 0) |]
-  &&  (store_tree_shape l )
+  &&  (single_tree_node l k_3 v_3 h_4 l_3 r_3 )
+  **  (store_tree_shape l_3 )
+  **  (store_non_empty_tree r_3 )
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "height")) # UChar  |-> h)
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "value")) # Int  |-> v)
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree r tr )
+  **  ((&((r)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
+  **  ((&((r)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
+  **  ((&((r)  # "tree" ->ₛ "height")) # UChar  |-> h_3)
+  **  ((&((r)  # "tree" ->ₛ "value")) # Int  |-> v_2)
+  **  ((&((r)  # "tree" ->ₛ "key")) # Int  |-> k_2)
+  **  (store_tree r_2 tr2_2 )
+  **  (store_tree l_2 tr1_2 )
   **  ((p_pre) # Ptr  |-> p_pre_v_2)
 |--
   EX (p_pre_v: Z) ,
@@ -5537,8 +5491,8 @@ forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) 
   **  (store_tree_shape p_pre_v )
 .
 
-Definition balance_return_wit_3_6 := 
-forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
+Definition balance_return_wit_15 := 
+forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
   [| (retval_2 >= 0) |] 
   &&  [| (retval_2 <= 0) |] 
   &&  [| (retval_2 >= 0) |] 
@@ -5547,20 +5501,30 @@ forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) 
   &&  [| (h >= 0) |] 
   &&  [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
   &&  [| (l <> 0) |] 
   &&  [| (retval > 1) |] 
-  &&  [| (retval >= 0) |] 
+  &&  [| (retval = x) |] 
   &&  [| (p_pre_v_2 <> 0) |]
-  &&  (single_tree_node l k_2 v_2 h_3 l_2 r_2 )
-  **  (store_non_empty_tree l_2 )
-  **  (store_tree_shape r_2 )
+  &&  (single_tree_node l k_3 v_3 h_4 l_3 r_3 )
+  **  (store_non_empty_tree l_3 )
+  **  (store_tree_shape r_3 )
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "height")) # UChar  |-> h)
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "value")) # Int  |-> v)
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree r tr )
+  **  ((&((r)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
+  **  ((&((r)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
+  **  ((&((r)  # "tree" ->ₛ "height")) # UChar  |-> h_3)
+  **  ((&((r)  # "tree" ->ₛ "value")) # Int  |-> v_2)
+  **  ((&((r)  # "tree" ->ₛ "key")) # Int  |-> k_2)
+  **  (store_tree r_2 tr2_2 )
+  **  (store_tree l_2 tr1_2 )
   **  ((p_pre) # Ptr  |-> p_pre_v_2)
 |--
   EX (p_pre_v: Z) ,
@@ -5568,30 +5532,37 @@ forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) 
   **  (store_tree_shape p_pre_v )
 .
 
-Definition balance_return_wit_3_7 := 
-forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
+Definition balance_return_wit_16 := 
+forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (retval_2: Z) ,
   [| (retval_2 >= 0) |] 
   &&  [| (retval_2 <= 0) |] 
-  &&  [| (retval_2 <= 0) |] 
-  &&  [| (l <> 0) |] 
+  &&  [| (retval_2 = 0) |] 
   &&  [| (h <= 255) |] 
   &&  [| (h >= 0) |] 
   &&  [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
   &&  [| (l <> 0) |] 
   &&  [| (retval > 1) |] 
-  &&  [| (retval >= 0) |] 
+  &&  [| (retval = x) |] 
   &&  [| (p_pre_v_2 <> 0) |]
-  &&  (single_tree_node l k_2 v_2 h_3 l_2 r_2 )
-  **  (store_tree_shape l_2 )
-  **  (store_non_empty_tree r_2 )
+  &&  (store_tree_shape l )
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "height")) # UChar  |-> h)
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "value")) # Int  |-> v)
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree r tr )
+  **  ((&((r)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
+  **  ((&((r)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
+  **  ((&((r)  # "tree" ->ₛ "height")) # UChar  |-> h_3)
+  **  ((&((r)  # "tree" ->ₛ "value")) # Int  |-> v_2)
+  **  ((&((r)  # "tree" ->ₛ "key")) # Int  |-> k_2)
+  **  (store_tree r_2 tr2_2 )
+  **  (store_tree l_2 tr1_2 )
   **  ((p_pre) # Ptr  |-> p_pre_v_2)
 |--
   EX (p_pre_v: Z) ,
@@ -5599,7 +5570,7 @@ forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) 
   **  (store_tree_shape p_pre_v )
 .
 
-Definition balance_return_wit_3_8 := 
+Definition balance_return_wit_17 := 
 forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (x: Z) (retval_2: Z) ,
   [| (retval_2 >= 0) |] 
   &&  [| (retval_2 <= 0) |] 
@@ -5630,7 +5601,97 @@ forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) 
   **  (store_tree_shape p_pre_v )
 .
 
-Definition balance_return_wit_4_1 := 
+Definition balance_return_wit_18 := 
+forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
+  [| (retval_2 >= 0) |] 
+  &&  [| (retval_2 <= 0) |] 
+  &&  [| (retval_2 <= 0) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval > 1) |] 
+  &&  [| (retval >= 0) |] 
+  &&  [| (p_pre_v_2 <> 0) |]
+  &&  (single_tree_node l k_2 v_2 h_3 l_2 r_2 )
+  **  (store_tree_shape l_2 )
+  **  (store_non_empty_tree r_2 )
+  **  ((&((p_pre_v_2)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v_2)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v_2)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v_2)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v_2)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  (store_tree r tr )
+  **  ((p_pre) # Ptr  |-> p_pre_v_2)
+|--
+  EX (p_pre_v: Z) ,
+  ((p_pre) # Ptr  |-> p_pre_v)
+  **  (store_tree_shape p_pre_v )
+.
+
+Definition balance_return_wit_19 := 
+forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
+  [| (retval_2 >= 0) |] 
+  &&  [| (retval_2 <= 0) |] 
+  &&  [| (retval_2 >= 0) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval > 1) |] 
+  &&  [| (retval >= 0) |] 
+  &&  [| (p_pre_v_2 <> 0) |]
+  &&  (single_tree_node l k_2 v_2 h_3 l_2 r_2 )
+  **  (store_non_empty_tree l_2 )
+  **  (store_tree_shape r_2 )
+  **  ((&((p_pre_v_2)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v_2)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v_2)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v_2)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v_2)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  (store_tree r tr )
+  **  ((p_pre) # Ptr  |-> p_pre_v_2)
+|--
+  EX (p_pre_v: Z) ,
+  ((p_pre) # Ptr  |-> p_pre_v)
+  **  (store_tree_shape p_pre_v )
+.
+
+Definition balance_return_wit_20 := 
+forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (retval_2: Z) ,
+  [| (retval_2 >= 0) |] 
+  &&  [| (retval_2 <= 0) |] 
+  &&  [| (retval_2 = 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval > 1) |] 
+  &&  [| (retval >= 0) |] 
+  &&  [| (p_pre_v_2 <> 0) |]
+  &&  (store_tree_shape l )
+  **  ((&((p_pre_v_2)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v_2)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v_2)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v_2)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v_2)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  (store_tree r tr )
+  **  ((p_pre) # Ptr  |-> p_pre_v_2)
+|--
+  EX (p_pre_v: Z) ,
+  ((p_pre) # Ptr  |-> p_pre_v)
+  **  (store_tree_shape p_pre_v )
+.
+
+Definition balance_return_wit_21 := 
 forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (r: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (h_3: Z) (l: Z) (r_2: Z) (x: Z) (retval_2: Z) (tr_2: tree) (h_4: Z) (tr1_2: tree) (tr2_2: tree) (tr_3: tree) (h_5: Z) (tr1_3: tree) (tr2_3: tree) (retval_3: Z) ,
   [| (retval_3 = r) |] 
   &&  [| (h_3 <= 255) |] 
@@ -5664,7 +5725,7 @@ forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (r: Z) (retval: Z) (tr: tree) (h_2: Z) (
   **  (store_tree_shape p_pre_v )
 .
 
-Definition balance_return_wit_4_2 := 
+Definition balance_return_wit_22 := 
 forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (r: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (h_3: Z) (r_2: Z) (retval_2: Z) (tr_2: tree) (h_4: Z) (tr1_2: tree) (tr2_2: tree) (retval_3: Z) ,
   [| (retval_3 = r) |] 
   &&  [| (h_3 <= 255) |] 
@@ -5694,7 +5755,7 @@ forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (r: Z) (retval: Z) (tr: tree) (h_2: Z) (
   **  (store_tree_shape p_pre_v )
 .
 
-Definition balance_return_wit_4_3 := 
+Definition balance_return_wit_23 := 
 forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (h_4: Z) (l_2: Z) (r_2: Z) (x_2: Z) (retval_2: Z) (tr_3: tree) (h_5: Z) (tr1_3: tree) (tr2_3: tree) (tr_4: tree) (h_6: Z) (tr1_4: tree) (tr2_4: tree) (retval_3: Z) ,
   [| (retval_3 = r) |] 
   &&  [| (h_4 <= 255) |] 
@@ -5732,7 +5793,7 @@ forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tr
   **  (store_tree_shape p_pre_v )
 .
 
-Definition balance_return_wit_4_4 := 
+Definition balance_return_wit_24 := 
 forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (h_4: Z) (r_2: Z) (retval_2: Z) (tr_3: tree) (h_5: Z) (tr1_3: tree) (tr2_3: tree) (retval_3: Z) ,
   [| (retval_3 = r) |] 
   &&  [| (h_4 <= 255) |] 
@@ -5766,57 +5827,30 @@ forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tr
   **  (store_tree_shape p_pre_v )
 .
 
-Definition balance_return_wit_5_1 := 
-forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (r: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (h_3: Z) (l: Z) (r_2: Z) (x: Z) (retval_2: Z) (tr_2: tree) (h_4: Z) (tr1_2: tree) (tr2_2: tree) (retval_3: Z) ,
-  [| (retval_3 = l) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
+Definition balance_return_wit_25 := 
+forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (h_4: Z) (l_2: Z) (retval_2: Z) (retval_3: Z) ,
+  [| (retval_3 = l_2) |] 
   &&  [| (h_4 <= 255) |] 
   &&  [| (h_4 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r_2 <> 0) |] 
   &&  [| (retval_2 > 0) |] 
   &&  [| (retval_2 >= 0) |] 
-  &&  [| (retval_2 = x) |] 
+  &&  [| (retval_2 >= 0) |] 
   &&  [| (r <> 0) |] 
   &&  [| (h <= 255) |] 
   &&  [| (h >= 0) |] 
   &&  [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (retval < (-1)) |] 
-  &&  [| (retval <= 1) |] 
-  &&  [| (retval <= 0) |] 
-  &&  [| (p_pre_v_2 <> 0) |]
-  &&  (store_non_empty_tree l )
-  **  ((p_pre) # Ptr  |-> retval_3)
-|--
-  EX (p_pre_v: Z) ,
-  ((p_pre) # Ptr  |-> p_pre_v)
-  **  (store_tree_shape p_pre_v )
-.
-
-Definition balance_return_wit_5_2 := 
-forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (r: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (h_3: Z) (l: Z) (retval_2: Z) (retval_3: Z) ,
-  [| (retval_3 = l) |] 
   &&  [| (h_3 <= 255) |] 
   &&  [| (h_3 >= 0) |] 
-  &&  [| (retval_2 > 0) |] 
-  &&  [| (retval_2 >= 0) |] 
-  &&  [| (retval_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
   &&  [| (r <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
   &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (r <> 0) |] 
+  &&  [| (l <> 0) |] 
   &&  [| (retval < (-1)) |] 
   &&  [| (retval <= 1) |] 
-  &&  [| (retval <= 0) |] 
+  &&  [| (retval = x) |] 
   &&  [| (p_pre_v_2 <> 0) |]
-  &&  (store_non_empty_tree l )
+  &&  (store_non_empty_tree l_2 )
   **  ((p_pre) # Ptr  |-> retval_3)
 |--
   EX (p_pre_v: Z) ,
@@ -5824,7 +5858,7 @@ forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (r: Z) (retval: Z) (tr: tree) (h_2: Z) (
   **  (store_tree_shape p_pre_v )
 .
 
-Definition balance_return_wit_5_3 := 
+Definition balance_return_wit_26 := 
 forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (h_4: Z) (l_2: Z) (r_2: Z) (x_2: Z) (retval_2: Z) (tr_3: tree) (h_5: Z) (tr1_3: tree) (tr2_3: tree) (retval_3: Z) ,
   [| (retval_3 = l_2) |] 
   &&  [| (h_4 <= 255) |] 
@@ -5859,11 +5893,11 @@ forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tr
   **  (store_tree_shape p_pre_v )
 .
 
-Definition balance_return_wit_5_4 := 
-forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (h_4: Z) (l_2: Z) (retval_2: Z) (retval_3: Z) ,
-  [| (retval_3 = l_2) |] 
-  &&  [| (h_4 <= 255) |] 
-  &&  [| (h_4 >= 0) |] 
+Definition balance_return_wit_27 := 
+forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (r: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (h_3: Z) (l: Z) (retval_2: Z) (retval_3: Z) ,
+  [| (retval_3 = l) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
   &&  [| (retval_2 > 0) |] 
   &&  [| (retval_2 >= 0) |] 
   &&  [| (retval_2 >= 0) |] 
@@ -5872,17 +5906,13 @@ forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tr
   &&  [| (h >= 0) |] 
   &&  [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r <> 0) |] 
   &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
+  &&  [| (r <> 0) |] 
   &&  [| (retval < (-1)) |] 
   &&  [| (retval <= 1) |] 
-  &&  [| (retval = x) |] 
+  &&  [| (retval <= 0) |] 
   &&  [| (p_pre_v_2 <> 0) |]
-  &&  (store_non_empty_tree l_2 )
+  &&  (store_non_empty_tree l )
   **  ((p_pre) # Ptr  |-> retval_3)
 |--
   EX (p_pre_v: Z) ,
@@ -5890,38 +5920,62 @@ forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tr
   **  (store_tree_shape p_pre_v )
 .
 
-Definition balance_return_wit_6_1 := 
-forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (retval_2: Z) ,
-  [| (retval_2 <= 0) |] 
+Definition balance_return_wit_28 := 
+forall (p_pre: Z) (p_pre_v_2: Z) (h: Z) (r: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (h_3: Z) (l: Z) (r_2: Z) (x: Z) (retval_2: Z) (tr_2: tree) (h_4: Z) (tr1_2: tree) (tr2_2: tree) (retval_3: Z) ,
+  [| (retval_3 = l) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (h_4 <= 255) |] 
+  &&  [| (h_4 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (r_2 <> 0) |] 
+  &&  [| (retval_2 > 0) |] 
   &&  [| (retval_2 >= 0) |] 
-  &&  [| (retval_2 = 0) |] 
+  &&  [| (retval_2 = x) |] 
+  &&  [| (r <> 0) |] 
   &&  [| (h <= 255) |] 
   &&  [| (h >= 0) |] 
   &&  [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r <> 0) |] 
   &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
+  &&  [| (r <> 0) |] 
   &&  [| (retval < (-1)) |] 
   &&  [| (retval <= 1) |] 
-  &&  [| (retval = x) |] 
+  &&  [| (retval <= 0) |] 
   &&  [| (p_pre_v_2 <> 0) |]
-  &&  (store_tree_shape r )
+  &&  (store_non_empty_tree l )
+  **  ((p_pre) # Ptr  |-> retval_3)
+|--
+  EX (p_pre_v: Z) ,
+  ((p_pre) # Ptr  |-> p_pre_v)
+  **  (store_tree_shape p_pre_v )
+.
+
+Definition balance_return_wit_29 := 
+forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (x: Z) (retval_2: Z) ,
+  [| (retval_2 <= 0) |] 
+  &&  [| (retval_2 >= 0) |] 
+  &&  [| (retval_2 = x) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (retval < (-1)) |] 
+  &&  [| (retval <= 1) |] 
+  &&  [| (retval <= 0) |] 
+  &&  [| (p_pre_v_2 <> 0) |]
+  &&  (single_tree_node r k_2 v_2 h_3 l_2 r_2 )
+  **  (store_non_empty_tree l_2 )
+  **  (store_non_empty_tree r_2 )
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "height")) # UChar  |-> h)
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "value")) # Int  |-> v)
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  ((&((l)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
-  **  ((&((l)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
-  **  ((&((l)  # "tree" ->ₛ "height")) # UChar  |-> h_2)
-  **  ((&((l)  # "tree" ->ₛ "value")) # Int  |-> v_2)
-  **  ((&((l)  # "tree" ->ₛ "key")) # Int  |-> k_2)
-  **  (store_tree r_2 tr2 )
-  **  (store_tree l_2 tr1 )
+  **  (store_tree l tr )
   **  ((p_pre) # Ptr  |-> p_pre_v_2)
 |--
   EX (p_pre_v: Z) ,
@@ -5929,50 +5983,8 @@ forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retv
   **  (store_tree_shape p_pre_v )
 .
 
-Definition balance_return_wit_6_2 := 
-forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
-  [| (retval_2 <= 0) |] 
-  &&  [| (retval_2 >= 0) |] 
-  &&  [| (retval_2 >= 0) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval < (-1)) |] 
-  &&  [| (retval <= 1) |] 
-  &&  [| (retval = x) |] 
-  &&  [| (p_pre_v_2 <> 0) |]
-  &&  (single_tree_node r k_3 v_3 h_4 l_3 r_3 )
-  **  (store_non_empty_tree l_3 )
-  **  (store_tree_shape r_3 )
-  **  ((&((p_pre_v_2)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v_2)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v_2)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v_2)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v_2)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  ((&((l)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
-  **  ((&((l)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
-  **  ((&((l)  # "tree" ->ₛ "height")) # UChar  |-> h_2)
-  **  ((&((l)  # "tree" ->ₛ "value")) # Int  |-> v_2)
-  **  ((&((l)  # "tree" ->ₛ "key")) # Int  |-> k_2)
-  **  (store_tree r_2 tr2 )
-  **  (store_tree l_2 tr1 )
-  **  ((p_pre) # Ptr  |-> p_pre_v_2)
-|--
-  EX (p_pre_v: Z) ,
-  ((p_pre) # Ptr  |-> p_pre_v)
-  **  (store_tree_shape p_pre_v )
-.
-
-Definition balance_return_wit_6_3 := 
-forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
+Definition balance_return_wit_30 := 
+forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
   [| (retval_2 <= 0) |] 
   &&  [| (retval_2 >= 0) |] 
   &&  [| (retval_2 <= 0) |] 
@@ -5981,31 +5993,21 @@ forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retv
   &&  [| (h >= 0) |] 
   &&  [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
   &&  [| (r <> 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
   &&  [| (retval < (-1)) |] 
   &&  [| (retval <= 1) |] 
-  &&  [| (retval = x) |] 
+  &&  [| (retval <= 0) |] 
   &&  [| (p_pre_v_2 <> 0) |]
-  &&  (single_tree_node r k_3 v_3 h_4 l_3 r_3 )
-  **  (store_tree_shape l_3 )
-  **  (store_non_empty_tree r_3 )
+  &&  (single_tree_node r k_2 v_2 h_3 l_2 r_2 )
+  **  (store_tree_shape l_2 )
+  **  (store_non_empty_tree r_2 )
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "height")) # UChar  |-> h)
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "value")) # Int  |-> v)
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  ((&((l)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
-  **  ((&((l)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
-  **  ((&((l)  # "tree" ->ₛ "height")) # UChar  |-> h_2)
-  **  ((&((l)  # "tree" ->ₛ "value")) # Int  |-> v_2)
-  **  ((&((l)  # "tree" ->ₛ "key")) # Int  |-> k_2)
-  **  (store_tree r_2 tr2 )
-  **  (store_tree l_2 tr1 )
+  **  (store_tree l tr )
   **  ((p_pre) # Ptr  |-> p_pre_v_2)
 |--
   EX (p_pre_v: Z) ,
@@ -6013,7 +6015,68 @@ forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retv
   **  (store_tree_shape p_pre_v )
 .
 
-Definition balance_return_wit_6_4 := 
+Definition balance_return_wit_31 := 
+forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
+  [| (retval_2 <= 0) |] 
+  &&  [| (retval_2 >= 0) |] 
+  &&  [| (retval_2 >= 0) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (retval < (-1)) |] 
+  &&  [| (retval <= 1) |] 
+  &&  [| (retval <= 0) |] 
+  &&  [| (p_pre_v_2 <> 0) |]
+  &&  (single_tree_node r k_2 v_2 h_3 l_2 r_2 )
+  **  (store_non_empty_tree l_2 )
+  **  (store_tree_shape r_2 )
+  **  ((&((p_pre_v_2)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v_2)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v_2)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v_2)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v_2)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  (store_tree l tr )
+  **  ((p_pre) # Ptr  |-> p_pre_v_2)
+|--
+  EX (p_pre_v: Z) ,
+  ((p_pre) # Ptr  |-> p_pre_v)
+  **  (store_tree_shape p_pre_v )
+.
+
+Definition balance_return_wit_32 := 
+forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (retval_2: Z) ,
+  [| (retval_2 <= 0) |] 
+  &&  [| (retval_2 >= 0) |] 
+  &&  [| (retval_2 = 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (retval < (-1)) |] 
+  &&  [| (retval <= 1) |] 
+  &&  [| (retval <= 0) |] 
+  &&  [| (p_pre_v_2 <> 0) |]
+  &&  (store_tree_shape r )
+  **  ((&((p_pre_v_2)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v_2)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v_2)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v_2)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v_2)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  (store_tree l tr )
+  **  ((p_pre) # Ptr  |-> p_pre_v_2)
+|--
+  EX (p_pre_v: Z) ,
+  ((p_pre) # Ptr  |-> p_pre_v)
+  **  (store_tree_shape p_pre_v )
+.
+
+Definition balance_return_wit_33 := 
 forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (x_2: Z) (retval_2: Z) ,
   [| (retval_2 <= 0) |] 
   &&  [| (retval_2 >= 0) |] 
@@ -6055,69 +6118,8 @@ forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retv
   **  (store_tree_shape p_pre_v )
 .
 
-Definition balance_return_wit_6_5 := 
-forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (retval_2: Z) ,
-  [| (retval_2 <= 0) |] 
-  &&  [| (retval_2 >= 0) |] 
-  &&  [| (retval_2 = 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (retval < (-1)) |] 
-  &&  [| (retval <= 1) |] 
-  &&  [| (retval <= 0) |] 
-  &&  [| (p_pre_v_2 <> 0) |]
-  &&  (store_tree_shape r )
-  **  ((&((p_pre_v_2)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v_2)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v_2)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v_2)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v_2)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree l tr )
-  **  ((p_pre) # Ptr  |-> p_pre_v_2)
-|--
-  EX (p_pre_v: Z) ,
-  ((p_pre) # Ptr  |-> p_pre_v)
-  **  (store_tree_shape p_pre_v )
-.
-
-Definition balance_return_wit_6_6 := 
-forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
-  [| (retval_2 <= 0) |] 
-  &&  [| (retval_2 >= 0) |] 
-  &&  [| (retval_2 >= 0) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (retval < (-1)) |] 
-  &&  [| (retval <= 1) |] 
-  &&  [| (retval <= 0) |] 
-  &&  [| (p_pre_v_2 <> 0) |]
-  &&  (single_tree_node r k_2 v_2 h_3 l_2 r_2 )
-  **  (store_non_empty_tree l_2 )
-  **  (store_tree_shape r_2 )
-  **  ((&((p_pre_v_2)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v_2)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v_2)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v_2)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v_2)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree l tr )
-  **  ((p_pre) # Ptr  |-> p_pre_v_2)
-|--
-  EX (p_pre_v: Z) ,
-  ((p_pre) # Ptr  |-> p_pre_v)
-  **  (store_tree_shape p_pre_v )
-.
-
-Definition balance_return_wit_6_7 := 
-forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
+Definition balance_return_wit_34 := 
+forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
   [| (retval_2 <= 0) |] 
   &&  [| (retval_2 >= 0) |] 
   &&  [| (retval_2 <= 0) |] 
@@ -6126,21 +6128,31 @@ forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) 
   &&  [| (h >= 0) |] 
   &&  [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
   &&  [| (r <> 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
   &&  [| (retval < (-1)) |] 
   &&  [| (retval <= 1) |] 
-  &&  [| (retval <= 0) |] 
+  &&  [| (retval = x) |] 
   &&  [| (p_pre_v_2 <> 0) |]
-  &&  (single_tree_node r k_2 v_2 h_3 l_2 r_2 )
-  **  (store_tree_shape l_2 )
-  **  (store_non_empty_tree r_2 )
+  &&  (single_tree_node r k_3 v_3 h_4 l_3 r_3 )
+  **  (store_tree_shape l_3 )
+  **  (store_non_empty_tree r_3 )
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "height")) # UChar  |-> h)
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "value")) # Int  |-> v)
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree l tr )
+  **  ((&((l)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
+  **  ((&((l)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
+  **  ((&((l)  # "tree" ->ₛ "height")) # UChar  |-> h_2)
+  **  ((&((l)  # "tree" ->ₛ "value")) # Int  |-> v_2)
+  **  ((&((l)  # "tree" ->ₛ "key")) # Int  |-> k_2)
+  **  (store_tree r_2 tr2 )
+  **  (store_tree l_2 tr1 )
   **  ((p_pre) # Ptr  |-> p_pre_v_2)
 |--
   EX (p_pre_v: Z) ,
@@ -6148,31 +6160,41 @@ forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) 
   **  (store_tree_shape p_pre_v )
 .
 
-Definition balance_return_wit_6_8 := 
-forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (x: Z) (retval_2: Z) ,
+Definition balance_return_wit_35 := 
+forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
   [| (retval_2 <= 0) |] 
   &&  [| (retval_2 >= 0) |] 
-  &&  [| (retval_2 = x) |] 
+  &&  [| (retval_2 >= 0) |] 
   &&  [| (r <> 0) |] 
   &&  [| (h <= 255) |] 
   &&  [| (h >= 0) |] 
   &&  [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
   &&  [| (r <> 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
   &&  [| (retval < (-1)) |] 
   &&  [| (retval <= 1) |] 
-  &&  [| (retval <= 0) |] 
+  &&  [| (retval = x) |] 
   &&  [| (p_pre_v_2 <> 0) |]
-  &&  (single_tree_node r k_2 v_2 h_3 l_2 r_2 )
-  **  (store_non_empty_tree l_2 )
-  **  (store_non_empty_tree r_2 )
+  &&  (single_tree_node r k_3 v_3 h_4 l_3 r_3 )
+  **  (store_non_empty_tree l_3 )
+  **  (store_tree_shape r_3 )
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "height")) # UChar  |-> h)
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "value")) # Int  |-> v)
   **  ((&((p_pre_v_2)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree l tr )
+  **  ((&((l)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
+  **  ((&((l)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
+  **  ((&((l)  # "tree" ->ₛ "height")) # UChar  |-> h_2)
+  **  ((&((l)  # "tree" ->ₛ "value")) # Int  |-> v_2)
+  **  ((&((l)  # "tree" ->ₛ "key")) # Int  |-> k_2)
+  **  (store_tree r_2 tr2 )
+  **  (store_tree l_2 tr1 )
   **  ((p_pre) # Ptr  |-> p_pre_v_2)
 |--
   EX (p_pre_v: Z) ,
@@ -6180,60 +6202,38 @@ forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) 
   **  (store_tree_shape p_pre_v )
 .
 
-Definition balance_return_wit_7_1 := 
-forall (p_pre: Z) (p_pre_v_2: Z) (retval: Z) ,
-  [| (retval >= (-1)) |] 
-  &&  [| (retval <= 1) |] 
-  &&  [| (retval = 0) |]
-  &&  (store_tree_shape p_pre_v_2 )
-  **  ((p_pre) # Ptr  |-> p_pre_v_2)
-|--
-  EX (p_pre_v: Z) ,
-  ((p_pre) # Ptr  |-> p_pre_v)
-  **  (store_tree_shape p_pre_v )
-.
-
-Definition balance_return_wit_7_2 := 
-forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) ,
-  [| (retval >= (-1)) |] 
-  &&  [| (retval <= 1) |] 
-  &&  [| (retval >= 0) |] 
-  &&  [| (p_pre_v_2 <> 0) |]
-  &&  (single_tree_node p_pre_v_2 k v h l r )
-  **  (store_non_empty_tree l )
-  **  (store_tree_shape r )
-  **  ((p_pre) # Ptr  |-> p_pre_v_2)
-|--
-  EX (p_pre_v: Z) ,
-  ((p_pre) # Ptr  |-> p_pre_v)
-  **  (store_tree_shape p_pre_v )
-.
-
-Definition balance_return_wit_7_3 := 
-forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) ,
-  [| (retval >= (-1)) |] 
-  &&  [| (retval <= 1) |] 
-  &&  [| (retval <= 0) |] 
-  &&  [| (p_pre_v_2 <> 0) |]
-  &&  (single_tree_node p_pre_v_2 k v h l r )
-  **  (store_tree_shape l )
-  **  (store_non_empty_tree r )
-  **  ((p_pre) # Ptr  |-> p_pre_v_2)
-|--
-  EX (p_pre_v: Z) ,
-  ((p_pre) # Ptr  |-> p_pre_v)
-  **  (store_tree_shape p_pre_v )
-.
-
-Definition balance_return_wit_7_4 := 
-forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) ,
-  [| (retval >= (-1)) |] 
+Definition balance_return_wit_36 := 
+forall (p_pre: Z) (p_pre_v_2: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (retval_2: Z) ,
+  [| (retval_2 <= 0) |] 
+  &&  [| (retval_2 >= 0) |] 
+  &&  [| (retval_2 = 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval < (-1)) |] 
   &&  [| (retval <= 1) |] 
   &&  [| (retval = x) |] 
   &&  [| (p_pre_v_2 <> 0) |]
-  &&  (single_tree_node p_pre_v_2 k v h l r )
-  **  (store_non_empty_tree l )
-  **  (store_non_empty_tree r )
+  &&  (store_tree_shape r )
+  **  ((&((p_pre_v_2)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v_2)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v_2)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v_2)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v_2)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  ((&((l)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
+  **  ((&((l)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
+  **  ((&((l)  # "tree" ->ₛ "height")) # UChar  |-> h_2)
+  **  ((&((l)  # "tree" ->ₛ "value")) # Int  |-> v_2)
+  **  ((&((l)  # "tree" ->ₛ "key")) # Int  |-> k_2)
+  **  (store_tree r_2 tr2 )
+  **  (store_tree l_2 tr1 )
   **  ((p_pre) # Ptr  |-> p_pre_v_2)
 |--
   EX (p_pre_v: Z) ,
@@ -6251,6 +6251,79 @@ forall (p_pre: Z) (p_pre_v: Z) ,
 .
 
 Definition balance_partial_solve_wit_2 := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) ,
+  [| (retval > 1) |] 
+  &&  [| (retval >= 0) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (single_tree_node p_pre_v k v h l r )
+  **  (store_non_empty_tree l )
+  **  (store_tree_shape r )
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  EX (tr2: tree)  (tr1: tree)  (r_2: Z)  (l_2: Z)  (h_2: Z)  (v_2: Z)  (k_2: Z)  (tr_2: tree)  (tr: tree) ,
+  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval > 1) |] 
+  &&  [| (retval >= 0) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  ((&((l)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
+  **  ((&((l)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
+  **  ((&((l)  # "tree" ->ₛ "height")) # UChar  |-> h_2)
+  **  ((&((l)  # "tree" ->ₛ "value")) # Int  |-> v_2)
+  **  ((&((l)  # "tree" ->ₛ "key")) # Int  |-> k_2)
+  **  (store_tree r_2 tr2 )
+  **  (store_tree l_2 tr1 )
+  **  (store_tree r tr )
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+.
+
+Definition balance_partial_solve_wit_3 := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) ,
+  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval > 1) |] 
+  &&  [| (retval >= 0) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (single_tree_node l k_2 v_2 h_2 l_2 r_2 )
+  **  (single_tree_node p_pre_v k v h l r )
+  **  (store_tree r_2 tr2 )
+  **  (store_tree l_2 tr1 )
+  **  (store_tree r tr )
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval > 1) |] 
+  &&  [| (retval >= 0) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (store_tree_shape l )
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  (store_tree r tr )
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+.
+
+Definition balance_partial_solve_wit_4 := 
 forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) ,
   [| (retval > 1) |] 
   &&  [| (retval = x) |] 
@@ -6296,7 +6369,7 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval
   **  ((p_pre) # Ptr  |-> p_pre_v)
 .
 
-Definition balance_partial_solve_wit_3 := 
+Definition balance_partial_solve_wit_5 := 
 forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_3: Z) (v_3: Z) (h_2: Z) (l_3: Z) (r_3: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) ,
   [| (h <= 255) |] 
   &&  [| (h >= 0) |] 
@@ -6349,18 +6422,12 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval
   **  ((p_pre) # Ptr  |-> p_pre_v)
 .
 
-Definition balance_partial_solve_wit_4 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) ,
-  [| (retval > 1) |] 
-  &&  [| (retval >= 0) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node p_pre_v k v h l r )
-  **  (store_non_empty_tree l )
-  **  (store_tree_shape r )
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  EX (tr2: tree)  (tr1: tree)  (r_2: Z)  (l_2: Z)  (h_2: Z)  (v_2: Z)  (k_2: Z)  (tr_2: tree)  (tr: tree) ,
-  [| (h <= 255) |] 
+Definition balance_partial_solve_wit_6_pure := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
+  [| (retval_2 > 0) |] 
+  &&  [| (retval_2 >= 0) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (h <= 255) |] 
   &&  [| (h >= 0) |] 
   &&  [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
@@ -6369,41 +6436,32 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) ,
   &&  [| (retval > 1) |] 
   &&  [| (retval >= 0) |] 
   &&  [| (p_pre_v <> 0) |]
-  &&  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  &&  (single_tree_node l k_2 v_2 h_3 l_2 r_2 )
+  **  (store_non_empty_tree l_2 )
+  **  (store_tree_shape r_2 )
   **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
   **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
   **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
   **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  ((&((l)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
-  **  ((&((l)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
-  **  ((&((l)  # "tree" ->ₛ "height")) # UChar  |-> h_2)
-  **  ((&((l)  # "tree" ->ₛ "value")) # Int  |-> v_2)
-  **  ((&((l)  # "tree" ->ₛ "key")) # Int  |-> k_2)
-  **  (store_tree r_2 tr2 )
-  **  (store_tree l_2 tr1 )
   **  (store_tree r tr )
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-.
-
-Definition balance_partial_solve_wit_5 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) ,
-  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval > 1) |] 
-  &&  [| (retval >= 0) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node l k_2 v_2 h_2 l_2 r_2 )
-  **  (single_tree_node p_pre_v k v h l r )
-  **  (store_tree r_2 tr2 )
-  **  (store_tree l_2 tr1 )
-  **  (store_tree r tr )
+  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
   **  ((p_pre) # Ptr  |-> p_pre_v)
 |--
-  [| (h <= 255) |] 
+  [| (p_pre_v <> 0) |]
+.
+
+Definition balance_partial_solve_wit_6_aux := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
+  [| (retval_2 > 0) |] 
+  &&  [| (retval_2 >= 0) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (h <= 255) |] 
   &&  [| (h >= 0) |] 
   &&  [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
@@ -6412,7 +6470,9 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (t
   &&  [| (retval > 1) |] 
   &&  [| (retval >= 0) |] 
   &&  [| (p_pre_v <> 0) |]
-  &&  (store_tree_shape l )
+  &&  (single_tree_node l k_2 v_2 h_3 l_2 r_2 )
+  **  (store_non_empty_tree l_2 )
+  **  (store_tree_shape r_2 )
   **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
   **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
   **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
@@ -6420,9 +6480,36 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (t
   **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
   **  (store_tree r tr )
   **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  EX (tr2_2: tree)  (tr1_2: tree)  (h_4: Z)  (tr_3: tree) ,
+  [| (p_pre_v <> 0) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (h_4 <= 255) |] 
+  &&  [| (h_4 >= 0) |] 
+  &&  [| (tr_3 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (l_2 <> 0) |] 
+  &&  [| (retval_2 > 0) |] 
+  &&  [| (retval_2 >= 0) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval > 1) |] 
+  &&  [| (retval >= 0) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (single_tree_node p_pre_v k v h l r )
+  **  (store_non_empty_tree l )
+  **  (store_tree_shape r )
+  **  ((p_pre) # Ptr  |-> p_pre_v)
 .
 
-Definition balance_partial_solve_wit_6_pure := 
+Definition balance_partial_solve_wit_6 := balance_partial_solve_wit_6_pure -> balance_partial_solve_wit_6_aux.
+
+Definition balance_partial_solve_wit_7_pure := 
 forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (x: Z) (retval_2: Z) ,
   [| (retval_2 > 0) |] 
   &&  [| (retval_2 = x) |] 
@@ -6456,7 +6543,7 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (t
   [| (p_pre_v <> 0) |]
 .
 
-Definition balance_partial_solve_wit_6_aux := 
+Definition balance_partial_solve_wit_7_aux := 
 forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (x: Z) (retval_2: Z) ,
   [| (retval_2 > 0) |] 
   &&  [| (retval_2 = x) |] 
@@ -6511,10 +6598,10 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (t
   **  ((p_pre) # Ptr  |-> p_pre_v)
 .
 
-Definition balance_partial_solve_wit_6 := balance_partial_solve_wit_6_pure -> balance_partial_solve_wit_6_aux.
+Definition balance_partial_solve_wit_7 := balance_partial_solve_wit_7_pure -> balance_partial_solve_wit_7_aux.
 
-Definition balance_partial_solve_wit_7_pure := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
+Definition balance_partial_solve_wit_8_pure := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
   [| (retval_2 > 0) |] 
   &&  [| (retval_2 >= 0) |] 
   &&  [| (l <> 0) |] 
@@ -6522,20 +6609,30 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (t
   &&  [| (h >= 0) |] 
   &&  [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
   &&  [| (l <> 0) |] 
   &&  [| (retval > 1) |] 
-  &&  [| (retval >= 0) |] 
+  &&  [| (retval = x) |] 
   &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node l k_2 v_2 h_3 l_2 r_2 )
-  **  (store_non_empty_tree l_2 )
-  **  (store_tree_shape r_2 )
+  &&  (single_tree_node l k_3 v_3 h_4 l_3 r_3 )
+  **  (store_non_empty_tree l_3 )
+  **  (store_tree_shape r_3 )
   **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
   **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
   **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
   **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
   **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree r tr )
+  **  ((&((r)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
+  **  ((&((r)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
+  **  ((&((r)  # "tree" ->ₛ "height")) # UChar  |-> h_3)
+  **  ((&((r)  # "tree" ->ₛ "value")) # Int  |-> v_2)
+  **  ((&((r)  # "tree" ->ₛ "key")) # Int  |-> k_2)
+  **  (store_tree r_2 tr2_2 )
+  **  (store_tree l_2 tr1_2 )
   **  ((( &( "lbf" ) )) # Int  |-> retval_2)
   **  ((( &( "bf" ) )) # Int  |-> retval)
   **  ((( &( "rh" ) )) # Int  |-> 0)
@@ -6547,8 +6644,8 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (t
   [| (p_pre_v <> 0) |]
 .
 
-Definition balance_partial_solve_wit_7_aux := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
+Definition balance_partial_solve_wit_8_aux := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
   [| (retval_2 > 0) |] 
   &&  [| (retval_2 >= 0) |] 
   &&  [| (l <> 0) |] 
@@ -6556,30 +6653,40 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (t
   &&  [| (h >= 0) |] 
   &&  [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
   &&  [| (l <> 0) |] 
   &&  [| (retval > 1) |] 
-  &&  [| (retval >= 0) |] 
+  &&  [| (retval = x) |] 
   &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node l k_2 v_2 h_3 l_2 r_2 )
-  **  (store_non_empty_tree l_2 )
-  **  (store_tree_shape r_2 )
+  &&  (single_tree_node l k_3 v_3 h_4 l_3 r_3 )
+  **  (store_non_empty_tree l_3 )
+  **  (store_tree_shape r_3 )
   **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
   **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
   **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
   **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
   **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree r tr )
+  **  ((&((r)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
+  **  ((&((r)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
+  **  ((&((r)  # "tree" ->ₛ "height")) # UChar  |-> h_3)
+  **  ((&((r)  # "tree" ->ₛ "value")) # Int  |-> v_2)
+  **  ((&((r)  # "tree" ->ₛ "key")) # Int  |-> k_2)
+  **  (store_tree r_2 tr2_2 )
+  **  (store_tree l_2 tr1_2 )
   **  ((p_pre) # Ptr  |-> p_pre_v)
 |--
-  EX (tr2_2: tree)  (tr1_2: tree)  (h_4: Z)  (tr_3: tree) ,
+  EX (tr2_3: tree)  (tr1_3: tree)  (h_5: Z)  (tr_3: tree) ,
   [| (p_pre_v <> 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
   &&  [| (h_4 <= 255) |] 
   &&  [| (h_4 >= 0) |] 
-  &&  [| (tr_3 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (l_2 <> 0) |] 
+  &&  [| (h_5 <= 255) |] 
+  &&  [| (h_5 >= 0) |] 
+  &&  [| (tr_3 = (make_tree (tr1_3) (tr2_3))) |] 
+  &&  [| (l_3 <> 0) |] 
   &&  [| (retval_2 > 0) |] 
   &&  [| (retval_2 >= 0) |] 
   &&  [| (l <> 0) |] 
@@ -6587,10 +6694,14 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (t
   &&  [| (h >= 0) |] 
   &&  [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
   &&  [| (l <> 0) |] 
   &&  [| (retval > 1) |] 
-  &&  [| (retval >= 0) |] 
+  &&  [| (retval = x) |] 
   &&  [| (p_pre_v <> 0) |]
   &&  (single_tree_node p_pre_v k v h l r )
   **  (store_non_empty_tree l )
@@ -6598,9 +6709,9 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (t
   **  ((p_pre) # Ptr  |-> p_pre_v)
 .
 
-Definition balance_partial_solve_wit_7 := balance_partial_solve_wit_7_pure -> balance_partial_solve_wit_7_aux.
+Definition balance_partial_solve_wit_8 := balance_partial_solve_wit_8_pure -> balance_partial_solve_wit_8_aux.
 
-Definition balance_partial_solve_wit_8_pure := 
+Definition balance_partial_solve_wit_9_pure := 
 forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (x_2: Z) (retval_2: Z) ,
   [| (retval_2 > 0) |] 
   &&  [| (retval_2 = x_2) |] 
@@ -6644,7 +6755,7 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval
   [| (p_pre_v <> 0) |]
 .
 
-Definition balance_partial_solve_wit_8_aux := 
+Definition balance_partial_solve_wit_9_aux := 
 forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (x_2: Z) (retval_2: Z) ,
   [| (retval_2 > 0) |] 
   &&  [| (retval_2 = x_2) |] 
@@ -6713,12 +6824,13 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval
   **  ((p_pre) # Ptr  |-> p_pre_v)
 .
 
-Definition balance_partial_solve_wit_8 := balance_partial_solve_wit_8_pure -> balance_partial_solve_wit_8_aux.
+Definition balance_partial_solve_wit_9 := balance_partial_solve_wit_9_pure -> balance_partial_solve_wit_9_aux.
 
-Definition balance_partial_solve_wit_9_pure := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
-  [| (retval_2 > 0) |] 
-  &&  [| (retval_2 >= 0) |] 
+Definition balance_partial_solve_wit_10_pure := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (x_2: Z) (retval_2: Z) ,
+  [| (retval_2 < 0) |] 
+  &&  [| (retval_2 <= 0) |] 
+  &&  [| (retval_2 = x_2) |] 
   &&  [| (l <> 0) |] 
   &&  [| (h <= 255) |] 
   &&  [| (h >= 0) |] 
@@ -6735,7 +6847,7 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval
   &&  [| (p_pre_v <> 0) |]
   &&  (single_tree_node l k_3 v_3 h_4 l_3 r_3 )
   **  (store_non_empty_tree l_3 )
-  **  (store_tree_shape r_3 )
+  **  (store_non_empty_tree r_3 )
   **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
   **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
   **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
@@ -6756,13 +6868,15 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval
   **  ((( &( "p" ) )) # Ptr  |-> p_pre)
   **  ((p_pre) # Ptr  |-> p_pre_v)
 |--
-  [| (p_pre_v <> 0) |]
+  [| (p_pre_v <> 0) |] 
+  &&  [| (l <> 0) |]
 .
 
-Definition balance_partial_solve_wit_9_aux := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
-  [| (retval_2 > 0) |] 
-  &&  [| (retval_2 >= 0) |] 
+Definition balance_partial_solve_wit_10_aux := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (x_2: Z) (retval_2: Z) ,
+  [| (retval_2 < 0) |] 
+  &&  [| (retval_2 <= 0) |] 
+  &&  [| (retval_2 = x_2) |] 
   &&  [| (l <> 0) |] 
   &&  [| (h <= 255) |] 
   &&  [| (h >= 0) |] 
@@ -6779,7 +6893,7 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval
   &&  [| (p_pre_v <> 0) |]
   &&  (single_tree_node l k_3 v_3 h_4 l_3 r_3 )
   **  (store_non_empty_tree l_3 )
-  **  (store_tree_shape r_3 )
+  **  (store_non_empty_tree r_3 )
   **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
   **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
   **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
@@ -6796,14 +6910,16 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval
 |--
   EX (tr2_3: tree)  (tr1_3: tree)  (h_5: Z)  (tr_3: tree) ,
   [| (p_pre_v <> 0) |] 
+  &&  [| (l <> 0) |] 
   &&  [| (h_4 <= 255) |] 
   &&  [| (h_4 >= 0) |] 
   &&  [| (h_5 <= 255) |] 
   &&  [| (h_5 >= 0) |] 
   &&  [| (tr_3 = (make_tree (tr1_3) (tr2_3))) |] 
   &&  [| (l_3 <> 0) |] 
-  &&  [| (retval_2 > 0) |] 
-  &&  [| (retval_2 >= 0) |] 
+  &&  [| (retval_2 < 0) |] 
+  &&  [| (retval_2 <= 0) |] 
+  &&  [| (retval_2 = x_2) |] 
   &&  [| (l <> 0) |] 
   &&  [| (h <= 255) |] 
   &&  [| (h >= 0) |] 
@@ -6819,14 +6935,129 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval
   &&  [| (retval = x) |] 
   &&  [| (p_pre_v <> 0) |]
   &&  (single_tree_node p_pre_v k v h l r )
-  **  (store_non_empty_tree l )
+  **  (single_tree_node l k_3 v_3 h_4 l_3 r_3 )
   **  (store_tree_shape r )
+  **  (store_tree_shape l_3 )
+  **  (store_non_empty_tree r_3 )
   **  ((p_pre) # Ptr  |-> p_pre_v)
 .
 
-Definition balance_partial_solve_wit_9 := balance_partial_solve_wit_9_pure -> balance_partial_solve_wit_9_aux.
+Definition balance_partial_solve_wit_10 := balance_partial_solve_wit_10_pure -> balance_partial_solve_wit_10_aux.
 
-Definition balance_partial_solve_wit_10_pure := 
+Definition balance_partial_solve_wit_11_pure := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
+  [| (retval_2 < 0) |] 
+  &&  [| (retval_2 <= 0) |] 
+  &&  [| (retval_2 <= 0) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval > 1) |] 
+  &&  [| (retval = x) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (single_tree_node l k_3 v_3 h_4 l_3 r_3 )
+  **  (store_tree_shape l_3 )
+  **  (store_non_empty_tree r_3 )
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  ((&((r)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
+  **  ((&((r)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
+  **  ((&((r)  # "tree" ->ₛ "height")) # UChar  |-> h_3)
+  **  ((&((r)  # "tree" ->ₛ "value")) # Int  |-> v_2)
+  **  ((&((r)  # "tree" ->ₛ "key")) # Int  |-> k_2)
+  **  (store_tree r_2 tr2_2 )
+  **  (store_tree l_2 tr1_2 )
+  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| (p_pre_v <> 0) |] 
+  &&  [| (l <> 0) |]
+.
+
+Definition balance_partial_solve_wit_11_aux := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
+  [| (retval_2 < 0) |] 
+  &&  [| (retval_2 <= 0) |] 
+  &&  [| (retval_2 <= 0) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval > 1) |] 
+  &&  [| (retval = x) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (single_tree_node l k_3 v_3 h_4 l_3 r_3 )
+  **  (store_tree_shape l_3 )
+  **  (store_non_empty_tree r_3 )
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  ((&((r)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
+  **  ((&((r)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
+  **  ((&((r)  # "tree" ->ₛ "height")) # UChar  |-> h_3)
+  **  ((&((r)  # "tree" ->ₛ "value")) # Int  |-> v_2)
+  **  ((&((r)  # "tree" ->ₛ "key")) # Int  |-> k_2)
+  **  (store_tree r_2 tr2_2 )
+  **  (store_tree l_2 tr1_2 )
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| (p_pre_v <> 0) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (h_4 <= 255) |] 
+  &&  [| (h_4 >= 0) |] 
+  &&  [| (retval_2 < 0) |] 
+  &&  [| (retval_2 <= 0) |] 
+  &&  [| (retval_2 <= 0) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
+  &&  [| (retval > 1) |] 
+  &&  [| (retval = x) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (single_tree_node p_pre_v k v h l r )
+  **  (single_tree_node l k_3 v_3 h_4 l_3 r_3 )
+  **  (store_tree_shape r )
+  **  (store_tree_shape l_3 )
+  **  (store_non_empty_tree r_3 )
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+.
+
+Definition balance_partial_solve_wit_11 := balance_partial_solve_wit_11_pure -> balance_partial_solve_wit_11_aux.
+
+Definition balance_partial_solve_wit_12_pure := 
 forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (x: Z) (retval_2: Z) ,
   [| (retval_2 < 0) |] 
   &&  [| (retval_2 <= 0) |] 
@@ -6862,7 +7093,7 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (t
   &&  [| (l <> 0) |]
 .
 
-Definition balance_partial_solve_wit_10_aux := 
+Definition balance_partial_solve_wit_12_aux := 
 forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (x: Z) (retval_2: Z) ,
   [| (retval_2 < 0) |] 
   &&  [| (retval_2 <= 0) |] 
@@ -6918,9 +7149,9 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (t
   **  ((p_pre) # Ptr  |-> p_pre_v)
 .
 
-Definition balance_partial_solve_wit_10 := balance_partial_solve_wit_10_pure -> balance_partial_solve_wit_10_aux.
+Definition balance_partial_solve_wit_12 := balance_partial_solve_wit_12_pure -> balance_partial_solve_wit_12_aux.
 
-Definition balance_partial_solve_wit_11_pure := 
+Definition balance_partial_solve_wit_13_pure := 
 forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
   [| (retval_2 < 0) |] 
   &&  [| (retval_2 <= 0) |] 
@@ -6956,7 +7187,7 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (t
   &&  [| (l <> 0) |]
 .
 
-Definition balance_partial_solve_wit_11_aux := 
+Definition balance_partial_solve_wit_13_aux := 
 forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
   [| (retval_2 < 0) |] 
   &&  [| (retval_2 <= 0) |] 
@@ -7004,237 +7235,6 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (t
   **  (store_tree_shape r )
   **  (store_tree_shape l_2 )
   **  (store_non_empty_tree r_2 )
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-.
-
-Definition balance_partial_solve_wit_11 := balance_partial_solve_wit_11_pure -> balance_partial_solve_wit_11_aux.
-
-Definition balance_partial_solve_wit_12_pure := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (x_2: Z) (retval_2: Z) ,
-  [| (retval_2 < 0) |] 
-  &&  [| (retval_2 <= 0) |] 
-  &&  [| (retval_2 = x_2) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval > 1) |] 
-  &&  [| (retval = x) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node l k_3 v_3 h_4 l_3 r_3 )
-  **  (store_non_empty_tree l_3 )
-  **  (store_non_empty_tree r_3 )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  ((&((r)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
-  **  ((&((r)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
-  **  ((&((r)  # "tree" ->ₛ "height")) # UChar  |-> h_3)
-  **  ((&((r)  # "tree" ->ₛ "value")) # Int  |-> v_2)
-  **  ((&((r)  # "tree" ->ₛ "key")) # Int  |-> k_2)
-  **  (store_tree r_2 tr2_2 )
-  **  (store_tree l_2 tr1_2 )
-  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| (p_pre_v <> 0) |] 
-  &&  [| (l <> 0) |]
-.
-
-Definition balance_partial_solve_wit_12_aux := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (x_2: Z) (retval_2: Z) ,
-  [| (retval_2 < 0) |] 
-  &&  [| (retval_2 <= 0) |] 
-  &&  [| (retval_2 = x_2) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval > 1) |] 
-  &&  [| (retval = x) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node l k_3 v_3 h_4 l_3 r_3 )
-  **  (store_non_empty_tree l_3 )
-  **  (store_non_empty_tree r_3 )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  ((&((r)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
-  **  ((&((r)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
-  **  ((&((r)  # "tree" ->ₛ "height")) # UChar  |-> h_3)
-  **  ((&((r)  # "tree" ->ₛ "value")) # Int  |-> v_2)
-  **  ((&((r)  # "tree" ->ₛ "key")) # Int  |-> k_2)
-  **  (store_tree r_2 tr2_2 )
-  **  (store_tree l_2 tr1_2 )
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  EX (tr2_3: tree)  (tr1_3: tree)  (h_5: Z)  (tr_3: tree) ,
-  [| (p_pre_v <> 0) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (h_4 <= 255) |] 
-  &&  [| (h_4 >= 0) |] 
-  &&  [| (h_5 <= 255) |] 
-  &&  [| (h_5 >= 0) |] 
-  &&  [| (tr_3 = (make_tree (tr1_3) (tr2_3))) |] 
-  &&  [| (l_3 <> 0) |] 
-  &&  [| (retval_2 < 0) |] 
-  &&  [| (retval_2 <= 0) |] 
-  &&  [| (retval_2 = x_2) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval > 1) |] 
-  &&  [| (retval = x) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node p_pre_v k v h l r )
-  **  (single_tree_node l k_3 v_3 h_4 l_3 r_3 )
-  **  (store_tree_shape r )
-  **  (store_tree_shape l_3 )
-  **  (store_non_empty_tree r_3 )
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-.
-
-Definition balance_partial_solve_wit_12 := balance_partial_solve_wit_12_pure -> balance_partial_solve_wit_12_aux.
-
-Definition balance_partial_solve_wit_13_pure := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
-  [| (retval_2 < 0) |] 
-  &&  [| (retval_2 <= 0) |] 
-  &&  [| (retval_2 <= 0) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval > 1) |] 
-  &&  [| (retval = x) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node l k_3 v_3 h_4 l_3 r_3 )
-  **  (store_tree_shape l_3 )
-  **  (store_non_empty_tree r_3 )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  ((&((r)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
-  **  ((&((r)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
-  **  ((&((r)  # "tree" ->ₛ "height")) # UChar  |-> h_3)
-  **  ((&((r)  # "tree" ->ₛ "value")) # Int  |-> v_2)
-  **  ((&((r)  # "tree" ->ₛ "key")) # Int  |-> k_2)
-  **  (store_tree r_2 tr2_2 )
-  **  (store_tree l_2 tr1_2 )
-  **  ((( &( "lbf" ) )) # Int  |-> retval_2)
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| (p_pre_v <> 0) |] 
-  &&  [| (l <> 0) |]
-.
-
-Definition balance_partial_solve_wit_13_aux := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (h_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
-  [| (retval_2 < 0) |] 
-  &&  [| (retval_2 <= 0) |] 
-  &&  [| (retval_2 <= 0) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval > 1) |] 
-  &&  [| (retval = x) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node l k_3 v_3 h_4 l_3 r_3 )
-  **  (store_tree_shape l_3 )
-  **  (store_non_empty_tree r_3 )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  ((&((r)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
-  **  ((&((r)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
-  **  ((&((r)  # "tree" ->ₛ "height")) # UChar  |-> h_3)
-  **  ((&((r)  # "tree" ->ₛ "value")) # Int  |-> v_2)
-  **  ((&((r)  # "tree" ->ₛ "key")) # Int  |-> k_2)
-  **  (store_tree r_2 tr2_2 )
-  **  (store_tree l_2 tr1_2 )
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| (p_pre_v <> 0) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (h_4 <= 255) |] 
-  &&  [| (h_4 >= 0) |] 
-  &&  [| (retval_2 < 0) |] 
-  &&  [| (retval_2 <= 0) |] 
-  &&  [| (retval_2 <= 0) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
-  &&  [| (retval > 1) |] 
-  &&  [| (retval = x) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node p_pre_v k v h l r )
-  **  (single_tree_node l k_3 v_3 h_4 l_3 r_3 )
-  **  (store_tree_shape r )
-  **  (store_tree_shape l_3 )
-  **  (store_non_empty_tree r_3 )
   **  ((p_pre) # Ptr  |-> p_pre_v)
 .
 
@@ -7421,29 +7421,39 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (t
 .
 
 Definition balance_partial_solve_wit_18_pure := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (x: Z) (retval_2: Z) ,
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
   [| (retval_2 < 0) |] 
-  &&  [| (retval_2 = x) |] 
+  &&  [| (retval_2 <= 0) |] 
   &&  [| (r <> 0) |] 
   &&  [| (h <= 255) |] 
   &&  [| (h >= 0) |] 
   &&  [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
   &&  [| (r <> 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
   &&  [| (retval < (-1)) |] 
   &&  [| (retval <= 1) |] 
-  &&  [| (retval <= 0) |] 
+  &&  [| (retval = x) |] 
   &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node r k_2 v_2 h_3 l_2 r_2 )
-  **  (store_non_empty_tree l_2 )
-  **  (store_non_empty_tree r_2 )
+  &&  (single_tree_node r k_3 v_3 h_4 l_3 r_3 )
+  **  (store_tree_shape l_3 )
+  **  (store_non_empty_tree r_3 )
   **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
   **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
   **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
   **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
   **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree l tr )
+  **  ((&((l)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
+  **  ((&((l)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
+  **  ((&((l)  # "tree" ->ₛ "height")) # UChar  |-> h_2)
+  **  ((&((l)  # "tree" ->ₛ "value")) # Int  |-> v_2)
+  **  ((&((l)  # "tree" ->ₛ "key")) # Int  |-> k_2)
+  **  (store_tree r_2 tr2 )
+  **  (store_tree l_2 tr1 )
   **  ((( &( "rbf" ) )) # Int  |-> retval_2)
   **  ((( &( "bf" ) )) # Int  |-> retval)
   **  ((( &( "rh" ) )) # Int  |-> 0)
@@ -7456,55 +7466,65 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (t
 .
 
 Definition balance_partial_solve_wit_18_aux := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (x: Z) (retval_2: Z) ,
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
   [| (retval_2 < 0) |] 
-  &&  [| (retval_2 = x) |] 
+  &&  [| (retval_2 <= 0) |] 
   &&  [| (r <> 0) |] 
   &&  [| (h <= 255) |] 
   &&  [| (h >= 0) |] 
   &&  [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
   &&  [| (r <> 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
   &&  [| (retval < (-1)) |] 
   &&  [| (retval <= 1) |] 
-  &&  [| (retval <= 0) |] 
+  &&  [| (retval = x) |] 
   &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node r k_2 v_2 h_3 l_2 r_2 )
-  **  (store_non_empty_tree l_2 )
-  **  (store_non_empty_tree r_2 )
+  &&  (single_tree_node r k_3 v_3 h_4 l_3 r_3 )
+  **  (store_tree_shape l_3 )
+  **  (store_non_empty_tree r_3 )
   **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
   **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
   **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
   **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
   **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree l tr )
+  **  ((&((l)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
+  **  ((&((l)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
+  **  ((&((l)  # "tree" ->ₛ "height")) # UChar  |-> h_2)
+  **  ((&((l)  # "tree" ->ₛ "value")) # Int  |-> v_2)
+  **  ((&((l)  # "tree" ->ₛ "key")) # Int  |-> k_2)
+  **  (store_tree r_2 tr2 )
+  **  (store_tree l_2 tr1 )
   **  ((p_pre) # Ptr  |-> p_pre_v)
 |--
-  EX (tr2_3: tree)  (tr1_3: tree)  (h_5: Z)  (tr_4: tree)  (tr2_2: tree)  (tr1_2: tree)  (h_4: Z)  (tr_3: tree) ,
+  EX (tr2_3: tree)  (tr1_3: tree)  (h_5: Z)  (tr_3: tree) ,
   [| (p_pre_v <> 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
   &&  [| (h_4 <= 255) |] 
   &&  [| (h_4 >= 0) |] 
   &&  [| (h_5 <= 255) |] 
   &&  [| (h_5 >= 0) |] 
-  &&  [| (tr_4 = (make_tree (tr1_3) (tr2_3))) |] 
-  &&  [| (r_2 <> 0) |] 
-  &&  [| (tr_3 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (l_2 <> 0) |] 
+  &&  [| (tr_3 = (make_tree (tr1_3) (tr2_3))) |] 
+  &&  [| (r_3 <> 0) |] 
   &&  [| (retval_2 < 0) |] 
-  &&  [| (retval_2 = x) |] 
+  &&  [| (retval_2 <= 0) |] 
   &&  [| (r <> 0) |] 
   &&  [| (h <= 255) |] 
   &&  [| (h >= 0) |] 
   &&  [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
   &&  [| (r <> 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (l <> 0) |] 
   &&  [| (retval < (-1)) |] 
   &&  [| (retval <= 1) |] 
-  &&  [| (retval <= 0) |] 
+  &&  [| (retval = x) |] 
   &&  [| (p_pre_v <> 0) |]
   &&  (single_tree_node p_pre_v k v h l r )
   **  (store_tree_shape l )
@@ -7515,96 +7535,6 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (t
 Definition balance_partial_solve_wit_18 := balance_partial_solve_wit_18_pure -> balance_partial_solve_wit_18_aux.
 
 Definition balance_partial_solve_wit_19_pure := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
-  [| (retval_2 < 0) |] 
-  &&  [| (retval_2 <= 0) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (retval < (-1)) |] 
-  &&  [| (retval <= 1) |] 
-  &&  [| (retval <= 0) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node r k_2 v_2 h_3 l_2 r_2 )
-  **  (store_tree_shape l_2 )
-  **  (store_non_empty_tree r_2 )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree l tr )
-  **  ((( &( "rbf" ) )) # Int  |-> retval_2)
-  **  ((( &( "bf" ) )) # Int  |-> retval)
-  **  ((( &( "rh" ) )) # Int  |-> 0)
-  **  ((( &( "lh" ) )) # Int  |-> 0)
-  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
-  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| (p_pre_v <> 0) |]
-.
-
-Definition balance_partial_solve_wit_19_aux := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
-  [| (retval_2 < 0) |] 
-  &&  [| (retval_2 <= 0) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (retval < (-1)) |] 
-  &&  [| (retval <= 1) |] 
-  &&  [| (retval <= 0) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node r k_2 v_2 h_3 l_2 r_2 )
-  **  (store_tree_shape l_2 )
-  **  (store_non_empty_tree r_2 )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree l tr )
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  EX (tr2_2: tree)  (tr1_2: tree)  (h_4: Z)  (tr_3: tree) ,
-  [| (p_pre_v <> 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (h_4 <= 255) |] 
-  &&  [| (h_4 >= 0) |] 
-  &&  [| (tr_3 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (r_2 <> 0) |] 
-  &&  [| (retval_2 < 0) |] 
-  &&  [| (retval_2 <= 0) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
-  &&  [| (r <> 0) |] 
-  &&  [| (retval < (-1)) |] 
-  &&  [| (retval <= 1) |] 
-  &&  [| (retval <= 0) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node p_pre_v k v h l r )
-  **  (store_tree_shape l )
-  **  (store_non_empty_tree r )
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-.
-
-Definition balance_partial_solve_wit_19 := balance_partial_solve_wit_19_pure -> balance_partial_solve_wit_19_aux.
-
-Definition balance_partial_solve_wit_20_pure := 
 forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (x_2: Z) (retval_2: Z) ,
   [| (retval_2 < 0) |] 
   &&  [| (retval_2 = x_2) |] 
@@ -7649,7 +7579,7 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval
   [| (p_pre_v <> 0) |]
 .
 
-Definition balance_partial_solve_wit_20_aux := 
+Definition balance_partial_solve_wit_19_aux := 
 forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (x_2: Z) (retval_2: Z) ,
   [| (retval_2 < 0) |] 
   &&  [| (retval_2 = x_2) |] 
@@ -7720,10 +7650,10 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval
   **  ((p_pre) # Ptr  |-> p_pre_v)
 .
 
-Definition balance_partial_solve_wit_20 := balance_partial_solve_wit_20_pure -> balance_partial_solve_wit_20_aux.
+Definition balance_partial_solve_wit_19 := balance_partial_solve_wit_19_pure -> balance_partial_solve_wit_19_aux.
 
-Definition balance_partial_solve_wit_21_pure := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
+Definition balance_partial_solve_wit_20_pure := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
   [| (retval_2 < 0) |] 
   &&  [| (retval_2 <= 0) |] 
   &&  [| (r <> 0) |] 
@@ -7731,31 +7661,111 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval
   &&  [| (h >= 0) |] 
   &&  [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
   &&  [| (r <> 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
   &&  [| (retval < (-1)) |] 
   &&  [| (retval <= 1) |] 
-  &&  [| (retval = x) |] 
+  &&  [| (retval <= 0) |] 
   &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node r k_3 v_3 h_4 l_3 r_3 )
-  **  (store_tree_shape l_3 )
-  **  (store_non_empty_tree r_3 )
+  &&  (single_tree_node r k_2 v_2 h_3 l_2 r_2 )
+  **  (store_tree_shape l_2 )
+  **  (store_non_empty_tree r_2 )
   **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
   **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
   **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
   **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
   **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  ((&((l)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
-  **  ((&((l)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
-  **  ((&((l)  # "tree" ->ₛ "height")) # UChar  |-> h_2)
-  **  ((&((l)  # "tree" ->ₛ "value")) # Int  |-> v_2)
-  **  ((&((l)  # "tree" ->ₛ "key")) # Int  |-> k_2)
-  **  (store_tree r_2 tr2 )
-  **  (store_tree l_2 tr1 )
+  **  (store_tree l tr )
+  **  ((( &( "rbf" ) )) # Int  |-> retval_2)
+  **  ((( &( "bf" ) )) # Int  |-> retval)
+  **  ((( &( "rh" ) )) # Int  |-> 0)
+  **  ((( &( "lh" ) )) # Int  |-> 0)
+  **  ((( &( "root" ) )) # Ptr  |-> p_pre_v)
+  **  ((( &( "p" ) )) # Ptr  |-> p_pre)
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| (p_pre_v <> 0) |]
+.
+
+Definition balance_partial_solve_wit_20_aux := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (retval_2: Z) ,
+  [| (retval_2 < 0) |] 
+  &&  [| (retval_2 <= 0) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (retval < (-1)) |] 
+  &&  [| (retval <= 1) |] 
+  &&  [| (retval <= 0) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (single_tree_node r k_2 v_2 h_3 l_2 r_2 )
+  **  (store_tree_shape l_2 )
+  **  (store_non_empty_tree r_2 )
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  (store_tree l tr )
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  EX (tr2_2: tree)  (tr1_2: tree)  (h_4: Z)  (tr_3: tree) ,
+  [| (p_pre_v <> 0) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
+  &&  [| (h_4 <= 255) |] 
+  &&  [| (h_4 >= 0) |] 
+  &&  [| (tr_3 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (r_2 <> 0) |] 
+  &&  [| (retval_2 < 0) |] 
+  &&  [| (retval_2 <= 0) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (retval < (-1)) |] 
+  &&  [| (retval <= 1) |] 
+  &&  [| (retval <= 0) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (single_tree_node p_pre_v k v h l r )
+  **  (store_tree_shape l )
+  **  (store_non_empty_tree r )
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+.
+
+Definition balance_partial_solve_wit_20 := balance_partial_solve_wit_20_pure -> balance_partial_solve_wit_20_aux.
+
+Definition balance_partial_solve_wit_21_pure := 
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (x: Z) (retval_2: Z) ,
+  [| (retval_2 < 0) |] 
+  &&  [| (retval_2 = x) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
+  &&  [| (r <> 0) |] 
+  &&  [| (retval < (-1)) |] 
+  &&  [| (retval <= 1) |] 
+  &&  [| (retval <= 0) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (single_tree_node r k_2 v_2 h_3 l_2 r_2 )
+  **  (store_non_empty_tree l_2 )
+  **  (store_non_empty_tree r_2 )
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  (store_tree l tr )
   **  ((( &( "rbf" ) )) # Int  |-> retval_2)
   **  ((( &( "bf" ) )) # Int  |-> retval)
   **  ((( &( "rh" ) )) # Int  |-> 0)
@@ -7768,65 +7778,55 @@ forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval
 .
 
 Definition balance_partial_solve_wit_21_aux := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (x: Z) (retval: Z) (tr: tree) (k_2: Z) (v_2: Z) (h_2: Z) (l_2: Z) (r_2: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_3: Z) (tr1_2: tree) (tr2_2: tree) (k_3: Z) (v_3: Z) (h_4: Z) (l_3: Z) (r_3: Z) (retval_2: Z) ,
+forall (p_pre: Z) (p_pre_v: Z) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (retval: Z) (tr: tree) (tr_2: tree) (h_2: Z) (tr1: tree) (tr2: tree) (k_2: Z) (v_2: Z) (h_3: Z) (l_2: Z) (r_2: Z) (x: Z) (retval_2: Z) ,
   [| (retval_2 < 0) |] 
-  &&  [| (retval_2 <= 0) |] 
+  &&  [| (retval_2 = x) |] 
   &&  [| (r <> 0) |] 
   &&  [| (h <= 255) |] 
   &&  [| (h >= 0) |] 
   &&  [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
   &&  [| (r <> 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
   &&  [| (retval < (-1)) |] 
   &&  [| (retval <= 1) |] 
-  &&  [| (retval = x) |] 
+  &&  [| (retval <= 0) |] 
   &&  [| (p_pre_v <> 0) |]
-  &&  (single_tree_node r k_3 v_3 h_4 l_3 r_3 )
-  **  (store_tree_shape l_3 )
-  **  (store_non_empty_tree r_3 )
+  &&  (single_tree_node r k_2 v_2 h_3 l_2 r_2 )
+  **  (store_non_empty_tree l_2 )
+  **  (store_non_empty_tree r_2 )
   **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
   **  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> l)
   **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
   **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
   **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  ((&((l)  # "tree" ->ₛ "rchild")) # Ptr  |-> r_2)
-  **  ((&((l)  # "tree" ->ₛ "lchild")) # Ptr  |-> l_2)
-  **  ((&((l)  # "tree" ->ₛ "height")) # UChar  |-> h_2)
-  **  ((&((l)  # "tree" ->ₛ "value")) # Int  |-> v_2)
-  **  ((&((l)  # "tree" ->ₛ "key")) # Int  |-> k_2)
-  **  (store_tree r_2 tr2 )
-  **  (store_tree l_2 tr1 )
+  **  (store_tree l tr )
   **  ((p_pre) # Ptr  |-> p_pre_v)
 |--
-  EX (tr2_3: tree)  (tr1_3: tree)  (h_5: Z)  (tr_3: tree) ,
+  EX (tr2_3: tree)  (tr1_3: tree)  (h_5: Z)  (tr_4: tree)  (tr2_2: tree)  (tr1_2: tree)  (h_4: Z)  (tr_3: tree) ,
   [| (p_pre_v <> 0) |] 
+  &&  [| (h_3 <= 255) |] 
+  &&  [| (h_3 >= 0) |] 
   &&  [| (h_4 <= 255) |] 
   &&  [| (h_4 >= 0) |] 
   &&  [| (h_5 <= 255) |] 
   &&  [| (h_5 >= 0) |] 
-  &&  [| (tr_3 = (make_tree (tr1_3) (tr2_3))) |] 
-  &&  [| (r_3 <> 0) |] 
+  &&  [| (tr_4 = (make_tree (tr1_3) (tr2_3))) |] 
+  &&  [| (r_2 <> 0) |] 
+  &&  [| (tr_3 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (l_2 <> 0) |] 
   &&  [| (retval_2 < 0) |] 
-  &&  [| (retval_2 <= 0) |] 
+  &&  [| (retval_2 = x) |] 
   &&  [| (r <> 0) |] 
   &&  [| (h <= 255) |] 
   &&  [| (h >= 0) |] 
   &&  [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
-  &&  [| (h_3 <= 255) |] 
-  &&  [| (h_3 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (tr_2 = (make_tree (tr1) (tr2))) |] 
   &&  [| (r <> 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (l <> 0) |] 
   &&  [| (retval < (-1)) |] 
   &&  [| (retval <= 1) |] 
-  &&  [| (retval = x) |] 
+  &&  [| (retval <= 0) |] 
   &&  [| (p_pre_v <> 0) |]
   &&  (single_tree_node p_pre_v k v h l r )
   **  (store_tree_shape l )
@@ -8338,41 +8338,6 @@ forall (value_pre: Z) (key_pre: Z) (p_pre: Z) (p_pre_v: Z) (tr: tree) (retval: Z
 .
 
 Definition insert_return_wit_1 := 
-forall (value_pre: Z) (key_pre: Z) (p_pre: Z) (p_pre_v_2: Z) (tr: tree) (retval: Z) ,
-  [| (retval <> 0) |] 
-  &&  [| (tr = empty) |] 
-  &&  [| (p_pre_v_2 = 0) |]
-  &&  ((&((retval)  # "tree" ->ₛ "key")) # Int  |-> key_pre)
-  **  ((&((retval)  # "tree" ->ₛ "height")) # UChar  |-> 1)
-  **  ((&((retval)  # "tree" ->ₛ "value")) # Int  |-> value_pre)
-  **  ((&((retval)  # "tree" ->ₛ "lchild")) # Ptr  |-> 0)
-  **  ((&((retval)  # "tree" ->ₛ "rchild")) # Ptr  |-> 0)
-  **  ((p_pre) # Ptr  |-> retval)
-|--
-  EX (p_pre_v: Z) ,
-  ((p_pre) # Ptr  |-> p_pre_v)
-  **  (store_tree_shape p_pre_v )
-.
-
-Definition insert_return_wit_2 := 
-forall (key_pre: Z) (p_pre: Z) (p_pre_v_2: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) ,
-  [| (key_pre <= k) |] 
-  &&  [| (key_pre >= k) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (p_pre_v_2 <> 0) |]
-  &&  (single_tree_node p_pre_v_2 k v h l r )
-  **  (store_tree r tr2 )
-  **  (store_tree l tr1 )
-  **  ((p_pre) # Ptr  |-> p_pre_v_2)
-|--
-  EX (p_pre_v: Z) ,
-  ((p_pre) # Ptr  |-> p_pre_v)
-  **  (store_tree_shape p_pre_v )
-.
-
-Definition insert_return_wit_3_1 := 
 forall (key_pre: Z) (p_pre: Z) (p_pre_v_2: Z) (tr: tree) (k: Z) (h: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_2: Z) (tr1_2: tree) (tr2_2: tree) (p_callee_v: Z) ,
   [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
@@ -8392,7 +8357,7 @@ forall (key_pre: Z) (p_pre: Z) (p_pre_v_2: Z) (tr: tree) (k: Z) (h: Z) (tr1: tre
   **  (store_tree_shape p_pre_v )
 .
 
-Definition insert_return_wit_3_2 := 
+Definition insert_return_wit_2 := 
 forall (key_pre: Z) (p_pre: Z) (p_pre_v_2: Z) (tr: tree) (k: Z) (h: Z) (tr1: tree) (tr2: tree) (tr_2: tree) (h_2: Z) (tr1_2: tree) (tr2_2: tree) (p_callee_v: Z) ,
   [| (h_2 <= 255) |] 
   &&  [| (h_2 >= 0) |] 
@@ -8405,6 +8370,41 @@ forall (key_pre: Z) (p_pre: Z) (p_pre_v_2: Z) (tr: tree) (k: Z) (h: Z) (tr1: tre
   &&  [| (p_pre_v_2 <> 0) |]
   &&  ((p_pre) # Ptr  |-> p_callee_v)
   **  (store_tree_shape p_callee_v )
+|--
+  EX (p_pre_v: Z) ,
+  ((p_pre) # Ptr  |-> p_pre_v)
+  **  (store_tree_shape p_pre_v )
+.
+
+Definition insert_return_wit_3 := 
+forall (value_pre: Z) (key_pre: Z) (p_pre: Z) (p_pre_v_2: Z) (tr: tree) (retval: Z) ,
+  [| (retval <> 0) |] 
+  &&  [| (tr = empty) |] 
+  &&  [| (p_pre_v_2 = 0) |]
+  &&  ((&((retval)  # "tree" ->ₛ "key")) # Int  |-> key_pre)
+  **  ((&((retval)  # "tree" ->ₛ "height")) # UChar  |-> 1)
+  **  ((&((retval)  # "tree" ->ₛ "value")) # Int  |-> value_pre)
+  **  ((&((retval)  # "tree" ->ₛ "lchild")) # Ptr  |-> 0)
+  **  ((&((retval)  # "tree" ->ₛ "rchild")) # Ptr  |-> 0)
+  **  ((p_pre) # Ptr  |-> retval)
+|--
+  EX (p_pre_v: Z) ,
+  ((p_pre) # Ptr  |-> p_pre_v)
+  **  (store_tree_shape p_pre_v )
+.
+
+Definition insert_return_wit_4 := 
+forall (key_pre: Z) (p_pre: Z) (p_pre_v_2: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (r: Z) (tr1: tree) (tr2: tree) ,
+  [| (key_pre <= k) |] 
+  &&  [| (key_pre >= k) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (p_pre_v_2 <> 0) |]
+  &&  (single_tree_node p_pre_v_2 k v h l r )
+  **  (store_tree r tr2 )
+  **  (store_tree l tr1 )
+  **  ((p_pre) # Ptr  |-> p_pre_v_2)
 |--
   EX (p_pre_v: Z) ,
   ((p_pre) # Ptr  |-> p_pre_v)
@@ -8424,12 +8424,12 @@ forall (p_pre: Z) (p_pre_v: Z) ,
 .
 
 Definition insert_partial_solve_wit_2 := 
-forall (p_pre: Z) (p_pre_v: Z) (k: Z) ,
+forall (p_pre: Z) (p_pre_v: Z) ,
   [| (p_pre_v <> 0) |]
   &&  ((p_pre) # Ptr  |-> p_pre_v)
   **  (store_tree_shape p_pre_v )
 |--
-  EX (tr2: tree)  (tr1: tree)  (r: Z)  (l: Z)  (h: Z)  (v: Z)  (tr: tree) ,
+  EX (k: Z)  (tr2: tree)  (tr1: tree)  (r: Z)  (l: Z)  (h: Z)  (v: Z)  (tr: tree) ,
   [| (h <= 255) |] 
   &&  [| (h >= 0) |] 
   &&  [| (tr = (make_tree (tr1) (tr2))) |] 
@@ -8528,31 +8528,6 @@ forall (key_pre: Z) (p_pre: Z) (p_pre_v: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: 
 .
 
 Definition insert_partial_solve_wit_6 := 
-forall (key_pre: Z) (p_pre: Z) (p_pre_v: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (r: Z) (tr1: tree) (tr2: tree) (p_callee_v: Z) ,
-  [| (key_pre < k) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> p_callee_v)
-  **  (store_tree_shape p_callee_v )
-  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
-  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
-  **  (store_tree r tr2 )
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  [| (key_pre < k) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (store_non_empty_tree p_pre_v )
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-.
-
-Definition insert_partial_solve_wit_7 := 
 forall (key_pre: Z) (p_pre: Z) (p_pre_v: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: Z) (tr1: tree) (tr2: tree) (p_callee_v: Z) ,
   [| (key_pre > k) |] 
   &&  [| (key_pre >= k) |] 
@@ -8579,7 +8554,56 @@ forall (key_pre: Z) (p_pre: Z) (p_pre_v: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (l: 
   **  ((p_pre) # Ptr  |-> p_pre_v)
 .
 
+Definition insert_partial_solve_wit_7 := 
+forall (key_pre: Z) (p_pre: Z) (p_pre_v: Z) (tr: tree) (k: Z) (v: Z) (h: Z) (r: Z) (tr1: tree) (tr2: tree) (p_callee_v: Z) ,
+  [| (key_pre < k) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  ((&((p_pre_v)  # "tree" ->ₛ "lchild")) # Ptr  |-> p_callee_v)
+  **  (store_tree_shape p_callee_v )
+  **  ((&((p_pre_v)  # "tree" ->ₛ "rchild")) # Ptr  |-> r)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "height")) # UChar  |-> h)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "value")) # Int  |-> v)
+  **  ((&((p_pre_v)  # "tree" ->ₛ "key")) # Int  |-> k)
+  **  (store_tree r tr2 )
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  [| (key_pre < k) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (store_non_empty_tree p_pre_v )
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+.
+
 Definition insert_partial_solve_wit_8 := 
+forall (key_pre: Z) (p_pre: Z) (p_pre_v: Z) (tr: tree) (k: Z) (h: Z) (tr1: tree) (tr2: tree) ,
+  [| (key_pre < k) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  (store_non_empty_tree p_pre_v )
+  **  ((p_pre) # Ptr  |-> p_pre_v)
+|--
+  EX (tr2_2: tree)  (tr1_2: tree)  (h_2: Z)  (tr_2: tree) ,
+  [| (h_2 <= 255) |] 
+  &&  [| (h_2 >= 0) |] 
+  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
+  &&  [| (p_pre_v <> 0) |] 
+  &&  [| (key_pre < k) |] 
+  &&  [| (h <= 255) |] 
+  &&  [| (h >= 0) |] 
+  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
+  &&  [| (p_pre_v <> 0) |]
+  &&  ((p_pre) # Ptr  |-> p_pre_v)
+  **  (store_tree_shape p_pre_v )
+.
+
+Definition insert_partial_solve_wit_9 := 
 forall (key_pre: Z) (p_pre: Z) (p_pre_v: Z) (tr: tree) (k: Z) (h: Z) (tr1: tree) (tr2: tree) ,
   [| (key_pre > k) |] 
   &&  [| (key_pre >= k) |] 
@@ -8597,30 +8621,6 @@ forall (key_pre: Z) (p_pre: Z) (p_pre_v: Z) (tr: tree) (k: Z) (h: Z) (tr1: tree)
   &&  [| (p_pre_v <> 0) |] 
   &&  [| (key_pre > k) |] 
   &&  [| (key_pre >= k) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  ((p_pre) # Ptr  |-> p_pre_v)
-  **  (store_tree_shape p_pre_v )
-.
-
-Definition insert_partial_solve_wit_9 := 
-forall (key_pre: Z) (p_pre: Z) (p_pre_v: Z) (tr: tree) (k: Z) (h: Z) (tr1: tree) (tr2: tree) ,
-  [| (key_pre < k) |] 
-  &&  [| (h <= 255) |] 
-  &&  [| (h >= 0) |] 
-  &&  [| (tr = (make_tree (tr1) (tr2))) |] 
-  &&  [| (p_pre_v <> 0) |]
-  &&  (store_non_empty_tree p_pre_v )
-  **  ((p_pre) # Ptr  |-> p_pre_v)
-|--
-  EX (tr2_2: tree)  (tr1_2: tree)  (h_2: Z)  (tr_2: tree) ,
-  [| (h_2 <= 255) |] 
-  &&  [| (h_2 >= 0) |] 
-  &&  [| (tr_2 = (make_tree (tr1_2) (tr2_2))) |] 
-  &&  [| (p_pre_v <> 0) |] 
-  &&  [| (key_pre < k) |] 
   &&  [| (h <= 255) |] 
   &&  [| (h >= 0) |] 
   &&  [| (tr = (make_tree (tr1) (tr2))) |] 
@@ -8652,12 +8652,12 @@ Axiom proof_of_update_height_safety_wit_15 : update_height_safety_wit_15.
 Axiom proof_of_update_height_safety_wit_16 : update_height_safety_wit_16.
 Axiom proof_of_update_height_safety_wit_17 : update_height_safety_wit_17.
 Axiom proof_of_update_height_safety_wit_18 : update_height_safety_wit_18.
-Axiom proof_of_update_height_return_wit_1_1 : update_height_return_wit_1_1.
-Axiom proof_of_update_height_return_wit_1_2 : update_height_return_wit_1_2.
-Axiom proof_of_update_height_return_wit_1_3 : update_height_return_wit_1_3.
-Axiom proof_of_update_height_return_wit_1_4 : update_height_return_wit_1_4.
-Axiom proof_of_update_height_return_wit_1_5 : update_height_return_wit_1_5.
-Axiom proof_of_update_height_return_wit_1_6 : update_height_return_wit_1_6.
+Axiom proof_of_update_height_return_wit_1 : update_height_return_wit_1.
+Axiom proof_of_update_height_return_wit_2 : update_height_return_wit_2.
+Axiom proof_of_update_height_return_wit_3 : update_height_return_wit_3.
+Axiom proof_of_update_height_return_wit_4 : update_height_return_wit_4.
+Axiom proof_of_update_height_return_wit_5 : update_height_return_wit_5.
+Axiom proof_of_update_height_return_wit_6 : update_height_return_wit_6.
 Axiom proof_of_update_height_partial_solve_wit_1 : update_height_partial_solve_wit_1.
 Axiom proof_of_update_height_partial_solve_wit_2 : update_height_partial_solve_wit_2.
 Axiom proof_of_update_height_partial_solve_wit_3 : update_height_partial_solve_wit_3.
@@ -8711,10 +8711,10 @@ Axiom proof_of_balance_factor_safety_wit_9 : balance_factor_safety_wit_9.
 Axiom proof_of_balance_factor_safety_wit_10 : balance_factor_safety_wit_10.
 Axiom proof_of_balance_factor_safety_wit_11 : balance_factor_safety_wit_11.
 Axiom proof_of_balance_factor_return_wit_1 : balance_factor_return_wit_1.
-Axiom proof_of_balance_factor_return_wit_2_1 : balance_factor_return_wit_2_1.
-Axiom proof_of_balance_factor_return_wit_2_2 : balance_factor_return_wit_2_2.
-Axiom proof_of_balance_factor_return_wit_2_3 : balance_factor_return_wit_2_3.
-Axiom proof_of_balance_factor_return_wit_2_4 : balance_factor_return_wit_2_4.
+Axiom proof_of_balance_factor_return_wit_2 : balance_factor_return_wit_2.
+Axiom proof_of_balance_factor_return_wit_3 : balance_factor_return_wit_3.
+Axiom proof_of_balance_factor_return_wit_4 : balance_factor_return_wit_4.
+Axiom proof_of_balance_factor_return_wit_5 : balance_factor_return_wit_5.
 Axiom proof_of_balance_factor_partial_solve_wit_1 : balance_factor_partial_solve_wit_1.
 Axiom proof_of_balance_factor_partial_solve_wit_2 : balance_factor_partial_solve_wit_2.
 Axiom proof_of_balance_factor_partial_solve_wit_3 : balance_factor_partial_solve_wit_3.
@@ -8790,42 +8790,42 @@ Axiom proof_of_balance_safety_wit_63 : balance_safety_wit_63.
 Axiom proof_of_balance_safety_wit_64 : balance_safety_wit_64.
 Axiom proof_of_balance_safety_wit_65 : balance_safety_wit_65.
 Axiom proof_of_balance_safety_wit_66 : balance_safety_wit_66.
-Axiom proof_of_balance_return_wit_1_1 : balance_return_wit_1_1.
-Axiom proof_of_balance_return_wit_1_2 : balance_return_wit_1_2.
-Axiom proof_of_balance_return_wit_1_3 : balance_return_wit_1_3.
-Axiom proof_of_balance_return_wit_1_4 : balance_return_wit_1_4.
-Axiom proof_of_balance_return_wit_2_1 : balance_return_wit_2_1.
-Axiom proof_of_balance_return_wit_2_2 : balance_return_wit_2_2.
-Axiom proof_of_balance_return_wit_2_3 : balance_return_wit_2_3.
-Axiom proof_of_balance_return_wit_2_4 : balance_return_wit_2_4.
-Axiom proof_of_balance_return_wit_3_1 : balance_return_wit_3_1.
-Axiom proof_of_balance_return_wit_3_2 : balance_return_wit_3_2.
-Axiom proof_of_balance_return_wit_3_3 : balance_return_wit_3_3.
-Axiom proof_of_balance_return_wit_3_4 : balance_return_wit_3_4.
-Axiom proof_of_balance_return_wit_3_5 : balance_return_wit_3_5.
-Axiom proof_of_balance_return_wit_3_6 : balance_return_wit_3_6.
-Axiom proof_of_balance_return_wit_3_7 : balance_return_wit_3_7.
-Axiom proof_of_balance_return_wit_3_8 : balance_return_wit_3_8.
-Axiom proof_of_balance_return_wit_4_1 : balance_return_wit_4_1.
-Axiom proof_of_balance_return_wit_4_2 : balance_return_wit_4_2.
-Axiom proof_of_balance_return_wit_4_3 : balance_return_wit_4_3.
-Axiom proof_of_balance_return_wit_4_4 : balance_return_wit_4_4.
-Axiom proof_of_balance_return_wit_5_1 : balance_return_wit_5_1.
-Axiom proof_of_balance_return_wit_5_2 : balance_return_wit_5_2.
-Axiom proof_of_balance_return_wit_5_3 : balance_return_wit_5_3.
-Axiom proof_of_balance_return_wit_5_4 : balance_return_wit_5_4.
-Axiom proof_of_balance_return_wit_6_1 : balance_return_wit_6_1.
-Axiom proof_of_balance_return_wit_6_2 : balance_return_wit_6_2.
-Axiom proof_of_balance_return_wit_6_3 : balance_return_wit_6_3.
-Axiom proof_of_balance_return_wit_6_4 : balance_return_wit_6_4.
-Axiom proof_of_balance_return_wit_6_5 : balance_return_wit_6_5.
-Axiom proof_of_balance_return_wit_6_6 : balance_return_wit_6_6.
-Axiom proof_of_balance_return_wit_6_7 : balance_return_wit_6_7.
-Axiom proof_of_balance_return_wit_6_8 : balance_return_wit_6_8.
-Axiom proof_of_balance_return_wit_7_1 : balance_return_wit_7_1.
-Axiom proof_of_balance_return_wit_7_2 : balance_return_wit_7_2.
-Axiom proof_of_balance_return_wit_7_3 : balance_return_wit_7_3.
-Axiom proof_of_balance_return_wit_7_4 : balance_return_wit_7_4.
+Axiom proof_of_balance_return_wit_1 : balance_return_wit_1.
+Axiom proof_of_balance_return_wit_2 : balance_return_wit_2.
+Axiom proof_of_balance_return_wit_3 : balance_return_wit_3.
+Axiom proof_of_balance_return_wit_4 : balance_return_wit_4.
+Axiom proof_of_balance_return_wit_5 : balance_return_wit_5.
+Axiom proof_of_balance_return_wit_6 : balance_return_wit_6.
+Axiom proof_of_balance_return_wit_7 : balance_return_wit_7.
+Axiom proof_of_balance_return_wit_8 : balance_return_wit_8.
+Axiom proof_of_balance_return_wit_9 : balance_return_wit_9.
+Axiom proof_of_balance_return_wit_10 : balance_return_wit_10.
+Axiom proof_of_balance_return_wit_11 : balance_return_wit_11.
+Axiom proof_of_balance_return_wit_12 : balance_return_wit_12.
+Axiom proof_of_balance_return_wit_13 : balance_return_wit_13.
+Axiom proof_of_balance_return_wit_14 : balance_return_wit_14.
+Axiom proof_of_balance_return_wit_15 : balance_return_wit_15.
+Axiom proof_of_balance_return_wit_16 : balance_return_wit_16.
+Axiom proof_of_balance_return_wit_17 : balance_return_wit_17.
+Axiom proof_of_balance_return_wit_18 : balance_return_wit_18.
+Axiom proof_of_balance_return_wit_19 : balance_return_wit_19.
+Axiom proof_of_balance_return_wit_20 : balance_return_wit_20.
+Axiom proof_of_balance_return_wit_21 : balance_return_wit_21.
+Axiom proof_of_balance_return_wit_22 : balance_return_wit_22.
+Axiom proof_of_balance_return_wit_23 : balance_return_wit_23.
+Axiom proof_of_balance_return_wit_24 : balance_return_wit_24.
+Axiom proof_of_balance_return_wit_25 : balance_return_wit_25.
+Axiom proof_of_balance_return_wit_26 : balance_return_wit_26.
+Axiom proof_of_balance_return_wit_27 : balance_return_wit_27.
+Axiom proof_of_balance_return_wit_28 : balance_return_wit_28.
+Axiom proof_of_balance_return_wit_29 : balance_return_wit_29.
+Axiom proof_of_balance_return_wit_30 : balance_return_wit_30.
+Axiom proof_of_balance_return_wit_31 : balance_return_wit_31.
+Axiom proof_of_balance_return_wit_32 : balance_return_wit_32.
+Axiom proof_of_balance_return_wit_33 : balance_return_wit_33.
+Axiom proof_of_balance_return_wit_34 : balance_return_wit_34.
+Axiom proof_of_balance_return_wit_35 : balance_return_wit_35.
+Axiom proof_of_balance_return_wit_36 : balance_return_wit_36.
 Axiom proof_of_balance_partial_solve_wit_1 : balance_partial_solve_wit_1.
 Axiom proof_of_balance_partial_solve_wit_2 : balance_partial_solve_wit_2.
 Axiom proof_of_balance_partial_solve_wit_3 : balance_partial_solve_wit_3.
@@ -8873,8 +8873,8 @@ Axiom proof_of_insert_safety_wit_3 : insert_safety_wit_3.
 Axiom proof_of_insert_safety_wit_4 : insert_safety_wit_4.
 Axiom proof_of_insert_return_wit_1 : insert_return_wit_1.
 Axiom proof_of_insert_return_wit_2 : insert_return_wit_2.
-Axiom proof_of_insert_return_wit_3_1 : insert_return_wit_3_1.
-Axiom proof_of_insert_return_wit_3_2 : insert_return_wit_3_2.
+Axiom proof_of_insert_return_wit_3 : insert_return_wit_3.
+Axiom proof_of_insert_return_wit_4 : insert_return_wit_4.
 Axiom proof_of_insert_partial_solve_wit_1 : insert_partial_solve_wit_1.
 Axiom proof_of_insert_partial_solve_wit_2 : insert_partial_solve_wit_2.
 Axiom proof_of_insert_partial_solve_wit_3 : insert_partial_solve_wit_3.

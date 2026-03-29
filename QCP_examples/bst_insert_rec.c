@@ -15,9 +15,9 @@ struct tree * insert(struct tree * b, int x, int value)
       With m
       Require
         INT_MIN <= x && x <= INT_MAX &&
-        store_map(b, m)
+        Bst::store_map(b, m)
       Ensure
-        store_map(__return, map_insert(x, value, m))
+        Bst::store_map(__return, map_insert(x, value, m))
    */
 ;
 

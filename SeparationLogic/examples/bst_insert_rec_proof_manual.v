@@ -85,7 +85,7 @@ Qed.
 Lemma proof_of_insert_derive_high_level_spec_by_low_level_spec : insert_derive_high_level_spec_by_low_level_spec.
 Proof.
   pre_process.
-  unfold store_map.
+  unfold Bst.store_map.
   Intros tr.
   Exists tr.
   entailer!.

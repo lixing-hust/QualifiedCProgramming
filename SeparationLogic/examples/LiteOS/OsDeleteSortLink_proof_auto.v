@@ -29,10 +29,10 @@ Proof. Admitted.
 Lemma proof_of_OsDeleteSortLink_safety_wit_2 : OsDeleteSortLink_safety_wit_2.
 Proof. Admitted. 
 
-Lemma proof_of_OsDeleteSortLink_return_wit_1_2 : OsDeleteSortLink_return_wit_1_2.
+Lemma proof_of_OsDeleteSortLink_return_wit_2 : OsDeleteSortLink_return_wit_2.
 Proof. Admitted. 
 
-Lemma proof_of_OsDeleteSortLink_return_wit_1_3 : OsDeleteSortLink_return_wit_1_3.
+Lemma proof_of_OsDeleteSortLink_return_wit_3 : OsDeleteSortLink_return_wit_3.
 Proof. Admitted. 
 
 Lemma proof_of_OsDeleteSortLink_partial_solve_wit_1 : OsDeleteSortLink_partial_solve_wit_1.

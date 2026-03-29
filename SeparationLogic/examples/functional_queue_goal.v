@@ -165,7 +165,7 @@ forall (q_pre: Z) (l: (@list Z)) (x: Z) (q_l2: Z) (q_l1: Z) (l1: (@list Z)) (l2:
   &&  [| ((INT_MIN) <= 0) |]
 .
 
-Definition dequeue_return_wit_1_1 := 
+Definition dequeue_return_wit_1 := 
 forall (q_pre: Z) (l: (@list Z)) (x: Z) (q_l2: Z) (q_l1: Z) (l1: (@list Z)) (l2: (@list Z)) (z: Z) (l1_tail: (@list Z)) (p_callee_v: Z) (retval: Z) ,
   [| (retval = z) |] 
   &&  [| (l1 = (cons (z) (l1_tail))) |] 
@@ -180,7 +180,7 @@ forall (q_pre: Z) (l: (@list Z)) (x: Z) (q_l2: Z) (q_l1: Z) (l1: (@list Z)) (l2:
   &&  (store_queue q_pre l )
 .
 
-Definition dequeue_return_wit_1_2 := 
+Definition dequeue_return_wit_2 := 
 forall (q_pre: Z) (l: (@list Z)) (x: Z) (q_l1: Z) (l1: (@list Z)) (l2: (@list Z)) (p_callee_v: Z) (retval: Z) ,
   [| (retval = x) |] 
   &&  [| (q_l1 = 0) |] 
@@ -287,23 +287,6 @@ forall (q_pre: Z) (l: (@list Z)) (x: Z) (q_l2: Z) (q_l1: Z) (l1: (@list Z)) (l2:
 Definition dequeue_partial_solve_wit_4 := dequeue_partial_solve_wit_4_pure -> dequeue_partial_solve_wit_4_aux.
 
 Definition dequeue_partial_solve_wit_5 := 
-forall (q_pre: Z) (l: (@list Z)) (x: Z) (q_l1: Z) (l1: (@list Z)) (l2: (@list Z)) (retval: Z) ,
-  [| (q_l1 = 0) |] 
-  &&  [| ((cons (x) (l)) = (app (l1) ((rev (l2))))) |]
-  &&  ((&((q_pre)  # "queue" ->ₛ "l1")) # Ptr  |-> retval)
-  **  (sll retval (cons (x) (l)) )
-  **  (sll q_l1 l1 )
-  **  ((&((q_pre)  # "queue" ->ₛ "l2")) # Ptr  |-> 0)
-|--
-  [| (q_l1 = 0) |] 
-  &&  [| ((cons (x) (l)) = (app (l1) ((rev (l2))))) |]
-  &&  ((&((q_pre)  # "queue" ->ₛ "l1")) # Ptr  |-> retval)
-  **  (sll retval (cons (x) (l)) )
-  **  (sll q_l1 l1 )
-  **  ((&((q_pre)  # "queue" ->ₛ "l2")) # Ptr  |-> 0)
-.
-
-Definition dequeue_partial_solve_wit_6 := 
 forall (q_pre: Z) (l: (@list Z)) (x: Z) (q_l2: Z) (q_l1: Z) (l1: (@list Z)) (l2: (@list Z)) (z: Z) (l1_tail: (@list Z)) ,
   [| (l1 = (cons (z) (l1_tail))) |] 
   &&  [| (q_l1 <> 0) |] 
@@ -320,6 +303,23 @@ forall (q_pre: Z) (l: (@list Z)) (x: Z) (q_l2: Z) (q_l1: Z) (l1: (@list Z)) (l2:
   **  (sll q_l1 (cons (z) (l1_tail)) )
   **  ((&((q_pre)  # "queue" ->ₛ "l2")) # Ptr  |-> q_l2)
   **  (sll q_l2 l2 )
+.
+
+Definition dequeue_partial_solve_wit_6 := 
+forall (q_pre: Z) (l: (@list Z)) (x: Z) (q_l1: Z) (l1: (@list Z)) (l2: (@list Z)) (retval: Z) ,
+  [| (q_l1 = 0) |] 
+  &&  [| ((cons (x) (l)) = (app (l1) ((rev (l2))))) |]
+  &&  ((&((q_pre)  # "queue" ->ₛ "l1")) # Ptr  |-> retval)
+  **  (sll retval (cons (x) (l)) )
+  **  (sll q_l1 l1 )
+  **  ((&((q_pre)  # "queue" ->ₛ "l2")) # Ptr  |-> 0)
+|--
+  [| (q_l1 = 0) |] 
+  &&  [| ((cons (x) (l)) = (app (l1) ((rev (l2))))) |]
+  &&  ((&((q_pre)  # "queue" ->ₛ "l1")) # Ptr  |-> retval)
+  **  (sll retval (cons (x) (l)) )
+  **  (sll q_l1 l1 )
+  **  ((&((q_pre)  # "queue" ->ₛ "l2")) # Ptr  |-> 0)
 .
 
 Definition dequeue_which_implies_wit_1 := 
@@ -373,8 +373,8 @@ Axiom proof_of_enqueue_partial_solve_wit_2 : enqueue_partial_solve_wit_2.
 Axiom proof_of_enqueue_which_implies_wit_1 : enqueue_which_implies_wit_1.
 Axiom proof_of_dequeue_safety_wit_1 : dequeue_safety_wit_1.
 Axiom proof_of_dequeue_safety_wit_2 : dequeue_safety_wit_2.
-Axiom proof_of_dequeue_return_wit_1_1 : dequeue_return_wit_1_1.
-Axiom proof_of_dequeue_return_wit_1_2 : dequeue_return_wit_1_2.
+Axiom proof_of_dequeue_return_wit_1 : dequeue_return_wit_1.
+Axiom proof_of_dequeue_return_wit_2 : dequeue_return_wit_2.
 Axiom proof_of_dequeue_partial_solve_wit_1 : dequeue_partial_solve_wit_1.
 Axiom proof_of_dequeue_partial_solve_wit_2 : dequeue_partial_solve_wit_2.
 Axiom proof_of_dequeue_partial_solve_wit_3_pure : dequeue_partial_solve_wit_3_pure.

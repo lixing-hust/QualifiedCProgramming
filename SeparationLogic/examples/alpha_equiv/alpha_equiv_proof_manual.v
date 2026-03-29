@@ -25,14 +25,43 @@ Require Import malloc.
 Require Import super_poly_sll2.
 Local Open Scope sac.
 
-Lemma proof_of_alpha_equiv_entail_wit_1 : alpha_equiv_entail_wit_1.
+Lemma proof_of_alpha_equiv_safety_wit_16 : alpha_equiv_safety_wit_16.
 Proof. 
   pre_process.
   unfold termtypeID in *.
   destruct term1; lia.
 Qed.
 
-Lemma proof_of_alpha_equiv_return_wit_1_1 : alpha_equiv_return_wit_1_1.
+Lemma proof_of_alpha_equiv_return_wit_1 : alpha_equiv_return_wit_1.
+Proof. 
+  pre_process.
+  rewrite H.
+  apply store_null_right.
+Qed.
+
+Lemma proof_of_alpha_equiv_return_wit_2 : alpha_equiv_return_wit_2.
+Proof.
+  pre_process.
+  rewrite H.
+  apply store_null_left.
+Qed.
+
+Lemma proof_of_alpha_equiv_return_wit_3 : alpha_equiv_return_wit_3.
+Proof.
+  pre_process.
+  entailer!.
+  2: {
+    destruct term1; destruct term2; simpl in H; try lia.
+    all: unfold term_alpha_eqn, term_alpha_eq; reflexivity.
+  }
+  pose proof (store_term_fold_out t2_pre term2) H1.
+  sep_apply H4.
+  pose proof (store_term_fold_out t1_pre term1) H0.
+  sep_apply H5.
+  entailer!.
+Qed.
+
+Lemma proof_of_alpha_equiv_return_wit_4 : alpha_equiv_return_wit_4.
 Proof.
   pre_process.
   unfold list_Z_cmp in H0.
@@ -45,7 +74,7 @@ Proof.
   reflexivity.
 Qed.
 
-Lemma proof_of_alpha_equiv_return_wit_1_2 : alpha_equiv_return_wit_1_2.
+Lemma proof_of_alpha_equiv_return_wit_5 : alpha_equiv_return_wit_5.
 Proof.
   pre_process.
   rewrite H in H0.
@@ -59,7 +88,7 @@ Proof.
   reflexivity.
 Qed.
 
-Lemma proof_of_alpha_equiv_return_wit_2 : alpha_equiv_return_wit_2.
+Lemma proof_of_alpha_equiv_return_wit_6 : alpha_equiv_return_wit_6.
 Proof.
   pre_process.
   unfold store_term, term_alpha_eqn, term_alpha_eq.
@@ -71,7 +100,7 @@ Proof.
   + reflexivity.
 Qed.
 
-Lemma proof_of_alpha_equiv_return_wit_3_1 : alpha_equiv_return_wit_3_1.
+Lemma proof_of_alpha_equiv_return_wit_7 : alpha_equiv_return_wit_7.
 Proof. 
   pre_process.
   unfold store_term.
@@ -88,7 +117,7 @@ Proof.
     reflexivity.
 Qed.
 
-Lemma proof_of_alpha_equiv_return_wit_3_2 : alpha_equiv_return_wit_3_2.
+Lemma proof_of_alpha_equiv_return_wit_8 : alpha_equiv_return_wit_8.
 Proof.
   pre_process.
   unfold store_term.
@@ -105,7 +134,7 @@ Proof.
     contradiction.
 Qed.
 
-Lemma proof_of_alpha_equiv_return_wit_4 : alpha_equiv_return_wit_4.
+Lemma proof_of_alpha_equiv_return_wit_9 : alpha_equiv_return_wit_9.
 Proof.
   pre_process.
   unfold store_term.
@@ -126,7 +155,22 @@ Proof.
     contradiction.
 Qed.  
 
-Lemma proof_of_alpha_equiv_return_wit_5_1 : alpha_equiv_return_wit_5_1.
+Lemma proof_of_alpha_equiv_return_wit_10 : alpha_equiv_return_wit_10.
+Proof.
+  pre_process.
+  unfold store_term.
+  rewrite H3, H4.
+  fold store_term.
+  Exists y1 z1 y2 z2.
+  entailer!.
+  unfold term_alpha_eqn in *.
+  unfold term_alpha_eq.
+  fold term_alpha_eq.
+  destruct (term_alpha_eq lt1 lt2) eqn:Eql; [ | reflexivity].
+  congruence.
+Qed.
+
+Lemma proof_of_alpha_equiv_return_wit_11 : alpha_equiv_return_wit_11.
 Proof.
   pre_process.
   unfold store_term.
@@ -142,7 +186,7 @@ Proof.
   reflexivity.
 Qed.
 
-Lemma proof_of_alpha_equiv_return_wit_5_2 : alpha_equiv_return_wit_5_2.
+Lemma proof_of_alpha_equiv_return_wit_12 : alpha_equiv_return_wit_12.
 Proof.
   pre_process.
   unfold store_term.
@@ -158,22 +202,7 @@ Proof.
   congruence.
 Qed.
 
-Lemma proof_of_alpha_equiv_return_wit_5_3 : alpha_equiv_return_wit_5_3.
-Proof.
-  pre_process.
-  unfold store_term.
-  rewrite H3, H4.
-  fold store_term.
-  Exists y1 z1 y2 z2.
-  entailer!.
-  unfold term_alpha_eqn in *.
-  unfold term_alpha_eq.
-  fold term_alpha_eq.
-  destruct (term_alpha_eq lt1 lt2) eqn:Eql; [ | reflexivity].
-  congruence.
-Qed.
-
-Lemma proof_of_alpha_equiv_return_wit_6 : alpha_equiv_return_wit_6.
+Lemma proof_of_alpha_equiv_return_wit_13 : alpha_equiv_return_wit_13.
 Proof.
   pre_process.
   unfold store_term.
@@ -189,7 +218,7 @@ Proof.
   congruence.
 Qed.
 
-Lemma proof_of_alpha_equiv_return_wit_7 : alpha_equiv_return_wit_7.
+Lemma proof_of_alpha_equiv_return_wit_14 : alpha_equiv_return_wit_14.
 Proof.
   pre_process.
   unfold store_term.
@@ -213,7 +242,7 @@ Proof.
     congruence.
 Qed.
 
-Lemma proof_of_alpha_equiv_return_wit_8 : alpha_equiv_return_wit_8.
+Lemma proof_of_alpha_equiv_return_wit_15 : alpha_equiv_return_wit_15.
 Proof.
   pre_process.
   unfold store_term.
@@ -230,34 +259,6 @@ Proof.
     congruence.
 Qed.
 
-Lemma proof_of_alpha_equiv_return_wit_9_1 : alpha_equiv_return_wit_9_1.
-Proof. 
-  pre_process.
-  rewrite H.
-  apply store_null_right.
-Qed.
-
-Lemma proof_of_alpha_equiv_return_wit_9_2 : alpha_equiv_return_wit_9_2.
-Proof.
-  pre_process.
-  rewrite H.
-  apply store_null_left.
-Qed.
-
-Lemma proof_of_alpha_equiv_return_wit_10 : alpha_equiv_return_wit_10.
-Proof.
-  pre_process.
-  entailer!.
-  2: {
-    destruct term1; destruct term2; simpl in H; try lia.
-    all: unfold term_alpha_eqn, term_alpha_eq; reflexivity.
-  }
-  pose proof (store_term_fold_out t2_pre term2) H1.
-  sep_apply H4.
-  pose proof (store_term_fold_out t1_pre term1) H0.
-  sep_apply H5.
-  entailer!.
-Qed.
 
 Lemma proof_of_alpha_equiv_which_implies_wit_1 : alpha_equiv_which_implies_wit_1.
 Proof. 
@@ -339,5 +340,4 @@ Proof.
   Intros x n.
   Exists x n.
   entailer!.
-Qed.
-
+Qed. 

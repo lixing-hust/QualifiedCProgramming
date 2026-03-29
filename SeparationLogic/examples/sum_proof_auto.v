@@ -42,7 +42,7 @@ Proof. Admitted.
 Lemma proof_of_arr_sum_do_while_safety_wit_4 : arr_sum_do_while_safety_wit_4.
 Proof. Admitted. 
 
-Lemma proof_of_arr_sum_do_while_safety_wit_6 : arr_sum_do_while_safety_wit_6.
+Lemma proof_of_arr_sum_do_while_safety_wit_5 : arr_sum_do_while_safety_wit_5.
 Proof. Admitted. 
 
 Lemma proof_of_arr_sum_do_while_partial_solve_wit_1 : arr_sum_do_while_partial_solve_wit_1.

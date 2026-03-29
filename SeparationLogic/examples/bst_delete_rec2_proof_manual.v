@@ -60,7 +60,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_delete_return_wit_1 : delete_return_wit_1.
+Lemma proof_of_delete_return_wit_5 : delete_return_wit_5.
 Proof. 
   pre_process.
   Exists b_pre_v_2.
@@ -72,7 +72,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_delete_return_wit_2_1 : delete_return_wit_2_1.
+Lemma proof_of_delete_return_wit_1 : delete_return_wit_1.
 Proof.
   pre_process.
   Exists b_pre_v_2.
@@ -92,7 +92,7 @@ Proof.
     tauto.
 Qed.
 
-Lemma proof_of_delete_return_wit_2_2 : delete_return_wit_2_2.
+Lemma proof_of_delete_return_wit_2 : delete_return_wit_2.
 Proof. 
   pre_process.
   Exists p_right.
@@ -100,7 +100,7 @@ Proof.
   sep_apply (store_tree_zero); [ | tauto].
   entailer!.
   destruct (Key.dec x_pre p_key) as [[? | ?] | ?]; try Key.order.
-  assert (r0 = tree_delete' x_pre tr). {
+  assert (r0 = tree_delete' x_pre tr_low_level_spec). {
     rewrite e.
     rewrite H4.
     simpl.
@@ -112,7 +112,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_delete_return_wit_2_3 : delete_return_wit_2_3.
+Lemma proof_of_delete_return_wit_3 : delete_return_wit_3.
 Proof. 
   pre_process.
   Exists b_pre_v_2.
@@ -124,7 +124,7 @@ Proof.
   reflexivity.
 Qed.
 
-Lemma proof_of_delete_return_wit_2_4 : delete_return_wit_2_4.
+Lemma proof_of_delete_return_wit_4 : delete_return_wit_4.
 Proof. 
   pre_process.
   Exists b_pre_v_2.
@@ -162,7 +162,7 @@ Lemma proof_of_delete_derive_high_level_spec_by_low_level_spec : delete_derive_h
 Proof.
   pre_process.
   Intros b_pre_v.
-  unfold store_map. Intros tr.
+  unfold Bst.store_map. Intros tr.
   Exists tr. 
   entailer!.
   Exists b_pre_v.

@@ -62,7 +62,7 @@ mpn_copyi (unsigned int *d, unsigned int *s, int n)
   /*@ Inv
     0 <= i && i <= n@pre && 
     UIntArray::full(d@pre, i, sublist(0, i, l)) * 
-    UIntArray::undef_ceil(d@pre, i, n@pre)
+    UIntArray::undef_seg(d@pre, i, n@pre)
   */
   for (i = 0; i < n; i++) {
       d[i] = s[i];
@@ -156,7 +156,7 @@ mpn_normalized_size (unsigned int *xp, int n)
   Ensure
     0 <= __return && __return <= n &&
     mpd_store_Z_compact(UINT_MOD, xp, val, __return) * 
-    UIntArray::undef_ceil(xp, __return, n)
+    UIntArray::undef_seg(xp, __return, n)
 */
 {
   /*@
@@ -175,7 +175,7 @@ mpn_normalized_size (unsigned int *xp, int n)
     n >= 0 && n <= n@pre &&
     list_to_Z(UINT_MOD, sublist(0, n, l)) == val &&
     UIntArray::full(xp@pre, n, sublist(0, n, l)) *
-    UIntArray::undef_ceil(xp@pre, n, n@pre)
+    UIntArray::undef_seg(xp@pre, n, n@pre)
   */
   while (n > 0 && xp[n-1] == 0)
     --n;
@@ -231,7 +231,7 @@ mpn_add_1 (unsigned int *rp, unsigned int *ap, int n, unsigned int b)
     list_to_Z(UINT_MOD, l) == val && list_within_bound(UINT_MOD, l) &&
     UIntArray::full(ap, n@pre, l) * 
     UIntArray::full(rp@pre, i, l') *
-    UIntArray::undef_ceil(rp@pre, i, n@pre)
+    UIntArray::undef_seg(rp@pre, i, n@pre)
   */
   while (i < n);
 
@@ -244,7 +244,7 @@ mpn_add_n (unsigned int *rp, unsigned int *ap, unsigned int *bp, int n)
 /*@
  With val_a val_b
  Require
-   n > 0 &&
+   n >= 0 &&
    mpd_store_Z(UINT_MOD, ap, val_a, n) *
    mpd_store_Z(UINT_MOD, bp, val_b, n) *
    UIntArray::undef_full(rp, n) 
@@ -282,7 +282,7 @@ mpn_add_n (unsigned int *rp, unsigned int *ap, unsigned int *bp, int n)
       Zlength(l_r) == i &&
       (val_r + cy * Z::pow(UINT_MOD, i) == val_a_prefix + val_b_prefix) &&
       UIntArray::full(rp@pre, i, l_r) *
-      UIntArray::undef_ceil(rp@pre, i, n@pre)
+      UIntArray::undef_seg(rp@pre, i, n@pre)
   */
   while (i < n)
   {
@@ -304,7 +304,7 @@ mpn_add (unsigned int *rp, unsigned int *ap, int an, unsigned int *bp, int bn)
 /*@
  With val_a val_b
  Require
-   an >= bn && an > 0 && bn > 0 &&
+   an >= bn && an >= 0 && bn >= 0 &&
    mpd_store_Z(UINT_MOD, ap, val_a, an) *
    mpd_store_Z(UINT_MOD, bp, val_b, bn) *
    UIntArray::undef_full(rp, an)
@@ -318,7 +318,7 @@ mpn_add (unsigned int *rp, unsigned int *ap, int an, unsigned int *bp, int bn)
 {
   unsigned int cy;
   /*@
-    mpd_store_Z(UINT_MOD, ap, val_a, an) && an >= bn && bn > 0
+    mpd_store_Z(UINT_MOD, ap, val_a, an) && an >= bn && bn >= 0
     which implies
       exists val_a_low val_a_high,
         val_a == val_a_low + val_a_high * Z::pow(UINT_MOD, bn) &&
@@ -328,7 +328,7 @@ mpn_add (unsigned int *rp, unsigned int *ap, int an, unsigned int *bp, int bn)
   /*@
     Given val_a_low val_a_high
    */
-  /*@ an >= bn && bn > 0 && UIntArray::undef_full(rp, an)
+  /*@ an >= bn && bn >= 0 && UIntArray::undef_full(rp, an)
   which implies
     UIntArray::undef_full(rp, bn) *
     UIntArray::undef_full(rp + bn * sizeof(unsigned int), an - bn)
@@ -416,8 +416,8 @@ mpz_clear (mpz_t r)
     which implies
     exists ptr size cap,
       Zabs(size) <= cap &&
-      (size < 0 && n < 0 && mpd_store_Z_compact(UINT_MOD,ptr, -n, -size) * UIntArray::undef_ceil(ptr, -size, cap) ||
-        size >= 0 && n >= 0 && mpd_store_Z_compact(UINT_MOD,ptr, n, size) * UIntArray::undef_ceil(ptr, size, cap)) &&
+      (size < 0 && n < 0 && mpd_store_Z_compact(UINT_MOD,ptr, -n, -size) * UIntArray::undef_seg(ptr, -size, cap) ||
+        size >= 0 && n >= 0 && mpd_store_Z_compact(UINT_MOD,ptr, n, size) * UIntArray::undef_seg(ptr, size, cap)) &&
       r -> _mp_size == size &&
       r -> _mp_alloc == cap &&
       r -> _mp_d == ptr
@@ -429,20 +429,34 @@ mpz_clear (mpz_t r)
 
 static unsigned int *
 mpz_realloc (mpz_t r, int size)
-/*@
+/*@ neg
   With
     ptr old cap n
   Require
     size >= cap && size <= INT_MAX && cap >= 0 && cap <= INT_MAX &&
     Zabs(old) <= cap &&
-    (old < 0 && n < 0 && mpd_store_Z_compact(UINT_MOD,ptr, -n, -old) * UIntArray::undef_ceil(ptr, -old, cap) ||
-        old >= 0 && n >= 0 && mpd_store_Z_compact(UINT_MOD,ptr, n, old) * UIntArray::undef_ceil(ptr, old, cap)) &&
+    old < 0 && n < 0 && mpd_store_Z_compact(UINT_MOD,ptr, -n, -old) * UIntArray::undef_seg(ptr, -old, cap) &&
       r -> _mp_size == old &&
       r -> _mp_alloc == cap &&
       r -> _mp_d == ptr
   Ensure 
-    (n < 0 && mpd_store_Z_compact(UINT_MOD,__return, -n, -old) * UIntArray::undef_ceil(__return, -old, Z::max(size,1)) ||
-      n >= 0 && mpd_store_Z_compact(UINT_MOD,__return, n, old) * UIntArray::undef_ceil(__return, old, Z::max(size,1))) &&
+    n < 0 && mpd_store_Z_compact(UINT_MOD,__return, -n, -old) * UIntArray::undef_seg(__return, -old, Z::max(size,1)) &&
+    r -> _mp_size == old &&
+    r -> _mp_alloc == Z::max(size,1) &&
+    r -> _mp_d == __return
+*/
+/*@ pos
+  With
+    ptr old cap n
+  Require
+    size >= cap && size <= INT_MAX && cap >= 0 && cap <= INT_MAX &&
+    Zabs(old) <= cap &&
+    old >= 0 && n >= 0 && mpd_store_Z_compact(UINT_MOD,ptr, n, old) * UIntArray::undef_seg(ptr, old, cap) &&
+      r -> _mp_size == old &&
+      r -> _mp_alloc == cap &&
+      r -> _mp_d == ptr
+  Ensure 
+    n >= 0 && mpd_store_Z_compact(UINT_MOD,__return, n, old) * UIntArray::undef_seg(__return, old, Z::max(size,1)) &&
     r -> _mp_size == old &&
     r -> _mp_alloc == Z::max(size,1) &&
     r -> _mp_d == __return
@@ -463,10 +477,46 @@ mpz_realloc (mpz_t r, int size)
 }
 
 /* Realloc for an mpz_t WHAT if it has less than NEEDED limbs.  */
-/*unsigned int *mrz_realloc_if(mpz_t z,int n) 
+unsigned int *mrz_realloc_if(mpz_t z,int n)
+/*@ neg
+  With
+    ptr old cap m
+  Require
+    cap >= 0 && cap <= INT_MAX && n >= 1 &&
+    Zabs(old) <= cap &&
+    old < 0 && m < 0 && mpd_store_Z_compact(UINT_MOD,ptr, -m, -old) * UIntArray::undef_seg(ptr, -old, cap) &&
+      z -> _mp_size == old &&
+      z -> _mp_alloc == cap &&
+      z -> _mp_d == ptr
+  Ensure
+    m < 0 && mpd_store_Z_compact(UINT_MOD,__return, -m, -old) * UIntArray::undef_seg(__return, -old, Z::max(Z::max(n,1),cap)) &&
+    z -> _mp_size == old &&
+    z -> _mp_alloc == Z::max(Z::max(n,1),cap) &&
+    z -> _mp_d == __return
+*/
+/*@ pos
+  With
+    ptr old cap m
+  Require
+    cap >= 0 && cap <= INT_MAX && n >= 1 &&
+    Zabs(old) <= cap &&
+    old >= 0 && m >= 0 && mpd_store_Z_compact(UINT_MOD,ptr, m, old) * UIntArray::undef_seg(ptr, old, cap) &&
+      z -> _mp_size == old &&
+      z -> _mp_alloc == cap &&
+      z -> _mp_d == ptr
+  Ensure
+    m >= 0 && mpd_store_Z_compact(UINT_MOD,__return, m, old) * UIntArray::undef_seg(__return, old, Z::max(Z::max(n,1),cap)) &&
+    z -> _mp_size == old &&
+    z -> _mp_alloc == Z::max(Z::max(n,1),cap) &&
+    z -> _mp_d == __return
+*/
 {
-  return n > z->_mp_alloc ? mpz_realloc(z, n) : z->_mp_d;
-}*/
+  if (n > z->_mp_alloc) return mpz_realloc(z, n)/*@ where (pos) n = m_pos $ pos
+                                                  where (neg) n = m_neg $ neg */;
+  return z->_mp_d;
+  // ret = n > z->_mp_alloc ? mpz_realloc(z, n)  : z->_mp_d;
+  // return ret;
+}
 
 /* MPZ comparisons and the like. */
 int
@@ -487,8 +537,8 @@ mpz_sgn (const mpz_t u)
     which implies
     exists ptr cap size,
       Zabs(size) <= cap &&
-      (size < 0 && n < 0 && mpd_store_Z_compact(UINT_MOD,ptr, -n, -size) * UIntArray::undef_ceil(ptr, -size, cap) ||
-        size >= 0 && n >= 0 && mpd_store_Z_compact(UINT_MOD,ptr, n, size) * UIntArray::undef_ceil(ptr, size, cap)) &&
+      (size < 0 && n < 0 && mpd_store_Z_compact(UINT_MOD,ptr, -n, -size) * UIntArray::undef_seg(ptr, -size, cap) ||
+        size >= 0 && n >= 0 && mpd_store_Z_compact(UINT_MOD,ptr, n, size) * UIntArray::undef_seg(ptr, size, cap)) &&
       u->_mp_size == size && 
       u->_mp_alloc == cap && 
       u->_mp_d == ptr
@@ -512,8 +562,8 @@ mpz_swap (mpz_t u, mpz_t v)
     which implies
     exists ptr1 cap1 size1,
       Zabs(size1) <= cap1 &&
-      (size1 < 0 && n < 0 && mpd_store_Z_compact(UINT_MOD,ptr1, -n, -size1) * UIntArray::undef_ceil(ptr1, -size1, cap1) ||
-        size1 >= 0 && n >= 0 && mpd_store_Z_compact(UINT_MOD,ptr1, n, size1) * UIntArray::undef_ceil(ptr1, size1, cap1)) &&
+      (size1 < 0 && n < 0 && mpd_store_Z_compact(UINT_MOD,ptr1, -n, -size1) * UIntArray::undef_seg(ptr1, -size1, cap1) ||
+        size1 >= 0 && n >= 0 && mpd_store_Z_compact(UINT_MOD,ptr1, n, size1) * UIntArray::undef_seg(ptr1, size1, cap1)) &&
       u->_mp_size == size1 && 
       u->_mp_alloc == cap1 && 
       u->_mp_d == ptr1
@@ -523,8 +573,8 @@ mpz_swap (mpz_t u, mpz_t v)
     which implies
     exists ptr2 cap2 size2,
       Zabs(size2) <= cap2 &&
-      (size2 < 0 && m < 0 && mpd_store_Z_compact(UINT_MOD,ptr2, -m, -size2) * UIntArray::undef_ceil(ptr2, -size2, cap2) ||
-        size2 >= 0 && m >= 0 && mpd_store_Z_compact(UINT_MOD,ptr2, m, size2) * UIntArray::undef_ceil(ptr2, size2, cap2)) &&
+      (size2 < 0 && m < 0 && mpd_store_Z_compact(UINT_MOD,ptr2, -m, -size2) * UIntArray::undef_seg(ptr2, -size2, cap2) ||
+        size2 >= 0 && m >= 0 && mpd_store_Z_compact(UINT_MOD,ptr2, m, size2) * UIntArray::undef_seg(ptr2, size2, cap2)) &&
       v->_mp_size == size2 && 
       v->_mp_alloc == cap2 && 
       v->_mp_d == ptr2

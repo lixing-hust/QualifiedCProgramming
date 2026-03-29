@@ -390,6 +390,76 @@ Section mono_and_continuous_lemmas.
     - apply mono_choice'; tauto.
     - apply continuous_choice'; tauto.
   Qed.
+  
+  (** copied from StateRelMonad *)
+  Lemma mono_Lfix {A B: Type} {_SETS_A: Sets.SETS A} {_SETS_B: Sets.SETS B} 
+    {_SETS_PROP_A: SETS_Properties A} {_SETS_PROP_B: SETS_Properties B}:
+    forall (f: A -> B -> B),
+      (forall a, mono (f a)) ->
+      (forall b, mono (fun W => f W b)) ->
+      mono (fun W => (Lfix (f W))).
+  Proof.
+    unfold mono.
+    unfold Proper, respectful.
+    intros; apply Lfix_mono.
+    - unfold Proper, respectful.
+      intros; apply H; auto.
+    - intros. apply H0; auto.
+  Qed.
+
+  Lemma Lfix_seq_cont_general {A B} {SET_A: Sets.SETS A} {PROP_A: SETS_Properties A}
+                          {SET_B: Sets.SETS B} {PROP_B: SETS_Properties B}:
+forall (f: A -> B -> B)
+        (Hf_mono: Proper (Sets.included ==> Sets.included ==> Sets.included) f)
+        (Hfa_sseq: forall a, sseq_continuous (f a))
+        (Hf_sseq: forall b, sseq_continuous (fun a => f a b)),
+  sseq_continuous (fun a: A => Lfix (f a)).
+Proof.
+  intros. intros until 1. apply Sets_equiv_Sets_included. split.
+  - apply Sets_indexed_union_included. intros n. induction n.
+    + simpl. apply Sets_empty_included.
+    + simpl. rewrite IHn. erewrite Hf_sseq;auto.
+      apply Sets_indexed_union_included. intros m.
+      erewrite Hfa_sseq.
+      apply Sets_indexed_union_included. intros k.
+      set(mk:= max m k). assert (Hk: T k ⊆ T mk).
+      { apply sseq_mono_nat_le;auto. apply Nat.le_max_r. }
+      assert (Hm: T m ⊆ T mk).
+      { apply sseq_mono_nat_le;auto. apply Nat.le_max_l. }
+      rewrite <- (Sets_included_indexed_union mk).
+      rewrite (Lfix_fixpoint (f (T mk))).
+      apply Hf_mono;auto. 
+      apply Lfix_mono. apply Hf_mono. reflexivity.
+      intros. apply Hf_mono;auto. reflexivity.
+      apply Hf_mono. reflexivity. apply Hfa_sseq.
+      unfold sseq_mono. intros. 
+      apply Lfix_mono. apply Hf_mono. reflexivity.
+      intros. apply Hf_mono;auto. reflexivity.
+  - apply Sets_indexed_union_included. intros.
+    apply Lfix_mono. apply Hf_mono;auto. reflexivity.
+    intros. apply Hf_mono. rewrite <- (Sets_included_indexed_union (S n)).
+    auto. reflexivity.
+Qed.
+
+  Lemma mono_cont_Lfix {A B: Type} {_SETS_A: Sets.SETS A} {_SETS_B: Sets.SETS B}
+    {_SETS_Properties_A: SETS_Properties A} {_SETS_Properties_B: SETS_Properties B}:
+    forall (f: A -> B -> B),
+      (forall a, mono_cont (f a)) ->
+      (forall b, mono_cont (fun W => f W b)) ->
+      mono_cont (fun W => Lfix (f W)).
+  Proof.
+    unfold mono_cont; intros.
+    split.
+    - apply mono_Lfix; intros.
+      apply H. apply H0.
+    - apply Lfix_seq_cont_general; intros.
+      unfold Proper, respectful.
+      intros.
+      etransitivity.
+      apply H; eauto.
+      apply H0; auto.
+      apply H. apply H0.
+  Qed. 
 
 End mono_and_continuous_lemmas.
 

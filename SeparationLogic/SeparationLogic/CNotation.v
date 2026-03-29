@@ -56,130 +56,6 @@ Declare Custom Entry addr_expr_entry.
 Declare Custom Entry lvalue_expr_entry.
 Declare Custom Entry rvalue_expr_entry.
 
-Parameter rvalue_expr_equiv : rvalue_expr -> rvalue_expr -> Prop.
-
-Parameter lvalue_expr_equiv : lvalue_expr -> lvalue_expr -> Prop.
-
-Theorem rvalue_expr_equiv_refl: forall x : rvalue_expr, rvalue_expr_equiv x x
-with lvalue_expr_equiv_refl: forall x : lvalue_expr, lvalue_expr_equiv x x.
-Proof. Admitted.
-
-Theorem rvalue_expr_equiv_sym: forall x y : rvalue_expr, rvalue_expr_equiv x y -> rvalue_expr_equiv y x
-with lvalue_expr_equiv_sym: forall x y : lvalue_expr, lvalue_expr_equiv x y -> lvalue_expr_equiv y x.
-Proof. Admitted.
-
-Theorem rvalue_expr_equiv_trans: forall x y z : rvalue_expr, rvalue_expr_equiv x y -> rvalue_expr_equiv y z -> rvalue_expr_equiv x z
-with lvalue_expr_equiv_trans: forall x y z : lvalue_expr, lvalue_expr_equiv x y -> lvalue_expr_equiv y z -> lvalue_expr_equiv x z.
-Proof. Admitted.
-
-Theorem rvalue_expr_equiv_equiv: Equivalence rvalue_expr_equiv.
-Proof.
-  split ; hnf.
-  - apply rvalue_expr_equiv_refl.
-  - apply rvalue_expr_equiv_sym.
-  - apply rvalue_expr_equiv_trans.
-Qed.
-
-Theorem lvalue_expr_equiv_equiv: Equivalence lvalue_expr_equiv.
-Proof.
-  split ; hnf.
-  - apply lvalue_expr_equiv_refl.
-  - apply lvalue_expr_equiv_sym.
-  - apply lvalue_expr_equiv_trans.
-Qed.
-
-#[export] Existing Instance rvalue_expr_equiv_equiv.
-#[export] Existing Instance lvalue_expr_equiv_equiv.
-
-Axiom LE_arrow_field_congr:
-  Proper (rvalue_expr_equiv ==> eq ==> lvalue_expr_equiv) LE_arrow_field.
-
-Axiom LE_array_subst_congr:
-  Proper (lvalue_expr_equiv ==> eq ==> lvalue_expr_equiv) LE_array_subst.
-
-Axiom LE_dot_field_congr:
-  Proper (lvalue_expr_equiv ==> eq ==> lvalue_expr_equiv) LE_dot_field.
-
-Axiom RE_add_pi_congr:
-  Proper (rvalue_expr_equiv ==> eq ==> rvalue_expr_equiv) RE_add_pi.
-
-Axiom RE_sub_pi_congr:
-  Proper (rvalue_expr_equiv ==> eq ==> rvalue_expr_equiv) RE_sub_pi.
-
-Axiom RE_addr_of_congr:
-  Proper (lvalue_expr_equiv ==> rvalue_expr_equiv) RE_addr_of.
-
-Axiom eval_addr_expr_congr:
-  Proper (rvalue_expr_equiv ==> eq) eval_addr_expr.
-
-#[export] Existing Instance LE_arrow_field_congr.
-#[export] Existing Instance LE_array_subst_congr.
-#[export] Existing Instance LE_dot_field_congr.
-#[export] Existing Instance RE_add_pi_congr.
-#[export] Existing Instance RE_sub_pi_congr.
-#[export] Existing Instance RE_addr_of_congr.
-#[export] Existing Instance eval_addr_expr_congr.
-
-Axiom eval_addr: forall R t,
-  rvalue_expr_equiv
-    (RE_const (eval_addr_expr R) t) R.
-
-
-Axiom addr_of_array_subst: forall L x t,
-  rvalue_expr_equiv
-    (RE_const
-      (eval_addr_expr (RE_addr_of L) + x * sizeof_front_end_type t) t)
-    (RE_addr_of (LE_array_subst L x)).  
-
-Axiom addr_of_array_subst': forall L x t,
-  rvalue_expr_equiv
-    (RE_const
-      (eval_addr_expr (RE_addr_of L) + sizeof_front_end_type t * x) t)
-    (RE_addr_of (LE_array_subst L x)). 
-
-Axiom const_array_pi: forall p x t,
-  rvalue_expr_equiv
-    (RE_const
-      (p + x * sizeof_front_end_type t) t)
-    (RE_add_pi (RE_const p t) x).
-
-Axiom const_array_pi': forall p x t,
-  rvalue_expr_equiv
-    (RE_const
-      (p + sizeof_front_end_type t * x) t)
-    (RE_add_pi (RE_const p t) x).
-
-Axiom addr_of_arrow_field : forall L x, 
-  rvalue_expr_equiv
-    (RE_addr_of (LE_dot_field L x))
-    (RE_addr_of (LE_arrow_field (RE_addr_of L) x)).
-
-Ltac csimpl :=
-  repeat progress
-    rewrite ?eval_addr at 1;
-    rewrite ?addr_of_array_subst at 1;
-    rewrite ?addr_of_array_subst' at 1;
-    rewrite ?const_array_pi at 1 ; 
-    rewrite ?const_array_pi' at 1 ;
-    rewrite ?addr_of_arrow_field at 1.
-          
-Axiom addr_of_arrow_field_inv : forall x y F, 
-  eval_addr_expr (RE_addr_of (LE_arrow_field x F)) = eval_addr_expr (RE_addr_of (LE_arrow_field y F)) -> x = y.
-    
-Axiom addr_of_LE_var_not_zero : forall x, eval_addr_expr (RE_addr_of (LE_var x)) <> 0.
-
-Axiom RE_add_pi_inv_l : forall x y i, 
-  RE_add_pi x i = RE_add_pi y i -> x = y.
-
-Axiom RE_add_pi_inv_r : forall x a b,
-  RE_add_pi x a = RE_add_pi x b -> a = b.  
-
-Axiom RE_sub_pi_inv_l : forall x y i, 
-  RE_sub_pi x i = RE_sub_pi y i -> x = y.
-
-Axiom RE_sub_pi_inv_r : forall x a b,
-  RE_sub_pi x a = RE_sub_pi x b -> a = b.
-
 Inductive struct_or_union : Type := Struct | Union.
 
 Inductive composite_definition : Type :=
@@ -427,6 +303,145 @@ Notation "'sizeof' ( 'union' s )" := (sizeof_front_end_type (FET_union s))
 
 Notation "'sizeof' ( s )" := (sizeof_front_end_type (FET_alias s))
   (at level 1).
+
+Parameter rvalue_expr_equiv : rvalue_expr -> rvalue_expr -> Prop.
+
+Parameter lvalue_expr_equiv : lvalue_expr -> lvalue_expr -> Prop.
+
+Theorem rvalue_expr_equiv_refl: forall x : rvalue_expr, rvalue_expr_equiv x x
+with lvalue_expr_equiv_refl: forall x : lvalue_expr, lvalue_expr_equiv x x.
+Proof. Admitted.
+
+Theorem rvalue_expr_equiv_sym: forall x y : rvalue_expr, rvalue_expr_equiv x y -> rvalue_expr_equiv y x
+with lvalue_expr_equiv_sym: forall x y : lvalue_expr, lvalue_expr_equiv x y -> lvalue_expr_equiv y x.
+Proof. Admitted.
+
+Theorem rvalue_expr_equiv_trans: forall x y z : rvalue_expr, rvalue_expr_equiv x y -> rvalue_expr_equiv y z -> rvalue_expr_equiv x z
+with lvalue_expr_equiv_trans: forall x y z : lvalue_expr, lvalue_expr_equiv x y -> lvalue_expr_equiv y z -> lvalue_expr_equiv x z.
+Proof. Admitted.
+
+Theorem rvalue_expr_equiv_equiv: Equivalence rvalue_expr_equiv.
+Proof.
+  split ; hnf.
+  - apply rvalue_expr_equiv_refl.
+  - apply rvalue_expr_equiv_sym.
+  - apply rvalue_expr_equiv_trans.
+Qed.
+
+Theorem lvalue_expr_equiv_equiv: Equivalence lvalue_expr_equiv.
+Proof.
+  split ; hnf.
+  - apply lvalue_expr_equiv_refl.
+  - apply lvalue_expr_equiv_sym.
+  - apply lvalue_expr_equiv_trans.
+Qed.
+
+#[export] Existing Instance rvalue_expr_equiv_equiv.
+#[export] Existing Instance lvalue_expr_equiv_equiv.
+
+Axiom LE_arrow_field_congr:
+  Proper (rvalue_expr_equiv ==> eq ==> lvalue_expr_equiv) LE_arrow_field.
+
+Axiom LE_array_subst_congr:
+  Proper (lvalue_expr_equiv ==> eq ==> lvalue_expr_equiv) LE_array_subst.
+
+Axiom LE_dot_field_congr:
+  Proper (lvalue_expr_equiv ==> eq ==> lvalue_expr_equiv) LE_dot_field.
+
+Axiom RE_add_pi_congr:
+  Proper (rvalue_expr_equiv ==> eq ==> rvalue_expr_equiv) RE_add_pi.
+
+Axiom RE_sub_pi_congr:
+  Proper (rvalue_expr_equiv ==> eq ==> rvalue_expr_equiv) RE_sub_pi.
+
+Axiom RE_addr_of_congr:
+  Proper (lvalue_expr_equiv ==> rvalue_expr_equiv) RE_addr_of.
+
+Axiom eval_addr_expr_congr:
+  Proper (rvalue_expr_equiv ==> eq) eval_addr_expr.
+
+#[export] Existing Instance LE_arrow_field_congr.
+#[export] Existing Instance LE_array_subst_congr.
+#[export] Existing Instance LE_dot_field_congr.
+#[export] Existing Instance RE_add_pi_congr.
+#[export] Existing Instance RE_sub_pi_congr.
+#[export] Existing Instance RE_addr_of_congr.
+#[export] Existing Instance eval_addr_expr_congr.
+
+Axiom eval_addr: forall R t,
+  rvalue_expr_equiv
+    (RE_const (eval_addr_expr R) t) R.
+
+
+Axiom addr_of_array_subst: forall L x t,
+  rvalue_expr_equiv
+    (RE_const
+      (eval_addr_expr (RE_addr_of L) + x * sizeof_front_end_type t) t)
+    (RE_addr_of (LE_array_subst L x)).  
+
+Axiom addr_of_array_subst': forall L x t,
+  rvalue_expr_equiv
+    (RE_const
+      (eval_addr_expr (RE_addr_of L) + sizeof_front_end_type t * x) t)
+    (RE_addr_of (LE_array_subst L x)). 
+
+Axiom const_array_pi: forall p x t,
+  rvalue_expr_equiv
+    (RE_const
+      (p + x * sizeof_front_end_type t) t)
+    (RE_add_pi (RE_const p t) x).
+
+Axiom const_array_pi': forall p x t,
+  rvalue_expr_equiv
+    (RE_const
+      (p + sizeof_front_end_type t * x) t)
+    (RE_add_pi (RE_const p t) x).
+
+Axiom addr_of_arrow_field : forall L x, 
+  rvalue_expr_equiv
+    (RE_addr_of (LE_dot_field L x))
+    (RE_addr_of (LE_arrow_field (RE_addr_of L) x)).
+
+Ltac const_array_simpl :=
+  match goal with 
+    | |- context [eval_addr_expr (RE_addr_of (LE_arrow_field
+(RE_const (Z.add ?g_allQueue (Z.mul ?index (sizeof_front_end_type (FET_alias ?name))))
+(FET_alias ?name)) ?field_name))] =>
+             let ConstArraySimple := fresh "ConstArraySimple" in
+             assert (ConstArraySimple: &( ((g_allQueue + index * sizeof (name))) # name ->ₛ field_name) =
+&( ((g_allQueue) # (name) + index) ->ₛ field_name)) ; [ rewrite const_array_pi; reflexivity | rewrite ConstArraySimple; clear ConstArraySimple ]
+    | |- context [eval_addr_expr (RE_addr_of (LE_arrow_field
+(RE_const (Z.add ?g_allQueue (Z.mul (sizeof_front_end_type (FET_alias ?name)) ?index))
+(FET_alias ?name)) ?field_name))] =>
+              let ConstArraySimple' := fresh "ConstArraySimple'" in
+             assert (ConstArraySimple': &( ((g_allQueue + sizeof (name) * index)) # name ->ₛ field_name) =
+&( ((g_allQueue) # (name) + index) ->ₛ field_name)) ; [ rewrite const_array_pi'; reflexivity | rewrite ConstArraySimple'; clear ConstArraySimple' ]
+  end.
+
+Ltac csimpl :=
+  repeat progress
+    rewrite ?eval_addr at 1;
+    rewrite ?addr_of_array_subst at 1;
+    rewrite ?addr_of_array_subst' at 1;
+    rewrite ?addr_of_arrow_field at 1;
+    try const_array_simpl.
+          
+Axiom addr_of_arrow_field_inv : forall x y F, 
+  eval_addr_expr (RE_addr_of (LE_arrow_field x F)) = eval_addr_expr (RE_addr_of (LE_arrow_field y F)) -> x = y.
+    
+Axiom addr_of_LE_var_not_zero : forall x, eval_addr_expr (RE_addr_of (LE_var x)) <> 0.
+
+Axiom RE_add_pi_inv_l : forall x y i, 
+  RE_add_pi x i = RE_add_pi y i -> x = y.
+
+Axiom RE_add_pi_inv_r : forall x a b,
+  RE_add_pi x a = RE_add_pi x b -> a = b.  
+
+Axiom RE_sub_pi_inv_l : forall x y i, 
+  RE_sub_pi x i = RE_sub_pi y i -> x = y.
+
+Axiom RE_sub_pi_inv_r : forall x a b,
+  RE_sub_pi x a = RE_sub_pi x b -> a = b.
 
 Module TestNotations.
 

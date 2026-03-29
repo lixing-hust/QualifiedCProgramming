@@ -19,7 +19,7 @@ Import naive_C_Rules.
 Require Import dll_queue_lib.
 Local Open Scope sac.
 
-Lemma proof_of_enqueue_return_wit_1_1 : enqueue_return_wit_1_1.
+Lemma proof_of_enqueue_return_wit_1 : enqueue_return_wit_1.
 Proof.
   pre_process.
   subst.
@@ -32,7 +32,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_enqueue_return_wit_1_2 : enqueue_return_wit_1_2.
+Lemma proof_of_enqueue_return_wit_2 : enqueue_return_wit_2.
 Proof.
   pre_process.
   subst.
@@ -63,7 +63,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_dequeue_return_wit_1_1 : dequeue_return_wit_1_1.
+Lemma proof_of_dequeue_return_wit_1 : dequeue_return_wit_1.
 Proof.
   pre_process.
   subst.
@@ -74,7 +74,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_dequeue_return_wit_1_2 : dequeue_return_wit_1_2.
+Lemma proof_of_dequeue_return_wit_2 : dequeue_return_wit_2.
 Proof.
   pre_process.
   subst.

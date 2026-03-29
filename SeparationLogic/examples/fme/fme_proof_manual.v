@@ -50,13 +50,13 @@ Proof.
     + lia.
 Qed.
 
-Lemma proof_of_free_InequList_return_wit_1 : free_InequList_return_wit_1.
+Lemma proof_of_free_InequList_return_wit_3 : free_InequList_return_wit_3.
 Proof.
   pre_process. subst.
   sep_apply inequlist_0_implies_nil. entailer!.
 Qed.
 
-Lemma proof_of_free_InequList_return_wit_2_2 : free_InequList_return_wit_2_2.
+Lemma proof_of_free_InequList_return_wit_2 : free_InequList_return_wit_2.
 Proof.
   pre_process. subst.
   sep_apply inequlist_0_implies_nil. entailer!.
@@ -74,7 +74,7 @@ Proof.
   - split; intros; simpl; tauto.
 Qed.
 
-Lemma proof_of_eliminate_entail_wit_3_1 : eliminate_entail_wit_3_1.
+Lemma proof_of_eliminate_entail_wit_3_3 : eliminate_entail_wit_3_3.
 Proof.
   pre_process.
   set (re := x::re_2) in *.
@@ -118,8 +118,7 @@ Proof.
     apply list_split_adjust.
 Qed.
 
-(* similar to wit_3_1 *)
-Lemma proof_of_eliminate_entail_wit_3_3 : eliminate_entail_wit_3_3.
+Lemma proof_of_eliminate_entail_wit_3_1 : eliminate_entail_wit_3_1.
 Proof.
   pre_process.
   set (up := x::up_2) in *.
@@ -472,7 +471,7 @@ Proof.
   }
 Qed. 
 
-Lemma proof_of_generate_new_constr_return_wit_4 : generate_new_constr_return_wit_4.
+Lemma proof_of_generate_new_constr_return_wit_6 : generate_new_constr_return_wit_6.
 Proof.  
   pre_process.
   prop_apply (coef_array_length r2_pre). 
@@ -650,7 +649,7 @@ Proof.
   - apply self_LP_implies.
 Qed.
 
-Lemma proof_of_real_shadow_entail_wit_2_1 : real_shadow_entail_wit_2_1.
+Lemma proof_of_real_shadow_entail_wit_2_2 : real_shadow_entail_wit_2_2.
 Proof. 
   pre_process.
   Exists l3.
@@ -675,7 +674,7 @@ Proof.
     constructor; tauto.
 Qed. 
 
-Lemma proof_of_real_shadow_entail_wit_2_2 : real_shadow_entail_wit_2_2.
+Lemma proof_of_real_shadow_entail_wit_2_1 : real_shadow_entail_wit_2_1.
 Proof. 
   pre_process.
   Exists l3.
@@ -728,7 +727,7 @@ Proof.
 Qed.
 
 
-Lemma proof_of_real_shadow_return_wit_3_2 : real_shadow_return_wit_3_2.
+Lemma proof_of_real_shadow_return_wit_6 : real_shadow_return_wit_6.
 Proof.
   pre_process.
   Left. entailer!. do 3 sep_apply (store_ptr_undef_store_ptr).
@@ -736,7 +735,7 @@ Proof.
   sep_apply inequlist_0_implies_nil. entailer!.
 Qed.
 
-Lemma proof_of_real_shadow_return_wit_3_4 : real_shadow_return_wit_3_4.
+Lemma proof_of_real_shadow_return_wit_4 : real_shadow_return_wit_4.
 Proof.
   pre_process.
   Left. entailer!. do 3 sep_apply (store_ptr_undef_store_ptr).
@@ -773,7 +772,7 @@ Proof.
     subst. auto.
 Qed.
 
-Lemma proof_of_lia_deduction_return_wit_1 : lia_deduction_return_wit_1.
+Lemma proof_of_lia_deduction_return_wit_3 : lia_deduction_return_wit_3.
 Proof.
   pre_process.
   Left. Right.

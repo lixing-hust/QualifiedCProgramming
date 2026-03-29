@@ -19,7 +19,7 @@ Qed.
 
 Lemma undef_uint_array_strategy7_correctness : undef_uint_array_strategy7.
   pre_process_default.
-  sep_apply UIntArray.undef_full_to_undef_ceil.
+  sep_apply UIntArray.undef_full_to_undef_seg.
   entailer!.
 Qed.
 
@@ -33,7 +33,7 @@ Qed.
 Lemma undef_uint_array_strategy9_correctness : undef_uint_array_strategy9.
   pre_process_default.
   subst.
-  apply UIntArray.undef_ceil_empty.
+  apply UIntArray.undef_seg_empty.
 Qed.
 
 Lemma undef_uint_array_strategy10_correctness : undef_uint_array_strategy10.
@@ -50,10 +50,10 @@ Qed.
 
 Lemma undef_uint_array_strategy13_correctness : undef_uint_array_strategy13.
   pre_process_default.
-  sep_apply (IntArray.undef_ceil_split_to_undef_ceil p x (x + 1) y) ; try lia.
+  sep_apply (IntArray.undef_seg_split_to_undef_seg p x (x + 1) y) ; try lia.
   entailer!.
   pre_process_default.
-  unfold IntArray.undef_ceil. 
+  unfold IntArray.undef_seg. 
   replace (Z.to_nat (x + 1 - x)) with 1%nat by lia.
   simpl. entailer!.
 Qed.
@@ -66,11 +66,11 @@ Qed.
 
 Lemma undef_uint_array_strategy3_correctness : undef_uint_array_strategy3.
   pre_process_default.
-  sep_apply (UIntArray.undef_ceil_split_to_undef_ceil p x (x + 1) y) ; try lia.
+  sep_apply (UIntArray.undef_seg_split_to_undef_seg p x (x + 1) y) ; try lia.
   entailer!.
   pre_process_default.
-  rewrite (UIntArray.undef_ceil_unfold p x (x + 1)) ; try lia.
-  rewrite (UIntArray.undef_ceil_empty).
+  rewrite (UIntArray.undef_seg_unfold p x (x + 1)) ; try lia.
+  rewrite (UIntArray.undef_seg_empty).
   entailer!. 
 Qed. 
 
@@ -82,20 +82,20 @@ Qed.
 
 Lemma undef_uint_array_strategy14_correctness : undef_uint_array_strategy14.
   pre_process_default.
-  sep_apply IntArray.undef_ceil_merge_to_undef_ceil ; try lia.
+  sep_apply IntArray.undef_seg_merge_to_undef_seg ; try lia.
   entailer!.
 Qed.
 
 Lemma undef_uint_array_strategy4_correctness : undef_uint_array_strategy4.
   pre_process_default.
-  sep_apply UIntArray.undef_ceil_merge_to_undef_ceil ; try lia.
+  sep_apply UIntArray.undef_seg_merge_to_undef_seg ; try lia.
   entailer!.
 Qed.
 
 
 Lemma undef_uint_array_strategy17_correctness : undef_uint_array_strategy17.
   pre_process_default.
-  sep_apply IntArray.undef_full_to_undef_ceil.
+  sep_apply IntArray.undef_full_to_undef_seg.
   entailer!.
 Qed.
 
@@ -109,7 +109,7 @@ Qed.
 Lemma undef_uint_array_strategy19_correctness : undef_uint_array_strategy19.
   pre_process_default.
   subst.
-  apply IntArray.undef_ceil_empty.
+  apply IntArray.undef_seg_empty.
 Qed.
 
 Lemma undef_uint_array_strategy20_correctness : undef_uint_array_strategy20.
@@ -119,19 +119,19 @@ Qed.
 
 Lemma undef_uint_array_strategy5_correctness : undef_uint_array_strategy5.
   pre_process_default.
-  sep_apply (UIntArray.undef_ceil_split_to_undef_ceil p x y z) ; try lia.
+  sep_apply (UIntArray.undef_seg_split_to_undef_seg p x y z) ; try lia.
   entailer!.
 Qed.
 
 Lemma undef_uint_array_strategy15_correctness : undef_uint_array_strategy15.
   pre_process_default.
-  sep_apply (IntArray.undef_ceil_split_to_undef_ceil p x y z) ; try lia.
+  sep_apply (IntArray.undef_seg_split_to_undef_seg p x y z) ; try lia.
   entailer!.
 Qed.
 
 Lemma undef_uint_array_strategy6_correctness : undef_uint_array_strategy6.
   pre_process_default.
-  unfold UIntArray.undef_ceil.
+  unfold UIntArray.undef_seg.
   replace (Z.to_nat (x - x)) with 0%nat by lia.
   simpl.
   entailer!.
@@ -139,7 +139,7 @@ Qed.
 
 Lemma undef_uint_array_strategy16_correctness : undef_uint_array_strategy16.
   pre_process_default.
-  unfold IntArray.undef_ceil.
+  unfold IntArray.undef_seg.
   replace (Z.to_nat (x - x)) with 0%nat by lia.
   simpl.
   entailer!.
@@ -147,22 +147,22 @@ Qed.
 
 Lemma undef_uint_array_strategy21_correctness : undef_uint_array_strategy21.
   pre_process_default.
-  sep_apply (UIntArray.undef_full_split_to_undef_ceil p 1) ; try lia.
+  sep_apply (UIntArray.undef_full_split_to_undef_seg p 1) ; try lia.
   entailer!.
   replace (1) with (0 + 1) by lia.
-  rewrite UIntArray.undef_ceil_unfold; try lia.
+  rewrite UIntArray.undef_seg_unfold; try lia.
   rewrite Z.mul_0_l.
-  rewrite (UIntArray.undef_ceil_empty p (0 + 1)).
+  rewrite (UIntArray.undef_seg_empty p (0 + 1)).
   pre_process_default.
 Qed.
 
 Lemma undef_uint_array_strategy22_correctness : undef_uint_array_strategy22.
   pre_process_default.
-  sep_apply (IntArray.undef_full_split_to_undef_ceil p 1) ; try lia.
+  sep_apply (IntArray.undef_full_split_to_undef_seg p 1) ; try lia.
   entailer!.
   replace (1) with (0 + 1) by lia.
-  rewrite IntArray.undef_ceil_unfold; try lia.
+  rewrite IntArray.undef_seg_unfold; try lia.
   rewrite Z.mul_0_l.
-  rewrite (IntArray.undef_ceil_empty p (0 + 1)).
+  rewrite (IntArray.undef_seg_empty p (0 + 1)).
   pre_process_default.
 Qed.

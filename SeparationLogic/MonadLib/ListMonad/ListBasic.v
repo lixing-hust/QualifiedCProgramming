@@ -1,7 +1,8 @@
 (** Monadic operations on Lists. *)
 (* Reference: https://gitlab.mpi-sws.org/iris/stdpp/-/blob/master/stdpp/list_monad.v *)
 
-From MonadLib Require Import Monad OptionMonad.
+From MonadLib Require Import Monad.
+From MonadLib.OptionMonad Require Import OptionMonad.
 Import MonadNotation. Local Open Scope monad_scope.
 
 Require Import Coq.Unicode.Utf8.

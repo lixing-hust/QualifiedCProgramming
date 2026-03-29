@@ -55,8 +55,8 @@ action : left_erase(0);
 
 id : 6
 priority : core(1)
-left : UIntArray::ceil(?p, ?x, ?y, ?l1) at 0 
-right : UIntArray::ceil(?p, ?x, ?y, ?l2) at 1
+left : UIntArray::seg(?p, ?x, ?y, ?l1) at 0 
+right : UIntArray::seg(?p, ?x, ?y, ?l2) at 1
 action : right_erase(1);
          left_erase(0);
          right_add(l1 == l2);
@@ -64,7 +64,7 @@ action : right_erase(1);
 
 id : 7
 priority : core(1)
-left : UIntArray::ceil(?p, ?x, ?y, ?l) at 0
+left : UIntArray::seg(?p, ?x, ?y, ?l) at 0
 right : data_at(?p + (?i * sizeof(U32)), U32, ?v) at 1
 check : infer(x <= i);
         infer(i < y);
@@ -75,9 +75,9 @@ action : right_erase(1);
 
 id : 8
 priority : core(1)
-left : UIntArray::ceil(?p, ?x, ?y, ?l1) at 0 
-        UIntArray::ceil(?p, ?y, ?z, ?l2) at 1 
-right : UIntArray::ceil(?p, ?x, ?z, ?l3) at 2 
+left : UIntArray::seg(?p, ?x, ?y, ?l1) at 0 
+        UIntArray::seg(?p, ?y, ?z, ?l2) at 1 
+right : UIntArray::seg(?p, ?x, ?z, ?l3) at 2 
 check : infer(y <= z);
         infer(x <= y);
 action : right_erase(2);
@@ -87,9 +87,9 @@ action : right_erase(2);
 
 id : 9
 priority : core(1)
-left : UIntArray::ceil(?p, ?x, ?z, ?l3) at 2 
-right : UIntArray::ceil(?p, ?x, ?y, ?l1) at 0 
-        UIntArray::ceil(?p, ?y, ?z, ?l2) at 1 
+left : UIntArray::seg(?p, ?x, ?z, ?l3) at 2 
+right : UIntArray::seg(?p, ?x, ?y, ?l1) at 0 
+        UIntArray::seg(?p, ?y, ?z, ?l2) at 1 
 check : infer(y <= z);
         infer(x <= y);
 action : left_erase(2);
@@ -100,7 +100,7 @@ action : left_erase(2);
 
 id : 10
 priority : core(1)
-right : UIntArray::ceil(?p, ?x, ?x, ?l) at 0
+right : UIntArray::seg(?p, ?x, ?x, ?l) at 0
 action : right_erase(0);
          right_add(l == nil{Z});
 
@@ -113,7 +113,7 @@ check : infer(x <= i);
         infer(i < y);
 action : left_erase(1);
          left_erase(0);
-         left_add(UIntArray::ceil(p, x, y, l));
+         left_add(UIntArray::seg(p, x, y, l));
 
 id : 12
 priority : post(4)
@@ -123,7 +123,7 @@ check : infer(x <= i);
         infer(i < y);
 action : left_erase(1);
          left_erase(0);
-         left_add(UIntArray::ceil(p, x, y, replace_Znth{Z}(i - x, v, l)));
+         left_add(UIntArray::seg(p, x, y, replace_Znth{Z}(i - x, v, l)));
 
 id : 13
 priority : core(1)

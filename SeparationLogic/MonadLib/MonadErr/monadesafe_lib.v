@@ -279,6 +279,15 @@ Section exec_rules.
       tauto.
   Qed.
   
+  Lemma safeExec_pre {A: Type} (c: program Σ A) (P1 P2: Σ -> Prop) X:
+    (forall st, P1 st -> P2 st) ->
+    safeExec P1 c X ->
+    safeExec P2 c X.
+  Proof.
+    unfold safeExec, safe; intros Hx [s [H1 H2]].
+    exists s; split; auto.
+  Qed.
+
   Lemma safeExec_X_subset {A: Type} (c: program Σ A) (P: Σ -> Prop) X1 X2:
     X1 ⊆ X2 ->
     safeExec P c X1 ->
@@ -371,6 +380,47 @@ Section exec_rules.
     apply H0.
   Qed.
 
+  Lemma safeExec_get: forall {A: Type} (Pa: Σ -> A -> Prop) (P: Σ -> Prop) (X: A -> Σ -> Prop) a, 
+  (forall s, P s -> Pa s a) ->
+    safeExec P (get Pa) X -> safeExec P (ret a) X.
+  Proof. 
+    unfold safeExec, safe. intros.
+    destructs H0.
+    eexists.
+    split;eauto.
+    rewrite wp_get in H1.
+    sets_unfold in H1.
+    rewrite wp_ret.
+    apply H1;auto.
+  Qed.
+
+  Lemma safeExec_get': forall {A: Type} (f: Σ -> A) (P: Σ -> Prop) (X: A -> Σ -> Prop) a, 
+    (forall s, P s -> a = f s) ->
+    safeExec P (get' f) X -> safeExec P (ret a) X.
+  Proof. 
+    unfold safeExec, safe. intros.
+    destructs H0.
+    eexists.
+    split;eauto.
+    rewrite wp_get' in H1.
+    sets_unfold in H1.
+    rewrite wp_ret.
+    apply H1;auto.
+  Qed.
+
+  Lemma safeExec_update' : forall (f: Σ -> Σ) (P: Σ -> Prop) (X: unit -> Σ -> Prop), 
+    safeExec P (update' f) X -> safeExec (fun s => exists s0, s = f s0 /\ P s0) (ret tt) X.
+  Proof. 
+    unfold safeExec, safe. intros.
+    destructs H.
+    exists (f σₕ).
+    split;eauto.
+    rewrite wp_update' in H0.
+    sets_unfold in H0.
+    rewrite wp_ret.
+    apply H0;auto.
+  Qed.
+
   Lemma safeExec_assert_aux: forall (Q: Prop) P (X: unit -> Σ -> Prop),
     safeExec P (assert Q) X -> safeExec (fun s => Q /\ P s) (ret tt) X.
   Proof.
@@ -391,6 +441,20 @@ Section exec_rules.
     intros.
     apply safeExec_coqprop.
     apply safeExec_assert_aux;auto.
+  Qed.
+
+  Lemma safeExec_assertS: forall (Q: Σ -> Prop) P (X: unit -> Σ -> Prop),
+    safeExec P (assertS Q) X -> safeExec (fun s => Q s /\ P s) (ret tt) X.
+  Proof.
+    unfold safeExec, safe. intros.
+    destructs H.
+    rewrite wp_assertS in H0.
+    sets_unfold in H0.
+    exists σₕ.
+    split;[tauto | ].
+    rewrite wp_ret.
+    sets_unfold.
+    tauto.
   Qed.
 
   (* primitive rule *)
@@ -503,6 +567,28 @@ Section exec_rules.
     auto.
   Qed.
 
+  Lemma safeExec_get_bind {A B: Type} (a: A) (Pa: Σ -> A -> Prop) (P: Σ -> Prop) (c: A -> program Σ B) X:
+    (forall s, P s -> Pa s a) ->
+    safeExec P (a0 <- get Pa;; c a0) X -> safeExec P (c a) X.
+  Proof.
+    intros * H.
+    eapply safeExec_bind_reta with (a:= a);auto.
+    intros *.
+    apply safeExec_get;auto.
+  Qed.
+
+  Lemma safeExec_update'_bind {B: Type} (f: Σ -> Σ) (P: Σ -> Prop) (c:program Σ B) X:
+    safeExec P (update' f;; c) X ->
+    safeExec (fun s => exists s0, s = f s0 /\ P s0) c X.
+  Proof.
+    intros * H.
+    eapply safeExec_bind_reta  with (a:= tt) in H.
+    exact H.
+    intros *.
+    apply safeExec_update';auto.
+  Qed.
+
+
   Lemma safeExec_assert_seq : forall {A: Type}  (B : Prop) (c: program Σ A) (P : Σ -> Prop) ,
     forall X, safeExec P (assert B ;; c) X ->
     B /\ safeExec P c X.
@@ -513,6 +599,17 @@ Section exec_rules.
     exact H.
     intros *.
     apply safeExec_assert_aux;auto.
+  Qed.
+
+  Lemma safeExec_assertS_seq : forall {A: Type}  (B : Σ -> Prop) (c: program Σ A) (P : Σ -> Prop) ,
+    forall X, safeExec P (assertS B ;; c) X ->
+    safeExec (fun s => B s /\ P s) c X.
+  Proof.
+    intros * H.
+    eapply safeExec_bind_reta  with (a:= tt) in H.
+    exact H.
+    intros *.
+    apply safeExec_assertS;auto.
   Qed.
 
   Lemma safeExec_monad_Atrue_finnal: forall  {A: Type} (m: program unit A),

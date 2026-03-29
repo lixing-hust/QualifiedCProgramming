@@ -37,11 +37,11 @@ Proof.
     sep_apply sllseg_sllseg.
     easy.
   - rewrite Zlength_app.
-    rewrite <- H2.
+    rewrite <- H1.
     rewrite Zlength_cons. rewrite Zlength_nil. lia.
-  - rewrite H1, H; clear H H1. 
+  - rewrite H0, H; clear H H0. 
     rename l1_2 into l1.
-    revert l1 H2.
+    revert l1 H1.
     induction l3; intros; simpl.
     + rewrite app_nil_r. auto.
     + rewrite <- app_assoc. simpl. f_equal. 
@@ -51,10 +51,10 @@ Lemma proof_of_length_return_wit_1 : length_return_wit_1.
 Proof. 
   pre_process.
   rewrite H. sep_apply sll_zero; auto.
-  Intros. 
-  rewrite H4 in H0. 
-  rewrite app_nil_r in H0. subst. 
-  entailer!. clear H2.
+  Intros.
+  subst.  
+  rewrite app_nil_r in *.
+  entailer!. clear H1 H3.
   revert p_pre; induction l1; simpl; try easy.
   intros; Intros.
   Intros z; Exists z. entailer!.
@@ -66,7 +66,7 @@ Proof.
   entailer!.
   - pose proof Zlength_nonneg l1. lia.
   - pose proof Zlength_app l1 l2.
-    rewrite <- H1 in H4.
+    rewrite <- H0 in H4.
     pose proof Zlength_cons p_data l3.
     rewrite <- H in H5.
     pose proof Zlength_nonneg l3. lia.
@@ -91,8 +91,7 @@ Proof.
   + subst l2_2.
     simpl.
     rewrite <- app_assoc.
-    simpl.
-    apply H1.
+    simpl. auto.
 Qed.
 
 Lemma proof_of_reverse_return_wit_1 : reverse_return_wit_1.
@@ -101,7 +100,7 @@ Proof.
   sep_apply (sll_zero v l2); [ | tauto].
   entailer!.
   subst l2.
-  rewrite app_nil_r in H0.
+  rewrite app_nil_r in H.
   subst l.
   rewrite rev_involutive.
   entailer!.
@@ -126,8 +125,7 @@ Proof.
   + subst l2_2.
     simpl.
     rewrite <- app_assoc.
-    simpl.
-    apply H1.
+    simpl. auto.
 Qed.
 
 Lemma proof_of_reverse_alter_style1_return_wit_1 : reverse_alter_style1_return_wit_1.
@@ -136,7 +134,7 @@ Proof.
   sep_apply (sll_zero v l2); [ | tauto].
   entailer!.
   subst l2.
-  rewrite app_nil_r in H0.
+  rewrite app_nil_r in H.
   subst l.
   rewrite rev_involutive.
   entailer!.
@@ -161,8 +159,7 @@ Proof.
   + subst l2_2.
     simpl.
     rewrite <- app_assoc.
-    simpl.
-    apply H1.
+    simpl. auto.
 Qed.
 
 Lemma proof_of_reverse_alter_style3_entail_wit_3 : reverse_alter_style3_entail_wit_3.
@@ -183,8 +180,7 @@ Proof.
   + subst l2_2.
     simpl.
     rewrite <- app_assoc.
-    simpl.
-    apply H1.
+    simpl. auto.
 Qed.
 
 Lemma proof_of_reverse_alter_style3_return_wit_1 : reverse_alter_style3_return_wit_1.
@@ -193,7 +189,7 @@ Proof.
   sep_apply (sll_zero v l2); [ | tauto].
   entailer!.
   subst l2.
-  rewrite app_nil_r in H0.
+  rewrite app_nil_r in H.
   subst l.
   rewrite rev_involutive.
   entailer!.
@@ -205,7 +201,7 @@ Proof.
   sep_apply (sll_zero v_inv l2); [ | tauto].
   entailer!.
   subst l2.
-  rewrite app_nil_r in H0.
+  rewrite app_nil_r in H.
   subst l.
   rewrite rev_involutive.
   entailer!.
@@ -336,8 +332,7 @@ Proof.
     entailer!.
   + subst l1b_2.
     rewrite <- app_assoc.
-    simpl.
-    apply H0.
+    simpl. auto.
 Qed.
 
 Lemma proof_of_append_2p_return_wit_1 : append_2p_return_wit_1.
@@ -347,7 +342,7 @@ Proof.
   Intros.
   sep_apply sllseg_sll.
   subst l1b.
-  rewrite app_nil_r in H0.
+  rewrite app_nil_r in H.
   subst l1a.
   entailer!.
 Qed.

@@ -1,0 +1,2 @@
+[console_scripts]
+rocq-mcp = rocq_mcp.server:main

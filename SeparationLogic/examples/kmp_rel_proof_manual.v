@@ -31,7 +31,7 @@ Proof.
   replace (Zlength (0::nil)) with 1 by easy.
   pose proof H as H'.
   unfold inner_loop in H.
-  unfold_loop H.
+  unfold_loop in H.
   unfold inner_body at 1 in H.
   safe_step H.
   entailer!.
@@ -42,7 +42,7 @@ Proof.
   pre_process.
   entailer!.
   unfold inner_loop in *.
-  unfold_loop H4.
+  unfold_loop in H4.
   unfold inner_body at 1 in H4.
   safe_step H4.
   rewrite app_Znth1 in H0 by auto.
@@ -57,7 +57,7 @@ Proof.
   pre_process.
   entailer!.
   unfold inner_loop in H3.
-  unfold_loop H3.
+  unfold_loop in H3.
   unfold inner_body at 1 in H3.
   repeat (prog_nf in H3 ; safe_step H3).
   rewrite app_Znth1 in H by lia.
@@ -71,7 +71,7 @@ Proof.
   pre_process.
   entailer!.
   unfold inner_loop in H4.
-  unfold_loop H4.
+  unfold_loop in H4.
   unfold inner_body at 1 in H4.
   safe_step H4.
   rewrite app_Znth1 in H0 by lia.
@@ -85,7 +85,7 @@ Qed.
 Lemma proof_of_constr_entail_wit_1 : constr_entail_wit_1.
 Proof. 
   pre_process; subst.
-  Exists (sublist 1 n l) (0::nil).
+  Exists (sublist 1 n_low_level_spec l) (0::nil).
   entailer!.
   prop_apply IntArray.full_Zlength; Intros.
   destruct l.
@@ -94,7 +94,7 @@ Proof.
   rewrite (replace_Znth_app_l 0 0); try lia.
   2:{ lazy; auto. }
   replace (replace_Znth 0 0 (z::nil)) with (0::nil) by easy.
-  rewrite (IntArray.full_split_to_full retval 1 n); try lia.
+  rewrite (IntArray.full_split_to_full retval 1 n_low_level_spec); try lia.
   rewrite sublist_split_app_l; [ | lia | easy].
   assert (Zlength (0::nil) = 1). 
   { lazy; auto. }
@@ -103,12 +103,12 @@ Proof.
   replace ((0::nil) ++ l) with (0::l) by easy.
   replace ((z::nil) ++ l) with (z::l) by easy.
   rewrite replace_Znth_length in H0.
-  rewrite (sublist_cons2 1 n); try lia.
+  rewrite (sublist_cons2 1 n_low_level_spec); try lia.
   2:{
     rewrite Zlength_cons.
     rewrite Zlength_cons in H0. lia. 
   }
-  rewrite (sublist_cons2 1 n); try lia.
+  rewrite (sublist_cons2 1 n_low_level_spec); try lia.
   entailer!.
 Qed. 
 
@@ -118,9 +118,9 @@ Proof.
   Exists l1 (vnext0_2 ++ (retval::nil)).
   prop_apply (IntArray.full_Zlength vnext).
   entailer!.
-  sep_apply IntArray.ceil_single.
-  sep_apply IntArray.full_to_ceil.
-  sep_apply IntArray.ceil_merge_to_full ; try lia.
+  sep_apply IntArray.seg_single.
+  sep_apply IntArray.full_to_seg.
+  sep_apply IntArray.seg_merge_to_full ; try lia.
   replace (vnext + 0 * sizeof ( INT )) with vnext by lia.
   replace (i + 1 - 0) with (i + 1) by lia.
   entailer!.
@@ -130,15 +130,15 @@ Lemma proof_of_constr_return_wit_1 : constr_return_wit_1.
 Proof. 
   pre_process.
   prop_apply (IntArray.full_length (vnext_2 + i * sizeof ( INT ))); Intros.
-  assert (i = n) by lia; subst i; clear H3.
+  assert (i = n_low_level_spec) by lia; subst i; clear H3.
   prop_apply CharArray.full_Zlength.  
   Exists vnext0; entailer!.
-  - replace (n-n) with 0 by lia.
-    prop_apply (IntArray.full_Zlength (vnext_2 + n * sizeof ( INT ))).
+  - replace (n_low_level_spec-n_low_level_spec) with 0 by lia.
+    prop_apply (IntArray.full_Zlength (vnext_2 + n_low_level_spec * sizeof ( INT ))).
     Intros; apply Zlength_nil_inv in H4; subst l0.
     cbn. entailer!.
   - unfold constr_loop_from in H0.
-    unfold_loop H0.
+    unfold_loop in H0.
     apply string_Zlength in H3.
     safe_choice_r H0.
     auto. lia.
@@ -162,7 +162,7 @@ Proof.
     prog_nf.
     easy.
   - 
-    unfold_loop H0.
+    unfold_loop in H0.
     prog_nf in H0.
     safe_choice_l H0; try lia.
     unfold constr_body at 1 in H0.
@@ -181,9 +181,9 @@ Proof.
   rewrite <- Zlength_correct in H0.
   rewrite (IntArray.full_unfold).
   replace (vnext + i * sizeof ( INT ) + 0 * sizeof ( INT )) with (vnext + i * sizeof ( INT )) by lia.
-  sep_apply IntArray.ceil_to_full.
+  sep_apply IntArray.seg_to_full.
   replace (vnext + i * sizeof ( INT ) + 1 * sizeof ( INT )) with (vnext + (i+1) * sizeof ( INT )) by lia.
-  replace (n - i - 1) with (n - (i + 1)) by lia.
+  replace (n_low_level_spec - i - 1) with (n_low_level_spec - (i + 1)) by lia.
   entailer!.
 Qed. 
 
@@ -209,7 +209,7 @@ Proof.
   prop_apply CharArray.full_Zlength; Intros.
   apply string_Zlength in H.
   rewrite H in *; clear H.
-  Exists (Some(i-n+1)); entailer!.
+  Exists (Some(i-n_low_level_spec+1)); entailer!.
   safe_choice_l H0; auto.
 Qed. 
 
@@ -220,7 +220,7 @@ Proof.
   Exists None; entailer!.
   apply string_Zlength in H11.
   unfold match_loop_from in H0.
-  unfold_loop H0.
+  unfold_loop in H0.
   prog_nf in H0.
   safe_choice_r H0; [unfold continue in H0 ; prog_nf in H0 ; auto | lia].
 Qed. 
@@ -257,17 +257,17 @@ Qed.
 Lemma proof_of_match_derive_high_level_spec_by_low_level_spec : match_derive_high_level_spec_by_low_level_spec.
 Proof. 
   pre_process.
-  Exists patn0 text0 vnext0 n.
-  remember (match_loop 0 patn0 text0 vnext0) as prog.
-  Exists m (fun (r: option Z) x => prog.(MonadErr.nrm) tt r x).
+  Exists patn0_high_level_spec text0_high_level_spec vnext0_high_level_spec n_high_level_spec.
+  remember (match_loop 0 patn0_high_level_spec text0_high_level_spec vnext0_high_level_spec) as prog.
+  Exists m_high_level_spec (fun (r: option Z) x => prog.(MonadErr.nrm) tt r x).
   do 2 prop_apply CharArray.full_Zlength; Intros.
   prop_apply IntArray.full_length; Intros.
   apply string_Zlength in H3.
   apply string_Zlength in H4.
   rewrite <- Zlength_correct in H5.
-  assert (Zlength patn0 > 0) by lia.
+  assert (Zlength patn0_high_level_spec > 0) by lia.
   rewrite <- Zlength_nonnil in H6.
-  pose proof match_loop_sound 0 patn0 text0 vnext0 H6 ltac:(lia) H.
+  pose proof match_loop_sound 0 patn0_high_level_spec text0_high_level_spec vnext0_high_level_spec H6 ltac:(lia) H.
   do 2 apply derivable1_wand_sepcon_adjoint.
   entailer!.
   2:{
@@ -293,11 +293,11 @@ Proof.
   pre_process.
   prop_apply CharArray.full_Zlength; Intros.
   apply string_Zlength in H1.
-  Exists str n.
-  assert (Zlength str > 0) by lia.
+  Exists str_high_level_spec n_high_level_spec.
+  assert (Zlength str_high_level_spec > 0) by lia.
   apply Zlength_nonnil in H2.
-  pose proof constr_loop_sound 0 str H2.
-  Exists (fun r x => (constr_loop 0 str).(MonadErr.nrm) tt r x).
+  pose proof constr_loop_sound 0 str_high_level_spec H2.
+  Exists (fun r x => (constr_loop 0 str_high_level_spec).(MonadErr.nrm) tt r x).
   entailer!.
   2:{
     destruct H3 as [_ H3].
@@ -320,8 +320,8 @@ Proof.
   prop_apply IntArray.full_Zlength; Intros.
   apply string_Zlength in H2.
   apply safeExec_bind in H as (X' & H7 & H8).
-  Exists str0 vnext0.
-  Exists n m X'; entailer!.
+  Exists str0_bind_spec vnext0_bind_spec.
+  Exists n_bind_spec m_bind_spec X'; entailer!.
   apply derivable1_wand_sepcon_adjoint; entailer!.
   Intros ret; Exists ret; entailer!.
 Qed. 

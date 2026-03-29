@@ -2549,7 +2549,7 @@ Module StreamConn.
 
 Import List ListConn Streams.
 
-Search Stream list.
+(* Search Stream list. *)
 
 Definition stream_app {A: Type} (l1: list A) (l2: Stream A): Stream A :=
   (fix app (l1: list A): Stream A :=

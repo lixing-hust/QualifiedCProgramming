@@ -125,13 +125,6 @@ Proof.
   }
 Qed.
 
-Lemma proof_of_clause_gen_unary_safety_wit_8 : clause_gen_unary_safety_wit_8.
-Proof.
-  pre_process.
-  pose proof (Zlength_nonneg clist).
-  entailer!.
-Qed.
-
 Lemma proof_of_clause_gen_unary_which_implies_wit_1 : clause_gen_unary_which_implies_wit_1.
 Proof.
   pre_process.
@@ -145,10 +138,10 @@ Lemma proof_of_clause_gen_binary_safety_wit_80 : clause_gen_binary_safety_wit_80
 Proof.
   pre_process.
   entailer!.
-  destruct bop; try contradiction.
+  destruct bop; simpl in * ; try lia.
 Qed.
 
-Lemma proof_of_clause_gen_binary_return_wit_1_1 : clause_gen_binary_return_wit_1_1.
+Lemma proof_of_clause_gen_binary_return_wit_1 : clause_gen_binary_return_wit_1.
 Proof.
   pre_process.
   rewrite all_zero_list_3.
@@ -185,7 +178,7 @@ Proof.
   unfold store_predata.
   Exists retval_5.
   assert (bop = SMTPROP_IFF). {
-    destruct bop; unfold SmtPBID in *; try contradiction.
+    destruct bop; unfold SmtPBID in *; try lia.
     reflexivity.
   }
   rewrite H37.
@@ -245,7 +238,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_clause_gen_binary_return_wit_1_2 : clause_gen_binary_return_wit_1_2.
+Lemma proof_of_clause_gen_binary_return_wit_6 : clause_gen_binary_return_wit_6.
 Proof.
   pre_process.
   rewrite all_zero_list_3.
@@ -253,7 +246,7 @@ Proof.
   repeat rewrite replace_1st.
   repeat rewrite replace_2nd.
   assert (bop = SMTPROP_OR). {
-    destruct bop; unfold SmtPBID in *; try contradiction; try lia.
+    destruct bop; unfold SmtPBID in *;  try lia.
     reflexivity.
   }
   clear H23 H27.
@@ -325,7 +318,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_clause_gen_binary_return_wit_1_3 : clause_gen_binary_return_wit_1_3.
+Lemma proof_of_clause_gen_binary_return_wit_5 : clause_gen_binary_return_wit_5.
 Proof.
   pre_process.
   rewrite all_zero_list_3.
@@ -406,7 +399,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_clause_gen_binary_return_wit_1_4 : clause_gen_binary_return_wit_1_4.
+Lemma proof_of_clause_gen_binary_return_wit_4 : clause_gen_binary_return_wit_4.
 Proof.
   pre_process.
   clear H27.
@@ -488,7 +481,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_clause_gen_binary_return_wit_1_5 : clause_gen_binary_return_wit_1_5.
+Lemma proof_of_clause_gen_binary_return_wit_3 : clause_gen_binary_return_wit_3.
 Proof.
   pre_process.
   clear H27.
@@ -574,7 +567,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_clause_gen_binary_return_wit_1_6 : clause_gen_binary_return_wit_1_6.
+Lemma proof_of_clause_gen_binary_return_wit_2 : clause_gen_binary_return_wit_2.
 Proof.
   pre_process.
   clear H28 H27.
@@ -660,7 +653,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_clause_gen_binary_return_wit_1_7 : clause_gen_binary_return_wit_1_7.
+Lemma proof_of_clause_gen_binary_return_wit_8 : clause_gen_binary_return_wit_8.
 Proof.
   pre_process.
   (* clear H24 H25.
@@ -734,7 +727,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_clause_gen_binary_return_wit_1_8 : clause_gen_binary_return_wit_1_8.
+Lemma proof_of_clause_gen_binary_return_wit_7 : clause_gen_binary_return_wit_7.
 Proof.
   pre_process.
   clear H25.
@@ -879,10 +872,10 @@ Lemma proof_of_prop2cnf_safety_wit_9 : prop2cnf_safety_wit_9.
 Proof.
   pre_process.
   entailer!.
-  destruct prop; try contradiction.
+  destruct prop; simpl in * ; try lia.
 Qed.
 
-Lemma proof_of_prop2cnf_return_wit_1_1 : prop2cnf_return_wit_1_1.
+Lemma proof_of_prop2cnf_return_wit_1 : prop2cnf_return_wit_1.
 Proof.
   pre_process.
   clear H8 H7.
@@ -917,7 +910,7 @@ Qed.
 
 Opaque Z.add Z.sub Z.mul Z.opp Z.of_nat Z.of_N Z.succ.
 
-Lemma proof_of_prop2cnf_return_wit_1_2 : prop2cnf_return_wit_1_2.
+Lemma proof_of_prop2cnf_return_wit_2 : prop2cnf_return_wit_2.
 Proof.
   pre_process.
   clear H25.
@@ -987,7 +980,7 @@ Proof.
       lia.
 Qed.
 
-Lemma proof_of_prop2cnf_return_wit_1_3 : prop2cnf_return_wit_1_3.
+Lemma proof_of_prop2cnf_return_wit_3 : prop2cnf_return_wit_3.
 Proof.
   pre_process.
   rename H into Hs.
@@ -1782,4 +1775,3 @@ Proof.
   entailer!.
   lia.
 Qed.
-

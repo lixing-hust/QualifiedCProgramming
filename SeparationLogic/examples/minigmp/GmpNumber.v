@@ -20,6 +20,53 @@ Local Open Scope string.
 Import naive_C_Rules.
 Local Open Scope sac.
 
+Lemma uint_array_undef_seg_align4 : forall ptr size cap,
+  UIntArray.undef_seg ptr size cap |-- store_align4_n (cap - size).
+Proof.
+  intros.
+  unfold UIntArray.undef_seg.
+  destruct (Z_le_dec size cap).
+  - set (n := Z.to_nat (cap - size)).
+    replace (cap - size) with (Z.of_nat n) by lia.
+    replace (cap) with (size + Z.of_nat n) by lia.
+    clearbody n. clear l cap.
+    revert ptr size.
+    induction n ; simpl in * ; intros.
+    + unfold store_align4_n. Exists nil.
+      entailer!.
+      constructor.
+    + replace (size + Z.pos (Pos.of_succ_nat n)) with (size + 1 + Z.of_nat n) by lia.
+      sep_apply IHn.
+      sep_apply undef_store_uint_align4.
+      sep_apply (store_align4_merge 1 (Z.of_nat n)).
+      replace (Z.pos (Pos.of_succ_nat n)) with (1 + Z.of_nat n) by lia.
+      entailer!.
+  - replace (Z.to_nat (cap - size)) with 0%nat by lia.
+    simpl. Intros.
+    lia.
+Qed.
+
+Lemma uint_array_undef_full_align4 : forall ptr size,
+  UIntArray.undef_full ptr size |-- store_align4_n size.
+Proof.
+  intros.
+  sep_apply UIntArray.undef_full_to_undef_seg.
+  sep_apply uint_array_undef_seg_align4.
+  replace (size - 0) with size by lia.
+  entailer!.
+Qed.
+  
+Lemma uint_array_full_align4 : forall ptr size data,
+  UIntArray.full ptr size data |-- store_align4_n size.
+Proof.
+  intros.
+  sep_apply UIntArray.full_to_undef_full.
+  sep_apply uint_array_undef_full_align4.
+  entailer!.
+Qed.
+
+
+
 Section Internal.
   
 Variable Base : Z.
@@ -47,6 +94,13 @@ Definition mpd_store_Z (ptr: addr) (n: Z) (size: Z) : Assertion :=
 Definition mpd_store_Z_compact (ptr: addr) (n size: Z): Assertion :=
   EX data,
     [| list_to_Z data = n /\ last data 1 >= 1 /\ list_within_bound data |] && [| size = Zlength data |] && mpd_store_list ptr data.
+
+Definition is_compact_Z (n: Z) (size: Z) : Prop :=
+exists data, 
+  list_to_Z data = n /\
+  Zlength data = size /\ 
+  list_within_bound data /\
+  last data 1 >= 1.
 
 Lemma list_to_Z_injection: forall l1 l2 n1 n2,
   list_to_Z l1 = n1 ->
@@ -622,6 +676,195 @@ Proof.
   entailer!.
 Qed.
 
+
+Lemma mpd_store_Z_compact_align4 : forall ptr n size,
+  mpd_store_Z_compact ptr n size |-- store_align4_n size.
+Proof.
+  intros.
+  unfold mpd_store_Z_compact , mpd_store_list.
+  Intros data.
+  rewrite <- H0.
+  sep_apply uint_array_full_align4.
+  entailer!.
+Qed.
+
+(* Convert a number to its digit list representation *)
+Fixpoint Z_to_list (n: Z) (size: nat) : list Z :=
+  match size with
+  | O => nil
+  | S size' => (n mod Base) :: Z_to_list (n / Base) size'
+  end.
+
+Lemma Z_to_list_length : forall n size,
+  Zlength (Z_to_list n size) = Z.of_nat size.
+Proof.
+  intros. revert n.
+  induction size; simpl.
+  - rewrite Zlength_nil. lia.
+  - intros. rewrite Zlength_cons. rewrite IHsize. lia.
+Qed.
+
+Lemma Z_to_list_within_bound : forall n size,
+  0 <= n ->
+  list_within_bound (Z_to_list n size).
+Proof.
+  intros.
+  revert n H.
+  induction size; intros; simpl.
+  - tauto.
+  - split.
+    + pose proof (Z.mod_pos_bound n Base Base_pos). lia.
+    + apply IHsize. apply Z_div_pos; lia.
+Qed.
+
+Lemma Z_to_list_correct : forall n size,
+  0 <= n ->
+  list_to_Z (Z_to_list n size) = n mod (Base ^ (Z.of_nat size)).
+Proof.
+  intros.
+  revert n H.
+  induction size; intros.
+  - rewrite Z.mod_1_r. simpl. lia.
+  - simpl.
+  change (n mod Z.pow_pos Base (Pos.of_succ_nat size)) with (n mod Base ^ Z.of_nat (S size)).
+   rewrite IHsize; [ | apply Z_div_pos; lia].
+    pose proof Nat2Z.inj_succ size. rewrite H0.
+    pose proof Z.pow_succ_r Base (Z.of_nat size) ltac:(lia).
+    rewrite H1.
+    rewrite Z.rem_mul_r.
+    + lia.
+    + lia.
+    + lia.
+Qed.
+
+Lemma Z_to_list_exact : forall n size,
+  0 <= n < Base ^ (Z.of_nat size) ->
+  list_to_Z (Z_to_list n size) = n.
+Proof.
+  intros.
+  rewrite Z_to_list_correct; try lia.
+  rewrite Z.mod_small; lia.
+Qed.
+
+Lemma Z_to_list_last : forall n size,
+  0 <= n < Base ^ (Z.of_nat size) ->
+  Base ^ (Z.of_nat size - 1) <= n ->
+  last (Z_to_list n size) 1 >= 1.
+Proof.
+  intros.
+  revert n H H0.
+  induction size; intros.
+  - simpl. lia.
+  - simpl. pose proof IHsize (n / Base).
+  assert (Hcond1: 0 <= n / Base < Base ^ Z.of_nat size).
+  {
+    split.
+    - apply Z_div_pos; lia.
+    - apply Z.div_lt_upper_bound; try lia.
+    rewrite <- Z.pow_succ_r; try lia.
+  }
+  assert (Hcond2: Base ^ (Z.of_nat size - 1) <= n / Base). {
+    apply Z.div_le_lower_bound; try lia.
+    destruct (Nat.eq_dec size 0) as [Hsize0 | Hsize_pos].
+    -- subst. simpl in *. lia.
+    -- rewrite <- Z.pow_succ_r; try lia.
+      replace (Z.succ (Z.of_nat size - 1)) with (Z.of_nat size) by lia.
+      (* 现在目标是 Base ^ Z.of_nat size <= n *)
+      (* 从 H0: Base ^ (Z.of_nat (S size) - 1) <= n *)
+      replace (Z.of_nat (S size) - 1) with (Z.of_nat size) in H0 by lia.
+      exact H0. 
+  }
+  pose proof H1 Hcond1 Hcond2.
+  destruct size.
+    + simpl.
+      rewrite Nat2Z.inj_succ in H, H0.
+      simpl in H, H0.
+      pose proof (Z.mod_pos_bound n Base Base_pos).
+      pose proof Z.mod_small. rewrite H4; lia.
+    + remember (S size) as size'.
+      assert (Z_to_list (n / Base) size' <> nil). {
+        subst size'.
+        simpl. congruence.
+      }
+      destruct (Z_to_list (n / Base) size').
+      -- contradiction.
+      -- lia. 
+Qed.
+
+(* Simpler lemma: if we know the exact bounds, the compact representation exists *)
+Lemma is_compact_Z_from_bounds : forall n size,
+  size >= 0 ->
+  (size = 0 /\ n = 0) \/ (size > 0 /\ Base ^ (size - 1) <= n < Base ^ size) ->
+  is_compact_Z n size.
+Proof.
+  intros.
+  destruct H0.
+  - (* size = 0, n = 0 case *)
+    destruct H0; subst.
+    unfold is_compact_Z.
+    exists nil.
+    simpl. repeat split; lia.
+  - (* size > 0, proper bounds *)
+    destruct H0 as [Hsize [Hlo Hhi]].
+    unfold is_compact_Z.
+    destruct (Z.to_nat size) eqn:Hnat.
+    + lia.
+    + exists (Z_to_list n (S n0)).
+      repeat split.
+      * rewrite Z_to_list_exact; try lia.
+        replace (Z.of_nat (S n0)) with size by lia. lia.
+      * rewrite Z_to_list_length. lia.
+      * apply Z.mod_pos_bound. lia.
+      * apply Z.mod_pos_bound. lia.
+      * apply Z_to_list_within_bound. apply Z_div_pos; lia.
+      * apply Z_to_list_last.
+        -- replace (Z.of_nat (S n0)) with size by lia. lia.
+        -- replace (Z.of_nat (S n0)) with size by lia. lia.
+Qed.
+
+(* Compact representation properties from is_compact_Z *)
+Lemma is_compact_Z_bounds : forall n size,
+  is_compact_Z n size ->
+  size >= 0 /\
+  ((size = 0 /\ n = 0) \/ (size > 0 /\ Base ^ (size - 1) <= n < Base ^ size)).
+Proof.
+  intros.
+  unfold is_compact_Z in H.
+  destruct H as [data [Heq [Hlen [Hbound Hlast]]]].
+  split.
+  - pose proof (Zlength_nonneg data). lia.
+  - destruct data.
+    + left. simpl in *. rewrite Zlength_nil in Hlen.
+     split; lia.
+    + right.
+      simpl in Hlast.
+      pose proof (list_to_Z_compact_bound (z :: data) Hbound Hlast).
+      rewrite Zlength_cons in Hlen.
+      pose proof (Zlength_nonneg data).
+      split; try lia.
+      rewrite Zlength_cons in H.
+      subst. lia.
+Qed.
+
+Lemma is_compact_Z_add_helper_1 : forall n m size,
+  Base>2 ->
+  size >= 0 ->
+  0 <= n -> 0 <= m ->
+  Base ^ size <= n + m < 2 * Base ^ size ->
+  is_compact_Z (n + m) (size + 1).
+Proof.
+  intros.
+  apply is_compact_Z_from_bounds; try lia.
+  right.
+  split; try lia.
+  split.
+  - replace (size + 1 - 1) with size by lia. lia.
+  - rewrite Aux.Zpow_add_1; try lia.
+    rewrite Z.mul_comm.
+    pose proof Z.pow_pos_nonneg.
+    nia.
+Qed.
+
 End Internal.
 
 
@@ -633,6 +876,20 @@ Proof.
   lia.
 Qed.
 
+(* same_sign: two integers have the same sign *)
+Definition same_sign (a b: Z) : Prop :=
+  (a >= 0 /\ b >= 0) \/ (a < 0 /\ b < 0).
+
+Lemma same_sign_refl : forall a, same_sign a a.
+Proof.
+  intros. unfold same_sign. lia.
+Qed.
+
+Lemma same_sign_sym : forall a b, same_sign a b -> same_sign b a.
+Proof.
+  intros. unfold same_sign in *. lia.
+Qed.
+
 Record bigint_ent: Type := {
     cap: Z;
     data: list Z;
@@ -642,8 +899,444 @@ Record bigint_ent: Type := {
 Definition store_Z (x: addr) (n: Z): Assertion :=
   EX (ptr: addr) (size cap: Z),
     [| Zabs size <= cap |] && 
-    (([| size < 0 |] && [| n < 0 |] && mpd_store_Z_compact UINT_MOD ptr (-n) (-size) ** UIntArray.undef_ceil ptr (-size) cap) ||
-      ([| size >= 0 |] && [| n >= 0 |] && mpd_store_Z_compact UINT_MOD ptr n size ** UIntArray.undef_ceil ptr size cap)) **
+    (([| size < 0 |] && [| n < 0 |] && mpd_store_Z_compact UINT_MOD ptr (-n) (-size) ** UIntArray.undef_seg ptr (-size) cap) ||
+      ([| size >= 0 |] && [| n >= 0 |] && mpd_store_Z_compact UINT_MOD ptr n size ** UIntArray.undef_seg ptr size cap)) **
     &(x # "__mpz_struct" ->ₛ "_mp_size") # Int |-> size **
     &(x # "__mpz_struct" ->ₛ "_mp_alloc") # Int |-> cap **
     &(x # "__mpz_struct" ->ₛ "_mp_d") # Ptr |-> ptr.
+
+Definition store_Z_with_size (x: addr) (n: Z) (size: Z): Assertion :=
+  EX (ptr: addr) (cap: Z),
+    [| Zabs size <= cap |] && 
+    (([| size < 0 |] && [| n < 0 |] && mpd_store_Z_compact UINT_MOD ptr (-n) (-size) ** UIntArray.undef_seg ptr (-size) cap) ||
+      ([| size >= 0 |] && [| n >= 0 |] && mpd_store_Z_compact UINT_MOD ptr n size ** UIntArray.undef_seg ptr size cap)) **
+    &(x # "__mpz_struct" ->ₛ "_mp_size") # Int |-> size **
+    &(x # "__mpz_struct" ->ₛ "_mp_alloc") # Int |-> cap **
+    &(x # "__mpz_struct" ->ₛ "_mp_d") # Ptr |-> ptr.
+
+Lemma store_Z_with_size_range: forall x n size,
+  store_Z_with_size x n size |-- [| Zabs size + 1 <= INT_MAX |].
+Proof.
+  intros.
+  unfold store_Z, store_Z_with_size.
+  Intros ptr cap.
+  Split ; Intros;
+  do 2 sep_apply store_int_align4;
+  sep_apply store_ptr_align4;
+  sep_apply uint_array_undef_seg_align4;
+  sep_apply mpd_store_Z_compact_align4;
+  [ sep_apply (store_align4_merge (-size) (cap - (-size)));
+    replace (- size + (cap - (-size))) with cap by lia |
+    sep_apply (store_align4_merge size (cap - size));
+    replace (size + (cap - size)) with cap by lia ];
+  sep_apply (store_align4_merge cap 1);
+  sep_apply (store_align4_merge (cap + 1) 1);
+  sep_apply (store_align4_merge (cap + 1 + 1) 1);
+  prop_apply store_align4_n_valid;
+  Intros;
+  entailer!;
+  replace (Int.max_unsigned / 4) with 1073741823 in H2 by reflexivity;
+  lia.
+Qed.
+
+Definition store_Z_remain_size (x: addr) (n: Z) (old_size: Z) (real_size: Z): Assertion :=
+  EX (ptr: addr) (cap: Z),
+    [| Zabs real_size <= cap |] && 
+    (([| real_size < 0 |] && [| n < 0 |] && mpd_store_Z_compact UINT_MOD ptr (-n) (-real_size) ** UIntArray.undef_seg ptr (-real_size) cap) ||
+      ([| real_size >= 0 |] && [| n >= 0 |] && mpd_store_Z_compact UINT_MOD ptr n real_size ** UIntArray.undef_seg ptr real_size cap)) **
+    &(x # "__mpz_struct" ->ₛ "_mp_size") # Int |-> old_size **
+    &(x # "__mpz_struct" ->ₛ "_mp_alloc") # Int |-> cap **
+    &(x # "__mpz_struct" ->ₛ "_mp_d") # Ptr |-> ptr.
+
+Lemma store_Z_remain_size_range: forall x n old_size real_size,
+  store_Z_remain_size x n old_size real_size |-- 
+  [| Zabs real_size + 1 <= INT_MAX |].
+Proof.
+  intros.
+  unfold store_Z_remain_size.
+  Intros ptr cap.
+  Split ; Intros;
+  do 2 sep_apply store_int_align4;
+  sep_apply store_ptr_align4;
+  sep_apply uint_array_undef_seg_align4;
+  sep_apply mpd_store_Z_compact_align4;
+  [ sep_apply (store_align4_merge (-real_size) (cap - (-real_size)));
+    replace (- real_size + (cap - (-real_size))) with cap by lia |
+    sep_apply (store_align4_merge real_size (cap - real_size));
+    replace (real_size + (cap - real_size)) with cap by lia ];
+  sep_apply (store_align4_merge cap 1);
+  sep_apply (store_align4_merge (cap + 1) 1);
+  sep_apply (store_align4_merge (cap + 1 + 1) 1);
+  prop_apply store_align4_n_valid;
+  Intros;
+  entailer!;
+  replace (Int.max_unsigned / 4) with 1073741823 in H2 by reflexivity;
+  lia.
+Qed.
+
+Lemma mpd_store_Z_bound: forall ptr n size,
+  mpd_store_Z UINT_MOD ptr n size |-- 
+  [| 0 <= n < UINT_MOD ^ size |].
+Proof.
+  intros.
+  unfold mpd_store_Z.
+  Intros data.
+  pose proof list_to_Z_bound UINT_MOD.
+  unfold UINT_MOD in  H1,H.
+  pose proof H1 ltac:(lia) as H1.
+  pose proof H1 data as H1. destruct H.
+  pose proof H1 H2 as H1.
+  subst. 
+  entailer!.
+Qed.
+
+Lemma mpd_store_Z_compact_bound: forall ptr n size,
+  mpd_store_Z_compact UINT_MOD ptr n size |--
+  [| 0 <= n < UINT_MOD ^ size |].
+Proof.
+  intros.
+  unfold mpd_store_Z_compact.
+  Intros data.
+  pose proof list_to_Z_bound UINT_MOD.
+  unfold UINT_MOD in  H1,H.
+  pose proof H1 ltac:(lia) as H1.
+  pose proof H1 data as H1. destruct H.
+  destruct H2.
+  pose proof H1 H3 as H1.
+  subst. 
+  entailer!.
+Qed.
+
+Lemma mpn_add_ret_0_or_1: forall ap bp rp val_a val_b val_r an bn ret_val,
+  val_r + ret_val * UINT_MOD ^ an = val_a + val_b -> an >= bn ->
+  ( mpd_store_Z UINT_MOD ap val_a an ) **
+  ( mpd_store_Z UINT_MOD bp val_b bn ) **
+  ( mpd_store_Z UINT_MOD rp val_r an ) |--
+    [| ret_val = 0 \/ ret_val = 1 |].
+Proof.
+  intros.
+  prop_apply mpd_store_Z_bound.
+  prop_apply mpd_store_Z_bound.
+  Intros.
+  prop_apply (mpd_store_Z_bound rp val_r an).
+  Intros.
+  entailer!.
+  assert (UINT_MOD ^ an >= UINT_MOD ^ bn).
+  { unfold UINT_MOD in *. 
+  pose proof Z.pow_le_mono_r 4294967296 bn an as Hpow.
+  pose proof Hpow ltac:(lia) ltac:(lia) as Hpow.
+  lia. }
+  assert (0 <= val_b < UINT_MOD ^ an) by lia.
+  clear H2.
+  clear H4.
+  assert ( ret_val < 2).
+  { destruct (Z_lt_le_dec ret_val 2) as [? | Hge2]; auto.
+    exfalso.
+    assert (val_a+val_b < 2 * UINT_MOD ^ an) by lia.
+    assert (ret_val * UINT_MOD ^an >= 2 * UINT_MOD ^an).
+    { pose proof Z.mul_le_mono_nonneg_r 2 ret_val (UINT_MOD ^ an).
+    lia. }
+    assert (val_r + ret_val * UINT_MOD ^ an >= 2 * UINT_MOD ^ an) by lia.
+    assert (val_r + ret_val * UINT_MOD ^ an > val_a + val_b) by lia.
+    lia.
+  }
+  assert (ret_val >=0).
+  {
+      destruct (Z_lt_le_dec ret_val 0) as [Hneg | ?]; auto.
+      exfalso.
+      - assert (ret_val * UINT_MOD ^ an <= -1 * UINT_MOD ^ an).
+      {
+          pose proof Z.mul_le_mono_nonneg_r ret_val (-1) (UINT_MOD ^ an).
+          unfold UINT_MOD in H4 at 1.
+          pose proof H4 ltac:(lia) ltac:(lia) as H4.
+          lia.
+      }
+      assert (val_r + ret_val * UINT_MOD ^ an < 0) by lia.
+      lia.
+      -lia.
+  }
+  lia.
+Qed.
+
+Lemma mpn_sub_ret_0: forall ap bp rp val_a val_b val_r an bn rn ret_val ,
+  val_r - ret_val * UINT_MOD ^ an = val_a - val_b -> 
+  an >= bn ->
+  bn >= 0 ->
+  val_a >= val_b ->
+  rn <= an ->
+  ( mpd_store_Z UINT_MOD ap val_a an ) **
+  ( mpd_store_Z UINT_MOD bp val_b bn ) **
+  ( mpd_store_Z_compact UINT_MOD rp val_r rn ) |--
+    [| ret_val = 0 |].
+Proof.
+  intros.
+  prop_apply mpd_store_Z_bound.
+  prop_apply mpd_store_Z_bound.
+  Intros.
+  prop_apply (mpd_store_Z_compact_bound rp val_r rn).
+  Intros.
+  entailer!.
+  assert (UINT_MOD ^ an >= UINT_MOD ^ bn).
+  { unfold UINT_MOD in *. 
+  pose proof Z.pow_le_mono_r 4294967296 bn an as Hpow.
+  pose proof Hpow ltac:(lia) ltac:(lia) as Hpow.
+  lia. }
+  assert (0 <= val_b < UINT_MOD ^ an) by lia.
+  assert (0 <= val_r < UINT_MOD ^ rn) by lia.
+  assert (0 <= val_a - val_b < UINT_MOD ^ an) by lia.
+  assert (UINT_MOD ^ rn <= UINT_MOD ^ an).
+  {
+    unfold UINT_MOD in *. 
+    pose proof Z.pow_le_mono_r 4294967296 rn an as Hpow.
+    pose proof Hpow ltac:(lia) ltac:(lia) as Hpow. lia.
+  }
+  assert (0 <= val_r < UINT_MOD ^ an) by lia.
+  clear H6 H7 H9 H11 H5.
+  assert ( ret_val < 1).
+  { destruct (Z_lt_le_dec ret_val 1) as [? | Hge1]; auto.
+    exfalso.
+    assert (-ret_val * UINT_MOD ^an <= (-1) * UINT_MOD ^an).
+    { pose proof Z.mul_le_mono_nonneg_r (-ret_val) (-1) (UINT_MOD ^ an). unfold UINT_MOD in H5 at 1.
+    pose proof H5 ltac:(lia) ltac:(lia) as H5. lia.  }
+    assert (val_r - ret_val * UINT_MOD ^ an <= 0) by lia.
+    lia.
+  }
+  assert (ret_val >= 0).
+  {
+      destruct (Z_lt_le_dec ret_val 0) as [Hneg | ?]; auto.
+      exfalso.
+      - assert (-ret_val * UINT_MOD ^ an >=   UINT_MOD ^ an).
+      {
+          pose proof Z.mul_le_mono_nonneg_r 1 (-ret_val) (UINT_MOD ^ an).
+          unfold UINT_MOD in H6 at 1.
+          pose proof H6 ltac:(lia) ltac:(lia) as H6.
+          rewrite Z.mul_1_l in H6.
+          pose proof Z.le_ge (UINT_MOD ^ an) (- ret_val * UINT_MOD ^ an).
+          lia.
+      }
+      assert (val_r - ret_val * UINT_MOD ^ an > UINT_MOD ^ an) by lia.
+      lia.
+      -lia.
+  }
+  lia.
+Qed.
+
+Lemma mpd_store_Z_to_mpd_store_Z_compact: forall ptr n size,
+    is_compact_Z UINT_MOD n size ->
+    (mpd_store_Z UINT_MOD ptr n size) |--
+    (mpd_store_Z_compact UINT_MOD ptr n size).
+Proof.
+    intros.
+    unfold mpd_store_Z, mpd_store_Z_compact.
+    Intros data.
+    Exists data. entailer!.
+    unfold is_compact_Z in H.
+    destruct H.
+    pose proof list_to_Z_reverse_same_length_injection UINT_MOD.
+    unfold UINT_MOD in H2 at 1.
+    pose proof H2 ltac:(lia) data x as H2.
+    destruct H.
+    rewrite H in H2.
+    pose proof H2 ltac:(lia) as H2.
+    destruct H0.
+    destruct H3.
+    destruct H5.
+    pose proof H2 H4 H5 ltac:(lia) as H2.
+    rewrite H2.
+    tauto.
+Qed.
+
+Lemma is_compact_Z_add_0: forall n m size1 size2,
+  is_compact_Z UINT_MOD n size1 ->
+  is_compact_Z UINT_MOD m size2 ->
+  n + m < UINT_MOD ^ (Z.max size1 size2) ->
+  is_compact_Z UINT_MOD (n + m) (Z.max size1 size2).
+Proof.
+  intros n m size1 size2 H1 H2 Hbound.
+  pose proof (is_compact_Z_bounds UINT_MOD UINT_MOD_pos n size1 H1) as [Hs1 Hn].
+  pose proof (is_compact_Z_bounds UINT_MOD UINT_MOD_pos m size2 H2) as [Hs2 Hm].
+  apply is_compact_Z_from_bounds; unfold UINT_MOD; try lia.
+  destruct Hn as [[Hn1 Hn2] | [Hn1 [Hn2 Hn3]]];
+  destruct Hm as [[Hm1 Hm2] | [Hm1 [Hm2 Hm3]]].
+  - (* size1 = 0, n = 0, size2 = 0, m = 0 *)
+    left. subst. simpl. lia.
+  - (* size1 = 0, n = 0, size2 > 0 *)
+    subst n. rewrite Z.add_0_l.
+    right. split.
+    + rewrite Z.max_r; lia.
+    + rewrite Z.max_r; try lia.
+      split; unfold UINT_MOD in *; try lia. 
+  - (* size1 > 0, size2 = 0, m = 0 *)
+    subst m. rewrite Z.add_0_r.
+    right. split.
+    + rewrite Z.max_l; lia.
+    + rewrite Z.max_l; try lia. unfold UINT_MOD in *.
+      split; try lia.
+  - (* size1 > 0, size2 > 0 *)
+    right. split.
+    + lia.
+    + split.
+      * destruct (Z.max_spec size1 size2) as [[Hle Heq] | [Hlt Heq]]; rewrite Heq.
+        -- assert (UINT_MOD ^ (size2 - 1) <= m) by lia.
+           assert (0 <= n) by (unfold UINT_MOD in *; lia).
+           unfold UINT_MOD in *.
+           lia.
+        -- assert (UINT_MOD ^ (size1 - 1) <= n) by lia.
+           unfold UINT_MOD in *; lia.
+      * unfold UINT_MOD in *. lia.
+Qed.
+
+
+Lemma is_compact_Z_add_1: forall n m size1 size2,
+  is_compact_Z UINT_MOD n size1 ->
+  is_compact_Z UINT_MOD m size2 ->
+  n + m >= UINT_MOD ^ (Z.max size1 size2) ->
+  n + m < 2 * UINT_MOD ^ (Z.max size1 size2) ->
+  is_compact_Z UINT_MOD (n + m) ((Z.max size1 size2)+1).
+Proof.
+  intros n m size1 size2 H1 H2 Hlo Hhi.
+  pose proof (is_compact_Z_bounds UINT_MOD UINT_MOD_pos n size1 H1) as [Hs1 Hn].
+  pose proof (is_compact_Z_bounds UINT_MOD UINT_MOD_pos m size2 H2) as [Hs2 Hm].
+  apply is_compact_Z_add_helper_1; unfold UINT_MOD in *; try lia.
+Qed.
+
+Lemma mpd_store_Z_to_is_compact_Z: forall ptr n size,
+  (mpd_store_Z_compact UINT_MOD ptr n size) |--
+  [|is_compact_Z UINT_MOD n size|].
+Proof.
+  intros.
+  unfold mpd_store_Z_compact, is_compact_Z.
+  Intros data.
+  entailer!. exists data.
+  rewrite H0. tauto.
+Qed.
+
+Lemma mpd_store_Z_compact_to_mpd_store_Z: 
+forall (ptr: Z) (size: Z) (l: Z) ,
+  mpd_store_Z_compact UINT_MOD ptr l size  |--
+  mpd_store_Z UINT_MOD ptr l size .
+Proof.
+  intros.
+  unfold mpd_store_Z_compact, mpd_store_Z. Intros data. Exists data. entailer!.
+Qed.
+
+Lemma mpd_store_Z_compact_mono_size: forall ap bp n m size1 size2,
+  n>m ->
+  mpd_store_Z_compact UINT_MOD ap n size1 **
+  mpd_store_Z_compact UINT_MOD bp m size2 |--
+  [|size1 >= size2|].
+Proof.
+  intros.
+  unfold mpd_store_Z_compact.
+  Intros data_a data_b.
+  entailer!.
+  subst size1 size2.
+  destruct H0 as [Hn [Hlast_a Hbound_a]].
+  destruct H2 as [Hm [Hlast_b Hbound_b]].
+  subst n m.
+  (* data_b = nil 的情况 *)
+  destruct data_b as [ | z data_b'].
+  - rewrite Zlength_nil.
+    pose proof (Zlength_nonneg data_a). lia.
+  - (* data_b 非空，使用 compact bound *)
+    pose proof (list_to_Z_compact_bound UINT_MOD UINT_MOD_pos (z :: data_b') Hbound_b Hlast_b) as Hb.
+    pose proof (list_to_Z_pos UINT_MOD UINT_MOD_pos data_a Hbound_a) as Hpos_a.
+    (* data_a 也必须非空，因为 list_to_Z data_a > list_to_Z (z::data_b') > 0 *)
+    destruct data_a as [ | y data_a'].
+    + simpl in *. lia. (* 矛盾：list_to_Z nil = 0 *)
+    + pose proof (list_to_Z_compact_bound UINT_MOD UINT_MOD_pos (y :: data_a') Hbound_a Hlast_a) as Ha.
+      (* 反证：如果 Zlength data_a < Zlength data_b *)
+      destruct (Z_lt_dec (Zlength (y :: data_a')) (Zlength (z :: data_b'))).
+      * exfalso.
+        (* n < UINT_MOD^size1 <= UINT_MOD^(size2-1) <= m，矛盾 *)
+        assert (UINT_MOD ^ (Zlength (y :: data_a')) <= UINT_MOD ^ (Zlength (z :: data_b') - 1)).
+        { apply Z.pow_le_mono_r.
+          - unfold UINT_MOD. lia.
+          - pose proof (Zlength_nonneg data_a').
+            pose proof (Zlength_nonneg data_b').
+            rewrite !Zlength_cons in *. lia. }
+        lia.
+      * lia.
+Qed.
+
+Lemma store_Z_with_size_2_store_Z: forall x n size,
+  store_Z_with_size x n size |--
+  store_Z x n.
+Proof.
+  intros.
+  unfold store_Z_with_size, store_Z.
+  Intros ptr cap.
+  Exists ptr size cap. entailer!.
+  apply derivable1_orp_elim.
+  - Left. entailer!.
+  - Right. entailer!.
+Qed.
+
+Lemma lxor_negative_implies_opposite_signs_simple:
+  forall x y : Z,
+    Z.lxor x y < 0 ->
+    (x < 0 /\ y >= 0) \/ (x >= 0 /\ y < 0).
+Proof.
+    intros x y Hlxor.
+    destruct (Z_lt_ge_dec x 0) as [Hx_neg | Hx_nonneg].
+    -   left.
+        split.
+        * lia.
+        * destruct (Z_lt_ge_dec y 0) as [Hy_neg | Hy_nonneg].
+        + 
+        exfalso.
+        assert (H: 0 <= Z.lxor x y).
+        {
+            rewrite Z.lxor_nonneg.
+            split; intro; lia.
+        }
+        lia.
+        + 
+        exact Hy_nonneg.
+    -   right.
+        split; [lia| ].
+        destruct (Z_lt_ge_dec y 0) as [Hy_neg | Hy_nonneg].
+        + 
+        exact Hy_neg.
+        + 
+        exfalso.
+        assert (H: 0 <= Z.lxor x y).
+        {
+            rewrite Z.lxor_nonneg.
+            split; intro; lia.
+        }
+        lia.
+Qed.
+
+Lemma lxor_nonneg_implies_same_sign:
+  forall x y : Z,
+    Z.lxor x y >= 0 ->
+    (x >= 0 /\ y >= 0) \/ (x < 0 /\ y < 0).
+Proof.
+  intros x y Hlxor.
+  pose proof (proj1 (Z.lxor_nonneg x y) ltac:(lia)) as Hsame.
+  destruct (Z_lt_ge_dec x 0); destruct (Z_lt_ge_dec y 0);
+    try (left; lia); try (right; lia).
+Qed.
+
+Lemma store_Z_with_size_2_same_sign: forall x n size,
+  store_Z_with_size x n size |--
+  [|same_sign n size|].
+Proof.
+  intros.
+  unfold store_Z_with_size, same_sign.
+  Intros ptr cap.
+  apply derivable1_orp_elim.
+  - entailer!.
+  - entailer!.
+Qed.
+
+Lemma store_Z_remain_size_2_same_sign: forall x n old_size real_size,
+  store_Z_remain_size x n old_size real_size |--
+  [|same_sign n real_size|].
+Proof.
+  intros.
+  unfold store_Z_remain_size, same_sign.
+  Intros ptr cap.
+  apply derivable1_orp_elim; entailer!.
+Qed.

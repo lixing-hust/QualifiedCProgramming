@@ -173,8 +173,8 @@ Proof.
     lia.
     lia.
     +
-    simpl in H0.
-    discriminate H0.
+    simpl in H.
+    discriminate H.
 Qed. 
 
 Lemma proof_of_GetSortLinkNextExpireTime_return_wit_2 : GetSortLinkNextExpireTime_return_wit_2.
@@ -185,10 +185,9 @@ Proof.
     unfold store_sorted_dll.
     entailer!.
     pose proof storesortedLinkNode_split A storeA (&( retval_2 # "SortLinkList" ->ₛ "sortLinkNode")) retval_2 (sl_data a.(dll_data)) (responseTime a.(dll_data)). 
-    sep_apply H11.
+    sep_apply H11 ; try auto.
     unfold store_dll.
     Exists &( retval_2 # "SortLinkList" ->ₛ "sortLinkNode") pt.
-  
     simpl.
     pose proof dllseg_head_insert (sortedLinkNode A) (storesortedLinkNode storeA) (&( sortHead_pre # "SortLinkAttribute" ->ₛ "sortLink")) (&( retval_2 # "SortLinkList" ->ₛ "sortLinkNode")) pl (&( sortHead_pre # "SortLinkAttribute" ->ₛ "sortLink")) pt (mksortedLinkNode (sl_data a.(dll_data)) (responseTime a.(dll_data)))  l1. 
     simpl.
@@ -197,24 +196,20 @@ Proof.
     csimpl.
     intros.
     sep_apply H13.
-    rewrite H4.
+    rewrite H3.
     revert H0.
     unfold obtian_first_pointer.
     simpl in H2.
-    rewrite H4.
+    rewrite H3.
     intros.
     destruct a.
     rewrite H0.
     entailer!.
-    lia.
     unfold getFirstNodeExpireTime.
     pose proof map_sortedLinkNodeMapping_not_nil sortedLinkNodeMapping l.
-    assert (l <> nil).
-    apply H11.
-    apply H2.
+    assert (l <> nil) ; auto.
     destruct l.
-    +
-    contradiction.
+    + contradiction.
     +
     unfold getNodeExpireTime.
     pose proof map_sortedLinkNodeMapping d a l1 l.
@@ -229,10 +224,8 @@ Proof.
     lia.
     lia.
     rewrite H14 in H.
-    destruct (responseTime a.(dll_data) <=? startTime_pre + tickPrecision_pre)%Z eqn: En.
-    lia.
-    lia.
-    apply H4.
+    destruct (responseTime a.(dll_data) <=? startTime_pre + tickPrecision_pre)%Z eqn: En ; try lia.
+    auto.
 Qed. 
 
 Lemma proof_of_GetSortLinkNextExpireTime_return_wit_3 : GetSortLinkNextExpireTime_return_wit_3.
@@ -257,12 +250,12 @@ Proof.
     csimpl.
     intros.
     sep_apply H13.
-    rewrite H4.
+    rewrite H3.
     revert H0.
     unfold obtian_first_pointer.
     csimpl.
     simpl in H2.
-    rewrite H4.
+    rewrite H3.
     intros.
     destruct a.
     rewrite H0.
@@ -270,9 +263,7 @@ Proof.
     lia.
     unfold getFirstNodeExpireTime.
     pose proof map_sortedLinkNodeMapping_not_nil sortedLinkNodeMapping l.
-    assert (l <> nil).
-    apply H11.
-    apply H2.
+    assert (l <> nil) ; try auto.
     destruct l.
     +
     contradiction.
@@ -290,10 +281,8 @@ Proof.
     lia.
     lia.
     rewrite H14 in H.
-    destruct (responseTime a.(dll_data) <=? startTime_pre + tickPrecision_pre)%Z eqn: En.
-    lia.
-    lia.
-    apply H4.
+    destruct (responseTime a.(dll_data) <=? startTime_pre + tickPrecision_pre)%Z eqn: En ; try lia.
+    auto.
 Qed.
 
 Lemma proof_of_GetSortLinkNextExpireTime_which_implies_wit_1 : GetSortLinkNextExpireTime_which_implies_wit_1.
@@ -360,7 +349,7 @@ Qed.
 Lemma proof_of_LOS_ListEmpty_derive_getfirstSpec_by_highSpec : LOS_ListEmpty_derive_getfirstSpec_by_highSpec.
 Proof. 
     pre_process.
-    Exists A storeA l.
+    Exists A storeA_getfirstSpec l_getfirstSpec.
     entailer!.
     rewrite <- derivable1_wand_sepcon_adjoint.
     entailer!.
@@ -374,10 +363,10 @@ Proof.
     unfold store_dll.
     Intros h pt.
     unfold dllseg.
-    destruct l.
+    destruct l_getfirstSpec.
     + entailer!.
     + Intros z.
-    Exists d l retval_2.
+    Exists d l_getfirstSpec retval_2.
     Exists h pt.
     Exists z.
     entailer!.
@@ -393,10 +382,6 @@ Proof.
     pose proof map_sortedLinkNodeMapping_not_nil sortedLinkNodeMapping l.
     assert (l <> nil).
     apply H10.
-    apply H1.
-    destruct (map sortedLinkNodeMapping l).
-    +
-    congruence.
-    +
-    congruence.
+    auto.
+    destruct (map sortedLinkNodeMapping l) ; congruence.
 Qed.

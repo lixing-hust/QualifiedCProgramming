@@ -242,11 +242,11 @@ forall (a_pre: Z) (n_pre: Z) (l: (@list Z)) (ret: Z) (i: Z) ,
   &&  (IntArray.full a_pre n_pre l )
   **  ((( &( "i" ) )) # Int  |-> i)
   **  ((( &( "n" ) )) # Int  |-> n_pre)
-  **  ((( &( "ret" ) )) # Int  |-> ret)
+  **  ((( &( "ret" ) )) # Int  |-> (ret + (Znth i l 0) ))
   **  ((( &( "a" ) )) # Ptr  |-> a_pre)
 |--
-  [| ((ret + (Znth i l 0) ) <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= (ret + (Znth i l 0) )) |]
+  [| ((i + 1 ) <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= (i + 1 )) |]
 .
 
 Definition arr_sum_do_while_safety_wit_6 := 
@@ -261,30 +261,14 @@ forall (a_pre: Z) (n_pre: Z) (l: (@list Z)) (ret: Z) (i: Z) ,
   &&  (IntArray.full a_pre n_pre l )
   **  ((( &( "i" ) )) # Int  |-> i)
   **  ((( &( "n" ) )) # Int  |-> n_pre)
-  **  ((( &( "ret" ) )) # Int  |-> (ret + (Znth i l 0) ))
+  **  ((( &( "ret" ) )) # Int  |-> ret)
   **  ((( &( "a" ) )) # Ptr  |-> a_pre)
 |--
-  [| ((i + 1 ) <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= (i + 1 )) |]
+  [| ((ret + (Znth i l 0) ) <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= (ret + (Znth i l 0) )) |]
 .
 
 Definition arr_sum_do_while_entail_wit_1 := 
-forall (a_pre: Z) (n_pre: Z) (l: (@list Z)) ,
-  [| (0 < n_pre) |] 
-  &&  [| (n_pre < 100) |] 
-  &&  [| forall (i: Z) , (((0 <= i) /\ (i < n_pre)) -> ((0 <= (Znth i l 0)) /\ ((Znth i l 0) < 100))) |]
-  &&  (IntArray.full a_pre n_pre l )
-|--
-  [| (0 <= (0 + 1 )) |] 
-  &&  [| ((0 + 1 ) <= n_pre) |] 
-  &&  [| ((0 + (Znth 0 l 0) ) = (sum ((sublist (0) ((0 + 1 )) (l))))) |] 
-  &&  [| (0 < n_pre) |] 
-  &&  [| (n_pre < 100) |] 
-  &&  [| forall (i: Z) , (((0 <= i) /\ (i < n_pre)) -> ((0 <= (Znth i l 0)) /\ ((Znth i l 0) < 100))) |]
-  &&  (IntArray.full a_pre n_pre l )
-.
-
-Definition arr_sum_do_while_entail_wit_2 := 
 forall (a_pre: Z) (n_pre: Z) (l: (@list Z)) (ret: Z) (i_2: Z) ,
   [| (i_2 <> n_pre) |] 
   &&  [| (0 <= i_2) |] 
@@ -298,6 +282,22 @@ forall (a_pre: Z) (n_pre: Z) (l: (@list Z)) (ret: Z) (i_2: Z) ,
   [| (0 <= (i_2 + 1 )) |] 
   &&  [| ((i_2 + 1 ) <= n_pre) |] 
   &&  [| ((ret + (Znth i_2 l 0) ) = (sum ((sublist (0) ((i_2 + 1 )) (l))))) |] 
+  &&  [| (0 < n_pre) |] 
+  &&  [| (n_pre < 100) |] 
+  &&  [| forall (i: Z) , (((0 <= i) /\ (i < n_pre)) -> ((0 <= (Znth i l 0)) /\ ((Znth i l 0) < 100))) |]
+  &&  (IntArray.full a_pre n_pre l )
+.
+
+Definition arr_sum_do_while_entail_wit_2 := 
+forall (a_pre: Z) (n_pre: Z) (l: (@list Z)) ,
+  [| (0 < n_pre) |] 
+  &&  [| (n_pre < 100) |] 
+  &&  [| forall (i: Z) , (((0 <= i) /\ (i < n_pre)) -> ((0 <= (Znth i l 0)) /\ ((Znth i l 0) < 100))) |]
+  &&  (IntArray.full a_pre n_pre l )
+|--
+  [| (0 <= (0 + 1 )) |] 
+  &&  [| ((0 + 1 ) <= n_pre) |] 
+  &&  [| ((0 + (Znth 0 l 0) ) = (sum ((sublist (0) ((0 + 1 )) (l))))) |] 
   &&  [| (0 < n_pre) |] 
   &&  [| (n_pre < 100) |] 
   &&  [| forall (i: Z) , (((0 <= i) /\ (i < n_pre)) -> ((0 <= (Znth i l 0)) /\ ((Znth i l 0) < 100))) |]

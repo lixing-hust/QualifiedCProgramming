@@ -29,7 +29,7 @@ Proof.
    unfold store_swtmr_sorted_dll. 
    Intros y. subst y.
    Exists Z.
-   Exists n (fun (p : addr) (swmtrID : SwtmrID) => [|p = &(((sg).(g_swtmrCBArray) # ("SWTMR_CTRL_S") + swmtrID % 5) ->ₛ "stSortList")|] && emp) l.
+   Exists n_swmtrSpec (fun (p : addr) (swmtrID : SwtmrID) => [|p = &(((sg_swmtrSpec).(g_swtmrCBArray) # ("SWTMR_CTRL_S") + swmtrID % 5) ->ₛ "stSortList")|] && emp) l_swmtrSpec.
    entailer!.
    rewrite H0.
    unfold glob_vars_and_defs.SwtmrID.
@@ -49,9 +49,9 @@ Proof.
    unfold store_task_sorted_dll.
    Intros y. subst y.
    Exists Z.
-   Exists n (fun (p : addr) (taskID : glob_vars_and_defs.TaskID) =>
-    [|p = &( ((glob_vars_and_defs.g_taskCBArray sg) # "LosTaskCB" + taskID) ->ₛ "sortList")|] &&
-    emp) l.
+   Exists n_taskSpec (fun (p : addr) (taskID : glob_vars_and_defs.TaskID) =>
+    [|p = &( ((glob_vars_and_defs.g_taskCBArray sg_taskSpec) # "LosTaskCB" + taskID) ->ₛ "sortList")|] &&
+    emp) l_taskSpec.
    entailer!.
    rewrite H0.
    unfold glob_vars_and_defs.TaskID.

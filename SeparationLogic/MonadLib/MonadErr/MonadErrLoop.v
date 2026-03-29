@@ -182,8 +182,8 @@ Section mono_and_continuous_lemmas.
     eapply H; auto.
   Qed.
 
-  Lemma mono_bind {A B D: Type}:
-    forall  (c1: (A -> program Σ B) -> program Σ D) (c2: (A -> program Σ B) -> D -> program Σ B),
+  Lemma mono_bind {A B C D: Type}:
+    forall  (c1: (A -> program Σ B) -> program Σ D) (c2: (A -> program Σ B) -> D -> program Σ C),
       mono c1 ->
       (forall d, mono (fun W => c2 W d)) -> 
       mono (fun (W: A -> program Σ B) => bind (c1 W) (c2 W)).
@@ -212,8 +212,8 @@ Section mono_and_continuous_lemmas.
         tauto.
   Qed.
 
-  Lemma mono_bind' {B D: Type}:
-    forall  (c1: (program Σ B) -> program Σ D) (c2: (program Σ B) -> D -> program Σ B),
+  Lemma mono_bind' {B C D: Type}:
+    forall  (c1: (program Σ B) -> program Σ D) (c2: (program Σ B) -> D -> program Σ C),
       mono c1 ->
       (forall d, mono (fun W => c2 W d)) -> 
       mono (fun (W: program Σ B) => bind (c1 W) (c2 W)).
@@ -320,8 +320,8 @@ Section mono_and_continuous_lemmas.
     destruct H0; auto.
   Qed.
 
-  Lemma continuous_bind {A B D: Type}:
-    forall  (c1: (A -> program Σ B) -> program Σ D) (c2: (A -> program Σ B) -> D -> program Σ B),
+  Lemma continuous_bind {A B C D: Type}:
+    forall  (c1: (A -> program Σ B) -> program Σ D) (c2: (A -> program Σ B) -> D -> program Σ C),
       mono c1 -> continuous c1 ->
       (forall d, mono (fun W => c2 W d)) -> (forall d, continuous (fun W => c2 W d)) -> 
       continuous (fun (W: A -> program Σ B) => bind (c1 W) (c2 W)).
@@ -392,8 +392,8 @@ Section mono_and_continuous_lemmas.
       econstructor; eauto.
   Qed.
 
-  Lemma continuous_bind' {B D: Type}:
-    forall  (c1: program Σ B -> program Σ D) (c2: program Σ B -> D -> program Σ B),
+  Lemma continuous_bind' {B C D: Type}:
+    forall  (c1: program Σ B -> program Σ D) (c2: program Σ B -> D -> program Σ C),
       mono c1 -> continuous c1 ->
       (forall d, mono (fun W => c2 W d)) -> (forall d, continuous (fun W => c2 W d)) -> 
       continuous (fun (W: program Σ B) => bind (c1 W) (c2 W)).
@@ -569,8 +569,8 @@ Section mono_and_continuous_lemmas.
     apply continuous_const'.
   Qed.
 
-  Lemma mono_cont_bind {A B D: Type}:
-    forall  (c1: (A -> program Σ B) -> program Σ D) (c2: (A -> program Σ B) -> D -> program Σ B),
+  Lemma mono_cont_bind {A B C D: Type}:
+    forall  (c1: (A -> program Σ B) -> program Σ D) (c2: (A -> program Σ B) -> D -> program Σ C),
       mono_cont c1 ->
       (forall d, mono_cont (fun W => c2 W d)) ->
       mono_cont (fun (W: A -> program Σ B) => bind (c1 W) (c2 W)).
@@ -583,8 +583,8 @@ Section mono_and_continuous_lemmas.
       intros d; apply H0.
   Qed.
 
-  Lemma mono_cont_bind' {B D: Type}:
-    forall  (c1: program Σ B -> program Σ D) (c2: program Σ B -> D -> program Σ B),
+  Lemma mono_cont_bind' {B C D: Type}:
+    forall  (c1: program Σ B -> program Σ D) (c2: program Σ B -> D -> program Σ C),
       mono_cont c1 ->
       (forall d, mono_cont (fun W => c2 W d)) ->
       mono_cont (fun (W: program Σ B) => bind (c1 W) (c2 W)).
@@ -608,6 +608,150 @@ Section mono_and_continuous_lemmas.
     - apply continuous_choice; tauto.
   Qed.
 
+  Lemma increasing_mono_increasing:
+  forall {A B: Type} {RA: Order A} {RB: Order B}
+         (f: A -> B)
+         (l: nat -> A),
+    increasing l -> mono f -> increasing (fun n => f (l n)).
+  Proof.
+    intros.
+    unfold increasing, seq_mono. intros.
+    apply H0. apply H.
+  Qed.
+
+  Lemma mono_BW_fix {A B: Type} {RA: Order A} {RB: Order B} {EB: Equiv B}
+    {oLubB: OmegaLub B} {BotB: Bot B}
+    {equ: Equivalence equiv}
+    {CPO: CompletePartialOrder_Setoid B}:
+    forall (f: A -> B -> B),
+      (forall a, mono (f a)) ->
+      (forall b, mono (fun W => f W b)) ->
+      mono (fun W => (BW_fix (f W))).
+  Proof.
+    unfold mono in *.
+    unfold Proper, respectful in *.
+    intros.
+    apply BourbakiWitt_fixpoint_monotonic.
+    - intros b1 b2 Hb. apply (H x b1 b2 Hb).
+    - intros b1 b2 Hb. apply (H y b1 b2 Hb).
+    - intros.
+      transitivity (f y a).
+      + apply H0; auto.
+      + apply (H y); auto.
+  Qed.
+
+  Lemma BW_fix_seq_cont_general {A B} {RA: Order A} 
+    {EA: Equiv A}
+    {oLubA: OmegaLub A} {BotA: Bot A}
+    {CPOA: CompletePartialOrder_Setoid A}
+    {RB: Order B} {EB: Equiv B} {oLubB: OmegaLub B} {BotB: Bot B}
+    {equA: Equivalence (@equiv A EA)}
+    {equB: Equivalence (@equiv B EB)}
+    {CPOB: CompletePartialOrder_Setoid B}:
+  forall (f: A -> B -> B)
+          (Hf_mono: Proper (order_rel ==> order_rel ==> order_rel) f)
+          (Hfa_sseq: forall a, continuous (f a))
+          (Hf_sseq: forall b, continuous (fun a => f a b)),
+    continuous (fun a: A => BW_fix (f a)).
+  Proof.
+    intros. intros T HT.
+    apply antisymmetricity_setoid.
+    - unfold BW_fix at 1.
+      apply limit_smaller_iff.
+      + apply (@iter_bot_mono B _ _ _ _ CPOB (f (omega_lub T))).
+        intros x y Hxy. apply Hf_mono. reflexivity. apply Hxy.
+      + intros n.
+        induction n.
+        * simpl. apply CPO_least.
+        * simpl.
+          transitivity (f (omega_lub T) (omega_lub (fun n => BW_fix (f (T n))))).
+          { apply Hf_mono. reflexivity. apply IHn. }
+          transitivity (omega_lub (fun n => f (T n) (omega_lub (fun k => BW_fix (f (T k)))))).
+          { apply PO_Reflexive_Setoid. apply Hf_sseq. apply HT. }
+          apply limit_smaller_iff.
+          { apply (@increasing_mono_increasing A B RA RB (fun a => f a (omega_lub (fun k => BW_fix (f (T k))))) T).
+            - apply HT.
+            - unfold mono, Proper, respectful. intros.
+              apply Hf_mono. assumption. reflexivity. }
+          intros k.
+          transitivity (omega_lub (fun n => f (T k) (BW_fix (f (T n))))).
+          { apply PO_Reflexive_Setoid. apply Hfa_sseq.
+            apply (@increasing_mono_increasing A B RA RB (fun a => BW_fix (f a)) T).
+            - apply HT.
+            - apply mono_BW_fix.
+              + intros a. unfold mono, Proper, respectful. intros. apply Hf_mono. reflexivity. assumption.
+              + intros b. unfold mono, Proper, respectful. intros. apply Hf_mono. assumption. reflexivity.
+          }
+          apply limit_smaller_iff.
+          { apply (@increasing_mono_increasing A B RA RB (fun a => f (T k) (BW_fix (f a))) T).
+            - apply HT.
+            - unfold mono, Proper, respectful. intros x y Hxy.
+              apply Hf_mono. reflexivity.
+              apply mono_BW_fix.
+              + intros a. unfold mono, Proper, respectful. intros. apply Hf_mono. reflexivity. assumption.
+              + intros b. unfold mono, Proper, respectful. intros. apply Hf_mono. assumption. reflexivity.
+              + assumption. }
+          intros m.
+          apply limit_greater.
+          { apply (@increasing_mono_increasing A B RA RB (fun a => BW_fix (f a)) T).
+            - apply HT.
+            - apply mono_BW_fix.
+              + intros a. unfold mono, Proper, respectful. intros. apply Hf_mono. reflexivity. assumption.
+              + intros b. unfold mono, Proper, respectful. intros. apply Hf_mono. assumption. reflexivity. }
+          exists (max k m).
+          assert (BW_fix (f (T (max k m))) == f (T (max k m)) (BW_fix (f (T (max k m))))).
+          { apply BourbakiWitt_fixpoint; auto. apply Hf_mono. reflexivity. apply Hfa_sseq. }
+          transitivity (f (T (max k m)) (BW_fix (f (T (max k m))))).
+          2: { apply PO_Reflexive_Setoid. symmetry. apply H. }
+          apply Hf_mono.
+          { apply (@seq_mono_nat_le A RA _ _ T HT k (max k m)). apply Nat.le_max_l. }
+          { apply mono_BW_fix.
+            - intros a0. unfold mono, Proper, respectful. intros. apply Hf_mono. reflexivity. assumption.
+            - intros b0. unfold mono, Proper, respectful. intros. apply Hf_mono. assumption. reflexivity.
+            - apply (@seq_mono_nat_le A RA _ _ T HT m (max k m)). apply Nat.le_max_r. }
+    - apply limit_smaller_iff.
+      + apply (@increasing_mono_increasing A B RA RB (fun a => BW_fix (f a)) T).
+        * apply HT.
+        * apply mono_BW_fix.
+          -- intros a. unfold mono, Proper, respectful. intros. apply Hf_mono. reflexivity. assumption.
+          -- intros b. unfold mono, Proper, respectful. intros. apply Hf_mono. assumption. reflexivity.
+      + intros n.
+        apply mono_BW_fix.
+        * intros a. unfold mono, Proper, respectful. intros. apply Hf_mono. reflexivity. assumption.
+        * intros b. unfold mono, Proper, respectful. intros. apply Hf_mono. assumption. reflexivity.
+        * eapply limit_greater.
+          apply HT.
+          exists n. reflexivity.
+  Qed.
+
+  Lemma mono_cont_BW_fix {A B} {RA: Order A} 
+    {EA: Equiv A}
+    {oLubA: OmegaLub A} {BotA: Bot A}
+    {CPOA: CompletePartialOrder_Setoid A}
+    {RB: Order B} {EB: Equiv B} {oLubB: OmegaLub B} {BotB: Bot B}
+    {equA: Equivalence (@equiv A EA)}
+    {equB: Equivalence (@equiv B EB)}
+    {CPOB: CompletePartialOrder_Setoid B}:
+    forall (f: A -> B -> B),
+      (forall a, mono_cont (f a)) ->
+      (forall b, mono_cont (fun W => f W b)) ->
+      mono_cont (fun W => BW_fix (f W)).
+  Proof.
+    unfold mono_cont; intros.
+    split.
+    - apply mono_BW_fix; intros.
+      + destruct (H a); auto.
+      + destruct (H0 b); auto.
+    - apply BW_fix_seq_cont_general; intros.
+      + unfold Proper, respectful.
+        intros.
+        transitivity (f x y0).
+        * destruct (H x) as [Hm _]. apply Hm; auto.
+        * destruct (H0 y0) as [Hm _]. apply Hm; auto.
+      + apply H.
+      + apply H0.
+  Qed.
+
   Lemma mono_cont_choice' {B D: Type}:
     forall (c1 c2: (program Σ B) -> program Σ D),
       mono_cont c1 -> mono_cont c2 ->
@@ -621,7 +765,7 @@ Section mono_and_continuous_lemmas.
 
 End mono_and_continuous_lemmas.
 
-Ltac mono_cont_auto_aux :=
+(* Ltac mono_cont_auto_aux :=
   match goal with
   | |- mono_cont (fun (W: ?A -> program ?Σ ?B) => bind _ _) => apply mono_cont_bind; [try mono_cont_auto_aux | intros; try mono_cont_auto_aux]
   | |- mono_cont (fun (W: ?A -> program ?Σ ?B) => choice _ _) => apply mono_cont_choice; [try mono_cont_auto_aux | try mono_cont_auto_aux]
@@ -635,13 +779,22 @@ Ltac mono_cont_auto_aux' :=
   | |- mono_cont (fun (W: program ?Σ ?B) => choice _ _) => apply mono_cont_choice'; [try mono_cont_auto_aux' | try mono_cont_auto_aux']
   | |- mono_cont (fun (W: program ?Σ ?B) => match ?a with _ => _ end) => destruct a; try mono_cont_auto_aux'
   | |- mono_cont (fun (W: program ?Σ ?B) => _) => try apply mono_cont_const'; try easy
-  end.
+  end. *)
 
 Ltac mono_cont_auto :=
   match goal with
-  | |- mono_cont (fun (W: ?A -> program ?Σ ?B) _ => _) => apply mono_cont_intro; intros; mono_cont_auto_aux
-  | |- mono_cont (fun (W: ?A -> program ?Σ ?B) => _) => mono_cont_auto_aux
-  | |- mono_cont (fun (W: program ?Σ ?B) => _) => mono_cont_auto_aux'
+  | |- mono_cont (fun (W: ?A -> program ?Σ ?B) (a: ?A) => _) => apply mono_cont_intro; intros; mono_cont_auto
+  | |- mono_cont (fun (W: ?A -> program ?Σ ?B) => bind _ _) => apply mono_cont_bind; [try mono_cont_auto | intros; try mono_cont_auto]
+  | |- mono_cont (fun (W: ?A -> program ?Σ ?B) => choice _ _) => apply mono_cont_choice; [try mono_cont_auto | try mono_cont_auto]
+  | |- mono_cont (fun (W: ?A -> program ?Σ ?B) => match ?a with _ => _ end) => destruct a; try mono_cont_auto
+  | |- mono_cont (fun (W: ?A -> program ?Σ ?B) => BW_fix _) => apply mono_cont_BW_fix; intros; try mono_cont_auto
+  | |- mono_cont (bind _) => (apply mono_cont_bind || apply mono_cont_bind'); [try mono_cont_auto | intros; try mono_cont_auto]
+  | |- mono_cont (fun (W: ?A -> program ?Σ ?B) => _) => try apply mono_cont_const; try easy
+  | |- mono_cont (fun (W: program ?Σ ?B) => bind _ _) => apply mono_cont_bind'; [try mono_cont_auto | intros; try mono_cont_auto]
+  | |- mono_cont (fun (W: program ?Σ ?B) => choice _ _) => apply mono_cont_choice'; [try mono_cont_auto | try mono_cont_auto]
+  | |- mono_cont (fun (W: program ?Σ ?B) => match ?a with _ => _ end) => destruct a; try mono_cont_auto
+  | |- mono_cont (fun (W: program ?Σ ?B) => BW_fix _) => apply mono_cont_BW_fix; intros; try mono_cont_auto
+  | |- mono_cont (fun (W: program ?Σ ?B) => _) => try apply mono_cont_const'; try easy
   end.
 
 (*************************************************************************************************************)
@@ -669,6 +822,14 @@ Section  while_monad.
 
   Definition while (cond: (program Σ bool)) (body : program Σ unit)  := BW_fix (while_f cond body).
 
+  Definition whileP_f (cond: Σ -> Prop)  (body : (program Σ unit)) 
+                     (W : program Σ unit) 
+                        : program Σ unit :=
+  choice (assume cond;; body;; W) 
+         (assume (fun s => ~ cond s);; ret tt).
+  
+  Definition whileP (cond: Σ -> Prop) (body : program Σ unit)  := BW_fix (whileP_f cond body).
+
   Definition whileret_f {A: Type}  (cond: A -> (program Σ bool)) (body : A -> (program Σ A)) 
                      (W :  A -> program Σ A) 
                         : A -> program Σ A :=
@@ -692,6 +853,16 @@ Section  while_monad.
 
   Definition repeat_break {A B: Type} (body: A -> program Σ (CntOrBrk A B)): A -> program Σ B :=
     BW_fix (repeat_break_f body).
+
+  Definition repeat_break_f_noinput {B: Type} (body: program Σ (CntOrBrk unit B)) (W: program Σ B):  program Σ B :=
+      x <- body ;;
+      match x with
+      | by_continue _ => W 
+      | by_break b => ret b
+      end.
+
+  Definition repeat_break_noin {B: Type} (body: program Σ (CntOrBrk unit B)): program Σ B :=
+    BW_fix (repeat_break_f_noinput body).
 
   Definition range_iter_f {A: Type} (hi: Z) (body: Z -> A -> program Σ A) (W: (Z * A) -> program Σ A): (Z * A) -> program Σ A :=
     fun '(lo, a0) => 
@@ -732,6 +903,17 @@ Section  while_monad.
 
   Definition Repeat (body : (program Σ unit))  := BW_fix (Repeat_f body).
 
+  Fixpoint list_iter {Σ A B: Type}
+    (body: A -> B -> program Σ B)
+    (universe : list A) (b: B)
+    : program Σ B :=
+    match universe with
+    | nil => ret b
+    | cons a universe' =>
+        b0 <- body a b;;
+        list_iter body universe' b0
+    end.
+
   Definition ret_some {A: Type} (a: option A): program Σ bool :=
     match a with 
     | Some _ => ret true
@@ -751,8 +933,20 @@ Section  while_monad.
     unfold while_f.
     mono_cont_auto.
   Qed.
+
+  Lemma whileP_unfold: forall (cond: Σ -> Prop) (body : program Σ unit), 
+    whileP cond body == choice 
+                         (assume cond;; body;; whileP cond body)
+                         (assume (fun s => ~ cond s);; ret tt).
+  Proof.
+    intros.
+    unfold while.
+    apply (BW_fixpoint' (whileP_f cond body)).
+    unfold whileP_f.
+    mono_cont_auto.
+  Qed.
   
-  Lemma whileret_unfold: forall {A: Type} (cond: (A -> (program Σ bool))) (body : A -> (program Σ A))  (a: A), 
+  Lemma whileret_unfold: forall {A: Type} (cond: (A -> (program Σ bool))) (body : A -> (program Σ A)), 
     whileret cond body == fun a => (x <- (cond a);; 
                              match x with 
                              | true => y <- body a ;; whileret cond body y
@@ -779,6 +973,22 @@ Section  while_monad.
     unfold repeat_break.
     apply (BW_fixpoint' (repeat_break_f body)).
     unfold repeat_break_f.
+    mono_cont_auto.
+  Qed.
+
+  Lemma repeat_break_noin_unfold {B: Type}:
+    forall (body: program Σ (CntOrBrk unit B)),
+    repeat_break_noin body == 
+                        x <- body;; 
+                        match x with
+                        | by_continue _ => repeat_break_noin body
+                        | by_break b0 => ret b0
+                        end.
+  Proof.
+    intros.
+    unfold repeat_break.
+    apply (BW_fixpoint' (repeat_break_f_noinput body)).
+    unfold repeat_break_f_noinput.
     mono_cont_auto.
   Qed.
 
@@ -866,8 +1076,24 @@ Qed.
 
 End  while_monad.
 
-Ltac unfold_loop H :=
-  rewrite (while_unfold _ _ ) in H ||
-  rewrite (repeat_break_unfold _ _) in H ||
-  rewrite range_iter_unfold in H ||
-  rewrite range_iter_break_unfold in H.
+Ltac unfold_loop:=
+  rewrite ?(while_unfold _ _) ;
+  rewrite ?(whileP_unfold _ _) ;
+  rewrite ?(whileret_unfold _ _ _) ;
+  rewrite ?(repeat_break_unfold _ _) ;
+  rewrite ?(repeat_break_noin_unfold _) ;
+  rewrite ?(range_iter_unfold _ _ _ _) ;
+  rewrite ?(range_iter_break_unfold _ _ _ _) .
+
+Ltac unfold_loop_in H :=
+  rewrite ?(while_unfold _ _) in H;
+  rewrite ?(whileP_unfold _ _) in H;
+  rewrite ?(whileret_unfold _ _ _) in H;
+  rewrite ?(repeat_break_unfold _ _) in H;
+  rewrite ?(repeat_break_noin_unfold _) in H;
+  rewrite ?(range_iter_unfold _ _ _ _) in H;
+  rewrite ?(range_iter_break_unfold _ _ _ _) in H.
+
+
+Tactic Notation "unfold_loop" "in" hyp(H) :=
+  unfold_loop_in H.

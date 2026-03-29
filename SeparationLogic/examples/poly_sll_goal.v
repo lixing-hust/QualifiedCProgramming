@@ -48,9 +48,9 @@ forall (A: Type) (p_pre: Z) (l: (@list A)) (storeA: (Z -> (A -> Assertion))) ,
 Definition reverse_entail_wit_2 := 
 forall (A: Type) (l: (@list A)) (storeA: (Z -> (A -> Assertion))) (v: Z) (w: Z) (l1_2: (@list A)) (l2_2: (@list A)) (v_next: Z) (v_data: Z) (x: A) (xs: (@list A)) ,
   [| (l2_2 = (cons (x) (xs))) |] 
-  &&  [| (v <> 0) |] 
   &&  [| (l = (app ((rev (l1_2))) (l2_2))) |] 
-  &&  [| (sll_para storeA ) |]
+  &&  [| (sll_para storeA ) |] 
+  &&  [| (v <> 0) |]
   &&  ((&((v)  # "list" ->ₛ "data")) # Ptr  |-> v_data)
   **  (storeA v_data x )
   **  ((&((v)  # "list" ->ₛ "next")) # Ptr  |-> w)
@@ -66,9 +66,9 @@ forall (A: Type) (l: (@list A)) (storeA: (Z -> (A -> Assertion))) (v: Z) (w: Z) 
 
 Definition reverse_return_wit_1 := 
 forall (A: Type) (l: (@list A)) (storeA: (Z -> (A -> Assertion))) (v: Z) (w: Z) (l1: (@list A)) (l2: (@list A)) ,
-  [| (v = 0) |] 
-  &&  [| (l = (app ((rev (l1))) (l2))) |] 
-  &&  [| (sll_para storeA ) |]
+  [| (l = (app ((rev (l1))) (l2))) |] 
+  &&  [| (sll_para storeA ) |] 
+  &&  [| (v = 0) |]
   &&  (sll storeA w l1 )
   **  (sll storeA v l2 )
 |--
@@ -77,9 +77,9 @@ forall (A: Type) (l: (@list A)) (storeA: (Z -> (A -> Assertion))) (v: Z) (w: Z) 
 
 Definition reverse_partial_solve_wit_1_pure := 
 forall (A: Type) (p_pre: Z) (l: (@list A)) (storeA: (Z -> (A -> Assertion))) (v: Z) (w: Z) (l1: (@list A)) (l2: (@list A)) ,
-  [| (v <> 0) |] 
-  &&  [| (l = (app ((rev (l1))) (l2))) |] 
-  &&  [| (sll_para storeA ) |]
+  [| (l = (app ((rev (l1))) (l2))) |] 
+  &&  [| (sll_para storeA ) |] 
+  &&  [| (v <> 0) |]
   &&  ((( &( "w" ) )) # Ptr  |-> w)
   **  (sll storeA w l1 )
   **  ((( &( "v" ) )) # Ptr  |-> v)
@@ -91,16 +91,16 @@ forall (A: Type) (p_pre: Z) (l: (@list A)) (storeA: (Z -> (A -> Assertion))) (v:
 
 Definition reverse_partial_solve_wit_1_aux := 
 forall (A: Type) (l: (@list A)) (storeA: (Z -> (A -> Assertion))) (v: Z) (w: Z) (l1: (@list A)) (l2: (@list A)) ,
-  [| (v <> 0) |] 
-  &&  [| (l = (app ((rev (l1))) (l2))) |] 
-  &&  [| (sll_para storeA ) |]
+  [| (l = (app ((rev (l1))) (l2))) |] 
+  &&  [| (sll_para storeA ) |] 
+  &&  [| (v <> 0) |]
   &&  (sll storeA w l1 )
   **  (sll storeA v l2 )
 |--
   [| (v <> 0) |] 
-  &&  [| (v <> 0) |] 
   &&  [| (l = (app ((rev (l1))) (l2))) |] 
-  &&  [| (sll_para storeA ) |]
+  &&  [| (sll_para storeA ) |] 
+  &&  [| (v <> 0) |]
   &&  (sll storeA v l2 )
   **  (sll storeA w l1 )
 .

@@ -76,11 +76,8 @@ Qed.
 Lemma proof_of_sub_thm_return_wit_2 : sub_thm_return_wit_2.
 Proof.
   pre_process.
-  unfold sll_var_sub_list.
   rewrite H6, H2.
-  pose proof (sll_var_sub_list_fold lis_pre lis_cur l0 sy sz sv st lis_next H7 H1).
-  sep_apply H8.
-  unfold sll_var_sub_list.
+  sep_apply sll_var_sub_list_fold ; auto.
   entailer!.
   sep_apply store_sub_thm_res_fold; [ | auto].
   rewrite H3; entailer!.
@@ -89,11 +86,11 @@ Qed.
 Lemma proof_of_sub_thm_return_wit_3 : sub_thm_return_wit_3.
 Proof. 
   pre_process.
-  unfold sll_var_sub_list, store_var_sub.
+  unfold store_var_sub.
   destruct vs.
   Intros y z.
-  sep_apply sll_var_sub_list_fold; [ | auto | auto ].
-  unfold sll_var_sub_list; rewrite <- H1; entailer!.
+  sep_apply sll_var_sub_list_fold; auto.
+  rewrite <- H1; entailer!.
   unfold store_sub_thm_res.
   destruct t.
   + pose proof thm_subst_allres_var var (VarSub name t0) l0.
@@ -331,7 +328,7 @@ Qed.
 Lemma proof_of_check_list_gen_entail_wit_1 : check_list_gen_entail_wit_1.
 Proof.
   pre_process.
-  Exists theo nil.
+  Exists theo_low_level_spec nil.
   entailer!.
   unfold sllbseg_term_list, sllbseg.
   entailer!.
@@ -347,7 +344,7 @@ Proof.
     clear - H4 H3.
     unfold check_from_mid_rel in *.
     rewrite (repeat_break_unfold _ _) in H4.
-    prove_by_one_abs_step (by_continue (tr, targ, l_2 ++ r :: nil)).
+    prove_by_one_abs_step (by_continue (tr, targ_low_level_spec, l_2 ++ r :: nil)).
     unfold check_list_gen_body.
     unfold term_alpha_eqn in H3.
     destruct term_alpha_eq; [ lia | ].
@@ -462,7 +459,7 @@ Proof.
     auto.
 Qed.
 
-Lemma proof_of_thm_apply_return_wit_1_1 : thm_apply_return_wit_1_1.
+Lemma proof_of_thm_apply_return_wit_1 : thm_apply_return_wit_1.
 Proof. 
   pre_process.
   Exists (thm_subst' t_2 l) (SRTList l_2).
@@ -474,7 +471,7 @@ Proof.
   + sep_apply (partial_quant_combine t_2 l pq st); [entailer! | auto | auto].
 Qed.
 
-Lemma proof_of_thm_apply_return_wit_1_2 : thm_apply_return_wit_1_2.
+Lemma proof_of_thm_apply_return_wit_2 : thm_apply_return_wit_2.
 Proof.
   pre_process.
   Exists (thm_subst' t_2 l) (SRBool 1).
@@ -482,9 +479,9 @@ Proof.
   unfold thm_subst_allres_rel in H1.
   entailer!.
   + sep_apply (partial_quant_combine t_2 l pq st); [entailer! | auto | auto].
-  + unfold thm_app_rel, thm_app in H7.
-  rewrite H1 in H7.
-  unfold term_alpha_eqn in H0.
+  + unfold thm_app_rel, thm_app in H6.
+  rewrite H0 in H6.
+  unfold term_alpha_eqn in H.
   destruct term_alpha_eq eqn:Heq; [ | congruence].
   auto.
 Qed.
@@ -503,7 +500,7 @@ Proof.
   + entailer!.
 Qed. 
 
-Lemma proof_of_thm_apply_return_wit_1_3 : thm_apply_return_wit_1_3.
+Lemma proof_of_thm_apply_return_wit_3 : thm_apply_return_wit_3.
 Proof.
   pre_process.
   Exists (thm_subst' t_2 l) (SRBool 0).
@@ -565,10 +562,9 @@ Lemma proof_of_check_list_gen_derive_low_level_spec_aux_by_low_level_spec : chec
 Proof.
   pre_process.
   eapply safeExec_bind in H as (X' & ? & ?).
-  Exists theo targ X'.
+  Exists theo_low_level_spec_aux targ_low_level_spec_aux X'.
   entailer!.
   apply derivable1_wand_sepcon_adjoint.
   Intros t2 l2 r2; Exists t2 l2 r2.
   entailer!.
 Qed.
-
