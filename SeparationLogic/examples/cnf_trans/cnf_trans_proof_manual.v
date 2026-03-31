@@ -801,63 +801,6 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_clause_gen_binary_safety_wit_97 :
-  clause_gen_binary_safety_wit_97.
-Proof.
-  pre_process.
-  pose proof (Zlength_nonneg clist).
-  entailer!.
-Qed.
-
-Lemma proof_of_clause_gen_binary_safety_wit_99 : clause_gen_binary_safety_wit_99.
-Proof.
-  pre_process.
-  pose proof (Zlength_nonneg clist).
-  entailer!.
-Qed.
-
-Lemma proof_of_clause_gen_binary_safety_wit_125 : clause_gen_binary_safety_wit_125.
-Proof.
-  pre_process.
-  pose proof (Zlength_nonneg clist).
-  entailer!.
-Qed.
-
-
-Lemma proof_of_clause_gen_binary_safety_wit_127 : clause_gen_binary_safety_wit_127.
-Proof.
-  pre_process.
-  pose proof (Zlength_nonneg clist).
-  entailer!.
-Qed.
-
-Lemma proof_of_clause_gen_binary_safety_wit_129 : clause_gen_binary_safety_wit_129.
-Proof.
-  pre_process.
-  pose proof (Zlength_nonneg clist).
-  entailer!.
-Qed.
-
-Lemma proof_of_clause_gen_binary_safety_wit_131 : clause_gen_binary_safety_wit_131.
-Proof.
-  pre_process.
-  pose proof (Zlength_nonneg clist).
-  entailer!.
-Qed.
-
-Lemma proof_of_clause_gen_binary_safety_wit_133 : clause_gen_binary_safety_wit_133.
-Proof.
-  pre_process.
-  pose proof (Zlength_nonneg clist).
-  entailer!.
-Qed.
-
-Lemma proof_of_clause_gen_binary_safety_wit_135 : clause_gen_binary_safety_wit_135.
-Proof.
-  pre_process.
-  pose proof (Zlength_nonneg clist).
-  entailer!.
-Qed.
 
 Lemma proof_of_clause_gen_binary_which_implies_wit_1 : clause_gen_binary_which_implies_wit_1.
 Proof.
