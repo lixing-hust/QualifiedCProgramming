@@ -4,7 +4,7 @@ import os
 import shlex
 import shutil
 from typing import Optional, List
-from session import Session, TOOL_CMD
+from .session import Session, TOOL_CMD
 import logging
 
 

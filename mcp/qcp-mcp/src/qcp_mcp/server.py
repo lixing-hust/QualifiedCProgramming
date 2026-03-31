@@ -1,5 +1,5 @@
 from mcp.server.fastmcp import FastMCP
-from session_manager import manager
+from .session_manager import manager
 import asyncio
 import logging
 import os
@@ -115,7 +115,10 @@ async def close() -> str:
     await asyncio.to_thread(sess.send, "<end></end>")
     return "session closed"
 
-if __name__ == "__main__":
+def main():
     _configure_logging()
     logger.info("starting qcp-mcp server on stdio transport")
     mcp.run(transport="stdio")
+
+if __name__ == "__main__":
+    main()
