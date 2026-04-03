@@ -1,0 +1,12 @@
+-R /home/lixing/projects/QualifiedCProgramming/SeparationLogic/SeparationLogic SimpleC.SL
+-R /home/lixing/projects/QualifiedCProgramming/SeparationLogic/unifysl Logic
+-R /home/lixing/projects/QualifiedCProgramming/SeparationLogic/sets SetsClass
+-R /home/lixing/projects/QualifiedCProgramming/SeparationLogic/compcert_lib compcert.lib
+-R /home/lixing/projects/QualifiedCProgramming/SeparationLogic/auxlibs AUXLib
+-R /home/lixing/projects/QualifiedCProgramming/SeparationLogic/examples SimpleC.EE
+-R /home/lixing/projects/QualifiedCProgramming/SeparationLogic/StrategyLib SimpleC.StrategyLib
+-R /home/lixing/projects/QualifiedCProgramming/SeparationLogic/Common SimpleC.Common
+-R /home/lixing/projects/QualifiedCProgramming/SeparationLogic/fixedpoints FP
+-R /home/lixing/projects/QualifiedCProgramming/SeparationLogic/MonadLib MonadLib
+-R /home/lixing/projects/QualifiedCProgramming/SeparationLogic/listlib ListLib
+-R . SimpleC.EE

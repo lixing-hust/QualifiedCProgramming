@@ -1,0 +1,1 @@
+build/debug/symexec   --goal-file=./examples/humaneval/Int/C_49_goal.v   --proof-auto-file=./examples/humaneval/Int/C_49_proof_auto.v   --proof-manual-file=./examples/humaneval/Int/C_49_proof_manual.v   --coq-logic-path=SimpleC.EE   -slp ./examples/ SimpleC.EE   --input-file=./examples/humaneval/Int/C_49.c

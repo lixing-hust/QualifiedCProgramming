@@ -1,0 +1,203 @@
+# prompts_out .c 文件分类结果
+
+
+## 判定规则
+
+- 仅统计当前目录下的 `.c` 文件，共 164 个。
+- 按“最高复杂度优先”分类：整数标量 < 一维整数数组 < 字符串 < 多维数组/字符串数组 < 浮点数 < 自定义类型。
+- 如果一个程序同时命中多个类别，则归入复杂度更高的那一类。
+
+## 分类结果汇总
+
+- 第 1 类：20 个
+- 第 2 类：50 个
+- 第 3 类：48 个
+- 第 4 类：23 个
+- 第 5 类：20 个
+- 第 6 类：3 个
+
+## 1. 仅涉及整数标量操作（20 个）
+
+- [CPP_102.c](CPP_102.c)
+- [CPP_13.c](CPP_13.c)
+- [CPP_131.c](CPP_131.c)
+- [CPP_138.c](CPP_138.c)
+- [CPP_139.c](CPP_139.c)
+- [CPP_150.c](CPP_150.c)
+- [CPP_24.c](CPP_24.c)
+- [CPP_31.c](CPP_31.c)
+- [CPP_36.c](CPP_36.c)
+- [CPP_39.c](CPP_39.c)
+- [CPP_41.c](CPP_41.c)
+- [CPP_49.c](CPP_49.c)
+- [CPP_53.c](CPP_53.c)
+- [CPP_59.c](CPP_59.c)
+- [CPP_60.c](CPP_60.c)
+- [CPP_75.c](CPP_75.c)
+- [CPP_76.c](CPP_76.c)
+- [CPP_77.c](CPP_77.c)
+- [CPP_83.c](CPP_83.c)
+- [CPP_97.c](CPP_97.c)
+
+## 2. 一维整数数组（50 个）
+
+- [CPP_100.c](CPP_100.c)
+- [CPP_104.c](CPP_104.c)
+- [CPP_106.c](CPP_106.c)
+- [CPP_107.c](CPP_107.c)
+- [CPP_108.c](CPP_108.c)
+- [CPP_109.c](CPP_109.c)
+- [CPP_114.c](CPP_114.c)
+- [CPP_116.c](CPP_116.c)
+- [CPP_120.c](CPP_120.c)
+- [CPP_121.c](CPP_121.c)
+- [CPP_122.c](CPP_122.c)
+- [CPP_123.c](CPP_123.c)
+- [CPP_126.c](CPP_126.c)
+- [CPP_128.c](CPP_128.c)
+- [CPP_130.c](CPP_130.c)
+- [CPP_135.c](CPP_135.c)
+- [CPP_136.c](CPP_136.c)
+- [CPP_142.c](CPP_142.c)
+- [CPP_145.c](CPP_145.c)
+- [CPP_146.c](CPP_146.c)
+- [CPP_152.c](CPP_152.c)
+- [CPP_155.c](CPP_155.c)
+- [CPP_159.c](CPP_159.c)
+- [CPP_163.c](CPP_163.c)
+- [CPP_25.c](CPP_25.c)
+- [CPP_26.c](CPP_26.c)
+- [CPP_3.c](CPP_3.c)
+- [CPP_33.c](CPP_33.c)
+- [CPP_34.c](CPP_34.c)
+- [CPP_40.c](CPP_40.c)
+- [CPP_42.c](CPP_42.c)
+- [CPP_43.c](CPP_43.c)
+- [CPP_46.c](CPP_46.c)
+- [CPP_5.c](CPP_5.c)
+- [CPP_52.c](CPP_52.c)
+- [CPP_55.c](CPP_55.c)
+- [CPP_58.c](CPP_58.c)
+- [CPP_63.c](CPP_63.c)
+- [CPP_68.c](CPP_68.c)
+- [CPP_69.c](CPP_69.c)
+- [CPP_70.c](CPP_70.c)
+- [CPP_72.c](CPP_72.c)
+- [CPP_73.c](CPP_73.c)
+- [CPP_8.c](CPP_8.c)
+- [CPP_85.c](CPP_85.c)
+- [CPP_88.c](CPP_88.c)
+- [CPP_9.c](CPP_9.c)
+- [CPP_90.c](CPP_90.c)
+- [CPP_94.c](CPP_94.c)
+- [CPP_96.c](CPP_96.c)
+
+## 3. 字符串（48 个）
+
+- [CPP_10.c](CPP_10.c)
+- [CPP_103.c](CPP_103.c)
+- [CPP_11.c](CPP_11.c)
+- [CPP_110.c](CPP_110.c)
+- [CPP_118.c](CPP_118.c)
+- [CPP_119.c](CPP_119.c)
+- [CPP_124.c](CPP_124.c)
+- [CPP_127.c](CPP_127.c)
+- [CPP_132.c](CPP_132.c)
+- [CPP_134.c](CPP_134.c)
+- [CPP_140.c](CPP_140.c)
+- [CPP_141.c](CPP_141.c)
+- [CPP_143.c](CPP_143.c)
+- [CPP_144.c](CPP_144.c)
+- [CPP_15.c](CPP_15.c)
+- [CPP_154.c](CPP_154.c)
+- [CPP_156.c](CPP_156.c)
+- [CPP_16.c](CPP_16.c)
+- [CPP_161.c](CPP_161.c)
+- [CPP_162.c](CPP_162.c)
+- [CPP_17.c](CPP_17.c)
+- [CPP_18.c](CPP_18.c)
+- [CPP_19.c](CPP_19.c)
+- [CPP_23.c](CPP_23.c)
+- [CPP_27.c](CPP_27.c)
+- [CPP_38.c](CPP_38.c)
+- [CPP_44.c](CPP_44.c)
+- [CPP_48.c](CPP_48.c)
+- [CPP_50.c](CPP_50.c)
+- [CPP_51.c](CPP_51.c)
+- [CPP_54.c](CPP_54.c)
+- [CPP_56.c](CPP_56.c)
+- [CPP_6.c](CPP_6.c)
+- [CPP_61.c](CPP_61.c)
+- [CPP_64.c](CPP_64.c)
+- [CPP_65.c](CPP_65.c)
+- [CPP_66.c](CPP_66.c)
+- [CPP_67.c](CPP_67.c)
+- [CPP_78.c](CPP_78.c)
+- [CPP_79.c](CPP_79.c)
+- [CPP_80.c](CPP_80.c)
+- [CPP_82.c](CPP_82.c)
+- [CPP_84.c](CPP_84.c)
+- [CPP_86.c](CPP_86.c)
+- [CPP_89.c](CPP_89.c)
+- [CPP_91.c](CPP_91.c)
+- [CPP_93.c](CPP_93.c)
+- [CPP_98.c](CPP_98.c)
+
+## 4. 多维数组（含字符串数组）（23 个）
+
+- [CPP_1.c](CPP_1.c)
+- [CPP_101.c](CPP_101.c)
+- [CPP_105.c](CPP_105.c)
+- [CPP_112.c](CPP_112.c)
+- [CPP_113.c](CPP_113.c)
+- [CPP_115.c](CPP_115.c)
+- [CPP_117.c](CPP_117.c)
+- [CPP_12.c](CPP_12.c)
+- [CPP_125.c](CPP_125.c)
+- [CPP_129.c](CPP_129.c)
+- [CPP_14.c](CPP_14.c)
+- [CPP_147.c](CPP_147.c)
+- [CPP_148.c](CPP_148.c)
+- [CPP_149.c](CPP_149.c)
+- [CPP_153.c](CPP_153.c)
+- [CPP_158.c](CPP_158.c)
+- [CPP_160.c](CPP_160.c)
+- [CPP_28.c](CPP_28.c)
+- [CPP_29.c](CPP_29.c)
+- [CPP_7.c](CPP_7.c)
+- [CPP_74.c](CPP_74.c)
+- [CPP_87.c](CPP_87.c)
+- [CPP_95.c](CPP_95.c)
+
+## 5. 涉及浮点数（20 个）
+
+- [CPP_0.c](CPP_0.c)
+- [CPP_133.c](CPP_133.c)
+- [CPP_151.c](CPP_151.c)
+- [CPP_157.c](CPP_157.c)
+- [CPP_2.c](CPP_2.c)
+- [CPP_20.c](CPP_20.c)
+- [CPP_21.c](CPP_21.c)
+- [CPP_30.c](CPP_30.c)
+- [CPP_32.c](CPP_32.c)
+- [CPP_35.c](CPP_35.c)
+- [CPP_37.c](CPP_37.c)
+- [CPP_4.c](CPP_4.c)
+- [CPP_45.c](CPP_45.c)
+- [CPP_47.c](CPP_47.c)
+- [CPP_57.c](CPP_57.c)
+- [CPP_62.c](CPP_62.c)
+- [CPP_71.c](CPP_71.c)
+- [CPP_81.c](CPP_81.c)
+- [CPP_92.c](CPP_92.c)
+- [CPP_99.c](CPP_99.c)
+
+## 6. 自定义类型（3 个）
+
+- [CPP_111.c](CPP_111.c)
+- [CPP_137.c](CPP_137.c)
+- [CPP_22.c](CPP_22.c)
+
+## 其他
+
+- 无

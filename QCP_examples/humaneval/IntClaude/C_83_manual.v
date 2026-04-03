@@ -1,0 +1,84 @@
+Require Import Coq.ZArith.ZArith.
+Require Import Coq.Bool.Bool.
+Require Import Coq.Strings.String.
+Require Import Coq.Lists.List.
+Require Import Coq.Classes.RelationClasses.
+Require Import Coq.Classes.Morphisms.
+Require Import Coq.micromega.Psatz.
+Require Import Coq.Sorting.Permutation.
+From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+Require Import SetsClass.SetsClass. Import SetsNotation.
+From SimpleC.SL Require Import Mem SeparationLogic.
+From SimpleC.EE Require Import C_83_goal.
+Require Import Logic.LogicGenerator.demo932.Interface.
+Local Open Scope Z_scope.
+Local Open Scope sets.
+Local Open Scope string.
+Local Open Scope list.
+Import naive_C_Rules.
+Require Import coins_83.
+Local Open Scope sac.
+
+Lemma proof_of_starts_one_ends_safety_wit_7 : starts_one_ends_safety_wit_7.
+Proof.
+  unfold starts_one_ends_safety_wit_7.
+  intros.
+  Intros.
+  entailer!.
+  assert (Hi : i - 2 <= 6) by lia.
+  assert (Hi0 : 0 <= i - 2) by lia.
+  assert (H10 : 10 ^ (i - 2) <= 10 ^ 6).
+  { apply Z.pow_le_mono_r; lia. }
+  assert (H10nn : 0 <= 10 ^ (i - 2)).
+  { apply Z.pow_nonneg; lia. }
+  nlinarith.
+Qed.
+
+Lemma proof_of_starts_one_ends_entail_wit_2 : starts_one_ends_entail_wit_2.
+Proof.
+  unfold starts_one_ends_entail_wit_2.
+  intros.
+  Intros.
+  entailer!.
+  replace (i + 1 - 2) with (i - 2 + 1) by lia.
+  rewrite Z.pow_succ_r by lia.
+  nia.
+Qed.
+
+Lemma proof_of_starts_one_ends_return_wit_1 : starts_one_ends_return_wit_1.
+Proof.
+  unfold starts_one_ends_return_wit_1.
+  intros.
+  Intros.
+  entailer!.
+  unfold problem_83_spec_z, problem_83_spec.
+  subst.
+  simpl.
+  intro _. left. split; reflexivity.
+Qed.
+
+Lemma proof_of_starts_one_ends_return_wit_2 : starts_one_ends_return_wit_2.
+Proof.
+  unfold starts_one_ends_return_wit_2.
+  intros.
+  Intros.
+  entailer!.
+  assert (Hieq : i = n_pre) by lia.
+  subst i.
+  unfold problem_83_spec_z, problem_83_spec.
+  intro _.
+  right.
+  split.
+  - (* Z.to_nat n_pre > 1 *)
+    assert (Hn : n_pre >= 2) by lia.
+    lia.
+  - (* Z.to_nat out = 18 * Nat.pow 10 (Z.to_nat n_pre - 2) *)
+    subst out.
+    rewrite Z2Nat.inj_mul by (try lia; apply Z.pow_nonneg; lia).
+    simpl (Z.to_nat 18).
+    f_equal.
+    rewrite Z2Nat.inj_pow by lia.
+    rewrite Z2Nat.inj_sub by lia.
+    simpl (Z.to_nat 10). simpl (Z.to_nat 2).
+    reflexivity.
+Qed.
