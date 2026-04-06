@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "qcp": {
+      "type": "stdio",
+      "command": "/home/lixing/.local/bin/qcp-mcp",
+      "args": [],
+      "env": {}
+    },
+    "rocq-mcp": {
+      "type": "stdio",
+      "command": "/home/lixing/projects/QualifiedCProgramming/mcp/rocq-mcp/.venv/bin/rocq-mcp",
+      "args": [],
+      "env": {}
+    }
+  }
+}

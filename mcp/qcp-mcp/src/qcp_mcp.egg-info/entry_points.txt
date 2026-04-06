@@ -1,0 +1,2 @@
+[console_scripts]
+qcp-mcp = qcp_mcp.server:main

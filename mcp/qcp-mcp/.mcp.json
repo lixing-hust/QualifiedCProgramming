@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "qcp": {
+      "type": "stdio",
+      "command": "/home/lixing/.local/bin/qcp-mcp",
+      "args": [],
+      "env": {
+        "QCP_MCP_BIN": "/home/lixing/projects/QualifiedCProgramming/linux-binary/mcp"
+      }
+    },
+    "rocq-mcp": {
+      "type": "stdio",
+      "command": "/home/lixing/projects/QualifiedCProgramming/mcp/rocq-mcp/.venv/bin/rocq-mcp",
+      "args": [],
+      "env": {
+        "ROCQ_WORKSPACE": "/home/lixing/projects/QualifiedCProgramming",
+        "ROCQ_COQC_BINARY": "/home/lixing/.opam/coq8201/bin/coqc",
+        "PATH": "/home/lixing/.opam/coq8201/bin:/home/lixing/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+      }
+    }
+  }
+}
