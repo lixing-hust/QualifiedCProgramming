@@ -42,7 +42,6 @@
   "workspace": "workspace_20260405_233656_sum2",
   "input_file": "input/sum2.c",
   "function_name": "sum2",
-  "program_sha256": "193c47db4da37e1576a54e0e0b63bd46eb17f40ef148188f75ad1c9531d90812",
   "semantic_description": "Accumulates the even arithmetic series 2 + 4 + ... + 2n by adding 2 * i for i from 1 to n. For n >= 1 it returns n * (n + 1). For n <= 0 the loop is skipped and the function returns 0.",
   "keywords": {
     "algorithm_family": ["accumulation", "arithmetic_series"],
@@ -61,7 +60,6 @@
 
 - `semantic_description` 必须是自然语言，不要只写关键词堆砌。
 - `keywords` 必须来自下面的受控词表，不要自由发明同义词。
-- `program_sha256` 用于识别“同一程序在不同 workspace 的重复验证”。
 
 ## 4. Semantic Description 写法
 
@@ -237,7 +235,6 @@
 先按这些字段过滤候选：
 
 - `function_name`
-- `program_sha256`
 - `keywords.algorithm_family`
 - `keywords.semantic_intent`
 - `keywords.control_flow`
@@ -246,10 +243,9 @@
 
 推荐优先级：
 
-1. 如果是在找“同一个程序”的历史 workspace，先看 `program_sha256`
-2. 如果是在找“同类算法题”，先看 `algorithm_family + semantic_intent + control_flow`
-3. 如果是在找“同类证明套路”，先看 `proof_pattern + numeric_properties + verification_status`
-4. 如果结构化过滤还不够，再对 `semantic_description + keywords` 做 BM25 检索
+1. 如果是在找“同类算法题”，先看 `algorithm_family + semantic_intent + control_flow`
+2. 如果是在找“同类证明套路”，先看 `proof_pattern + numeric_properties + verification_status`
+3. 如果结构化过滤还不够，再对 `semantic_description + keywords` 做 BM25 检索
 
 ### 7A.3 第三步：再看自然语言摘要
 
@@ -296,7 +292,7 @@
 
 1. “找同一个程序”
    做法：
-   先按 `program_sha256` 或 `function_name + semantic_description` 查
+   先按 `function_name + semantic_description` 查
 
 2. “找相似算法题”
    做法：
@@ -377,7 +373,7 @@
 
 ### 8.2 同一程序的多个 workspace
 
-如果不同 workspace 对应同一个 `program_sha256`，则：
+如果不同 workspace 对应同一个程序语义，则：
 
 - `semantic_description` 应尽量保持一致
 - `keywords` 的语义标签应尽量一致
@@ -387,7 +383,6 @@
 
 如果输入程序本体变了：
 
-- 必须更新 `program_sha256`
 - 必须重写 `semantic_description`
 - 必须重新检查 `keywords`
 
@@ -403,7 +398,7 @@
 
 - 仓库级汇总索引，例如 `doc/fingerprint_index.json`
 - 受控词表校验脚本
-- 基于 `program_sha256` 的重复题聚合
+- 基于 `semantic_description + keywords` 的重复题聚合
 
 ## 10. 一个原则
 
@@ -411,6 +406,6 @@
 
 - 自然语言描述负责表达语义
 - 受控词表负责稳定过滤
-- 哈希和函数名负责稳定定位
+- 函数名负责提供辅助定位
 
 三者缺一不可。

@@ -1,0 +1,23 @@
+{
+  "fingerprint_version": 1,
+  "workspace": "example/sum",
+  "input_file": "example/sum/original/sum.c",
+  "function_name": "arr_sum_family",
+  "semantic_description": "Collects several array-sum variants: while, do-while, for-loop, pointer-style traversal, separation-logic decomposition with which-implies, and a version that zeros the array while accumulating its original sum.",
+  "source_paths": {
+    "c_file": "QCP_examples/sum.c",
+    "goal_file": "SeparationLogic/examples/sum_goal.v",
+    "proof_auto_file": "SeparationLogic/examples/sum_proof_auto.v",
+    "proof_manual_file": "SeparationLogic/examples/sum_proof_manual.v"
+  },
+  "keywords": {
+    "algorithm_family": ["accumulation", "prefix_sum"],
+    "control_flow": ["while_loop", "do_while", "for_loop"],
+    "data_shape": ["array", "pointer"],
+    "semantic_intent": ["preserve_input", "in_place_update"],
+    "proof_pattern": ["loop_invariant", "heap_reasoning", "range_bound"],
+    "numeric_properties": ["nonnegative_input", "int_range", "monotone_accumulator"],
+    "edge_case_behavior": [],
+    "verification_status": []
+  }
+}

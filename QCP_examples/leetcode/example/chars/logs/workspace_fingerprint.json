@@ -1,0 +1,23 @@
+{
+  "fingerprint_version": 1,
+  "workspace": "example/chars",
+  "input_file": "example/chars/original/chars.c",
+  "function_name": "chars_initialize",
+  "semantic_description": "Initializes a character array with the same byte value across all positions. It is a minimal reference for array-segment invariants over char buffers and postconditions expressed with repeat_Z.",
+  "source_paths": {
+    "c_file": "QCP_examples/chars.c",
+    "goal_file": "SeparationLogic/examples/chars_goal.v",
+    "proof_auto_file": "SeparationLogic/examples/chars_proof_auto.v",
+    "proof_manual_file": "SeparationLogic/examples/chars_proof_manual.v"
+  },
+  "keywords": {
+    "algorithm_family": ["simulation"],
+    "control_flow": ["for_loop"],
+    "data_shape": ["array", "string", "pointer"],
+    "semantic_intent": ["in_place_update"],
+    "proof_pattern": ["loop_invariant", "heap_reasoning"],
+    "numeric_properties": ["int_range"],
+    "edge_case_behavior": ["empty_loop_possible"],
+    "verification_status": []
+  }
+}

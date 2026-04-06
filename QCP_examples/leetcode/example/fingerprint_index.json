@@ -1,0 +1,290 @@
+[
+  {
+    "example": "add",
+    "path": "example/add",
+    "function_name": "add_family",
+    "semantic_description": "Covers direct integer addition, a loop-based slow addition that preserves x + y, and small pointer increment examples. The file is useful as a minimal reference for scalar arithmetic, a simple loop invariant, and tiny heap-updating contracts.",
+    "keywords": {
+      "algorithm_family": ["accumulation"],
+      "control_flow": ["straight_line", "while_loop"],
+      "data_shape": ["scalar_only", "pointer"],
+      "semantic_intent": ["in_place_update"],
+      "proof_pattern": ["pure_arithmetic", "loop_invariant", "heap_reasoning"],
+      "numeric_properties": ["overflow_guard", "int_range", "monotone_accumulator"],
+      "edge_case_behavior": [],
+      "verification_status": []
+    }
+  },
+  {
+    "example": "abs",
+    "path": "example/abs",
+    "function_name": "abs",
+    "semantic_description": "Computes integer absolute value with a single sign test and returns either x or -x. This is a minimal reference for branch-based arithmetic reasoning around a simple external mathematical model Zabs.",
+    "keywords": {
+      "algorithm_family": ["selection"],
+      "control_flow": ["if"],
+      "data_shape": ["scalar_only"],
+      "semantic_intent": [],
+      "proof_pattern": ["pure_arithmetic", "case_split"],
+      "numeric_properties": ["int_range"],
+      "edge_case_behavior": ["branch_on_order"],
+      "verification_status": []
+    }
+  },
+  {
+    "example": "exgcd",
+    "path": "example/exgcd",
+    "function_name": "exgcd",
+    "semantic_description": "Implements the extended Euclidean algorithm recursively, returning the gcd together with Bezout coefficients through pointer outputs. It is a reference example for recursive arithmetic proofs that mix return values, mutable outputs, and auxiliary number-theoretic lemmas.",
+    "keywords": {
+      "algorithm_family": ["recursion"],
+      "control_flow": ["if", "recursion"],
+      "data_shape": ["scalar_only", "pointer"],
+      "semantic_intent": ["in_place_update"],
+      "proof_pattern": ["pure_arithmetic", "case_split", "heap_reasoning"],
+      "numeric_properties": ["int_range"],
+      "edge_case_behavior": [],
+      "verification_status": []
+    }
+  },
+  {
+    "example": "gcd",
+    "path": "example/gcd",
+    "function_name": "gcd",
+    "semantic_description": "Implements Euclidean gcd recursively, with an external Coq model for absolute value and greatest common divisor. This example is a compact reference for recursive arithmetic verification and branch-based reasoning around the y == 0 base case.",
+    "keywords": {
+      "algorithm_family": ["recursion"],
+      "control_flow": ["if", "recursion"],
+      "data_shape": ["scalar_only"],
+      "semantic_intent": [],
+      "proof_pattern": ["pure_arithmetic", "case_split"],
+      "numeric_properties": ["int_range"],
+      "edge_case_behavior": [],
+      "verification_status": []
+    }
+  },
+  {
+    "example": "max3",
+    "path": "example/max3",
+    "function_name": "max3",
+    "semantic_description": "Selects the maximum among three integer inputs through nested comparisons. It is a compact reference for multi-branch scalar proofs where the postcondition is expressed as a set of lower bounds rather than an exact return formula.",
+    "keywords": {
+      "algorithm_family": ["selection"],
+      "control_flow": ["if"],
+      "data_shape": ["scalar_only"],
+      "semantic_intent": ["return_max"],
+      "proof_pattern": ["pure_arithmetic", "case_split"],
+      "numeric_properties": ["int_range"],
+      "edge_case_behavior": ["branch_on_order"],
+      "verification_status": []
+    }
+  },
+  {
+    "example": "swap",
+    "path": "example/swap",
+    "function_name": "swap_family",
+    "semantic_description": "Contains pointer-based swap functions with separate equal-pointer and distinct-pointer specifications, plus wrapper tests that instantiate those modes. This is a strong alias-analysis example for in-place updates under parameterized pre/postconditions.",
+    "keywords": {
+      "algorithm_family": ["simulation"],
+      "control_flow": ["straight_line"],
+      "data_shape": ["pointer"],
+      "semantic_intent": ["in_place_update"],
+      "proof_pattern": ["heap_reasoning", "case_split"],
+      "numeric_properties": [],
+      "edge_case_behavior": [],
+      "verification_status": []
+    }
+  },
+  {
+    "example": "sum",
+    "path": "example/sum",
+    "function_name": "arr_sum_family",
+    "semantic_description": "Collects several array-sum variants: while, do-while, for-loop, pointer-style traversal, separation-logic decomposition with which-implies, and a version that zeros the array while accumulating its original sum.",
+    "keywords": {
+      "algorithm_family": ["accumulation", "prefix_sum"],
+      "control_flow": ["while_loop", "do_while", "for_loop"],
+      "data_shape": ["array", "pointer"],
+      "semantic_intent": ["preserve_input", "in_place_update"],
+      "proof_pattern": ["loop_invariant", "heap_reasoning", "range_bound"],
+      "numeric_properties": ["nonnegative_input", "int_range", "monotone_accumulator"],
+      "edge_case_behavior": [],
+      "verification_status": []
+    }
+  },
+  {
+    "example": "array_auto",
+    "path": "example/array_auto",
+    "function_name": "array_auto_module",
+    "semantic_description": "Provides a catalog of array-shape proofs including copying, concatenation, swap, pointwise vector operations, memset, maximum search, and converting an array into a linked list. It is a strong reference for segment-based invariants over arrays.",
+    "keywords": {
+      "algorithm_family": ["accumulation", "simulation", "search"],
+      "control_flow": ["for_loop", "if"],
+      "data_shape": ["array", "linked_list", "pointer"],
+      "semantic_intent": ["preserve_input", "in_place_update"],
+      "proof_pattern": ["loop_invariant", "heap_reasoning", "case_split"],
+      "numeric_properties": ["int_range"],
+      "edge_case_behavior": ["empty_loop_possible"],
+      "verification_status": []
+    }
+  },
+  {
+    "example": "chars",
+    "path": "example/chars",
+    "function_name": "chars_initialize",
+    "semantic_description": "Initializes a character array with the same byte value across all positions. It is a minimal reference for array-segment invariants over char buffers and postconditions expressed with repeat_Z.",
+    "keywords": {
+      "algorithm_family": ["simulation"],
+      "control_flow": ["for_loop"],
+      "data_shape": ["array", "string", "pointer"],
+      "semantic_intent": ["in_place_update"],
+      "proof_pattern": ["loop_invariant", "heap_reasoning"],
+      "numeric_properties": ["int_range"],
+      "edge_case_behavior": ["empty_loop_possible"],
+      "verification_status": []
+    }
+  },
+  {
+    "example": "sll_auto",
+    "path": "example/sll_auto",
+    "function_name": "sll_module",
+    "semantic_description": "Shows classic singly linked list routines including copy, free, reverse, append, merge, and multi-append. The annotations and proofs center on listrep and lseg decomposition under iterative pointer updates.",
+    "keywords": {
+      "algorithm_family": ["simulation"],
+      "control_flow": ["if", "while_loop"],
+      "data_shape": ["linked_list", "pointer"],
+      "semantic_intent": ["in_place_update"],
+      "proof_pattern": ["loop_invariant", "heap_reasoning", "case_split"],
+      "numeric_properties": [],
+      "edge_case_behavior": ["empty_loop_possible"],
+      "verification_status": []
+    }
+  },
+  {
+    "example": "sll_queue",
+    "path": "example/sll_queue",
+    "function_name": "queue_ops",
+    "semantic_description": "Implements a queue with a singly linked list plus a tail sentinel cell. The example is useful for abstract queue predicates backed by list segments, with enqueue and dequeue each touching only a small frontier of the heap.",
+    "keywords": {
+      "algorithm_family": ["simulation"],
+      "control_flow": ["straight_line"],
+      "data_shape": ["linked_list", "pointer", "struct"],
+      "semantic_intent": ["in_place_update"],
+      "proof_pattern": ["heap_reasoning"],
+      "numeric_properties": [],
+      "edge_case_behavior": [],
+      "verification_status": []
+    }
+  },
+  {
+    "example": "sll_split_while",
+    "path": "example/sll_split_while",
+    "function_name": "split_while",
+    "semantic_description": "Splits a singly linked list into two lists by alternately moving nodes to p and q. The specification is expressed through safeExec and a relational split_rec_rel program, making it a representative example for loop invariants that track both heap shape and relational semantics.",
+    "keywords": {
+      "algorithm_family": ["simulation"],
+      "control_flow": ["while_loop", "if"],
+      "data_shape": ["linked_list", "pointer"],
+      "semantic_intent": ["in_place_update"],
+      "proof_pattern": ["loop_invariant", "heap_reasoning", "case_split"],
+      "numeric_properties": [],
+      "edge_case_behavior": ["empty_loop_possible"],
+      "verification_status": []
+    }
+  },
+  {
+    "example": "dll_auto",
+    "path": "example/dll_auto",
+    "function_name": "dll_module",
+    "semantic_description": "Provides doubly linked list routines such as copy, free, reverse, append, forward iteration, backward iteration, and merged traversals. It is the main shape-oriented reference for programs that simultaneously maintain next and prev consistency.",
+    "keywords": {
+      "algorithm_family": ["simulation"],
+      "control_flow": ["if", "while_loop"],
+      "data_shape": ["linked_list", "pointer", "struct"],
+      "semantic_intent": ["in_place_update"],
+      "proof_pattern": ["loop_invariant", "heap_reasoning", "case_split"],
+      "numeric_properties": [],
+      "edge_case_behavior": ["empty_loop_possible"],
+      "verification_status": []
+    }
+  },
+  {
+    "example": "dll_queue",
+    "path": "example/dll_queue",
+    "function_name": "queue_ops",
+    "semantic_description": "Implements enqueue and dequeue for a doubly linked queue. The proof scripts illustrate how to unfold an abstract queue predicate into a doubly linked segment predicate and then restore the abstraction after local pointer rewrites.",
+    "keywords": {
+      "algorithm_family": ["simulation"],
+      "control_flow": ["if"],
+      "data_shape": ["linked_list", "pointer", "struct"],
+      "semantic_intent": ["in_place_update"],
+      "proof_pattern": ["heap_reasoning", "case_split"],
+      "numeric_properties": [],
+      "edge_case_behavior": [],
+      "verification_status": []
+    }
+  },
+  {
+    "example": "functional_queue",
+    "path": "example/functional_queue",
+    "function_name": "queue_ops",
+    "semantic_description": "Implements a queue with two singly linked lists. Enqueue pushes onto the rear list, and dequeue may reverse that list into the front list before popping, making this a compact reference for abstraction over app and rev in separation-logic queue proofs.",
+    "keywords": {
+      "algorithm_family": ["simulation"],
+      "control_flow": ["if"],
+      "data_shape": ["linked_list", "pointer", "struct"],
+      "semantic_intent": ["in_place_update"],
+      "proof_pattern": ["heap_reasoning", "case_split"],
+      "numeric_properties": [],
+      "edge_case_behavior": [],
+      "verification_status": []
+    }
+  },
+  {
+    "example": "bst_insert_rec",
+    "path": "example/bst_insert_rec",
+    "function_name": "insert",
+    "semantic_description": "Performs recursive insertion into a binary search tree and returns the updated subtree pointer. It is a compact tree example for recursive heap reasoning and for deriving a high-level map-update view from a low-level tree_insert specification.",
+    "keywords": {
+      "algorithm_family": ["search", "recursion"],
+      "control_flow": ["if", "recursion"],
+      "data_shape": ["tree", "pointer", "struct"],
+      "semantic_intent": ["in_place_update"],
+      "proof_pattern": ["heap_reasoning", "case_split"],
+      "numeric_properties": ["int_range"],
+      "edge_case_behavior": [],
+      "verification_status": []
+    }
+  },
+  {
+    "example": "bst_insert",
+    "path": "example/bst_insert",
+    "function_name": "insert",
+    "semantic_description": "Performs iterative insertion into a binary search tree through a pointer-to-pointer cursor. The example is representative for tree-shaped heap reasoning, path invariants, and deriving a high-level map update specification from a low-level tree mutation proof.",
+    "keywords": {
+      "algorithm_family": ["search"],
+      "control_flow": ["if", "while_loop"],
+      "data_shape": ["tree", "pointer", "struct"],
+      "semantic_intent": ["in_place_update"],
+      "proof_pattern": ["loop_invariant", "heap_reasoning", "case_split"],
+      "numeric_properties": ["int_range"],
+      "edge_case_behavior": [],
+      "verification_status": []
+    }
+  },
+  {
+    "example": "avl_insert",
+    "path": "example/avl_insert",
+    "function_name": "insert",
+    "semantic_description": "Implements AVL insertion with height maintenance and single or double rotations. This is a representative balancing example for tree-shaped heap reasoning with local rewrites around rotateL, rotateR, rotateLR, and rotateRL.",
+    "keywords": {
+      "algorithm_family": ["search", "recursion"],
+      "control_flow": ["if", "recursion"],
+      "data_shape": ["tree", "pointer", "struct"],
+      "semantic_intent": ["in_place_update"],
+      "proof_pattern": ["heap_reasoning", "case_split"],
+      "numeric_properties": ["int_range"],
+      "edge_case_behavior": [],
+      "verification_status": []
+    }
+  }
+]

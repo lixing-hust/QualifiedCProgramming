@@ -1,0 +1,23 @@
+{
+  "fingerprint_version": 1,
+  "workspace": "example/exgcd",
+  "input_file": "example/exgcd/original/exgcd.c",
+  "function_name": "exgcd",
+  "semantic_description": "Implements the extended Euclidean algorithm recursively, returning the gcd together with Bezout coefficients through pointer outputs. It is a reference example for recursive arithmetic proofs that mix return values, mutable outputs, and auxiliary number-theoretic lemmas.",
+  "source_paths": {
+    "c_file": "QCP_examples/simple_arith/exgcd.c",
+    "goal_file": "SeparationLogic/examples/simple_arith/exgcd_goal.v",
+    "proof_auto_file": "SeparationLogic/examples/simple_arith/exgcd_proof_auto.v",
+    "proof_manual_file": "SeparationLogic/examples/simple_arith/exgcd_proof_manual.v"
+  },
+  "keywords": {
+    "algorithm_family": ["recursion"],
+    "control_flow": ["if", "recursion"],
+    "data_shape": ["scalar_only", "pointer"],
+    "semantic_intent": ["in_place_update"],
+    "proof_pattern": ["pure_arithmetic", "case_split", "heap_reasoning"],
+    "numeric_properties": ["int_range"],
+    "edge_case_behavior": [],
+    "verification_status": []
+  }
+}

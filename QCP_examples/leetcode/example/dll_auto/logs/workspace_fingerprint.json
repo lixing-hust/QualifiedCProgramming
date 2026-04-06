@@ -1,0 +1,24 @@
+{
+  "fingerprint_version": 1,
+  "workspace": "example/dll_auto",
+  "input_file": "example/dll_auto/original/dll_auto.c",
+  "function_name": "dll_module",
+  "semantic_description": "Provides doubly linked list routines such as copy, free, reverse, append, forward iteration, backward iteration, and merged traversals. It is the main shape-oriented reference for programs that simultaneously maintain next and prev consistency.",
+  "source_paths": {
+    "c_file": "QCP_examples/dll_auto.c",
+    "goal_file": "SeparationLogic/examples/dll_auto_goal.v",
+    "proof_auto_file": "SeparationLogic/examples/dll_auto_proof_auto.v",
+    "proof_manual_file": "SeparationLogic/examples/dll_auto_proof_manual.v",
+    "support_file": "SeparationLogic/examples/dll_shape_lib.v"
+  },
+  "keywords": {
+    "algorithm_family": ["simulation"],
+    "control_flow": ["if", "while_loop"],
+    "data_shape": ["linked_list", "pointer", "struct"],
+    "semantic_intent": ["in_place_update"],
+    "proof_pattern": ["loop_invariant", "heap_reasoning", "case_split"],
+    "numeric_properties": [],
+    "edge_case_behavior": ["empty_loop_possible"],
+    "verification_status": []
+  }
+}

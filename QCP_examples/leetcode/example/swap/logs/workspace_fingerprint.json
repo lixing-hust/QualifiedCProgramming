@@ -1,0 +1,24 @@
+{
+  "fingerprint_version": 1,
+  "workspace": "example/swap",
+  "input_file": "example/swap/original/swap.c",
+  "function_name": "swap_family",
+  "semantic_description": "Contains pointer-based swap functions with separate equal-pointer and distinct-pointer specifications, plus wrapper tests that instantiate those modes. This is a strong alias-analysis example for in-place updates under parameterized pre/postconditions.",
+  "source_paths": {
+    "c_file": "QCP_examples/swap.c",
+    "goal_file": "SeparationLogic/examples/swap_goal.v",
+    "proof_auto_file": "SeparationLogic/examples/swap_proof_auto.v",
+    "proof_manual_file": "SeparationLogic/examples/swap_proof_manual.v",
+    "support_file": "SeparationLogic/examples/swap_lib.v"
+  },
+  "keywords": {
+    "algorithm_family": ["simulation"],
+    "control_flow": ["straight_line"],
+    "data_shape": ["pointer"],
+    "semantic_intent": ["in_place_update"],
+    "proof_pattern": ["heap_reasoning", "case_split"],
+    "numeric_properties": [],
+    "edge_case_behavior": [],
+    "verification_status": []
+  }
+}

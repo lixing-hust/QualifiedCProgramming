@@ -1,0 +1,23 @@
+{
+  "fingerprint_version": 1,
+  "workspace": "example/array_auto",
+  "input_file": "example/array_auto/original/array_auto.c",
+  "function_name": "array_auto_module",
+  "semantic_description": "Provides a catalog of array-shape proofs including copying, concatenation, swap, pointwise vector operations, memset, maximum search, and converting an array into a linked list. It is a strong reference for segment-based invariants over arrays.",
+  "source_paths": {
+    "c_file": "QCP_examples/array_auto.c",
+    "goal_file": "SeparationLogic/examples/array_auto_goal.v",
+    "proof_auto_file": "SeparationLogic/examples/array_auto_proof_auto.v",
+    "proof_manual_file": "SeparationLogic/examples/array_auto_proof_manual.v"
+  },
+  "keywords": {
+    "algorithm_family": ["accumulation", "simulation", "search"],
+    "control_flow": ["for_loop", "if"],
+    "data_shape": ["array", "linked_list", "pointer"],
+    "semantic_intent": ["preserve_input", "in_place_update"],
+    "proof_pattern": ["loop_invariant", "heap_reasoning", "case_split"],
+    "numeric_properties": ["int_range"],
+    "edge_case_behavior": ["empty_loop_possible"],
+    "verification_status": []
+  }
+}

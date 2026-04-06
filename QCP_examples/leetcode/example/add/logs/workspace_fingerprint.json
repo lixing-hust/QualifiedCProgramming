@@ -1,0 +1,23 @@
+{
+  "fingerprint_version": 1,
+  "workspace": "example/add",
+  "input_file": "example/add/original/add.c",
+  "function_name": "add_family",
+  "semantic_description": "Covers direct integer addition, a loop-based slow addition that preserves x + y, and small pointer increment examples. The file is useful as a minimal reference for scalar arithmetic, a simple loop invariant, and tiny heap-updating contracts.",
+  "source_paths": {
+    "c_file": "QCP_examples/simple_arith/add.c",
+    "goal_file": "SeparationLogic/examples/simple_arith/add_goal.v",
+    "proof_auto_file": "SeparationLogic/examples/simple_arith/add_proof_auto.v",
+    "proof_manual_file": "SeparationLogic/examples/simple_arith/add_proof_manual.v"
+  },
+  "keywords": {
+    "algorithm_family": ["accumulation"],
+    "control_flow": ["straight_line", "while_loop"],
+    "data_shape": ["scalar_only", "pointer"],
+    "semantic_intent": ["in_place_update"],
+    "proof_pattern": ["pure_arithmetic", "loop_invariant", "heap_reasoning"],
+    "numeric_properties": ["overflow_guard", "int_range", "monotone_accumulator"],
+    "edge_case_behavior": [],
+    "verification_status": []
+  }
+}
