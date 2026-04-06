@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import datetime as dt
+import hashlib
 import json
 from pathlib import Path
 import shutil
@@ -24,6 +25,10 @@ def iso_now() -> str:
 
 def stem_from_input(input_path: Path) -> str:
     return input_path.stem
+
+
+def sha256_hex(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def whitespace_token_count(text: str) -> int:
@@ -55,6 +60,7 @@ Task:
 - Verify function `{function_name}` from `{input_path}`.
 - Work fully automatically without asking for human input.
 - Use workspace `{workspace_path}`.
+- Before writing `annotated/<name>.c`, first write or update `logs/workspace_fingerprint.json` with a natural-language semantic description of the program and a keyword list for retrieval.
 - Before writing `annotated/<name>.c`, first output natural-language annotation reasoning into `logs/annotation_reasoning.md` inside the workspace.
 - Before writing `coq/generated/<name>_proof_manual.v`, first output natural-language proof reasoning into `logs/proof_reasoning.md` inside the workspace.
 - Treat those reasoning files as mandatory workflow artifacts, not optional notes.
@@ -155,11 +161,22 @@ def update_issues_on_failure(issues_path: Path, stage: str, exit_code: int, stde
     issues_path.write_text(existing + block, encoding="utf-8")
 
 
-def bootstrap_workspace(workspace_path: Path, input_path: Path) -> None:
+def bootstrap_workspace(workspace_path: Path, input_path: Path, function_name: str) -> None:
     (workspace_path / "logs").mkdir(parents=True, exist_ok=True)
     (workspace_path / "original").mkdir(parents=True, exist_ok=True)
     dst = workspace_path / "original" / input_path.name
     shutil.copy2(input_path, dst)
+    fingerprint_path = workspace_path / "logs" / "workspace_fingerprint.json"
+    fingerprint = {
+        "fingerprint_version": 1,
+        "workspace": workspace_path.name,
+        "input_file": str(input_path),
+        "function_name": function_name,
+        "program_sha256": sha256_hex(input_path),
+        "semantic_description": "",
+        "keywords": [],
+    }
+    fingerprint_path.write_text(json.dumps(fingerprint, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -196,7 +213,7 @@ def main() -> int:
     workspace_stem = args.workspace_name or stem_from_input(input_path)
     workspace_timestamp = args.timestamp or timestamp_now()
     workspace_path = OUTPUT_ROOT / f"workspace_{workspace_timestamp}_{workspace_stem}"
-    bootstrap_workspace(workspace_path, input_path)
+    bootstrap_workspace(workspace_path, input_path, args.function_name)
 
     logs_dir = workspace_path / "logs"
     run_label = dt.datetime.now().strftime("%Y%m%d_%H%M%S")

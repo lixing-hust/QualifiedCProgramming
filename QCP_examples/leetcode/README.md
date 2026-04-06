@@ -28,6 +28,8 @@ The script will:
 
 - create `output/workspace_<timestamp>_<name>/`
 - ask Codex to read [SKILL.md](/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/SKILL.md) and work inside that workspace
+- seed `logs/workspace_fingerprint.json` with stable metadata for retrieval
+- require Codex to fill `logs/workspace_fingerprint.json` with a semantic description and keywords
 - require Codex to write natural-language reasoning to `logs/annotation_reasoning.md` before annotation
 - require Codex to write natural-language reasoning to `logs/proof_reasoning.md` before manual proof work
 - capture `codex exec --json` stdout/stderr under `logs/`
