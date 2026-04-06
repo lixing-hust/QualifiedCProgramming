@@ -27,7 +27,7 @@ forall (n_pre: Z) ,
   [| (problem_131_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
   &&  [| (n_pre <= INT_MAX) |] 
-  &&  [| ((raw_odd_prod_z (n_pre)) <= INT_MAX) |]
+  &&  [| ((tail_odd_prod_z (n_pre)) <= INT_MAX) |]
   &&  ((( &( "has" ) )) # Int  |->_)
   **  ((( &( "prod" ) )) # Int  |-> 1)
   **  ((( &( "n" ) )) # Int  |-> n_pre)
@@ -41,7 +41,7 @@ forall (n_pre: Z) ,
   [| (problem_131_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
   &&  [| (n_pre <= INT_MAX) |] 
-  &&  [| ((raw_odd_prod_z (n_pre)) <= INT_MAX) |]
+  &&  [| ((tail_odd_prod_z (n_pre)) <= INT_MAX) |]
   &&  ((( &( "prod" ) )) # Int  |->_)
   **  ((( &( "n" ) )) # Int  |-> n_pre)
 |--
@@ -54,7 +54,7 @@ forall (n_pre: Z) ,
   [| (problem_131_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
   &&  [| (n_pre <= INT_MAX) |] 
-  &&  [| ((raw_odd_prod_z (n_pre)) <= INT_MAX) |]
+  &&  [| ((tail_odd_prod_z (n_pre)) <= INT_MAX) |]
   &&  ((( &( "has" ) )) # Int  |-> 0)
   **  ((( &( "prod" ) )) # Int  |-> 1)
   **  ((( &( "n" ) )) # Int  |-> n_pre)
@@ -69,7 +69,7 @@ forall (n_pre: Z) ,
   &&  [| (problem_131_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
   &&  [| (n_pre <= INT_MAX) |] 
-  &&  [| ((raw_odd_prod_z (n_pre)) <= INT_MAX) |]
+  &&  [| ((tail_odd_prod_z (n_pre)) <= INT_MAX) |]
   &&  ((( &( "has" ) )) # Int  |-> 0)
   **  ((( &( "prod" ) )) # Int  |-> 1)
   **  ((( &( "n" ) )) # Int  |-> n_pre)
@@ -84,13 +84,14 @@ forall (n_pre: Z) (has: Z) (prod: Z) (n: Z) ,
   &&  [| (prod <= INT_MAX) |] 
   &&  [| (0 <= has) |] 
   &&  [| (has <= 1) |] 
-  &&  [| ((prod * (raw_odd_prod_z (n)) ) <= INT_MAX) |] 
-  &&  [| (problem_131_spec_z n_pre (digits_loop_z (n) (prod) (has)) ) |] 
+  &&  [| ((has = 0) -> (prod = 1)) |] 
+  &&  [| ((prod * (tail_odd_prod_z (n)) ) <= INT_MAX) |] 
+  &&  [| (problem_131_spec_z n_pre (digits_state_z (n) (prod) (has)) ) |] 
   &&  [| (n_pre <> 0) |] 
   &&  [| (problem_131_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
   &&  [| (n_pre <= INT_MAX) |] 
-  &&  [| ((raw_odd_prod_z (n_pre)) <= INT_MAX) |]
+  &&  [| ((tail_odd_prod_z (n_pre)) <= INT_MAX) |]
   &&  ((( &( "n" ) )) # Int  |-> n)
   **  ((( &( "prod" ) )) # Int  |-> prod)
   **  ((( &( "has" ) )) # Int  |-> has)
@@ -107,13 +108,14 @@ forall (n_pre: Z) (has: Z) (prod: Z) (n: Z) ,
   &&  [| (prod <= INT_MAX) |] 
   &&  [| (0 <= has) |] 
   &&  [| (has <= 1) |] 
-  &&  [| ((prod * (raw_odd_prod_z (n)) ) <= INT_MAX) |] 
-  &&  [| (problem_131_spec_z n_pre (digits_loop_z (n) (prod) (has)) ) |] 
+  &&  [| ((has = 0) -> (prod = 1)) |] 
+  &&  [| ((prod * (tail_odd_prod_z (n)) ) <= INT_MAX) |] 
+  &&  [| (problem_131_spec_z n_pre (digits_state_z (n) (prod) (has)) ) |] 
   &&  [| (n_pre <> 0) |] 
   &&  [| (problem_131_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
   &&  [| (n_pre <= INT_MAX) |] 
-  &&  [| ((raw_odd_prod_z (n_pre)) <= INT_MAX) |]
+  &&  [| ((tail_odd_prod_z (n_pre)) <= INT_MAX) |]
   &&  ((( &( "d" ) )) # Int  |->_)
   **  ((( &( "n" ) )) # Int  |-> n)
   **  ((( &( "prod" ) )) # Int  |-> prod)
@@ -131,13 +133,14 @@ forall (n_pre: Z) (has: Z) (prod: Z) (n: Z) ,
   &&  [| (prod <= INT_MAX) |] 
   &&  [| (0 <= has) |] 
   &&  [| (has <= 1) |] 
-  &&  [| ((prod * (raw_odd_prod_z (n)) ) <= INT_MAX) |] 
-  &&  [| (problem_131_spec_z n_pre (digits_loop_z (n) (prod) (has)) ) |] 
+  &&  [| ((has = 0) -> (prod = 1)) |] 
+  &&  [| ((prod * (tail_odd_prod_z (n)) ) <= INT_MAX) |] 
+  &&  [| (problem_131_spec_z n_pre (digits_state_z (n) (prod) (has)) ) |] 
   &&  [| (n_pre <> 0) |] 
   &&  [| (problem_131_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
   &&  [| (n_pre <= INT_MAX) |] 
-  &&  [| ((raw_odd_prod_z (n_pre)) <= INT_MAX) |]
+  &&  [| ((tail_odd_prod_z (n_pre)) <= INT_MAX) |]
   &&  ((( &( "d" ) )) # Int  |->_)
   **  ((( &( "n" ) )) # Int  |-> n)
   **  ((( &( "prod" ) )) # Int  |-> prod)
@@ -155,13 +158,14 @@ forall (n_pre: Z) (has: Z) (prod: Z) (n: Z) ,
   &&  [| (prod <= INT_MAX) |] 
   &&  [| (0 <= has) |] 
   &&  [| (has <= 1) |] 
-  &&  [| ((prod * (raw_odd_prod_z (n)) ) <= INT_MAX) |] 
-  &&  [| (problem_131_spec_z n_pre (digits_loop_z (n) (prod) (has)) ) |] 
+  &&  [| ((has = 0) -> (prod = 1)) |] 
+  &&  [| ((prod * (tail_odd_prod_z (n)) ) <= INT_MAX) |] 
+  &&  [| (problem_131_spec_z n_pre (digits_state_z (n) (prod) (has)) ) |] 
   &&  [| (n_pre <> 0) |] 
   &&  [| (problem_131_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
   &&  [| (n_pre <= INT_MAX) |] 
-  &&  [| ((raw_odd_prod_z (n_pre)) <= INT_MAX) |]
+  &&  [| ((tail_odd_prod_z (n_pre)) <= INT_MAX) |]
   &&  ((( &( "d" ) )) # Int  |-> (n % ( 10 ) ))
   **  ((( &( "n" ) )) # Int  |-> n)
   **  ((( &( "prod" ) )) # Int  |-> prod)
@@ -179,13 +183,14 @@ forall (n_pre: Z) (has: Z) (prod: Z) (n: Z) ,
   &&  [| (prod <= INT_MAX) |] 
   &&  [| (0 <= has) |] 
   &&  [| (has <= 1) |] 
-  &&  [| ((prod * (raw_odd_prod_z (n)) ) <= INT_MAX) |] 
-  &&  [| (problem_131_spec_z n_pre (digits_loop_z (n) (prod) (has)) ) |] 
+  &&  [| ((has = 0) -> (prod = 1)) |] 
+  &&  [| ((prod * (tail_odd_prod_z (n)) ) <= INT_MAX) |] 
+  &&  [| (problem_131_spec_z n_pre (digits_state_z (n) (prod) (has)) ) |] 
   &&  [| (n_pre <> 0) |] 
   &&  [| (problem_131_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
   &&  [| (n_pre <= INT_MAX) |] 
-  &&  [| ((raw_odd_prod_z (n_pre)) <= INT_MAX) |]
+  &&  [| ((tail_odd_prod_z (n_pre)) <= INT_MAX) |]
   &&  ((( &( "d" ) )) # Int  |-> (n % ( 10 ) ))
   **  ((( &( "n" ) )) # Int  |-> n)
   **  ((( &( "prod" ) )) # Int  |-> prod)
@@ -203,13 +208,14 @@ forall (n_pre: Z) (has: Z) (prod: Z) (n: Z) ,
   &&  [| (prod <= INT_MAX) |] 
   &&  [| (0 <= has) |] 
   &&  [| (has <= 1) |] 
-  &&  [| ((prod * (raw_odd_prod_z (n)) ) <= INT_MAX) |] 
-  &&  [| (problem_131_spec_z n_pre (digits_loop_z (n) (prod) (has)) ) |] 
+  &&  [| ((has = 0) -> (prod = 1)) |] 
+  &&  [| ((prod * (tail_odd_prod_z (n)) ) <= INT_MAX) |] 
+  &&  [| (problem_131_spec_z n_pre (digits_state_z (n) (prod) (has)) ) |] 
   &&  [| (n_pre <> 0) |] 
   &&  [| (problem_131_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
   &&  [| (n_pre <= INT_MAX) |] 
-  &&  [| ((raw_odd_prod_z (n_pre)) <= INT_MAX) |]
+  &&  [| ((tail_odd_prod_z (n_pre)) <= INT_MAX) |]
   &&  ((( &( "d" ) )) # Int  |-> (n % ( 10 ) ))
   **  ((( &( "n" ) )) # Int  |-> n)
   **  ((( &( "prod" ) )) # Int  |-> prod)
@@ -228,13 +234,14 @@ forall (n_pre: Z) (has: Z) (prod: Z) (n: Z) ,
   &&  [| (prod <= INT_MAX) |] 
   &&  [| (0 <= has) |] 
   &&  [| (has <= 1) |] 
-  &&  [| ((prod * (raw_odd_prod_z (n)) ) <= INT_MAX) |] 
-  &&  [| (problem_131_spec_z n_pre (digits_loop_z (n) (prod) (has)) ) |] 
+  &&  [| ((has = 0) -> (prod = 1)) |] 
+  &&  [| ((prod * (tail_odd_prod_z (n)) ) <= INT_MAX) |] 
+  &&  [| (problem_131_spec_z n_pre (digits_state_z (n) (prod) (has)) ) |] 
   &&  [| (n_pre <> 0) |] 
   &&  [| (problem_131_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
   &&  [| (n_pre <= INT_MAX) |] 
-  &&  [| ((raw_odd_prod_z (n_pre)) <= INT_MAX) |]
+  &&  [| ((tail_odd_prod_z (n_pre)) <= INT_MAX) |]
   &&  ((( &( "d" ) )) # Int  |-> (n % ( 10 ) ))
   **  ((( &( "n" ) )) # Int  |-> n)
   **  ((( &( "prod" ) )) # Int  |-> prod)
@@ -253,13 +260,14 @@ forall (n_pre: Z) (has: Z) (prod: Z) (n: Z) ,
   &&  [| (prod <= INT_MAX) |] 
   &&  [| (0 <= has) |] 
   &&  [| (has <= 1) |] 
-  &&  [| ((prod * (raw_odd_prod_z (n)) ) <= INT_MAX) |] 
-  &&  [| (problem_131_spec_z n_pre (digits_loop_z (n) (prod) (has)) ) |] 
+  &&  [| ((has = 0) -> (prod = 1)) |] 
+  &&  [| ((prod * (tail_odd_prod_z (n)) ) <= INT_MAX) |] 
+  &&  [| (problem_131_spec_z n_pre (digits_state_z (n) (prod) (has)) ) |] 
   &&  [| (n_pre <> 0) |] 
   &&  [| (problem_131_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
   &&  [| (n_pre <= INT_MAX) |] 
-  &&  [| ((raw_odd_prod_z (n_pre)) <= INT_MAX) |]
+  &&  [| ((tail_odd_prod_z (n_pre)) <= INT_MAX) |]
   &&  ((( &( "d" ) )) # Int  |-> (n % ( 10 ) ))
   **  ((( &( "n" ) )) # Int  |-> n)
   **  ((( &( "prod" ) )) # Int  |-> prod)
@@ -278,13 +286,14 @@ forall (n_pre: Z) (has: Z) (prod: Z) (n: Z) ,
   &&  [| (prod <= INT_MAX) |] 
   &&  [| (0 <= has) |] 
   &&  [| (has <= 1) |] 
-  &&  [| ((prod * (raw_odd_prod_z (n)) ) <= INT_MAX) |] 
-  &&  [| (problem_131_spec_z n_pre (digits_loop_z (n) (prod) (has)) ) |] 
+  &&  [| ((has = 0) -> (prod = 1)) |] 
+  &&  [| ((prod * (tail_odd_prod_z (n)) ) <= INT_MAX) |] 
+  &&  [| (problem_131_spec_z n_pre (digits_state_z (n) (prod) (has)) ) |] 
   &&  [| (n_pre <> 0) |] 
   &&  [| (problem_131_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
   &&  [| (n_pre <= INT_MAX) |] 
-  &&  [| ((raw_odd_prod_z (n_pre)) <= INT_MAX) |]
+  &&  [| ((tail_odd_prod_z (n_pre)) <= INT_MAX) |]
   &&  ((( &( "d" ) )) # Int  |-> (n % ( 10 ) ))
   **  ((( &( "n" ) )) # Int  |-> n)
   **  ((( &( "prod" ) )) # Int  |-> prod)
@@ -303,13 +312,14 @@ forall (n_pre: Z) (has: Z) (prod: Z) (n: Z) ,
   &&  [| (prod <= INT_MAX) |] 
   &&  [| (0 <= has) |] 
   &&  [| (has <= 1) |] 
-  &&  [| ((prod * (raw_odd_prod_z (n)) ) <= INT_MAX) |] 
-  &&  [| (problem_131_spec_z n_pre (digits_loop_z (n) (prod) (has)) ) |] 
+  &&  [| ((has = 0) -> (prod = 1)) |] 
+  &&  [| ((prod * (tail_odd_prod_z (n)) ) <= INT_MAX) |] 
+  &&  [| (problem_131_spec_z n_pre (digits_state_z (n) (prod) (has)) ) |] 
   &&  [| (n_pre <> 0) |] 
   &&  [| (problem_131_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
   &&  [| (n_pre <= INT_MAX) |] 
-  &&  [| ((raw_odd_prod_z (n_pre)) <= INT_MAX) |]
+  &&  [| ((tail_odd_prod_z (n_pre)) <= INT_MAX) |]
   &&  ((( &( "d" ) )) # Int  |-> (n % ( 10 ) ))
   **  ((( &( "n" ) )) # Int  |-> n)
   **  ((( &( "prod" ) )) # Int  |-> prod)
@@ -328,13 +338,14 @@ forall (n_pre: Z) (has: Z) (prod: Z) (n: Z) ,
   &&  [| (prod <= INT_MAX) |] 
   &&  [| (0 <= has) |] 
   &&  [| (has <= 1) |] 
-  &&  [| ((prod * (raw_odd_prod_z (n)) ) <= INT_MAX) |] 
-  &&  [| (problem_131_spec_z n_pre (digits_loop_z (n) (prod) (has)) ) |] 
+  &&  [| ((has = 0) -> (prod = 1)) |] 
+  &&  [| ((prod * (tail_odd_prod_z (n)) ) <= INT_MAX) |] 
+  &&  [| (problem_131_spec_z n_pre (digits_state_z (n) (prod) (has)) ) |] 
   &&  [| (n_pre <> 0) |] 
   &&  [| (problem_131_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
   &&  [| (n_pre <= INT_MAX) |] 
-  &&  [| ((raw_odd_prod_z (n_pre)) <= INT_MAX) |]
+  &&  [| ((tail_odd_prod_z (n_pre)) <= INT_MAX) |]
   &&  ((( &( "d" ) )) # Int  |-> (n % ( 10 ) ))
   **  ((( &( "n" ) )) # Int  |-> n)
   **  ((( &( "prod" ) )) # Int  |-> (prod * (n % ( 10 ) ) ))
@@ -353,13 +364,14 @@ forall (n_pre: Z) (has: Z) (prod: Z) (n: Z) ,
   &&  [| (prod <= INT_MAX) |] 
   &&  [| (0 <= has) |] 
   &&  [| (has <= 1) |] 
-  &&  [| ((prod * (raw_odd_prod_z (n)) ) <= INT_MAX) |] 
-  &&  [| (problem_131_spec_z n_pre (digits_loop_z (n) (prod) (has)) ) |] 
+  &&  [| ((has = 0) -> (prod = 1)) |] 
+  &&  [| ((prod * (tail_odd_prod_z (n)) ) <= INT_MAX) |] 
+  &&  [| (problem_131_spec_z n_pre (digits_state_z (n) (prod) (has)) ) |] 
   &&  [| (n_pre <> 0) |] 
   &&  [| (problem_131_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
   &&  [| (n_pre <= INT_MAX) |] 
-  &&  [| ((raw_odd_prod_z (n_pre)) <= INT_MAX) |]
+  &&  [| ((tail_odd_prod_z (n_pre)) <= INT_MAX) |]
   &&  ((( &( "d" ) )) # Int  |-> (n % ( 10 ) ))
   **  ((( &( "n" ) )) # Int  |-> n)
   **  ((( &( "prod" ) )) # Int  |-> (prod * (n % ( 10 ) ) ))
@@ -377,13 +389,14 @@ forall (n_pre: Z) (has: Z) (prod: Z) (n: Z) ,
   &&  [| (prod <= INT_MAX) |] 
   &&  [| (0 <= has) |] 
   &&  [| (has <= 1) |] 
-  &&  [| ((prod * (raw_odd_prod_z (n)) ) <= INT_MAX) |] 
-  &&  [| (problem_131_spec_z n_pre (digits_loop_z (n) (prod) (has)) ) |] 
+  &&  [| ((has = 0) -> (prod = 1)) |] 
+  &&  [| ((prod * (tail_odd_prod_z (n)) ) <= INT_MAX) |] 
+  &&  [| (problem_131_spec_z n_pre (digits_state_z (n) (prod) (has)) ) |] 
   &&  [| (n_pre <> 0) |] 
   &&  [| (problem_131_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
   &&  [| (n_pre <= INT_MAX) |] 
-  &&  [| ((raw_odd_prod_z (n_pre)) <= INT_MAX) |]
+  &&  [| ((tail_odd_prod_z (n_pre)) <= INT_MAX) |]
   &&  ((( &( "n" ) )) # Int  |-> n)
   **  ((( &( "prod" ) )) # Int  |-> prod)
   **  ((( &( "has" ) )) # Int  |-> has)
@@ -401,13 +414,14 @@ forall (n_pre: Z) (has: Z) (prod: Z) (n: Z) ,
   &&  [| (prod <= INT_MAX) |] 
   &&  [| (0 <= has) |] 
   &&  [| (has <= 1) |] 
-  &&  [| ((prod * (raw_odd_prod_z (n)) ) <= INT_MAX) |] 
-  &&  [| (problem_131_spec_z n_pre (digits_loop_z (n) (prod) (has)) ) |] 
+  &&  [| ((has = 0) -> (prod = 1)) |] 
+  &&  [| ((prod * (tail_odd_prod_z (n)) ) <= INT_MAX) |] 
+  &&  [| (problem_131_spec_z n_pre (digits_state_z (n) (prod) (has)) ) |] 
   &&  [| (n_pre <> 0) |] 
   &&  [| (problem_131_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
   &&  [| (n_pre <= INT_MAX) |] 
-  &&  [| ((raw_odd_prod_z (n_pre)) <= INT_MAX) |]
+  &&  [| ((tail_odd_prod_z (n_pre)) <= INT_MAX) |]
   &&  ((( &( "n" ) )) # Int  |-> n)
   **  ((( &( "prod" ) )) # Int  |-> prod)
   **  ((( &( "has" ) )) # Int  |-> has)
@@ -422,7 +436,7 @@ forall (n_pre: Z) ,
   &&  [| (problem_131_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
   &&  [| (n_pre <= INT_MAX) |] 
-  &&  [| ((raw_odd_prod_z (n_pre)) <= INT_MAX) |]
+  &&  [| ((tail_odd_prod_z (n_pre)) <= INT_MAX) |]
   &&  emp
 |--
   [| (n_pre >= 0) |] 
@@ -430,13 +444,14 @@ forall (n_pre: Z) ,
   &&  [| (1 <= INT_MAX) |] 
   &&  [| (0 <= 0) |] 
   &&  [| (0 <= 1) |] 
-  &&  [| ((1 * (raw_odd_prod_z (n_pre)) ) <= INT_MAX) |] 
-  &&  [| (problem_131_spec_z n_pre (digits_loop_z (n_pre) (1) (0)) ) |] 
+  &&  [| ((0 = 0) -> (1 = 1)) |] 
+  &&  [| ((1 * (tail_odd_prod_z (n_pre)) ) <= INT_MAX) |] 
+  &&  [| (problem_131_spec_z n_pre (digits_state_z (n_pre) (1) (0)) ) |] 
   &&  [| (n_pre <> 0) |] 
   &&  [| (problem_131_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
   &&  [| (n_pre <= INT_MAX) |] 
-  &&  [| ((raw_odd_prod_z (n_pre)) <= INT_MAX) |]
+  &&  [| ((tail_odd_prod_z (n_pre)) <= INT_MAX) |]
   &&  emp
 .
 
@@ -449,13 +464,14 @@ forall (n_pre: Z) (has: Z) (prod: Z) (n: Z) ,
   &&  [| (prod <= INT_MAX) |] 
   &&  [| (0 <= has) |] 
   &&  [| (has <= 1) |] 
-  &&  [| ((prod * (raw_odd_prod_z (n)) ) <= INT_MAX) |] 
-  &&  [| (problem_131_spec_z n_pre (digits_loop_z (n) (prod) (has)) ) |] 
+  &&  [| ((has = 0) -> (prod = 1)) |] 
+  &&  [| ((prod * (tail_odd_prod_z (n)) ) <= INT_MAX) |] 
+  &&  [| (problem_131_spec_z n_pre (digits_state_z (n) (prod) (has)) ) |] 
   &&  [| (n_pre <> 0) |] 
   &&  [| (problem_131_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
   &&  [| (n_pre <= INT_MAX) |] 
-  &&  [| ((raw_odd_prod_z (n_pre)) <= INT_MAX) |]
+  &&  [| ((tail_odd_prod_z (n_pre)) <= INT_MAX) |]
   &&  emp
 |--
   [| ((n ÷ 10 ) >= 0) |] 
@@ -463,13 +479,14 @@ forall (n_pre: Z) (has: Z) (prod: Z) (n: Z) ,
   &&  [| ((prod * (n % ( 10 ) ) ) <= INT_MAX) |] 
   &&  [| (0 <= 1) |] 
   &&  [| (1 <= 1) |] 
-  &&  [| (((prod * (n % ( 10 ) ) ) * (raw_odd_prod_z ((n ÷ 10 ))) ) <= INT_MAX) |] 
-  &&  [| (problem_131_spec_z n_pre (digits_loop_z ((n ÷ 10 )) ((prod * (n % ( 10 ) ) )) (1)) ) |] 
+  &&  [| ((1 = 0) -> ((prod * (n % ( 10 ) ) ) = 1)) |] 
+  &&  [| (((prod * (n % ( 10 ) ) ) * (tail_odd_prod_z ((n ÷ 10 ))) ) <= INT_MAX) |] 
+  &&  [| (problem_131_spec_z n_pre (digits_state_z ((n ÷ 10 )) ((prod * (n % ( 10 ) ) )) (1)) ) |] 
   &&  [| (n_pre <> 0) |] 
   &&  [| (problem_131_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
   &&  [| (n_pre <= INT_MAX) |] 
-  &&  [| ((raw_odd_prod_z (n_pre)) <= INT_MAX) |]
+  &&  [| ((tail_odd_prod_z (n_pre)) <= INT_MAX) |]
   &&  emp
 .
 
@@ -482,13 +499,14 @@ forall (n_pre: Z) (has: Z) (prod: Z) (n: Z) ,
   &&  [| (prod <= INT_MAX) |] 
   &&  [| (0 <= has) |] 
   &&  [| (has <= 1) |] 
-  &&  [| ((prod * (raw_odd_prod_z (n)) ) <= INT_MAX) |] 
-  &&  [| (problem_131_spec_z n_pre (digits_loop_z (n) (prod) (has)) ) |] 
+  &&  [| ((has = 0) -> (prod = 1)) |] 
+  &&  [| ((prod * (tail_odd_prod_z (n)) ) <= INT_MAX) |] 
+  &&  [| (problem_131_spec_z n_pre (digits_state_z (n) (prod) (has)) ) |] 
   &&  [| (n_pre <> 0) |] 
   &&  [| (problem_131_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
   &&  [| (n_pre <= INT_MAX) |] 
-  &&  [| ((raw_odd_prod_z (n_pre)) <= INT_MAX) |]
+  &&  [| ((tail_odd_prod_z (n_pre)) <= INT_MAX) |]
   &&  emp
 |--
   [| ((n ÷ 10 ) >= 0) |] 
@@ -496,13 +514,14 @@ forall (n_pre: Z) (has: Z) (prod: Z) (n: Z) ,
   &&  [| (prod <= INT_MAX) |] 
   &&  [| (0 <= has) |] 
   &&  [| (has <= 1) |] 
-  &&  [| ((prod * (raw_odd_prod_z ((n ÷ 10 ))) ) <= INT_MAX) |] 
-  &&  [| (problem_131_spec_z n_pre (digits_loop_z ((n ÷ 10 )) (prod) (has)) ) |] 
+  &&  [| ((has = 0) -> (prod = 1)) |] 
+  &&  [| ((prod * (tail_odd_prod_z ((n ÷ 10 ))) ) <= INT_MAX) |] 
+  &&  [| (problem_131_spec_z n_pre (digits_state_z ((n ÷ 10 )) (prod) (has)) ) |] 
   &&  [| (n_pre <> 0) |] 
   &&  [| (problem_131_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
   &&  [| (n_pre <= INT_MAX) |] 
-  &&  [| ((raw_odd_prod_z (n_pre)) <= INT_MAX) |]
+  &&  [| ((tail_odd_prod_z (n_pre)) <= INT_MAX) |]
   &&  emp
 .
 
@@ -515,13 +534,14 @@ forall (n_pre: Z) (has: Z) (prod: Z) (n: Z) ,
   &&  [| (prod <= INT_MAX) |] 
   &&  [| (0 <= has) |] 
   &&  [| (has <= 1) |] 
-  &&  [| ((prod * (raw_odd_prod_z (n)) ) <= INT_MAX) |] 
-  &&  [| (problem_131_spec_z n_pre (digits_loop_z (n) (prod) (has)) ) |] 
+  &&  [| ((has = 0) -> (prod = 1)) |] 
+  &&  [| ((prod * (tail_odd_prod_z (n)) ) <= INT_MAX) |] 
+  &&  [| (problem_131_spec_z n_pre (digits_state_z (n) (prod) (has)) ) |] 
   &&  [| (n_pre <> 0) |] 
   &&  [| (problem_131_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
   &&  [| (n_pre <= INT_MAX) |] 
-  &&  [| ((raw_odd_prod_z (n_pre)) <= INT_MAX) |]
+  &&  [| ((tail_odd_prod_z (n_pre)) <= INT_MAX) |]
   &&  emp
 |--
   [| (problem_131_spec_z n_pre 0 ) |]
@@ -537,13 +557,14 @@ forall (n_pre: Z) (has: Z) (prod: Z) (n: Z) ,
   &&  [| (prod <= INT_MAX) |] 
   &&  [| (0 <= has) |] 
   &&  [| (has <= 1) |] 
-  &&  [| ((prod * (raw_odd_prod_z (n)) ) <= INT_MAX) |] 
-  &&  [| (problem_131_spec_z n_pre (digits_loop_z (n) (prod) (has)) ) |] 
+  &&  [| ((has = 0) -> (prod = 1)) |] 
+  &&  [| ((prod * (tail_odd_prod_z (n)) ) <= INT_MAX) |] 
+  &&  [| (problem_131_spec_z n_pre (digits_state_z (n) (prod) (has)) ) |] 
   &&  [| (n_pre <> 0) |] 
   &&  [| (problem_131_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
   &&  [| (n_pre <= INT_MAX) |] 
-  &&  [| ((raw_odd_prod_z (n_pre)) <= INT_MAX) |]
+  &&  [| ((tail_odd_prod_z (n_pre)) <= INT_MAX) |]
   &&  emp
 |--
   [| (problem_131_spec_z n_pre prod ) |]
