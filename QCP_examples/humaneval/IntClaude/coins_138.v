@@ -1,4 +1,4 @@
-Load "../../../../Coins/spec/human/input/138".
+Load "../spec/138".
 
 (* Adapt bool result to Z: r <> 0 means true *)
 Definition problem_138_spec_z (n r : Z) : Prop :=

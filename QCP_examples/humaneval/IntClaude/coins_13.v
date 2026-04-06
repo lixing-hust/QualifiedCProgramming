@@ -1,1 +1,1 @@
-Load "../../../../Coins/spec/human/input/13".
+Load "../spec/13".

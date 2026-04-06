@@ -1,4 +1,4 @@
-Load "../../../../Coins/spec/human/input/31".
+Load "../spec/31".
 
 (* Adapt nat input + bool output to Z: r <> 0 means true *)
 Definition problem_31_spec_z (n r : Z) : Prop :=

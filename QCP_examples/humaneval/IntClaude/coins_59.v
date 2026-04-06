@@ -1,4 +1,4 @@
-Load "../../../../Coins/spec/human/input/59".
+Load "../spec/59".
 Require Import Coq.ZArith.ZArith.
 Require Import Coq.ZArith.Znumtheory.
 Require Import Coq.micromega.Lia.

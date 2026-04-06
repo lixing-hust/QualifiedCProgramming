@@ -1,4 +1,4 @@
-Load "../../../../Coins/spec/human/input/39".
+Load "../spec/39".
 
 (* Z-typed wrappers for QCP (C int -> Z) *)
 Definition problem_39_pre_z (n : Z) : Prop :=

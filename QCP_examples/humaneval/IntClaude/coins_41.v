@@ -1,4 +1,4 @@
-Load "../../../../Coins/spec/human/input/41".
+Load "../spec/41".
 Require Import Coq.ZArith.ZArith.
 Open Scope Z_scope.
 
