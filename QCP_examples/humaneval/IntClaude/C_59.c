@@ -8,6 +8,8 @@ Return the largest prime factor of n. Assume n > 1 && is ! a prime.
 #include "../../verification_stdlib.h"
 /*@ Extern Coq (problem_59_pre: Z -> Prop) */
 /*@ Extern Coq (problem_59_spec: Z -> Z -> Prop) */
+/*@ Extern Coq (lpf_inv: Z -> Z -> Z -> Prop) */
+/*@ Extern Coq (lpf_while_inv: Z -> Z -> Z -> Prop) */
 /*@ Import Coq Require Import coins_59 */
 int largest_prime_factor(int n)
 /*@ Require
@@ -19,11 +21,11 @@ int largest_prime_factor(int n)
 {
     int i;
     /*@ Inv
-        2 <= i && n >= 1
+        2 <= i && lpf_inv(n@pre, n, i)
     */
-    for (i=2;i*i<=n;i++)
+    for (i=2;i<=n/i;i++)
     /*@ Inv
-        n >= 1 && i >= 2 && n % i != 0
+        i >= 2 && lpf_while_inv(n@pre, n, i)
     */
     while (n%i==0 && n>i)  n=n/i;
     return n;
