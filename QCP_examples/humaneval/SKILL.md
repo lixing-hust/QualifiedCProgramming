@@ -20,7 +20,7 @@ description: "中文精简流程：用于 humaneval/IntClaude 下 C_XX 验证，
 3. 每次改注解或桥接逻辑后，必须重新 symexec 生成 goal 文件。
 4. 证明失败先回查信息是否不足，避免盲目堆引理。
 
-## 七步流程
+## 八步流程
 
 ### 1) 约束确认
 
@@ -28,7 +28,12 @@ description: "中文精简流程：用于 humaneval/IntClaude 下 C_XX 验证，
 - 确认允许改动范围：仅注解 / 注解+coins / 允许改 C 语句。
 - 确认用户偏好：是否禁止复用旧不变式，是否要求最小新增引理。
 
-### 2) 基线阅读
+### 2) 代码审查
+
+- 检查 `C_XX.c` 中每个函数是否有明确的 function specification（输入输出说明）。
+- 若缺失，先补充规格注解，再进行后续步骤。
+
+### 3) 基线阅读
 
 - 读取：`C_XX.c`、`coins_XX.v`、`Coins/spec/human/input/XX.v`、现有 `C_XX_goal.v` 和 `C_XX_manual.v`。
 - 判断问题类型：
@@ -37,15 +42,16 @@ description: "中文精简流程：用于 humaneval/IntClaude 下 C_XX 验证，
   - 规格映射不一致
   - 目标文件过期（stale goal）
 
-### 3) 重建不变式与桥接
+### 4) 重建不变式与桥接
 
-- 在 C 注解里建立最小状态模型，保证：
+- 在 C 注解里建立最小状态模型，所有 loop invariant 必须以 **`Inv Assert`** 形式给出完整不变式。保证：
   - 安全边界可证
   - 循环状态能映射到规格
   - 关键蕴含关系明确（如 `has==0 -> prod==1`）
 - 在 `coins_XX.v` 只补必要桥接引理（局部、可解释、可维护）。
+- 如需修改 C 程序语句（非注解），必须暂停，与用户讨论修改方案并获得确认后再继续。
 
-### 4) 强制重生成
+### 5) 强制重生成
 
 改动后立即重新 symexec，更新：
 
@@ -54,17 +60,21 @@ description: "中文精简流程：用于 humaneval/IntClaude 下 C_XX 验证，
 - `C_XX_manual.v`
 - `C_XX_goal_check.v`
 
-禁止在旧 goal 上继续证明。
+禁止在旧 goal 上继续证明。**每次修改注解或 coins 文件后文件行数会变化，必须重新 symexec 到文件尾获取最新完整 witness 列表。**
 
-### 5) manual 逐项证明
+### 6) manual 逐项证明
 
-- 按 witness 顺序补证明。
+- 通过 symexec symbolic 到文件尾来获得完整的 witness 列表。
+- 依次使用 **qcp-mcp 的 `proof`** 打印对应的 witness 到 Rocq，单个 witness 证明结束后再进行下一个。
+- 可补充必要的辅助引理和定义，可通过 Coq `Search` tactic 查找可用引理。
+- **不能引入 Axioms**，使用 **rocq-mcp 的 `rocq-verify`** 检查是否引入了 Axioms。
+- **本步骤只能使用 qcp-mcp / rocq-mcp 工具，不得使用其他工具。**
 - 单个 witness 连续卡住时，按顺序回查：
-  - goal 是否过期
+  - goal 是否过期（需重新 symexec）
   - 不变式是否缺信息
   - 是否缺最小桥接引理
 
-### 6) 全链编译验收
+### 7) 全链编译验收
 
 依次编译：
 
@@ -76,11 +86,12 @@ description: "中文精简流程：用于 humaneval/IntClaude 下 C_XX 验证，
 
 可接受 load-path remap warning，但必须整体编译通过。
 
-### 7) 收尾与交付
+### 8) 收尾与交付
 
 - 检查无 `Admitted.`/`Axiom`：
   - `grep -nE "Admitted\\.|Axiom[[:space:]]" coins_XX.v C_XX_manual.v || true`
-- 按需清理本题临时产物（如 `.aux`），不删除生成的 goal/auto/manual/check 文件。
+  - 同时用 **rocq-mcp 的 `rocq-verify`** 二次确认无 Axiom 引入。
+- 清理本题临时产物，包括编译产生的 `.aux` 文件；不删除 symexec 生成的 goal/auto/manual/check 文件。
 - 汇报：改了什么、为什么、编译结果、扫描结果、剩余风险。
 
 ## 标准命令模板
