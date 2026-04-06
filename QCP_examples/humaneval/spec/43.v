@@ -1,0 +1,41 @@
+(* pairs_sum_to_zero takes a list of integers as an input.
+it returns True if there are two distinct elements in the list that
+sum to zero, and False otherwise.
+>>> pairs_sum_to_zero([1, 3, 5, 0])
+False
+>>> pairs_sum_to_zero([1, 3, -2, 1])
+False
+>>> pairs_sum_to_zero([1, 2, 3, 7])
+False
+>>> pairs_sum_to_zero([2, 4, -5, 3, 5, 7])
+True
+>>> pairs_sum_to_zero([1])
+False *)
+
+(* Spec(input : list int, output : bool) :=
+
+​	∃i,j i<>j  /\ input[i] + input[j]  = 0 → output = true /\
+​	∀i,j i<>j  /\ input[i] + input[j]  <> 0 → output = false *)
+
+Require Import Coq.Lists.List.
+Require Import Coq.ZArith.ZArith.
+Import ListNotations.
+Open Scope Z_scope.
+
+(* Pre: no special constraints for `pairs_sum_to_zero` *)
+Definition problem_43_pre (input : list Z) : Prop := True.
+
+Definition problem_43_spec (input : list Z) (output : bool) : Prop :=
+  (*
+    存在两个不同的索引 i, j，
+    使得对应元素之和为 0。
+    我们必须同时检查索引 i, j 在列表的有效范围内。
+    nth 函数需要一个默认值 (这里是0)，如果索引越界，它会返回该默认值。
+    但因为我们已经用 i < length input 等条件确保了索引有效，所以默认值不会被用到。
+  *)
+  (exists i j : nat,
+    (i <> j)  /\
+    (i < length input)%nat /\
+    (j < length input)%nat /\
+    (nth i input 0 + nth j input 0 = 0))
+  <-> (output = true).
