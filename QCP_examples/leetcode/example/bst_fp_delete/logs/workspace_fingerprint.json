@@ -1,0 +1,24 @@
+{
+  "fingerprint_version": 1,
+  "workspace": "example/bst_fp_delete",
+  "input_file": "example/bst_fp_delete/original/bst_fp_delete.c",
+  "function_name": "Delete",
+  "semantic_description": "Deletes a node from a BST that stores explicit father pointers, including a replace_min helper for pulling up the minimum node from the right subtree. It is a representative example for parent-aware tree mutation.",
+  "source_paths": {
+    "c_file": "QCP_examples/bst_fp_delete.c",
+    "goal_file": "SeparationLogic/examples/bst_fp_delete_goal.v",
+    "proof_auto_file": "SeparationLogic/examples/bst_fp_delete_proof_auto.v",
+    "proof_manual_file": "SeparationLogic/examples/bst_fp_delete_proof_manual.v",
+    "support_file": "SeparationLogic/examples/bst_fp_lib.v"
+  },
+  "keywords": {
+    "algorithm_family": ["search"],
+    "control_flow": ["if", "while_loop"],
+    "data_shape": ["tree", "pointer", "struct"],
+    "semantic_intent": ["in_place_update"],
+    "proof_pattern": ["loop_invariant", "heap_reasoning", "case_split"],
+    "numeric_properties": ["int_range"],
+    "edge_case_behavior": [],
+    "verification_status": []
+  }
+}

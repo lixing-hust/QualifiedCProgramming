@@ -1,0 +1,24 @@
+{
+  "fingerprint_version": 1,
+  "workspace": "example/kmp_rel",
+  "input_file": "example/kmp_rel/original/kmp_rel.c",
+  "function_name": "kmp_family",
+  "semantic_description": "Contains construction of the KMP prefix table and the subsequent pattern-matching routine, both expressed with relational safeExec-style specifications. It is a rich reference for string and integer-array reasoning, nested recursion-like control flow, and algorithmic search semantics.",
+  "source_paths": {
+    "c_file": "QCP_examples/kmp_rel.c",
+    "goal_file": "SeparationLogic/examples/kmp_rel_goal.v",
+    "proof_auto_file": "SeparationLogic/examples/kmp_rel_proof_auto.v",
+    "proof_manual_file": "SeparationLogic/examples/kmp_rel_proof_manual.v",
+    "support_file": "SeparationLogic/examples/kmp_rel_lib.v"
+  },
+  "keywords": {
+    "algorithm_family": ["search", "simulation"],
+    "control_flow": ["while_loop", "for_loop", "if"],
+    "data_shape": ["string", "array", "pointer"],
+    "semantic_intent": ["in_place_update"],
+    "proof_pattern": ["loop_invariant", "heap_reasoning", "case_split"],
+    "numeric_properties": ["int_range"],
+    "edge_case_behavior": [],
+    "verification_status": []
+  }
+}

@@ -160,6 +160,38 @@
     }
   },
   {
+    "example": "sll_insert_sort",
+    "path": "example/sll_insert_sort",
+    "function_name": "insertion_sort_family",
+    "semantic_description": "Implements insertion into a sorted singly linked list and builds insertion sort on top of it. This is a representative algorithmic list example for maintaining both permutation and increasing-order specifications.",
+    "keywords": {
+      "algorithm_family": ["simulation"],
+      "control_flow": ["while_loop"],
+      "data_shape": ["linked_list", "pointer"],
+      "semantic_intent": ["in_place_update"],
+      "proof_pattern": ["loop_invariant", "heap_reasoning"],
+      "numeric_properties": [],
+      "edge_case_behavior": ["empty_loop_possible"],
+      "verification_status": []
+    }
+  },
+  {
+    "example": "sll_merge_rel",
+    "path": "example/sll_merge_rel",
+    "function_name": "merge_sort_family",
+    "semantic_description": "Implements merge, list splitting, and merge sort over singly linked lists with relational safeExec specifications. It is a strong algorithmic reference for list-based divide-and-conquer sorting proofs.",
+    "keywords": {
+      "algorithm_family": ["simulation", "recursion"],
+      "control_flow": ["while_loop", "if", "recursion"],
+      "data_shape": ["linked_list", "pointer"],
+      "semantic_intent": ["in_place_update"],
+      "proof_pattern": ["loop_invariant", "heap_reasoning", "case_split"],
+      "numeric_properties": [],
+      "edge_case_behavior": ["empty_loop_possible"],
+      "verification_status": []
+    }
+  },
+  {
     "example": "sll_queue",
     "path": "example/sll_queue",
     "function_name": "queue_ops",
@@ -256,10 +288,74 @@
     }
   },
   {
+    "example": "bst_delete_rec",
+    "path": "example/bst_delete_rec",
+    "function_name": "delete",
+    "semantic_description": "Performs recursive BST deletion and uses the rightmost node of the left subtree as the predecessor replacement when removing a node with a left child. It is a representative tree-deletion example with structural reattachment.",
+    "keywords": {
+      "algorithm_family": ["search", "recursion"],
+      "control_flow": ["if", "recursion"],
+      "data_shape": ["tree", "pointer", "struct"],
+      "semantic_intent": ["in_place_update"],
+      "proof_pattern": ["heap_reasoning", "case_split"],
+      "numeric_properties": ["int_range"],
+      "edge_case_behavior": [],
+      "verification_status": []
+    }
+  },
+  {
+    "example": "bst_delete_rec2",
+    "path": "example/bst_delete_rec2",
+    "function_name": "delete",
+    "semantic_description": "Implements recursive BST deletion using a pointer-to-pointer predecessor search so the predecessor node can be removed in place after copying its key and value. It is a useful variant for pointer-to-pointer tree updates.",
+    "keywords": {
+      "algorithm_family": ["search", "recursion"],
+      "control_flow": ["if", "recursion"],
+      "data_shape": ["tree", "pointer", "struct"],
+      "semantic_intent": ["in_place_update"],
+      "proof_pattern": ["heap_reasoning", "case_split"],
+      "numeric_properties": ["int_range"],
+      "edge_case_behavior": [],
+      "verification_status": []
+    }
+  },
+  {
     "example": "bst_insert",
     "path": "example/bst_insert",
     "function_name": "insert",
     "semantic_description": "Performs iterative insertion into a binary search tree through a pointer-to-pointer cursor. The example is representative for tree-shaped heap reasoning, path invariants, and deriving a high-level map update specification from a low-level tree mutation proof.",
+    "keywords": {
+      "algorithm_family": ["search"],
+      "control_flow": ["if", "while_loop"],
+      "data_shape": ["tree", "pointer", "struct"],
+      "semantic_intent": ["in_place_update"],
+      "proof_pattern": ["loop_invariant", "heap_reasoning", "case_split"],
+      "numeric_properties": ["int_range"],
+      "edge_case_behavior": [],
+      "verification_status": []
+    }
+  },
+  {
+    "example": "bst_fp_insert",
+    "path": "example/bst_fp_insert",
+    "function_name": "insert",
+    "semantic_description": "Performs iterative BST insertion while maintaining parent pointers in each tree node. This example is representative for tree updates where the local heap invariant includes both child links and a father link.",
+    "keywords": {
+      "algorithm_family": ["search"],
+      "control_flow": ["if", "while_loop"],
+      "data_shape": ["tree", "pointer", "struct"],
+      "semantic_intent": ["in_place_update"],
+      "proof_pattern": ["loop_invariant", "heap_reasoning", "case_split"],
+      "numeric_properties": ["int_range"],
+      "edge_case_behavior": [],
+      "verification_status": []
+    }
+  },
+  {
+    "example": "bst_fp_delete",
+    "path": "example/bst_fp_delete",
+    "function_name": "Delete",
+    "semantic_description": "Deletes a node from a BST that stores explicit father pointers, including a replace_min helper for pulling up the minimum node from the right subtree. It is a representative example for parent-aware tree mutation.",
     "keywords": {
       "algorithm_family": ["search"],
       "control_flow": ["if", "while_loop"],
@@ -283,6 +379,134 @@
       "semantic_intent": ["in_place_update"],
       "proof_pattern": ["heap_reasoning", "case_split"],
       "numeric_properties": ["int_range"],
+      "edge_case_behavior": [],
+      "verification_status": []
+    }
+  },
+  {
+    "example": "poly_sll",
+    "path": "example/poly_sll",
+    "function_name": "reverse",
+    "semantic_description": "Implements reversal for a polymorphic singly linked list parameterized by an abstract cell predicate storeA. It is a compact reference for generic list-shape reasoning that avoids committing to a concrete element representation.",
+    "keywords": {
+      "algorithm_family": ["simulation"],
+      "control_flow": ["while_loop"],
+      "data_shape": ["linked_list", "pointer"],
+      "semantic_intent": ["in_place_update"],
+      "proof_pattern": ["loop_invariant", "heap_reasoning"],
+      "numeric_properties": [],
+      "edge_case_behavior": ["empty_loop_possible"],
+      "verification_status": []
+    }
+  },
+  {
+    "example": "alpha_equiv",
+    "path": "example/alpha_equiv",
+    "function_name": "alpha_equiv",
+    "semantic_description": "Checks alpha-equivalence of lambda-like terms by recursively comparing syntax trees and, for quantified terms with different binders, copying and substituting before recurring. This example is a representative syntax-tree verification workload with heap-preserving recursion.",
+    "keywords": {
+      "algorithm_family": ["recursion", "simulation"],
+      "control_flow": ["if", "recursion"],
+      "data_shape": ["pointer", "struct", "tree"],
+      "semantic_intent": ["preserve_input"],
+      "proof_pattern": ["heap_reasoning", "case_split"],
+      "numeric_properties": [],
+      "edge_case_behavior": [],
+      "verification_status": []
+    }
+  },
+  {
+    "example": "eval",
+    "path": "example/eval",
+    "function_name": "eval",
+    "semantic_description": "Recursively evaluates an expression tree with constants, variables, unary operators, and binary operators against an integer array environment. It is a strong reference for AST recursion combined with array reads and short-circuit boolean cases.",
+    "keywords": {
+      "algorithm_family": ["recursion", "simulation"],
+      "control_flow": ["if", "recursion"],
+      "data_shape": ["tree", "array", "pointer", "struct"],
+      "semantic_intent": [],
+      "proof_pattern": ["heap_reasoning", "case_split"],
+      "numeric_properties": ["int_range"],
+      "edge_case_behavior": [],
+      "verification_status": []
+    }
+  },
+  {
+    "example": "int_array_merge_rel",
+    "path": "example/int_array_merge_rel",
+    "function_name": "mergeSort_family",
+    "semantic_description": "Implements merge and mergesort over integer array segments with relational safeExec specifications. This is a representative example for array-segment reasoning, multiple coordinated loop invariants, and relational refinement over sorting procedures.",
+    "keywords": {
+      "algorithm_family": ["simulation", "recursion"],
+      "control_flow": ["while_loop", "if", "recursion"],
+      "data_shape": ["array", "pointer"],
+      "semantic_intent": ["in_place_update"],
+      "proof_pattern": ["loop_invariant", "heap_reasoning", "case_split"],
+      "numeric_properties": ["int_range"],
+      "edge_case_behavior": [],
+      "verification_status": []
+    }
+  },
+  {
+    "example": "kmp_rel",
+    "path": "example/kmp_rel",
+    "function_name": "kmp_family",
+    "semantic_description": "Contains construction of the KMP prefix table and the subsequent pattern-matching routine, both expressed with relational safeExec-style specifications. It is a rich reference for string and integer-array reasoning, nested recursion-like control flow, and algorithmic search semantics.",
+    "keywords": {
+      "algorithm_family": ["search", "simulation"],
+      "control_flow": ["while_loop", "for_loop", "if"],
+      "data_shape": ["string", "array", "pointer"],
+      "semantic_intent": ["in_place_update"],
+      "proof_pattern": ["loop_invariant", "heap_reasoning", "case_split"],
+      "numeric_properties": ["int_range"],
+      "edge_case_behavior": [],
+      "verification_status": []
+    }
+  },
+  {
+    "example": "typeinfer",
+    "path": "example/typeinfer",
+    "function_name": "atype_unify_family",
+    "semantic_description": "Implements pieces of a type-inference unification engine over abstract type trees and a global solution map. The example is representative for pointer-rich recursive symbolic state, representation compression, and a layered final-spec-versus-verify-spec workflow.",
+    "keywords": {
+      "algorithm_family": ["recursion", "simulation"],
+      "control_flow": ["if", "recursion"],
+      "data_shape": ["pointer", "struct", "array", "tree"],
+      "semantic_intent": ["in_place_update"],
+      "proof_pattern": ["heap_reasoning", "case_split"],
+      "numeric_properties": ["int_range"],
+      "edge_case_behavior": [],
+      "verification_status": []
+    }
+  },
+  {
+    "example": "cnf_trans",
+    "path": "example/cnf_trans",
+    "function_name": "cnf_trans_family",
+    "semantic_description": "Generates CNF clauses from SMT-style propositions by building linked clause lists and integer arrays under a rich logical specification. It is a representative example for logic-heavy heap programs that mix arrays, linked lists, and external semantic models.",
+    "keywords": {
+      "algorithm_family": ["simulation"],
+      "control_flow": ["if", "recursion"],
+      "data_shape": ["array", "linked_list", "pointer", "struct"],
+      "semantic_intent": ["in_place_update"],
+      "proof_pattern": ["heap_reasoning", "case_split"],
+      "numeric_properties": ["int_range"],
+      "edge_case_behavior": [],
+      "verification_status": []
+    }
+  },
+  {
+    "example": "LOS_ListDelete",
+    "path": "example/LOS_ListDelete",
+    "function_name": "LOS_ListDelete",
+    "semantic_description": "Deletes a node from a doubly linked list in the LiteOS style by reconnecting predecessor and successor pointers and then nulling out the removed node. It is a compact systems-style example for low-level DLL segment reasoning with explicit field updates.",
+    "keywords": {
+      "algorithm_family": ["simulation"],
+      "control_flow": ["straight_line"],
+      "data_shape": ["linked_list", "pointer", "struct"],
+      "semantic_intent": ["in_place_update"],
+      "proof_pattern": ["heap_reasoning"],
+      "numeric_properties": [],
       "edge_case_behavior": [],
       "verification_status": []
     }

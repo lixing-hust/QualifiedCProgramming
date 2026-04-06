@@ -41,13 +41,27 @@
 - `chars`：字符数组初始化和 `repeat_Z` 形状规格。
 - `sll_auto`：单链表 `listrep` / `lseg`、反转、拼接、交错合并。
 - `sll_queue`：带哨兵尾节点的单链表队列。
+- `sll_insert_sort`：单链表插入排序和有序性/排列性规格。
+- `sll_merge_rel`：单链表归并排序、分裂与合并的关系式规格。
 - `sll_split_while`：单链表交替切分、`safeExec` 关系和循环中的关系式重写。
 - `dll_auto`：双链表 shape、反转、拼接、前后向迭代。
 - `dll_queue`：双向链表队列、抽象谓词到段谓词的拆解。
 - `functional_queue`：两表表示的函数式队列、`reverse` 归一化。
+- `poly_sll`：参数化单链表和多态 `storeA` 规格。
 - `bst_insert`：二叉搜索树插入、低层规范到高层规范、路径不变式。
 - `bst_insert_rec`：递归 BST 插入和高低层规范对齐。
+- `bst_delete_rec`：递归 BST 删除和前驱节点抽取。
+- `bst_delete_rec2`：双指针版前驱抽取和 BST 删除。
+- `bst_fp_insert`：带 `father` 指针的 BST 插入。
+- `bst_fp_delete`：带 `father` 指针的 BST 删除与最小替换。
 - `avl_insert`：AVL 旋转、平衡因子和树形局部重写。
+- `alpha_equiv`：lambda term 的 alpha 等价、递归语法树和替换。
+- `eval`：表达式求值器、AST 递归与数组环境读取。
+- `int_array_merge_rel`：关系式 mergesort、数组分段和 `safeExec`。
+- `kmp_rel`：KMP 前缀函数与匹配关系、字符数组加整型数组联合证明。
+- `typeinfer`：类型推断中的并查集式解、表示压缩和高低层规范。
+- `cnf_trans`：命题到 CNF 转换、链表子句结构和较重的逻辑建模。
+- `LOS_ListDelete`：LiteOS 双链表删除、系统风格低层规范。
 
 ## 维护规则
 

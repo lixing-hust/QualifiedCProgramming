@@ -1,0 +1,23 @@
+{
+  "fingerprint_version": 1,
+  "workspace": "example/LOS_ListDelete",
+  "input_file": "example/LOS_ListDelete/original/LOS_ListDelete.c",
+  "function_name": "LOS_ListDelete",
+  "semantic_description": "Deletes a node from a doubly linked list in the LiteOS style by reconnecting predecessor and successor pointers and then nulling out the removed node. It is a compact systems-style example for low-level DLL segment reasoning with explicit field updates.",
+  "source_paths": {
+    "c_file": "QCP_examples/LiteOS/LOS_ListDelete.c",
+    "goal_file": "SeparationLogic/examples/LiteOS/LOS_ListDelete_goal.v",
+    "proof_auto_file": "SeparationLogic/examples/LiteOS/LOS_ListDelete_proof_auto.v",
+    "proof_manual_file": "SeparationLogic/examples/LiteOS/LOS_ListDelete_proof_manual.v"
+  },
+  "keywords": {
+    "algorithm_family": ["simulation"],
+    "control_flow": ["straight_line"],
+    "data_shape": ["linked_list", "pointer", "struct"],
+    "semantic_intent": ["in_place_update"],
+    "proof_pattern": ["heap_reasoning"],
+    "numeric_properties": [],
+    "edge_case_behavior": [],
+    "verification_status": []
+  }
+}

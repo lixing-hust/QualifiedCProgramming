@@ -1,0 +1,24 @@
+{
+  "fingerprint_version": 1,
+  "workspace": "example/bst_fp_insert",
+  "input_file": "example/bst_fp_insert/original/bst_fp_insert.c",
+  "function_name": "insert",
+  "semantic_description": "Performs iterative BST insertion while maintaining parent pointers in each tree node. This example is representative for tree updates where the local heap invariant includes both child links and a father link.",
+  "source_paths": {
+    "c_file": "QCP_examples/bst_fp_insert.c",
+    "goal_file": "SeparationLogic/examples/bst_fp_insert_goal.v",
+    "proof_auto_file": "SeparationLogic/examples/bst_fp_insert_proof_auto.v",
+    "proof_manual_file": "SeparationLogic/examples/bst_fp_insert_proof_manual.v",
+    "support_file": "SeparationLogic/examples/bst_fp_lib.v"
+  },
+  "keywords": {
+    "algorithm_family": ["search"],
+    "control_flow": ["if", "while_loop"],
+    "data_shape": ["tree", "pointer", "struct"],
+    "semantic_intent": ["in_place_update"],
+    "proof_pattern": ["loop_invariant", "heap_reasoning", "case_split"],
+    "numeric_properties": ["int_range"],
+    "edge_case_behavior": [],
+    "verification_status": []
+  }
+}

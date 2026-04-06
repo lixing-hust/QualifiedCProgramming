@@ -1,0 +1,29 @@
+{
+  "fingerprint_version": 1,
+  "workspace": "example/cnf_trans",
+  "input_file": "example/cnf_trans/original/cnf_trans.c",
+  "function_name": "cnf_trans_family",
+  "semantic_description": "Generates CNF clauses from SMT-style propositions by building linked clause lists and integer arrays under a rich logical specification. It is a representative example for logic-heavy heap programs that mix arrays, linked lists, and external semantic models.",
+  "source_paths": {
+    "c_file": "QCP_examples/cnf_trans/cnf_trans.c",
+    "goal_file": "SeparationLogic/examples/cnf_trans/cnf_trans_goal.v",
+    "proof_auto_file": "SeparationLogic/examples/cnf_trans/cnf_trans_proof_auto.v",
+    "proof_manual_file": "SeparationLogic/examples/cnf_trans/cnf_trans_proof_manual.v",
+    "support_files": [
+      "SeparationLogic/examples/cnf_trans/cnf_trans_lib.v",
+      "SeparationLogic/examples/cnf_trans/smt_lang_lib.v",
+      "SeparationLogic/examples/malloc.v",
+      "SeparationLogic/examples/super_poly_sll2.v"
+    ]
+  },
+  "keywords": {
+    "algorithm_family": ["simulation"],
+    "control_flow": ["if", "recursion"],
+    "data_shape": ["array", "linked_list", "pointer", "struct"],
+    "semantic_intent": ["in_place_update"],
+    "proof_pattern": ["heap_reasoning", "case_split"],
+    "numeric_properties": ["int_range"],
+    "edge_case_behavior": [],
+    "verification_status": []
+  }
+}

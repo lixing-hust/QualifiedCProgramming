@@ -1,0 +1,27 @@
+{
+  "fingerprint_version": 1,
+  "workspace": "example/typeinfer",
+  "input_file": "example/typeinfer/original/typeinfer.c",
+  "function_name": "atype_unify_family",
+  "semantic_description": "Implements pieces of a type-inference unification engine over abstract type trees and a global solution map. The example is representative for pointer-rich recursive symbolic state, representation compression, and a layered final-spec-versus-verify-spec workflow.",
+  "source_paths": {
+    "c_file": "QCP_examples/typeinfer/typeinfer.c",
+    "goal_file": "SeparationLogic/examples/typeinfer/typeinfer_goal.v",
+    "proof_auto_file": "SeparationLogic/examples/typeinfer/typeinfer_proof_auto.v",
+    "proof_manual_file": "SeparationLogic/examples/typeinfer/typeinfer_proof_manual.v",
+    "support_files": [
+      "SeparationLogic/examples/typeinfer/typeinfer_lib.v",
+      "SeparationLogic/examples/typeinfer/sound_pv.v"
+    ]
+  },
+  "keywords": {
+    "algorithm_family": ["recursion", "simulation"],
+    "control_flow": ["if", "recursion"],
+    "data_shape": ["pointer", "struct", "array", "tree"],
+    "semantic_intent": ["in_place_update"],
+    "proof_pattern": ["heap_reasoning", "case_split"],
+    "numeric_properties": ["int_range"],
+    "edge_case_behavior": [],
+    "verification_status": []
+  }
+}
