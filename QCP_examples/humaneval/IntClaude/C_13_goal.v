@@ -17,16 +17,18 @@ Local Open Scope list.
 Import naive_C_Rules.
 Require Import coins_13.
 Local Open Scope sac.
-From SimpleC.EE Require Import common_strategy_goal.
-From SimpleC.EE Require Import common_strategy_proof.
+Require Import common_strategy_goal.
+Require Import common_strategy_proof.
 
 (*----- Function greatest_common_divisor -----*)
 
 Definition greatest_common_divisor_safety_wit_1 := 
 forall (b_pre: Z) (a_pre: Z) (a: Z) (b: Z) ,
   [| ((Zgcd (a) (b)) = (Zgcd (a_pre) (b_pre))) |] 
+  &&  [| (a > 0) |] 
   &&  [| (b > 0) |] 
   &&  [| (problem_13_pre a_pre b_pre ) |] 
+  &&  [| (a_pre > 0) |] 
   &&  [| (INT_MIN < a_pre) |] 
   &&  [| (a_pre <= INT_MAX) |] 
   &&  [| (INT_MIN < b_pre) |] 
@@ -43,30 +45,12 @@ forall (b_pre: Z) (a_pre: Z) (a: Z) (b: Z) ,
 
 Definition greatest_common_divisor_safety_wit_2 := 
 forall (b_pre: Z) (a_pre: Z) (a: Z) (b: Z) ,
-  [| (a < b) |] 
-  &&  [| ((Zgcd (a) (b)) = (Zgcd (a_pre) (b_pre))) |] 
-  &&  [| (b > 0) |] 
-  &&  [| (problem_13_pre a_pre b_pre ) |] 
-  &&  [| (INT_MIN < a_pre) |] 
-  &&  [| (a_pre <= INT_MAX) |] 
-  &&  [| (INT_MIN < b_pre) |] 
-  &&  [| (b_pre <= INT_MAX) |] 
-  &&  [| (b_pre > 0) |]
-  &&  ((( &( "b" ) )) # Int  |-> a)
-  **  ((( &( "a" ) )) # Int  |-> b)
-  **  ((( &( "m" ) )) # Int  |-> a)
-  **  ((( &( "out" ) )) # Int  |->_)
-|--
-  [| ((b <> (INT_MIN)) \/ (a <> (-1))) |] 
-  &&  [| (a <> 0) |]
-.
-
-Definition greatest_common_divisor_safety_wit_3 := 
-forall (b_pre: Z) (a_pre: Z) (a: Z) (b: Z) ,
   [| (a >= b) |] 
   &&  [| ((Zgcd (a) (b)) = (Zgcd (a_pre) (b_pre))) |] 
+  &&  [| (a > 0) |] 
   &&  [| (b > 0) |] 
   &&  [| (problem_13_pre a_pre b_pre ) |] 
+  &&  [| (a_pre > 0) |] 
   &&  [| (INT_MIN < a_pre) |] 
   &&  [| (a_pre <= INT_MAX) |] 
   &&  [| (INT_MIN < b_pre) |] 
@@ -81,32 +65,36 @@ forall (b_pre: Z) (a_pre: Z) (a: Z) (b: Z) ,
   &&  [| (b <> 0) |]
 .
 
-Definition greatest_common_divisor_safety_wit_4 := 
+Definition greatest_common_divisor_safety_wit_3 := 
 forall (b_pre: Z) (a_pre: Z) (a: Z) (b: Z) ,
-  [| (a >= b) |] 
+  [| (a < b) |] 
   &&  [| ((Zgcd (a) (b)) = (Zgcd (a_pre) (b_pre))) |] 
+  &&  [| (a > 0) |] 
   &&  [| (b > 0) |] 
   &&  [| (problem_13_pre a_pre b_pre ) |] 
+  &&  [| (a_pre > 0) |] 
   &&  [| (INT_MIN < a_pre) |] 
   &&  [| (a_pre <= INT_MAX) |] 
   &&  [| (INT_MIN < b_pre) |] 
   &&  [| (b_pre <= INT_MAX) |] 
   &&  [| (b_pre > 0) |]
-  &&  ((( &( "b" ) )) # Int  |-> b)
-  **  ((( &( "a" ) )) # Int  |-> (a % ( b ) ))
-  **  ((( &( "m" ) )) # Int  |->_)
+  &&  ((( &( "b" ) )) # Int  |-> a)
+  **  ((( &( "a" ) )) # Int  |-> b)
+  **  ((( &( "m" ) )) # Int  |-> a)
   **  ((( &( "out" ) )) # Int  |->_)
 |--
-  [| (0 <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= 0) |]
+  [| ((b <> (INT_MIN)) \/ (a <> (-1))) |] 
+  &&  [| (a <> 0) |]
 .
 
-Definition greatest_common_divisor_safety_wit_5 := 
+Definition greatest_common_divisor_safety_wit_4 := 
 forall (b_pre: Z) (a_pre: Z) (a: Z) (b: Z) ,
   [| (a < b) |] 
   &&  [| ((Zgcd (a) (b)) = (Zgcd (a_pre) (b_pre))) |] 
+  &&  [| (a > 0) |] 
   &&  [| (b > 0) |] 
   &&  [| (problem_13_pre a_pre b_pre ) |] 
+  &&  [| (a_pre > 0) |] 
   &&  [| (INT_MIN < a_pre) |] 
   &&  [| (a_pre <= INT_MAX) |] 
   &&  [| (INT_MIN < b_pre) |] 
@@ -121,9 +109,32 @@ forall (b_pre: Z) (a_pre: Z) (a: Z) (b: Z) ,
   &&  [| ((INT_MIN) <= 0) |]
 .
 
+Definition greatest_common_divisor_safety_wit_5 := 
+forall (b_pre: Z) (a_pre: Z) (a: Z) (b: Z) ,
+  [| (a >= b) |] 
+  &&  [| ((Zgcd (a) (b)) = (Zgcd (a_pre) (b_pre))) |] 
+  &&  [| (a > 0) |] 
+  &&  [| (b > 0) |] 
+  &&  [| (problem_13_pre a_pre b_pre ) |] 
+  &&  [| (a_pre > 0) |] 
+  &&  [| (INT_MIN < a_pre) |] 
+  &&  [| (a_pre <= INT_MAX) |] 
+  &&  [| (INT_MIN < b_pre) |] 
+  &&  [| (b_pre <= INT_MAX) |] 
+  &&  [| (b_pre > 0) |]
+  &&  ((( &( "b" ) )) # Int  |-> b)
+  **  ((( &( "a" ) )) # Int  |-> (a % ( b ) ))
+  **  ((( &( "m" ) )) # Int  |->_)
+  **  ((( &( "out" ) )) # Int  |->_)
+|--
+  [| (0 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 0) |]
+.
+
 Definition greatest_common_divisor_entail_wit_1 := 
 forall (b_pre: Z) (a_pre: Z) ,
   [| (problem_13_pre a_pre b_pre ) |] 
+  &&  [| (a_pre > 0) |] 
   &&  [| (INT_MIN < a_pre) |] 
   &&  [| (a_pre <= INT_MAX) |] 
   &&  [| (INT_MIN < b_pre) |] 
@@ -132,8 +143,10 @@ forall (b_pre: Z) (a_pre: Z) ,
   &&  emp
 |--
   [| ((Zgcd (a_pre) (b_pre)) = (Zgcd (a_pre) (b_pre))) |] 
+  &&  [| (a_pre > 0) |] 
   &&  [| (b_pre > 0) |] 
   &&  [| (problem_13_pre a_pre b_pre ) |] 
+  &&  [| (a_pre > 0) |] 
   &&  [| (INT_MIN < a_pre) |] 
   &&  [| (a_pre <= INT_MAX) |] 
   &&  [| (INT_MIN < b_pre) |] 
@@ -147,8 +160,10 @@ forall (b_pre: Z) (a_pre: Z) (a: Z) (b: Z) ,
   [| ((a % ( b ) ) <> 0) |] 
   &&  [| (a >= b) |] 
   &&  [| ((Zgcd (a) (b)) = (Zgcd (a_pre) (b_pre))) |] 
+  &&  [| (a > 0) |] 
   &&  [| (b > 0) |] 
   &&  [| (problem_13_pre a_pre b_pre ) |] 
+  &&  [| (a_pre > 0) |] 
   &&  [| (INT_MIN < a_pre) |] 
   &&  [| (a_pre <= INT_MAX) |] 
   &&  [| (INT_MIN < b_pre) |] 
@@ -157,8 +172,10 @@ forall (b_pre: Z) (a_pre: Z) (a: Z) (b: Z) ,
   &&  emp
 |--
   [| ((Zgcd ((a % ( b ) )) (b)) = (Zgcd (a_pre) (b_pre))) |] 
+  &&  [| ((a % ( b ) ) > 0) |] 
   &&  [| (b > 0) |] 
   &&  [| (problem_13_pre a_pre b_pre ) |] 
+  &&  [| (a_pre > 0) |] 
   &&  [| (INT_MIN < a_pre) |] 
   &&  [| (a_pre <= INT_MAX) |] 
   &&  [| (INT_MIN < b_pre) |] 
@@ -172,8 +189,10 @@ forall (b_pre: Z) (a_pre: Z) (a: Z) (b: Z) ,
   [| ((b % ( a ) ) <> 0) |] 
   &&  [| (a < b) |] 
   &&  [| ((Zgcd (a) (b)) = (Zgcd (a_pre) (b_pre))) |] 
+  &&  [| (a > 0) |] 
   &&  [| (b > 0) |] 
   &&  [| (problem_13_pre a_pre b_pre ) |] 
+  &&  [| (a_pre > 0) |] 
   &&  [| (INT_MIN < a_pre) |] 
   &&  [| (a_pre <= INT_MAX) |] 
   &&  [| (INT_MIN < b_pre) |] 
@@ -182,8 +201,10 @@ forall (b_pre: Z) (a_pre: Z) (a: Z) (b: Z) ,
   &&  ((( &( "m" ) )) # Int  |-> a)
 |--
   [| ((Zgcd ((b % ( a ) )) (a)) = (Zgcd (a_pre) (b_pre))) |] 
+  &&  [| ((b % ( a ) ) > 0) |] 
   &&  [| (a > 0) |] 
   &&  [| (problem_13_pre a_pre b_pre ) |] 
+  &&  [| (a_pre > 0) |] 
   &&  [| (INT_MIN < a_pre) |] 
   &&  [| (a_pre <= INT_MAX) |] 
   &&  [| (INT_MIN < b_pre) |] 
@@ -197,8 +218,10 @@ forall (b_pre: Z) (a_pre: Z) (a: Z) (b: Z) ,
   [| ((a % ( b ) ) = 0) |] 
   &&  [| (a >= b) |] 
   &&  [| ((Zgcd (a) (b)) = (Zgcd (a_pre) (b_pre))) |] 
+  &&  [| (a > 0) |] 
   &&  [| (b > 0) |] 
   &&  [| (problem_13_pre a_pre b_pre ) |] 
+  &&  [| (a_pre > 0) |] 
   &&  [| (INT_MIN < a_pre) |] 
   &&  [| (a_pre <= INT_MAX) |] 
   &&  [| (INT_MIN < b_pre) |] 
@@ -215,8 +238,10 @@ forall (b_pre: Z) (a_pre: Z) (a: Z) (b: Z) ,
   [| ((b % ( a ) ) = 0) |] 
   &&  [| (a < b) |] 
   &&  [| ((Zgcd (a) (b)) = (Zgcd (a_pre) (b_pre))) |] 
+  &&  [| (a > 0) |] 
   &&  [| (b > 0) |] 
   &&  [| (problem_13_pre a_pre b_pre ) |] 
+  &&  [| (a_pre > 0) |] 
   &&  [| (INT_MIN < a_pre) |] 
   &&  [| (a_pre <= INT_MAX) |] 
   &&  [| (INT_MIN < b_pre) |] 

@@ -9,7 +9,7 @@ Require Import Coq.Sorting.Permutation.
 From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
-From SimpleC.EE Require Import C_13_goal.
+Require Import C_13_goal.
 Require Import Logic.LogicGenerator.demo932.Interface.
 Local Open Scope Z_scope.
 Local Open Scope sets.
@@ -20,6 +20,9 @@ Require Import coins_13.
 Local Open Scope sac.
 
 Lemma proof_of_greatest_common_divisor_safety_wit_1 : greatest_common_divisor_safety_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_greatest_common_divisor_safety_wit_2 : greatest_common_divisor_safety_wit_2.
 Proof. Admitted. 
 
 Lemma proof_of_greatest_common_divisor_safety_wit_3 : greatest_common_divisor_safety_wit_3.

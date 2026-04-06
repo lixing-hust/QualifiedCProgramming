@@ -13,6 +13,7 @@ Return a greatest common divisor of two integers a && b
 int greatest_common_divisor(int a, int b)
 /*@ Require
         problem_13_pre(a, b) &&
+    a > 0 &&
         INT_MIN < a && a <= INT_MAX &&
         INT_MIN < b && b <= INT_MAX &&
         b > 0 && emp
@@ -22,7 +23,7 @@ int greatest_common_divisor(int a, int b)
 {
     int out,m;
     /*@ Inv
-        Zgcd(a, b) == Zgcd(a@pre, b@pre) && b > 0
+        Zgcd(a, b) == Zgcd(a@pre, b@pre) && a > 0 && b > 0
     */
     while (1){
         if (a<b)

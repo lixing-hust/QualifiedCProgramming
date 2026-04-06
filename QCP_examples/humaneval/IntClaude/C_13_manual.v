@@ -19,18 +19,191 @@ Import naive_C_Rules.
 Require Import coins_13.
 Local Open Scope sac.
 
-Lemma proof_of_greatest_common_divisor_safety_wit_2 : greatest_common_divisor_safety_wit_2.
-Proof. Admitted. 
+Lemma rem_nonzero_pos : forall x y : Z,
+	0 <= x -> 0 < y -> (x % ( y )) <> 0 -> (x % ( y )) > 0.
+Proof.
+	intros x y Hx_nonneg Hy_pos Hrem_nz.
+	rewrite Z.rem_mod_nonneg in Hrem_nz by lia.
+	rewrite Z.rem_mod_nonneg by lia.
+	pose proof (Z.mod_pos_bound x y Hy_pos) as Hrange.
+	lia.
+Qed.
+
+Lemma gcd_eq_right_of_mod0 : forall a b : Z,
+	0 < b -> a mod b = 0 -> Zgcd a b = b.
+Proof.
+	intros a b Hb_pos Hmod0.
+	assert (Hdiv_b_a : Z.divide b a) by (apply Z.mod_divide; lia).
+	assert (Hdiv_b_g : Z.divide b (Zgcd a b)).
+	{
+		apply Z.gcd_greatest.
+		- exact Hdiv_b_a.
+		- exists 1. lia.
+	}
+	assert (Hdiv_g_b : Z.divide (Zgcd a b) b) by apply Z.gcd_divide_r.
+	assert (Hg_nonneg : 0 <= Zgcd a b) by apply Z.gcd_nonneg.
+	assert (Hg_pos : 0 < Zgcd a b).
+	{
+		assert (Hg_ne0 : Zgcd a b <> 0).
+		{
+			intro Hg0.
+			destruct Hdiv_g_b as [k Hk].
+			rewrite Hg0 in Hk.
+			lia.
+		}
+		lia.
+	}
+	assert (Hg_le_b : Zgcd a b <= b).
+	{
+		apply Z.divide_pos_le.
+		- exact Hb_pos.
+		- exact Hdiv_g_b.
+	}
+	assert (Hb_le_g : b <= Zgcd a b).
+	{
+		apply Z.divide_pos_le.
+		- exact Hg_pos.
+		- exact Hdiv_b_g.
+	}
+	lia.
+Qed.
 
 Lemma proof_of_greatest_common_divisor_entail_wit_2_1 : greatest_common_divisor_entail_wit_2_1.
-Proof. Admitted. 
+Proof.
+	unfold greatest_common_divisor_entail_wit_2_1.
+	intros.
+	Intros.
+	entailer!.
+	- apply rem_nonzero_pos; lia.
+	- pose proof (Z.gcd_rem a b ltac:(lia)) as Hg.
+		rewrite Hg.
+		rewrite Z.gcd_comm.
+		exact H1.
+Qed.
 
 Lemma proof_of_greatest_common_divisor_entail_wit_2_2 : greatest_common_divisor_entail_wit_2_2.
-Proof. Admitted. 
+Proof.
+	unfold greatest_common_divisor_entail_wit_2_2.
+	intros.
+	Intros.
+	entailer!.
+	- apply store_int_undef_store_int.
+	- apply rem_nonzero_pos; lia.
+	- pose proof (Z.gcd_rem b a ltac:(lia)) as Hg.
+		rewrite Hg.
+		exact H1.
+Qed.
 
 Lemma proof_of_greatest_common_divisor_return_wit_1 : greatest_common_divisor_return_wit_1.
-Proof. Admitted. 
+Proof.
+	unfold greatest_common_divisor_return_wit_1.
+	intros.
+	Intros.
+	entailer!.
+	unfold problem_13_spec.
+	assert (Hmod_ab_mod : a mod b = 0).
+	{
+		rewrite <- Z.rem_mod_nonneg by lia.
+		exact H.
+	}
+	assert (Hg_ab_eq_b : Zgcd a b = b).
+	{
+		apply gcd_eq_right_of_mod0; lia.
+	}
+	assert (Hg_pre_eq_b : Zgcd a_pre b_pre = b) by lia.
+	split.
+	- assert (Hdiv : Z.divide b a_pre).
+		{
+			rewrite <- Hg_pre_eq_b.
+			apply Z.gcd_divide_l.
+		}
+		apply (proj2 (Z.mod_divide a_pre b ltac:(lia))).
+		exact Hdiv.
+	- split.
+		+ assert (Hdiv : Z.divide b b_pre).
+			{
+				rewrite <- Hg_pre_eq_b.
+				apply Z.gcd_divide_r.
+			}
+			apply (proj2 (Z.mod_divide b_pre b ltac:(lia))).
+			exact Hdiv.
+		+ intros x Hax Hbx Hx_pos.
+			assert (Hx_div_a_pre : Z.divide x a_pre).
+			{
+				apply (proj1 (Z.mod_divide a_pre x ltac:(lia))).
+				exact Hax.
+			}
+			assert (Hx_div_b_pre : Z.divide x b_pre).
+			{
+				apply (proj1 (Z.mod_divide b_pre x ltac:(lia))).
+				exact Hbx.
+			}
+			assert (Hx_div_g : Z.divide x (Zgcd a_pre b_pre)).
+			{
+				apply Z.gcd_greatest; assumption.
+			}
+			rewrite Hg_pre_eq_b in Hx_div_g.
+			apply Z.divide_pos_le.
+			* lia.
+			* exact Hx_div_g.
+Qed.
 
 Lemma proof_of_greatest_common_divisor_return_wit_2 : greatest_common_divisor_return_wit_2.
-Proof. Admitted. 
+Proof.
+	unfold greatest_common_divisor_return_wit_2.
+	intros.
+	Intros.
+	entailer!.
+	unfold problem_13_spec.
+	assert (Hmod_ba_mod : b mod a = 0).
+	{
+		rewrite <- Z.rem_mod_nonneg by lia.
+		exact H.
+	}
+	assert (Hg_ba_eq_a : Zgcd b a = a).
+	{
+		apply gcd_eq_right_of_mod0; lia.
+	}
+	assert (Hg_ab_eq_a : Zgcd a b = a).
+	{
+		rewrite Z.gcd_comm.
+		exact Hg_ba_eq_a.
+	}
+	assert (Hg_pre_eq_a : Zgcd a_pre b_pre = a) by lia.
+	split.
+	- assert (Hdiv : Z.divide a a_pre).
+		{
+			rewrite <- Hg_pre_eq_a.
+			apply Z.gcd_divide_l.
+		}
+		apply (proj2 (Z.mod_divide a_pre a ltac:(lia))).
+		exact Hdiv.
+	- split.
+		+ assert (Hdiv : Z.divide a b_pre).
+			{
+				rewrite <- Hg_pre_eq_a.
+				apply Z.gcd_divide_r.
+			}
+			apply (proj2 (Z.mod_divide b_pre a ltac:(lia))).
+			exact Hdiv.
+		+ intros x Hax Hbx Hx_pos.
+			assert (Hx_div_a_pre : Z.divide x a_pre).
+			{
+				apply (proj1 (Z.mod_divide a_pre x ltac:(lia))).
+				exact Hax.
+			}
+			assert (Hx_div_b_pre : Z.divide x b_pre).
+			{
+				apply (proj1 (Z.mod_divide b_pre x ltac:(lia))).
+				exact Hbx.
+			}
+			assert (Hx_div_g : Z.divide x (Zgcd a_pre b_pre)).
+			{
+				apply Z.gcd_greatest; assumption.
+			}
+			rewrite Hg_pre_eq_a in Hx_div_g.
+			apply Z.divide_pos_le.
+			* lia.
+			* exact Hx_div_g.
+Qed.
 
