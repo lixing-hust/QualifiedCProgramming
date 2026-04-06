@@ -78,7 +78,7 @@
 - `original/<name>.c` 仅用于复制保存原始输入，不应改动其程序语义
 - `annotated/<name>.c` 用于写规格、断言和 invariant
 - `coq/generated/<name>_proof_manual.v` 是唯一允许人工写证明和辅助引理的 Coq 产物文件
-- `logs/workspace_fingerprint.json` 用于记录该 workspace 对应程序的语义摘要与检索关键词
+- `logs/workspace_fingerprint.json` 用于记录该 workspace 对应程序的语义摘要和检索关键词
 - `logs/annotation_reasoning.md` 用于在写 annotation 前记录自然语言规格与 invariant 推理
 - `logs/proof_reasoning.md` 用于在写证明前记录自然语言 proof plan 与 witness 推理
 - `logs/issues.md` 和 `logs/proof_metrics.md` 必须维护
@@ -146,7 +146,7 @@
 
 - 写 annotation 之前的自然语言规格/断言/invariant 推理
 - 写证明之前的自然语言 witness/proof plan 推理
-- 程序语义的自然语言摘要和关键词列表，便于后续检索
+- 程序语义的自然语言摘要和结构化关键词，便于后续检索
 - 本次执行遇到的问题和阶段
 - 修复方式
 - 修复后是否重新 symbolic、重新证明、重新检查

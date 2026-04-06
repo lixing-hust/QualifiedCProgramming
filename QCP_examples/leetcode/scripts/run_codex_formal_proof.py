@@ -60,7 +60,9 @@ Task:
 - Verify function `{function_name}` from `{input_path}`.
 - Work fully automatically without asking for human input.
 - Use workspace `{workspace_path}`.
-- Before writing `annotated/<name>.c`, first write or update `logs/workspace_fingerprint.json` with a natural-language semantic description of the program and a keyword list for retrieval.
+- Before writing `annotated/<name>.c`, first write or update `logs/workspace_fingerprint.json` with:
+  - a natural-language semantic description of the program
+  - a structured keyword object for retrieval
 - Before writing `annotated/<name>.c`, first output natural-language annotation reasoning into `logs/annotation_reasoning.md` inside the workspace.
 - Before writing `coq/generated/<name>_proof_manual.v`, first output natural-language proof reasoning into `logs/proof_reasoning.md` inside the workspace.
 - Treat those reasoning files as mandatory workflow artifacts, not optional notes.
@@ -174,7 +176,7 @@ def bootstrap_workspace(workspace_path: Path, input_path: Path, function_name: s
         "function_name": function_name,
         "program_sha256": sha256_hex(input_path),
         "semantic_description": "",
-        "keywords": [],
+        "keywords": {},
     }
     fingerprint_path.write_text(json.dumps(fingerprint, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 

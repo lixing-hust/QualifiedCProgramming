@@ -209,6 +209,121 @@
 
 ## 7. 检索建议
 
+## 7A. 给大模型的检索流程
+
+如果你是一个在本目录中工作的模型，默认按下面顺序检索，不要跳步。
+
+### 7A.1 第一步：先读 fingerprint，不要先读全文日志
+
+优先读取：
+
+- 目标 workspace 的 `logs/workspace_fingerprint.json`
+- 如果需要找相似题，再读取其他 workspace 的 `logs/workspace_fingerprint.json`
+
+不要一开始就：
+
+- 通读所有 `issues.md`
+- 通读所有 `proof_manual.v`
+- 通读所有 `goal.v`
+
+原因：
+
+- fingerprint 的成本最低
+- fingerprint 已经包含语义摘要和结构化关键词
+- 先读 fingerprint 可以把候选范围压到很小
+
+### 7A.2 第二步：先做结构化过滤
+
+先按这些字段过滤候选：
+
+- `function_name`
+- `program_sha256`
+- `keywords.algorithm_family`
+- `keywords.semantic_intent`
+- `keywords.control_flow`
+- `keywords.proof_pattern`
+- `keywords.verification_status`
+
+推荐优先级：
+
+1. 如果是在找“同一个程序”的历史 workspace，先看 `program_sha256`
+2. 如果是在找“同类算法题”，先看 `algorithm_family + semantic_intent + control_flow`
+3. 如果是在找“同类证明套路”，先看 `proof_pattern + numeric_properties + verification_status`
+4. 如果结构化过滤还不够，再对 `semantic_description + keywords` 做 BM25 检索
+
+### 7A.3 第三步：再看自然语言摘要
+
+在结构化过滤后，再读候选 fingerprint 里的：
+
+- `semantic_description`
+
+用它判断：
+
+- 程序的数学语义是否真的接近
+- 边界行为是否一致
+- 是否属于同一类证明问题
+
+如果 `keywords` 相似但 `semantic_description` 明显不一样，也以 `semantic_description` 为准。
+
+### 7A.4 第四步：只展开少量候选的细节文件
+
+只有在候选缩小之后，才继续读：
+
+- `logs/annotation_reasoning.md`
+- `logs/proof_reasoning.md`
+- `logs/issues.md`
+- `coq/generated/<name>_proof_manual.v`
+
+展开顺序建议：
+
+1. 先读 `annotation_reasoning.md`，理解规格与 invariant
+2. 再读 `proof_reasoning.md`，理解证明计划
+3. 再读 `issues.md`，判断是否有已知坑
+4. 最后才读 `proof_manual.v`，找可复用 tactic 或 lemma 结构
+
+### 7A.5 什么时候不该继续展开
+
+如果已经出现下面任一情况，就不要继续深挖该候选：
+
+- `semantic_description` 明显不是同类程序
+- `data_shape` 不匹配，例如当前是 `scalar_only`，候选却是 `array` 或 `linked_list`
+- `proof_pattern` 不匹配，例如当前是纯算术题，候选却主要依赖 `heap_reasoning`
+- `verification_status` 表明该例子本身是失败路径，而且失败原因与你当前问题无关
+
+### 7A.6 推荐的回答式检索策略
+
+当用户提出问题时，大模型应先把问题映射到下面三类之一：
+
+1. “找同一个程序”
+   做法：
+   先按 `program_sha256` 或 `function_name + semantic_description` 查
+
+2. “找相似算法题”
+   做法：
+   先按 `algorithm_family + semantic_intent + control_flow` 查
+
+3. “找相似证明套路”
+   做法：
+   先按 `proof_pattern + numeric_properties + verification_status` 查
+
+只有在上述结构化检索都不够用时，才退回到更宽松的自然语言匹配。
+
+### 7A.7 一个硬规则
+
+检索时，必须优先依赖：
+
+- 结构化 fingerprint
+- 受控词表
+- 语义摘要
+
+而不是优先依赖：
+
+- 文件名相似
+- 时间戳相近
+- 日志里某句自然语言偶然相似
+
+文件名和时间戳只能做辅助线索，不能作为主检索依据。
+
 ### 7.1 找相似算法题
 
 先按：
