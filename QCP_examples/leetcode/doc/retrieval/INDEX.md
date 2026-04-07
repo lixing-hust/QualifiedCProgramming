@@ -15,6 +15,8 @@
 
 它是该 workspace 的最小检索单元。
 
+另外，`/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/examples/` 是允许检索的完整证明样例库。该目录下的样例已经整理成与 workspace 对齐的格式，可作为稳定的参考语料直接展开阅读。
+
 建议检索顺序：
 
 1. 先按受控关键词过滤候选 workspace。
@@ -217,6 +219,7 @@
 
 - 目标 workspace 的 `logs/workspace_fingerprint.json`
 - 如果需要找相似题，再读取其他 workspace 的 `logs/workspace_fingerprint.json`
+- 如果需要找稳定可复用的完整证明样例，优先读取 `/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/examples/fingerprint_index.json` 和 `/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/examples/*/logs/workspace_fingerprint.json`
 
 不要一开始就：
 
@@ -229,6 +232,7 @@
 - fingerprint 的成本最低
 - fingerprint 已经包含语义摘要和结构化关键词
 - 先读 fingerprint 可以把候选范围压到很小
+- `examples/` 是人工整理过的完整样例库，适合优先作为证明模板来源
 
 ### 7A.2 第二步：先做结构化过滤
 
@@ -269,6 +273,20 @@
 - `logs/proof_reasoning.md`
 - `logs/issues.md`
 - `coq/generated/<name>_proof_manual.v`
+
+如果候选来自 `/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/examples/`，则把它视为允许检索的完整证明样例，可以完整展开阅读下列文件：
+
+- `original/<name>.c`
+- `annotated/<name>.c`
+- `logs/annotation_reasoning.md`
+- `logs/proof_reasoning.md`
+- `logs/issues.md`
+- `coq/generated/<name>_goal.v`
+- `coq/generated/<name>_proof_auto.v`
+- `coq/generated/<name>_proof_manual.v`
+- `coq/generated/<name>_goal_check.v`
+
+除 `examples/` 之外，其它范围保持原规则不变。也就是说，对普通历史 workspace，仍然应优先读 fingerprint，候选缩小后再按需展开，不应把整个历史 workspace 当作默认全文检索库。
 
 展开顺序建议：
 
@@ -311,6 +329,8 @@
 - 结构化 fingerprint
 - 受控词表
 - 语义摘要
+
+在“找可直接复用的完整证明模板”这个特定场景下，应优先从 `/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/examples/` 选择候选，而不是先去扫描 `output/` 下的历史 workspace。
 
 而不是优先依赖：
 
@@ -378,6 +398,16 @@
 - `semantic_description` 应尽量保持一致
 - `keywords` 的语义标签应尽量一致
 - `verification_status` 可以不同，因为它反映的是该次任务状态
+
+### 8.2A `examples/` 的特殊角色
+
+`/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/examples/` 下的样例是“允许检索的完整证明例子库”：
+
+- 可以把它们当作默认优先级最高的模板来源
+- 可以完整阅读其中的 annotation、reasoning 和 proof 文件
+- 可以按 `fingerprint_index.json` 或各自的 `logs/workspace_fingerprint.json` 先筛选，再展开细节
+
+但这条特例只适用于 `examples/`。对于 `output/` 下普通历史 workspace，仍然维持本文件前述的保守展开规则。
 
 ### 8.3 修改程序语义时
 
