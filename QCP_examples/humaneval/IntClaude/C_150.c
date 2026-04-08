@@ -24,9 +24,10 @@ int x_or_y(int n, int x, int y)
     int i;
     /*@ Inv
         2 <= i && i <= n@pre &&
-        (isp != 0 => forall (k: Z), 2 <= k && k < i => n@pre % k != 0)
+        (isp != 0 => forall (k: Z), 2 <= k && k < i => n@pre % k != 0) &&
+        (isp == 0 => exists (k: Z), 2 <= k && k < i && n@pre % k == 0)
     */
-    for (i=2;i*i<=n;i++)
+    for (i=2;i<=n/i;i++)
     if (n%i==0) isp=0;
     if (isp) return x;
     return y;

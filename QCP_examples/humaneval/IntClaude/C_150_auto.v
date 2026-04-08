@@ -31,6 +31,9 @@ Proof. Admitted.
 Lemma proof_of_x_or_y_safety_wit_4 : x_or_y_safety_wit_4.
 Proof. Admitted. 
 
+Lemma proof_of_x_or_y_safety_wit_5 : x_or_y_safety_wit_5.
+Proof. Admitted. 
+
 Lemma proof_of_x_or_y_safety_wit_6 : x_or_y_safety_wit_6.
 Proof. Admitted. 
 
