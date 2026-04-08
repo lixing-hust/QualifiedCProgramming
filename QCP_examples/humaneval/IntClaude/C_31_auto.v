@@ -37,6 +37,12 @@ Proof. Admitted.
 Lemma proof_of_is_prime_safety_wit_7 : is_prime_safety_wit_7.
 Proof. Admitted. 
 
+Lemma proof_of_is_prime_safety_wit_8 : is_prime_safety_wit_8.
+Proof. Admitted. 
+
 Lemma proof_of_is_prime_safety_wit_9 : is_prime_safety_wit_9.
+Proof. Admitted. 
+
+Lemma proof_of_is_prime_entail_wit_1 : is_prime_entail_wit_1.
 Proof. Admitted. 
 

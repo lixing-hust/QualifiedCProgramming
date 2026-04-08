@@ -25,7 +25,7 @@ From SimpleC.EE Require Import common_strategy_proof.
 Definition is_prime_safety_wit_1 := 
 forall (n_pre: Z) ,
   [| (0 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
+  &&  [| (n_pre <= 2147395600) |]
   &&  ((( &( "n" ) )) # Int  |-> n_pre)
 |--
   [| (2 <= INT_MAX) |] 
@@ -36,7 +36,7 @@ Definition is_prime_safety_wit_2 :=
 forall (n_pre: Z) ,
   [| (n_pre < 2) |] 
   &&  [| (0 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
+  &&  [| (n_pre <= 2147395600) |]
   &&  ((( &( "n" ) )) # Int  |-> n_pre)
 |--
   [| (0 <= INT_MAX) |] 
@@ -47,7 +47,7 @@ Definition is_prime_safety_wit_3 :=
 forall (n_pre: Z) ,
   [| (n_pre >= 2) |] 
   &&  [| (0 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
+  &&  [| (n_pre <= 2147395600) |]
   &&  ((( &( "i" ) )) # Int  |->_)
   **  ((( &( "n" ) )) # Int  |-> n_pre)
 |--
@@ -58,11 +58,12 @@ forall (n_pre: Z) ,
 Definition is_prime_safety_wit_4 := 
 forall (n_pre: Z) (i: Z) ,
   [| (2 <= i) |] 
-  &&  [| ((i * i ) <= (n_pre + 1 )) |] 
+  &&  [| (i <= 46340) |] 
+  &&  [| (((i - 1 ) * (i - 1 ) ) <= n_pre) |] 
   &&  [| forall (k: Z) , (((2 <= k) /\ (k < i)) -> ((n_pre % ( k ) ) <> 0)) |] 
   &&  [| (n_pre >= 2) |] 
   &&  [| (0 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
+  &&  [| (n_pre <= 2147395600) |]
   &&  ((( &( "i" ) )) # Int  |-> i)
   **  ((( &( "n" ) )) # Int  |-> n_pre)
 |--
@@ -74,11 +75,12 @@ Definition is_prime_safety_wit_5 :=
 forall (n_pre: Z) (i: Z) ,
   [| ((i * i ) <= n_pre) |] 
   &&  [| (2 <= i) |] 
-  &&  [| ((i * i ) <= (n_pre + 1 )) |] 
+  &&  [| (i <= 46340) |] 
+  &&  [| (((i - 1 ) * (i - 1 ) ) <= n_pre) |] 
   &&  [| forall (k: Z) , (((2 <= k) /\ (k < i)) -> ((n_pre % ( k ) ) <> 0)) |] 
   &&  [| (n_pre >= 2) |] 
   &&  [| (0 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
+  &&  [| (n_pre <= 2147395600) |]
   &&  ((( &( "i" ) )) # Int  |-> i)
   **  ((( &( "n" ) )) # Int  |-> n_pre)
 |--
@@ -90,11 +92,12 @@ Definition is_prime_safety_wit_6 :=
 forall (n_pre: Z) (i: Z) ,
   [| ((i * i ) <= n_pre) |] 
   &&  [| (2 <= i) |] 
-  &&  [| ((i * i ) <= (n_pre + 1 )) |] 
+  &&  [| (i <= 46340) |] 
+  &&  [| (((i - 1 ) * (i - 1 ) ) <= n_pre) |] 
   &&  [| forall (k: Z) , (((2 <= k) /\ (k < i)) -> ((n_pre % ( k ) ) <> 0)) |] 
   &&  [| (n_pre >= 2) |] 
   &&  [| (0 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
+  &&  [| (n_pre <= 2147395600) |]
   &&  ((( &( "i" ) )) # Int  |-> i)
   **  ((( &( "n" ) )) # Int  |-> n_pre)
 |--
@@ -107,11 +110,12 @@ forall (n_pre: Z) (i: Z) ,
   [| ((n_pre % ( i ) ) = 0) |] 
   &&  [| ((i * i ) <= n_pre) |] 
   &&  [| (2 <= i) |] 
-  &&  [| ((i * i ) <= (n_pre + 1 )) |] 
+  &&  [| (i <= 46340) |] 
+  &&  [| (((i - 1 ) * (i - 1 ) ) <= n_pre) |] 
   &&  [| forall (k: Z) , (((2 <= k) /\ (k < i)) -> ((n_pre % ( k ) ) <> 0)) |] 
   &&  [| (n_pre >= 2) |] 
   &&  [| (0 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
+  &&  [| (n_pre <= 2147395600) |]
   &&  ((( &( "i" ) )) # Int  |-> i)
   **  ((( &( "n" ) )) # Int  |-> n_pre)
 |--
@@ -121,30 +125,14 @@ forall (n_pre: Z) (i: Z) ,
 
 Definition is_prime_safety_wit_8 := 
 forall (n_pre: Z) (i: Z) ,
-  [| ((n_pre % ( i ) ) <> 0) |] 
-  &&  [| ((i * i ) <= n_pre) |] 
-  &&  [| (2 <= i) |] 
-  &&  [| ((i * i ) <= (n_pre + 1 )) |] 
-  &&  [| forall (k: Z) , (((2 <= k) /\ (k < i)) -> ((n_pre % ( k ) ) <> 0)) |] 
-  &&  [| (n_pre >= 2) |] 
-  &&  [| (0 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
-  &&  ((( &( "i" ) )) # Int  |-> i)
-  **  ((( &( "n" ) )) # Int  |-> n_pre)
-|--
-  [| ((i + 1 ) <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= (i + 1 )) |]
-.
-
-Definition is_prime_safety_wit_9 := 
-forall (n_pre: Z) (i: Z) ,
   [| ((i * i ) > n_pre) |] 
   &&  [| (2 <= i) |] 
-  &&  [| ((i * i ) <= (n_pre + 1 )) |] 
+  &&  [| (i <= 46340) |] 
+  &&  [| (((i - 1 ) * (i - 1 ) ) <= n_pre) |] 
   &&  [| forall (k: Z) , (((2 <= k) /\ (k < i)) -> ((n_pre % ( k ) ) <> 0)) |] 
   &&  [| (n_pre >= 2) |] 
   &&  [| (0 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
+  &&  [| (n_pre <= 2147395600) |]
   &&  ((( &( "i" ) )) # Int  |-> i)
   **  ((( &( "n" ) )) # Int  |-> n_pre)
 |--
@@ -152,19 +140,38 @@ forall (n_pre: Z) (i: Z) ,
   &&  [| ((INT_MIN) <= 1) |]
 .
 
+Definition is_prime_safety_wit_9 := 
+forall (n_pre: Z) (i: Z) ,
+  [| ((n_pre % ( i ) ) <> 0) |] 
+  &&  [| ((i * i ) <= n_pre) |] 
+  &&  [| (2 <= i) |] 
+  &&  [| (i <= 46340) |] 
+  &&  [| (((i - 1 ) * (i - 1 ) ) <= n_pre) |] 
+  &&  [| forall (k: Z) , (((2 <= k) /\ (k < i)) -> ((n_pre % ( k ) ) <> 0)) |] 
+  &&  [| (n_pre >= 2) |] 
+  &&  [| (0 <= n_pre) |] 
+  &&  [| (n_pre <= 2147395600) |]
+  &&  ((( &( "i" ) )) # Int  |-> i)
+  **  ((( &( "n" ) )) # Int  |-> n_pre)
+|--
+  [| ((i + 1 ) <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= (i + 1 )) |]
+.
+
 Definition is_prime_entail_wit_1 := 
 forall (n_pre: Z) ,
   [| (n_pre >= 2) |] 
   &&  [| (0 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
+  &&  [| (n_pre <= 2147395600) |]
   &&  emp
 |--
   [| (2 <= 2) |] 
-  &&  [| ((2 * 2 ) <= (n_pre + 1 )) |] 
+  &&  [| (2 <= 46340) |] 
+  &&  [| (((2 - 1 ) * (2 - 1 ) ) <= n_pre) |] 
   &&  [| forall (k: Z) , (((2 <= k) /\ (k < 2)) -> ((n_pre % ( k ) ) <> 0)) |] 
   &&  [| (n_pre >= 2) |] 
   &&  [| (0 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
+  &&  [| (n_pre <= 2147395600) |]
   &&  emp
 .
 
@@ -173,32 +180,29 @@ forall (n_pre: Z) (i: Z) ,
   [| ((n_pre % ( i ) ) <> 0) |] 
   &&  [| ((i * i ) <= n_pre) |] 
   &&  [| (2 <= i) |] 
-  &&  [| ((i * i ) <= (n_pre + 1 )) |] 
+  &&  [| (i <= 46340) |] 
+  &&  [| (((i - 1 ) * (i - 1 ) ) <= n_pre) |] 
   &&  [| forall (k: Z) , (((2 <= k) /\ (k < i)) -> ((n_pre % ( k ) ) <> 0)) |] 
   &&  [| (n_pre >= 2) |] 
   &&  [| (0 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
+  &&  [| (n_pre <= 2147395600) |]
   &&  emp
 |--
   [| (2 <= (i + 1 )) |] 
-  &&  [| (((i + 1 ) * (i + 1 ) ) <= (n_pre + 1 )) |] 
+  &&  [| ((i + 1 ) <= 46340) |] 
+  &&  [| ((((i + 1 ) - 1 ) * ((i + 1 ) - 1 ) ) <= n_pre) |] 
   &&  [| forall (k: Z) , (((2 <= k) /\ (k < (i + 1 ))) -> ((n_pre % ( k ) ) <> 0)) |] 
   &&  [| (n_pre >= 2) |] 
   &&  [| (0 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
+  &&  [| (n_pre <= 2147395600) |]
   &&  emp
 .
 
 Definition is_prime_return_wit_1 := 
-forall (n_pre: Z) (i: Z) ,
-  [| ((n_pre % ( i ) ) = 0) |] 
-  &&  [| ((i * i ) <= n_pre) |] 
-  &&  [| (2 <= i) |] 
-  &&  [| ((i * i ) <= (n_pre + 1 )) |] 
-  &&  [| forall (k: Z) , (((2 <= k) /\ (k < i)) -> ((n_pre % ( k ) ) <> 0)) |] 
-  &&  [| (n_pre >= 2) |] 
+forall (n_pre: Z) ,
+  [| (n_pre < 2) |] 
   &&  [| (0 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
+  &&  [| (n_pre <= 2147395600) |]
   &&  emp
 |--
   [| (problem_31_spec_z n_pre 0 ) |]
@@ -206,10 +210,16 @@ forall (n_pre: Z) (i: Z) ,
 .
 
 Definition is_prime_return_wit_2 := 
-forall (n_pre: Z) ,
-  [| (n_pre < 2) |] 
+forall (n_pre: Z) (i: Z) ,
+  [| ((n_pre % ( i ) ) = 0) |] 
+  &&  [| ((i * i ) <= n_pre) |] 
+  &&  [| (2 <= i) |] 
+  &&  [| (i <= 46340) |] 
+  &&  [| (((i - 1 ) * (i - 1 ) ) <= n_pre) |] 
+  &&  [| forall (k: Z) , (((2 <= k) /\ (k < i)) -> ((n_pre % ( k ) ) <> 0)) |] 
+  &&  [| (n_pre >= 2) |] 
   &&  [| (0 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
+  &&  [| (n_pre <= 2147395600) |]
   &&  emp
 |--
   [| (problem_31_spec_z n_pre 0 ) |]
@@ -220,11 +230,12 @@ Definition is_prime_return_wit_3 :=
 forall (n_pre: Z) (i: Z) ,
   [| ((i * i ) > n_pre) |] 
   &&  [| (2 <= i) |] 
-  &&  [| ((i * i ) <= (n_pre + 1 )) |] 
+  &&  [| (i <= 46340) |] 
+  &&  [| (((i - 1 ) * (i - 1 ) ) <= n_pre) |] 
   &&  [| forall (k: Z) , (((2 <= k) /\ (k < i)) -> ((n_pre % ( k ) ) <> 0)) |] 
   &&  [| (n_pre >= 2) |] 
   &&  [| (0 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
+  &&  [| (n_pre <= 2147395600) |]
   &&  emp
 |--
   [| (problem_31_spec_z n_pre 1 ) |]

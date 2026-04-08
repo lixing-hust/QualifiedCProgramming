@@ -20,7 +20,7 @@ false
 /*@ Import Coq Require Import coins_31 */
 int is_prime(int n)
 /*@ Require
-        0 <= n && n <= INT_MAX && emp
+        0 <= n && n <= 2147395600 && emp
     Ensure
         problem_31_spec_z(n@pre, __return) && emp
 */
@@ -28,7 +28,8 @@ int is_prime(int n)
     if (n<2) return 0;
     int i;
     /*@ Inv
-        2 <= i && i * i <= n@pre + 1 &&
+        2 <= i && i <= 46340 &&
+        (i - 1) * (i - 1) <= n@pre &&
         forall (k: Z), 2 <= k && k < i => n@pre % k != 0
     */
     for (i=2;i*i<=n;i++)
