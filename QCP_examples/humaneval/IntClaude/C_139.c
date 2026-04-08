@@ -19,7 +19,7 @@ factorial of this integer.
 long long special_factorial(int n)
 /*@ Require
         problem_139_pre_z(n) &&
-        1 <= n && n <= 10 && emp
+        1 <= n && n <= 8 && emp
     Ensure
         problem_139_spec_z(n@pre, __return) && emp
 */

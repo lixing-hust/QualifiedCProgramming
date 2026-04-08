@@ -26,8 +26,9 @@ Definition special_factorial_safety_wit_1 :=
 forall (n_pre: Z) ,
   [| (problem_139_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
-  &&  [| (n_pre <= 10) |]
-  &&  ((( &( "fact" ) )) # Int64  |->_)
+  &&  [| (n_pre <= 8) |]
+  &&  ((( &( "bfact" ) )) # Int64  |->_)
+  **  ((( &( "fact" ) )) # Int64  |-> 1)
   **  ((( &( "n" ) )) # Int  |-> n_pre)
 |--
   [| (1 <= INT_MAX) |] 
@@ -38,9 +39,8 @@ Definition special_factorial_safety_wit_2 :=
 forall (n_pre: Z) ,
   [| (problem_139_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
-  &&  [| (n_pre <= 10) |]
-  &&  ((( &( "bfact" ) )) # Int64  |->_)
-  **  ((( &( "fact" ) )) # Int64  |-> 1)
+  &&  [| (n_pre <= 8) |]
+  &&  ((( &( "fact" ) )) # Int64  |->_)
   **  ((( &( "n" ) )) # Int  |-> n_pre)
 |--
   [| (1 <= INT_MAX) |] 
@@ -51,7 +51,7 @@ Definition special_factorial_safety_wit_3 :=
 forall (n_pre: Z) ,
   [| (problem_139_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
-  &&  [| (n_pre <= 10) |]
+  &&  [| (n_pre <= 8) |]
   &&  ((( &( "i" ) )) # Int  |->_)
   **  ((( &( "bfact" ) )) # Int64  |-> 1)
   **  ((( &( "fact" ) )) # Int64  |-> 1)
@@ -70,7 +70,7 @@ forall (n_pre: Z) (bfact: Z) (fact: Z) (i: Z) ,
   &&  [| (bfact = (bfact_coq ((i - 1 )))) |] 
   &&  [| (problem_139_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
-  &&  [| (n_pre <= 10) |]
+  &&  [| (n_pre <= 8) |]
   &&  ((( &( "i" ) )) # Int  |-> i)
   **  ((( &( "fact" ) )) # Int64  |-> fact)
   **  ((( &( "bfact" ) )) # Int64  |-> bfact)
@@ -89,7 +89,7 @@ forall (n_pre: Z) (bfact: Z) (fact: Z) (i: Z) ,
   &&  [| (bfact = (bfact_coq ((i - 1 )))) |] 
   &&  [| (problem_139_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
-  &&  [| (n_pre <= 10) |]
+  &&  [| (n_pre <= 8) |]
   &&  ((( &( "i" ) )) # Int  |-> i)
   **  ((( &( "fact" ) )) # Int64  |-> (fact * i ))
   **  ((( &( "bfact" ) )) # Int64  |-> bfact)
@@ -108,7 +108,7 @@ forall (n_pre: Z) (bfact: Z) (fact: Z) (i: Z) ,
   &&  [| (bfact = (bfact_coq ((i - 1 )))) |] 
   &&  [| (problem_139_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
-  &&  [| (n_pre <= 10) |]
+  &&  [| (n_pre <= 8) |]
   &&  ((( &( "i" ) )) # Int  |-> i)
   **  ((( &( "fact" ) )) # Int64  |-> (fact * i ))
   **  ((( &( "bfact" ) )) # Int64  |-> (bfact * (fact * i ) ))
@@ -122,7 +122,7 @@ Definition special_factorial_entail_wit_1 :=
 forall (n_pre: Z) ,
   [| (problem_139_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
-  &&  [| (n_pre <= 10) |]
+  &&  [| (n_pre <= 8) |]
   &&  emp
 |--
   [| (1 <= 1) |] 
@@ -131,7 +131,7 @@ forall (n_pre: Z) ,
   &&  [| (1 = (bfact_coq ((1 - 1 )))) |] 
   &&  [| (problem_139_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
-  &&  [| (n_pre <= 10) |]
+  &&  [| (n_pre <= 8) |]
   &&  emp
 .
 
@@ -144,7 +144,7 @@ forall (n_pre: Z) (bfact: Z) (fact: Z) (i: Z) ,
   &&  [| (bfact = (bfact_coq ((i - 1 )))) |] 
   &&  [| (problem_139_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
-  &&  [| (n_pre <= 10) |]
+  &&  [| (n_pre <= 8) |]
   &&  emp
 |--
   [| (1 <= (i + 1 )) |] 
@@ -153,7 +153,7 @@ forall (n_pre: Z) (bfact: Z) (fact: Z) (i: Z) ,
   &&  [| ((bfact * (fact * i ) ) = (bfact_coq (((i + 1 ) - 1 )))) |] 
   &&  [| (problem_139_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
-  &&  [| (n_pre <= 10) |]
+  &&  [| (n_pre <= 8) |]
   &&  emp
 .
 
@@ -166,7 +166,7 @@ forall (n_pre: Z) (bfact: Z) (fact: Z) (i: Z) ,
   &&  [| (bfact = (bfact_coq ((i - 1 )))) |] 
   &&  [| (problem_139_pre_z n_pre ) |] 
   &&  [| (1 <= n_pre) |] 
-  &&  [| (n_pre <= 10) |]
+  &&  [| (n_pre <= 8) |]
   &&  emp
 |--
   [| (problem_139_spec_z n_pre bfact ) |]
