@@ -19,15 +19,6 @@ Import naive_C_Rules.
 Require Import coins_49.
 Local Open Scope sac.
 
-(* Division safety: p_pre >= 2, so p_pre <> 0 and p_pre <> -1 *)
-Lemma proof_of_modp_safety_wit_4 : modp_safety_wit_4.
-Proof.
-  unfold modp_safety_wit_4.
-  intros.
-  Intros.
-  entailer!.
-Qed.
-
 (* Overflow safety: out = 2^i % p_pre < p_pre, and p_pre * 2 <= INT_MAX,
    so out * 2 < p_pre * 2 <= INT_MAX, and out >= 0 so out * 2 >= 0 > INT_MIN *)
 Lemma proof_of_modp_safety_wit_5 : modp_safety_wit_5.
@@ -36,9 +27,14 @@ Proof.
   intros.
   Intros.
   entailer!.
-  (* After entailer!, out has been substituted with 2^i % p_pre *)
-  pose proof (Z.mod_pos_bound (2^i) p_pre ltac:(lia)) as [Hmod_nn Hmod_lt].
-  nia.
+  - subst out.
+    assert (0 <= Z.rem (2 ^ i) p_pre < p_pre) as [Hrem_nn Hrem_lt].
+    { apply Z.rem_bound_pos; [apply Z.pow_nonneg; lia | lia]. }
+    nia.
+  - subst out.
+    assert (0 <= Z.rem (2 ^ i) p_pre < p_pre) as [Hrem_nn Hrem_lt].
+    { apply Z.rem_bound_pos; [apply Z.pow_nonneg; lia | lia]. }
+    nia.
 Qed.
 
 Lemma proof_of_modp_entail_wit_1 : modp_entail_wit_1.
@@ -48,7 +44,7 @@ Proof.
   Intros.
   entailer!.
   rewrite Z.pow_0_r.
-  rewrite Z.mod_1_l by lia.
+  rewrite Z.rem_1_l by lia.
   reflexivity.
 Qed.
 
@@ -59,11 +55,11 @@ Proof.
   Intros.
   entailer!.
   subst.
-  rewrite Z.pow_succ_r by lia.
-  rewrite <- Z.mul_mod_idemp_l.
-  ring_simplify.
-  rewrite Z.mul_comm.
-  reflexivity.
+  rewrite Z.pow_add_r by lia.
+  rewrite Z.pow_1_r.
+  replace (Z.rem (Z.rem (2 ^ i) p_pre * 2) p_pre) with (Z.rem (2 ^ i * 2) p_pre).
+  - reflexivity.
+  - symmetry. apply Z.mul_rem_idemp_l. lia.
 Qed.
 
 Lemma proof_of_modp_return_wit_1 : modp_return_wit_1.
@@ -76,5 +72,6 @@ Proof.
   intro Hpre.
   assert (i = n_pre) by lia.
   subst.
-  assumption.
+  rewrite Z.rem_mod_nonneg by lia.
+  reflexivity.
 Qed.
