@@ -13,11 +13,13 @@ is_simple_power(5, 3) => false
 #include "../../verification_stdlib.h"
 /*@ Extern Coq (problem_76_pre: Z -> Z -> Prop) */
 /*@ Extern Coq (is_simple_power_spec: Z -> Z -> Z -> Prop) */
+/*@ Extern Coq (sp_inv: Z -> Z -> Z -> Z -> Prop) */
 /*@ Import Coq Require Import coins_76 */
 int is_simple_power(int x, int n)
 /*@ Require
         1 <= x && x <= INT_MAX &&
-        1 <= n && n <= INT_MAX && emp
+        1 <= n && n <= INT_MAX &&
+        x * n <= INT_MAX && emp
     Ensure
         is_simple_power_spec(x@pre, n@pre, __return) && emp
 */
@@ -25,7 +27,7 @@ int is_simple_power(int x, int n)
     int p=1,count=0;
     /*@ Inv
         1 <= p && 0 <= count && count <= 100 &&
-        (count == 0 => p == 1)
+        sp_inv(x@pre, n@pre, count, p)
     */
     while (p<=x && count<100)
     {

@@ -15,7 +15,7 @@ Local Open Scope sets.
 Local Open Scope string.
 Local Open Scope list.
 Import naive_C_Rules.
-Require Import coins_76.
+From SimpleC.EE.humaneval Require Import coins_76.
 Local Open Scope sac.
 From SimpleC.EE Require Import common_strategy_goal.
 From SimpleC.EE Require Import common_strategy_proof.
@@ -27,21 +27,8 @@ forall (n_pre: Z) (x_pre: Z) ,
   [| (1 <= x_pre) |] 
   &&  [| (x_pre <= INT_MAX) |] 
   &&  [| (1 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
-  &&  ((( &( "p" ) )) # Int  |->_)
-  **  ((( &( "n" ) )) # Int  |-> n_pre)
-  **  ((( &( "x" ) )) # Int  |-> x_pre)
-|--
-  [| (1 <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= 1) |]
-.
-
-Definition is_simple_power_safety_wit_2 := 
-forall (n_pre: Z) (x_pre: Z) ,
-  [| (1 <= x_pre) |] 
-  &&  [| (x_pre <= INT_MAX) |] 
-  &&  [| (1 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
+  &&  [| (n_pre <= INT_MAX) |] 
+  &&  [| ((x_pre * n_pre ) <= INT_MAX) |]
   &&  ((( &( "count" ) )) # Int  |->_)
   **  ((( &( "p" ) )) # Int  |-> 1)
   **  ((( &( "n" ) )) # Int  |-> n_pre)
@@ -51,17 +38,33 @@ forall (n_pre: Z) (x_pre: Z) ,
   &&  [| ((INT_MIN) <= 0) |]
 .
 
+Definition is_simple_power_safety_wit_2 := 
+forall (n_pre: Z) (x_pre: Z) ,
+  [| (1 <= x_pre) |] 
+  &&  [| (x_pre <= INT_MAX) |] 
+  &&  [| (1 <= n_pre) |] 
+  &&  [| (n_pre <= INT_MAX) |] 
+  &&  [| ((x_pre * n_pre ) <= INT_MAX) |]
+  &&  ((( &( "p" ) )) # Int  |->_)
+  **  ((( &( "n" ) )) # Int  |-> n_pre)
+  **  ((( &( "x" ) )) # Int  |-> x_pre)
+|--
+  [| (1 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 1) |]
+.
+
 Definition is_simple_power_safety_wit_3 := 
 forall (n_pre: Z) (x_pre: Z) (count: Z) (p: Z) ,
   [| (p <= x_pre) |] 
   &&  [| (1 <= p) |] 
   &&  [| (0 <= count) |] 
   &&  [| (count <= 100) |] 
-  &&  [| ((count = 0) -> (p = 1)) |] 
+  &&  [| (sp_inv x_pre n_pre count p ) |] 
   &&  [| (1 <= x_pre) |] 
   &&  [| (x_pre <= INT_MAX) |] 
   &&  [| (1 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
+  &&  [| (n_pre <= INT_MAX) |] 
+  &&  [| ((x_pre * n_pre ) <= INT_MAX) |]
   &&  ((( &( "p" ) )) # Int  |-> p)
   **  ((( &( "count" ) )) # Int  |-> count)
   **  ((( &( "n" ) )) # Int  |-> n_pre)
@@ -79,11 +82,12 @@ forall (n_pre: Z) (x_pre: Z) (count: Z) (p: Z) ,
   &&  [| (1 <= p) |] 
   &&  [| (0 <= count) |] 
   &&  [| (count <= 100) |] 
-  &&  [| ((count = 0) -> (p = 1)) |] 
+  &&  [| (sp_inv x_pre n_pre count p ) |] 
   &&  [| (1 <= x_pre) |] 
   &&  [| (x_pre <= INT_MAX) |] 
   &&  [| (1 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
+  &&  [| (n_pre <= INT_MAX) |] 
+  &&  [| ((x_pre * n_pre ) <= INT_MAX) |]
   &&  ((( &( "p" ) )) # Int  |-> p)
   **  ((( &( "count" ) )) # Int  |-> count)
   **  ((( &( "n" ) )) # Int  |-> n_pre)
@@ -101,11 +105,12 @@ forall (n_pre: Z) (x_pre: Z) (count: Z) (p: Z) ,
   &&  [| (1 <= p) |] 
   &&  [| (0 <= count) |] 
   &&  [| (count <= 100) |] 
-  &&  [| ((count = 0) -> (p = 1)) |] 
+  &&  [| (sp_inv x_pre n_pre count p ) |] 
   &&  [| (1 <= x_pre) |] 
   &&  [| (x_pre <= INT_MAX) |] 
   &&  [| (1 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
+  &&  [| (n_pre <= INT_MAX) |] 
+  &&  [| ((x_pre * n_pre ) <= INT_MAX) |]
   &&  ((( &( "p" ) )) # Int  |-> p)
   **  ((( &( "count" ) )) # Int  |-> count)
   **  ((( &( "n" ) )) # Int  |-> n_pre)
@@ -123,11 +128,12 @@ forall (n_pre: Z) (x_pre: Z) (count: Z) (p: Z) ,
   &&  [| (1 <= p) |] 
   &&  [| (0 <= count) |] 
   &&  [| (count <= 100) |] 
-  &&  [| ((count = 0) -> (p = 1)) |] 
+  &&  [| (sp_inv x_pre n_pre count p ) |] 
   &&  [| (1 <= x_pre) |] 
   &&  [| (x_pre <= INT_MAX) |] 
   &&  [| (1 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
+  &&  [| (n_pre <= INT_MAX) |] 
+  &&  [| ((x_pre * n_pre ) <= INT_MAX) |]
   &&  ((( &( "p" ) )) # Int  |-> (p * n_pre ))
   **  ((( &( "count" ) )) # Int  |-> count)
   **  ((( &( "n" ) )) # Int  |-> n_pre)
@@ -145,11 +151,12 @@ forall (n_pre: Z) (x_pre: Z) (count: Z) (p: Z) ,
   &&  [| (1 <= p) |] 
   &&  [| (0 <= count) |] 
   &&  [| (count <= 100) |] 
-  &&  [| ((count = 0) -> (p = 1)) |] 
+  &&  [| (sp_inv x_pre n_pre count p ) |] 
   &&  [| (1 <= x_pre) |] 
   &&  [| (x_pre <= INT_MAX) |] 
   &&  [| (1 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
+  &&  [| (n_pre <= INT_MAX) |] 
+  &&  [| ((x_pre * n_pre ) <= INT_MAX) |]
   &&  ((( &( "p" ) )) # Int  |-> (p * n_pre ))
   **  ((( &( "count" ) )) # Int  |-> count)
   **  ((( &( "n" ) )) # Int  |-> n_pre)
@@ -166,11 +173,12 @@ forall (n_pre: Z) (x_pre: Z) (count: Z) (p: Z) ,
   &&  [| (1 <= p) |] 
   &&  [| (0 <= count) |] 
   &&  [| (count <= 100) |] 
-  &&  [| ((count = 0) -> (p = 1)) |] 
+  &&  [| (sp_inv x_pre n_pre count p ) |] 
   &&  [| (1 <= x_pre) |] 
   &&  [| (x_pre <= INT_MAX) |] 
   &&  [| (1 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
+  &&  [| (n_pre <= INT_MAX) |] 
+  &&  [| ((x_pre * n_pre ) <= INT_MAX) |]
   &&  ((( &( "p" ) )) # Int  |-> p)
   **  ((( &( "count" ) )) # Int  |-> count)
   **  ((( &( "n" ) )) # Int  |-> n_pre)
@@ -186,11 +194,12 @@ forall (n_pre: Z) (x_pre: Z) (count: Z) (p: Z) ,
   &&  [| (1 <= p) |] 
   &&  [| (0 <= count) |] 
   &&  [| (count <= 100) |] 
-  &&  [| ((count = 0) -> (p = 1)) |] 
+  &&  [| (sp_inv x_pre n_pre count p ) |] 
   &&  [| (1 <= x_pre) |] 
   &&  [| (x_pre <= INT_MAX) |] 
   &&  [| (1 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
+  &&  [| (n_pre <= INT_MAX) |] 
+  &&  [| ((x_pre * n_pre ) <= INT_MAX) |]
   &&  ((( &( "p" ) )) # Int  |-> p)
   **  ((( &( "count" ) )) # Int  |-> count)
   **  ((( &( "n" ) )) # Int  |-> n_pre)
@@ -205,17 +214,19 @@ forall (n_pre: Z) (x_pre: Z) ,
   [| (1 <= x_pre) |] 
   &&  [| (x_pre <= INT_MAX) |] 
   &&  [| (1 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
+  &&  [| (n_pre <= INT_MAX) |] 
+  &&  [| ((x_pre * n_pre ) <= INT_MAX) |]
   &&  emp
 |--
   [| (1 <= 1) |] 
   &&  [| (0 <= 0) |] 
   &&  [| (0 <= 100) |] 
-  &&  [| ((0 = 0) -> (1 = 1)) |] 
+  &&  [| (sp_inv x_pre n_pre 0 1 ) |] 
   &&  [| (1 <= x_pre) |] 
   &&  [| (x_pre <= INT_MAX) |] 
   &&  [| (1 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
+  &&  [| (n_pre <= INT_MAX) |] 
+  &&  [| ((x_pre * n_pre ) <= INT_MAX) |]
   &&  emp
 .
 
@@ -227,21 +238,23 @@ forall (n_pre: Z) (x_pre: Z) (count: Z) (p: Z) ,
   &&  [| (1 <= p) |] 
   &&  [| (0 <= count) |] 
   &&  [| (count <= 100) |] 
-  &&  [| ((count = 0) -> (p = 1)) |] 
+  &&  [| (sp_inv x_pre n_pre count p ) |] 
   &&  [| (1 <= x_pre) |] 
   &&  [| (x_pre <= INT_MAX) |] 
   &&  [| (1 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
+  &&  [| (n_pre <= INT_MAX) |] 
+  &&  [| ((x_pre * n_pre ) <= INT_MAX) |]
   &&  emp
 |--
   [| (1 <= (p * n_pre )) |] 
   &&  [| (0 <= (count + 1 )) |] 
   &&  [| ((count + 1 ) <= 100) |] 
-  &&  [| (((count + 1 ) = 0) -> ((p * n_pre ) = 1)) |] 
+  &&  [| (sp_inv x_pre n_pre (count + 1 ) (p * n_pre ) ) |] 
   &&  [| (1 <= x_pre) |] 
   &&  [| (x_pre <= INT_MAX) |] 
   &&  [| (1 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
+  &&  [| (n_pre <= INT_MAX) |] 
+  &&  [| ((x_pre * n_pre ) <= INT_MAX) |]
   &&  emp
 .
 
@@ -253,11 +266,12 @@ forall (n_pre: Z) (x_pre: Z) (count: Z) (p: Z) ,
   &&  [| (1 <= p) |] 
   &&  [| (0 <= count) |] 
   &&  [| (count <= 100) |] 
-  &&  [| ((count = 0) -> (p = 1)) |] 
+  &&  [| (sp_inv x_pre n_pre count p ) |] 
   &&  [| (1 <= x_pre) |] 
   &&  [| (x_pre <= INT_MAX) |] 
   &&  [| (1 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
+  &&  [| (n_pre <= INT_MAX) |] 
+  &&  [| ((x_pre * n_pre ) <= INT_MAX) |]
   &&  emp
 |--
   [| (is_simple_power_spec x_pre n_pre 1 ) |]
@@ -271,11 +285,12 @@ forall (n_pre: Z) (x_pre: Z) (count: Z) (p: Z) ,
   &&  [| (1 <= p) |] 
   &&  [| (0 <= count) |] 
   &&  [| (count <= 100) |] 
-  &&  [| ((count = 0) -> (p = 1)) |] 
+  &&  [| (sp_inv x_pre n_pre count p ) |] 
   &&  [| (1 <= x_pre) |] 
   &&  [| (x_pre <= INT_MAX) |] 
   &&  [| (1 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
+  &&  [| (n_pre <= INT_MAX) |] 
+  &&  [| ((x_pre * n_pre ) <= INT_MAX) |]
   &&  emp
 |--
   [| (is_simple_power_spec x_pre n_pre 0 ) |]
@@ -288,11 +303,12 @@ forall (n_pre: Z) (x_pre: Z) (count: Z) (p: Z) ,
   &&  [| (1 <= p) |] 
   &&  [| (0 <= count) |] 
   &&  [| (count <= 100) |] 
-  &&  [| ((count = 0) -> (p = 1)) |] 
+  &&  [| (sp_inv x_pre n_pre count p ) |] 
   &&  [| (1 <= x_pre) |] 
   &&  [| (x_pre <= INT_MAX) |] 
   &&  [| (1 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |]
+  &&  [| (n_pre <= INT_MAX) |] 
+  &&  [| ((x_pre * n_pre ) <= INT_MAX) |]
   &&  emp
 |--
   [| (is_simple_power_spec x_pre n_pre 0 ) |]
