@@ -34,25 +34,29 @@ COQINCLUDES="$(tr '\n' ' ' < _CoqProject)"
 
 ---
 
-## 2. 实时进度（2026-04-07）
+## 2. 实时进度（2026-04-08）
 
 统计口径：扫描所有 `C_*_manual.v` 的 `Admitted.` 与 `Axiom`。
 
 - 总文件数：20
-- 已达 `0 Admitted / 0 Axiom`：10
-- 待完成：10
-- 剩余 `Admitted` 总数：70
+- 已达 `0 Admitted / 0 Axiom`：14
+- 待完成：6
+- 剩余 `Admitted` 总数：50
 
 ### 2.1 已达 0 Admitted/0 Axiom
 
+- `C_102_manual.v`
+- `C_13_manual.v`
 - `C_131_manual.v`
 - `C_138_manual.v`
+- `C_139_manual.v`
 - `C_24_manual.v`
 - `C_41_manual.v`
 - `C_49_manual.v`
 - `C_59_manual.v`
 - `C_53_manual.v`
 - `C_60_manual.v`
+- `C_75_manual.v`
 - `C_83_manual.v`
 - `C_97_manual.v`
 
@@ -60,10 +64,6 @@ COQINCLUDES="$(tr '\n' ' ' < _CoqProject)"
 
 ### 2.2 待完成（按 Admitted 升序）
 
-- `C_102_manual.v`: 5
-- `C_139_manual.v`: 5
-- `C_13_manual.v`: 5
-- `C_75_manual.v`: 5
 - `C_76_manual.v`: 5
 - `C_39_manual.v`: 6
 - `C_31_manual.v`: 7
@@ -80,7 +80,9 @@ COQINCLUDES="$(tr '\n' ' ' < _CoqProject)"
 1. `C_XX.c`：函数语义 + 注解 + 循环不变式
 2. `coins_XX.v`：桥接定义/引理
 3. `C_XX_goal.v`：当前待证 witness
-4. `Coins/spec/human/input/XX.v`：原始规格定义
+4. `QCP_examples/humaneval/spec/XX.v`：原始规格定义
+
+补充说明：旧文档里提到的 `Coins/spec/human/input/XX.v` 已经过期。当前 HumanEval 题目的规格文件实际位于 `QCP_examples/humaneval/spec/` 下，`coins_XX.v` 也统一通过 `Load "../spec/XX".` 引入。
 
 ### Step 2: 先判定“能证明”还是“信息不足”
 
@@ -91,7 +93,7 @@ COQINCLUDES="$(tr '\n' ' ' < _CoqProject)"
 硬规则：
 
 1. 不改 C 程序语句逻辑（除非用户明确允许）
-2. 优先复用 `input/XX.v` 已有定义
+2. 优先复用 `spec/XX.v` 已有定义
 3. 只补本题必须的局部引理，不做大而泛的引理库
 
 ### Step 4: 每次修改后强制重生成（关键门禁）
@@ -132,6 +134,25 @@ coqc $COQINCLUDES -R . SimpleC.EE.humaneval C_XX_goal_check.v
 ```bash
 grep -nE "Admitted\\.|Axiom[[:space:]]" coins_XX.v C_XX_manual.v || true
 ```
+
+### Step 8: 清理编译产物
+
+在确认编译链通过且无 `Admitted` / `Axiom` 之后，删除本题编译产生的中间文件，例如：
+
+- `.aux`
+- `.glob`
+- `.vo`
+- `.vok`
+- `.vos`
+
+不要删除源码和证明源文件。必须保留：
+
+- `C_XX.c`
+- `coins_XX.v`
+- `C_XX_goal.v`
+- `C_XX_auto.v`
+- `C_XX_manual.v`
+- `C_XX_goal_check.v`
 
 ---
 
@@ -245,13 +266,22 @@ Qed.
 3. 证明 `n` 为素数可走反证：若 `~prime n`，先取小素因子，再与不变式冲突
 4. 对大于等于 `i` 的素因子，直接复用 while 退出后的保留性条件
 
+### 6.5 `C_75`（is_multiply_prime）
+
+可复用要点：
+
+1. 先确认问题是在注解还是在手写证明，不要因为 `manual.v` 编译失败就立刻怀疑 invariant。
+2. 这题当前注解经过重新 `symexec` 后是稳定的，核心不变式可围绕 `mp_outer_inv` 建模，不需要额外改 C 语句。
+3. 重生成后 `C_75_manual.v` 会被还原成骨架，旧证明需要按最新 goal 重新迁回，不能直接假设旧 proof 还能对上。
+4. `return_wit` 里若已经拿到了 `prime p1 /\ prime p2 /\ prime p3 /\ a = ...` 这类目标，避免无脑 `repeat split`，否则容易把 `prime` 原子命题错误继续拆开。
+
 ---
 
 ## 7. 剩余题目建议顺序
 
 按成本从低到高：
 
-1. `C_102` / `C_139` / `C_13` / `C_75` / `C_76`
+1. `C_76`
 2. `C_39`
 3. `C_31`
 4. `C_150`
@@ -277,4 +307,3 @@ Qed.
 2. 全链编译结果
 3. `Admitted/Axiom` 扫描结果
 4. 若未完成：卡点类别 + 最小下一步动作
-

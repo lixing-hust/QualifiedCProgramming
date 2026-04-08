@@ -86,12 +86,28 @@ description: "中文精简流程：用于 humaneval/IntClaude 下 C_XX 验证，
 
 可接受 load-path remap warning，但必须整体编译通过。
 
-### 8) 收尾与交付
+### 8) 清理编译产物
+
+- 在确认第 7 步全部编译通过后，删除本题编译产生的中间文件，例如：
+  - `.aux`
+  - `.glob`
+  - `.vo`
+  - `.vok`
+  - `.vos`
+- 只清理本题相关的编译产物，不删除源码和证明源文件。
+- 必须保留：
+  - `C_XX.c`
+  - `coins_XX.v`
+  - `C_XX_goal.v`
+  - `C_XX_auto.v`
+  - `C_XX_manual.v`
+  - `C_XX_goal_check.v`
+
+### 9) 收尾与交付
 
 - 检查无 `Admitted.`/`Axiom`：
   - `grep -nE "Admitted\\.|Axiom[[:space:]]" coins_XX.v C_XX_manual.v || true`
   - 同时用 **rocq-mcp 的 `rocq-verify`** 二次确认无 Axiom 引入。
-- 清理本题临时产物，包括编译产生的 `.aux` 文件；不删除 symexec 生成的 goal/auto/manual/check 文件。
 - 汇报：改了什么、为什么、编译结果、扫描结果、剩余风险。
 
 ## 标准命令模板
