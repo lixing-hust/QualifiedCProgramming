@@ -9,7 +9,7 @@ Require Import Coq.Sorting.Permutation.
 From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
-From SimpleC.EE Require Import C_75_goal.
+From SimpleC.EE.humaneval Require Import C_75_goal.
 Require Import Logic.LogicGenerator.demo932.Interface.
 Local Open Scope Z_scope.
 Local Open Scope sets.
@@ -34,6 +34,9 @@ Proof. Admitted.
 Lemma proof_of_is_multiply_prime_safety_wit_6 : is_multiply_prime_safety_wit_6.
 Proof. Admitted. 
 
+Lemma proof_of_is_multiply_prime_safety_wit_7 : is_multiply_prime_safety_wit_7.
+Proof. Admitted. 
+
 Lemma proof_of_is_multiply_prime_safety_wit_8 : is_multiply_prime_safety_wit_8.
 Proof. Admitted. 
 
@@ -43,9 +46,12 @@ Proof. Admitted.
 Lemma proof_of_is_multiply_prime_safety_wit_10 : is_multiply_prime_safety_wit_10.
 Proof. Admitted. 
 
-Lemma proof_of_is_multiply_prime_entail_wit_1 : is_multiply_prime_entail_wit_1.
+Lemma proof_of_is_multiply_prime_safety_wit_11 : is_multiply_prime_safety_wit_11.
 Proof. Admitted. 
 
-Lemma proof_of_is_multiply_prime_entail_wit_3 : is_multiply_prime_entail_wit_3.
+Lemma proof_of_is_multiply_prime_safety_wit_12 : is_multiply_prime_safety_wit_12.
+Proof. Admitted. 
+
+Lemma proof_of_is_multiply_prime_safety_wit_13 : is_multiply_prime_safety_wit_13.
 Proof. Admitted. 
 

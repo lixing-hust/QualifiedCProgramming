@@ -9,6 +9,7 @@ is_multiply_prime(30) == true
 #include "../../verification_stdlib.h"
 /*@ Extern Coq (problem_75_pre: Z -> Prop) */
 /*@ Extern Coq (problem_75_spec_z: Z -> Z -> Prop) */
+/*@ Extern Coq (mp_outer_inv: Z -> Z -> Z -> Z -> Prop) */
 /*@ Import Coq Require Import coins_75 */
 int is_multiply_prime(int a)
 /*@ Require
@@ -21,11 +22,13 @@ int is_multiply_prime(int a)
     int num=0;
     int i;
     /*@ Inv
-        2 <= i && a >= 1 && 0 <= num && num <= 2
+        2 <= i && i <= 10 && a >= 2 && a <= a@pre && 0 <= num && num + a <= a@pre &&
+        mp_outer_inv(a@pre, i, a, num)
     */
     for (i=2;i*i<=a;i++)
     /*@ Inv
-        a >= 1 && i >= 2 && 0 <= num && num <= 2 && a % i != 0
+        a >= 2 && a <= a@pre && i >= 2 && i <= 9 && 0 <= num && num + a <= a@pre &&
+        mp_outer_inv(a@pre, i, a, num)
     */
     while (a%i==0 && a>i)
     {
