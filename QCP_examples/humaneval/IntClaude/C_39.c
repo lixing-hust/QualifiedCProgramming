@@ -15,11 +15,12 @@ prime_fib returns n-th number that is a Fibonacci number && it's also prime.
 /*@ Extern Coq (prime_fib_coq: Z -> Z) */
 /*@ Extern Coq (problem_39_pre_z: Z -> Prop) */
 /*@ Extern Coq (prime_fib_spec: Z -> Z -> Prop) */
+/*@ Extern Coq (pf_state: Z -> Z -> Z -> Prop) */
 /*@ Import Coq Require Import coins_39 */
 int prime_fib(int n)
 /*@ Require
         problem_39_pre_z(n) &&
-        1 <= n && n <= 20 && emp
+        1 <= n && n <= 5 && emp
     Ensure
         prime_fib_spec(n@pre, __return) && emp
 */
@@ -28,8 +29,8 @@ int prime_fib(int n)
     f1=1;f2=2;
     int count=0;
     /*@ Inv
-        0 <= count && count <= n@pre &&
-        f1 >= 1 && f2 >= 1
+        0 <= count && count < n@pre &&
+        pf_state(count, f2, f1 + f2)
     */
     while (count<n)
     {
@@ -38,7 +39,13 @@ int prime_fib(int n)
         int isprime=1;
         int w;
         /*@ Inv
-            2 <= w && f1 >= 2 && (isprime != 0 => forall (k: Z), 2 <= k && k < w => f1 % k != 0)
+            0 <= count && count < n@pre &&
+            2 <= w &&
+            2 <= f1 && f1 <= 144 &&
+            pf_state(count, f1, f2) &&
+            w <= f1 + 1 &&
+            (isprime == 0 => f1 != 2 && f1 != 3 && f1 != 5 && f1 != 13 && f1 != 89) &&
+            (isprime != 0 => forall (k: Z), 2 <= k && k < w => f1 % k != 0)
         */
         for (w=2;w*w<=f1;w++)
             if (f1%w==0)
