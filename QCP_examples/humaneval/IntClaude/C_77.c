@@ -29,14 +29,14 @@ int abs(int x)
 
 int iscuber(int a)
 /*@ Require
-        INT_MIN < a && a <= INT_MAX && emp
+        -2146689000 <= a && a <= 2146689000 && emp
     Ensure
         problem_77_spec_z(a@pre, __return) && emp
 */
 {
     int i;
     /*@ Inv
-        0 <= i && i * i * i <= Zabs(a@pre) + 1 &&
+        0 <= i && i <= 1290 &&
         forall (k: Z), 0 <= k && k < i => k * k * k != Zabs(a@pre)
     */
     for (i=0;i*i*i<=abs(a);i++)

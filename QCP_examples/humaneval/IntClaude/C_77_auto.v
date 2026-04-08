@@ -31,7 +31,13 @@ Proof. Admitted.
 Lemma proof_of_iscuber_safety_wit_6 : iscuber_safety_wit_6.
 Proof. Admitted. 
 
+Lemma proof_of_iscuber_safety_wit_7 : iscuber_safety_wit_7.
+Proof. Admitted. 
+
 Lemma proof_of_iscuber_safety_wit_8 : iscuber_safety_wit_8.
+Proof. Admitted. 
+
+Lemma proof_of_iscuber_entail_wit_1 : iscuber_entail_wit_1.
 Proof. Admitted. 
 
 Lemma proof_of_iscuber_partial_solve_wit_1_pure : iscuber_partial_solve_wit_1_pure.

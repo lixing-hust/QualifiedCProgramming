@@ -17,8 +17,8 @@ Local Open Scope list.
 Import naive_C_Rules.
 Require Import coins_77.
 Local Open Scope sac.
-From SimpleC.EE Require Import common_strategy_goal.
-From SimpleC.EE Require Import common_strategy_proof.
+Require Import common_strategy_goal.
+Require Import common_strategy_proof.
 
 (*----- Function abs -----*)
 
@@ -68,8 +68,8 @@ forall (x_pre: Z) ,
 
 Definition iscuber_safety_wit_1 := 
 forall (a_pre: Z) ,
-  [| (INT_MIN < a_pre) |] 
-  &&  [| (a_pre <= INT_MAX) |]
+  [| ((-2146689000) <= a_pre) |] 
+  &&  [| (a_pre <= 2146689000) |]
   &&  ((( &( "i" ) )) # Int  |->_)
   **  ((( &( "a" ) )) # Int  |-> a_pre)
 |--
@@ -80,10 +80,10 @@ forall (a_pre: Z) ,
 Definition iscuber_safety_wit_2 := 
 forall (a_pre: Z) (i: Z) ,
   [| (0 <= i) |] 
-  &&  [| (((i * i ) * i ) <= ((Zabs (a_pre)) + 1 )) |] 
+  &&  [| (i <= 1290) |] 
   &&  [| forall (k: Z) , (((0 <= k) /\ (k < i)) -> (((k * k ) * k ) <> (Zabs (a_pre)))) |] 
-  &&  [| (INT_MIN < a_pre) |] 
-  &&  [| (a_pre <= INT_MAX) |]
+  &&  [| ((-2146689000) <= a_pre) |] 
+  &&  [| (a_pre <= 2146689000) |]
   &&  ((( &( "i" ) )) # Int  |-> i)
   **  ((( &( "a" ) )) # Int  |-> a_pre)
 |--
@@ -94,10 +94,10 @@ forall (a_pre: Z) (i: Z) ,
 Definition iscuber_safety_wit_3 := 
 forall (a_pre: Z) (i: Z) ,
   [| (0 <= i) |] 
-  &&  [| (((i * i ) * i ) <= ((Zabs (a_pre)) + 1 )) |] 
+  &&  [| (i <= 1290) |] 
   &&  [| forall (k: Z) , (((0 <= k) /\ (k < i)) -> (((k * k ) * k ) <> (Zabs (a_pre)))) |] 
-  &&  [| (INT_MIN < a_pre) |] 
-  &&  [| (a_pre <= INT_MAX) |]
+  &&  [| ((-2146689000) <= a_pre) |] 
+  &&  [| (a_pre <= 2146689000) |]
   &&  ((( &( "i" ) )) # Int  |-> i)
   **  ((( &( "a" ) )) # Int  |-> a_pre)
 |--
@@ -110,10 +110,10 @@ forall (a_pre: Z) (i: Z) (retval: Z) ,
   [| (((i * i ) * i ) <= retval) |] 
   &&  [| (retval = (Zabs (a_pre))) |] 
   &&  [| (0 <= i) |] 
-  &&  [| (((i * i ) * i ) <= ((Zabs (a_pre)) + 1 )) |] 
+  &&  [| (i <= 1290) |] 
   &&  [| forall (k: Z) , (((0 <= k) /\ (k < i)) -> (((k * k ) * k ) <> (Zabs (a_pre)))) |] 
-  &&  [| (INT_MIN < a_pre) |] 
-  &&  [| (a_pre <= INT_MAX) |]
+  &&  [| ((-2146689000) <= a_pre) |] 
+  &&  [| (a_pre <= 2146689000) |]
   &&  ((( &( "i" ) )) # Int  |-> i)
   **  ((( &( "a" ) )) # Int  |-> a_pre)
 |--
@@ -126,10 +126,10 @@ forall (a_pre: Z) (i: Z) (retval: Z) ,
   [| (((i * i ) * i ) <= retval) |] 
   &&  [| (retval = (Zabs (a_pre))) |] 
   &&  [| (0 <= i) |] 
-  &&  [| (((i * i ) * i ) <= ((Zabs (a_pre)) + 1 )) |] 
+  &&  [| (i <= 1290) |] 
   &&  [| forall (k: Z) , (((0 <= k) /\ (k < i)) -> (((k * k ) * k ) <> (Zabs (a_pre)))) |] 
-  &&  [| (INT_MIN < a_pre) |] 
-  &&  [| (a_pre <= INT_MAX) |]
+  &&  [| ((-2146689000) <= a_pre) |] 
+  &&  [| (a_pre <= 2146689000) |]
   &&  ((( &( "i" ) )) # Int  |-> i)
   **  ((( &( "a" ) )) # Int  |-> a_pre)
 |--
@@ -144,10 +144,10 @@ forall (a_pre: Z) (i: Z) (retval: Z) (retval_2: Z) ,
   &&  [| (((i * i ) * i ) <= retval) |] 
   &&  [| (retval = (Zabs (a_pre))) |] 
   &&  [| (0 <= i) |] 
-  &&  [| (((i * i ) * i ) <= ((Zabs (a_pre)) + 1 )) |] 
+  &&  [| (i <= 1290) |] 
   &&  [| forall (k: Z) , (((0 <= k) /\ (k < i)) -> (((k * k ) * k ) <> (Zabs (a_pre)))) |] 
-  &&  [| (INT_MIN < a_pre) |] 
-  &&  [| (a_pre <= INT_MAX) |]
+  &&  [| ((-2146689000) <= a_pre) |] 
+  &&  [| (a_pre <= 2146689000) |]
   &&  ((( &( "i" ) )) # Int  |-> i)
   **  ((( &( "a" ) )) # Int  |-> a_pre)
 |--
@@ -156,32 +156,14 @@ forall (a_pre: Z) (i: Z) (retval: Z) (retval_2: Z) ,
 .
 
 Definition iscuber_safety_wit_7 := 
-forall (a_pre: Z) (i: Z) (retval: Z) (retval_2: Z) ,
-  [| (((i * i ) * i ) <> retval_2) |] 
-  &&  [| (retval_2 = (Zabs (a_pre))) |] 
-  &&  [| (((i * i ) * i ) <= retval) |] 
-  &&  [| (retval = (Zabs (a_pre))) |] 
-  &&  [| (0 <= i) |] 
-  &&  [| (((i * i ) * i ) <= ((Zabs (a_pre)) + 1 )) |] 
-  &&  [| forall (k: Z) , (((0 <= k) /\ (k < i)) -> (((k * k ) * k ) <> (Zabs (a_pre)))) |] 
-  &&  [| (INT_MIN < a_pre) |] 
-  &&  [| (a_pre <= INT_MAX) |]
-  &&  ((( &( "i" ) )) # Int  |-> i)
-  **  ((( &( "a" ) )) # Int  |-> a_pre)
-|--
-  [| ((i + 1 ) <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= (i + 1 )) |]
-.
-
-Definition iscuber_safety_wit_8 := 
 forall (a_pre: Z) (i: Z) (retval: Z) ,
   [| (((i * i ) * i ) > retval) |] 
   &&  [| (retval = (Zabs (a_pre))) |] 
   &&  [| (0 <= i) |] 
-  &&  [| (((i * i ) * i ) <= ((Zabs (a_pre)) + 1 )) |] 
+  &&  [| (i <= 1290) |] 
   &&  [| forall (k: Z) , (((0 <= k) /\ (k < i)) -> (((k * k ) * k ) <> (Zabs (a_pre)))) |] 
-  &&  [| (INT_MIN < a_pre) |] 
-  &&  [| (a_pre <= INT_MAX) |]
+  &&  [| ((-2146689000) <= a_pre) |] 
+  &&  [| (a_pre <= 2146689000) |]
   &&  ((( &( "i" ) )) # Int  |-> i)
   **  ((( &( "a" ) )) # Int  |-> a_pre)
 |--
@@ -189,17 +171,35 @@ forall (a_pre: Z) (i: Z) (retval: Z) ,
   &&  [| ((INT_MIN) <= 0) |]
 .
 
+Definition iscuber_safety_wit_8 := 
+forall (a_pre: Z) (i: Z) (retval: Z) (retval_2: Z) ,
+  [| (((i * i ) * i ) <> retval_2) |] 
+  &&  [| (retval_2 = (Zabs (a_pre))) |] 
+  &&  [| (((i * i ) * i ) <= retval) |] 
+  &&  [| (retval = (Zabs (a_pre))) |] 
+  &&  [| (0 <= i) |] 
+  &&  [| (i <= 1290) |] 
+  &&  [| forall (k: Z) , (((0 <= k) /\ (k < i)) -> (((k * k ) * k ) <> (Zabs (a_pre)))) |] 
+  &&  [| ((-2146689000) <= a_pre) |] 
+  &&  [| (a_pre <= 2146689000) |]
+  &&  ((( &( "i" ) )) # Int  |-> i)
+  **  ((( &( "a" ) )) # Int  |-> a_pre)
+|--
+  [| ((i + 1 ) <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= (i + 1 )) |]
+.
+
 Definition iscuber_entail_wit_1 := 
 forall (a_pre: Z) ,
-  [| (INT_MIN < a_pre) |] 
-  &&  [| (a_pre <= INT_MAX) |]
+  [| ((-2146689000) <= a_pre) |] 
+  &&  [| (a_pre <= 2146689000) |]
   &&  emp
 |--
   [| (0 <= 0) |] 
-  &&  [| (((0 * 0 ) * 0 ) <= ((Zabs (a_pre)) + 1 )) |] 
+  &&  [| (0 <= 1290) |] 
   &&  [| forall (k: Z) , (((0 <= k) /\ (k < 0)) -> (((k * k ) * k ) <> (Zabs (a_pre)))) |] 
-  &&  [| (INT_MIN < a_pre) |] 
-  &&  [| (a_pre <= INT_MAX) |]
+  &&  [| ((-2146689000) <= a_pre) |] 
+  &&  [| (a_pre <= 2146689000) |]
   &&  emp
 .
 
@@ -210,17 +210,17 @@ forall (a_pre: Z) (i: Z) (retval: Z) (retval_2: Z) ,
   &&  [| (((i * i ) * i ) <= retval) |] 
   &&  [| (retval = (Zabs (a_pre))) |] 
   &&  [| (0 <= i) |] 
-  &&  [| (((i * i ) * i ) <= ((Zabs (a_pre)) + 1 )) |] 
+  &&  [| (i <= 1290) |] 
   &&  [| forall (k: Z) , (((0 <= k) /\ (k < i)) -> (((k * k ) * k ) <> (Zabs (a_pre)))) |] 
-  &&  [| (INT_MIN < a_pre) |] 
-  &&  [| (a_pre <= INT_MAX) |]
+  &&  [| ((-2146689000) <= a_pre) |] 
+  &&  [| (a_pre <= 2146689000) |]
   &&  emp
 |--
   [| (0 <= (i + 1 )) |] 
-  &&  [| ((((i + 1 ) * (i + 1 ) ) * (i + 1 ) ) <= ((Zabs (a_pre)) + 1 )) |] 
+  &&  [| ((i + 1 ) <= 1290) |] 
   &&  [| forall (k: Z) , (((0 <= k) /\ (k < (i + 1 ))) -> (((k * k ) * k ) <> (Zabs (a_pre)))) |] 
-  &&  [| (INT_MIN < a_pre) |] 
-  &&  [| (a_pre <= INT_MAX) |]
+  &&  [| ((-2146689000) <= a_pre) |] 
+  &&  [| (a_pre <= 2146689000) |]
   &&  emp
 .
 
@@ -231,10 +231,10 @@ forall (a_pre: Z) (i: Z) (retval: Z) (retval_2: Z) ,
   &&  [| (((i * i ) * i ) <= retval) |] 
   &&  [| (retval = (Zabs (a_pre))) |] 
   &&  [| (0 <= i) |] 
-  &&  [| (((i * i ) * i ) <= ((Zabs (a_pre)) + 1 )) |] 
+  &&  [| (i <= 1290) |] 
   &&  [| forall (k: Z) , (((0 <= k) /\ (k < i)) -> (((k * k ) * k ) <> (Zabs (a_pre)))) |] 
-  &&  [| (INT_MIN < a_pre) |] 
-  &&  [| (a_pre <= INT_MAX) |]
+  &&  [| ((-2146689000) <= a_pre) |] 
+  &&  [| (a_pre <= 2146689000) |]
   &&  emp
 |--
   [| (problem_77_spec_z a_pre 1 ) |]
@@ -246,10 +246,10 @@ forall (a_pre: Z) (i: Z) (retval: Z) ,
   [| (((i * i ) * i ) > retval) |] 
   &&  [| (retval = (Zabs (a_pre))) |] 
   &&  [| (0 <= i) |] 
-  &&  [| (((i * i ) * i ) <= ((Zabs (a_pre)) + 1 )) |] 
+  &&  [| (i <= 1290) |] 
   &&  [| forall (k: Z) , (((0 <= k) /\ (k < i)) -> (((k * k ) * k ) <> (Zabs (a_pre)))) |] 
-  &&  [| (INT_MIN < a_pre) |] 
-  &&  [| (a_pre <= INT_MAX) |]
+  &&  [| ((-2146689000) <= a_pre) |] 
+  &&  [| (a_pre <= 2146689000) |]
   &&  emp
 |--
   [| (problem_77_spec_z a_pre 0 ) |]
@@ -259,10 +259,10 @@ forall (a_pre: Z) (i: Z) (retval: Z) ,
 Definition iscuber_partial_solve_wit_1_pure := 
 forall (a_pre: Z) (i: Z) ,
   [| (0 <= i) |] 
-  &&  [| (((i * i ) * i ) <= ((Zabs (a_pre)) + 1 )) |] 
+  &&  [| (i <= 1290) |] 
   &&  [| forall (k: Z) , (((0 <= k) /\ (k < i)) -> (((k * k ) * k ) <> (Zabs (a_pre)))) |] 
-  &&  [| (INT_MIN < a_pre) |] 
-  &&  [| (a_pre <= INT_MAX) |]
+  &&  [| ((-2146689000) <= a_pre) |] 
+  &&  [| (a_pre <= 2146689000) |]
   &&  ((( &( "i" ) )) # Int  |-> i)
   **  ((( &( "a" ) )) # Int  |-> a_pre)
 |--
@@ -273,19 +273,19 @@ forall (a_pre: Z) (i: Z) ,
 Definition iscuber_partial_solve_wit_1_aux := 
 forall (a_pre: Z) (i: Z) ,
   [| (0 <= i) |] 
-  &&  [| (((i * i ) * i ) <= ((Zabs (a_pre)) + 1 )) |] 
+  &&  [| (i <= 1290) |] 
   &&  [| forall (k: Z) , (((0 <= k) /\ (k < i)) -> (((k * k ) * k ) <> (Zabs (a_pre)))) |] 
-  &&  [| (INT_MIN < a_pre) |] 
-  &&  [| (a_pre <= INT_MAX) |]
+  &&  [| ((-2146689000) <= a_pre) |] 
+  &&  [| (a_pre <= 2146689000) |]
   &&  emp
 |--
   [| (INT_MIN < a_pre) |] 
   &&  [| (a_pre <= INT_MAX) |] 
   &&  [| (0 <= i) |] 
-  &&  [| (((i * i ) * i ) <= ((Zabs (a_pre)) + 1 )) |] 
+  &&  [| (i <= 1290) |] 
   &&  [| forall (k: Z) , (((0 <= k) /\ (k < i)) -> (((k * k ) * k ) <> (Zabs (a_pre)))) |] 
-  &&  [| (INT_MIN < a_pre) |] 
-  &&  [| (a_pre <= INT_MAX) |]
+  &&  [| ((-2146689000) <= a_pre) |] 
+  &&  [| (a_pre <= 2146689000) |]
   &&  emp
 .
 
@@ -296,10 +296,10 @@ forall (a_pre: Z) (i: Z) (retval: Z) ,
   [| (((i * i ) * i ) <= retval) |] 
   &&  [| (retval = (Zabs (a_pre))) |] 
   &&  [| (0 <= i) |] 
-  &&  [| (((i * i ) * i ) <= ((Zabs (a_pre)) + 1 )) |] 
+  &&  [| (i <= 1290) |] 
   &&  [| forall (k: Z) , (((0 <= k) /\ (k < i)) -> (((k * k ) * k ) <> (Zabs (a_pre)))) |] 
-  &&  [| (INT_MIN < a_pre) |] 
-  &&  [| (a_pre <= INT_MAX) |]
+  &&  [| ((-2146689000) <= a_pre) |] 
+  &&  [| (a_pre <= 2146689000) |]
   &&  ((( &( "i" ) )) # Int  |-> i)
   **  ((( &( "a" ) )) # Int  |-> a_pre)
 |--
@@ -312,10 +312,10 @@ forall (a_pre: Z) (i: Z) (retval: Z) ,
   [| (((i * i ) * i ) <= retval) |] 
   &&  [| (retval = (Zabs (a_pre))) |] 
   &&  [| (0 <= i) |] 
-  &&  [| (((i * i ) * i ) <= ((Zabs (a_pre)) + 1 )) |] 
+  &&  [| (i <= 1290) |] 
   &&  [| forall (k: Z) , (((0 <= k) /\ (k < i)) -> (((k * k ) * k ) <> (Zabs (a_pre)))) |] 
-  &&  [| (INT_MIN < a_pre) |] 
-  &&  [| (a_pre <= INT_MAX) |]
+  &&  [| ((-2146689000) <= a_pre) |] 
+  &&  [| (a_pre <= 2146689000) |]
   &&  emp
 |--
   [| (INT_MIN < a_pre) |] 
@@ -323,10 +323,10 @@ forall (a_pre: Z) (i: Z) (retval: Z) ,
   &&  [| (((i * i ) * i ) <= retval) |] 
   &&  [| (retval = (Zabs (a_pre))) |] 
   &&  [| (0 <= i) |] 
-  &&  [| (((i * i ) * i ) <= ((Zabs (a_pre)) + 1 )) |] 
+  &&  [| (i <= 1290) |] 
   &&  [| forall (k: Z) , (((0 <= k) /\ (k < i)) -> (((k * k ) * k ) <> (Zabs (a_pre)))) |] 
-  &&  [| (INT_MIN < a_pre) |] 
-  &&  [| (a_pre <= INT_MAX) |]
+  &&  [| ((-2146689000) <= a_pre) |] 
+  &&  [| (a_pre <= 2146689000) |]
   &&  emp
 .
 
