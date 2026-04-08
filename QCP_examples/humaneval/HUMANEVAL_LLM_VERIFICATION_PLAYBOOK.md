@@ -39,9 +39,9 @@ COQINCLUDES="$(tr '\n' ' ' < _CoqProject)"
 统计口径：扫描所有 `C_*_manual.v` 的 `Admitted.` 与 `Axiom`。
 
 - 总文件数：20
-- 已达 `0 Admitted / 0 Axiom`：16
-- 待完成：4
-- 剩余 `Admitted` 总数：50
+- 已达 `0 Admitted / 0 Axiom`：20
+- 待完成：0
+- 剩余 `Admitted` 总数：0
 
 ### 2.1 已达 0 Admitted/0 Axiom
 
@@ -50,7 +50,10 @@ COQINCLUDES="$(tr '\n' ' ' < _CoqProject)"
 - `C_131_manual.v`
 - `C_138_manual.v`
 - `C_139_manual.v`
+- `C_150_manual.v`
 - `C_24_manual.v`
+- `C_31_manual.v`
+- `C_36_manual.v`
 - `C_39_manual.v`
 - `C_41_manual.v`
 - `C_49_manual.v`
@@ -59,17 +62,15 @@ COQINCLUDES="$(tr '\n' ' ' < _CoqProject)"
 - `C_60_manual.v`
 - `C_75_manual.v`
 - `C_76_manual.v`
+- `C_77_manual.v`
 - `C_83_manual.v`
 - `C_97_manual.v`
 
-注：上述 16 题目前都已完成全链编译验收，`coins_XX.v / goal / auto / manual / goal_check` 已逐题编译通过。
+注：上述 20 题目前都已完成全链编译验收，`coins_XX.v / goal / auto / manual / goal_check` 已逐题编译通过。
 
-### 2.2 待完成（按 Admitted 升序）
+### 2.2 待完成
 
-- `C_31_manual.v`: 7
-- `C_150_manual.v`: 8
-- `C_77_manual.v`: 11
-- `C_36_manual.v`: 13
+- 无。`IntClaude` 目录下现有 20 个 `C_*.c` 已全部完成验证。
 
 ---
 
@@ -257,6 +258,27 @@ Qed.
 1. 注解先保证溢出边界（例如把前提强化为 `p * 2 <= INT_MAX`）
 2. 对 `out = 2^i % p` 先拆出 `0 <= out < p`
 3. `lia` 吃不动复合项时，先建中间事实再 `nia`
+
+### 6.3 `C_150`（prime check / x_or_y）
+
+可复用要点：
+
+1. 如果循环条件写成 `i * i <= n`，先检查 C 层是否会因为 `int` 乘法触发 safety obligation；必要时改成等价但更安全的 `i <= n / i`
+2. 对“素数判定”这类循环，不变式不能只记“暂未发现因子”，还要记“已经发现因子时的见证存在性”
+3. `return_wit` 往往需要两套桥接：
+   - `i > n / i` 推出 `n < i * i`
+   - `存在小因子` 推出 `~ prime n`
+4. `coins_XX.v` 里补素数辅助引理通常比在 `manual.v` 里硬推更稳
+
+### 6.4 当前统一结论
+
+1. `IntClaude` 目录下现有 20 题已经全部验证完成
+2. 编译验收统一使用 `_CoqProject` 展开的 `COQINCLUDES`
+3. 不要在编译命令里额外加 `-R . SimpleC.EE.humaneval`
+4. 完成后要清理：
+   - `.vo/.vos/.vok/.glob/.aux`
+   - 隐藏 `.aux`
+   - 多余 `manual backup`
 
 ### 6.3 `C_41`、`C_53`、`C_60`、`C_97`
 
