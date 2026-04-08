@@ -31,7 +31,7 @@ Proof.
   { apply Z.pow_le_mono_r; lia. }
   assert (H10nn : 0 <= 10 ^ (i - 2)).
   { apply Z.pow_nonneg; lia. }
-  nlinarith.
+  nia.
 Qed.
 
 Lemma proof_of_starts_one_ends_entail_wit_2 : starts_one_ends_entail_wit_2.
@@ -40,9 +40,11 @@ Proof.
   intros.
   Intros.
   entailer!.
-  replace (i + 1 - 2) with (i - 2 + 1) by lia.
-  rewrite Z.pow_succ_r by lia.
-  nia.
+  subst out.
+  replace ((i + 1) - 2) with ((i - 2) + 1) by lia.
+  rewrite Z.pow_add_r by lia.
+  rewrite Z.pow_1_r.
+  ring.
 Qed.
 
 Lemma proof_of_starts_one_ends_return_wit_1 : starts_one_ends_return_wit_1.
@@ -54,7 +56,9 @@ Proof.
   unfold problem_83_spec_z, problem_83_spec.
   subst.
   simpl.
-  intro _. left. split; reflexivity.
+  intros _.
+  left.
+  split; reflexivity.
 Qed.
 
 Lemma proof_of_starts_one_ends_return_wit_2 : starts_one_ends_return_wit_2.
@@ -66,7 +70,7 @@ Proof.
   assert (Hieq : i = n_pre) by lia.
   subst i.
   unfold problem_83_spec_z, problem_83_spec.
-  intro _.
+  intros _.
   right.
   split.
   - (* Z.to_nat n_pre > 1 *)
