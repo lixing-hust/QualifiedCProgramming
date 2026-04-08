@@ -41,11 +41,22 @@ Proof.
   intros.
   Intros.
   entailer!.
-  pose proof (Z.abs_nonneg a_pre) as Hna.
-  pose proof (Z.abs_nonneg b_pre) as Hnb.
-  assert (Ha: 0 <= retval mod 10 < 10) by (apply Z.mod_pos_bound; lia).
-  assert (Hb: 0 <= retval_2 mod 10 < 10) by (apply Z.mod_pos_bound; lia).
-  apply Z.mul_nonneg_nonneg; lia.
+  - subst retval retval_2.
+    set (x := Z.rem (Zabs a_pre) 10).
+    set (y := Z.rem (Zabs b_pre) 10).
+    assert (Hx: 0 <= x < 10).
+    { subst x. apply Z.rem_bound_pos; [apply Z.abs_nonneg | lia]. }
+    assert (Hy: 0 <= y < 10).
+    { subst y. apply Z.rem_bound_pos; [apply Z.abs_nonneg | lia]. }
+    nia.
+  - subst retval retval_2.
+    set (x := Z.rem (Zabs a_pre) 10).
+    set (y := Z.rem (Zabs b_pre) 10).
+    assert (Hx: 0 <= x < 10).
+    { subst x. apply Z.rem_bound_pos; [apply Z.abs_nonneg | lia]. }
+    assert (Hy: 0 <= y < 10).
+    { subst y. apply Z.rem_bound_pos; [apply Z.abs_nonneg | lia]. }
+    nia.
 Qed.
 
 Lemma proof_of_multiply_return_wit_1 : multiply_return_wit_1.
@@ -56,6 +67,7 @@ Proof.
   entailer!.
   unfold problem_97_spec.
   subst.
+  rewrite Z.rem_mod_nonneg by (try apply Z.abs_nonneg; lia).
+  rewrite Z.rem_mod_nonneg by (try apply Z.abs_nonneg; lia).
   reflexivity.
 Qed.
-
