@@ -39,8 +39,8 @@ COQINCLUDES="$(tr '\n' ' ' < _CoqProject)"
 统计口径：扫描所有 `C_*_manual.v` 的 `Admitted.` 与 `Axiom`。
 
 - 总文件数：20
-- 已达 `0 Admitted / 0 Axiom`：14
-- 待完成：6
+- 已达 `0 Admitted / 0 Axiom`：16
+- 待完成：4
 - 剩余 `Admitted` 总数：50
 
 ### 2.1 已达 0 Admitted/0 Axiom
@@ -51,21 +51,21 @@ COQINCLUDES="$(tr '\n' ' ' < _CoqProject)"
 - `C_138_manual.v`
 - `C_139_manual.v`
 - `C_24_manual.v`
+- `C_39_manual.v`
 - `C_41_manual.v`
 - `C_49_manual.v`
-- `C_59_manual.v`
 - `C_53_manual.v`
+- `C_59_manual.v`
 - `C_60_manual.v`
 - `C_75_manual.v`
+- `C_76_manual.v`
 - `C_83_manual.v`
 - `C_97_manual.v`
 
-注：`0 Admitted` 不等于“已做全链编译验收”，最终仍需跑第 6 节命令。
+注：上述 16 题目前都已完成全链编译验收，`coins_XX.v / goal / auto / manual / goal_check` 已逐题编译通过。
 
 ### 2.2 待完成（按 Admitted 升序）
 
-- `C_76_manual.v`: 5
-- `C_39_manual.v`: 6
 - `C_31_manual.v`: 7
 - `C_150_manual.v`: 8
 - `C_77_manual.v`: 11
@@ -122,12 +122,20 @@ COQINCLUDES="$(tr '\n' ' ' < _CoqProject)"
 ```bash
 eval "$(opam env --switch=coq8201 --set-switch)"
 COQINCLUDES="$(tr '\n' ' ' < _CoqProject)"
-coqc $COQINCLUDES -R . SimpleC.EE.humaneval coins_XX.v
-coqc $COQINCLUDES -R . SimpleC.EE.humaneval C_XX_goal.v
-coqc $COQINCLUDES -R . SimpleC.EE.humaneval C_XX_auto.v
-coqc $COQINCLUDES -R . SimpleC.EE.humaneval C_XX_manual.v
-coqc $COQINCLUDES -R . SimpleC.EE.humaneval C_XX_goal_check.v
+coqc $COQINCLUDES coins_XX.v
+coqc $COQINCLUDES C_XX_goal.v
+coqc $COQINCLUDES C_XX_auto.v
+coqc $COQINCLUDES C_XX_manual.v
+coqc $COQINCLUDES C_XX_goal_check.v
 ```
+
+补充说明：
+
+- 当前 `IntClaude` 目录的 `symexec` 生成文件默认与 `_CoqProject` 中的 `SimpleC.EE` 逻辑路径对齐。
+- 不要在编译命令里额外追加 `-R . SimpleC.EE.humaneval`；这会导致一部分题目的 generated `.v` 文件 import 路径和编译环境不一致。
+- 如果某题曾被人工改成 `SimpleC.EE.humaneval` 前缀，需先恢复到 `symexec` 默认风格后再验收。
+- 普通 `symexec` 在 `manual.v` 已存在时通常不会覆盖该文件；若 `goal/auto/goal_check` 已更新而 `manual.v` 仍保留旧路径前缀，编译会卡在 `manual.v` 的 import。
+- 若确需让 `symexec` 连同 `manual.v` 一起重生成，可使用 `--gen-and-backup`；旧 manual 会被备份成 `C_XX_manual_backup*.v`。
 
 ### Step 7: 无残留检查
 
@@ -140,6 +148,7 @@ grep -nE "Admitted\\.|Axiom[[:space:]]" coins_XX.v C_XX_manual.v || true
 在确认编译链通过且无 `Admitted` / `Axiom` 之后，删除本题编译产生的中间文件，例如：
 
 - `.aux`
+- 隐藏 `.aux`（例如 `.C_XX_auto.aux`、`.coins_XX.aux`）
 - `.glob`
 - `.vo`
 - `.vok`
@@ -210,7 +219,7 @@ Qed.
 
 ### 5.2 `safety_wit` 常用套路
 
-1. 先拿到范围事实：`Z.mod_pos_bound`、`Z.mod_nonneg`
+1. 先拿到范围事实：`Z.mod_pos_bound`、`Z.mod_nonneg`，若目标里 `%` 实际落成 `Z.rem`，则改用 `Z.rem_bound_pos`、`Z.rem_mod_nonneg`
 2. 再用 `nia`/`lia` 收束
 3. 含 `Z.pow` 时先 `pose proof` 中间结论
 

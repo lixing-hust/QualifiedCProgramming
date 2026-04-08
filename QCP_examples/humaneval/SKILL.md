@@ -117,11 +117,11 @@ description: "中文精简流程：用于 humaneval/IntClaude 下 C_XX 验证，
 ```bash
 eval "$(opam env --switch=coq8201 --set-switch)"
 COQINCLUDES="$(tr '\n' ' ' < _CoqProject)"
-coqc $COQINCLUDES -R . SimpleC.EE.humaneval coins_XX.v
-coqc $COQINCLUDES -R . SimpleC.EE.humaneval C_XX_goal.v
-coqc $COQINCLUDES -R . SimpleC.EE.humaneval C_XX_auto.v
-coqc $COQINCLUDES -R . SimpleC.EE.humaneval C_XX_manual.v
-coqc $COQINCLUDES -R . SimpleC.EE.humaneval C_XX_goal_check.v
+coqc $COQINCLUDES coins_XX.v
+coqc $COQINCLUDES C_XX_goal.v
+coqc $COQINCLUDES C_XX_auto.v
+coqc $COQINCLUDES C_XX_manual.v
+coqc $COQINCLUDES C_XX_goal_check.v
 ```
 
 ## 完成判定
