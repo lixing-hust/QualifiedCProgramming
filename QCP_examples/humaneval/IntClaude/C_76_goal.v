@@ -15,7 +15,7 @@ Local Open Scope sets.
 Local Open Scope string.
 Local Open Scope list.
 Import naive_C_Rules.
-From SimpleC.EE.humaneval Require Import coins_76.
+From SimpleC.EE Require Import coins_76.
 Local Open Scope sac.
 From SimpleC.EE Require Import common_strategy_goal.
 From SimpleC.EE Require Import common_strategy_proof.
