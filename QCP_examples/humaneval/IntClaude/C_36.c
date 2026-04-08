@@ -16,7 +16,7 @@ Return the number of times the digit 7 appears in integers less than n which are
 
 int fizz_buzz(int n)
 /*@ Require
-        0 <= n && n <= INT_MAX && emp
+        0 <= n && n <= 46340 && emp
     Ensure
         problem_36_spec_z(n@pre, __return) && emp
 */
@@ -26,15 +26,40 @@ int fizz_buzz(int n)
     int q;
     /*@ Inv
         0 <= i && i <= n@pre &&
-        count == fizzbuzz_upto(i)
+        count == fizzbuzz_upto(i) &&
+        0 <= count && count <= i * i
     */
     for (i = 0; i < n; i++)
-    if (i % 11 == 0 || i % 13 == 0)
+    if (i % 11 == 0)
     {
         q = i;
         /*@ Inv
+            i < n@pre &&
+            0 <= i && i <= n@pre &&
+            0 <= count &&
+            i % 11 == 0 &&
             0 <= q &&
-            count + count_digit7(q) == fizzbuzz_upto(i) + count_digit7(i)
+            count + count_digit7(q) == fizzbuzz_upto(i) + count_digit7(i) &&
+            count + count_digit7(q) <= i * (i + 1)
+        */
+        while (q > 0)
+        {
+            if (q % 10 == 7) count += 1;
+            q = q / 10;
+        }
+    }
+    else if (i % 13 == 0)
+    {
+        q = i;
+        /*@ Inv
+            i < n@pre &&
+            0 <= i && i <= n@pre &&
+            0 <= count &&
+            i % 13 == 0 &&
+            i % 11 != 0 &&
+            0 <= q &&
+            count + count_digit7(q) == fizzbuzz_upto(i) + count_digit7(i) &&
+            count + count_digit7(q) <= i * (i + 1)
         */
         while (q > 0)
         {

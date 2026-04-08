@@ -46,9 +46,6 @@ Proof. Admitted.
 Lemma proof_of_fizz_buzz_safety_wit_9 : fizz_buzz_safety_wit_9.
 Proof. Admitted. 
 
-Lemma proof_of_fizz_buzz_safety_wit_10 : fizz_buzz_safety_wit_10.
-Proof. Admitted. 
-
 Lemma proof_of_fizz_buzz_safety_wit_11 : fizz_buzz_safety_wit_11.
 Proof. Admitted. 
 
@@ -67,7 +64,13 @@ Proof. Admitted.
 Lemma proof_of_fizz_buzz_safety_wit_16 : fizz_buzz_safety_wit_16.
 Proof. Admitted. 
 
+Lemma proof_of_fizz_buzz_safety_wit_17 : fizz_buzz_safety_wit_17.
+Proof. Admitted. 
+
 Lemma proof_of_fizz_buzz_safety_wit_18 : fizz_buzz_safety_wit_18.
+Proof. Admitted. 
+
+Lemma proof_of_fizz_buzz_safety_wit_19 : fizz_buzz_safety_wit_19.
 Proof. Admitted. 
 
 Lemma proof_of_fizz_buzz_safety_wit_20 : fizz_buzz_safety_wit_20.
@@ -77,9 +80,6 @@ Lemma proof_of_fizz_buzz_safety_wit_21 : fizz_buzz_safety_wit_21.
 Proof. Admitted. 
 
 Lemma proof_of_fizz_buzz_safety_wit_22 : fizz_buzz_safety_wit_22.
-Proof. Admitted. 
-
-Lemma proof_of_fizz_buzz_safety_wit_23 : fizz_buzz_safety_wit_23.
 Proof. Admitted. 
 
 Lemma proof_of_fizz_buzz_safety_wit_24 : fizz_buzz_safety_wit_24.
@@ -97,12 +97,12 @@ Proof. Admitted.
 Lemma proof_of_fizz_buzz_safety_wit_28 : fizz_buzz_safety_wit_28.
 Proof. Admitted. 
 
+Lemma proof_of_fizz_buzz_safety_wit_29 : fizz_buzz_safety_wit_29.
+Proof. Admitted. 
+
+Lemma proof_of_fizz_buzz_safety_wit_30 : fizz_buzz_safety_wit_30.
+Proof. Admitted. 
+
 Lemma proof_of_fizz_buzz_safety_wit_31 : fizz_buzz_safety_wit_31.
-Proof. Admitted. 
-
-Lemma proof_of_fizz_buzz_entail_wit_2_1 : fizz_buzz_entail_wit_2_1.
-Proof. Admitted. 
-
-Lemma proof_of_fizz_buzz_entail_wit_2_2 : fizz_buzz_entail_wit_2_2.
 Proof. Admitted. 
 
