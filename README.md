@@ -1,8 +1,8 @@
 # QCP: A Practical Separation Logic-based C Program Verification Tool
 
 ## File Structure
-- `linux-binary/`, `win-binary/`, `mac-arm64-binary`: Precompiled QCP binaries
-- `QCP_examples/`: Annotated C programs
+- `linux-binary/`, `win-binary/`, `mac-x86-64-binary`, `mac-arm64-binary`: Precompiled QCP binaries
+- `QCP_examples/`: Annotated C programs, split into `Applications/`, `QCP_democases/`, and `LLM_friendly_cases/`
 - `SeparationLogic/`: Rocq scripts to check QCP-generated VCs
 - `tutorial/`: Step-by-step QCP usage guide
 - `run-example-linux.sh`, `run-example-windows.sh`: Scripts to run QCP examples
@@ -38,9 +38,34 @@ Example `CONFIGURE` content:
 
 ```ini
 COQBIN = /absolute/path/to/coq/bin/
-# Windows users: set SUF to .exe
-# SUF = .exe
 ```
+
+For windows user, you must explicitly set `SUF = .exe` in the `CONFIGURE` file:
+
+```ini
+COQBIN = /absolute/path/to/coq/bin/
+SUF = .exe
+```
+
+If you use wsl, we recommend installing Rocq 8.20.1 via opam. 
+
+1. Install Opam (if not already):
+```bash
+sudo apt update && sudo apt install opam
+opam init
+eval $(opam env)
+```
+2. Install Rocq 8.20.1:
+```bash
+opam install coq.8.20.1
+```
+
+With this approach:
+
+- No CONFIGURE file is needed.
+
+- You can use the vsrocq extension in VS Code directly.
+
 #### Rocq Files Build
 
 Then you can compile Rocq files:
@@ -162,13 +187,18 @@ powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | ie
 ```bash
 cd mcp/qcp-mcp
 uv venv .venv
-uv tool install .
+uv sync
 ```
 
 Set `mcp/qcp-mcp/CONFIGURE`:
 
 ```ini
 QCP_MCP_BIN=/absolute/path/to/qcp/mcp/binary
+```
+
+eg : 
+```ini
+QCP_MCP_BIN=/mnt/d/coq/qcp-binary-democases/linux-binary/mcp
 ```
 
 ### 2) Configure `rocq-mcp`
@@ -226,8 +256,13 @@ Linux/macOS example:
       "type": "stdio",
       "command": "/absolute/path/to/qcp-binary-democases/mcp/qcp-mcp/.venv/bin/python",
       "args": [
-        "/absolute/path/to/qcp-binary-democases/mcp/qcp-mcp/server.py"
-      ]
+          "-m",
+          "qcp_mcp.server"
+      ],
+      "env" : {
+          "PYTHONPATH": "/absolute/path/to/qcp-binary-democases/mcp/qcp-mcp/src",
+          "QCP_MCP_CONFIG": "/absolute/path/to/qcp-binary-democases/mcp/qcp-mcp/CONFIGURE"
+      }
     },
     "rocq-mcp": {
       "type": "stdio",
@@ -238,6 +273,30 @@ Linux/macOS example:
     }
   }
 }
+```
+
+eg : 
+```json
+"servers": {
+      "qcp": {
+        "type": "stdio",
+        "command": "/mnt/d/coq/qcp-binary-democases/mcp/qcp-mcp/.venv/bin/python",
+        "args": [
+          "-m",
+          "qcp_mcp.server"
+        ],
+        "env" : {
+          "PYTHONPATH": "/mnt/d/coq/qcp-binary-democases/mcp/qcp-mcp/src",
+          "QCP_MCP_CONFIG": "/mnt/d/coq/qcp-binary-democases/mcp/qcp-mcp/CONFIGURE"
+        }
+      },
+      "rocq-mcp": {
+        "command": "rocq-mcp",
+        "env": {
+          "ROCQ_WORKSPACE": "${workspaceFolder}"
+        }
+      }
+    }
 ```
 
 After editing `mcp.json`, enable/start the servers from VS Code MCP server list.
@@ -266,5 +325,5 @@ For more details, refer to:
 ## Evaluation
 
 Our evaluation consists of two parts: the Tool component and the VSCode Extension component. 
-- The Tool component allows you to check files in the ``QCP_examples`` by running ``sh ./run-example-linux.sh``, and it generates the corresponding Coq files in the ``SeparationLogic/examples/`` directory. 
+- The Tool component allows you to check files in the ``QCP_examples`` tree by running ``sh ./run-example-linux.sh``, and it generates the corresponding Coq files in the ``SeparationLogic/examples/`` directory, grouped under ``Applications/``, ``QCP_democases/``, and ``LLM_friendly_cases/``. 
 - The VSCode Extension component is designed to support real-time verification interaction. You can open any annotated C file to view the current assertion state, which facilitates the continued writing of annotations for proofs.
