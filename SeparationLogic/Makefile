@@ -82,51 +82,103 @@ SL_FILES = \
 StrategyLib_FILES = \
   DepList.v Mapping.v
 
-Examples_Lib_FILES = \
-	poly_sll_lib.v sll_lib.v sll_insert_sort_lib.v functional_queue_lib.v dll_queue_lib.v sll_queue_lib.v simple_arith/Apos_lib.v simple_arith/PDiv_lib.v bst_lib.v bst_fp_lib.v swap_lib.v eval_lib.v fme/algorithm.v fme/implement.v fme/implement_lemma.v fme/fme_lib.v typeinfer/repr_subst_prop.v typeinfer/sol_prop.v typeinfer/sound_pv.v typeinfer/type_infer_lib.v typeinfer/typeinfer_lib.v avl_shape.v sll_shape_lib.v dll_shape_lib.v \
+QCP_DEMO_Example_Lib_FILES = \
+	poly_sll_lib.v sll_lib.v sll_insert_sort_lib.v functional_queue_lib.v dll_queue_lib.v sll_queue_lib.v simple_arith/Apos_lib.v simple_arith/PDiv_lib.v bst_lib.v bst_fp_lib.v swap_lib.v eval_lib.v avl_shape.v sll_shape_lib.v dll_shape_lib.v \
 	sll_merge_rel_lib.v kmp_lib.v kmp_rel_lib.v int_array_merge_rel_lib.v \
-	malloc.v super_poly_sll2.v minigmp/GmpAux.v minigmp/GmpNumber.v cnf_trans/cnf_trans_lib.v cnf_trans/smt_lang_lib.v alpha_equiv/ast_lib.v
 
-Examples_FILE_NAME = \
-	poly_sll sll sll_insert_sort functional_queue dll_queue sll_queue simple_arith/abs simple_arith/add simple_arith/max3 simple_arith/gcd simple_arith/Always_pos simple_arith/div_test simple_arith/exgcd sum bst_insert bst_insert_rec bst_fp_insert bst_fp_delete swap eval bst_delete_rec bst_delete_rec2 typeinfer/typeinfer avl_insert sll_auto dll_auto array_auto chars \
-	alpha_equiv/alpha_equiv alpha_equiv/thm_apply  minigmp/gmp \
-	kmp_rel int_array_merge_rel sll_merge_rel sll_split_while cnf_trans/cnf_trans alpha_equiv/subst fme/fme
+LLM_FRIENDLY_CASES_Lib_FILES = \
+	poly_sll_lib.v sll_lib.v sll_insert_sort_lib.v functional_queue_lib.v dll_queue_lib.v sll_queue_lib.v simple_arith/Apos_lib.v simple_arith/PDiv_lib.v bst_lib.v bst_fp_lib.v swap_lib.v eval_lib.v avl_shape.v sll_shape_lib.v dll_shape_lib.v \
+	sll_merge_rel_lib.v kmp_lib.v kmp_rel_lib.v int_array_merge_rel_lib.v \
+	majorityElement_lib.v sortArray_lib.v \
+
+APPLICATION_Lib_FILES = \
+	fme/algorithm.v fme/implement.v fme/implement_lemma.v fme/fme_lib.v typeinfer/repr_subst_prop.v typeinfer/sol_prop.v typeinfer/sound_pv.v typeinfer/type_infer_lib.v typeinfer/typeinfer_lib.v \
+	minigmp/GmpAux.v minigmp/GmpNumber.v cnf_trans/cnf_trans_lib.v cnf_trans/smt_lang_lib.v alpha_equiv/ast_lib.v \
+	malloc.v super_poly_sll2.v
+
+QCP_DEMO_EXAMPLE_FILE_NAME = \
+	poly_sll sll sll_insert_sort functional_queue dll_queue sll_queue simple_arith/abs simple_arith/add simple_arith/max3 simple_arith/gcd simple_arith/Always_pos simple_arith/div_test simple_arith/exgcd \
+	sum bst_insert bst_insert_rec bst_fp_insert bst_fp_delete swap eval bst_delete_rec bst_delete_rec2 avl_insert sll_auto dll_auto array_auto chars \
+	kmp_rel int_array_merge_rel sll_merge_rel sll_split_while
+
+LLM_FRIENDLY_CASES_EXAMPLE_FILE_NAME = \
+	poly_sll sll sll_insert_sort functional_queue dll_queue sll_queue simple_arith/abs simple_arith/add simple_arith/max3 simple_arith/gcd simple_arith/Always_pos simple_arith/div_test simple_arith/exgcd \
+	sum bst_insert bst_insert_rec bst_fp_insert bst_fp_delete swap eval bst_delete_rec bst_delete_rec2 avl_insert sll_auto dll_auto array_auto chars \
+	kmp_rel int_array_merge_rel sll_merge_rel sll_split_while majorityElement sortArray sortArray2 sortArray3
+
+APPLICATION_FILE_NAME = \
+	LiteOS/Get_Set_Value LiteOS/GetSortLinkNextExpireTime LiteOS/List_Add LiteOS/LOS_ListDelete LiteOS/LOS_ListDelInit LiteOS/LOS_ListEmpty LiteOS/LOS_ListInit LiteOS/OsAdd2SortLink LiteOS/OsDeleteNodeSortLink \
+	LiteOS/OsDeleteSortLink LiteOS/OsGetNextExpireTime LiteOS/OsGetSortLinkAttribute LiteOS/OsSortLinkGetNextExpireTime LiteOS/OsSortLinkGetRemainTime LiteOS/OsSortLinkGetTargetExpireTime \
+	LiteOS/OsSortLinkInit LiteOS/OsSortLinkResponseTimeConvertFreq \
+	typeinfer/typeinfer alpha_equiv/alpha_equiv alpha_equiv/subst alpha_equiv/thm_apply cnf_trans/cnf_trans minigmp/gmp fme/fme
+
+QCP_DEMO_Examples_FILES = \
+	$(addsuffix _goal.v, $(QCP_DEMO_EXAMPLE_FILE_NAME:%=QCP_democases/%)) \
+	$(addsuffix _goal_check.v, $(QCP_DEMO_EXAMPLE_FILE_NAME:%=QCP_democases/%)) \
+	$(addsuffix _proof_auto.v, $(QCP_DEMO_EXAMPLE_FILE_NAME:%=QCP_democases/%)) \
+	$(addsuffix _proof_manual.v, $(QCP_DEMO_EXAMPLE_FILE_NAME:%=QCP_democases/%)) \
+	$(QCP_DEMO_Example_Lib_FILES:%=QCP_democases/%)
+
+APPLICATION_Examples_FILES = \
+	$(addsuffix _goal.v, $(APPLICATION_FILE_NAME:%=Applications/%)) \
+	$(addsuffix _goal_check.v, $(APPLICATION_FILE_NAME:%=Applications/%)) \
+	$(addsuffix _proof_auto.v, $(APPLICATION_FILE_NAME:%=Applications/%)) \
+	$(addsuffix _proof_manual.v, $(APPLICATION_FILE_NAME:%=Applications/%)) \
+	$(APPLICATION_Lib_FILES:%=Applications/%) \
+	Applications/cnf_trans/cnf_trans_proof_manual1.v \
+	Applications/cnf_trans/cnf_trans_proof_manual2.v \
+	Applications/cnf_trans/cnf_trans_proof_manual3.v \
+
+LLM_FRIENDLY_CASES_Examples_FILES = \
+	$(addsuffix _goal.v, $(LLM_FRIENDLY_CASES_EXAMPLE_FILE_NAME:%=LLM_friendly_cases/%)) \
+	$(addsuffix _goal_check.v, $(LLM_FRIENDLY_CASES_EXAMPLE_FILE_NAME:%=LLM_friendly_cases/%)) \
+	$(addsuffix _proof_auto.v, $(LLM_FRIENDLY_CASES_EXAMPLE_FILE_NAME:%=LLM_friendly_cases/%)) \
+	$(addsuffix _proof_manual.v, $(LLM_FRIENDLY_CASES_EXAMPLE_FILE_NAME:%=LLM_friendly_cases/%)) \
+	$(LLM_FRIENDLY_CASES_Lib_FILES:%=LLM_friendly_cases/%)
 
 Examples_FILES = \
-	$(addsuffix _goal.v, $(Examples_FILE_NAME)) \
-	$(addsuffix _goal_check.v, $(Examples_FILE_NAME)) \
-	$(addsuffix _proof_auto.v, $(Examples_FILE_NAME)) \
-	$(addsuffix _proof_manual.v, $(Examples_FILE_NAME)) \
-	$(Examples_Lib_FILES)
+	$(QCP_DEMO_Examples_FILES) \
+	$(APPLICATION_Examples_FILES) \
+	$(LLM_FRIENDLY_CASES_Examples_FILES)
 
-Strategy_FILE_NAME = \
-	common poly_sll sll_shape sll dll_queue functional_queue sll_queue int_array undef_uint_array uint_array array_shape bst bst_fp eval char_array fme/fme typeinfer/typeinfer avl dll_shape safeexec safeexecE ptr_array 
+QCP_DEMO_STRATEGY_FILE_NAME = \
+	common poly_sll sll_shape sll dll_queue functional_queue sll_queue int_array undef_uint_array uint_array array_shape bst bst_fp eval char_array avl dll_shape safeexec safeexecE ptr_array
+
+APPLICATION_STRATEGY_FILE_NAME = \
+	fme/fme typeinfer/typeinfer
   
+QCP_DEMO_StrategyProof_FILES = \
+	$(addsuffix _strategy_goal.v, $(QCP_DEMO_STRATEGY_FILE_NAME:%=QCP_democases/%)) \
+	$(addsuffix _strategy_goal_check.v, $(QCP_DEMO_STRATEGY_FILE_NAME:%=QCP_democases/%)) \
+	$(addsuffix _strategy_proof.v, $(QCP_DEMO_STRATEGY_FILE_NAME:%=QCP_democases/%))
+
+APPLICATION_StrategyProof_FILES = \
+	$(addsuffix _strategy_goal.v, $(APPLICATION_STRATEGY_FILE_NAME:%=Applications/%)) \
+	$(addsuffix _strategy_goal_check.v, $(APPLICATION_STRATEGY_FILE_NAME:%=Applications/%)) \
+	$(addsuffix _strategy_proof.v, $(APPLICATION_STRATEGY_FILE_NAME:%=Applications/%))
+
+LLM_FRIENDLY_CASES_StrategyProof_FILES = \
+	$(addsuffix _strategy_goal.v, $(QCP_DEMO_STRATEGY_FILE_NAME:%=LLM_friendly_cases/%)) \
+	$(addsuffix _strategy_goal_check.v, $(QCP_DEMO_STRATEGY_FILE_NAME:%=LLM_friendly_cases/%)) \
+	$(addsuffix _strategy_proof.v, $(QCP_DEMO_STRATEGY_FILE_NAME:%=LLM_friendly_cases/%))
+
 StrategyProof_FILES = \
-	$(addsuffix _strategy_goal.v, $(Strategy_FILE_NAME)) \
-	$(addsuffix _strategy_goal_check.v, $(Strategy_FILE_NAME)) \
-	$(addsuffix _strategy_proof.v, $(Strategy_FILE_NAME)) \
+	$(QCP_DEMO_StrategyProof_FILES) \
+	$(APPLICATION_StrategyProof_FILES) \
+	$(LLM_FRIENDLY_CASES_StrategyProof_FILES) \
 
 LiteOS_Lib_FILES = \
 	dll sortlink tick_backup glob_vars_and_defs tick Los_Verify_State_def
 
-LiteOS_FILE_NAME = \
-	Get_Set_Value GetSortLinkNextExpireTime List_Add LOS_ListDelete LOS_ListDelInit LOS_ListEmpty LOS_ListInit OsAdd2SortLink OsDeleteNodeSortLink \
-	OsDeleteSortLink OsGetNextExpireTime OsGetSortLinkAttribute OsSortLinkGetNextExpireTime OsSortLinkGetRemainTime OsSortLinkGetTargetExpireTime \
-	OsSortLinkInit OsSortLinkResponseTimeConvertFreq
-
 LiteOS_Strategy_FILE_NAME = \
 	los_sortlink
 
+
 LiteOS_FILE = \
-	$(LiteOS_FILE_NAME:%=LiteOS/%_goal.v) \
-	$(LiteOS_FILE_NAME:%=LiteOS/%_goal_check.v) \
-	$(LiteOS_FILE_NAME:%=LiteOS/%_proof_auto.v) \
-	$(LiteOS_FILE_NAME:%=LiteOS/%_proof_manual.v) \
-	$(LiteOS_Lib_FILES:%=LiteOS/lib/%.v) \
-	$(LiteOS_Strategy_FILE_NAME:%=%_strategy_goal.v) \
-	$(LiteOS_Strategy_FILE_NAME:%=%_strategy_goal_check.v) \
-	$(LiteOS_Strategy_FILE_NAME:%=%_strategy_proof.v) \
+	$(LiteOS_Lib_FILES:%=Applications/LiteOS/lib/%.v) \
+	$(LiteOS_Strategy_FILE_NAME:%=Applications/%_strategy_goal.v) \
+	$(LiteOS_Strategy_FILE_NAME:%=Applications/%_strategy_goal_check.v) \
+	$(LiteOS_Strategy_FILE_NAME:%=Applications/%_strategy_proof.v) \
 
 Project_Lib_FILES = \
 	hashtbl_lib \
@@ -141,14 +193,14 @@ Project_Strategy_FILE_NAME = \
 	Project/minigmp1/mini_gmp Project/minigmp2/gmp_array Project/mergeablelist/sll_project Project/hashtable/hashtbl \
 
 Project_FILE = \
-	$(Project_FILE_NAME:%=Project/%_goal.v) \
-	$(Project_FILE_NAME:%=Project/%_goal_check.v) \
-	$(Project_FILE_NAME:%=Project/%_proof_auto.v) \
-	$(Project_FILE_NAME:%=Project/%_proof_manual.v) \
-	$(Project_Lib_FILES:%=Project/%.v) \
-	$(addsuffix _strategy_goal.v, $(Project_Strategy_FILE_NAME)) \
-	$(addsuffix _strategy_goal_check.v, $(Project_Strategy_FILE_NAME)) \
-	$(addsuffix _strategy_proof.v, $(Project_Strategy_FILE_NAME)) \
+	$(Project_FILE_NAME:%=Applications/Project/%_goal.v) \
+	$(Project_FILE_NAME:%=Applications/Project/%_goal_check.v) \
+	$(Project_FILE_NAME:%=Applications/Project/%_proof_auto.v) \
+	$(Project_FILE_NAME:%=Applications/Project/%_proof_manual.v) \
+	$(Project_Lib_FILES:%=Applications/Project/%.v) \
+	$(addsuffix _strategy_goal.v, $(Project_Strategy_FILE_NAME:%=Applications/%)) \
+	$(addsuffix _strategy_goal_check.v, $(Project_Strategy_FILE_NAME:%=Applications/%)) \
+	$(addsuffix _strategy_proof.v, $(Project_Strategy_FILE_NAME:%=Applications/%)) \
 
 
 EXAMPLE = \

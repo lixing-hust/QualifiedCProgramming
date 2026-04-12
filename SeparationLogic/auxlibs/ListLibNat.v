@@ -178,13 +178,13 @@ Proof.
   intros.
   eapply (list_eq_ext default _ _).
   split.
-  + rewrite app_length.
+  + rewrite length_app.
     rewrite ! length_sublist by lia.
     simpl; lia.
   + intros.
     destruct (le_gt_dec i i0).
     - rewrite app_nth2 by (rewrite length_sublist by lia; lia).
-      rewrite app_length, length_sublist in H1 by lia.
+      rewrite length_app, length_sublist in H1 by lia.
       simpl in H1.
       rewrite !nth_sublist by lia.
       rewrite length_sublist by lia.
@@ -378,7 +378,7 @@ Proof.
   intros.
   destruct H as [? ?].
   subst.
-  rewrite app_length.
+  rewrite length_app.
   lia.
 Qed.
 
@@ -389,7 +389,7 @@ Proof.
   intros.
   destruct H as [? ?].
   subst.
-  rewrite app_length.
+  rewrite length_app.
   lia.
 Qed.
 
@@ -420,7 +420,7 @@ Proof.
     
     rewrite (list_eq_ext default).
     split.
-    - rewrite app_length.
+    - rewrite length_app.
       rewrite length_sublist by lia.
       lia.
     - intros.
@@ -469,14 +469,14 @@ Proof.
     split; [tauto |].
     intros.
     subst.
-    rewrite app_length.
+    rewrite length_app.
     rewrite app_nth2 by lia.
     f_equal. lia.
   + destruct H.
     exists (sublist 0 (length l2 - length l1) l2).
     rewrite (list_eq_ext default).
     split.
-    - rewrite app_length.
+    - rewrite length_app.
       rewrite length_sublist by lia.
       lia.
     - intros.
@@ -524,7 +524,7 @@ Lemma is_prefix_snoc_iff: forall {A: Type} default (l1 l2: list A) a,
 Proof.
   intros.
   rewrite !(prefix_iff default).
-  rewrite app_length; simpl.
+  rewrite length_app; simpl.
   split; intros.
   + destruct H.
     split; [| split; [split |]].
@@ -679,7 +679,7 @@ Proof.
       split; [auto | ].
       split; [| split].
       * apply prefix_length in H0.
-        rewrite app_length in H0; simpl in H0.
+        rewrite length_app in H0; simpl in H0.
         lia.
       * destruct H0.
         subst patn.
@@ -717,7 +717,7 @@ Proof.
   - unfold is_prefix in H.
     destruct H as [l3 H].
     exists (length l1).
-    pose proof app_length l1 l3.
+    pose proof length_app l1 l3.
     subst; split; try lia.
     rewrite sublist_split_app_l; try lia.
     rewrite sublist_self; easy.
@@ -740,7 +740,7 @@ Proof.
   - unfold is_suffix in H.
     destruct H as [l3 H].
     exists (length l3).
-    pose proof app_length l3 l1.
+    pose proof length_app l3 l1.
     subst; split; try lia.
     rewrite sublist_split_app_r with (len:= length l3); try lia.
     rewrite H0.
@@ -840,7 +840,7 @@ Proof.
     rewrite suffix_iff' in *.
     destruct H1 as [_ H1]; split; try easy.
     intros. specialize (H1 default i H).
-    rewrite app_length in H1.
+    rewrite length_app in H1.
     rewrite app_nth2 in H1 by lia.
     replace (length l3 + length l2 - 1 - i - length l3) 
       with (length l2 - 1 - i) in H1 by lia; auto.
