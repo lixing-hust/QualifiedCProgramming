@@ -11,7 +11,7 @@ import time
 
 
 REPO_ROOT = Path("/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode")
-DEFAULT_SKILL = REPO_ROOT / "SKILL.md"
+DEFAULT_SKILL = REPO_ROOT / "skills" / "verify" / "SKILL.md"
 OUTPUT_ROOT = REPO_ROOT / "output"
 
 
@@ -38,8 +38,8 @@ def whitespace_token_count(text: str) -> int:
 def count_file_tokens(paths: list[Path]) -> int:
     total = 0
     for path in paths:
-      if path.exists():
-        total += whitespace_token_count(path.read_text(encoding="utf-8"))
+        if path.exists():
+            total += whitespace_token_count(path.read_text(encoding="utf-8"))
     return total
 
 
@@ -47,19 +47,34 @@ def ensure_parent(path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
 
 
+def paired_input_v(input_path: Path) -> Path | None:
+    candidate = input_path.with_suffix(".v")
+    if candidate.exists():
+        return candidate
+    return None
+
+
 def build_prompt(
     skill_path: Path,
     input_path: Path,
+    input_v_path: Path | None,
     function_name: str,
     workspace_path: Path,
 ) -> str:
+    input_v_line = f"- Optional Coq companion input: `{input_v_path}`.\n" if input_v_path else ""
     return f"""Read and follow this skill first:
 {skill_path}
 
 Task:
 - Verify function `{function_name}` from `{input_path}`.
-- Work fully automatically without asking for human input.
+{input_v_line}- Work fully automatically without asking for human input.
 - Use workspace `{workspace_path}`.
+- This is Verify only: consume the verification-ready `input/<name>.c` and the optional `input/<name>.v` produced by Annotate.
+- Treat `input/<name>.c` as the trusted verification input. Its preconditions and postconditions are already correct in both syntax and intended semantics.
+- Do not redesign or repair the existing `Require` / `Ensure` / `With` contract unless you find a concrete contradiction that blocks all progress.
+- Your annotation job is to derive and write the missing `Assert`, `which implies`, and `Inv` content into `annotated/<name>.c`.
+- `annotated/<name>.c` is initialized from the trusted `input/<name>.c`; refine that file instead of editing the original input.
+- If the paired `input/<name>.v` exists, read it and use it as part of the formal input. If it does not exist, continue without fabricating one.
 - Before writing `annotated/<name>.c`, first write or update `logs/workspace_fingerprint.json` with:
   - a natural-language semantic description of the program
   - a structured keyword object for retrieval
@@ -163,20 +178,38 @@ def update_issues_on_failure(issues_path: Path, stage: str, exit_code: int, stde
     issues_path.write_text(existing + block, encoding="utf-8")
 
 
-def bootstrap_workspace(workspace_path: Path, input_path: Path, function_name: str) -> None:
+def bootstrap_workspace(workspace_path: Path, input_path: Path, input_v_path: Path | None, function_name: str) -> None:
     (workspace_path / "logs").mkdir(parents=True, exist_ok=True)
     (workspace_path / "original").mkdir(parents=True, exist_ok=True)
-    dst = workspace_path / "original" / input_path.name
-    shutil.copy2(input_path, dst)
+    (workspace_path / "annotated").mkdir(parents=True, exist_ok=True)
+
+    original_c = workspace_path / "original" / input_path.name
+    annotated_c = workspace_path / "annotated" / input_path.name
+    shutil.copy2(input_path, original_c)
+    shutil.copy2(input_path, annotated_c)
+
+    original_v = ""
+    if input_v_path is not None:
+        dst_v = workspace_path / "original" / input_v_path.name
+        shutil.copy2(input_v_path, dst_v)
+        original_v = str(dst_v)
+
     fingerprint_path = workspace_path / "logs" / "workspace_fingerprint.json"
     fingerprint = {
-        "fingerprint_version": 1,
+        "fingerprint_version": 2,
         "workspace": workspace_path.name,
-        "input_file": str(input_path),
+        "stage": "verify",
+        "input_c": str(input_path),
+        "input_v": str(input_v_path) if input_v_path else "",
+        "original_c": str(original_c),
+        "original_v": original_v,
+        "annotated_c": str(annotated_c),
         "function_name": function_name,
         "program_sha256": sha256_hex(input_path),
         "semantic_description": "",
         "keywords": {},
+        "assume_contract_is_correct": True,
+        "contract_source": "annotate_input_c",
     }
     fingerprint_path.write_text(json.dumps(fingerprint, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
@@ -185,7 +218,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Run Codex externally to produce a formal proof workspace.")
     parser.add_argument("input_c", help="Path to input C file, relative to repo root or absolute.")
     parser.add_argument("function_name", help="Function name to verify.")
-    parser.add_argument("--skill", default=str(DEFAULT_SKILL), help="Path to SKILL.md.")
+    parser.add_argument("--skill", default=str(DEFAULT_SKILL), help="Path to verification skill markdown.")
     parser.add_argument("--workspace-name", help="Explicit workspace stem; defaults to input file stem.")
     parser.add_argument("--timestamp", help="Explicit workspace timestamp; defaults to current local time.")
     parser.add_argument("--model", help="Optional Codex model override.")
@@ -208,14 +241,19 @@ def main() -> int:
     if not input_path.exists():
         print(f"input file not found: {input_path}", file=sys.stderr)
         return 2
+    if input_path.suffix != ".c":
+        print(f"input file must be a .c file: {input_path}", file=sys.stderr)
+        return 2
     if not skill_path.exists():
         print(f"skill file not found: {skill_path}", file=sys.stderr)
         return 2
 
+    input_v_path = paired_input_v(input_path)
+
     workspace_stem = args.workspace_name or stem_from_input(input_path)
     workspace_timestamp = args.timestamp or timestamp_now()
     workspace_path = OUTPUT_ROOT / f"workspace_{workspace_timestamp}_{workspace_stem}"
-    bootstrap_workspace(workspace_path, input_path, args.function_name)
+    bootstrap_workspace(workspace_path, input_path, input_v_path, args.function_name)
 
     logs_dir = workspace_path / "logs"
     run_label = dt.datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -224,7 +262,7 @@ def main() -> int:
     stderr_log = logs_dir / f"codex_stderr_{run_label}.log"
     last_message_path = logs_dir / f"codex_last_message_{run_label}.txt"
 
-    prompt = build_prompt(skill_path, input_path, args.function_name, workspace_path)
+    prompt = build_prompt(skill_path, input_path, input_v_path, args.function_name, workspace_path)
     ensure_parent(prompt_path)
     prompt_path.write_text(prompt, encoding="utf-8")
 

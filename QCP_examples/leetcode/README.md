@@ -1,72 +1,51 @@
 # LeetCode Verification Workspace
 
-This directory is for per-problem verification workspaces.
+这个目录现在采用两段链路：
 
-## Layout
+- Annotate: 生成验证输入
+- Verify: 验证规格输入
 
-- `input/`: raw source files, one input program per `.c`
-- `output/`: generated `workspace_<timestamp>_<stem>/`
-- `scripts/make_verification_workspace.py`: workspace generator and QCP runner
-- `doc/`: local documentation
+## Annotate: 生成验证输入
 
-## Main Command
+目标：把原始题意和原始 C 整理成 Verify 可直接消费的正式输入。
 
-```bash
-python3 scripts/make_verification_workspace.py init input/<name>.c
-```
+入口说明见：
+- `skills/annotate/SKILL.md`
+- `doc/ANNOTATE.md`
 
-## Codex Driver
+Annotate 的正式输出是：
+- `input/<name>.c`
+- `input/<name>.v`，如果需要额外 Coq 定义
 
-To delegate end-to-end proof construction to an external Codex CLI process and record external
-wall-clock / token usage into the workspace logs, run:
+## Verify: 验证规格输入
+
+目标：消费 Annotate 产物，补中间断言和循环不变式，完成 symbolic 与证明。
+
+入口说明见：
+- `skills/verify/SKILL.md`
+- `doc/VERIFY.md`
+
+运行方式：
 
 ```bash
 python3 run_codex_formal_proof.py input/<name>.c <function_name>
 ```
 
-The script will:
+脚本会：
+- 创建 `output/workspace_<timestamp>_<name>/`
+- 复制 `input/<name>.c` 到 `original/` 和 `annotated/`
+- 如果存在 `input/<name>.v`，复制到 `original/`
+- 默认使用 `skills/verify/SKILL.md`
+- 要求模型在 `annotated/<name>.c` 中补 `Assert` / `which implies` / `Inv`
+- 在 `logs/` 下记录 reasoning、issues、metrics
+- 生成并检查 Coq 证明产物
 
-- create `output/workspace_<timestamp>_<name>/`
-- ask Codex to read [SKILL.md](/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/SKILL.md) and work inside that workspace
-- seed `logs/workspace_fingerprint.json` with stable metadata for retrieval
-- require Codex to fill `logs/workspace_fingerprint.json` with a semantic description and structured keywords
-- require Codex to write natural-language reasoning to `logs/annotation_reasoning.md` before annotation
-- require Codex to write natural-language reasoning to `logs/proof_reasoning.md` before manual proof work
-- capture `codex exec --json` stdout/stderr under `logs/`
-- append external timing and token metrics to `logs/proof_metrics.md`
+## Layout
 
-That command creates:
-
-```text
-output/workspace_<timestamp>_<name>/
-```
-
-with:
-
-- copied raw `.c/.h`
-- editable annotated source tree
-- copied strategy files when found
-- best-effort copied Coq `.v` references when found
-- `coq/generated/<name>_goal.v`
-- `coq/generated/<name>_proof_auto.v`
-- `coq/generated/<name>_proof_manual.v`
-- `coq/generated/<name>_goal_check.v`
-- `coq/defs/<name>_defs.v`
-- `run_qcp.sh`
-- `manifest.json`
-
-## QCP Generation
-
-After you annotate the copied source in `annotated/`, run:
-
-```bash
-python3 scripts/make_verification_workspace.py run-qcp output/workspace_<timestamp>_<name> --symexec /path/to/symexec
-```
-
-Or directly:
-
-```bash
-output/workspace_<timestamp>_<name>/run_qcp.sh
-```
-
-If the default repo binary is not executable, pass `--symexec` explicitly.
+- `input/`: Annotate 产出的正式输入
+- `output/`: Verify 生成的 `workspace_<timestamp>_<stem>/`
+- `scripts/run_codex_formal_proof.py`: Verify driver
+- `doc/`: 分阶段文档
+- `skills/annotate/SKILL.md`: Annotate skill
+- `skills/verify/SKILL.md`: Verify skill
+- `SKILL.md`: 总览入口
