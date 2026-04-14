@@ -1,4 +1,4 @@
-Require Import C_9_goal C_9_proof_auto C_9_proof_manual.
+From SimpleC.EE Require Import C_9_goal C_9_proof_auto C_9_proof_manual.
 
 Module VC_Correctness : VC_Correct.
   Include common_strategy_proof.

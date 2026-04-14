@@ -9,13 +9,14 @@ Require Import Coq.Sorting.Permutation.
 From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
-Require Import C_9_goal.
+From SimpleC.EE Require Import C_9_goal.
 Require Import Logic.LogicGenerator.demo932.Interface.
 Local Open Scope Z_scope.
 Local Open Scope sets.
 Local Open Scope string.
 Local Open Scope list.
 Import naive_C_Rules.
+Require Import coins_9.
 Local Open Scope sac.
 
 Lemma proof_of_rolling_max_safety_wit_1 : rolling_max_safety_wit_1.
@@ -28,6 +29,9 @@ Lemma proof_of_rolling_max_safety_wit_3 : rolling_max_safety_wit_3.
 Proof. Admitted. 
 
 Lemma proof_of_rolling_max_safety_wit_4 : rolling_max_safety_wit_4.
+Proof. Admitted. 
+
+Lemma proof_of_rolling_max_safety_wit_5 : rolling_max_safety_wit_5.
 Proof. Admitted. 
 
 Lemma proof_of_rolling_max_partial_solve_wit_1 : rolling_max_partial_solve_wit_1.
