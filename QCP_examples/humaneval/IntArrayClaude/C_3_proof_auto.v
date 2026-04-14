@@ -9,13 +9,14 @@ Require Import Coq.Sorting.Permutation.
 From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
-Require Import C_3_goal.
+From SimpleC.EE Require Import C_3_goal.
 Require Import Logic.LogicGenerator.demo932.Interface.
 Local Open Scope Z_scope.
 Local Open Scope sets.
 Local Open Scope string.
 Local Open Scope list.
 Import naive_C_Rules.
+Require Import coins_3.
 Local Open Scope sac.
 
 Lemma proof_of_below_zero_safety_wit_1 : below_zero_safety_wit_1.

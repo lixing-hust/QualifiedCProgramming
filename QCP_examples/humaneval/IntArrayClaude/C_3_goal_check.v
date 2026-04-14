@@ -1,4 +1,4 @@
-Require Import C_3_goal C_3_proof_auto C_3_proof_manual.
+From SimpleC.EE Require Import C_3_goal C_3_proof_auto C_3_proof_manual.
 
 Module VC_Correctness : VC_Correct.
   Include common_strategy_proof.
