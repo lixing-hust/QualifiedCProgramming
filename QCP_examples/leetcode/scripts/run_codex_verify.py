@@ -61,28 +61,14 @@ def build_prompt(
     function_name: str,
     workspace_path: Path,
 ) -> str:
-    input_v_line = f"- Optional Coq companion input: `{input_v_path}`.\n" if input_v_path else ""
-    return f"""Read and follow this skill first:
+    input_v_line = f"- Optional input V: `{input_v_path}`\n" if input_v_path else "- Optional input V: `<not provided>`\n"
+    return f"""Use this skill as the complete workflow:
 {skill_path}
 
-Task:
-- Verify function `{function_name}` from `{input_path}`.
-{input_v_line}- Work fully automatically without asking for human input.
-- Use workspace `{workspace_path}`.
-- This is Verify only: consume the verification-ready `input/<name>.c` and the optional `input/<name>.v` produced by Annotate.
-- Treat `input/<name>.c` as the trusted verification input. Its preconditions and postconditions are already correct in both syntax and intended semantics.
-- Do not redesign or repair the existing `Require` / `Ensure` / `With` contract unless you find a concrete contradiction that blocks all progress.
-- Your annotation job is to derive and write the missing `Assert`, `which implies`, and `Inv` content into `annotated/<name>.c`.
-- `annotated/<name>.c` is initialized from the trusted `input/<name>.c`; refine that file instead of editing the original input.
-- If the paired `input/<name>.v` exists, read it and use it as part of the formal input. If it does not exist, continue without fabricating one.
-- Before writing `annotated/<name>.c`, first write or update `logs/workspace_fingerprint.json` with:
-  - a natural-language semantic description of the program
-  - a structured keyword object for retrieval
-- Before writing `annotated/<name>.c`, first output natural-language annotation reasoning into `logs/annotation_reasoning.md` inside the workspace.
-- Before writing `coq/generated/<name>_proof_manual.v`, first output natural-language proof reasoning into `logs/proof_reasoning.md` inside the workspace.
-- Treat those reasoning files as mandatory workflow artifacts, not optional notes.
-
-Keep the final response short and state whether the proof passed and whether any blocker remains.
+Inputs:
+- Input C: `{input_path}`
+{input_v_line}- Target function: `{function_name}`
+- Workspace: `{workspace_path}`
 """
 
 
@@ -107,7 +93,7 @@ def parse_usage(stdout_jsonl: Path) -> dict[str, int] | None:
 
 
 def append_metrics_section(
-    proof_metrics_path: Path,
+    metrics_md_path: Path,
     run_label: str,
     start_iso: str,
     end_iso: str,
@@ -156,11 +142,11 @@ def append_metrics_section(
     lines.append(f"- Codex stderr log: `{stderr_log}`")
     lines.append(f"- Codex last message: `{last_message_path}`")
 
-    if proof_metrics_path.exists():
-        existing = proof_metrics_path.read_text(encoding="utf-8")
+    if metrics_md_path.exists():
+        existing = metrics_md_path.read_text(encoding="utf-8")
     else:
-        existing = "# Proof Metrics\n"
-    proof_metrics_path.write_text(existing.rstrip() + "\n" + "\n".join(lines) + "\n", encoding="utf-8")
+        existing = "# Verify Metrics\n"
+    metrics_md_path.write_text(existing.rstrip() + "\n" + "\n".join(lines) + "\n", encoding="utf-8")
 
 
 def update_issues_on_failure(issues_path: Path, stage: str, exit_code: int, stderr_log: Path) -> None:
@@ -215,15 +201,16 @@ def bootstrap_workspace(workspace_path: Path, input_path: Path, input_v_path: Pa
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Run Codex externally to produce a formal proof workspace.")
+    parser = argparse.ArgumentParser(description="Run Codex externally to execute the full verify workflow.")
     parser.add_argument("input_c", help="Path to input C file, relative to repo root or absolute.")
     parser.add_argument("function_name", help="Function name to verify.")
     parser.add_argument("--skill", default=str(DEFAULT_SKILL), help="Path to verification skill markdown.")
     parser.add_argument("--workspace-name", help="Explicit workspace stem; defaults to input file stem.")
-    parser.add_argument("--timestamp", help="Explicit workspace timestamp; defaults to current local time.")
+    parser.add_argument("--timestamp", help="Explicit verify timestamp; defaults to current local time.")
     parser.add_argument("--model", help="Optional Codex model override.")
     parser.add_argument("--dry-run", action="store_true", help="Prepare workspace and prompt, but do not invoke Codex.")
     parser.add_argument("--codex-bin", default="codex", help="Codex CLI binary.")
+    parser.add_argument("--timeout-seconds", type=int, default=3600, help="Kill the external Codex run if it exceeds this wall-clock timeout.")
     return parser
 
 
@@ -252,7 +239,7 @@ def main() -> int:
 
     workspace_stem = args.workspace_name or stem_from_input(input_path)
     workspace_timestamp = args.timestamp or timestamp_now()
-    workspace_path = OUTPUT_ROOT / f"workspace_{workspace_timestamp}_{workspace_stem}"
+    workspace_path = OUTPUT_ROOT / f"verify_{workspace_timestamp}_{workspace_stem}"
     bootstrap_workspace(workspace_path, input_path, input_v_path, args.function_name)
 
     logs_dir = workspace_path / "logs"
@@ -274,9 +261,12 @@ def main() -> int:
     start_iso = iso_now()
     cmd = [
         args.codex_bin,
+        "--ask-for-approval",
+        "never",
         "exec",
         "--json",
-        "--full-auto",
+        "--sandbox",
+        "workspace-write",
         "--skip-git-repo-check",
         "-C",
         str(REPO_ROOT),
@@ -287,15 +277,23 @@ def main() -> int:
         cmd.extend(["--model", args.model])
     cmd.append("-")
 
-    with stdout_jsonl.open("w", encoding="utf-8") as out_f, stderr_log.open("w", encoding="utf-8") as err_f:
-        proc = subprocess.run(
-            cmd,
-            input=prompt,
-            text=True,
-            stdout=out_f,
-            stderr=err_f,
-            cwd=REPO_ROOT,
-        )
+    proc_returncode = 0
+    failure_detail = None
+    try:
+        with stdout_jsonl.open("w", encoding="utf-8") as out_f, stderr_log.open("w", encoding="utf-8") as err_f:
+            proc = subprocess.run(
+                cmd,
+                input=prompt,
+                text=True,
+                stdout=out_f,
+                stderr=err_f,
+                cwd=REPO_ROOT,
+                timeout=args.timeout_seconds,
+            )
+        proc_returncode = proc.returncode
+    except subprocess.TimeoutExpired:
+        proc_returncode = 124
+        failure_detail = f"external codex run exceeded timeout of {args.timeout_seconds} seconds"
     end_wall = time.time()
     end_iso = iso_now()
 
@@ -305,12 +303,12 @@ def main() -> int:
     workspace_text_files = [
         p for p in workspace_path.rglob("*")
         if p.is_file() and p.suffix in {".c", ".v", ".md", ".txt", ".log", ".json"}
-        and p != proof_metrics_path(workspace_path)
+        and p != metrics_path(workspace_path)
     ]
     workspace_tokens_approx = count_file_tokens(workspace_text_files)
 
     append_metrics_section(
-        proof_metrics_path(workspace_path),
+        metrics_path(workspace_path),
         run_label,
         start_iso,
         end_iso,
@@ -325,20 +323,24 @@ def main() -> int:
         last_message_path,
     )
 
-    if proc.returncode != 0:
+    if proc_returncode != 0:
         update_issues_on_failure(
             workspace_path / "logs" / "issues.md",
             "external-codex-run",
-            proc.returncode,
+            proc_returncode,
             stderr_log,
         )
+        if failure_detail is not None:
+            issues_path = workspace_path / "logs" / "issues.md"
+            existing = issues_path.read_text(encoding="utf-8").rstrip() + "\n"
+            issues_path.write_text(existing + f"- Detail: `{failure_detail}`\n", encoding="utf-8")
 
     print(str(workspace_path))
-    return proc.returncode
+    return proc_returncode
 
 
-def proof_metrics_path(workspace_path: Path) -> Path:
-    return workspace_path / "logs" / "proof_metrics.md"
+def metrics_path(workspace_path: Path) -> Path:
+    return workspace_path / "logs" / "metrics.md"
 
 
 if __name__ == "__main__":

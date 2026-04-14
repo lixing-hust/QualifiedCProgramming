@@ -4,5 +4,5 @@ import runpy
 
 
 if __name__ == "__main__":
-    script = Path(__file__).resolve().parent / "scripts" / "run_codex_formal_proof.py"
+    script = Path(__file__).resolve().parent / "scripts" / "run_codex_verify.py"
     runpy.run_path(str(script), run_name="__main__")

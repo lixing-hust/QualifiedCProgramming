@@ -12,7 +12,7 @@ Verify 只能消费这些输入，不负责重写它们。
 
 每次处理某个 `input/<name>.c` 时，都必须先确定本次任务对应的唯一 workspace：
 
-- `output/workspace_<timestamp>_<name>/`
+- `output/verify_<timestamp>_<name>/`
 
 除非用户明确授权，否则所有写操作都必须限制在这个 workspace 内。
 
@@ -35,7 +35,7 @@ Verify 只能消费这些输入，不负责重写它们。
 - `logs/annotation_reasoning.md`
 - `logs/proof_reasoning.md`
 - `logs/issues.md`
-- `logs/proof_metrics.md`
+- `logs/metrics.md`
 
 ## Read-Only Files In Current Workspace
 

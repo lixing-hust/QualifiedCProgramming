@@ -10,12 +10,13 @@
 
 约定：
 - 输入 `n` 为非负整数。
+-  0 <= `n` <= 10。
 - 参考实现假设结果不会超出 `int` 的表示范围。
 
 ## 正确代码
 
 ```c
-int factorial(int n) {
+int fac(int n) {
     int i;
     int res = 1;
 

@@ -16,6 +16,9 @@
 Annotate 的正式输出是：
 - `input/<name>.c`
 - `input/<name>.v`，如果需要额外 Coq 定义
+- `output/annotate_<timestamp>_<name>/raw/<name>.md`
+- `output/annotate_<timestamp>_<name>/input/`
+- `output/annotate_<timestamp>_<name>/logs/`
 
 ## Verify: 验证规格输入
 
@@ -28,11 +31,11 @@ Annotate 的正式输出是：
 运行方式：
 
 ```bash
-python3 run_codex_formal_proof.py input/<name>.c <function_name>
+python3 run_codex_verify.py input/<name>.c <function_name>
 ```
 
 脚本会：
-- 创建 `output/workspace_<timestamp>_<name>/`
+- 创建 `output/verify_<timestamp>_<name>/`
 - 复制 `input/<name>.c` 到 `original/` 和 `annotated/`
 - 如果存在 `input/<name>.v`，复制到 `original/`
 - 默认使用 `skills/verify/SKILL.md`
@@ -43,8 +46,17 @@ python3 run_codex_formal_proof.py input/<name>.c <function_name>
 ## Layout
 
 - `input/`: Annotate 产出的正式输入
-- `output/`: Verify 生成的 `workspace_<timestamp>_<stem>/`
-- `scripts/run_codex_formal_proof.py`: Verify driver
+- `output/`: annotate 和 verify 各自独立的运行目录
+  annotate workspace 约定为：
+  `annotate_<timestamp>_<name>/`
+  `raw/` 保存原始 markdown 输入，
+  `input/` 保存本次 annotate 产出的输入快照，
+  `logs/` 保存 annotate 阶段经验记录；
+  verify workspace 约定为：
+  `verify_<timestamp>_<name>/`
+  `original/`、`annotated/`、`coq/generated/`、`logs/` 保存 verify 阶段产物
+- `scripts/run_codex_verify.py`: Verify driver
+- `scripts/run_codex_annotate.py`: Annotate driver
 - `doc/`: 分阶段文档
 - `skills/annotate/SKILL.md`: Annotate skill
 - `skills/verify/SKILL.md`: Verify skill
