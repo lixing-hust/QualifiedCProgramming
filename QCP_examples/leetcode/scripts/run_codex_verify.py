@@ -3,6 +3,7 @@ import argparse
 import datetime as dt
 import hashlib
 import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -13,6 +14,10 @@ import time
 REPO_ROOT = Path("/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode")
 DEFAULT_SKILL = REPO_ROOT / "skills" / "verify" / "SKILL.md"
 OUTPUT_ROOT = REPO_ROOT / "output"
+NOISE_PATTERNS = [
+    "failed to renew cache TTL: Read-only file system",
+    "failed to record rollout items: failed to queue rollout items: channel closed",
+]
 
 
 def timestamp_now() -> str:
@@ -45,6 +50,30 @@ def count_file_tokens(paths: list[Path]) -> int:
 
 def ensure_parent(path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
+
+
+def build_codex_env(logs_dir: Path) -> dict[str, str]:
+    env = os.environ.copy()
+    cache_dir = logs_dir / ".codex_cache"
+    tmp_dir = logs_dir / ".tmp"
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    tmp_dir.mkdir(parents=True, exist_ok=True)
+    env["XDG_CACHE_HOME"] = str(cache_dir)
+    env["TMPDIR"] = str(tmp_dir)
+    env["TMP"] = str(tmp_dir)
+    env["TEMP"] = str(tmp_dir)
+    return env
+
+
+def filter_stderr_in_place(stderr_log: Path) -> None:
+    if not stderr_log.exists():
+        return
+    clean_lines = []
+    for raw_line in stderr_log.read_text(encoding="utf-8", errors="replace").splitlines():
+        if any(pattern in raw_line for pattern in NOISE_PATTERNS):
+            continue
+        clean_lines.append(raw_line)
+    stderr_log.write_text("\n".join(clean_lines) + ("\n" if clean_lines else ""), encoding="utf-8")
 
 
 def paired_input_v(input_path: Path) -> Path | None:
@@ -289,6 +318,7 @@ def main() -> int:
                 stderr=err_f,
                 cwd=REPO_ROOT,
                 timeout=args.timeout_seconds,
+                env=build_codex_env(logs_dir),
             )
         proc_returncode = proc.returncode
     except subprocess.TimeoutExpired:
@@ -296,6 +326,7 @@ def main() -> int:
         failure_detail = f"external codex run exceeded timeout of {args.timeout_seconds} seconds"
     end_wall = time.time()
     end_iso = iso_now()
+    filter_stderr_in_place(stderr_log)
 
     usage = parse_usage(stdout_jsonl)
     final_message = last_message_path.read_text(encoding="utf-8") if last_message_path.exists() else ""
