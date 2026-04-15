@@ -15,8 +15,10 @@ DEFAULT_SKILL = REPO_ROOT / "skills" / "annotate" / "SKILL.md"
 OUTPUT_ROOT = REPO_ROOT / "output"
 INPUT_ROOT = REPO_ROOT / "input"
 NOISE_PATTERNS = [
+    "WARNING: proceeding, even though we could not update PATH: Read-only file system",
     "failed to renew cache TTL: Read-only file system",
     "failed to record rollout items: failed to queue rollout items: channel closed",
+    "failed to connect to websocket: IO error: Connection reset by peer",
 ]
 
 
@@ -47,10 +49,19 @@ def ensure_parent(path: Path) -> None:
 def build_codex_env(logs_dir: Path) -> dict[str, str]:
     env = os.environ.copy()
     cache_dir = logs_dir / ".codex_cache"
+    state_dir = logs_dir / ".state"
+    data_dir = logs_dir / ".data"
+    config_dir = logs_dir / ".config"
     tmp_dir = logs_dir / ".tmp"
     cache_dir.mkdir(parents=True, exist_ok=True)
+    state_dir.mkdir(parents=True, exist_ok=True)
+    data_dir.mkdir(parents=True, exist_ok=True)
+    config_dir.mkdir(parents=True, exist_ok=True)
     tmp_dir.mkdir(parents=True, exist_ok=True)
     env["XDG_CACHE_HOME"] = str(cache_dir)
+    env["XDG_STATE_HOME"] = str(state_dir)
+    env["XDG_DATA_HOME"] = str(data_dir)
+    env["XDG_CONFIG_HOME"] = str(config_dir)
     env["TMPDIR"] = str(tmp_dir)
     env["TMP"] = str(tmp_dir)
     env["TEMP"] = str(tmp_dir)

@@ -32,6 +32,20 @@ Verify 只消费 Annotate 的正式输出：
 - `input/<name>.c`
 - `input/<name>.v`，如果存在
 
+## 日志记录模板（重点）
+
+### 1) `metrics.md` 必须采用双层时间口径
+
+- 第一层：整任务口径（`start/end/total elapsed`），用于统计单题真实耗时。
+- 第二层：阶段口径（至少记录 annotate 调整、symexec、manual proof、compile replay 的开始/结束/耗时），用于定位慢点。
+- 只写“编译耗时”是不够的；必须覆盖整个 verify 生命周期。
+
+### 2) `issues.md` 必须区分过程问题与最终状态
+
+- 过程问题即使已修复，也要保留：`现象 -> 原因 -> 处理 -> 结果`。
+- 文件末尾必须给出状态分组：`Resolved` 和 `Open`。
+- 避免只写最终一句“通过/失败”，否则后续无法复用排障经验。
+
 ## 基本假设
 
 - `input/<name>.c` 已经是验证友好的 C

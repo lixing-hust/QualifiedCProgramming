@@ -94,6 +94,13 @@
   - 先在 `goal.v` 里确认该 witness 的精确 statement
   - 再去仓库里找相同类型的已完成证明做参照
 
+## proof 失败记录规范
+
+- proof 失败时，不要写笼统描述（例如“proof 编译失败”）。
+- 必须记录首个稳定失败点：`文件 + 行号 + 原始错误文本`。
+- 例如：`array_sum_proof_manual.v:49 Error: Tactic failure: Cannot find witness.`  
+- 每次修复后都要更新这个“首个失败点”，直到 `goal_check` 通过。
+
 ## 边界要求
 
 - 可以参考仓库里的类似 Coq 证明，但不能直接照搬当前目标函数同名 workspace 的旧证明
