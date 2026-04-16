@@ -82,6 +82,22 @@ def build_codex_env(logs_dir: Path) -> dict[str, str]:
     return env
 
 
+def codex_supports_reasoning_effort(codex_bin: str, cwd: Path, env: dict[str, str]) -> bool:
+    try:
+        proc = subprocess.run(
+            [codex_bin, "exec", "--help"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            cwd=cwd,
+            env=env,
+            timeout=10,
+        )
+    except (subprocess.SubprocessError, OSError):
+        return False
+    return "--reasoning-effort" in proc.stdout
+
+
 def filter_stderr_in_place(stderr_log: Path) -> None:
     if not stderr_log.exists():
         return
@@ -308,9 +324,11 @@ def main() -> int:
     emit_log(f"input_v={input_v_path if input_v_path else '<not provided>'}")
     emit_log(f"annotated_c={annotated_c_path}")
     emit_log(f"model={args.model}")
-    emit_log(f"reasoning_effort={args.reasoning_effort}")
-
     logs_dir = workspace_path / "logs"
+    codex_env = build_codex_env(logs_dir)
+    reasoning_effort_supported = codex_supports_reasoning_effort(args.codex_bin, REPO_ROOT, codex_env)
+    emit_log(f"reasoning_effort={args.reasoning_effort}")
+    emit_log(f"reasoning_effort_supported={reasoning_effort_supported}")
     run_label = dt.datetime.now().strftime("%Y%m%d_%H%M%S")
     prompt_path = logs_dir / f"codex_prompt_{run_label}.txt"
     stdout_jsonl = logs_dir / f"codex_stdout_{run_label}.jsonl"
@@ -341,7 +359,7 @@ def main() -> int:
     ]
     if args.model:
         cmd.extend(["--model", args.model])
-    if args.reasoning_effort:
+    if args.reasoning_effort and reasoning_effort_supported:
         cmd.extend(["--reasoning-effort", args.reasoning_effort])
     cmd.append("-")
     emit_log(f"codex_exec_start timeout_seconds={args.timeout_seconds}")
@@ -358,7 +376,7 @@ def main() -> int:
                 stderr=err_f,
                 cwd=REPO_ROOT,
                 timeout=args.timeout_seconds,
-                env=build_codex_env(logs_dir),
+                env=codex_env,
             )
         proc_returncode = proc.returncode
     except subprocess.TimeoutExpired:

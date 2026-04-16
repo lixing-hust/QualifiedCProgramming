@@ -10,6 +10,8 @@
 
 ## 1. 写 invariant 前，必须先做充分的自然语言 reasoning，并检查能否证出后条件
 
+如果当前函数根本不需要补任何 `Inv` / `Assert`，就不要机械地生成 `annotation_reasoning.md`；直接跳过这一阶段。
+
 在真正写 `Inv` 之前，必须先用自然语言把思路写清楚，而不是直接试错式地改注释。
 
 至少要先分析：
@@ -19,7 +21,7 @@
 - 后条件真正需要的语义是什么
 - 当前准备写的 invariant 是否会把这些语义保留下来
 
-如果题目较复杂，这份 reasoning 应先落到当前 workspace 的 `logs/annotation_reasoning.md`，再开始改 `annotated/<name>.c`。
+如果题目较复杂，这份 reasoning 应先落到当前 workspace 的 `logs/annotation_reasoning.md`，再开始改 `annotated/verify_<timestamp>_<name>.c`。
 
 写任何 invariant 之前，还必须逐条检查它是否同时满足下面三件事：
 

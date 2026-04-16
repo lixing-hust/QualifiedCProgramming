@@ -7,6 +7,7 @@
 - 只记录 manual proof
 - 不记录 invariant/assert/symexec
 - 不记录 Coq 编译与路径问题
+- 如果 `proof_manual.v` 里没有需要手工证明的 theorem，就直接跳过 manual proof 和 `proof_reasoning.md`
 
 ## 2. 开始前先读当前目标
 
