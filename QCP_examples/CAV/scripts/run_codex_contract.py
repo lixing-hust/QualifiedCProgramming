@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import argparse
 import datetime as dt
-import hashlib
 import json
 import os
 from pathlib import Path
@@ -12,8 +11,9 @@ import time
 
 
 REPO_ROOT = Path("/home/yangfp/QualifiedCProgramming/QCP_examples/CAV")
-DEFAULT_SKILL = REPO_ROOT / "skills" / "verify" / "SKILL.md"
+DEFAULT_SKILL = REPO_ROOT / "skills" / "contract" / "SKILL.md"
 OUTPUT_ROOT = REPO_ROOT / "output"
+INPUT_ROOT = REPO_ROOT / "input"
 NOISE_PATTERNS = [
     "WARNING: proceeding, even though we could not update PATH: Read-only file system",
     "failed to renew cache TTL: Read-only file system",
@@ -28,14 +28,6 @@ def timestamp_now() -> str:
 
 def iso_now() -> str:
     return dt.datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S %z")
-
-
-def stem_from_input(input_path: Path) -> str:
-    return input_path.stem
-
-
-def sha256_hex(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def whitespace_token_count(text: str) -> int:
@@ -55,7 +47,7 @@ def ensure_parent(path: Path) -> None:
 
 
 def emit_log(message: str) -> None:
-    print(f"[verify] {message}", flush=True)
+    print(f"[contract] {message}", flush=True)
 
 
 def build_codex_env(logs_dir: Path) -> dict[str, str]:
@@ -91,31 +83,6 @@ def filter_stderr_in_place(stderr_log: Path) -> None:
     stderr_log.write_text("\n".join(clean_lines) + ("\n" if clean_lines else ""), encoding="utf-8")
 
 
-def paired_input_v(input_path: Path) -> Path | None:
-    candidate = input_path.with_suffix(".v")
-    if candidate.exists():
-        return candidate
-    return None
-
-
-def build_prompt(
-    skill_path: Path,
-    input_path: Path,
-    input_v_path: Path | None,
-    function_name: str,
-    workspace_path: Path,
-) -> str:
-    input_v_line = f"- Optional input V: `{input_v_path}`\n" if input_v_path else "- Optional input V: `<not provided>`\n"
-    return f"""Use this skill as the complete workflow:
-{skill_path}
-
-Inputs:
-- Input C: `{input_path}`
-{input_v_line}- Target function: `{function_name}`
-- Workspace: `{workspace_path}`
-"""
-
-
 def parse_usage(stdout_jsonl: Path) -> dict[str, int] | None:
     usage = None
     if not stdout_jsonl.exists():
@@ -136,9 +103,61 @@ def parse_usage(stdout_jsonl: Path) -> dict[str, int] | None:
     return usage
 
 
+def metrics_path(workspace_path: Path) -> Path:
+    return workspace_path / "logs" / "metrics.md"
+
+
+def issues_path(workspace_path: Path) -> Path:
+    return workspace_path / "logs" / "issues.md"
+
+
+def reasoning_path(workspace_path: Path) -> Path:
+    return workspace_path / "logs" / "reasoning.md"
+
+
+def bootstrap_workspace(workspace_path: Path, raw_path: Path) -> dict[str, Path]:
+    logs_dir = workspace_path / "logs"
+    raw_dir = workspace_path / "raw"
+    workspace_input_dir = workspace_path / "input"
+    logs_dir.mkdir(parents=True, exist_ok=True)
+    raw_dir.mkdir(parents=True, exist_ok=True)
+    workspace_input_dir.mkdir(parents=True, exist_ok=True)
+
+    raw_copy = raw_dir / raw_path.name
+    shutil.copy2(raw_path, raw_copy)
+    return {
+        "logs_dir": logs_dir,
+        "raw_dir": raw_dir,
+        "workspace_input_dir": workspace_input_dir,
+        "raw_copy": raw_copy,
+    }
+
+
+def build_prompt(
+    skill_path: Path,
+    raw_path: Path,
+    workspace_path: Path,
+    target_c_path: Path,
+    target_v_path: Path,
+    function_name: str,
+) -> str:
+    return f"""Use this skill as the complete workflow:
+{skill_path}
+
+Inputs:
+- Raw markdown: `{raw_path}`
+- Target function: `{function_name}`
+- Workspace: `{workspace_path}`
+- Output C: `{target_c_path}`
+- Optional output V: `{target_v_path}`
+"""
+
+
 def append_metrics_section(
-    metrics_md_path: Path,
+    metrics_md: Path,
     run_label: str,
+    status: str,
+    exit_code: int,
     start_iso: str,
     end_iso: str,
     wall_clock_seconds: float,
@@ -150,14 +169,21 @@ def append_metrics_section(
     stdout_jsonl: Path,
     stderr_log: Path,
     last_message_path: Path,
+    produced_c: Path,
+    produced_v: Path,
 ) -> None:
     lines = []
+    lines.append("# Contract Metrics")
     lines.append("")
     lines.append(f"## External Codex Run `{run_label}`")
     lines.append("")
+    lines.append(f"- Stage: `contract`")
+    lines.append(f"- Status: `{status}`")
+    lines.append(f"- Exit code: `{exit_code}`")
     lines.append(f"- Start time: `{start_iso}`")
     lines.append(f"- End time: `{end_iso}`")
-    lines.append(f"- Wall-clock time (seconds): `{wall_clock_seconds:.2f}`")
+    lines.append(f"- Total wall-clock time (seconds): `{wall_clock_seconds:.2f}`")
+    lines.append(f"- Step `external_codex_run` wall-clock time (seconds): `{wall_clock_seconds:.2f}`")
     if usage is not None:
         input_tokens = usage.get("input_tokens")
         cached_input_tokens = usage.get("cached_input_tokens")
@@ -181,81 +207,72 @@ def append_metrics_section(
         lines.append(f"- Approx final-message tokens: `{final_message_tokens_approx}`")
         lines.append(f"- Approx total tokens: `{total_tokens}`")
     lines.append(f"- Approx workspace-authored text tokens: `{workspace_tokens_approx}`")
+    lines.append(f"- Produced input C: `{produced_c}`")
+    if produced_v.exists():
+        lines.append(f"- Produced input V: `{produced_v}`")
+    else:
+        lines.append("- Produced input V: `<not created>`")
+    lines.append(f"- Workspace input snapshot: `{metrics_md.parent.parent / 'input'}`")
     lines.append(f"- Prompt file: `{prompt_path}`")
     lines.append(f"- Codex stdout JSONL: `{stdout_jsonl}`")
     lines.append(f"- Codex stderr log: `{stderr_log}`")
     lines.append(f"- Codex last message: `{last_message_path}`")
+    metrics_md.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
-    if metrics_md_path.exists():
-        existing = metrics_md_path.read_text(encoding="utf-8")
+
+def update_issues_on_failure(issues_md: Path, stage: str, exit_code: int, stderr_log: Path, detail: str | None = None) -> None:
+    issues_md.parent.mkdir(parents=True, exist_ok=True)
+    if issues_md.exists():
+        existing = issues_md.read_text(encoding="utf-8").rstrip() + "\n\n"
     else:
-        existing = "# Verify Metrics\n"
-    metrics_md_path.write_text(existing.rstrip() + "\n" + "\n".join(lines) + "\n", encoding="utf-8")
-
-
-def update_issues_on_failure(issues_path: Path, stage: str, exit_code: int, stderr_log: Path) -> None:
-    issues_path.parent.mkdir(parents=True, exist_ok=True)
-    if issues_path.exists():
-        existing = issues_path.read_text(encoding="utf-8").rstrip() + "\n\n"
-    else:
-        existing = "# Execution Issues\n\n"
+        existing = "# Contract Issues\n\n"
     block = (
         "## External Codex Failure\n\n"
         f"- Stage: `{stage}`\n"
         f"- Exit code: `{exit_code}`\n"
         f"- Stderr log: `{stderr_log}`\n"
     )
-    issues_path.write_text(existing + block, encoding="utf-8")
+    if detail:
+        block += f"- Detail: `{detail}`\n"
+    issues_md.write_text(existing + block, encoding="utf-8")
 
 
-def bootstrap_workspace(workspace_path: Path, input_path: Path, input_v_path: Path | None, function_name: str) -> None:
-    (workspace_path / "logs").mkdir(parents=True, exist_ok=True)
-    (workspace_path / "original").mkdir(parents=True, exist_ok=True)
-    (workspace_path / "annotated").mkdir(parents=True, exist_ok=True)
+def ensure_reasoning_placeholder(reasoning_md: Path, stage: str, detail: str | None = None) -> None:
+    if reasoning_md.exists():
+        return
+    lines = [
+        "# Contract Reasoning",
+        "",
+        "## Unavailable",
+        "",
+        f"- This file was not produced by the contract run because stage `{stage}` failed before reasoning was written.",
+    ]
+    if detail:
+        lines.append(f"- Failure detail: `{detail}`")
+    reasoning_md.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
-    original_c = workspace_path / "original" / input_path.name
-    annotated_c = workspace_path / "annotated" / input_path.name
-    shutil.copy2(input_path, original_c)
-    shutil.copy2(input_path, annotated_c)
 
-    original_v = ""
-    if input_v_path is not None:
-        dst_v = workspace_path / "original" / input_v_path.name
-        shutil.copy2(input_v_path, dst_v)
-        original_v = str(dst_v)
-
-    fingerprint_path = workspace_path / "logs" / "workspace_fingerprint.json"
-    fingerprint = {
-        "fingerprint_version": 2,
-        "workspace": workspace_path.name,
-        "stage": "verify",
-        "input_c": str(input_path),
-        "input_v": str(input_v_path) if input_v_path else "",
-        "original_c": str(original_c),
-        "original_v": original_v,
-        "annotated_c": str(annotated_c),
-        "function_name": function_name,
-        "program_sha256": sha256_hex(input_path),
-        "semantic_description": "",
-        "keywords": {},
-        "assume_contract_is_correct": True,
-        "contract_source": "contract_input_c",
-    }
-    fingerprint_path.write_text(json.dumps(fingerprint, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+def snapshot_generated_inputs(workspace_path: Path, input_c: Path, input_v: Path) -> None:
+    generated_input_dir = workspace_path / "input"
+    generated_input_dir.mkdir(parents=True, exist_ok=True)
+    if input_c.exists():
+        shutil.copy2(input_c, generated_input_dir / input_c.name)
+    if input_v.exists():
+        shutil.copy2(input_v, generated_input_dir / input_v.name)
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Run Codex externally to execute the full verify workflow.")
-    parser.add_argument("input_c", help="Path to input C file, relative to repo root or absolute.")
-    parser.add_argument("function_name_positional", nargs="?", help="Optional function name to verify. Kept for CLI compatibility.")
-    parser.add_argument("--function-name", help="Function name to verify. Preferred form.")
-    parser.add_argument("--skill", default=str(DEFAULT_SKILL), help="Path to verification skill markdown.")
-    parser.add_argument("--workspace-name", help="Explicit workspace stem; defaults to input file stem.")
-    parser.add_argument("--timestamp", help="Explicit verify timestamp; defaults to current local time.")
+    parser = argparse.ArgumentParser(description="Run Codex externally to produce contract-stage inputs from raw markdown.")
+    parser.add_argument("input_md", help="Path to raw markdown input, relative to repo root or absolute.")
+    parser.add_argument("function_name_positional", nargs="?", help="Optional target function name. Kept for CLI compatibility.")
+    parser.add_argument("--function-name", help="Explicit target function name. Defaults to markdown stem.")
+    parser.add_argument("--skill", default=str(DEFAULT_SKILL), help="Path to contract skill markdown.")
+    parser.add_argument("--workspace-name", help="Explicit workspace stem; defaults to markdown stem.")
+    parser.add_argument("--timestamp", help="Explicit contract timestamp; defaults to current local time.")
     parser.add_argument("--model", help="Optional Codex model override.")
     parser.add_argument("--dry-run", action="store_true", help="Prepare workspace and prompt, but do not invoke Codex.")
     parser.add_argument("--codex-bin", default="codex", help="Codex CLI binary.")
-    parser.add_argument("--timeout-seconds", type=int, default=3600, help="Kill the external Codex run if it exceeds this wall-clock timeout.")
+    parser.add_argument("--timeout-seconds", type=int, default=300, help="Kill the external Codex run if it exceeds this wall-clock timeout.")
     return parser
 
 
@@ -263,38 +280,36 @@ def main() -> int:
     parser = build_parser()
     args = parser.parse_args()
 
-    input_path = Path(args.input_c)
-    if not input_path.is_absolute():
-        input_path = (REPO_ROOT / input_path).resolve()
+    raw_path = Path(args.input_md)
+    if not raw_path.is_absolute():
+        raw_path = (REPO_ROOT / raw_path).resolve()
     skill_path = Path(args.skill)
     if not skill_path.is_absolute():
         skill_path = (REPO_ROOT / skill_path).resolve()
 
-    if not input_path.exists():
-        print(f"input file not found: {input_path}", file=sys.stderr)
+    if not raw_path.exists():
+        print(f"input markdown not found: {raw_path}", file=sys.stderr)
         return 2
-    if input_path.suffix != ".c":
-        print(f"input file must be a .c file: {input_path}", file=sys.stderr)
+    if raw_path.suffix != ".md":
+        print(f"input markdown must be a .md file: {raw_path}", file=sys.stderr)
         return 2
     if not skill_path.exists():
         print(f"skill file not found: {skill_path}", file=sys.stderr)
         return 2
 
-    function_name = args.function_name or args.function_name_positional
-    if not function_name:
-        print("function name is required: pass --function-name NAME or a positional NAME", file=sys.stderr)
-        return 2
-
-    input_v_path = paired_input_v(input_path)
-
-    workspace_stem = args.workspace_name or stem_from_input(input_path)
+    workspace_stem = args.workspace_name or raw_path.stem
     workspace_timestamp = args.timestamp or timestamp_now()
-    workspace_path = OUTPUT_ROOT / f"verify_{workspace_timestamp}_{workspace_stem}"
-    bootstrap_workspace(workspace_path, input_path, input_v_path, function_name)
+    workspace_path = OUTPUT_ROOT / f"contract_{workspace_timestamp}_{workspace_stem}"
+    bootstrap_workspace(workspace_path, raw_path)
     emit_log(f"workspace={workspace_path}")
-    emit_log(f"input_c={input_path}")
+
+    function_name = args.function_name or args.function_name_positional or raw_path.stem
+    target_c_path = INPUT_ROOT / f"{raw_path.stem}.c"
+    target_v_path = INPUT_ROOT / f"{raw_path.stem}.v"
+    emit_log(f"input_md={raw_path}")
     emit_log(f"function_name={function_name}")
-    emit_log(f"input_v={input_v_path if input_v_path else '<not provided>'}")
+    emit_log(f"target_c={target_c_path}")
+    emit_log(f"target_v={target_v_path}")
 
     logs_dir = workspace_path / "logs"
     run_label = dt.datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -303,7 +318,14 @@ def main() -> int:
     stderr_log = logs_dir / f"codex_stderr_{run_label}.log"
     last_message_path = logs_dir / f"codex_last_message_{run_label}.txt"
 
-    prompt = build_prompt(skill_path, input_path, input_v_path, function_name, workspace_path)
+    prompt = build_prompt(
+        skill_path,
+        raw_path,
+        workspace_path,
+        target_c_path,
+        target_v_path,
+        function_name,
+    )
     ensure_parent(prompt_path)
     prompt_path.write_text(prompt, encoding="utf-8")
 
@@ -331,6 +353,7 @@ def main() -> int:
     emit_log(f"codex_exec_start timeout_seconds={args.timeout_seconds}")
 
     proc_returncode = 0
+    status = "completed"
     failure_detail = None
     try:
         with stdout_jsonl.open("w", encoding="utf-8") as out_f, stderr_log.open("w", encoding="utf-8") as err_f:
@@ -346,6 +369,7 @@ def main() -> int:
             )
         proc_returncode = proc.returncode
     except subprocess.TimeoutExpired:
+        status = "timeout"
         proc_returncode = 124
         failure_detail = f"external codex run exceeded timeout of {args.timeout_seconds} seconds"
         emit_log(f"codex_exec_timeout detail={failure_detail}")
@@ -353,9 +377,10 @@ def main() -> int:
     end_iso = iso_now()
     filter_stderr_in_place(stderr_log)
 
+    snapshot_generated_inputs(workspace_path, target_c_path, target_v_path)
+
     usage = parse_usage(stdout_jsonl)
     final_message = last_message_path.read_text(encoding="utf-8") if last_message_path.exists() else ""
-
     workspace_text_files = [
         p for p in workspace_path.rglob("*")
         if p.is_file() and p.suffix in {".c", ".v", ".md", ".txt", ".log", ".json"}
@@ -366,6 +391,8 @@ def main() -> int:
     append_metrics_section(
         metrics_path(workspace_path),
         run_label,
+        status,
+        proc_returncode,
         start_iso,
         end_iso,
         end_wall - start_wall,
@@ -377,19 +404,23 @@ def main() -> int:
         stdout_jsonl,
         stderr_log,
         last_message_path,
+        target_c_path,
+        target_v_path,
     )
 
     if proc_returncode != 0:
+        ensure_reasoning_placeholder(
+            reasoning_path(workspace_path),
+            "external-codex-run",
+            failure_detail,
+        )
         update_issues_on_failure(
-            workspace_path / "logs" / "issues.md",
+            issues_path(workspace_path),
             "external-codex-run",
             proc_returncode,
             stderr_log,
+            failure_detail,
         )
-        if failure_detail is not None:
-            issues_path = workspace_path / "logs" / "issues.md"
-            existing = issues_path.read_text(encoding="utf-8").rstrip() + "\n"
-            issues_path.write_text(existing + f"- Detail: `{failure_detail}`\n", encoding="utf-8")
         emit_log(f"codex_exec_failed exit_code={proc_returncode}")
     else:
         emit_log("codex_exec_completed exit_code=0")
@@ -400,10 +431,6 @@ def main() -> int:
 
     print(str(workspace_path))
     return proc_returncode
-
-
-def metrics_path(workspace_path: Path) -> Path:
-    return workspace_path / "logs" / "metrics.md"
 
 
 if __name__ == "__main__":
