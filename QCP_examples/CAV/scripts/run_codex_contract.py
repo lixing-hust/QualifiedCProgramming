@@ -14,6 +14,8 @@ REPO_ROOT = Path("/home/yangfp/QualifiedCProgramming/QCP_examples/CAV")
 DEFAULT_SKILL = REPO_ROOT / "skills" / "contract" / "SKILL.md"
 OUTPUT_ROOT = REPO_ROOT / "output"
 INPUT_ROOT = REPO_ROOT / "input"
+DEFAULT_MODEL = "gpt-5.4"
+DEFAULT_REASONING_EFFORT = "medium"
 NOISE_PATTERNS = [
     "WARNING: proceeding, even though we could not update PATH: Read-only file system",
     "failed to renew cache TTL: Read-only file system",
@@ -269,7 +271,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--skill", default=str(DEFAULT_SKILL), help="Path to contract skill markdown.")
     parser.add_argument("--workspace-name", help="Explicit workspace stem; defaults to markdown stem.")
     parser.add_argument("--timestamp", help="Explicit contract timestamp; defaults to current local time.")
-    parser.add_argument("--model", help="Optional Codex model override.")
+    parser.add_argument("--model", default=DEFAULT_MODEL, help="Codex model. Defaults to gpt-5.4.")
+    parser.add_argument(
+        "--reasoning-effort",
+        default=DEFAULT_REASONING_EFFORT,
+        help="Codex reasoning effort. Defaults to medium.",
+    )
     parser.add_argument("--dry-run", action="store_true", help="Prepare workspace and prompt, but do not invoke Codex.")
     parser.add_argument("--codex-bin", default="codex", help="Codex CLI binary.")
     parser.add_argument("--timeout-seconds", type=int, default=300, help="Kill the external Codex run if it exceeds this wall-clock timeout.")
@@ -310,6 +317,8 @@ def main() -> int:
     emit_log(f"function_name={function_name}")
     emit_log(f"target_c={target_c_path}")
     emit_log(f"target_v={target_v_path}")
+    emit_log(f"model={args.model}")
+    emit_log(f"reasoning_effort={args.reasoning_effort}")
 
     logs_dir = workspace_path / "logs"
     run_label = dt.datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -349,6 +358,8 @@ def main() -> int:
     ]
     if args.model:
         cmd.extend(["--model", args.model])
+    if args.reasoning_effort:
+        cmd.extend(["--reasoning-effort", args.reasoning_effort])
     cmd.append("-")
     emit_log(f"codex_exec_start timeout_seconds={args.timeout_seconds}")
 

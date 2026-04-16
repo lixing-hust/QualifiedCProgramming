@@ -60,3 +60,9 @@
 - 改了证明结构
 
 都必须重新对齐 witness。
+
+## 10. `proof_auto.v` 已经定义的 lemma，不要在 `proof_manual.v` 里重复定义
+
+- 开始写 manual proof 前，先看一眼 `proof_auto.v`
+- 如果某个 `proof_of_<name>_*` 已经在 `proof_auto.v` 里给出，就不要在 `proof_manual.v` 里再写同名 lemma
+- 否则 `goal_check.v` 里同时 `Include proof_auto` 和 `Include proof_manual` 时会报重复 label

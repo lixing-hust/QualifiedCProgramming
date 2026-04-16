@@ -14,6 +14,8 @@ import time
 REPO_ROOT = Path("/home/yangfp/QualifiedCProgramming/QCP_examples/CAV")
 DEFAULT_SKILL = REPO_ROOT / "skills" / "verify" / "SKILL.md"
 OUTPUT_ROOT = REPO_ROOT / "output"
+DEFAULT_MODEL = "gpt-5.4"
+DEFAULT_REASONING_EFFORT = "medium"
 NOISE_PATTERNS = [
     "WARNING: proceeding, even though we could not update PATH: Read-only file system",
     "failed to renew cache TTL: Read-only file system",
@@ -104,6 +106,7 @@ def build_prompt(
     input_v_path: Path | None,
     function_name: str,
     workspace_path: Path,
+    annotated_c_path: Path,
 ) -> str:
     input_v_line = f"- Optional input V: `{input_v_path}`\n" if input_v_path else "- Optional input V: `<not provided>`\n"
     return f"""Use this skill as the complete workflow:
@@ -113,6 +116,7 @@ Inputs:
 - Input C: `{input_path}`
 {input_v_line}- Target function: `{function_name}`
 - Workspace: `{workspace_path}`
+- Active annotated C: `{annotated_c_path}`
 """
 
 
@@ -208,13 +212,14 @@ def update_issues_on_failure(issues_path: Path, stage: str, exit_code: int, stde
     issues_path.write_text(existing + block, encoding="utf-8")
 
 
-def bootstrap_workspace(workspace_path: Path, input_path: Path, input_v_path: Path | None, function_name: str) -> None:
+def bootstrap_workspace(workspace_path: Path, input_path: Path, input_v_path: Path | None, function_name: str) -> Path:
     (workspace_path / "logs").mkdir(parents=True, exist_ok=True)
     (workspace_path / "original").mkdir(parents=True, exist_ok=True)
-    (workspace_path / "annotated").mkdir(parents=True, exist_ok=True)
+    (workspace_path / "coq").mkdir(parents=True, exist_ok=True)
+    (REPO_ROOT / "annotated").mkdir(parents=True, exist_ok=True)
 
     original_c = workspace_path / "original" / input_path.name
-    annotated_c = workspace_path / "annotated" / input_path.name
+    annotated_c = REPO_ROOT / "annotated" / f"{workspace_path.name}.c"
     shutil.copy2(input_path, original_c)
     shutil.copy2(input_path, annotated_c)
 
@@ -242,6 +247,7 @@ def bootstrap_workspace(workspace_path: Path, input_path: Path, input_v_path: Pa
         "contract_source": "contract_input_c",
     }
     fingerprint_path.write_text(json.dumps(fingerprint, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    return annotated_c
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -252,7 +258,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--skill", default=str(DEFAULT_SKILL), help="Path to verification skill markdown.")
     parser.add_argument("--workspace-name", help="Explicit workspace stem; defaults to input file stem.")
     parser.add_argument("--timestamp", help="Explicit verify timestamp; defaults to current local time.")
-    parser.add_argument("--model", help="Optional Codex model override.")
+    parser.add_argument("--model", default=DEFAULT_MODEL, help="Codex model. Defaults to gpt-5.4.")
+    parser.add_argument(
+        "--reasoning-effort",
+        default=DEFAULT_REASONING_EFFORT,
+        help="Codex reasoning effort. Defaults to medium.",
+    )
     parser.add_argument("--dry-run", action="store_true", help="Prepare workspace and prompt, but do not invoke Codex.")
     parser.add_argument("--codex-bin", default="codex", help="Codex CLI binary.")
     parser.add_argument("--timeout-seconds", type=int, default=3600, help="Kill the external Codex run if it exceeds this wall-clock timeout.")
@@ -290,11 +301,14 @@ def main() -> int:
     workspace_stem = args.workspace_name or stem_from_input(input_path)
     workspace_timestamp = args.timestamp or timestamp_now()
     workspace_path = OUTPUT_ROOT / f"verify_{workspace_timestamp}_{workspace_stem}"
-    bootstrap_workspace(workspace_path, input_path, input_v_path, function_name)
+    annotated_c_path = bootstrap_workspace(workspace_path, input_path, input_v_path, function_name)
     emit_log(f"workspace={workspace_path}")
     emit_log(f"input_c={input_path}")
     emit_log(f"function_name={function_name}")
     emit_log(f"input_v={input_v_path if input_v_path else '<not provided>'}")
+    emit_log(f"annotated_c={annotated_c_path}")
+    emit_log(f"model={args.model}")
+    emit_log(f"reasoning_effort={args.reasoning_effort}")
 
     logs_dir = workspace_path / "logs"
     run_label = dt.datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -303,7 +317,7 @@ def main() -> int:
     stderr_log = logs_dir / f"codex_stderr_{run_label}.log"
     last_message_path = logs_dir / f"codex_last_message_{run_label}.txt"
 
-    prompt = build_prompt(skill_path, input_path, input_v_path, function_name, workspace_path)
+    prompt = build_prompt(skill_path, input_path, input_v_path, function_name, workspace_path, annotated_c_path)
     ensure_parent(prompt_path)
     prompt_path.write_text(prompt, encoding="utf-8")
 
@@ -327,6 +341,8 @@ def main() -> int:
     ]
     if args.model:
         cmd.extend(["--model", args.model])
+    if args.reasoning_effort:
+        cmd.extend(["--reasoning-effort", args.reasoning_effort])
     cmd.append("-")
     emit_log(f"codex_exec_start timeout_seconds={args.timeout_seconds}")
 
