@@ -14,6 +14,8 @@ import time
 REPO_ROOT = Path("/home/yangfp/QualifiedCProgramming/QCP_examples/CAV")
 DEFAULT_SKILL = REPO_ROOT / "skills" / "verify" / "SKILL.md"
 OUTPUT_ROOT = REPO_ROOT / "output"
+EXAMPLES_ROOT = REPO_ROOT / "examples"
+EXPORT_SCRIPT = REPO_ROOT / "skills" / "example_export" / "scripts" / "export_verify_example.py"
 DEFAULT_MODEL = "gpt-5.4"
 DEFAULT_REASONING_EFFORT = "medium"
 NOISE_PATTERNS = [
@@ -228,6 +230,25 @@ def update_issues_on_failure(issues_path: Path, stage: str, exit_code: int, stde
     issues_path.write_text(existing + block, encoding="utf-8")
 
 
+def export_example_if_needed(workspace_path: Path, function_name: str) -> tuple[bool, str]:
+    target_dir = EXAMPLES_ROOT / function_name
+    if target_dir.exists():
+        return False, f"skip_existing:{target_dir}"
+    if not EXPORT_SCRIPT.exists():
+        return False, f"missing_export_script:{EXPORT_SCRIPT}"
+    proc = subprocess.run(
+        [sys.executable, str(EXPORT_SCRIPT), str(workspace_path)],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        cwd=REPO_ROOT,
+    )
+    if proc.returncode != 0:
+        detail = proc.stderr.strip() or proc.stdout.strip() or "unknown export failure"
+        return False, f"export_failed:{detail}"
+    return True, target_dir.as_posix()
+
+
 def bootstrap_workspace(workspace_path: Path, input_path: Path, input_v_path: Path | None, function_name: str) -> Path:
     (workspace_path / "logs").mkdir(parents=True, exist_ok=True)
     (workspace_path / "original").mkdir(parents=True, exist_ok=True)
@@ -281,6 +302,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="Codex reasoning effort. Defaults to medium.",
     )
     parser.add_argument("--dry-run", action="store_true", help="Prepare workspace and prompt, but do not invoke Codex.")
+    parser.add_argument(
+        "--export-examples",
+        action="store_true",
+        help="If verify succeeds, export the workspace into examples/<function_name>/ unless that example already exists.",
+    )
     parser.add_argument("--codex-bin", default="codex", help="Codex CLI binary.")
     parser.add_argument("--timeout-seconds", type=int, default=3600, help="Kill the external Codex run if it exceeds this wall-clock timeout.")
     return parser
@@ -427,6 +453,12 @@ def main() -> int:
         emit_log(f"codex_exec_failed exit_code={proc_returncode}")
     else:
         emit_log("codex_exec_completed exit_code=0")
+        if args.export_examples:
+            exported, detail = export_example_if_needed(workspace_path, function_name)
+            if exported:
+                emit_log(f"examples_exported={detail}")
+            else:
+                emit_log(f"examples_export_skipped={detail}")
 
     emit_log(f"stdout_jsonl={stdout_jsonl}")
     emit_log(f"stderr_log={stderr_log}")
