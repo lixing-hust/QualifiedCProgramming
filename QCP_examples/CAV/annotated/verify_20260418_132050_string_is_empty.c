@@ -6,7 +6,6 @@ int string_is_empty(char *s)
 /*@ With l n
     Require
       0 <= n && n < INT_MAX &&
-      (forall (k: Z), (0 <= k && k < n) => l[k] != 0) &&
       CharArray::full(s, n + 1, app(l, cons(0, nil)))
     Ensure
       ((n == 0 && __return == 1) ||

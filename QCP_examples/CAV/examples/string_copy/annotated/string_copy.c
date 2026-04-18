@@ -16,18 +16,6 @@ void string_copy(char *src, char *dst)
 {
     int i = 0;
 
-    /*@ Inv exists l1 d1,
-          0 <= i && i <= n &&
-          src == src@pre &&
-          dst == dst@pre &&
-          Zlength(l1) == i &&
-          Zlength(d1) == n + 1 - i &&
-          (forall (k: Z), (0 <= k && k < i) => l1[k] == l[k]) &&
-          (forall (k: Z), (0 <= k && k < n) => l[k] != 0) &&
-          (forall (k: Z), (0 <= k && k < i) => l[k] != 0) &&
-          CharArray::full(src, n + 1, app(l, cons(0, nil))) *
-          CharArray::full(dst, n + 1, app(l1, d1))
-    */
     while (1) {
         if (src[i] == 0) {
             break;

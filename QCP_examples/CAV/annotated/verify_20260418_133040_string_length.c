@@ -2,21 +2,24 @@
 #include "../../verification_list.h"
 #include "../../char_array_def.h"
 
-int string_is_empty(char *s)
+int string_length(char *s)
 /*@ With l n
     Require
       0 <= n && n < INT_MAX &&
-      (forall (k: Z), (0 <= k && k < n) => l[k] != 0) &&
       CharArray::full(s, n + 1, app(l, cons(0, nil)))
     Ensure
-      ((n == 0 && __return == 1) ||
-       (0 < n && __return == 0)) &&
+      __return == n &&
       CharArray::full(s, n + 1, app(l, cons(0, nil)))
 */
 {
-    if (s[0] == 0) {
-        return 1;
-    } else {
-        return 0;
+    int i = 0;
+
+    while (1) {
+        if (s[i] == 0) {
+            break;
+        }
+        i++;
     }
+
+    return i;
 }
