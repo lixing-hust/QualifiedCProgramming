@@ -43,14 +43,15 @@ Verify 只消费 Contract 已经准备好的验证输入，不再负责设计前
 - 只在当前任务对应的 `annotated/verify_<timestamp>_<name>.c` 中补 `Inv`、`Assert`、`which implies`、bridge assert、loop-exit assertion
 - 每次改注释后都必须重新跑 `symexec`
 - 如果当前程序确实需要补 `Inv` / `Assert`，先写 `logs/annotation_reasoning.md`，再改 annotated 工作副本；如果完全不需要补任何 Verify 注释，就跳过 `annotation_reasoning.md`
-- `logs/annotation_reasoning.md` 不能只写最终答案；必须记录每一轮注释层迭代中的判断、失败原因、修改方向，以及为什么这次修改有望修复当前问题
+- `logs/annotation_reasoning.md` 只能追加，不能覆盖已有内容；必须记录每一轮注释层迭代中的判断、失败原因、修改方向，以及为什么这次修改有望修复当前问题
 - 如果 `proof_manual.v` 里确实有需要手工证明的 theorem，先写 `logs/proof_reasoning.md`，再改 `proof_manual.v`；如果 `proof_manual.v` 没有需要证明的目标，就跳过 `proof_reasoning.md` 和 manual proof
-- `logs/proof_reasoning.md` 不能只写首轮计划；必须持续追加每一轮 proof 迭代中的失败点、当前假设、为什么证不出来、尝试过什么、下一步准备怎么改
+- `logs/proof_reasoning.md` 只能追加，不能覆盖已有内容；必须持续追加每一轮 proof 迭代中的失败点、当前假设、为什么证不出来、尝试过什么、下一步准备怎么改
 - proof 阶段必须不断迭代，直到 `goal_check.v` 编译通过，或外部时间上限触发；其他细节统一以 `doc/experiences/PROOF.md` 为准
 - `proof_manual.v` 不得留下 `Admitted.` 或新增 `Axiom`
 - `goal_check.v` 必须编译通过
 - 编译完成后清理 `coq/` 下非 `.v` 中间产物
-- `logs/issues.md` 必须详细记录整个 verify 过程中的所有踩坑，而不是只记最后一个错误；至少要覆盖现象、触发条件、定位过程、修复动作和结果
+- `logs/issues.md` 只能追加，不能覆盖已有内容；必须详细记录整个 verify 过程中的所有踩坑，而不是只记最后一个错误；至少要覆盖现象、触发条件、定位过程、修复动作和结果
+- `logs/metrics.md` 只能追加，不能覆盖已有内容；唯一允许修改的已有内容是最后的 `Final Result: ...` 行
 - `logs/metrics.md` 的最后必须显式写一行 `Final Result: Success` 或 `Final Result: Fail`
 - 如果本次任务更新了任何经验文档，`logs/metrics.md` 必须显式列出更新了哪些经验文件；如果没有更新，也要明确写 `Experience updates: none`
 - `Final Result: Success` 只能在以下条件同时满足时写：
