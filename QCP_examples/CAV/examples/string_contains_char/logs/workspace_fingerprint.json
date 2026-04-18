@@ -3,14 +3,33 @@
   "workspace": "verify_20260418_182117_string_contains_char",
   "stage": "verify",
   "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_contains_char.c",
-  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_contains_char.v",
+  "input_v": "",
   "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_182117_string_contains_char/original/string_contains_char.c",
-  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_182117_string_contains_char/original/string_contains_char.v",
+  "original_v": "",
   "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_182117_string_contains_char.c",
   "function_name": "string_contains_char",
-  "program_sha256": "ee32e7757e8424721cbfabcdf3350e0f1457c4062aaceb4b7cb8b6dc8ba6c765",
-  "semantic_description": "",
-  "keywords": {},
+  "program_sha256": "29deeb6b0a8dd05ad7004395097ce6e7d5d0697e566815e8f5a355b4bd7862fe",
+  "semantic_description": "Searches a null-terminated string for a target character by scanning until either the character or the terminator is reached.",
+  "keywords": {
+    "algorithm_family": [
+      "search"
+    ],
+    "control_flow": [
+      "while_loop",
+      "if"
+    ],
+    "data_shape": [
+      "string"
+    ],
+    "proof_pattern": [
+      "loop_invariant",
+      "case_split",
+      "heap_reasoning"
+    ],
+    "verification_status": [
+      "goal_check_passed"
+    ]
+  },
   "assume_contract_is_correct": true,
   "contract_source": "contract_input_c"
 }

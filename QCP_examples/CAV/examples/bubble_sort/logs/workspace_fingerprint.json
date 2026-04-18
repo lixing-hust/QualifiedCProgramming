@@ -9,27 +9,28 @@
   "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260417_202657_bubble_sort.c",
   "function_name": "bubble_sort",
   "program_sha256": "7a53da9fee31cc4245fe4953729c33432c17baf24f31195ede3d7a5d6a9c5f85",
-  "semantic_description": "In-place bubble sort over an integer array. The function performs nested passes over the array, swapping adjacent out-of-order elements. The postcondition requires the final array contents to be sorted in nondecreasing order and to be a permutation of the input contents, while preserving ownership of the same array block.",
+  "semantic_description": "Sorts an integer array in place with nested bubble-sort passes, swapping adjacent out-of-order elements until the array is in nondecreasing order.",
   "keywords": {
-    "algorithm": [
-      "bubble_sort",
-      "in_place_sort",
-      "adjacent_swap",
-      "nested_loops"
+    "algorithm_family": [
+      "simulation"
     ],
-    "data_structure": [
-      "int_array"
+    "control_flow": [
+      "nested_loop",
+      "if"
     ],
-    "proof_obligations": [
+    "data_shape": [
+      "array"
+    ],
+    "semantic_intent": [
+      "in_place_update"
+    ],
+    "proof_pattern": [
       "loop_invariant",
-      "array_ownership_preservation",
-      "sortedness",
-      "permutation"
+      "heap_reasoning",
+      "case_split"
     ],
-    "spec_terms": [
-      "IntArray::full",
-      "sorted_z",
-      "Permutation"
+    "verification_status": [
+      "goal_check_passed"
     ]
   },
   "assume_contract_is_correct": true,

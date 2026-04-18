@@ -8,9 +8,29 @@
   "original_v": "",
   "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_195028_string_reverse_copy.c",
   "function_name": "string_reverse_copy",
-  "program_sha256": "efd8435cc40d140c3fccaa28a7691377d13f9c5deffaba76835438cc5ee9a818",
-  "semantic_description": "",
-  "keywords": {},
+  "program_sha256": "906867d0fa85cdac246d0576fcaad638d61428b39d73199c6a5348ac33247953",
+  "semantic_description": "Copies a null-terminated string into a destination buffer in reverse character order and preserves the source string.",
+  "keywords": {
+    "algorithm_family": [
+      "simulation"
+    ],
+    "control_flow": [
+      "for_loop"
+    ],
+    "data_shape": [
+      "string"
+    ],
+    "semantic_intent": [
+      "preserve_input"
+    ],
+    "proof_pattern": [
+      "loop_invariant",
+      "heap_reasoning"
+    ],
+    "verification_status": [
+      "goal_check_passed"
+    ]
+  },
   "assume_contract_is_correct": true,
   "contract_source": "contract_input_c"
 }

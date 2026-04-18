@@ -8,9 +8,31 @@
   "original_v": "",
   "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_120110_is_sorted_nondecreasing.c",
   "function_name": "is_sorted_nondecreasing",
-  "program_sha256": "3eb3fe72100e90ba8c58b43b679d3ad4ec561229ce0ad31da8c4fa55fc30a250",
-  "semantic_description": "",
-  "keywords": {},
+  "program_sha256": "c625c25aaec83752d258f7067db21fd7300d1f360f85ce7b45474b1f6ff7a1db",
+  "semantic_description": "Checks whether an integer array is sorted in nondecreasing order by scanning adjacent pairs and returning false on the first violation.",
+  "keywords": {
+    "algorithm_family": [
+      "search"
+    ],
+    "control_flow": [
+      "for_loop",
+      "if"
+    ],
+    "data_shape": [
+      "array"
+    ],
+    "proof_pattern": [
+      "loop_invariant",
+      "case_split",
+      "heap_reasoning"
+    ],
+    "edge_case_behavior": [
+      "empty_loop_possible"
+    ],
+    "verification_status": [
+      "goal_check_passed"
+    ]
+  },
   "assume_contract_is_correct": true,
   "contract_source": "contract_input_c"
 }

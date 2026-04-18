@@ -3,14 +3,35 @@
   "workspace": "verify_20260418_171328_count_positive",
   "stage": "verify",
   "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/count_positive.c",
-  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/count_positive.v",
+  "input_v": "",
   "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_171328_count_positive/original/count_positive.c",
-  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_171328_count_positive/original/count_positive.v",
+  "original_v": "",
   "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_171328_count_positive.c",
   "function_name": "count_positive",
-  "program_sha256": "d65930f834166a47c259c7c65f89ccdc4518108c2726765217127446d81fd75d",
-  "semantic_description": "",
-  "keywords": {},
+  "program_sha256": "75c364bb66c6a0a7493d3cf7fdadbd23d0f4c75b6e5af7cf339f886c1a1c07c1",
+  "semantic_description": "Counts how many elements of an integer array are strictly positive using a forward loop.",
+  "keywords": {
+    "algorithm_family": [
+      "counting"
+    ],
+    "control_flow": [
+      "for_loop",
+      "if"
+    ],
+    "data_shape": [
+      "array"
+    ],
+    "semantic_intent": [
+      "count_iterations"
+    ],
+    "proof_pattern": [
+      "loop_invariant",
+      "heap_reasoning"
+    ],
+    "verification_status": [
+      "goal_check_passed"
+    ]
+  },
   "assume_contract_is_correct": true,
   "contract_source": "contract_input_c"
 }

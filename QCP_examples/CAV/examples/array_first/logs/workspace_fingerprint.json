@@ -9,22 +9,25 @@
   "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_013727_array_first.c",
   "function_name": "array_first",
   "program_sha256": "bb2ca0f5c9940a4e7057319e07b7d5488151a6efcf5e4f7de3360b528f9be746",
-  "semantic_description": "Return the first element of an integer array while preserving ownership of the full array predicate.",
+  "semantic_description": "Returns the first element of a nonempty integer array while preserving ownership of the array.",
   "keywords": {
-    "algorithm": [
-      "array_first",
-      "direct_read"
+    "algorithm_family": [
+      "selection"
     ],
-    "data_structure": [
-      "int_array"
+    "control_flow": [
+      "straight_line"
     ],
-    "proof_obligations": [
-      "array_read",
-      "ownership_preservation"
+    "data_shape": [
+      "array"
     ],
-    "spec_terms": [
-      "IntArray::full",
-      "Zlength"
+    "semantic_intent": [
+      "return_input"
+    ],
+    "proof_pattern": [
+      "heap_reasoning"
+    ],
+    "verification_status": [
+      "goal_check_passed"
     ]
   },
   "assume_contract_is_correct": true,

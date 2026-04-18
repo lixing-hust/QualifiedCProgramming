@@ -9,8 +9,29 @@
   "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_124259_string_copy.c",
   "function_name": "string_copy",
   "program_sha256": "f0cb578b3b823811e86e2dcc9c03f8046f8e05d3444a3941c59a89ccec69cf33",
-  "semantic_description": "",
-  "keywords": {},
+  "semantic_description": "Copies a null-terminated source string into a destination buffer until the terminator is reached, while preserving the source string.",
+  "keywords": {
+    "algorithm_family": [
+      "simulation"
+    ],
+    "control_flow": [
+      "while_loop",
+      "if"
+    ],
+    "data_shape": [
+      "string"
+    ],
+    "semantic_intent": [
+      "preserve_input"
+    ],
+    "proof_pattern": [
+      "loop_invariant",
+      "heap_reasoning"
+    ],
+    "verification_status": [
+      "goal_check_passed"
+    ]
+  },
   "assume_contract_is_correct": true,
   "contract_source": "contract_input_c"
 }

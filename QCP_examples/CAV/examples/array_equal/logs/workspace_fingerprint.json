@@ -3,14 +3,36 @@
   "workspace": "verify_20260418_172343_array_equal",
   "stage": "verify",
   "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_equal.c",
-  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_equal.v",
+  "input_v": "",
   "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_172343_array_equal/original/array_equal.c",
-  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_172343_array_equal/original/array_equal.v",
+  "original_v": "",
   "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_172343_array_equal.c",
   "function_name": "array_equal",
-  "program_sha256": "8970a3fb1f6bdb9a125a52714c7306dc56a00274308119aa9bb0135321c8f8d8",
-  "semantic_description": "",
-  "keywords": {},
+  "program_sha256": "236eb0e9f81c4122a5fb0d33508ca1591cc3d183e3f4eb15dbd572ed5d4be841",
+  "semantic_description": "Compares two integer arrays element by element and returns whether they are equal, using a loop with branch-based mismatch handling.",
+  "keywords": {
+    "algorithm_family": [
+      "search"
+    ],
+    "control_flow": [
+      "for_loop",
+      "if"
+    ],
+    "data_shape": [
+      "array"
+    ],
+    "semantic_intent": [
+      "preserve_input"
+    ],
+    "proof_pattern": [
+      "loop_invariant",
+      "case_split",
+      "heap_reasoning"
+    ],
+    "verification_status": [
+      "goal_check_passed"
+    ]
+  },
   "assume_contract_is_correct": true,
   "contract_source": "contract_input_c"
 }

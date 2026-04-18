@@ -3,17 +3,31 @@
   "workspace": "verify_20260418_015641_array_min",
   "stage": "verify",
   "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_min.c",
-  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_min.v",
+  "input_v": "",
   "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_015641_array_min/original/array_min.c",
-  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_015641_array_min/original/array_min.v",
+  "original_v": "",
   "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_015641_array_min.c",
   "function_name": "array_min",
-  "program_sha256": "5da9e98a78bba565907beb2c03f220c81587e94d94daf61b549c9782ee46c7b1",
-  "semantic_description": "Scan a nonempty integer array and return the minimum element while preserving the array contents.",
+  "program_sha256": "3b7d1fe318f4804b60125efa3c7c1f8bd99b91902699e539a80f279497c4b65f",
+  "semantic_description": "Scans a nonempty integer array and returns the minimum element while preserving the array contents.",
   "keywords": {
-    "shape": "array scan",
-    "accumulator": "running minimum",
-    "requires_manual_proof": true
+    "algorithm_family": [
+      "selection"
+    ],
+    "control_flow": [
+      "for_loop",
+      "if"
+    ],
+    "data_shape": [
+      "array"
+    ],
+    "proof_pattern": [
+      "loop_invariant",
+      "heap_reasoning"
+    ],
+    "verification_status": [
+      "goal_check_passed"
+    ]
   },
   "assume_contract_is_correct": true,
   "contract_source": "contract_input_c"

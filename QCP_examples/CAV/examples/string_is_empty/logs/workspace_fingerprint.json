@@ -8,9 +8,26 @@
   "original_v": "",
   "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_145048_string_is_empty.c",
   "function_name": "string_is_empty",
-  "program_sha256": "46adda547044d61d5b967ab8a325798ce99267aacb6675125749f47437d28e2b",
-  "semantic_description": "",
-  "keywords": {},
+  "program_sha256": "f860cc57f5508df43a5f4aa554723f2f9a464e35f0049ea5091f41eeccf131ee",
+  "semantic_description": "Checks whether a null-terminated string is empty by testing its first character against the terminator.",
+  "keywords": {
+    "algorithm_family": [
+      "selection"
+    ],
+    "control_flow": [
+      "if"
+    ],
+    "data_shape": [
+      "string"
+    ],
+    "proof_pattern": [
+      "case_split",
+      "heap_reasoning"
+    ],
+    "verification_status": [
+      "goal_check_passed"
+    ]
+  },
   "assume_contract_is_correct": true,
   "contract_source": "contract_input_c"
 }

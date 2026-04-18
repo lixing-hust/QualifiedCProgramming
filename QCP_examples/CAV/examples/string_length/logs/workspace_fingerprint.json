@@ -9,8 +9,28 @@
   "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_151824_string_length.c",
   "function_name": "string_length",
   "program_sha256": "c1c3b0702e712b94e85031d532c17b0287f900d224cd372e50fd286b4aede75b",
-  "semantic_description": "",
-  "keywords": {},
+  "semantic_description": "Counts the length of a null-terminated string by advancing through characters until the terminator is found.",
+  "keywords": {
+    "algorithm_family": [
+      "counting"
+    ],
+    "control_flow": [
+      "while_loop"
+    ],
+    "data_shape": [
+      "string"
+    ],
+    "semantic_intent": [
+      "count_iterations"
+    ],
+    "proof_pattern": [
+      "loop_invariant",
+      "heap_reasoning"
+    ],
+    "verification_status": [
+      "goal_check_passed"
+    ]
+  },
   "assume_contract_is_correct": true,
   "contract_source": "contract_input_c"
 }
