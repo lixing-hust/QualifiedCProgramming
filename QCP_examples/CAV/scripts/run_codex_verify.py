@@ -125,9 +125,11 @@ def build_prompt(
     function_name: str,
     workspace_path: Path,
     annotated_c_path: Path,
+    attempt: int,
 ) -> str:
     input_v_line = f"- Optional input V: `{input_v_path}`\n" if input_v_path else "- Optional input V: `<not provided>`\n"
-    return f"""Use this skill as the complete workflow:
+    if attempt <= 1:
+        return f"""Use this skill as the complete workflow:
 {skill_path}
 
 Inputs:
@@ -135,6 +137,30 @@ Inputs:
 {input_v_line}- Target function: `{function_name}`
 - Workspace: `{workspace_path}`
 - Active annotated C: `{annotated_c_path}`
+
+Execution rule:
+- Work only inside this existing workspace.
+- Start from the normal verify workflow for this task.
+- Keep iterating in the same workspace until verification succeeds or the external time budget is exhausted.
+"""
+    return f"""Use this skill as the complete workflow:
+{skill_path}
+
+Retry round for the same verify workspace.
+
+Inputs:
+- Input C: `{input_path}`
+{input_v_line}- Target function: `{function_name}`
+- Workspace: `{workspace_path}`
+- Active annotated C: `{annotated_c_path}`
+
+Retry rule:
+- Do not restart the task from scratch.
+- First read the current logs, generated Coq files, latest compile errors, and current annotated file in this workspace.
+- Precisely identify the current blocker from the existing workspace state.
+- Continue repairing from that blocker in the same workspace.
+- Preserve existing correct work; only change what is needed for the next proof/compile step.
+- Keep iterating until verification succeeds or the external time budget is exhausted.
 """
 
 
@@ -386,104 +412,154 @@ def main() -> int:
     stderr_log = logs_dir / f"codex_stderr_{run_label}.log"
     last_message_path = logs_dir / f"codex_last_message_{run_label}.txt"
 
-    prompt = build_prompt(skill_path, input_path, input_v_path, function_name, workspace_path, annotated_c_path)
-    ensure_parent(prompt_path)
-    prompt_path.write_text(prompt, encoding="utf-8")
-
     if args.dry_run:
+        prompt = build_prompt(skill_path, input_path, input_v_path, function_name, workspace_path, annotated_c_path, 1)
+        ensure_parent(prompt_path)
+        prompt_path.write_text(prompt, encoding="utf-8")
         emit_log("dry_run=true")
         print(str(workspace_path))
         return 0
 
-    start_wall = time.time()
-    start_iso = iso_now()
-    cmd = [
-        args.codex_bin,
-        "--dangerously-bypass-approvals-and-sandbox",
-        "exec",
-        "--json",
-        "--skip-git-repo-check",
-        "-C",
-        str(REPO_ROOT),
-        "-o",
-        str(last_message_path),
-    ]
-    if args.model:
-        cmd.extend(["--model", args.model])
-    if args.reasoning_effort and reasoning_effort_supported:
-        cmd.extend(["--reasoning-effort", args.reasoning_effort])
-    cmd.append("-")
-    emit_log(f"codex_exec_start timeout_seconds={args.timeout_seconds}")
+    total_budget_seconds = args.timeout_seconds
+    overall_start_wall = time.time()
+    attempt = 0
+    proc_returncode = 1
+    completed = False
 
-    proc_returncode = 0
-    failure_detail = None
-    try:
-        with stdout_jsonl.open("w", encoding="utf-8") as out_f, stderr_log.open("w", encoding="utf-8") as err_f:
-            proc = subprocess.run(
-                cmd,
-                input=prompt,
-                text=True,
-                stdout=out_f,
-                stderr=err_f,
-                cwd=REPO_ROOT,
-                timeout=args.timeout_seconds,
-                env=codex_env,
-            )
-        proc_returncode = proc.returncode
-    except subprocess.TimeoutExpired:
-        proc_returncode = 124
-        failure_detail = f"external codex run exceeded timeout of {args.timeout_seconds} seconds"
-        emit_log(f"codex_exec_timeout detail={failure_detail}")
-    end_wall = time.time()
-    end_iso = iso_now()
-    filter_stderr_in_place(stderr_log)
+    while True:
+        attempt += 1
+        elapsed_before = time.time() - overall_start_wall
+        remaining_budget = total_budget_seconds - elapsed_before
+        if remaining_budget <= 0:
+            emit_log("codex_exec_budget_exhausted")
+            proc_returncode = 124
+            break
 
-    usage = parse_usage(stdout_jsonl)
-    final_message = last_message_path.read_text(encoding="utf-8") if last_message_path.exists() else ""
-
-    workspace_text_files = [
-        p for p in workspace_path.rglob("*")
-        if p.is_file() and p.suffix in {".c", ".v", ".md", ".txt", ".log", ".json"}
-        and p != metrics_path(workspace_path)
-    ]
-    workspace_tokens_approx = count_file_tokens(workspace_text_files)
-
-    append_metrics_section(
-        metrics_path(workspace_path),
-        run_label,
-        start_iso,
-        end_iso,
-        end_wall - start_wall,
-        usage,
-        whitespace_token_count(prompt),
-        whitespace_token_count(final_message),
-        workspace_tokens_approx,
-        prompt_path,
-        stdout_jsonl,
-        stderr_log,
-        last_message_path,
-    )
-
-    if proc_returncode != 0:
-        update_issues_on_failure(
-            workspace_path / "logs" / "issues.md",
-            "external-codex-run",
-            proc_returncode,
-            stderr_log,
+        run_label = dt.datetime.now().strftime("%Y%m%d_%H%M%S")
+        prompt_path = logs_dir / f"codex_prompt_{run_label}.txt"
+        stdout_jsonl = logs_dir / f"codex_stdout_{run_label}.jsonl"
+        stderr_log = logs_dir / f"codex_stderr_{run_label}.log"
+        last_message_path = logs_dir / f"codex_last_message_{run_label}.txt"
+        prompt = build_prompt(
+            skill_path,
+            input_path,
+            input_v_path,
+            function_name,
+            workspace_path,
+            annotated_c_path,
+            attempt,
         )
-        if failure_detail is not None:
-            issues_path = workspace_path / "logs" / "issues.md"
-            existing = issues_path.read_text(encoding="utf-8").rstrip() + "\n"
-            issues_path.write_text(existing + f"- Detail: `{failure_detail}`\n", encoding="utf-8")
-        emit_log(f"codex_exec_failed exit_code={proc_returncode}")
-    else:
-        emit_log("codex_exec_completed exit_code=0")
-        if args.export_examples:
-            exported, detail = export_example_if_needed(workspace_path, function_name)
-            if exported:
-                emit_log(f"examples_exported={detail}")
-            else:
-                emit_log(f"examples_export_skipped={detail}")
+        ensure_parent(prompt_path)
+        prompt_path.write_text(prompt, encoding="utf-8")
+
+        round_timeout = max(1, int(remaining_budget))
+        cmd = [
+            args.codex_bin,
+            "--dangerously-bypass-approvals-and-sandbox",
+            "exec",
+            "--json",
+            "--skip-git-repo-check",
+            "-C",
+            str(REPO_ROOT),
+            "-o",
+            str(last_message_path),
+        ]
+        if args.model:
+            cmd.extend(["--model", args.model])
+        if args.reasoning_effort and reasoning_effort_supported:
+            cmd.extend(["--reasoning-effort", args.reasoning_effort])
+        cmd.append("-")
+        emit_log(
+            f"codex_exec_start attempt={attempt} round_timeout_seconds={round_timeout} total_budget_seconds={total_budget_seconds}"
+        )
+
+        start_wall = time.time()
+        start_iso = iso_now()
+        failure_detail = None
+        try:
+            with stdout_jsonl.open("w", encoding="utf-8") as out_f, stderr_log.open("w", encoding="utf-8") as err_f:
+                proc = subprocess.run(
+                    cmd,
+                    input=prompt,
+                    text=True,
+                    stdout=out_f,
+                    stderr=err_f,
+                    cwd=REPO_ROOT,
+                    timeout=round_timeout,
+                    env=codex_env,
+                )
+            proc_returncode = proc.returncode
+        except subprocess.TimeoutExpired:
+            proc_returncode = 124
+            failure_detail = f"external codex run exceeded remaining timeout budget of {round_timeout} seconds"
+            emit_log(f"codex_exec_timeout attempt={attempt} detail={failure_detail}")
+        end_wall = time.time()
+        end_iso = iso_now()
+        filter_stderr_in_place(stderr_log)
+
+        usage = parse_usage(stdout_jsonl)
+        final_message = last_message_path.read_text(encoding="utf-8") if last_message_path.exists() else ""
+
+        workspace_text_files = [
+            p for p in workspace_path.rglob("*")
+            if p.is_file() and p.suffix in {".c", ".v", ".md", ".txt", ".log", ".json"}
+            and p != metrics_path(workspace_path)
+        ]
+        workspace_tokens_approx = count_file_tokens(workspace_text_files)
+
+        append_metrics_section(
+            metrics_path(workspace_path),
+            run_label,
+            start_iso,
+            end_iso,
+            end_wall - start_wall,
+            usage,
+            whitespace_token_count(prompt),
+            whitespace_token_count(final_message),
+            workspace_tokens_approx,
+            prompt_path,
+            stdout_jsonl,
+            stderr_log,
+            last_message_path,
+        )
+
+        if proc_returncode != 0:
+            update_issues_on_failure(
+                workspace_path / "logs" / "issues.md",
+                "external-codex-run",
+                proc_returncode,
+                stderr_log,
+            )
+            if failure_detail is not None:
+                issues_path = workspace_path / "logs" / "issues.md"
+                existing = issues_path.read_text(encoding="utf-8").rstrip() + "\n"
+                issues_path.write_text(existing + f"- Detail: `{failure_detail}`\n", encoding="utf-8")
+            emit_log(f"codex_exec_failed attempt={attempt} exit_code={proc_returncode}")
+        else:
+            emit_log(f"codex_exec_completed attempt={attempt} exit_code=0")
+
+        completed, detail = verify_workspace_completed(workspace_path)
+        if completed:
+            emit_log(f"verify_completed={detail}")
+            if args.export_examples:
+                exported, export_detail = export_example_if_needed(workspace_path, function_name)
+                if exported:
+                    emit_log(f"examples_exported={export_detail}")
+                else:
+                    emit_log(f"examples_export_skipped={export_detail}")
+            proc_returncode = 0
+            break
+
+        elapsed_total = time.time() - overall_start_wall
+        if elapsed_total >= total_budget_seconds:
+            emit_log("codex_exec_budget_exhausted_after_attempt")
+            if proc_returncode == 0:
+                proc_returncode = 124
+            break
+
+        emit_log(
+            f"verify_incomplete_retrying attempt={attempt} detail={detail} remaining_seconds={max(0, int(total_budget_seconds - elapsed_total))}"
+        )
 
     emit_log(f"stdout_jsonl={stdout_jsonl}")
     emit_log(f"stderr_log={stderr_log}")
