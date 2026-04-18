@@ -1,6 +1,6 @@
 # Assertion Experience
 
-本文件只记录 `annotated/<name>.c` 中 `Assert` / `which implies` / bridge assertion 的经验。
+本文件只记录 `annotated/verify_<timestamp>_<name>.c` 中 `Assert` / `which implies` / bridge assertion 的经验。
 
 不记录：
 

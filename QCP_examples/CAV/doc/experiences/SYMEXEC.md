@@ -14,25 +14,18 @@
 典型现象：
 
 - `codex_stderr` 持续出现 `channel closed`
-- `Read-only file system`
 - stdout/stderr 长时间不再增长
 - 外层脚本还活着，但没有新产物
 
 处理方法：
 
 - 先停止自动进程，接管当前 workspace
-- 检查当前 workspace 是否已经有：
-  - `annotated/<name>.c`
+- 检查是否已经生成：
+  - 当前任务对应的 `annotated/verify_<timestamp>_<name>.c`
   - `coq/generated/<name>_goal.v`
   - `coq/generated/<name>_proof_auto.v`
   - `coq/generated/<name>_proof_manual.v`
-- 如果这些文件已经生成，就不要重开新 workspace，直接在当前 workspace 继续
-- 只有当 `annotated/` 或 `coq/generated/` 明显不完整时，才考虑从头再跑
-
-原则：
-
-- 自动流程卡住，优先保住已生成产物
-- 不要因为外层脚本假活，就重复启动多个 verify 进程
+- 已生成的产物优先复用，不要重复开新 workspace
 
 ## 2. 每次注释改动后都必须重新 `symexec`
 
@@ -44,57 +37,100 @@
 - loop-exit assertion
 - 任何会改变 VC 形状的中间注释
 
-不要继续沿用旧的：
+不要继续沿用旧的 `goal`、`proof_auto`、`proof_manual`、`goal_check`。
 
-- `goal`
-- `proof_auto`
-- `proof_manual`
-- `goal_check`
+重新跑当前 workspace 的 `symexec` 之前，必须先清理旧的 generated 文件：
+
+- `coq/generated/<name>_goal.v`
+- `coq/generated/<name>_proof_auto.v`
+- `coq/generated/<name>_proof_manual.v`
+- `coq/generated/<name>_goal_check.v`
+- `coq/generated/<name>_proof_check.v`，如果存在
+
+否则工具可能因为旧的 `proof_manual.v` 已存在而拒绝更新，导致新的注释和旧的 witness 混在一起。
 
 ## 3. `symexec` 失败时，先检查注释与控制点是否对齐
 
 先检查：
 
-- invariant 写的是“进入循环判断点”的状态，还是“循环体执行后”的状态
+- invariant 写的是进入循环判断点的状态，还是循环体执行后的状态
 - `Assert` 是否放在真正的阶段切换点
 - 局部展开是否和当前读写语句匹配
 - 退出条件是否已经被显式固定
 
 很多 symbolic 失败不是 proof 问题，而是注释没有贴住程序控制点。
 
-## 4. 头文件路径问题先在 `annotated/<name>.c` 修，不要改 `input/<name>.c`
+## 4. `symexec` 成功后先分流，不要机械回注释层
 
-典型现象：
+`symexec` 成功后，先判断剩余问题属于哪一层。
 
-- `symexec` 在 verify workspace 里一开始就找不到头文件
+如果剩下的是这些问题，就不要再回注释层：
 
-原因：
+- 纯 list witness
+- 纯 arithmetic witness
+- Coq side condition
+- 只差 helper lemma、rewrite、case split
 
-- `input/<name>.c` 的相对路径是相对于 `input/`
-- verify 真正运行的是 `output/verify_<timestamp>_<name>/annotated/<name>.c`
+这类问题已经进入 proof 阶段，继续改注释通常只会浪费时间。
 
-处理方法：
+只有在下面这些现象出现时，才应回注释层：
 
-- 只修改 workspace 内的 `annotated/<name>.c`
-- 把头文件改成从 `annotated/` 出发的正确相对路径
-- 不要回写 `input/<name>.c`，因为那是 contract 正式输出
+- witness 明显缺 shape / ownership 信息
+- `return_wit` 或 `entail_wit` 反复重建“参数未变”“数组未变”这类语义
+- 退出后条件需要大量额外语义，说明 invariant 太弱
+- witness 里出现和控制点不对应的旧状态、错位状态
 
-这类问题属于 verify workspace 适配，不属于 contract 错误。
+判断原则：
 
-## 5. witness 形状脏，通常是注释层信息组织不对
+- 缺程序语义，回注释层
+- 缺纯命题桥接，不回注释层
 
-如果生成的 witness 非常绕、重复、纯命题很乱，优先怀疑：
+## 5. 顶层 `annotated/` 目录就是为避免头文件路径报错
+
+verify 的实际工作副本固定放在：
+
+- `annotated/verify_<timestamp>_<name>.c`
+
+它和 `input/` 是同层目录，所以像 `../../verification_stdlib.h` 这类相对头文件路径通常可以直接沿用，不需要再在每个 workspace 里手改 include。
+
+如果还报头文件找不到，优先检查：
+
+- 当前 `qcp` / `symexec` 跑的是不是这个顶层 `annotated/*.c`
+- 是否误用了旧 workspace 里的历史 `annotated` 副本
+
+不要把这类问题回退成修改 `input/<name>.c`。
+
+## 6. 公共 strategy 预编译后，不要再为每题重复 staging `coq/deps/`
+
+如果下面这些公共产物已经存在：
+
+- `SeparationLogic/examples/int_array_strategy_goal.vo`
+- `SeparationLogic/examples/int_array_strategy_proof.vo`
+- `SeparationLogic/examples/uint_array_strategy_goal.vo`
+- `SeparationLogic/examples/uint_array_strategy_proof.vo`
+- `SeparationLogic/examples/undef_uint_array_strategy_goal.vo`
+- `SeparationLogic/examples/undef_uint_array_strategy_proof.vo`
+- `SeparationLogic/examples/array_shape_strategy_goal.vo`
+- `SeparationLogic/examples/array_shape_strategy_proof.vo`
+
+后续 verify 应直接复用公共 `examples/`，不要再把这些文件复制到当前 workspace 的 `coq/deps/`。
+
+只有公共编译产物缺失，或当前环境读不到它们时，才回退到 workspace-local `coq/deps/`。
+
+## 7. witness 形状脏，通常是注释层信息组织不对
+
+如果生成的 witness 很绕、重复、纯命题很乱，优先怀疑：
 
 - invariant 缺参数不变关系
 - `Assert` 放错位置
 - shape/value 语义混写
 - 不该展开的谓词提前展开了
 
-先回去整理 `annotated/<name>.c`，通常比在 `proof_manual.v` 里硬扛更便宜。
+先回去整理当前任务的 `annotated/*.c`，通常比在 `proof_manual.v` 里硬扛更便宜。
 
-## 6. 当前 `goal_check` 没过时，不能把任务算完成
+## 8. 当前 `goal_check` 没过时，不能把任务算完成
 
-即使下面这些都已经存在：
+即使已经有：
 
 - `goal.v`
 - `proof_auto.v`
@@ -108,9 +144,7 @@
 - `proof_manual.v` 无 `Admitted.`
 - `proof_manual.v` 无新增 `Axiom`
 
-自动流程曾出现过“前面文件已生成，但 `goal_check` 仍未闭环”的情况，因此完成判断必须以 `goal_check` 为准。
-
-## 7. `metrics.md` 里要单独记 `symexec`
+## 9. `metrics.md` 里要单独记 `symexec`
 
 verify 阶段的 `metrics.md` 至少要单列：
 
@@ -118,9 +152,7 @@ verify 阶段的 `metrics.md` 至少要单列：
 - `symexec_end`
 - `symexec_elapsed`
 
-不要只记“编译时间”或“proof 时间”。
-
-## 8. `issues.md` 里要保留 symbolic 过程问题
+## 10. `issues.md` 里要保留 symbolic 过程问题
 
 即使最后修好了，也要记：
 
@@ -128,9 +160,3 @@ verify 阶段的 `metrics.md` 至少要单列：
 - 原因
 - 处理
 - 结果
-
-例如：
-
-- invariant 校验点卡住
-- witness 数量变化
-- 退出断言缺失导致 return_wit 异常

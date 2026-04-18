@@ -11,13 +11,15 @@ Verify 的前提是：
 
 Verify 默认只消费这些正式输入，不负责重写它们。
 
-## 2. 当前任务的唯一 workspace
+## 2. 当前任务的两类工作区
 
-每次处理某个 `input/<name>.c` 时，都必须先确定本次任务对应的唯一 workspace：
+每次处理某个 `input/<name>.c` 时，都必须先确定：
 
-- `output/verify_<timestamp>_<name>/`
+- 当前任务对应的唯一 workspace：`output/verify_<timestamp>_<name>/`
+- 当前任务对应的唯一 annotated 工作副本：`annotated/verify_<timestamp>_<name>.c`
+- 这两者必须同名对齐：workspace 基名是 `verify_<timestamp>_<name>`，annotated 文件名也必须正好是 `verify_<timestamp>_<name>.c`
 
-除非用户明确授权，否则所有写操作都必须限制在这个 workspace 内。
+除非用户明确授权，否则 Verify 的写操作只能落在这两处。
 
 ## 3. 默认允许读取
 
@@ -41,28 +43,28 @@ Verify 默认只消费这些正式输入，不负责重写它们。
 - `/home/yangfp/QualifiedCProgramming/QCP_examples/` 下其他例子：只有当 `CAV/examples/` 没有足够接近的例子时，才允许扩大范围读取
 - `/home/yangfp/QualifiedCProgramming/tutorial/`：只在当前步骤确实缺少教程级说明时读取
 
-## 5. 当前 workspace 内允许人工修改
+## 5. 当前任务允许人工修改
 
-- `annotated/<name>.c`
-- `coq/generated/<name>_proof_manual.v`
-- `coq/deps/` 下为当前 workspace 准备的依赖 `.v`
-- `logs/workspace_fingerprint.json`
-- `logs/annotation_reasoning.md`
-- `logs/proof_reasoning.md`
-- `logs/issues.md`
-- `logs/metrics.md`
+- `annotated/verify_<timestamp>_<name>.c`
+- `output/verify_<timestamp>_<name>/coq/generated/<name>_proof_manual.v`
+- `output/verify_<timestamp>_<name>/coq/deps/` 下为当前 workspace 准备的依赖 `.v`
+- `output/verify_<timestamp>_<name>/logs/workspace_fingerprint.json`
+- `output/verify_<timestamp>_<name>/logs/annotation_reasoning.md`
+- `output/verify_<timestamp>_<name>/logs/proof_reasoning.md`
+- `output/verify_<timestamp>_<name>/logs/issues.md`
+- `output/verify_<timestamp>_<name>/logs/metrics.md`
 
 ## 6. 当前 workspace 内只读文件
 
 允许读取、编译检查、由工具覆盖，但不允许人工修改：
 
-- `original/<name>.c`
-- `original/<name>.v`，如果存在
-- `coq/generated/<name>_goal.v`
-- `coq/generated/<name>_proof_auto.v`
-- `coq/generated/<name>_goal_check.v`
-- `coq/generated/<name>_proof_check.v`，如果存在
-- `logs/qcp_run.log`
+- `output/verify_<timestamp>_<name>/original/<name>.c`
+- `output/verify_<timestamp>_<name>/original/<name>.v`，如果存在
+- `output/verify_<timestamp>_<name>/coq/generated/<name>_goal.v`
+- `output/verify_<timestamp>_<name>/coq/generated/<name>_proof_auto.v`
+- `output/verify_<timestamp>_<name>/coq/generated/<name>_goal_check.v`
+- `output/verify_<timestamp>_<name>/coq/generated/<name>_proof_check.v`，如果存在
+- `output/verify_<timestamp>_<name>/logs/qcp_run.log`
 
 ## 7. 默认禁止修改
 
@@ -70,6 +72,7 @@ Verify 默认只消费这些正式输入，不负责重写它们。
 
 - `input/`
 - `raw/`
+- 不属于当前任务的 `annotated/*.c`
 - 其他题目的 workspace
 - 仓库级脚本、README、配置文件
 - 公共头文件、公共 Coq 库、公共 strategy 文件
