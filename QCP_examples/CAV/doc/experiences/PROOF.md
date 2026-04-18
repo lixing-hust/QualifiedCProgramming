@@ -9,6 +9,8 @@
 - 不记录 Coq 编译与路径问题
 - 如果 `proof_manual.v` 里没有需要手工证明的 theorem，就直接跳过 manual proof 和 `proof_reasoning.md`
 - 如果 `proof_manual.v` 或 `goal_check.v` 还没有编译通过，就不能退出 proof 阶段，必须继续证明
+- 只有到达明确外部边界时，才允许以 `Fail` 结束 proof：具体只包括已用反例确认的 contract gap、当前 workspace 内无法排除的外部工具/环境故障、外部时间上限触发，或调用方明确要求停止；剩一个 witness、某轮 `coqc` 失败、暂时想不到 tactic、当前写法还没证通，都不算可结束理由
+- 如果以 `Fail` 结束 proof，必须在 `logs/proof_reasoning.md`、`logs/issues.md`、`logs/metrics.md` 中写清楚属于哪一种边界，以及对应的具体证据；没有证据就不允许收尾
 
 ## 2. 开始前先读当前目标
 

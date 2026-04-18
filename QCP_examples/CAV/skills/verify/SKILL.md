@@ -46,7 +46,7 @@ Verify 只消费 Contract 已经准备好的验证输入，不再负责设计前
 - `logs/annotation_reasoning.md` 不能只写最终答案；必须记录每一轮注释层迭代中的判断、失败原因、修改方向，以及为什么这次修改有望修复当前问题
 - 如果 `proof_manual.v` 里确实有需要手工证明的 theorem，先写 `logs/proof_reasoning.md`，再改 `proof_manual.v`；如果 `proof_manual.v` 没有需要证明的目标，就跳过 `proof_reasoning.md` 和 manual proof
 - `logs/proof_reasoning.md` 不能只写首轮计划；必须持续追加每一轮 proof 迭代中的失败点、当前假设、为什么证不出来、尝试过什么、下一步准备怎么改
-- proof 阶段的具体迭代、编译、检索和辅助引理规则统一以 `doc/experiences/PROOF.md` 为准
+- proof 阶段必须不断迭代，直到 `goal_check.v` 编译通过，或外部时间上限触发；其他细节统一以 `doc/experiences/PROOF.md` 为准
 - `proof_manual.v` 不得留下 `Admitted.` 或新增 `Axiom`
 - `goal_check.v` 必须编译通过
 - 编译完成后清理 `coq/` 下非 `.v` 中间产物
@@ -60,8 +60,6 @@ Verify 只消费 Contract 已经准备好的验证输入，不再负责设计前
   - `goal.v`、`proof_auto.v`、`proof_manual.v`、`goal_check.v` 全部按当前 workspace 的完整编译模板编译通过
   - `coq/` 下非 `.v` 中间产物已经清理
   - `issues.md` 和 `metrics.md` 已完整更新
-- 只要以上任一条件不满足，就必须写 `Final Result: Fail`
-- 不允许因为 `symexec` 成功、部分 theorem 证明完成、或 `proof_manual.v` 单独编译通过，就写 `Final Result: Success`
 - 每次 verify 任务完成后，都要选择性更新 `doc/experiences/SYMEXEC.md`、`doc/experiences/ASSERTION.md`、`doc/experiences/INV.md`、`doc/experiences/PROOF.md`、`doc/experiences/COMPILE.md`
 
 ## 5. 最短流程
