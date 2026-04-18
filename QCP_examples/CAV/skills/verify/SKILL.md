@@ -5,6 +5,8 @@ description: Verify skill，消费 Contract 输出完成注解、证明和编译
 
 Verify 只消费 Contract 已经准备好的验证输入，不再负责设计前后条件。
 
+所有 `reasoning` 和 `issues` 日志的核心目标只有一个：保证后来的智能体能够快速看懂当前状态、准确接管，并直接复用之前的定位、修复和证明工作；不要写成只有当前这一轮自己看得懂的简写。
+
 当前任务一旦确定 workspace=`output/verify_<timestamp>_<name>/`，对应的 annotated 工作副本就唯一固定为 `annotated/verify_<timestamp>_<name>.c`。脚本调用和手动按 skill 执行都必须使用这同一个路径规则，不能各自发明不同位置或文件名。
 
 ## 1. 分步阅读规则
@@ -43,16 +45,15 @@ Verify 只消费 Contract 已经准备好的验证输入，不再负责设计前
 - 只在当前任务对应的 `annotated/verify_<timestamp>_<name>.c` 中补 `Inv`、`Assert`、`which implies`、bridge assert、loop-exit assertion
 - 每次改注释后都必须重新跑 `symexec`
 - 如果当前程序确实需要补 `Inv` / `Assert`，先写 `logs/annotation_reasoning.md`，再改 annotated 工作副本；如果完全不需要补任何 Verify 注释，就跳过 `annotation_reasoning.md`
-- `logs/annotation_reasoning.md` 只能追加，不能覆盖已有内容；必须记录每一轮注释层迭代中的判断、失败原因、修改方向，以及为什么这次修改有望修复当前问题
+- `logs/annotation_reasoning.md` 只能追加，不能覆盖已有内容；必须写得非常具体，至少写清楚当前卡在哪个程序点、哪条注释不成立、看到了什么报错或执行现象、准备改哪一行注释、为什么这次修改预计会修复当前问题
 - 如果 `proof_manual.v` 里确实有需要手工证明的 theorem，先写 `logs/proof_reasoning.md`，再改 `proof_manual.v`；如果 `proof_manual.v` 没有需要证明的目标，就跳过 `proof_reasoning.md` 和 manual proof
-- `logs/proof_reasoning.md` 只能追加，不能覆盖已有内容；必须持续追加每一轮 proof 迭代中的失败点、当前假设、为什么证不出来、尝试过什么、下一步准备怎么改
+- `logs/proof_reasoning.md` 只能追加，不能覆盖已有内容；必须写得非常具体，至少写清楚当前卡住的 theorem 或 witness 名、`coqc`/`coqtop` 的具体报错或剩余子目标、当前可用假设、为什么现有脚本不够、已经尝试过哪些 tactic 或 lemma、下一步准备改哪一段 proof
 - proof 阶段必须不断迭代，直到 `goal_check.v` 编译通过，或外部时间上限触发；其他细节统一以 `doc/experiences/PROOF.md` 为准
 - `proof_manual.v` 不得留下 `Admitted.` 或新增 `Axiom`
 - `goal_check.v` 必须编译通过
 - 编译完成后清理 `coq/` 下非 `.v` 中间产物
-- `logs/issues.md` 只能追加，不能覆盖已有内容；必须详细记录整个 verify 过程中的所有踩坑，而不是只记最后一个错误；至少要覆盖现象、触发条件、定位过程、修复动作和结果
-- `logs/workspace_fingerprint.json` 不能保留脚本初始化时的空占位；必须在任务早期回填非空的 `semantic_description` 和 `keywords`
-- 回填 `keywords` 前先读 `doc/retrieval/INDEX.md`；`keywords` 的 key 和 value 都只能来自其中定义的受控词表
+- `logs/issues.md` 只能追加，不能覆盖已有内容；必须写得非常具体，详细记录整个 verify 过程中的所有踩坑，而不是只记最后一个错误；每个问题至少要写清楚现象、触发条件、定位到的文件/行号或 theorem、修复动作、修复后的结果
+- `logs/workspace_fingerprint.json` 不能保留脚本初始化时的空占位；必须在任务早期回填非空的 `semantic_description` 和 `keywords`，回填 `keywords` 前先读 `doc/retrieval/INDEX.md`；`keywords` 的 key 和 value 都只能来自其中定义的受控词表
 - `logs/metrics.md` 只能追加，不能覆盖已有内容；唯一允许修改的已有内容是最后的 `Final Result: ...` 行
 - `logs/metrics.md` 的最后必须显式写一行 `Final Result: Success` 或 `Final Result: Fail`
 - 如果本次任务更新了任何经验文档，`logs/metrics.md` 必须显式列出更新了哪些经验文件；如果没有更新，也要明确写 `Experience updates: none`
