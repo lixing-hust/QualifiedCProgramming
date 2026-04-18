@@ -52,6 +52,7 @@ Verify 只消费 Contract 已经准备好的验证输入，不再负责设计前
 - 编译完成后清理 `coq/` 下非 `.v` 中间产物
 - `logs/issues.md` 必须详细记录整个 verify 过程中的所有踩坑，而不是只记最后一个错误；至少要覆盖现象、触发条件、定位过程、修复动作和结果
 - `logs/metrics.md` 的最后必须显式写一行 `Final Result: Success` 或 `Final Result: Fail`
+- 如果本次任务更新了任何经验文档，`logs/metrics.md` 必须显式列出更新了哪些经验文件；如果没有更新，也要明确写 `Experience updates: none`
 - `Final Result: Success` 只能在以下条件同时满足时写：
   - `symexec` 成功并基于当前最新 annotated 文件生成了最新 `goal/proof_auto/proof_manual/goal_check`
   - `proof_manual.v` 中所有需要手工证明的 theorem 都已完成
