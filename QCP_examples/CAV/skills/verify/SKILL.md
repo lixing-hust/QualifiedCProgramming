@@ -51,6 +51,16 @@ Verify 只消费 Contract 已经准备好的验证输入，不再负责设计前
 - `goal_check.v` 必须编译通过
 - 编译完成后清理 `coq/` 下非 `.v` 中间产物
 - `logs/issues.md` 必须详细记录整个 verify 过程中的所有踩坑，而不是只记最后一个错误；至少要覆盖现象、触发条件、定位过程、修复动作和结果
+- `logs/metrics.md` 的最后必须显式写一行 `Final Result: Success` 或 `Final Result: Fail`
+- `Final Result: Success` 只能在以下条件同时满足时写：
+  - `symexec` 成功并基于当前最新 annotated 文件生成了最新 `goal/proof_auto/proof_manual/goal_check`
+  - `proof_manual.v` 中所有需要手工证明的 theorem 都已完成
+  - `proof_manual.v` 不含 `Admitted.`，也没有新增 `Axiom`
+  - `goal.v`、`proof_auto.v`、`proof_manual.v`、`goal_check.v` 全部按当前 workspace 的完整编译模板编译通过
+  - `coq/` 下非 `.v` 中间产物已经清理
+  - `issues.md` 和 `metrics.md` 已完整更新
+- 只要以上任一条件不满足，就必须写 `Final Result: Fail`
+- 不允许因为 `symexec` 成功、部分 theorem 证明完成、或 `proof_manual.v` 单独编译通过，就写 `Final Result: Success`
 - 每次 verify 任务完成后，都要选择性更新 `doc/experiences/SYMEXEC.md`、`doc/experiences/ASSERTION.md`、`doc/experiences/INV.md`、`doc/experiences/PROOF.md`、`doc/experiences/COMPILE.md`
 
 ## 5. 最短流程
@@ -61,7 +71,7 @@ Verify 只消费 Contract 已经准备好的验证输入，不再负责设计前
 4. 读 `SYMEXEC.md`，跑 `symexec`，生成最新 `goal/proof_auto/proof_manual/goal_check`。
 5. 如果 `proof_manual.v` 里还有需要手工证明的 theorem，读 `PROOF.md`，写并持续更新 `logs/proof_reasoning.md`，补 `proof_manual.v`，编译失败就继续 proof 迭代直到通过；否则跳过这一步。
 6. 读 `COMPILE.md`，按完整模板编译 `goal`、`proof_auto`、`proof_manual`、`goal_check`。
-7. 详细写 `logs/issues.md` 和 `logs/metrics.md`，把整个过程中的踩坑、定位和修复链路补全。
+7. 详细写 `logs/issues.md` 和 `logs/metrics.md`，把整个过程中的踩坑、定位和修复链路补全，并在 `logs/metrics.md` 最后一行写 `Final Result: Success` 或 `Final Result: Fail`。
 
 ## 6. 完成标准
 

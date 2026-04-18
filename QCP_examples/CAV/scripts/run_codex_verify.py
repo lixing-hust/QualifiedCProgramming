@@ -230,10 +230,32 @@ def update_issues_on_failure(issues_path: Path, stage: str, exit_code: int, stde
     issues_path.write_text(existing + block, encoding="utf-8")
 
 
+def verify_workspace_completed(workspace_path: Path) -> tuple[bool, str]:
+    metrics_md = metrics_path(workspace_path)
+    if not metrics_md.exists():
+        return False, f"missing_metrics:{metrics_md}"
+
+    lines = metrics_md.read_text(encoding="utf-8", errors="replace").splitlines()
+    for raw_line in reversed(lines):
+        line = raw_line.strip()
+        if not line:
+            continue
+        if line == "Final Result: Success":
+            return True, "metrics_final_result_success"
+        if line == "Final Result: Fail":
+            return False, "metrics_final_result_fail"
+        break
+
+    return False, "metrics_missing_final_result"
+
+
 def export_example_if_needed(workspace_path: Path, function_name: str) -> tuple[bool, str]:
     target_dir = EXAMPLES_ROOT / function_name
     if target_dir.exists():
         return False, f"skip_existing:{target_dir}"
+    completed, detail = verify_workspace_completed(workspace_path)
+    if not completed:
+        return False, f"skip_incomplete_verify:{detail}"
     if not EXPORT_SCRIPT.exists():
         return False, f"missing_export_script:{EXPORT_SCRIPT}"
     proc = subprocess.run(
