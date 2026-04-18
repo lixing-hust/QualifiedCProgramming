@@ -141,6 +141,7 @@ Inputs:
 Execution rule:
 - Work only inside this existing workspace.
 - Start from the normal verify workflow for this task.
+- Early in the task, read `doc/retrieval/INDEX.md`, then update `logs/workspace_fingerprint.json` so `semantic_description` is non-empty and `keywords` use only the controlled vocabulary defined there.
 - Keep iterating in the same workspace until verification succeeds or the external time budget is exhausted.
 """
     return f"""Use this skill as the complete workflow:
@@ -157,6 +158,7 @@ Inputs:
 Retry rule:
 - Do not restart the task from scratch.
 - First read the current logs, generated Coq files, latest compile errors, and current annotated file in this workspace.
+- If `logs/workspace_fingerprint.json` still has empty `semantic_description` or `keywords`, first read `doc/retrieval/INDEX.md` and fill them using only its controlled vocabulary before proceeding.
 - Precisely identify the current blocker from the existing workspace state.
 - Continue repairing from that blocker in the same workspace.
 - Preserve existing correct work; only change what is needed for the next proof/compile step.

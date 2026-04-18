@@ -51,6 +51,8 @@ Verify 只消费 Contract 已经准备好的验证输入，不再负责设计前
 - `goal_check.v` 必须编译通过
 - 编译完成后清理 `coq/` 下非 `.v` 中间产物
 - `logs/issues.md` 只能追加，不能覆盖已有内容；必须详细记录整个 verify 过程中的所有踩坑，而不是只记最后一个错误；至少要覆盖现象、触发条件、定位过程、修复动作和结果
+- `logs/workspace_fingerprint.json` 不能保留脚本初始化时的空占位；必须在任务早期回填非空的 `semantic_description` 和 `keywords`
+- 回填 `keywords` 前先读 `doc/retrieval/INDEX.md`；`keywords` 的 key 和 value 都只能来自其中定义的受控词表
 - `logs/metrics.md` 只能追加，不能覆盖已有内容；唯一允许修改的已有内容是最后的 `Final Result: ...` 行
 - `logs/metrics.md` 的最后必须显式写一行 `Final Result: Success` 或 `Final Result: Fail`
 - 如果本次任务更新了任何经验文档，`logs/metrics.md` 必须显式列出更新了哪些经验文件；如果没有更新，也要明确写 `Experience updates: none`
@@ -66,7 +68,7 @@ Verify 只消费 Contract 已经准备好的验证输入，不再负责设计前
 ## 5. 最短流程
 
 1. 读 `input/<name>.c` / `.v`。
-2. 写 `logs/workspace_fingerprint.json`。
+2. 先读 `doc/retrieval/INDEX.md`，再写并回填 `logs/workspace_fingerprint.json`，确保 `semantic_description` 非空，且 `keywords` 只使用受控词表中的 key 和 value。
 3. 如果需要补 `Inv` / `Assert`，读 `INV.md` 和 `ASSERTION.md`，写并持续更新 `logs/annotation_reasoning.md`，修改当前任务对应的 `annotated/*.c`；否则跳过这一步。
 4. 读 `SYMEXEC.md`，跑 `symexec`，生成最新 `goal/proof_auto/proof_manual/goal_check`。
 5. 如果 `proof_manual.v` 里还有需要手工证明的 theorem，读 `PROOF.md`，写并持续更新 `logs/proof_reasoning.md`，补 `proof_manual.v`，编译失败就继续 proof 迭代直到通过；否则跳过这一步。
