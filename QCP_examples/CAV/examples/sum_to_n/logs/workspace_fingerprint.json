@@ -1,0 +1,16 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260418_153041_sum_to_n",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/sum_to_n.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_153041_sum_to_n/original/sum_to_n.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_153041_sum_to_n.c",
+  "function_name": "sum_to_n",
+  "program_sha256": "56324ff225986c9d8b96f61901f3622ab5cc5439650e252a375f43accd2c3168",
+  "semantic_description": "",
+  "keywords": {},
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

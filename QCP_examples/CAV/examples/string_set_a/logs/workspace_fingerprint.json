@@ -1,0 +1,16 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260418_152341_string_set_a",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_set_a.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_152341_string_set_a/original/string_set_a.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_152341_string_set_a.c",
+  "function_name": "string_set_a",
+  "program_sha256": "e1d214974318fdccf6fbf606ab4e247e4c219616edb5b6fa66b508ca1377c81a",
+  "semantic_description": "",
+  "keywords": {},
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

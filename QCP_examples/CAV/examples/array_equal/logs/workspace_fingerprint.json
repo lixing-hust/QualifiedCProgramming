@@ -1,0 +1,16 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260418_172343_array_equal",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_equal.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_equal.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_172343_array_equal/original/array_equal.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_172343_array_equal/original/array_equal.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_172343_array_equal.c",
+  "function_name": "array_equal",
+  "program_sha256": "8970a3fb1f6bdb9a125a52714c7306dc56a00274308119aa9bb0135321c8f8d8",
+  "semantic_description": "",
+  "keywords": {},
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

@@ -1,0 +1,16 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260418_151824_string_length",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_length.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_151824_string_length/original/string_length.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_151824_string_length.c",
+  "function_name": "string_length",
+  "program_sha256": "c1c3b0702e712b94e85031d532c17b0287f900d224cd372e50fd286b4aede75b",
+  "semantic_description": "",
+  "keywords": {},
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}
