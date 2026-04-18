@@ -236,16 +236,19 @@ def verify_workspace_completed(workspace_path: Path) -> tuple[bool, str]:
         return False, f"missing_metrics:{metrics_md}"
 
     lines = metrics_md.read_text(encoding="utf-8", errors="replace").splitlines()
-    for raw_line in reversed(lines):
+    saw_success = False
+    saw_fail = False
+    for raw_line in lines:
         line = raw_line.strip()
-        if not line:
-            continue
         if line == "Final Result: Success":
-            return True, "metrics_final_result_success"
-        if line == "Final Result: Fail":
-            return False, "metrics_final_result_fail"
-        break
+            saw_success = True
+        elif line == "Final Result: Fail":
+            saw_fail = True
 
+    if saw_success:
+        return True, "metrics_contains_final_result_success"
+    if saw_fail:
+        return False, "metrics_contains_final_result_fail"
     return False, "metrics_missing_final_result"
 
 
