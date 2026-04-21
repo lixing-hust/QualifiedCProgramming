@@ -1,7 +1,3 @@
-#include "../../verification_stdlib.h"
-#include "../../verification_list.h"
-#include "../../char_array_def.h"
-
 /*@ Extern Coq (string_contains_char_spec : list Z -> Z -> Z) */
 /*@ Import Coq Require Import string_contains_char */
 

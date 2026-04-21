@@ -1,7 +1,3 @@
-#include "../../verification_stdlib.h"
-#include "../../verification_list.h"
-#include "../../char_array_def.h"
-
 void string_reverse_copy(int n, char *src, char *dst)
 /*@ With l d
     Require

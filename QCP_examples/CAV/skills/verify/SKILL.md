@@ -44,6 +44,8 @@ Verify 只消费 Contract 已经准备好的验证输入，不再负责设计前
 ## 4. 硬规则
 
 - 默认信任 `input/<name>.c` / `.v` 的 contract，不重写 `Require` / `Ensure`
+- 不要向 `annotated/verify_<timestamp>_<name>.c` 添加已内建的验证头文件：`verification_stdlib.h`、`verification_list.h`、`int_array_def.h`、`char_array_def.h`
+- 如果旧输入或旧例子带有这些 include，不要把它当作必须保留的依赖；新注解和新 examples 应使用无冗余 include 的形式
 - 只在当前任务对应的 `annotated/verify_<timestamp>_<name>.c` 中补 `Inv`、`Assert`、`which implies`、bridge assert、loop-exit assertion
 - 每次改注释后都必须重新跑 `symexec`
 - 如果当前程序确实需要补 `Inv` / `Assert`，先写 `logs/annotation_reasoning.md`，再改 annotated 工作副本；如果完全不需要补任何 Verify 注释，就跳过 `annotation_reasoning.md`
@@ -57,6 +59,7 @@ Verify 只消费 Contract 已经准备好的验证输入，不再负责设计前
 - `logs/issues.md` 只能追加，不能覆盖已有内容；必须写得非常具体，详细记录整个 verify 过程中的所有踩坑，而不是只记最后一个错误；每个问题至少要写清楚现象、触发条件、定位到的文件/行号或 theorem、修复动作、修复后的结果；每个代表性问题还要贴出足够读懂问题的关键代码或日志片段，例如 C annotation 片段、Coq theorem/subgoal/tactic 片段、`coqc`/`symexec` 报错片段或相关命令片段，保证后来的智能体只读 `issues.md` 也能理解问题发生在哪里、为什么发生、如何修复
 - 验证过程中每解决一个有代表性的通用问题，都必须立即判断是否需要更新 Experience；如果该问题能复用于后续任务，就更新对应的 `doc/experiences/*.md`，不要等到任务最后才回忆
 - Experience 只写可复用结论，不写单题流水账；按问题所属阶段写入 `SYMEXEC.md`、`ASSERTION.md`、`INV.md`、`PROOF.md` 或 `COMPILE.md`
+- 每次新增、删除、重编号或重写 Experience 条目时，必须同步维护该文件开头的“常见入口”；如果该经验适合作为跨文档检索入口，还必须同步更新 `doc/experiences/README.md` 的“按症状检索”
 - `logs/workspace_fingerprint.json` 不能保留脚本初始化时的空占位；必须在任务早期回填非空的 `semantic_description` 和 `keywords`，回填 `keywords` 前先读 `doc/retrieval/INDEX.md`；`keywords` 的 key 和 value 都只能来自其中定义的受控词表
 - `logs/metrics.md` 只能追加，不能覆盖已有内容；唯一允许修改的已有内容是最后的 `Final Result: ...` 行
 - `logs/metrics.md` 的最后必须显式写一行 `Final Result: Success` 或 `Final Result: Fail`
@@ -78,7 +81,7 @@ Verify 只消费 Contract 已经准备好的验证输入，不再负责设计前
 4. 读 `SYMEXEC.md`，跑 `symexec`，生成最新 `goal/proof_auto/proof_manual/goal_check`。
 5. 如果 `proof_manual.v` 里还有需要手工证明的 theorem，读 `PROOF.md`，写并持续更新 `logs/proof_reasoning.md`，记录关键 Coq theorem/subgoal/tactic 片段后再补 `proof_manual.v`，编译失败就继续 proof 迭代直到通过；否则跳过这一步。
 6. 读 `COMPILE.md`，按完整模板编译 `goal`、`proof_auto`、`proof_manual`、`goal_check`。
-7. 每解决一个有代表性的通用问题，就同步更新对应 Experience，并在 `logs/issues.md` 记录该问题的具体踩坑和修复链路。
+7. 每解决一个有代表性的通用问题，就同步更新对应 Experience，并同步维护对应文档开头“常见入口”和必要的 `README.md` 按症状索引；同时在 `logs/issues.md` 记录该问题的具体踩坑和修复链路。
 8. 详细写 `logs/issues.md` 和 `logs/metrics.md`，把整个过程中的踩坑、定位和修复链路补全，在 `logs/metrics.md` 中列出 `Experience updates`，并在最后一行写 `Final Result: Success` 或 `Final Result: Fail`。
 
 ## 6. 完成标准

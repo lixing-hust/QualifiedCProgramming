@@ -1,7 +1,3 @@
-#include "../../verification_stdlib.h"
-#include "../../verification_list.h"
-#include "../../int_array_def.h"
-
 void array_adjacent_diff(int n, int *a, int *out)
 /*@ With la lo
     Require

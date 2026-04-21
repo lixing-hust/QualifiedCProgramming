@@ -1,7 +1,3 @@
-#include "../../verification_stdlib.h"
-#include "../../verification_list.h"
-#include "../../int_array_def.h"
-
 /*@ Extern Coq (max_list_nonempty : list Z -> Z) */
 /*@ Import Coq Require Import array_max */
 

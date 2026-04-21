@@ -10,6 +10,12 @@ from pathlib import Path
 ROOT = Path("/home/yangfp/QualifiedCProgramming/QCP_examples/CAV")
 EXAMPLES_DIR = ROOT / "examples"
 ANNOTATED_DIR = ROOT / "annotated"
+BUILTIN_INCLUDE_LINES = {
+    '#include "../../verification_stdlib.h"',
+    '#include "../../verification_list.h"',
+    '#include "../../int_array_def.h"',
+    '#include "../../char_array_def.h"',
+}
 
 
 def copy_if_exists(src: Path, dst: Path) -> None:
@@ -17,6 +23,17 @@ def copy_if_exists(src: Path, dst: Path) -> None:
         return
     dst.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(src, dst)
+
+
+def copy_c_without_builtin_includes(src: Path, dst: Path) -> None:
+    if not src.exists():
+        return
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    lines = src.read_text(encoding="utf-8").splitlines(keepends=True)
+    kept = [line for line in lines if line.strip() not in BUILTIN_INCLUDE_LINES]
+    while kept and not kept[0].strip():
+        kept.pop(0)
+    dst.write_text("".join(kept), encoding="utf-8")
 
 
 def parse_workspace(workspace: Path) -> str:
@@ -51,15 +68,18 @@ def export_workspace(workspace: Path) -> Path:
     original_dir = workspace / "original"
     logs_dir = workspace / "logs"
 
-    copy_if_exists(original_dir / f"{func_name}.c", dst_root / "original" / f"{func_name}.c")
+    copy_c_without_builtin_includes(
+        original_dir / f"{func_name}.c",
+        dst_root / "original" / f"{func_name}.c",
+    )
     copy_if_exists(original_dir / f"{func_name}.v", dst_root / "original" / f"{func_name}.v")
-    copy_if_exists(
+    copy_c_without_builtin_includes(
         ANNOTATED_DIR / f"{workspace.name}.c",
         dst_root / "annotated" / f"{func_name}.c",
     )
 
     for src in sorted(generated_dir.glob("*.v")):
-      copy_if_exists(src, dst_root / "coq" / "generated" / src.name)
+        copy_if_exists(src, dst_root / "coq" / "generated" / src.name)
 
     copy_if_exists(logs_dir / "workspace_fingerprint.json", dst_root / "logs" / "workspace_fingerprint.json")
     copy_if_exists(logs_dir / "annotation_reasoning.md", dst_root / "logs" / "annotation_reasoning.md")

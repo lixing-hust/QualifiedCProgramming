@@ -1,5 +1,3 @@
-#include "../../verification_stdlib.h"
-
 int sum_to_n(int n)
 /*@ Require
       0 <= n &&

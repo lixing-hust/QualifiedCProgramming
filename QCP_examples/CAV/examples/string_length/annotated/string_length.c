@@ -1,7 +1,3 @@
-#include "../../verification_stdlib.h"
-#include "../../verification_list.h"
-#include "../../char_array_def.h"
-
 int string_length(char *s)
 /*@ With l n
     Require

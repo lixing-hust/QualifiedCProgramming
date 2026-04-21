@@ -1,7 +1,3 @@
-#include "../../verification_stdlib.h"
-#include "../../verification_list.h"
-#include "../../int_array_def.h"
-
 /*@ Extern Coq (array_equal_spec : list Z -> list Z -> Z) */
 /*@ Import Coq Require Import array_equal */
 
