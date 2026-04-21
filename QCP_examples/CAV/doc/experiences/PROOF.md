@@ -2,6 +2,24 @@
 
 本文件只记录 `coq/generated/<name>_proof_manual.v` 的手工证明经验。
 
+常见入口：
+
+- proof 阶段范围和退出条件：看 1
+- 开始证明前该读什么：看 2
+- 第一轮最短 proof 骨架：看 3
+- 编译失败要看完整 proof state：看 5
+- 卡住时检索例子：看 6
+- witness 太复杂，需要 helper lemma：看 7
+- `Cannot find witness`：看 8、19
+- 多个相似 list 导致 helper 参数实例化错：看 20
+- merge / two-pointer：看 21
+- QCP assertion-level `Left` / `Right` / `Exists`：看 22
+- hypothesis 编号复制错：看 23
+- return witness prefix/suffix 归一化：看 24
+- `replace_Znth` / nat index：看 25
+- `entailer!` 后目标顺序：看 27
+- insertion sort final witness：看 31、32
+
 ## 1. 证明范围
 
 - 只记录 manual proof
@@ -239,7 +257,27 @@
 
 把这层桥接写出来后，`lia` 才会稳定。
 
-## 20. merge / two-pointer proof 要先抽 append-last helper，不要在 witness 里展开递归硬证
+## 20. 多个相似逻辑列表同场时，helper lemma 参数必须显式钉住
+
+在嵌套循环或“保存旧状态 + 当前状态”的 proof 里，经常同时出现：
+
+- 外层循环保存的整体列表
+- 内层循环的 base 列表
+- 当前 heap 表示列表
+- 写入后的候选列表
+
+这时调用局部 helper lemma 不要只写少量索引参数再交给 `eauto` 猜列表参数。即使目标看起来唯一，Coq 也可能把 helper 的 `l_base` 实例化成外层旧列表，留下一个形如“当前 heap list 等于用旧列表拼出来的 sublist 结构”的不可证 side condition。
+
+更稳的写法是：
+
+- 在 `eapply ... with` 中显式给出所有关键列表参数，例如 `(l_base := l_base) (l_cur := l_cur)`
+- 对结构等式 side condition 直接 `exact Hshape`
+- 对长度等式直接 `exact Hlen` 或 `symmetry; exact Hlen`
+- 避免在这种 helper 调用后使用过宽的 `try eauto; try (symmetry; exact H...)`
+
+这类问题的典型症状不是核心语义 lemma 错，而是 `Qed` 报 `Attempt to save an incomplete proof`，`Show` 后剩余目标里出现了错误版本的 sublist 结构。
+
+## 21. merge / two-pointer proof 要先抽 append-last helper，不要在 witness 里展开递归硬证
 
 `merge_sorted_arrays` 的核心 proof 难点不是 separation logic，而是纯 list 语义：
 
@@ -264,7 +302,7 @@
 
 这个模式适用于 merge、partition、two-sorted-array scan、双指针输出数组等题。
 
-## 21. QCP entailment 里的 disjunction / existential 用大写 tactics
+## 22. QCP entailment 里的 disjunction / existential 用大写 tactics
 
 在 QCP assertion entailment 中，目标经常是：
 
@@ -281,7 +319,7 @@
 
 如果 `coqtop Show` 里出现目标末尾是 `(...) m`，说明 proof 很可能已经掉进 model-level，需要回到 assertion-level tactic。
 
-## 22. 同一个算法不同 witness 的假设编号不能复制粘贴
+## 23. 同一个算法不同 witness 的假设编号不能复制粘贴
 
 `pre_process` 后的假设编号依赖当前 witness 的前置条件顺序。主循环、尾循环、return witness 的编号可能完全不同。
 
@@ -299,7 +337,7 @@
 
 不要因为两个 witness 形状相似就默认 hypothesis 编号相同。
 
-## 23. return witness 优先做 full-prefix 和 empty-suffix 归一化
+## 24. return witness 优先做 full-prefix 和 empty-suffix 归一化
 
 对逐步写满输出数组的题，最终 return witness 往往不是新的语义问题，而是需要把 loop state 归一化成后条件形状。
 
@@ -315,7 +353,7 @@
 
 不要一开始就证明最终数组相等；先把 prefix/suffix shape 化简到和后条件同形，`entailer!` 才容易收掉。
 
-## 24. `replace_Znth` 最后一步经常卡在 `nat` 索引没有化简
+## 25. `replace_Znth` 最后一步经常卡在 `nat` 索引没有化简
 
 即使在 `Z` 上已经知道索引等于 `0`，展开
 
@@ -335,7 +373,7 @@
 
 很多看起来像“最后一条列表相等还差一点”的目标，真正缺的就是这一步。
 
-## 25. 局部变量值态到未定义态的权限目标要用 store-undef lemma
+## 26. 局部变量值态到未定义态的权限目标要用 store-undef lemma
 
 循环体内的局部临时变量在 entailment witness 里经常出现：
 
@@ -352,7 +390,7 @@ apply store_int_undef_store_int.
 
 然后再处理后续纯目标。其他类型对应使用 `StoreAux.v` 中同类的 `store_*_undef_store_*` lemma。
 
-## 26. `entailer!` 后的子目标顺序不一定等于规格文本顺序
+## 27. `entailer!` 后的子目标顺序不一定等于规格文本顺序
 
 在 entailment witness 中，`pre_process; entailer!; try lia` 后剩下的目标可能会被重排：
 
@@ -368,7 +406,7 @@ apply store_int_undef_store_int.
 3. 按实际目标顺序重排 bullet
 4. 对重复使用的 list / recurrence 结论抽 helper lemma，避免在 witness bullet 里手搓复杂 rewrite
 
-## 27. 溢出 witness 不要只看纯前提，先从栈槽取回 `Int` 范围
+## 28. 溢出 witness 不要只看纯前提，先从栈槽取回 `Int` 范围
 
 如果 `safety_wit` 的目标是类似 `cnt + 1 <= INT_MAX`，而 `pre_process; entailer!` 后纯上下文里没有 `n <= INT_MAX`，不要马上判断为 contract gap。
 
@@ -380,7 +418,7 @@ sep_apply store_int_range.
 
 它可以从空间断言 `(&( "n")) # Int |-> n_pre`、`(&( "i")) # Int |-> i` 这类栈槽中恢复 `Int.min_signed <= ... <= Int.max_signed`。之后再结合循环计数的纯上界，例如 prefix count `<= i - 1` 和 `i < n_pre`，通常可以完成自增溢出证明。
 
-## 28. 打开 `sac` 后局部 list 证明避免使用 `[| ...]` 和 `[x]` 语法
+## 29. 打开 `sac` 后局部 list 证明避免使用 `[| ...]` 和 `[x]` 语法
 
 `Local Open Scope sac` 可能干扰 Coq 对 list induction/destruct pattern 和 singleton list notation 的解析，表现为：
 
@@ -392,7 +430,7 @@ sep_apply store_int_range.
 - 用 `induction xs.` / `destruct xs.`，不要写 `induction xs as [| x xs IH]`
 - 用 `cons x nil`，不要写 `[x]`
 
-## 29. Coq 脚本优先用保守写法，尤其少依赖脆弱的 `destruct ... as ...` 形状
+## 30. Coq 脚本优先用保守写法，尤其少依赖脆弱的 `destruct ... as ...` 形状
 
 自动生成或半自动修改的 proof 中，以下写法更容易在不同环境里出问题：
 
@@ -407,3 +445,45 @@ sep_apply store_int_range.
 - 需要结构信息时，先证明一个局部 `assert`
 
 这样脚本会更长，但通常更稳，也更容易在下一轮编译失败时精确定位 first blocker。
+
+## 31. insertion final witness 要拆成 shape / permutation / order / length 四类 helper
+
+插入排序最后一步 `a[j + 1] = key` 的 witness 容易看起来像一个整体目标：
+
+- 写入后的数组是某个 `replace_Znth`
+- 新前缀有序
+- 新数组是旧数组的 permutation
+- 长度和 heap shape 保持
+
+不要在主 witness 里同时展开这些性质。更稳的拆法是四类 helper：
+
+- shape helper：把 `replace_Znth (j + 1) key l_cur` 改写成 `sublist 0 (j + 1) l_base ++ key :: nil ++ sublist (j + 1) i l_base ++ sublist (i + 1) n l_base`
+- permutation helper：只证明 final inserted list 与 `l_base` permutation
+- adjacent-order helper：只证明插入后前缀的相邻有序关系，按受影响边界分类讨论
+- length helper：只证明 final inserted list 的 `Zlength`
+
+主 witness 只负责：
+
+- `Exists (replace_Znth (j + 1) key l_cur)`
+- 用 shape helper 统一 list 表达
+- 分别调用 permutation / adjacent-order / length helper
+- 处理局部变量权限和简单算术
+
+这样每个 helper 的失败点都很明确，也避免在一个 bullet 中同时面对 `replace_Znth`、`sublist`、`Permutation` 和 `sorted_z`。
+
+## 32. insertion sort 的 sorted proof 优先先证 adjacent order，再在 return 处转成 `sorted_z`
+
+如果 invariant 直接维护 `sorted_z(sublist 0 i l)`，最终插入时通常需要证明 `replace_Znth` 后的结构化 list 仍满足 `sorted_z`，这会牵涉大量 `sublist` 和结构归纳。
+
+更稳定的证明路线是：
+
+1. annotation 层维护相邻有序关系。
+2. final insertion witness 只证明相邻有序关系保持。
+3. return witness 中一次性调用 helper，把“全数组相邻有序 + 长度覆盖”转成 `sorted_z l`。
+
+这个分层的好处是：
+
+- 循环保持性只需处理局部相邻边
+- 未受影响的相邻边可以直接复用 invariant
+- `sorted_z` 的结构归纳集中在一个 return helper 中
+- witness 里的 list 结构改写明显减少

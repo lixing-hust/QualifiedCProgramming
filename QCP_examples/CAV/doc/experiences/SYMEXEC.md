@@ -9,6 +9,19 @@
 - manual proof（见 `PROOF.md`）
 - Coq 编译与 load-path（见 `COMPILE.md`）
 
+常见入口：
+
+- 自动 verify 进程卡住：看 1
+- annotation 改动后重新 `symexec`：看 2
+- `symexec` 失败先查控制点：看 3
+- `symexec` 成功后分流到 proof 还是 annotation：看 4、13
+- annotated 工作副本路径：看 5
+- 公共 strategy / `coq/deps`：看 6
+- witness 形状脏，怀疑 annotation 信息组织错：看 7
+- `goal_check` 没过不能算完成：看 8
+- metrics / issues 记录要求：看 9、10
+- invariant 很强导致前端变慢：看 12
+
 ## 1. 自动 verify 进程卡住时，不要继续空等
 
 典型现象：

@@ -8,6 +8,20 @@
 - symbolic 执行流程（见 `SYMEXEC.md`）
 - manual proof（见 `PROOF.md`）
 
+常见入口：
+
+- 写 invariant 前的 reasoning 标准：看 1
+- invariant 控制点位置：看 2
+- 状态量闭式表达：看 3
+- 扫描类循环：看 4
+- 退出后能否推出后条件：看 7
+- nested loop：看 8
+- 参数不变关系：看 9
+- 数组逐步写入 / DP：看 10
+- merge / 双指针：看 11、12
+- 排序前缀 / insertion sort：看 13、15
+- `for` 循环初始化边界和 skip-loop：看 14
+
 ## 1. 写 invariant 前，必须先做充分的自然语言 reasoning，并检查能否证出后条件
 
 如果当前函数根本不需要补任何 `Inv` / `Assert`，就不要机械地生成 `annotation_reasoning.md`；直接跳过这一阶段。
@@ -222,3 +236,60 @@
 - 每个尾循环的 invariant 仍然保留完整的 `lout_done == merge(consumed_a, consumed_b)`
 - 尾循环继续保留跨边界关系，即使其中一侧已经到达边界；这些关系在 proof 中会变成 vacuous 或用于 append-last lemma
 - 退出到 return witness 前，要能直接推出 `i == n`、`j == m`、`k == n + m`
+
+## 13. 排序前缀 invariant 可优先携带相邻有序关系
+
+对插入排序这类每轮只在局部移动元素、最终需要 `sorted_z` 的数组排序题，循环 invariant 里直接携带 `sorted_z(sublist 0 i l)` 可能让最终插入/交换 witness 变成大段结构化 list proof。
+
+更稳的做法是携带等价但更局部的相邻有序关系：
+
+- `forall k, 0 <= k && k + 1 < i => l[k] <= l[k + 1]`
+
+这样保持性只需按受影响的相邻边分类讨论，未受影响的边直接复用旧 invariant；退出时再用一个 Coq helper 从相邻有序关系和长度推出 `sorted_z`。这通常比在每个循环保持 witness 中直接证明 `sorted_z` 的 `sublist` / `replace_Znth` 结构变换更稳定。
+
+## 14. `for` 循环 invariant 要按“初始化后、判断前”的状态写边界
+
+C 的 `for (init; cond; step)` invariant 位于执行 `init` 后、检查 `cond` 前的控制点，不是进入循环体后的状态。
+
+典型坑是：
+
+- `for (i = 1; i < n; ++i)`
+- precondition 允许 `n == 0`
+- invariant 却写成 `i <= n`
+
+初始化后 `i == 1`，此时还没有检查 `i < n`。如果 `n == 0`，`i <= n` 是假的，但程序本身合法并且会跳过循环。
+
+处理方法：
+
+- 循环头 invariant 的边界要允许 skip-loop 初始状态，例如 `i <= n + 1`
+- 如果 return witness 仍需要非空分支的强边界，再额外写条件事实，例如 `n > 0 => i <= n`
+- 退出处再结合 loop guard false 和条件事实恢复后条件需要的边界
+
+不要把“循环体会执行时成立的边界”写成“循环判断点总成立的 invariant”。
+
+## 15. 插入排序内循环优先建模成 shifted-hole
+
+插入排序内循环不是普通交换排序，它的核心状态是“拿出 `key` 后，右移元素形成一个 hole”。
+
+更稳的 inner invariant 应显式保存：
+
+- `l_base`：进入本轮外循环时的基准数组
+- `l_cur`：当前 heap 数组
+- `key`：被拿出的元素
+- `j` 和 `i` 对应的 hole 位置
+- `l_cur` 与 `l_base` 的 shifted-hole 结构关系
+
+典型结构是：
+
+- 前缀未受影响：`sublist 0 (j + 2) l_base`
+- 被右移区间：`sublist (j + 1) i l_base`
+- 后缀未受影响：`sublist (i + 1) n l_base`
+
+这比只写“当前前缀仍有序”更适合证明：
+
+- 一次右移后 heap shape 怎么变化
+- `Znth j l_cur` 和 `Znth j l_base` 如何对应
+- 最终 `a[j + 1] = key` 后如何恢复完整数组
+- permutation 如何从局部插入结构推出
+
+如果 invariant 没有显式保存 shifted-hole，final insertion witness 往往会退化成很难控制的 `replace_Znth` / `sublist` 大等式。
