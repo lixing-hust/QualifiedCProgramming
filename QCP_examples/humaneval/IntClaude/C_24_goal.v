@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -17,8 +17,6 @@ Local Open Scope list.
 Import naive_C_Rules.
 Require Import coins_24.
 Local Open Scope sac.
-From SimpleC.EE Require Import common_strategy_goal.
-From SimpleC.EE Require Import common_strategy_proof.
 
 (*----- Function largest_divisor -----*)
 
@@ -100,6 +98,22 @@ forall (n_pre: Z) (i: Z) ,
 
 Definition largest_divisor_safety_wit_6 := 
 forall (n_pre: Z) (i: Z) ,
+  [| ((i * i ) > n_pre) |] 
+  &&  [| (2 <= i) |] 
+  &&  [| (i <= 46340) |] 
+  &&  [| forall (k: Z) , (((2 <= k) /\ (k < i)) -> ((n_pre % ( k ) ) <> 0)) |] 
+  &&  [| (problem_24_pre_z n_pre ) |] 
+  &&  [| (2 <= n_pre) |] 
+  &&  [| (n_pre <= 2147395600) |]
+  &&  ((( &( "i" ) )) # Int  |-> i)
+  **  ((( &( "n" ) )) # Int  |-> n_pre)
+|--
+  [| (1 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 1) |]
+.
+
+Definition largest_divisor_safety_wit_7 := 
+forall (n_pre: Z) (i: Z) ,
   [| ((n_pre % ( i ) ) <> 0) |] 
   &&  [| ((i * i ) <= n_pre) |] 
   &&  [| (2 <= i) |] 
@@ -113,22 +127,6 @@ forall (n_pre: Z) (i: Z) ,
 |--
   [| ((i + 1 ) <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= (i + 1 )) |]
-.
-
-Definition largest_divisor_safety_wit_7 := 
-forall (n_pre: Z) (i: Z) ,
-  [| ((i * i ) > n_pre) |] 
-  &&  [| (2 <= i) |] 
-  &&  [| (i <= 46340) |] 
-  &&  [| forall (k: Z) , (((2 <= k) /\ (k < i)) -> ((n_pre % ( k ) ) <> 0)) |] 
-  &&  [| (problem_24_pre_z n_pre ) |] 
-  &&  [| (2 <= n_pre) |] 
-  &&  [| (n_pre <= 2147395600) |]
-  &&  ((( &( "i" ) )) # Int  |-> i)
-  **  ((( &( "n" ) )) # Int  |-> n_pre)
-|--
-  [| (1 <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= 1) |]
 .
 
 Definition largest_divisor_entail_wit_1 := 
@@ -170,6 +168,21 @@ forall (n_pre: Z) (i: Z) ,
 
 Definition largest_divisor_return_wit_1 := 
 forall (n_pre: Z) (i: Z) ,
+  [| ((i * i ) > n_pre) |] 
+  &&  [| (2 <= i) |] 
+  &&  [| (i <= 46340) |] 
+  &&  [| forall (k: Z) , (((2 <= k) /\ (k < i)) -> ((n_pre % ( k ) ) <> 0)) |] 
+  &&  [| (problem_24_pre_z n_pre ) |] 
+  &&  [| (2 <= n_pre) |] 
+  &&  [| (n_pre <= 2147395600) |]
+  &&  emp
+|--
+  [| (problem_24_spec_z n_pre 1 ) |]
+  &&  emp
+.
+
+Definition largest_divisor_return_wit_2 := 
+forall (n_pre: Z) (i: Z) ,
   [| ((n_pre % ( i ) ) = 0) |] 
   &&  [| ((i * i ) <= n_pre) |] 
   &&  [| (2 <= i) |] 
@@ -184,24 +197,8 @@ forall (n_pre: Z) (i: Z) ,
   &&  emp
 .
 
-Definition largest_divisor_return_wit_2 := 
-forall (n_pre: Z) (i: Z) ,
-  [| ((i * i ) > n_pre) |] 
-  &&  [| (2 <= i) |] 
-  &&  [| (i <= 46340) |] 
-  &&  [| forall (k: Z) , (((2 <= k) /\ (k < i)) -> ((n_pre % ( k ) ) <> 0)) |] 
-  &&  [| (problem_24_pre_z n_pre ) |] 
-  &&  [| (2 <= n_pre) |] 
-  &&  [| (n_pre <= 2147395600) |]
-  &&  emp
-|--
-  [| (problem_24_spec_z n_pre 1 ) |]
-  &&  emp
-.
-
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 
 Axiom proof_of_largest_divisor_safety_wit_1 : largest_divisor_safety_wit_1.
 Axiom proof_of_largest_divisor_safety_wit_2 : largest_divisor_safety_wit_2.

@@ -43,6 +43,28 @@ Proof.
 	lia.
 Qed.
 
+Lemma proof_of_largest_prime_factor_entail_wit_1 : largest_prime_factor_entail_wit_1.
+Proof.
+	unfold largest_prime_factor_entail_wit_1.
+	intros.
+	Intros.
+	entailer!.
+	unfold lpf_inv.
+	split.
+	- lia.
+	- split.
+	  + rewrite Z.mod_same by lia.
+	    reflexivity.
+	  + split.
+	    * intros p Hpprime Hpge2 Hplt2.
+	      lia.
+	    * split.
+	      { intros p Hpprime Hpge2 Hplt2 Hndiv.
+	        lia. }
+	      intros q Hqprime Hqge2 Hqdiv.
+	      exact Hqdiv.
+Qed.
+
 Lemma proof_of_largest_prime_factor_entail_wit_2 : largest_prime_factor_entail_wit_2.
 Proof.
 	unfold largest_prime_factor_entail_wit_2.
@@ -88,13 +110,67 @@ Proof.
 	- split.
 	  + exact Hn_ge2.
 	  + split.
-	    * exact Hmod.
+	    * lia.
 	    * split.
+	      { exact Hmod. }
+	      split.
 	      { exact Hsmall. }
 	      split.
 	      { exact Hbound. }
 	      intros q Hprime Hqi Hdiv.
 	      eapply Hlarge; eauto; lia.
+Qed.
+
+Lemma proof_of_largest_prime_factor_entail_wit_3_1 : largest_prime_factor_entail_wit_3_1.
+Proof.
+	unfold largest_prime_factor_entail_wit_3_1.
+	intros.
+	Intros.
+	entailer!.
+	pose proof H1 as Hwhile.
+	unfold lpf_while_inv in Hwhile.
+	destruct Hwhile as [_ [Hn_ge2 _]].
+	apply lpf_inv_after_not_div.
+	- rewrite <- Z.rem_mod_nonneg by lia.
+	  exact H.
+	- lia.
+	- exact H1.
+Qed.
+
+Lemma proof_of_largest_prime_factor_entail_wit_3_2 : largest_prime_factor_entail_wit_3_2.
+Proof.
+	unfold largest_prime_factor_entail_wit_3_2.
+	intros.
+	Intros.
+	entailer!.
+	pose proof H2 as Hwhile.
+	unfold lpf_while_inv in Hwhile.
+	destruct Hwhile as [_ [Hn_ge2 _]].
+	apply lpf_inv_after_le_mod0.
+	- lia.
+	- rewrite <- Z.rem_mod_nonneg by lia.
+	  exact H0.
+	- lia.
+	- exact H2.
+Qed.
+
+Lemma proof_of_largest_prime_factor_entail_wit_4 : largest_prime_factor_entail_wit_4.
+Proof.
+	unfold largest_prime_factor_entail_wit_4.
+	intros.
+	Intros.
+	entailer!.
+	pose proof H2 as Hwhile.
+	unfold lpf_while_inv in Hwhile.
+	destruct Hwhile as [_ [Hn2_ge2 _]].
+	pose proof (Zquot_Zdiv_pos n_2 i_2 ltac:(lia) ltac:(lia)) as Hquot.
+	rewrite Hquot.
+	apply lpf_while_inv_div_step.
+	- lia.
+	- lia.
+	- rewrite <- Z.rem_mod_nonneg by lia.
+	  exact H0.
+	- exact H2.
 Qed.
 
 Lemma proof_of_largest_prime_factor_return_wit_1 : largest_prime_factor_return_wit_1.
@@ -110,4 +186,3 @@ Proof.
 	rewrite Hq in H.
 	eapply (lpf_spec_from_exit n_pre n i); eauto.
 Qed.
-

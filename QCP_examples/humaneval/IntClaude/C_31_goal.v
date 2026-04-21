@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -17,8 +17,6 @@ Local Open Scope list.
 Import naive_C_Rules.
 Require Import coins_31.
 Local Open Scope sac.
-From SimpleC.EE Require Import common_strategy_goal.
-From SimpleC.EE Require Import common_strategy_proof.
 
 (*----- Function is_prime -----*)
 
@@ -199,13 +197,18 @@ forall (n_pre: Z) (i: Z) ,
 .
 
 Definition is_prime_return_wit_1 := 
-forall (n_pre: Z) ,
-  [| (n_pre < 2) |] 
+forall (n_pre: Z) (i: Z) ,
+  [| ((i * i ) > n_pre) |] 
+  &&  [| (2 <= i) |] 
+  &&  [| (i <= 46340) |] 
+  &&  [| (((i - 1 ) * (i - 1 ) ) <= n_pre) |] 
+  &&  [| forall (k: Z) , (((2 <= k) /\ (k < i)) -> ((n_pre % ( k ) ) <> 0)) |] 
+  &&  [| (n_pre >= 2) |] 
   &&  [| (0 <= n_pre) |] 
   &&  [| (n_pre <= 2147395600) |]
   &&  emp
 |--
-  [| (problem_31_spec_z n_pre 0 ) |]
+  [| (problem_31_spec_z n_pre 1 ) |]
   &&  emp
 .
 
@@ -227,24 +230,18 @@ forall (n_pre: Z) (i: Z) ,
 .
 
 Definition is_prime_return_wit_3 := 
-forall (n_pre: Z) (i: Z) ,
-  [| ((i * i ) > n_pre) |] 
-  &&  [| (2 <= i) |] 
-  &&  [| (i <= 46340) |] 
-  &&  [| (((i - 1 ) * (i - 1 ) ) <= n_pre) |] 
-  &&  [| forall (k: Z) , (((2 <= k) /\ (k < i)) -> ((n_pre % ( k ) ) <> 0)) |] 
-  &&  [| (n_pre >= 2) |] 
+forall (n_pre: Z) ,
+  [| (n_pre < 2) |] 
   &&  [| (0 <= n_pre) |] 
   &&  [| (n_pre <= 2147395600) |]
   &&  emp
 |--
-  [| (problem_31_spec_z n_pre 1 ) |]
+  [| (problem_31_spec_z n_pre 0 ) |]
   &&  emp
 .
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 
 Axiom proof_of_is_prime_safety_wit_1 : is_prime_safety_wit_1.
 Axiom proof_of_is_prime_safety_wit_2 : is_prime_safety_wit_2.

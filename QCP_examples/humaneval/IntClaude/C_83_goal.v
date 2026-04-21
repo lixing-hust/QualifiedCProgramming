@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -17,8 +17,6 @@ Local Open Scope list.
 Import naive_C_Rules.
 Require Import coins_83.
 Local Open Scope sac.
-From SimpleC.EE Require Import common_strategy_goal.
-From SimpleC.EE Require Import common_strategy_proof.
 
 (*----- Function starts_one_ends -----*)
 
@@ -110,11 +108,11 @@ forall (n_pre: Z) (out: Z) (i: Z) ,
   &&  [| (1 <= n_pre) |] 
   &&  [| (n_pre <= 9) |]
   &&  ((( &( "i" ) )) # Int  |-> i)
-  **  ((( &( "out" ) )) # Int  |-> out)
+  **  ((( &( "out" ) )) # Int  |-> (out * 10 ))
   **  ((( &( "n" ) )) # Int  |-> n_pre)
 |--
-  [| ((out * 10 ) <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= (out * 10 )) |]
+  [| ((i + 1 ) <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= (i + 1 )) |]
 .
 
 Definition starts_one_ends_safety_wit_8 := 
@@ -132,8 +130,8 @@ forall (n_pre: Z) (out: Z) (i: Z) ,
   **  ((( &( "out" ) )) # Int  |-> out)
   **  ((( &( "n" ) )) # Int  |-> n_pre)
 |--
-  [| (10 <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= 10) |]
+  [| ((out * 10 ) <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= (out * 10 )) |]
 .
 
 Definition starts_one_ends_safety_wit_9 := 
@@ -148,11 +146,11 @@ forall (n_pre: Z) (out: Z) (i: Z) ,
   &&  [| (1 <= n_pre) |] 
   &&  [| (n_pre <= 9) |]
   &&  ((( &( "i" ) )) # Int  |-> i)
-  **  ((( &( "out" ) )) # Int  |-> (out * 10 ))
+  **  ((( &( "out" ) )) # Int  |-> out)
   **  ((( &( "n" ) )) # Int  |-> n_pre)
 |--
-  [| ((i + 1 ) <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= (i + 1 )) |]
+  [| (10 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 10) |]
 .
 
 Definition starts_one_ends_entail_wit_1 := 
@@ -200,19 +198,6 @@ forall (n_pre: Z) (out: Z) (i: Z) ,
 .
 
 Definition starts_one_ends_return_wit_1 := 
-forall (n_pre: Z) ,
-  [| (n_pre = 1) |] 
-  &&  [| (n_pre >= 1) |] 
-  &&  [| (problem_83_pre_z n_pre ) |] 
-  &&  [| (1 <= n_pre) |] 
-  &&  [| (n_pre <= 9) |]
-  &&  emp
-|--
-  [| (problem_83_spec_z n_pre 1 ) |]
-  &&  emp
-.
-
-Definition starts_one_ends_return_wit_2 := 
 forall (n_pre: Z) (out: Z) (i: Z) ,
   [| (i >= n_pre) |] 
   &&  [| (2 <= i) |] 
@@ -229,9 +214,21 @@ forall (n_pre: Z) (out: Z) (i: Z) ,
   &&  emp
 .
 
+Definition starts_one_ends_return_wit_2 := 
+forall (n_pre: Z) ,
+  [| (n_pre = 1) |] 
+  &&  [| (n_pre >= 1) |] 
+  &&  [| (problem_83_pre_z n_pre ) |] 
+  &&  [| (1 <= n_pre) |] 
+  &&  [| (n_pre <= 9) |]
+  &&  emp
+|--
+  [| (problem_83_spec_z n_pre 1 ) |]
+  &&  emp
+.
+
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 
 Axiom proof_of_starts_one_ends_safety_wit_1 : starts_one_ends_safety_wit_1.
 Axiom proof_of_starts_one_ends_safety_wit_2 : starts_one_ends_safety_wit_2.

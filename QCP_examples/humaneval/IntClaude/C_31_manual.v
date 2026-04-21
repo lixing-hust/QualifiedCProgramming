@@ -61,12 +61,82 @@ Proof.
   Intros.
   entailer!.
   unfold problem_31_spec_z, IsPrime.
-  assert (Hcases : n_pre = 0 \/ n_pre = 1) by nia.
-  destruct Hcases as [-> | ->]; split; intro Hc.
-  - contradiction.
-  - destruct Hc as [Hlt _]. lia.
-  - contradiction.
-  - destruct Hc as [Hlt _]. lia.
+  split.
+  - intro Hnz.
+    split.
+    + change (Z.to_nat 1 < Z.to_nat n_pre)%nat.
+      apply Z2Nat.inj_lt; nia.
+    + intros d Hdmod.
+      destruct d.
+      * simpl in Hdmod.
+        assert ((0 < Z.to_nat n_pre)%nat).
+        { change (Z.to_nat 0 < Z.to_nat n_pre)%nat.
+          apply Z2Nat.inj_lt; nia. }
+        lia.
+      * destruct d.
+        { left; reflexivity. }
+        { assert (Hd_ge_2 : 2 <= Z.of_nat (S (S d))) by lia.
+          destruct (lt_eq_lt_dec (S (S d)) (Z.to_nat n_pre)) as [[Hd_lt | Hd_eq] | Hd_gt].
+          - assert (Hd_divides : exists c : nat, Z.to_nat n_pre = ((S (S d)) * c)%nat).
+            {
+              apply (proj1 (Nat.Div0.mod_divides _ _)).
+              exact Hdmod.
+            }
+            destruct Hd_divides as [c Hnat_eq].
+            assert (Hc_ge_2 : (2 <= c)%nat).
+            {
+              destruct c.
+              - simpl in Hnat_eq. lia.
+              - destruct c.
+                + simpl in Hnat_eq. lia.
+                + lia.
+            }
+            assert (Hfac : n_pre = Z.of_nat (S (S d)) * Z.of_nat c).
+            {
+              pose proof (f_equal Z.of_nat Hnat_eq) as Hz_eq.
+              rewrite Nat2Z.inj_mul in Hz_eq.
+              rewrite Z2Nat.id in Hz_eq by nia.
+              exact Hz_eq.
+            }
+            assert (Hsmall : Z.of_nat (S (S d)) < i \/ Z.of_nat c < i) by nia.
+            destruct Hsmall as [Hd_lt_i | Hc_lt_i].
+            + exfalso.
+              match goal with
+              | Hinv : forall k : Z, ((2 <= k /\ k < i) -> ((n_pre % ( k ) ) <> 0)) |- _ =>
+                  specialize (Hinv (Z.of_nat (S (S d))));
+                  assert (Hrange : 2 <= Z.of_nat (S (S d)) < i) by nia;
+                  specialize (Hinv Hrange);
+                  apply Hinv
+              end.
+              rewrite Hfac.
+              assert (Hd_nz : Z.of_nat (S (S d)) <> 0) by lia.
+              apply (proj2 (Z.rem_divide _ _ Hd_nz)).
+              exists (Z.of_nat c).
+              rewrite Z.mul_comm.
+              reflexivity.
+            + exfalso.
+              match goal with
+              | Hinv : forall k : Z, ((2 <= k /\ k < i) -> ((n_pre % ( k ) ) <> 0)) |- _ =>
+                  specialize (Hinv (Z.of_nat c));
+                  assert (Hrange : 2 <= Z.of_nat c < i) by nia;
+                  specialize (Hinv Hrange);
+                  apply Hinv
+              end.
+              rewrite Hfac.
+              assert (Hc_nz : Z.of_nat c <> 0) by lia.
+              apply (proj2 (Z.rem_divide _ _ Hc_nz)).
+              exists (Z.of_nat (S (S d))).
+              reflexivity.
+          - right.
+            exact Hd_eq.
+          - exfalso.
+            rewrite Nat.mod_small in Hdmod by lia.
+            assert ((0 < Z.to_nat n_pre)%nat).
+            { change (Z.to_nat 0 < Z.to_nat n_pre)%nat.
+              apply Z2Nat.inj_lt; nia. }
+            lia. }
+  - intro Hprime.
+    discriminate.
 Qed. 
 
 Lemma proof_of_is_prime_return_wit_2 : is_prime_return_wit_2.
@@ -128,76 +198,15 @@ Proof.
   entailer!.
   unfold problem_31_spec_z, IsPrime.
   split.
-  - intro Hnz.
-    split.
-    + change (Z.to_nat 1 < Z.to_nat n_pre)%nat.
-      apply Z2Nat.inj_lt; nia.
-    + intros d Hdmod.
-      destruct d.
-      * simpl in Hdmod.
-        assert ((0 < Z.to_nat n_pre)%nat).
-        { change (Z.to_nat 0 < Z.to_nat n_pre)%nat.
-          apply Z2Nat.inj_lt; nia. }
-        lia.
-      * destruct d.
-        { left; reflexivity. }
-        { assert (Hd_ge_2 : 2 <= Z.of_nat (S (S d))) by lia.
-          assert (Hn_gt1_nat : (1 < Z.to_nat n_pre)%nat).
-          { change (Z.to_nat 1 < Z.to_nat n_pre)%nat.
-            apply Z2Nat.inj_lt; nia. }
-          destruct (lt_eq_lt_dec (S (S d)) (Z.to_nat n_pre)) as [[Hd_lt | Hd_eq] | Hd_gt].
-          - assert (Hd_divides : exists c : nat, Z.to_nat n_pre = ((S (S d)) * c)%nat).
-            {
-              apply (proj1 (Nat.Div0.mod_divides _ _)).
-              exact Hdmod.
-            }
-            destruct Hd_divides as [c Hnat_eq].
-            assert (Hc_ge_2 : (2 <= c)%nat).
-            {
-              destruct c.
-              - simpl in Hnat_eq. lia.
-              - destruct c.
-                + simpl in Hnat_eq. lia.
-                + lia.
-            }
-            assert (Hfac : n_pre = Z.of_nat (S (S d)) * Z.of_nat c).
-            {
-              pose proof (f_equal Z.of_nat Hnat_eq) as Hz_eq.
-              rewrite Nat2Z.inj_mul in Hz_eq.
-              rewrite Z2Nat.id in Hz_eq by nia.
-              exact Hz_eq.
-            }
-            assert (Hsmall : Z.of_nat (S (S d)) < i \/ Z.of_nat c < i) by nia.
-            destruct Hsmall as [Hd_lt_i | Hc_lt_i].
-            + exfalso.
-              specialize (H3 (Z.of_nat (S (S d)))).
-              assert (Hrange : 2 <= Z.of_nat (S (S d)) < i) by nia.
-              specialize (H3 Hrange).
-              apply H3.
-              rewrite Hfac.
-              assert (Hd_nz : Z.of_nat (S (S d)) <> 0) by lia.
-              apply (proj2 (Z.rem_divide _ _ Hd_nz)).
-              exists (Z.of_nat c).
-              rewrite Z.mul_comm.
-              reflexivity.
-            + exfalso.
-              specialize (H3 (Z.of_nat c)).
-              assert (Hrange : 2 <= Z.of_nat c < i) by nia.
-              specialize (H3 Hrange).
-              apply H3.
-              rewrite Hfac.
-              assert (Hc_nz : Z.of_nat c <> 0) by lia.
-              apply (proj2 (Z.rem_divide _ _ Hc_nz)).
-              exists (Z.of_nat (S (S d))).
-              reflexivity.
-          - right.
-            exact Hd_eq.
-          - exfalso.
-            rewrite Nat.mod_small in Hdmod by lia.
-            assert ((0 < Z.to_nat n_pre)%nat).
-            { change (Z.to_nat 0 < Z.to_nat n_pre)%nat.
-              apply Z2Nat.inj_lt; nia. }
-            lia. }
+  - intro Hfalse.
+    contradiction.
   - intro Hprime.
-    discriminate.
+    exfalso.
+    destruct Hprime as [Hgt1 _].
+    assert (Hn_lt_2_nat : (Z.to_nat n_pre < 2)%nat).
+    {
+      replace 2%nat with (Z.to_nat 2) by reflexivity.
+      apply Z2Nat.inj_lt; nia.
+    }
+    lia.
 Qed. 

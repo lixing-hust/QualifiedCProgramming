@@ -95,29 +95,29 @@ Qed.
 
 Lemma proof_of_x_or_y_return_wit_1 : x_or_y_return_wit_1.
 Proof.
-	unfold x_or_y_return_wit_1.
-	intros.
-	Intros.
-	entailer!.
-	apply problem_150_spec_z_prime; try lia.
-	assert (Hquot : n_pre ÷ i = n_pre / i) by (apply Z.quot_div_nonneg; lia).
-	rewrite Hquot in H.
-	apply prime_of_no_divisors_upto_sqrt with (i := i); try lia.
-	- pose proof (div_square_lt_from_exit n_pre i H0 H) as Hlt.
-		lia.
-	- intros k Hk.
-		apply (H2 H11 k Hk).
+  unfold x_or_y_return_wit_1.
+  intros.
+  Intros.
+  entailer!.
+  apply problem_150_spec_z_not_prime; try lia.
+  specialize (H3 H11).
+  destruct H3 as [k [[Hk2 Hklt] Hkdiv]].
+  eapply (not_prime_of_small_divisor n_pre k); eauto.
+  lia.
 Qed. 
 
 Lemma proof_of_x_or_y_return_wit_2 : x_or_y_return_wit_2.
 Proof.
-	unfold x_or_y_return_wit_2.
-	intros.
-	Intros.
-	entailer!.
-	apply problem_150_spec_z_not_prime; try lia.
-	specialize (H3 H11).
-	destruct H3 as [k [[Hk2 Hklt] Hkdiv]].
-	eapply (not_prime_of_small_divisor n_pre k); eauto.
-	lia.
+  unfold x_or_y_return_wit_2.
+  intros.
+  Intros.
+  entailer!.
+  apply problem_150_spec_z_prime; try lia.
+  assert (Hquot : n_pre ÷ i = n_pre / i) by (apply Z.quot_div_nonneg; lia).
+  rewrite Hquot in H.
+  apply prime_of_no_divisors_upto_sqrt with (i := i); try lia.
+  - pose proof (div_square_lt_from_exit n_pre i H0 H) as Hlt.
+    lia.
+  - intros k Hk.
+    apply (H2 H11 k Hk).
 Qed. 

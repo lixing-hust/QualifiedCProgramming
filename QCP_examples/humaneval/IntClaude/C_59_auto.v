@@ -6,10 +6,10 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
-Require Import C_59_goal.
+From SimpleC.EE Require Import C_59_goal.
 Require Import Logic.LogicGenerator.demo932.Interface.
 Local Open Scope Z_scope.
 Local Open Scope sets.
@@ -33,16 +33,4 @@ Proof. Admitted.
 
 Lemma proof_of_largest_prime_factor_safety_wit_7 : largest_prime_factor_safety_wit_7.
 Proof. Admitted. 
-
-Lemma proof_of_largest_prime_factor_entail_wit_1 : largest_prime_factor_entail_wit_1.
-Proof. Admitted.
-
-Lemma proof_of_largest_prime_factor_entail_wit_3_1 : largest_prime_factor_entail_wit_3_1.
-Proof. Admitted.
-
-Lemma proof_of_largest_prime_factor_entail_wit_3_2 : largest_prime_factor_entail_wit_3_2.
-Proof. Admitted.
-
-Lemma proof_of_largest_prime_factor_entail_wit_4 : largest_prime_factor_entail_wit_4.
-Proof. Admitted.
 

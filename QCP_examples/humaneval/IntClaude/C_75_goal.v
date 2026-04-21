@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -17,8 +17,6 @@ Local Open Scope list.
 Import naive_C_Rules.
 Require Import coins_75.
 Local Open Scope sac.
-From SimpleC.EE Require Import common_strategy_goal.
-From SimpleC.EE Require Import common_strategy_proof.
 
 (*----- Function is_multiply_prime -----*)
 
@@ -513,26 +511,6 @@ forall (a_pre: Z) (num: Z) (a: Z) (i: Z) (num_2: Z) (i_2: Z) (a_2: Z) ,
 
 Definition is_multiply_prime_return_wit_1 := 
 forall (a_pre: Z) (num: Z) (a: Z) (i: Z) ,
-  [| (num = 2) |] 
-  &&  [| ((i * i ) > a) |] 
-  &&  [| (2 <= i) |] 
-  &&  [| (i <= 10) |] 
-  &&  [| (a >= 2) |] 
-  &&  [| (a <= a_pre) |] 
-  &&  [| (0 <= num) |] 
-  &&  [| ((num + a ) <= a_pre) |] 
-  &&  [| (mp_outer_inv a_pre i a num ) |] 
-  &&  [| (problem_75_pre a_pre ) |] 
-  &&  [| (2 <= a_pre) |] 
-  &&  [| (a_pre < 100) |]
-  &&  emp
-|--
-  [| (problem_75_spec_z a_pre 1 ) |]
-  &&  emp
-.
-
-Definition is_multiply_prime_return_wit_2 := 
-forall (a_pre: Z) (num: Z) (a: Z) (i: Z) ,
   [| (num <> 2) |] 
   &&  [| ((i * i ) > a) |] 
   &&  [| (2 <= i) |] 
@@ -551,9 +529,28 @@ forall (a_pre: Z) (num: Z) (a: Z) (i: Z) ,
   &&  emp
 .
 
+Definition is_multiply_prime_return_wit_2 := 
+forall (a_pre: Z) (num: Z) (a: Z) (i: Z) ,
+  [| (num = 2) |] 
+  &&  [| ((i * i ) > a) |] 
+  &&  [| (2 <= i) |] 
+  &&  [| (i <= 10) |] 
+  &&  [| (a >= 2) |] 
+  &&  [| (a <= a_pre) |] 
+  &&  [| (0 <= num) |] 
+  &&  [| ((num + a ) <= a_pre) |] 
+  &&  [| (mp_outer_inv a_pre i a num ) |] 
+  &&  [| (problem_75_pre a_pre ) |] 
+  &&  [| (2 <= a_pre) |] 
+  &&  [| (a_pre < 100) |]
+  &&  emp
+|--
+  [| (problem_75_spec_z a_pre 1 ) |]
+  &&  emp
+.
+
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 
 Axiom proof_of_is_multiply_prime_safety_wit_1 : is_multiply_prime_safety_wit_1.
 Axiom proof_of_is_multiply_prime_safety_wit_2 : is_multiply_prime_safety_wit_2.

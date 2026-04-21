@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -17,8 +17,6 @@ Local Open Scope list.
 Import naive_C_Rules.
 Require Import coins_53.
 Local Open Scope sac.
-From SimpleC.EE Require Import common_strategy_goal.
-From SimpleC.EE Require Import common_strategy_proof.
 
 (*----- Function add -----*)
 
@@ -53,7 +51,6 @@ forall (y_pre: Z) (x_pre: Z) ,
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 
 Axiom proof_of_add_safety_wit_1 : add_safety_wit_1.
 Axiom proof_of_add_return_wit_1 : add_return_wit_1.

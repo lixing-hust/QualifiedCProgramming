@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -17,8 +17,6 @@ Local Open Scope list.
 Import naive_C_Rules.
 Require Import coins_13.
 Local Open Scope sac.
-Require Import common_strategy_goal.
-Require Import common_strategy_proof.
 
 (*----- Function greatest_common_divisor -----*)
 
@@ -215,26 +213,6 @@ forall (b_pre: Z) (a_pre: Z) (a: Z) (b: Z) ,
 
 Definition greatest_common_divisor_return_wit_1 := 
 forall (b_pre: Z) (a_pre: Z) (a: Z) (b: Z) ,
-  [| ((a % ( b ) ) = 0) |] 
-  &&  [| (a >= b) |] 
-  &&  [| ((Zgcd (a) (b)) = (Zgcd (a_pre) (b_pre))) |] 
-  &&  [| (a > 0) |] 
-  &&  [| (b > 0) |] 
-  &&  [| (problem_13_pre a_pre b_pre ) |] 
-  &&  [| (a_pre > 0) |] 
-  &&  [| (INT_MIN < a_pre) |] 
-  &&  [| (a_pre <= INT_MAX) |] 
-  &&  [| (INT_MIN < b_pre) |] 
-  &&  [| (b_pre <= INT_MAX) |] 
-  &&  [| (b_pre > 0) |]
-  &&  emp
-|--
-  [| (problem_13_spec a_pre b_pre b ) |]
-  &&  emp
-.
-
-Definition greatest_common_divisor_return_wit_2 := 
-forall (b_pre: Z) (a_pre: Z) (a: Z) (b: Z) ,
   [| ((b % ( a ) ) = 0) |] 
   &&  [| (a < b) |] 
   &&  [| ((Zgcd (a) (b)) = (Zgcd (a_pre) (b_pre))) |] 
@@ -253,9 +231,28 @@ forall (b_pre: Z) (a_pre: Z) (a: Z) (b: Z) ,
   &&  emp
 .
 
+Definition greatest_common_divisor_return_wit_2 := 
+forall (b_pre: Z) (a_pre: Z) (a: Z) (b: Z) ,
+  [| ((a % ( b ) ) = 0) |] 
+  &&  [| (a >= b) |] 
+  &&  [| ((Zgcd (a) (b)) = (Zgcd (a_pre) (b_pre))) |] 
+  &&  [| (a > 0) |] 
+  &&  [| (b > 0) |] 
+  &&  [| (problem_13_pre a_pre b_pre ) |] 
+  &&  [| (a_pre > 0) |] 
+  &&  [| (INT_MIN < a_pre) |] 
+  &&  [| (a_pre <= INT_MAX) |] 
+  &&  [| (INT_MIN < b_pre) |] 
+  &&  [| (b_pre <= INT_MAX) |] 
+  &&  [| (b_pre > 0) |]
+  &&  emp
+|--
+  [| (problem_13_spec a_pre b_pre b ) |]
+  &&  emp
+.
+
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 
 Axiom proof_of_greatest_common_divisor_safety_wit_1 : greatest_common_divisor_safety_wit_1.
 Axiom proof_of_greatest_common_divisor_safety_wit_2 : greatest_common_divisor_safety_wit_2.

@@ -53,12 +53,26 @@ Proof.
 	intros.
 	Intros.
 	entailer!.
+	repeat rewrite Z.rem_mod_nonneg in * by lia.
 	unfold problem_102_spec.
 	split.
-	- intros [z [Hxz [Hzy _]]].
-		lia.
 	- intros _.
-		reflexivity.
+		repeat split.
+		+ apply mod2_ne1_pos_even_true; [lia | assumption].
+		+ lia.
+		+ lia.
+		+ intros z' Hz'.
+			exfalso.
+			lia.
+	- intros Hno_even.
+		exfalso.
+		apply Hno_even.
+		exists y_pre.
+		split.
+		+ lia.
+		+ split.
+		  * lia.
+		  * apply mod2_ne1_pos_even_true; [lia | assumption].
 Qed.
 
 Lemma proof_of_choose_num_return_wit_2 : choose_num_return_wit_2.
@@ -70,20 +84,23 @@ Proof.
 	repeat rewrite Z.rem_mod_nonneg in * by lia.
 	unfold problem_102_spec.
 	split.
-	- intros Hex.
-		exfalso.
-		destruct Hex as [z [Hxz [Hzy Hevenz]]].
-		assert (z = y_pre) by lia.
-		subst z.
-		assert (Hodd : Z.even y_pre = false).
-		{
-			apply mod2_eq1_even_false.
-			assumption.
-		}
-		rewrite Hodd in Hevenz.
-		discriminate.
 	- intros _.
-		reflexivity.
+		repeat split.
+		+ apply mod2_ne1_pos_even_true; [lia | assumption].
+		+ lia.
+		+ lia.
+		+ intros z' Hz'.
+			exfalso.
+			lia.
+	- intros Hno_even.
+		exfalso.
+		apply Hno_even.
+		exists y_pre.
+		split.
+		+ lia.
+		+ split.
+		  * lia.
+		  * apply mod2_ne1_pos_even_true; [lia | assumption].
 Qed.
 
 Lemma proof_of_choose_num_return_wit_3 : choose_num_return_wit_3.
@@ -137,25 +154,20 @@ Proof.
 	repeat rewrite Z.rem_mod_nonneg in * by lia.
 	unfold problem_102_spec.
 	split.
-	- intros _.
-		repeat split.
-		+ apply mod2_ne1_pos_even_true.
-		  * lia.
-		  * assumption.
-		+ lia.
-		+ lia.
-		+ intros z' Hz'.
-			exfalso.
-			lia.
-	- intros Hno_even.
+	- intros Hex.
 		exfalso.
-		apply Hno_even.
-		exists y_pre.
-		split.
-		+ lia.
-		+ split.
-		  * lia.
-		  * apply mod2_ne1_pos_even_true; [lia | assumption].
+		destruct Hex as [z [Hxz [Hzy Hevenz]]].
+		assert (z = y_pre) by lia.
+		subst z.
+		assert (Hodd : Z.even y_pre = false).
+		{
+			apply mod2_eq1_even_false.
+			assumption.
+		}
+		rewrite Hodd in Hevenz.
+		discriminate.
+	- intros _.
+		reflexivity.
 Qed.
 
 Lemma proof_of_choose_num_return_wit_5 : choose_num_return_wit_5.
@@ -167,24 +179,8 @@ Proof.
 	repeat rewrite Z.rem_mod_nonneg in * by lia.
 	unfold problem_102_spec.
 	split.
+	- intros [z [Hxz [Hzy _]]].
+		lia.
 	- intros _.
-		repeat split.
-		+ apply mod2_ne1_pos_even_true.
-		  * lia.
-		  * assumption.
-		+ lia.
-		+ lia.
-		+ intros z' Hz'.
-			exfalso.
-			lia.
-	- intros Hno_even.
-		exfalso.
-		apply Hno_even.
-		exists y_pre.
-		split.
-		+ lia.
-		+ split.
-		  * lia.
-		  * apply mod2_ne1_pos_even_true; [lia | assumption].
+		reflexivity.
 Qed.
-

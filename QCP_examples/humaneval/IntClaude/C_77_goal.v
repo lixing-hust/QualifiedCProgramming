@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -17,8 +17,6 @@ Local Open Scope list.
 Import naive_C_Rules.
 Require Import coins_77.
 Local Open Scope sac.
-Require Import common_strategy_goal.
-Require Import common_strategy_proof.
 
 (*----- Function abs -----*)
 
@@ -44,23 +42,23 @@ forall (x_pre: Z) ,
 
 Definition abs_return_wit_1 := 
 forall (x_pre: Z) ,
-  [| (x_pre < 0) |] 
-  &&  [| (INT_MIN < x_pre) |] 
-  &&  [| (x_pre <= INT_MAX) |]
-  &&  emp
-|--
-  [| ((-x_pre) = (Zabs (x_pre))) |]
-  &&  emp
-.
-
-Definition abs_return_wit_2 := 
-forall (x_pre: Z) ,
   [| (x_pre >= 0) |] 
   &&  [| (INT_MIN < x_pre) |] 
   &&  [| (x_pre <= INT_MAX) |]
   &&  emp
 |--
   [| (x_pre = (Zabs (x_pre))) |]
+  &&  emp
+.
+
+Definition abs_return_wit_2 := 
+forall (x_pre: Z) ,
+  [| (x_pre < 0) |] 
+  &&  [| (INT_MIN < x_pre) |] 
+  &&  [| (x_pre <= INT_MAX) |]
+  &&  emp
+|--
+  [| ((-x_pre) = (Zabs (x_pre))) |]
   &&  emp
 .
 
@@ -225,6 +223,21 @@ forall (a_pre: Z) (i: Z) (retval: Z) (retval_2: Z) ,
 .
 
 Definition iscuber_return_wit_1 := 
+forall (a_pre: Z) (i: Z) (retval: Z) ,
+  [| (((i * i ) * i ) > retval) |] 
+  &&  [| (retval = (Zabs (a_pre))) |] 
+  &&  [| (0 <= i) |] 
+  &&  [| (i <= 1290) |] 
+  &&  [| forall (k: Z) , (((0 <= k) /\ (k < i)) -> (((k * k ) * k ) <> (Zabs (a_pre)))) |] 
+  &&  [| ((-2146689000) <= a_pre) |] 
+  &&  [| (a_pre <= 2146689000) |]
+  &&  emp
+|--
+  [| (problem_77_spec_z a_pre 0 ) |]
+  &&  emp
+.
+
+Definition iscuber_return_wit_2 := 
 forall (a_pre: Z) (i: Z) (retval: Z) (retval_2: Z) ,
   [| (((i * i ) * i ) = retval_2) |] 
   &&  [| (retval_2 = (Zabs (a_pre))) |] 
@@ -238,21 +251,6 @@ forall (a_pre: Z) (i: Z) (retval: Z) (retval_2: Z) ,
   &&  emp
 |--
   [| (problem_77_spec_z a_pre 1 ) |]
-  &&  emp
-.
-
-Definition iscuber_return_wit_2 := 
-forall (a_pre: Z) (i: Z) (retval: Z) ,
-  [| (((i * i ) * i ) > retval) |] 
-  &&  [| (retval = (Zabs (a_pre))) |] 
-  &&  [| (0 <= i) |] 
-  &&  [| (i <= 1290) |] 
-  &&  [| forall (k: Z) , (((0 <= k) /\ (k < i)) -> (((k * k ) * k ) <> (Zabs (a_pre)))) |] 
-  &&  [| ((-2146689000) <= a_pre) |] 
-  &&  [| (a_pre <= 2146689000) |]
-  &&  emp
-|--
-  [| (problem_77_spec_z a_pre 0 ) |]
   &&  emp
 .
 
@@ -334,7 +332,6 @@ Definition iscuber_partial_solve_wit_2 := iscuber_partial_solve_wit_2_pure -> is
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 
 Axiom proof_of_abs_safety_wit_1 : abs_safety_wit_1.
 Axiom proof_of_abs_safety_wit_2 : abs_safety_wit_2.

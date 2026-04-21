@@ -19,9 +19,9 @@ Import naive_C_Rules.
 Require Import coins_83.
 Local Open Scope sac.
 
-Lemma proof_of_starts_one_ends_safety_wit_7 : starts_one_ends_safety_wit_7.
+Lemma proof_of_starts_one_ends_safety_wit_8 : starts_one_ends_safety_wit_8.
 Proof.
-  unfold starts_one_ends_safety_wit_7.
+  unfold starts_one_ends_safety_wit_8.
   intros.
   Intros.
   entailer!.
@@ -53,12 +53,22 @@ Proof.
   intros.
   Intros.
   entailer!.
+  assert (Hieq : i = n_pre) by lia.
+  subst i.
   unfold problem_83_spec_z, problem_83_spec.
-  subst.
-  simpl.
   intros _.
-  left.
-  split; reflexivity.
+  right.
+  split.
+  - assert (Hn : n_pre >= 2) by lia.
+    lia.
+  - subst out.
+    rewrite Z2Nat.inj_mul by (try lia; apply Z.pow_nonneg; lia).
+    simpl (Z.to_nat 18).
+    f_equal.
+    rewrite Z2Nat.inj_pow by lia.
+    rewrite Z2Nat.inj_sub by lia.
+    simpl (Z.to_nat 10). simpl (Z.to_nat 2).
+    reflexivity.
 Qed.
 
 Lemma proof_of_starts_one_ends_return_wit_2 : starts_one_ends_return_wit_2.
@@ -67,22 +77,10 @@ Proof.
   intros.
   Intros.
   entailer!.
-  assert (Hieq : i = n_pre) by lia.
-  subst i.
   unfold problem_83_spec_z, problem_83_spec.
+  subst.
+  simpl.
   intros _.
-  right.
-  split.
-  - (* Z.to_nat n_pre > 1 *)
-    assert (Hn : n_pre >= 2) by lia.
-    lia.
-  - (* Z.to_nat out = 18 * Nat.pow 10 (Z.to_nat n_pre - 2) *)
-    subst out.
-    rewrite Z2Nat.inj_mul by (try lia; apply Z.pow_nonneg; lia).
-    simpl (Z.to_nat 18).
-    f_equal.
-    rewrite Z2Nat.inj_pow by lia.
-    rewrite Z2Nat.inj_sub by lia.
-    simpl (Z.to_nat 10). simpl (Z.to_nat 2).
-    reflexivity.
+  left.
+  split; reflexivity.
 Qed.

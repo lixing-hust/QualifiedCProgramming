@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -17,8 +17,6 @@ Local Open Scope list.
 Import naive_C_Rules.
 Require Import coins_131.
 Local Open Scope sac.
-From SimpleC.EE Require Import common_strategy_goal.
-From SimpleC.EE Require Import common_strategy_proof.
 
 (*----- Function digits -----*)
 
@@ -527,29 +525,6 @@ forall (n_pre: Z) (has: Z) (prod: Z) (n: Z) ,
 
 Definition digits_return_wit_1 := 
 forall (n_pre: Z) (has: Z) (prod: Z) (n: Z) ,
-  [| (has = 0) |] 
-  &&  [| (n <= 0) |] 
-  &&  [| (n >= 0) |] 
-  &&  [| (1 <= prod) |] 
-  &&  [| (prod <= INT_MAX) |] 
-  &&  [| (0 <= has) |] 
-  &&  [| (has <= 1) |] 
-  &&  [| ((has = 0) -> (prod = 1)) |] 
-  &&  [| ((prod * (tail_odd_prod_z (n)) ) <= INT_MAX) |] 
-  &&  [| (problem_131_spec_z n_pre (digits_state_z (n) (prod) (has)) ) |] 
-  &&  [| (n_pre <> 0) |] 
-  &&  [| (problem_131_pre_z n_pre ) |] 
-  &&  [| (1 <= n_pre) |] 
-  &&  [| (n_pre <= INT_MAX) |] 
-  &&  [| ((tail_odd_prod_z (n_pre)) <= INT_MAX) |]
-  &&  emp
-|--
-  [| (problem_131_spec_z n_pre 0 ) |]
-  &&  emp
-.
-
-Definition digits_return_wit_2 := 
-forall (n_pre: Z) (has: Z) (prod: Z) (n: Z) ,
   [| (has <> 0) |] 
   &&  [| (n <= 0) |] 
   &&  [| (n >= 0) |] 
@@ -571,9 +546,31 @@ forall (n_pre: Z) (has: Z) (prod: Z) (n: Z) ,
   &&  emp
 .
 
+Definition digits_return_wit_2 := 
+forall (n_pre: Z) (has: Z) (prod: Z) (n: Z) ,
+  [| (has = 0) |] 
+  &&  [| (n <= 0) |] 
+  &&  [| (n >= 0) |] 
+  &&  [| (1 <= prod) |] 
+  &&  [| (prod <= INT_MAX) |] 
+  &&  [| (0 <= has) |] 
+  &&  [| (has <= 1) |] 
+  &&  [| ((has = 0) -> (prod = 1)) |] 
+  &&  [| ((prod * (tail_odd_prod_z (n)) ) <= INT_MAX) |] 
+  &&  [| (problem_131_spec_z n_pre (digits_state_z (n) (prod) (has)) ) |] 
+  &&  [| (n_pre <> 0) |] 
+  &&  [| (problem_131_pre_z n_pre ) |] 
+  &&  [| (1 <= n_pre) |] 
+  &&  [| (n_pre <= INT_MAX) |] 
+  &&  [| ((tail_odd_prod_z (n_pre)) <= INT_MAX) |]
+  &&  emp
+|--
+  [| (problem_131_spec_z n_pre 0 ) |]
+  &&  emp
+.
+
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 
 Axiom proof_of_digits_safety_wit_1 : digits_safety_wit_1.
 Axiom proof_of_digits_safety_wit_2 : digits_safety_wit_2.

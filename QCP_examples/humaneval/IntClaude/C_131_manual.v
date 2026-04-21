@@ -123,21 +123,6 @@ Proof.
 	Intros.
 	entailer!.
 	assert (n = 0) by lia.
-	subst n.
-	subst has.
-	unfold digits_state_z in H8.
-	rewrite Z.eqb_refl in H8.
-	simpl in H8.
-	exact H8.
-Qed. 
-
-Lemma proof_of_digits_return_wit_2 : digits_return_wit_2.
-Proof.
-	unfold digits_return_wit_2.
-	intros.
-	Intros.
-	entailer!.
-	assert (n = 0) by lia.
 	assert (has = 1) by lia.
 	subst n has.
 	unfold digits_state_z in H8.
@@ -149,3 +134,17 @@ Proof.
 		ring.
 Qed. 
 
+Lemma proof_of_digits_return_wit_2 : digits_return_wit_2.
+Proof.
+	unfold digits_return_wit_2.
+	intros.
+	Intros.
+	entailer!.
+	assert (n = 0) by lia.
+	subst n.
+	unfold digits_state_z in H8.
+	rewrite H in H8.
+	rewrite Z.eqb_refl in H8.
+	simpl in H8.
+	exact H8.
+Qed. 

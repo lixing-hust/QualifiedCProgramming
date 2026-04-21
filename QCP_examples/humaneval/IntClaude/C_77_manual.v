@@ -110,28 +110,6 @@ Proof.
   Intros.
   entailer!.
   split.
-  - intros _.
-    destruct (Z_lt_ge_dec a_pre 0) as [Hneg | Hnonneg].
-    + exists (- i).
-      assert (Hzabs : Z.abs a_pre = - a_pre) by (apply Z.abs_neq; lia).
-      assert (Hiabs : i * i * i = Z.abs a_pre) by (rewrite H; exact H0).
-      rewrite <- Hiabs in Hzabs.
-      nia.
-    + exists i.
-      assert (Hzabs : Z.abs a_pre = a_pre) by (apply Z.abs_eq; lia).
-      assert (Hiabs : i * i * i = Z.abs a_pre) by (rewrite H; exact H0).
-      rewrite <- Hiabs in Hzabs.
-      nia.
-  - intros _. discriminate.
-Qed.
-
-Lemma proof_of_iscuber_return_wit_2 : iscuber_return_wit_2.
-Proof.
-  unfold iscuber_return_wit_2, problem_77_spec_z.
-  intros.
-  Intros.
-  entailer!.
-  split.
   - intros Hfalse.
     contradiction.
   - intros Hcube.
@@ -139,7 +117,7 @@ Proof.
     destruct Hcube as [x Hx].
     assert (Habs : Z.abs a_pre = Z.abs x * Z.abs x * Z.abs x).
     { rewrite Hx. apply abs_cube. }
-    assert (Hiabs : i * i * i > Z.abs a_pre) by (rewrite H0 in H; exact H).
+    assert (Hiabs : i * i * i > Z.abs a_pre) by (rewrite <- H0; exact H).
     assert (Hxlt : Z.abs x < i).
     {
       assert (Hcube_lt : Z.abs x * Z.abs x * Z.abs x < i * i * i) by nia.
@@ -157,4 +135,26 @@ Proof.
     apply Hneq.
     symmetry.
     exact Habs.
+Qed.
+
+Lemma proof_of_iscuber_return_wit_2 : iscuber_return_wit_2.
+Proof.
+  unfold iscuber_return_wit_2, problem_77_spec_z.
+  intros.
+  Intros.
+  entailer!.
+  split.
+  - intros _.
+    destruct (Z_lt_ge_dec a_pre 0) as [Hneg | Hnonneg].
+    + exists (- i).
+      assert (Hzabs : Z.abs a_pre = - a_pre) by (apply Z.abs_neq; lia).
+      assert (Hiabs : i * i * i = Z.abs a_pre) by (rewrite H; exact H0).
+      rewrite <- Hiabs in Hzabs.
+      nia.
+    + exists i.
+      assert (Hzabs : Z.abs a_pre = a_pre) by (apply Z.abs_eq; lia).
+      assert (Hiabs : i * i * i = Z.abs a_pre) by (rewrite H; exact H0).
+      rewrite <- Hiabs in Hzabs.
+      nia.
+  - intros _. discriminate.
 Qed.

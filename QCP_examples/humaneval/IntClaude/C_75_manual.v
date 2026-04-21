@@ -551,52 +551,6 @@ Proof.
 	entailer!.
 	unfold problem_75_spec_z.
 	split.
-	- intros Hnz.
-		match goal with
-		| Hinv : mp_outer_inv _ _ _ _ |- _ =>
-			destruct Hinv as [Ha_ge2 [l [Hlprime [Hlen [Heq Hnodiv]]]]]
-		end.
-		assert (Hprime_a : prime a).
-		{
-			apply (prime_from_mp_outer_inv_exit a i).
-			- exact Ha_ge2.
-			- lia.
-			- lia.
-			- exact Hnodiv.
-		}
-		assert (Hlen2 : Z.of_nat (length l) = 2) by lia.
-		destruct l.
-		+ simpl in Hlen2. lia.
-		+ destruct l.
-		  * simpl in Hlen2. lia.
-		  * destruct l.
-			{ simpl in Hlen2.
-			  pose proof (Forall_inv Hlprime) as Hp1.
-			  pose proof (Forall_inv_tail Hlprime) as Ht.
-			  pose proof (Forall_inv Ht) as Hp2.
-			  exists z, z0, a.
-			  split.
-			  { exact Hp1. }
-			  split.
-			  { exact Hp2. }
-			  split.
-			  { exact Hprime_a. }
-			  cbn [coins_75.list_prod] in Heq.
-			  ring_simplify in Heq.
-			  exact Heq. }
-			{ simpl in Hlen2. lia. }
-	- intros Hex.
-	  lia.
-Qed.
-
-Lemma proof_of_is_multiply_prime_return_wit_2 : is_multiply_prime_return_wit_2.
-Proof.
-	unfold is_multiply_prime_return_wit_2.
-	intros.
-	Intros.
-	entailer!.
-	unfold problem_75_spec_z.
-	split.
 	- intro Hfalse.
 	  contradiction.
 	- intros (p1 & p2 & p3 & Hp1 & Hp2 & Hp3 & Hprod3).
@@ -690,4 +644,50 @@ Proof.
 		}
 		assert (Hnum_eq_2 : num = 2) by lia.
 		contradiction.
+Qed.
+
+Lemma proof_of_is_multiply_prime_return_wit_2 : is_multiply_prime_return_wit_2.
+Proof.
+	unfold is_multiply_prime_return_wit_2.
+	intros.
+	Intros.
+	entailer!.
+	unfold problem_75_spec_z.
+	split.
+	- intros Hnz.
+		match goal with
+		| Hinv : mp_outer_inv _ _ _ _ |- _ =>
+			destruct Hinv as [Ha_ge2 [l [Hlprime [Hlen [Heq Hnodiv]]]]]
+		end.
+		assert (Hprime_a : prime a).
+		{
+			apply (prime_from_mp_outer_inv_exit a i).
+			- exact Ha_ge2.
+			- lia.
+			- lia.
+			- exact Hnodiv.
+		}
+		assert (Hlen2 : Z.of_nat (length l) = 2) by lia.
+		destruct l.
+		+ simpl in Hlen2. lia.
+		+ destruct l.
+		  * simpl in Hlen2. lia.
+		  * destruct l.
+			{ simpl in Hlen2.
+			  pose proof (Forall_inv Hlprime) as Hp1.
+			  pose proof (Forall_inv_tail Hlprime) as Ht.
+			  pose proof (Forall_inv Ht) as Hp2.
+			  exists z, z0, a.
+			  split.
+			  { exact Hp1. }
+			  split.
+			  { exact Hp2. }
+			  split.
+			  { exact Hprime_a. }
+			  cbn [coins_75.list_prod] in Heq.
+			  ring_simplify in Heq.
+			  exact Heq. }
+			{ simpl in Hlen2. lia. }
+	- intros Hex.
+	  lia.
 Qed.

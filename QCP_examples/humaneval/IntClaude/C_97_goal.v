@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -17,8 +17,6 @@ Local Open Scope list.
 Import naive_C_Rules.
 Require Import coins_97.
 Local Open Scope sac.
-From SimpleC.EE Require Import common_strategy_goal.
-From SimpleC.EE Require Import common_strategy_proof.
 
 (*----- Function abs -----*)
 
@@ -44,23 +42,23 @@ forall (x_pre: Z) ,
 
 Definition abs_return_wit_1 := 
 forall (x_pre: Z) ,
-  [| (x_pre < 0) |] 
-  &&  [| (INT_MIN < x_pre) |] 
-  &&  [| (x_pre <= INT_MAX) |]
-  &&  emp
-|--
-  [| ((-x_pre) = (Zabs (x_pre))) |]
-  &&  emp
-.
-
-Definition abs_return_wit_2 := 
-forall (x_pre: Z) ,
   [| (x_pre >= 0) |] 
   &&  [| (INT_MIN < x_pre) |] 
   &&  [| (x_pre <= INT_MAX) |]
   &&  emp
 |--
   [| (x_pre = (Zabs (x_pre))) |]
+  &&  emp
+.
+
+Definition abs_return_wit_2 := 
+forall (x_pre: Z) ,
+  [| (x_pre < 0) |] 
+  &&  [| (INT_MIN < x_pre) |] 
+  &&  [| (x_pre <= INT_MAX) |]
+  &&  emp
+|--
+  [| ((-x_pre) = (Zabs (x_pre))) |]
   &&  emp
 .
 
@@ -82,8 +80,9 @@ forall (b_pre: Z) (a_pre: Z) (retval: Z) (retval_2: Z) ,
 .
 
 Definition multiply_safety_wit_2 := 
-forall (b_pre: Z) (a_pre: Z) (retval: Z) ,
-  [| (retval = (Zabs (a_pre))) |] 
+forall (b_pre: Z) (a_pre: Z) (retval_2: Z) (retval: Z) ,
+  [| (retval = (Zabs (b_pre))) |] 
+  &&  [| (retval_2 = (Zabs (a_pre))) |] 
   &&  [| (INT_MIN < a_pre) |] 
   &&  [| (a_pre <= INT_MAX) |] 
   &&  [| (INT_MIN < b_pre) |] 
@@ -105,14 +104,13 @@ forall (b_pre: Z) (a_pre: Z) (retval: Z) ,
   &&  ((( &( "b" ) )) # Int  |-> b_pre)
   **  ((( &( "a" ) )) # Int  |-> a_pre)
 |--
-  [| (10 <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= 10) |]
+  [| ((retval <> (INT_MIN)) \/ (10 <> (-1))) |] 
+  &&  [| (10 <> 0) |]
 .
 
 Definition multiply_safety_wit_4 := 
-forall (b_pre: Z) (a_pre: Z) (retval_2: Z) (retval: Z) ,
-  [| (retval = (Zabs (b_pre))) |] 
-  &&  [| (retval_2 = (Zabs (a_pre))) |] 
+forall (b_pre: Z) (a_pre: Z) (retval: Z) ,
+  [| (retval = (Zabs (a_pre))) |] 
   &&  [| (INT_MIN < a_pre) |] 
   &&  [| (a_pre <= INT_MAX) |] 
   &&  [| (INT_MIN < b_pre) |] 
@@ -120,8 +118,8 @@ forall (b_pre: Z) (a_pre: Z) (retval_2: Z) (retval: Z) ,
   &&  ((( &( "b" ) )) # Int  |-> b_pre)
   **  ((( &( "a" ) )) # Int  |-> a_pre)
 |--
-  [| ((retval <> (INT_MIN)) \/ (10 <> (-1))) |] 
-  &&  [| (10 <> 0) |]
+  [| (10 <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= 10) |]
 .
 
 Definition multiply_safety_wit_5 := 
@@ -222,7 +220,6 @@ Definition multiply_partial_solve_wit_2 := multiply_partial_solve_wit_2_pure -> 
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 
 Axiom proof_of_abs_safety_wit_1 : abs_safety_wit_1.
 Axiom proof_of_abs_safety_wit_2 : abs_safety_wit_2.

@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -15,10 +15,8 @@ Local Open Scope sets.
 Local Open Scope string.
 Local Open Scope list.
 Import naive_C_Rules.
-From SimpleC.EE Require Import coins_76.
+Require Import coins_76.
 Local Open Scope sac.
-From SimpleC.EE Require Import common_strategy_goal.
-From SimpleC.EE Require Import common_strategy_proof.
 
 (*----- Function is_simple_power -----*)
 
@@ -260,9 +258,7 @@ forall (n_pre: Z) (x_pre: Z) (count: Z) (p: Z) ,
 
 Definition is_simple_power_return_wit_1 := 
 forall (n_pre: Z) (x_pre: Z) (count: Z) (p: Z) ,
-  [| (p = x_pre) |] 
-  &&  [| (count < 100) |] 
-  &&  [| (p <= x_pre) |] 
+  [| (p > x_pre) |] 
   &&  [| (1 <= p) |] 
   &&  [| (0 <= count) |] 
   &&  [| (count <= 100) |] 
@@ -274,7 +270,7 @@ forall (n_pre: Z) (x_pre: Z) (count: Z) (p: Z) ,
   &&  [| ((x_pre * n_pre ) <= INT_MAX) |]
   &&  emp
 |--
-  [| (is_simple_power_spec x_pre n_pre 1 ) |]
+  [| (is_simple_power_spec x_pre n_pre 0 ) |]
   &&  emp
 .
 
@@ -299,7 +295,9 @@ forall (n_pre: Z) (x_pre: Z) (count: Z) (p: Z) ,
 
 Definition is_simple_power_return_wit_3 := 
 forall (n_pre: Z) (x_pre: Z) (count: Z) (p: Z) ,
-  [| (p > x_pre) |] 
+  [| (p = x_pre) |] 
+  &&  [| (count < 100) |] 
+  &&  [| (p <= x_pre) |] 
   &&  [| (1 <= p) |] 
   &&  [| (0 <= count) |] 
   &&  [| (count <= 100) |] 
@@ -311,13 +309,12 @@ forall (n_pre: Z) (x_pre: Z) (count: Z) (p: Z) ,
   &&  [| ((x_pre * n_pre ) <= INT_MAX) |]
   &&  emp
 |--
-  [| (is_simple_power_spec x_pre n_pre 0 ) |]
+  [| (is_simple_power_spec x_pre n_pre 1 ) |]
   &&  emp
 .
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 
 Axiom proof_of_is_simple_power_safety_wit_1 : is_simple_power_safety_wit_1.
 Axiom proof_of_is_simple_power_safety_wit_2 : is_simple_power_safety_wit_2.

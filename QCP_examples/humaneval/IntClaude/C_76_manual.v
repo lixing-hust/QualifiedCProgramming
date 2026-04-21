@@ -65,10 +65,10 @@ Proof.
   entailer!.
   unfold is_simple_power_spec.
   split.
-  - intros _.
-    eapply sp_inv_hit_witness; eauto; lia.
-  - intros _.
-    lia.
+  - intro Hfalse. lia.
+  - intro Hex.
+    exfalso.
+    eapply no_power_if_gt; eauto; lia.
 Qed.
 
 Lemma proof_of_is_simple_power_return_wit_2 : is_simple_power_return_wit_2.
@@ -93,8 +93,8 @@ Proof.
   entailer!.
   unfold is_simple_power_spec.
   split.
-  - intro Hfalse. lia.
-  - intro Hex.
-    exfalso.
-    eapply no_power_if_gt; eauto; lia.
+  - intros _.
+    eapply sp_inv_hit_witness; eauto; lia.
+  - intros _.
+    lia.
 Qed.

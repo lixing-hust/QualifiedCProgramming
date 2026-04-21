@@ -6,10 +6,10 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
-Require Import C_39_goal.
+From SimpleC.EE Require Import C_39_goal.
 Require Import Logic.LogicGenerator.demo932.Interface.
 Local Open Scope Z_scope.
 Local Open Scope sets.
@@ -60,3 +60,4 @@ Proof. Admitted.
 
 Lemma proof_of_prime_fib_safety_wit_16 : prime_fib_safety_wit_16.
 Proof. Admitted. 
+
