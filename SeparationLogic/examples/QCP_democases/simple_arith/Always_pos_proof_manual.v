@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.QCP_democases.simple_arith Require Import Always_pos_goal.
@@ -19,7 +19,7 @@ Import naive_C_Rules.
 From SimpleC.EE.QCP_democases.simple_arith Require Import Apos_lib.
 Local Open Scope sac.
 
-Lemma proof_of_Always_positive_simple_return_wit_1 : Always_positive_simple_return_wit_1.
+Lemma proof_of_Always_positive_simple_return_wit_4 : Always_positive_simple_return_wit_4.
 Proof.
   pre_process.
   entailer!.
@@ -27,7 +27,7 @@ Proof.
   subst. simpl. lia.
 Qed.
 
-Lemma proof_of_Always_positive_simple_return_wit_2 : Always_positive_simple_return_wit_2.
+Lemma proof_of_Always_positive_simple_return_wit_3 : Always_positive_simple_return_wit_3.
 Proof.
   pre_process.
   entailer!.
@@ -39,7 +39,7 @@ Proof.
   nia.
 Qed.
 
-Lemma proof_of_Always_positive_simple_return_wit_3 : Always_positive_simple_return_wit_3.
+Lemma proof_of_Always_positive_simple_return_wit_2 : Always_positive_simple_return_wit_2.
 Proof.
   pre_process.
   entailer!.
@@ -52,7 +52,7 @@ Proof.
   - destruct (Z_gt_le_dec a_pre 0) ; try lia.
 Qed.
 
-Lemma proof_of_Always_positive_simple_return_wit_4 : Always_positive_simple_return_wit_4.
+Lemma proof_of_Always_positive_simple_return_wit_1 : Always_positive_simple_return_wit_1.
 Proof.
   pre_process.
   entailer!.
@@ -75,7 +75,7 @@ Proof.
   pre_process.
 Qed.  
 
-Lemma proof_of_Always_positive_return_wit_1 : Always_positive_return_wit_1.
+Lemma proof_of_Always_positive_return_wit_5 : Always_positive_return_wit_5.
 Proof.
   pre_process.
   entailer!.
@@ -83,7 +83,7 @@ Proof.
   subst. simpl. lia.
 Qed.  
 
-Lemma proof_of_Always_positive_return_wit_2 : Always_positive_return_wit_2.
+Lemma proof_of_Always_positive_return_wit_4 : Always_positive_return_wit_4.
 Proof.
   pre_process.
   entailer!.
@@ -101,7 +101,7 @@ Proof.
   destruct (Z_ge_lt_dec (b_pre * b_pre - 4 * a_pre * c_pre) 0); try nia.
 Qed.
 
-Lemma proof_of_Always_positive_return_wit_4 : Always_positive_return_wit_4.
+Lemma proof_of_Always_positive_return_wit_2 : Always_positive_return_wit_2.
 Proof.
   pre_process.
   entailer!. unfold Always_pos.
@@ -111,7 +111,7 @@ Proof.
   destruct (Z_gt_le_dec a_pre 0); try lia.
 Qed.  
 
-Lemma proof_of_Always_positive_return_wit_5 : Always_positive_return_wit_5.
+Lemma proof_of_Always_positive_return_wit_1 : Always_positive_return_wit_1.
 Proof.
   pre_process.
   entailer!. unfold Always_pos.

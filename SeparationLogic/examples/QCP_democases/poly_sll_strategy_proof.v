@@ -111,3 +111,7 @@ Lemma poly_sll_strategy9_correctness : poly_sll_strategy9.
   subst.
   entailer!.
 Qed.
+
+Lemma poly_sll_strategy19_correctness : poly_sll_strategy19.
+  pre_process_default.
+Qed.

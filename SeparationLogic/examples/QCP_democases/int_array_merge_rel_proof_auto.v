@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.QCP_democases Require Import int_array_merge_rel_goal.
@@ -18,7 +18,7 @@ Local Open Scope list.
 Import naive_C_Rules.
 Require Import SimpleC.EE.QCP_democases.sll_merge_rel_lib.
 Local Open Scope monad.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap relations.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap relations.
 From FP Require Import PartialOrder_Setoid BourbakiWitt.
 Require Import SimpleC.EE.QCP_democases.int_array_merge_rel_lib.
 Local Open Scope sac.
@@ -131,7 +131,7 @@ Proof. Admitted.
 Lemma proof_of_mergeSort_safety_wit_6 : mergeSort_safety_wit_6.
 Proof. Admitted. 
 
-Lemma proof_of_mergeSort_return_wit_2 : mergeSort_return_wit_2.
+Lemma proof_of_mergeSort_return_wit_1 : mergeSort_return_wit_1.
 Proof. Admitted. 
 
 Lemma proof_of_mergeSort_partial_solve_wit_1 : mergeSort_partial_solve_wit_1.

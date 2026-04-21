@@ -1,4 +1,4 @@
-#include "verification_stdlib.h"
+
 
 /*@ Import Coq Require Import SimpleC.EE.QCP_democases.swap_lib */
 

@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.QCP_democases Require Import eval_goal.
@@ -22,21 +22,21 @@ Local Open Scope sac.
 (* Locally use Z.eqb_eq *)
 Local Hint Resolve Z.eqb_eq : core.
 
-Lemma proof_of_eval_return_wit_1 : eval_return_wit_1.
+Lemma proof_of_eval_return_wit_28 : eval_return_wit_28.
 Proof.
   pre_process.
   subst.
   entailer!.
 Qed.
 
-Lemma proof_of_eval_return_wit_2 : eval_return_wit_2.
+Lemma proof_of_eval_return_wit_27 : eval_return_wit_27.
 Proof.
   pre_process.
   subst.
   entailer!.
 Qed.
 
-Lemma proof_of_eval_return_wit_3 : eval_return_wit_3.
+Lemma proof_of_eval_return_wit_26 : eval_return_wit_26.
 Proof.
   pre_process.
   subst. simpl. rewrite <- H3.
@@ -47,7 +47,7 @@ Proof.
   destruct (expr_eval e2 l =? 0)%Z eqn : J; try lia.
 Qed.
 
-Lemma proof_of_eval_return_wit_4 : eval_return_wit_4.
+Lemma proof_of_eval_return_wit_25 : eval_return_wit_25.
 Proof.
   pre_process.
   subst. simpl. rewrite <- H3.
@@ -58,7 +58,7 @@ Proof.
   destruct (expr_eval e2 l =? 0)%Z eqn : J; try lia.
 Qed.
 
-Lemma proof_of_eval_return_wit_5 : eval_return_wit_5.
+Lemma proof_of_eval_return_wit_24 : eval_return_wit_24.
 Proof.
   pre_process.
   subst.
@@ -69,7 +69,7 @@ Proof.
   destruct (expr_eval e1 l =? 0)%Z eqn : I; try lia.
 Qed.
 
-Lemma proof_of_eval_return_wit_6 : eval_return_wit_6.
+Lemma proof_of_eval_return_wit_23 : eval_return_wit_23.
 Proof.
   pre_process.
   subst.
@@ -80,7 +80,7 @@ Proof.
   destruct (expr_eval e1 l =? 0)%Z eqn : I; try lia.
 Qed. 
 
-Lemma proof_of_eval_return_wit_7 : eval_return_wit_7.
+Lemma proof_of_eval_return_wit_22 : eval_return_wit_22.
 Proof.
   pre_process.
   subst.
@@ -92,7 +92,7 @@ Proof.
   destruct (expr_eval e2 l =? 0)%Z eqn : J; try lia.
 Qed.
 
-Lemma proof_of_eval_return_wit_8 : eval_return_wit_8.
+Lemma proof_of_eval_return_wit_21 : eval_return_wit_21.
 Proof.
   pre_process.
   subst.
@@ -104,7 +104,7 @@ Proof.
   destruct (expr_eval e2 l =? 0)%Z eqn : J; try lia.
 Qed. 
 
-Lemma proof_of_eval_return_wit_9 : eval_return_wit_9.
+Lemma proof_of_eval_return_wit_20 : eval_return_wit_20.
 Proof.
   pre_process.
   subst. simpl. rewrite H9.
@@ -113,7 +113,7 @@ Proof.
   destruct op; try discriminate; auto.
 Qed.
 
-Lemma proof_of_eval_return_wit_10 : eval_return_wit_10.
+Lemma proof_of_eval_return_wit_19 : eval_return_wit_19.
 Proof. 
   pre_process.
   subst. simpl. rewrite H10.
@@ -122,7 +122,7 @@ Proof.
   destruct op; try discriminate; auto.
 Qed.
 
-Lemma proof_of_eval_return_wit_11 : eval_return_wit_11.
+Lemma proof_of_eval_return_wit_18 : eval_return_wit_18.
 Proof. 
   pre_process.
   subst. simpl. rewrite H11.
@@ -131,7 +131,7 @@ Proof.
   destruct op; try discriminate; auto.
 Qed.
 
-Lemma proof_of_eval_return_wit_12 : eval_return_wit_12.
+Lemma proof_of_eval_return_wit_17 : eval_return_wit_17.
 Proof.
   pre_process.
   subst. simpl. rewrite <- H12.
@@ -140,7 +140,7 @@ Proof.
   destruct op; try discriminate; auto.
 Qed.
 
-Lemma proof_of_eval_return_wit_13 : eval_return_wit_13.
+Lemma proof_of_eval_return_wit_16 : eval_return_wit_16.
 Proof.
   pre_process.
   subst. simpl. rewrite <- H13.
@@ -149,7 +149,7 @@ Proof.
   destruct op; try discriminate; auto.
 Qed.
 
-Lemma proof_of_eval_return_wit_14 : eval_return_wit_14.
+Lemma proof_of_eval_return_wit_15 : eval_return_wit_15.
 Proof.
   pre_process.
   subst.
@@ -160,7 +160,7 @@ Proof.
   destruct (expr_eval e1 l <? expr_eval e2 l)%Z eqn : I; lia.
 Qed.
 
-Lemma proof_of_eval_return_wit_15 : eval_return_wit_15.
+Lemma proof_of_eval_return_wit_14 : eval_return_wit_14.
 Proof.
   pre_process.
   subst.
@@ -171,7 +171,7 @@ Proof.
   destruct (expr_eval e1 l <? expr_eval e2 l)%Z eqn : I; lia.
 Qed.
 
-Lemma proof_of_eval_return_wit_16 : eval_return_wit_16.
+Lemma proof_of_eval_return_wit_13 : eval_return_wit_13.
 Proof.
   pre_process.
   subst.
@@ -182,7 +182,7 @@ Proof.
   destruct (expr_eval e1 l >? expr_eval e2 l)%Z eqn : I; lia.
 Qed.
 
-Lemma proof_of_eval_return_wit_17 : eval_return_wit_17.
+Lemma proof_of_eval_return_wit_12 : eval_return_wit_12.
 Proof.
   pre_process.
   subst.
@@ -193,7 +193,7 @@ Proof.
   destruct (expr_eval e1 l >? expr_eval e2 l)%Z eqn : I; lia.
 Qed.
 
-Lemma proof_of_eval_return_wit_18 : eval_return_wit_18.
+Lemma proof_of_eval_return_wit_11 : eval_return_wit_11.
 Proof.
   pre_process.
   subst. simpl. rewrite <- H17.
@@ -203,7 +203,7 @@ Proof.
   destruct (expr_eval e1 l <=? expr_eval e2 l)%Z eqn : I; lia.
 Qed.
 
-Lemma proof_of_eval_return_wit_19 : eval_return_wit_19.
+Lemma proof_of_eval_return_wit_10 : eval_return_wit_10.
 Proof.
   pre_process.
   subst. simpl. rewrite <- H17.
@@ -213,7 +213,7 @@ Proof.
   destruct (expr_eval e1 l <=? expr_eval e2 l)%Z eqn : I; lia.
 Qed.
 
-Lemma proof_of_eval_return_wit_20 : eval_return_wit_20.
+Lemma proof_of_eval_return_wit_9 : eval_return_wit_9.
 Proof.
   pre_process.
   subst. simpl. rewrite <- H18.
@@ -223,7 +223,7 @@ Proof.
   destruct (expr_eval e1 l >=? expr_eval e2 l)%Z eqn : I; lia.
 Qed.
 
-Lemma proof_of_eval_return_wit_21 : eval_return_wit_21.
+Lemma proof_of_eval_return_wit_8 : eval_return_wit_8.
 Proof.
   pre_process.
   subst. simpl. rewrite <- H18.
@@ -233,7 +233,7 @@ Proof.
   destruct (expr_eval e1 l >=? expr_eval e2 l)%Z eqn : I; lia.
 Qed. 
 
-Lemma proof_of_eval_return_wit_22 : eval_return_wit_22.
+Lemma proof_of_eval_return_wit_7 : eval_return_wit_7.
 Proof.
   pre_process.
   subst. simpl. rewrite <- H19.
@@ -243,7 +243,7 @@ Proof.
   destruct (expr_eval e1 l =? expr_eval e2 l)%Z eqn : I; lia.
 Qed.
 
-Lemma proof_of_eval_return_wit_23 : eval_return_wit_23.
+Lemma proof_of_eval_return_wit_6 : eval_return_wit_6.
 Proof.
   pre_process.
   subst. simpl. rewrite <- H19.
@@ -253,7 +253,7 @@ Proof.
   destruct (expr_eval e1 l =? expr_eval e2 l)%Z eqn : I; try lia.
 Qed.
 
-Lemma proof_of_eval_return_wit_24 : eval_return_wit_24.
+Lemma proof_of_eval_return_wit_5 : eval_return_wit_5.
 Proof.
   pre_process.
   subst. simpl. rewrite <- H20.
@@ -263,7 +263,7 @@ Proof.
   destruct (expr_eval e1 l =? expr_eval e2 l)%Z eqn : I; try lia.
 Qed.
 
-Lemma proof_of_eval_return_wit_25 : eval_return_wit_25.
+Lemma proof_of_eval_return_wit_4 : eval_return_wit_4.
 Proof.
   pre_process.
   subst. simpl. rewrite <- H20. 
@@ -273,7 +273,7 @@ Proof.
   destruct (expr_eval e1 l =? expr_eval e2 l)%Z eqn : I; try lia.
 Qed.
 
-Lemma proof_of_eval_return_wit_26 : eval_return_wit_26.
+Lemma proof_of_eval_return_wit_3 : eval_return_wit_3.
 Proof.
   pre_process.
   subst. simpl.
@@ -284,7 +284,7 @@ Proof.
   destruct ((expr_eval e1 l =? 0)%Z) eqn: I; lia.
 Qed.
 
-Lemma proof_of_eval_return_wit_27 : eval_return_wit_27.
+Lemma proof_of_eval_return_wit_2 : eval_return_wit_2.
 Proof.
   pre_process.
   subst.
@@ -297,7 +297,7 @@ Proof.
   destruct ((expr_eval e1 l =? 0)%Z) eqn: I; lia.
 Qed. 
 
-Lemma proof_of_eval_return_wit_28 : eval_return_wit_28.
+Lemma proof_of_eval_return_wit_1 : eval_return_wit_1.
 Proof.
   pre_process.
   subst.

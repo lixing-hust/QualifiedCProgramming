@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -16,8 +16,6 @@ Local Open Scope string.
 Local Open Scope list.
 Import naive_C_Rules.
 Local Open Scope sac.
-From SimpleC.EE.LLM_friendly_cases Require Import common_strategy_goal.
-From SimpleC.EE.LLM_friendly_cases Require Import common_strategy_proof.
 
 (*----- Function gcd -----*)
 
@@ -68,8 +66,8 @@ forall (y_pre: Z) (x_pre: Z) ,
 
 Definition gcd_return_wit_1 := 
 forall (y_pre: Z) (x_pre: Z) (retval: Z) ,
-  [| (retval = (Zabs (x_pre))) |] 
-  &&  [| (y_pre = 0) |] 
+  [| (retval = (Zgcd (y_pre) ((x_pre % ( y_pre ) )))) |] 
+  &&  [| (y_pre <> 0) |] 
   &&  [| (x_pre <= INT_MAX) |] 
   &&  [| (y_pre <= INT_MAX) |] 
   &&  [| (y_pre >= INT_MIN) |] 
@@ -83,8 +81,8 @@ forall (y_pre: Z) (x_pre: Z) (retval: Z) ,
 
 Definition gcd_return_wit_2 := 
 forall (y_pre: Z) (x_pre: Z) (retval: Z) ,
-  [| (retval = (Zgcd (y_pre) ((x_pre % ( y_pre ) )))) |] 
-  &&  [| (y_pre <> 0) |] 
+  [| (retval = (Zabs (x_pre))) |] 
+  &&  [| (y_pre = 0) |] 
   &&  [| (x_pre <= INT_MAX) |] 
   &&  [| (y_pre <= INT_MAX) |] 
   &&  [| (y_pre >= INT_MIN) |] 
@@ -174,7 +172,6 @@ Definition gcd_partial_solve_wit_2 := gcd_partial_solve_wit_2_pure -> gcd_partia
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 
 Axiom proof_of_gcd_safety_wit_1 : gcd_safety_wit_1.
 Axiom proof_of_gcd_safety_wit_2 : gcd_safety_wit_2.

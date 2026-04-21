@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -17,20 +17,10 @@ Local Open Scope list.
 Import naive_C_Rules.
 Require Import SimpleC.EE.QCP_democases.sll_merge_rel_lib.
 Local Open Scope monad.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap relations.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap relations.
 From FP Require Import PartialOrder_Setoid BourbakiWitt.
 Require Import SimpleC.EE.QCP_democases.int_array_merge_rel_lib.
 Local Open Scope sac.
-From SimpleC.EE.QCP_democases Require Import common_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import common_strategy_proof.
-From SimpleC.EE.QCP_democases Require Import int_array_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import int_array_strategy_proof.
-From SimpleC.EE.QCP_democases Require Import uint_array_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import uint_array_strategy_proof.
-From SimpleC.EE.QCP_democases Require Import undef_uint_array_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import undef_uint_array_strategy_proof.
-From SimpleC.EE.QCP_democases Require Import array_shape_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import array_shape_strategy_proof.
 From SimpleC.EE.QCP_democases Require Import safeexec_strategy_goal.
 From SimpleC.EE.QCP_democases Require Import safeexec_strategy_proof.
 
@@ -1638,22 +1628,6 @@ forall (ret_pre: Z) (r_pre: Z) (l_pre: Z) (arr_pre: Z) (X_low_level_spec: ((@lis
 .
 
 Definition mergeSort_return_wit_1 := 
-forall (ret_pre: Z) (r_pre: Z) (l_pre: Z) (arr_pre: Z) (X_low_level_spec: ((@list Z) -> (unit -> Prop))) (s1_low_level_spec: (@list Z)) ,
-  [| (l_pre >= r_pre) |] 
-  &&  [| (safeExec ATrue (gmergesortrec (s1_low_level_spec)) X_low_level_spec ) |] 
-  &&  [| (0 <= l_pre) |] 
-  &&  [| (l_pre <= r_pre) |] 
-  &&  [| ((r_pre + 1 ) <= INT_MAX) |]
-  &&  (IntArray.seg arr_pre l_pre (r_pre + 1 ) s1_low_level_spec )
-  **  (IntArray.seg ret_pre l_pre (r_pre + 1 ) s1_low_level_spec )
-|--
-  EX (s3: (@list Z))  (s2: (@list Z)) ,
-  [| (safeExec ATrue (return (s2)) X_low_level_spec ) |]
-  &&  (IntArray.seg arr_pre l_pre (r_pre + 1 ) s3 )
-  **  (IntArray.seg ret_pre l_pre (r_pre + 1 ) s2 )
-.
-
-Definition mergeSort_return_wit_2 := 
 forall (ret_pre: Z) (r_pre: Z) (l_pre: Z) (arr_pre: Z) (X_low_level_spec: ((@list Z) -> (unit -> Prop))) (m: Z) (l1: (@list Z)) (s3_2: (@list Z)) ,
   [| (safeExec ATrue (return (s3_2)) X_low_level_spec ) |] 
   &&  [| (0 <= l_pre) |] 
@@ -1664,6 +1638,22 @@ forall (ret_pre: Z) (r_pre: Z) (l_pre: Z) (arr_pre: Z) (X_low_level_spec: ((@lis
   &&  [| (m < r_pre) |]
   &&  (IntArray.seg arr_pre l_pre (r_pre + 1 ) l1 )
   **  (IntArray.seg ret_pre l_pre (r_pre + 1 ) s3_2 )
+|--
+  EX (s3: (@list Z))  (s2: (@list Z)) ,
+  [| (safeExec ATrue (return (s2)) X_low_level_spec ) |]
+  &&  (IntArray.seg arr_pre l_pre (r_pre + 1 ) s3 )
+  **  (IntArray.seg ret_pre l_pre (r_pre + 1 ) s2 )
+.
+
+Definition mergeSort_return_wit_2 := 
+forall (ret_pre: Z) (r_pre: Z) (l_pre: Z) (arr_pre: Z) (X_low_level_spec: ((@list Z) -> (unit -> Prop))) (s1_low_level_spec: (@list Z)) ,
+  [| (l_pre >= r_pre) |] 
+  &&  [| (safeExec ATrue (gmergesortrec (s1_low_level_spec)) X_low_level_spec ) |] 
+  &&  [| (0 <= l_pre) |] 
+  &&  [| (l_pre <= r_pre) |] 
+  &&  [| ((r_pre + 1 ) <= INT_MAX) |]
+  &&  (IntArray.seg arr_pre l_pre (r_pre + 1 ) s1_low_level_spec )
+  **  (IntArray.seg ret_pre l_pre (r_pre + 1 ) s1_low_level_spec )
 |--
   EX (s3: (@list Z))  (s2: (@list Z)) ,
   [| (safeExec ATrue (return (s2)) X_low_level_spec ) |]
@@ -1874,11 +1864,6 @@ EX (s1_low_level_spec: (@list Z)) (X_low_level_spec: ((@list Z) -> (unit -> Prop
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
-Include int_array_Strategy_Correct.
-Include uint_array_Strategy_Correct.
-Include undef_uint_array_Strategy_Correct.
-Include array_shape_Strategy_Correct.
 Include safeexec_Strategy_Correct.
 
 Axiom proof_of_merge_safety_wit_1 : merge_safety_wit_1.

@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -17,8 +17,6 @@ Local Open Scope list.
 Import naive_C_Rules.
 Require Import SimpleC.EE.QCP_democases.sll_lib.
 Local Open Scope sac.
-From SimpleC.EE.QCP_democases Require Import common_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import common_strategy_proof.
 From SimpleC.EE.QCP_democases Require Import sll_strategy_goal.
 From SimpleC.EE.QCP_democases Require Import sll_strategy_proof.
 
@@ -613,15 +611,6 @@ forall (x_pre: Z) (l2: (@list Z)) (l1: (@list Z)) (x_data: Z) (l1n: (@list Z)) (
 .
 
 Definition append_return_wit_1 := 
-forall (y_pre: Z) (x_pre: Z) (l2: (@list Z)) (l1: (@list Z)) ,
-  [| (x_pre = 0) |]
-  &&  (sll x_pre l1 )
-  **  (sll y_pre l2 )
-|--
-  (sll y_pre (app (l1) (l2)) )
-.
-
-Definition append_return_wit_2 := 
 forall (x_pre: Z) (l2: (@list Z)) (l1: (@list Z)) (x_data: Z) (l1n: (@list Z)) (y: Z) (x: Z) (u: Z) (t_next: Z) (l1a: (@list Z)) (t_data: Z) (t: Z) (l1b: (@list Z)) ,
   [| (u = 0) |] 
   &&  [| ((app (l1a) ((cons (t_data) (l1b)))) = l1) |] 
@@ -636,6 +625,15 @@ forall (x_pre: Z) (l2: (@list Z)) (l1: (@list Z)) (x_data: Z) (l1n: (@list Z)) (
   **  (sll y l2 )
 |--
   (sll x (app (l1) (l2)) )
+.
+
+Definition append_return_wit_2 := 
+forall (y_pre: Z) (x_pre: Z) (l2: (@list Z)) (l1: (@list Z)) ,
+  [| (x_pre = 0) |]
+  &&  (sll x_pre l1 )
+  **  (sll y_pre l2 )
+|--
+  (sll y_pre (app (l1) (l2)) )
 .
 
 Definition append_partial_solve_wit_1_pure := 
@@ -851,12 +849,21 @@ forall (x_pre: Z) (l2: (@list Z)) (l1: (@list Z)) (xn: Z) (a: Z) (l1b: (@list Z)
 .
 
 Definition append_long_return_wit_1 := 
-forall (y_pre: Z) (x_pre: Z) (l2: (@list Z)) (l1: (@list Z)) ,
-  [| (x_pre = 0) |]
-  &&  (sll x_pre l1 )
-  **  (sll y_pre l2 )
+forall (x_pre: Z) (l2: (@list Z)) (l1: (@list Z)) (xn: Z) (a: Z) (l1b: (@list Z)) (y: Z) (x: Z) (u: Z) (t_next: Z) (t: Z) (l1a: (@list Z)) (b: Z) (l1c: (@list Z)) ,
+  [| (u = 0) |] 
+  &&  [| ((app (l1a) ((cons (b) (l1c)))) = l1) |] 
+  &&  [| (t_next = u) |] 
+  &&  [| (t <> 0) |] 
+  &&  [| (xn <> 0) |] 
+  &&  [| (l1 = (cons (a) (l1b))) |] 
+  &&  [| (x_pre <> 0) |]
+  &&  ((&((t)  # "list" ->ₛ "data")) # Int  |-> b)
+  **  ((&((t)  # "list" ->ₛ "next")) # Ptr  |-> y)
+  **  (sllseg x t l1a )
+  **  (sll u l1c )
+  **  (sll y l2 )
 |--
-  (sll y_pre (app (l1) (l2)) )
+  (sll x (app (l1) (l2)) )
 .
 
 Definition append_long_return_wit_2 := 
@@ -873,21 +880,12 @@ forall (y_pre: Z) (x_pre: Z) (l2: (@list Z)) (l1: (@list Z)) (xn: Z) (a: Z) (l1b
 .
 
 Definition append_long_return_wit_3 := 
-forall (x_pre: Z) (l2: (@list Z)) (l1: (@list Z)) (xn: Z) (a: Z) (l1b: (@list Z)) (y: Z) (x: Z) (u: Z) (t_next: Z) (t: Z) (l1a: (@list Z)) (b: Z) (l1c: (@list Z)) ,
-  [| (u = 0) |] 
-  &&  [| ((app (l1a) ((cons (b) (l1c)))) = l1) |] 
-  &&  [| (t_next = u) |] 
-  &&  [| (t <> 0) |] 
-  &&  [| (xn <> 0) |] 
-  &&  [| (l1 = (cons (a) (l1b))) |] 
-  &&  [| (x_pre <> 0) |]
-  &&  ((&((t)  # "list" ->ₛ "data")) # Int  |-> b)
-  **  ((&((t)  # "list" ->ₛ "next")) # Ptr  |-> y)
-  **  (sllseg x t l1a )
-  **  (sll u l1c )
-  **  (sll y l2 )
+forall (y_pre: Z) (x_pre: Z) (l2: (@list Z)) (l1: (@list Z)) ,
+  [| (x_pre = 0) |]
+  &&  (sll x_pre l1 )
+  **  (sll y_pre l2 )
 |--
-  (sll x (app (l1) (l2)) )
+  (sll y_pre (app (l1) (l2)) )
 .
 
 Definition append_long_partial_solve_wit_1_pure := 
@@ -1085,7 +1083,6 @@ forall (l1a: (@list Z)) (pt: Z) (pt_v: Z) (y: Z) (pres: Z) ,
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 Include sll_Strategy_Correct.
 
 Axiom proof_of_length_safety_wit_1 : length_safety_wit_1.

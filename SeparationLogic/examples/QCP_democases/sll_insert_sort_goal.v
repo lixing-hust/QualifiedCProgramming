@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -18,8 +18,6 @@ Import naive_C_Rules.
 Require Import SimpleC.EE.QCP_democases.sll_lib.
 Require Import SimpleC.EE.QCP_democases.sll_insert_sort_lib.
 Local Open Scope sac.
-From SimpleC.EE.QCP_democases Require Import common_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import common_strategy_proof.
 From SimpleC.EE.QCP_democases Require Import sll_strategy_goal.
 From SimpleC.EE.QCP_democases Require Import sll_strategy_proof.
 
@@ -89,6 +87,22 @@ forall (node_pre: Z) (a: Z) (l: (@list Z)) (p2_v_2: Z) (p2: Z) (l1_2: (@list Z))
 .
 
 Definition insertion_return_wit_1 := 
+forall (node_pre: Z) (a: Z) (l: (@list Z)) (p2_v: Z) (l1: (@list Z)) (l2: (@list Z)) (res: Z) ,
+  [| (p2_v = 0) |] 
+  &&  [| (l = (app (l1) (l2))) |] 
+  &&  [| (strict_upperbound a l1 ) |] 
+  &&  [| (node_pre <> 0) |]
+  &&  (sllseg res node_pre l1 )
+  **  ((&((node_pre)  # "list" ->ₛ "data")) # Int  |-> a)
+  **  (sll p2_v l2 )
+  **  ((&((node_pre)  # "list" ->ₛ "next")) # Ptr  |-> p2_v)
+|--
+  EX (l0: (@list Z)) ,
+  [| (l0 = (insert (a) (l))) |]
+  &&  (sll res l0 )
+.
+
+Definition insertion_return_wit_2 := 
 forall (node_pre: Z) (a: Z) (l: (@list Z)) (p2_v: Z) (l1: (@list Z)) (l2: (@list Z)) (x: Z) (l0_2: (@list Z)) (y: Z) (res: Z) ,
   [| (x >= a) |] 
   &&  [| (l2 = (cons (x) (l0_2))) |] 
@@ -101,22 +115,6 @@ forall (node_pre: Z) (a: Z) (l: (@list Z)) (p2_v: Z) (l1: (@list Z)) (l2: (@list
   **  (sll y l0_2 )
   **  ((&((p2_v)  # "list" ->ₛ "next")) # Ptr  |-> y)
   **  ((&((node_pre)  # "list" ->ₛ "data")) # Int  |-> a)
-  **  ((&((node_pre)  # "list" ->ₛ "next")) # Ptr  |-> p2_v)
-|--
-  EX (l0: (@list Z)) ,
-  [| (l0 = (insert (a) (l))) |]
-  &&  (sll res l0 )
-.
-
-Definition insertion_return_wit_2 := 
-forall (node_pre: Z) (a: Z) (l: (@list Z)) (p2_v: Z) (l1: (@list Z)) (l2: (@list Z)) (res: Z) ,
-  [| (p2_v = 0) |] 
-  &&  [| (l = (app (l1) (l2))) |] 
-  &&  [| (strict_upperbound a l1 ) |] 
-  &&  [| (node_pre <> 0) |]
-  &&  (sllseg res node_pre l1 )
-  **  ((&((node_pre)  # "list" ->ₛ "data")) # Int  |-> a)
-  **  (sll p2_v l2 )
   **  ((&((node_pre)  # "list" ->ₛ "next")) # Ptr  |-> p2_v)
 |--
   EX (l0: (@list Z)) ,
@@ -501,7 +499,6 @@ forall (l2: (@list Z)) (p: Z) ,
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 Include sll_Strategy_Correct.
 
 Axiom proof_of_insertion_safety_wit_1 : insertion_safety_wit_1.

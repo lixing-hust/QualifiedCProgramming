@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -17,14 +17,12 @@ Local Open Scope list.
 Import naive_C_Rules.
 Require Import SimpleC.EE.QCP_democases.sll_merge_rel_lib.
 Local Open Scope monad.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap relations.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap relations.
 From FP Require Import PartialOrder_Setoid BourbakiWitt.
 Require Import ast_lib.
 Require Import malloc.
 Require Import super_poly_sll2.
 Local Open Scope sac.
-From SimpleC.EE.QCP_democases Require Import common_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import common_strategy_proof.
 From SimpleC.EE.QCP_democases Require Import safeexec_strategy_goal.
 From SimpleC.EE.QCP_democases Require Import safeexec_strategy_proof.
 
@@ -79,13 +77,20 @@ forall (lis_pre: Z) (thm_pre: Z) (l: (@list var_sub)) (t: term) (lis_next: Z) (l
 .
 
 Definition sub_thm_return_wit_1 := 
-forall (lis_pre: Z) (thm_pre: Z) (l: (@list var_sub)) (t: term) ,
-  [| (lis_pre = 0) |]
-  &&  (store_term thm_pre t )
-  **  (sll_var_sub_list lis_pre l )
+forall (lis_pre: Z) (thm_pre: Z) (l: (@list var_sub)) (t: term) (lis_next: Z) (lis_cur: Z) (vs: var_sub) (l0: (@list var_sub)) ,
+  [| ((termtypeID (t)) <> 3) |] 
+  &&  [| (thm_pre <> 0) |] 
+  &&  [| (l = (cons (vs) (l0))) |] 
+  &&  [| (lis_pre <> 0) |]
+  &&  ((&((thm_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (t)))
+  **  (store_term' thm_pre t )
+  **  ((&((lis_pre)  # "var_sub_list" ->ₛ "cur")) # Ptr  |-> lis_cur)
+  **  (store_var_sub lis_cur vs )
+  **  ((&((lis_pre)  # "var_sub_list" ->ₛ "next")) # Ptr  |-> lis_next)
+  **  (sll_var_sub_list lis_next l0 )
 |--
   (sll_var_sub_list lis_pre l )
-  **  (store_sub_thm_res thm_pre thm_pre t l )
+  **  (store_sub_thm_res thm_pre 0 t l )
 .
 
 Definition sub_thm_return_wit_2 := 
@@ -118,20 +123,13 @@ forall (lis_pre: Z) (thm_pre: Z) (l: (@list var_sub)) (t: term) (lis_next: Z) (l
 .
 
 Definition sub_thm_return_wit_3 := 
-forall (lis_pre: Z) (thm_pre: Z) (l: (@list var_sub)) (t: term) (lis_next: Z) (lis_cur: Z) (vs: var_sub) (l0: (@list var_sub)) ,
-  [| ((termtypeID (t)) <> 3) |] 
-  &&  [| (thm_pre <> 0) |] 
-  &&  [| (l = (cons (vs) (l0))) |] 
-  &&  [| (lis_pre <> 0) |]
-  &&  ((&((thm_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (t)))
-  **  (store_term' thm_pre t )
-  **  ((&((lis_pre)  # "var_sub_list" ->ₛ "cur")) # Ptr  |-> lis_cur)
-  **  (store_var_sub lis_cur vs )
-  **  ((&((lis_pre)  # "var_sub_list" ->ₛ "next")) # Ptr  |-> lis_next)
-  **  (sll_var_sub_list lis_next l0 )
+forall (lis_pre: Z) (thm_pre: Z) (l: (@list var_sub)) (t: term) ,
+  [| (lis_pre = 0) |]
+  &&  (store_term thm_pre t )
+  **  (sll_var_sub_list lis_pre l )
 |--
   (sll_var_sub_list lis_pre l )
-  **  (store_sub_thm_res thm_pre 0 t l )
+  **  (store_sub_thm_res thm_pre thm_pre t l )
 .
 
 Definition sub_thm_partial_solve_wit_1_pure := 
@@ -555,26 +553,54 @@ forall (t_pre: Z) (trm: term) (v: Z) (v_2: Z) (lt: term) (rt: term) (v_3: Z) (v_
 .
 
 Definition separate_imply_return_wit_1 := 
-forall (t_pre: Z) (trm: term) ,
-  [| ((termtypeID (trm)) <> 2) |] 
+forall (t_pre: Z) (trm: term) (v: Z) (v_2: Z) (lt: term) (rt: term) (v_3: Z) (v_4: Z) (ll: term) (lr: term) (llctype: const_type) (llcctnt: Z) (t1': Z) (t2': Z) (retval: Z) ,
+  [| ((ctID (llctype)) = 7) |] 
+  &&  [| (ll = (TermConst (llctype) (llcctnt))) |] 
+  &&  [| ((termtypeID (ll)) = 1) |] 
+  &&  [| (v_4 <> 0) |] 
+  &&  [| (lt = (TermApply (ll) (lr))) |] 
+  &&  [| ((termtypeID (lt)) = 2) |] 
+  &&  [| (v_2 <> 0) |] 
+  &&  [| (trm = (TermApply (lt) (rt))) |] 
+  &&  [| ((termtypeID (trm)) = 2) |] 
   &&  [| (t_pre <> 0) |]
-  &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
-  **  (store_term' t_pre trm )
+  &&  (store_term v_3 lr )
+  **  (store_term v rt )
+  **  (store_ImplyProp retval t1' t2' lr rt )
+  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "left")) # Ptr  |-> v_2)
+  **  ((&((v_2)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "left")) # Ptr  |-> v_4)
+  **  ((&((v_4)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "type")) # Int  |-> (ctID (llctype)))
+  **  ((&((v_4)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "content")) # Int  |-> llcctnt)
+  **  ((&((v_4)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (ll)))
+  **  ((&((v_2)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "right")) # Ptr  |-> v_3)
+  **  ((&((v_2)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (lt)))
+  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "right")) # Ptr  |-> v)
+  **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
 |--
-  (store_imply_res 0 (sep_impl (trm)) )
+  (store_imply_res retval (sep_impl (trm)) )
   **  (store_term t_pre trm )
 .
 
 Definition separate_imply_return_wit_2 := 
-forall (t_pre: Z) (trm: term) (v: Z) (v_2: Z) (lt: term) (rt: term) ,
-  [| ((termtypeID (lt)) <> 2) |] 
+forall (t_pre: Z) (trm: term) (v: Z) (v_2: Z) (lt: term) (rt: term) (v_3: Z) (v_4: Z) (ll: term) (lr: term) (llctype: const_type) (llcctnt: Z) ,
+  [| ((ctID (llctype)) <> 7) |] 
+  &&  [| (ll = (TermConst (llctype) (llcctnt))) |] 
+  &&  [| ((termtypeID (ll)) = 1) |] 
+  &&  [| (v_4 <> 0) |] 
+  &&  [| (lt = (TermApply (ll) (lr))) |] 
+  &&  [| ((termtypeID (lt)) = 2) |] 
   &&  [| (v_2 <> 0) |] 
   &&  [| (trm = (TermApply (lt) (rt))) |] 
   &&  [| ((termtypeID (trm)) = 2) |] 
   &&  [| (t_pre <> 0) |]
   &&  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "left")) # Ptr  |-> v_2)
+  **  ((&((v_2)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "left")) # Ptr  |-> v_4)
+  **  ((&((v_4)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "type")) # Int  |-> (ctID (llctype)))
+  **  ((&((v_4)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "content")) # Int  |-> llcctnt)
+  **  ((&((v_4)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (ll)))
+  **  ((&((v_2)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "right")) # Ptr  |-> v_3)
+  **  (store_term v_3 lr )
   **  ((&((v_2)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (lt)))
-  **  (store_term' v_2 lt )
   **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "right")) # Ptr  |-> v)
   **  (store_term v rt )
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
@@ -609,25 +635,15 @@ forall (t_pre: Z) (trm: term) (v: Z) (v_2: Z) (lt: term) (rt: term) (v_3: Z) (v_
 .
 
 Definition separate_imply_return_wit_4 := 
-forall (t_pre: Z) (trm: term) (v: Z) (v_2: Z) (lt: term) (rt: term) (v_3: Z) (v_4: Z) (ll: term) (lr: term) (llctype: const_type) (llcctnt: Z) ,
-  [| ((ctID (llctype)) <> 7) |] 
-  &&  [| (ll = (TermConst (llctype) (llcctnt))) |] 
-  &&  [| ((termtypeID (ll)) = 1) |] 
-  &&  [| (v_4 <> 0) |] 
-  &&  [| (lt = (TermApply (ll) (lr))) |] 
-  &&  [| ((termtypeID (lt)) = 2) |] 
+forall (t_pre: Z) (trm: term) (v: Z) (v_2: Z) (lt: term) (rt: term) ,
+  [| ((termtypeID (lt)) <> 2) |] 
   &&  [| (v_2 <> 0) |] 
   &&  [| (trm = (TermApply (lt) (rt))) |] 
   &&  [| ((termtypeID (trm)) = 2) |] 
   &&  [| (t_pre <> 0) |]
   &&  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "left")) # Ptr  |-> v_2)
-  **  ((&((v_2)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "left")) # Ptr  |-> v_4)
-  **  ((&((v_4)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "type")) # Int  |-> (ctID (llctype)))
-  **  ((&((v_4)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "content")) # Int  |-> llcctnt)
-  **  ((&((v_4)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (ll)))
-  **  ((&((v_2)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "right")) # Ptr  |-> v_3)
-  **  (store_term v_3 lr )
   **  ((&((v_2)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (lt)))
+  **  (store_term' v_2 lt )
   **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "right")) # Ptr  |-> v)
   **  (store_term v rt )
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
@@ -637,31 +653,13 @@ forall (t_pre: Z) (trm: term) (v: Z) (v_2: Z) (lt: term) (rt: term) (v_3: Z) (v_
 .
 
 Definition separate_imply_return_wit_5 := 
-forall (t_pre: Z) (trm: term) (v: Z) (v_2: Z) (lt: term) (rt: term) (v_3: Z) (v_4: Z) (ll: term) (lr: term) (llctype: const_type) (llcctnt: Z) (t1': Z) (t2': Z) (retval: Z) ,
-  [| ((ctID (llctype)) = 7) |] 
-  &&  [| (ll = (TermConst (llctype) (llcctnt))) |] 
-  &&  [| ((termtypeID (ll)) = 1) |] 
-  &&  [| (v_4 <> 0) |] 
-  &&  [| (lt = (TermApply (ll) (lr))) |] 
-  &&  [| ((termtypeID (lt)) = 2) |] 
-  &&  [| (v_2 <> 0) |] 
-  &&  [| (trm = (TermApply (lt) (rt))) |] 
-  &&  [| ((termtypeID (trm)) = 2) |] 
+forall (t_pre: Z) (trm: term) ,
+  [| ((termtypeID (trm)) <> 2) |] 
   &&  [| (t_pre <> 0) |]
-  &&  (store_term v_3 lr )
-  **  (store_term v rt )
-  **  (store_ImplyProp retval t1' t2' lr rt )
-  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "left")) # Ptr  |-> v_2)
-  **  ((&((v_2)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "left")) # Ptr  |-> v_4)
-  **  ((&((v_4)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "type")) # Int  |-> (ctID (llctype)))
-  **  ((&((v_4)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "content")) # Int  |-> llcctnt)
-  **  ((&((v_4)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (ll)))
-  **  ((&((v_2)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "right")) # Ptr  |-> v_3)
-  **  ((&((v_2)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (lt)))
-  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "right")) # Ptr  |-> v)
-  **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
+  &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
+  **  (store_term' t_pre trm )
 |--
-  (store_imply_res retval (sep_impl (trm)) )
+  (store_imply_res 0 (sep_impl (trm)) )
   **  (store_term t_pre trm )
 .
 
@@ -1120,6 +1118,20 @@ forall (target_pre: Z) (X_low_level_spec: ((term * (@list term)) -> (unit -> Pro
 .
 
 Definition check_list_gen_return_wit_1 := 
+forall (target_pre: Z) (X_low_level_spec: ((term * (@list term)) -> (unit -> Prop))) (targ_low_level_spec: term) (t_2: term) (l_2: (@list term)) (retval: Z) (check_list: Z) ,
+  [| (retval <> 0) |] 
+  &&  [| (retval = (term_alpha_eqn (t_2) (targ_low_level_spec))) |] 
+  &&  [| (safeExec ATrue (check_from_mid_rel (t_2) (targ_low_level_spec) (l_2)) X_low_level_spec ) |]
+  &&  (sll_term_list check_list l_2 )
+  **  (store_term target_pre targ_low_level_spec )
+|--
+  EX (t: term)  (l: (@list term)) ,
+  [| (safeExec ATrue (return ((makepair (t) (l)))) X_low_level_spec ) |]
+  &&  (store_term target_pre targ_low_level_spec )
+  **  (sll_term_list check_list l )
+.
+
+Definition check_list_gen_return_wit_2 := 
 forall (target_pre: Z) (X_low_level_spec: ((term * (@list term)) -> (unit -> Prop))) (targ_low_level_spec: term) (t_2: term) (l_2: (@list term)) (retval: Z) (retval_2: Z) ,
   [| (retval_2 = 0) |] 
   &&  [| (retval = 0) |] 
@@ -1132,20 +1144,6 @@ forall (target_pre: Z) (X_low_level_spec: ((term * (@list term)) -> (unit -> Pro
   [| (safeExec ATrue (return ((makepair (t) (l)))) X_low_level_spec ) |]
   &&  (store_term target_pre targ_low_level_spec )
   **  (sll_term_list 0 l )
-.
-
-Definition check_list_gen_return_wit_2 := 
-forall (target_pre: Z) (X_low_level_spec: ((term * (@list term)) -> (unit -> Prop))) (targ_low_level_spec: term) (t_2: term) (l_2: (@list term)) (retval: Z) (check_list: Z) ,
-  [| (retval <> 0) |] 
-  &&  [| (retval = (term_alpha_eqn (t_2) (targ_low_level_spec))) |] 
-  &&  [| (safeExec ATrue (check_from_mid_rel (t_2) (targ_low_level_spec) (l_2)) X_low_level_spec ) |]
-  &&  (sll_term_list check_list l_2 )
-  **  (store_term target_pre targ_low_level_spec )
-|--
-  EX (t: term)  (l: (@list term)) ,
-  [| (safeExec ATrue (return ((makepair (t) (l)))) X_low_level_spec ) |]
-  &&  (store_term target_pre targ_low_level_spec )
-  **  (sll_term_list check_list l )
 .
 
 Definition check_list_gen_partial_solve_wit_1 := 
@@ -1641,25 +1639,18 @@ forall (goal_pre: Z) (lis_pre: Z) (thm_pre: Z) (X: (solve_res -> (unit -> Prop))
 .
 
 Definition thm_apply_return_wit_1 := 
-forall (goal_pre: Z) (lis_pre: Z) (thm_pre: Z) (X: (solve_res -> (unit -> Prop))) (g: term) (l: (@list var_sub)) (t_2: term) (retval_2: Z) (retval: Z) (v: Z) (res_type: Z) (pq: partial_quant) (st: term) (retval_3: Z) (v_2: Z) (retval_4: Z) (t_3: term) (l_2: (@list term)) (retval_5: Z) ,
-  [| (safeExec ATrue (applyf (get_list) ((makepair (t_3) (l_2)))) X ) |] 
-  &&  [| (retval_4 <> 0) |] 
-  &&  [| (v_2 = 0) |] 
-  &&  [| (retval_3 = (term_alpha_eqn (st) (g))) |] 
-  &&  [| (thm_subst_allres_rel t_2 l pq st ) |] 
-  &&  [| (retval_2 <> 0) |] 
+forall (goal_pre: Z) (lis_pre: Z) (thm_pre: Z) (X: (solve_res -> (unit -> Prop))) (g: term) (l: (@list var_sub)) (t_2: term) (retval_2: Z) (retval: Z) (v: Z) (res_type: Z) ,
+  [| (retval_2 = 0) |] 
   &&  [| (res_type = 0) |] 
   &&  [| (v = 0) |] 
   &&  [| (retval <> 0) |] 
   &&  [| (thm_pre <> 0) |] 
-  &&  [| (retval_3 = 0) |]
-  &&  (store_term goal_pre g )
-  **  (sll_term_list retval_5 l_2 )
-  **  (store_term retval_2 st )
-  **  ((&((retval)  # "solve_res" ->ₛ "d" .ₛ "list")) # Ptr  |-> retval_5)
-  **  (store_partial_quant thm_pre retval_2 pq )
-  **  ((&((retval)  # "solve_res" ->ₛ "type")) # Int  |-> 1)
+  &&  [| (safeExec ATrue (thm_app_rel (t_2) (l) (g)) X ) |]
+  &&  ((&((retval)  # "solve_res" ->ₛ "type")) # Int  |-> 0)
+  **  ((&((retval)  # "solve_res" ->ₛ "d" .ₛ "ans")) # Int  |-> 0)
   **  (sll_var_sub_list lis_pre l )
+  **  (store_sub_thm_res thm_pre retval_2 t_2 l )
+  **  (store_term goal_pre g )
 |--
   EX (t: term)  (sr: solve_res) ,
   [| (safeExec ATrue (return (sr)) X ) |]
@@ -1696,18 +1687,25 @@ forall (goal_pre: Z) (lis_pre: Z) (thm_pre: Z) (X: (solve_res -> (unit -> Prop))
 .
 
 Definition thm_apply_return_wit_3 := 
-forall (goal_pre: Z) (lis_pre: Z) (thm_pre: Z) (X: (solve_res -> (unit -> Prop))) (g: term) (l: (@list var_sub)) (t_2: term) (retval_2: Z) (retval: Z) (v: Z) (res_type: Z) ,
-  [| (retval_2 = 0) |] 
+forall (goal_pre: Z) (lis_pre: Z) (thm_pre: Z) (X: (solve_res -> (unit -> Prop))) (g: term) (l: (@list var_sub)) (t_2: term) (retval_2: Z) (retval: Z) (v: Z) (res_type: Z) (pq: partial_quant) (st: term) (retval_3: Z) (v_2: Z) (retval_4: Z) (t_3: term) (l_2: (@list term)) (retval_5: Z) ,
+  [| (safeExec ATrue (applyf (get_list) ((makepair (t_3) (l_2)))) X ) |] 
+  &&  [| (retval_4 <> 0) |] 
+  &&  [| (v_2 = 0) |] 
+  &&  [| (retval_3 = (term_alpha_eqn (st) (g))) |] 
+  &&  [| (thm_subst_allres_rel t_2 l pq st ) |] 
+  &&  [| (retval_2 <> 0) |] 
   &&  [| (res_type = 0) |] 
   &&  [| (v = 0) |] 
   &&  [| (retval <> 0) |] 
   &&  [| (thm_pre <> 0) |] 
-  &&  [| (safeExec ATrue (thm_app_rel (t_2) (l) (g)) X ) |]
-  &&  ((&((retval)  # "solve_res" ->ₛ "type")) # Int  |-> 0)
-  **  ((&((retval)  # "solve_res" ->ₛ "d" .ₛ "ans")) # Int  |-> 0)
+  &&  [| (retval_3 = 0) |]
+  &&  (store_term goal_pre g )
+  **  (sll_term_list retval_5 l_2 )
+  **  (store_term retval_2 st )
+  **  ((&((retval)  # "solve_res" ->ₛ "d" .ₛ "list")) # Ptr  |-> retval_5)
+  **  (store_partial_quant thm_pre retval_2 pq )
+  **  ((&((retval)  # "solve_res" ->ₛ "type")) # Int  |-> 1)
   **  (sll_var_sub_list lis_pre l )
-  **  (store_sub_thm_res thm_pre retval_2 t_2 l )
-  **  (store_term goal_pre g )
 |--
   EX (t: term)  (sr: solve_res) ,
   [| (safeExec ATrue (return (sr)) X ) |]
@@ -2172,7 +2170,6 @@ EX (theo_low_level_spec: term) (targ_low_level_spec: term) (X_low_level_spec: ((
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 Include safeexec_Strategy_Correct.
 
 Axiom proof_of_sub_thm_safety_wit_1 : sub_thm_safety_wit_1.

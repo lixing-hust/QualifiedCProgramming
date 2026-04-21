@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.Applications.typeinfer Require Import typeinfer_goal.
@@ -20,7 +20,7 @@ From SimpleC.EE.Applications.typeinfer Require Import sound_pv.
 Import naive_C_Rules.
 Local Open Scope sac.
 
-Lemma proof_of_atype_unify_return_wit_2 : atype_unify_return_wit_2.
+Lemma proof_of_atype_unify_return_wit_5 : atype_unify_return_wit_5.
 Proof.
   pre_process.
   Right.
@@ -31,7 +31,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_atype_unify_return_wit_1 : atype_unify_return_wit_1.
+Lemma proof_of_atype_unify_return_wit_6 : atype_unify_return_wit_6.
 Proof.
   pre_process.
   Left.
@@ -236,7 +236,7 @@ Proof.
   tauto.
 Qed.
 
-Lemma proof_of_atype_unify1_return_wit_2 : atype_unify1_return_wit_2.
+Lemma proof_of_atype_unify1_return_wit_5 : atype_unify1_return_wit_5.
 Proof.
   pre_process.
   Right.
@@ -247,7 +247,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_atype_unify1_return_wit_1 : atype_unify1_return_wit_1.
+Lemma proof_of_atype_unify1_return_wit_6 : atype_unify1_return_wit_6.
 Proof.
   pre_process.
   Left.
@@ -375,7 +375,7 @@ Proof.
   tauto.
 Qed.
 
-Lemma proof_of_atype_unify2_return_wit_1 : atype_unify2_return_wit_1.
+Lemma proof_of_atype_unify2_return_wit_13 : atype_unify2_return_wit_13.
 Proof.
   pre_process.
   Right.
@@ -386,7 +386,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_atype_unify2_return_wit_2 : atype_unify2_return_wit_2.
+Lemma proof_of_atype_unify2_return_wit_12 : atype_unify2_return_wit_12.
 Proof.
   pre_process.
   Left.
@@ -401,7 +401,7 @@ Proof.
 Qed.
 
 
-Lemma proof_of_atype_unify2_return_wit_3 : atype_unify2_return_wit_3.
+Lemma proof_of_atype_unify2_return_wit_11 : atype_unify2_return_wit_11.
 Proof.
   pre_process.
   Right.
@@ -412,7 +412,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_atype_unify2_return_wit_4 : atype_unify2_return_wit_4.
+Lemma proof_of_atype_unify2_return_wit_10 : atype_unify2_return_wit_10.
 Proof.
   pre_process.
   Left.
@@ -425,7 +425,7 @@ Proof.
   eapply unify_rel_right_var; eauto.
 Qed.
 
-Lemma proof_of_atype_unify2_return_wit_5 : atype_unify2_return_wit_5.
+Lemma proof_of_atype_unify2_return_wit_9 : atype_unify2_return_wit_9.
 Proof.
   pre_process.
   Right.
@@ -436,7 +436,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_atype_unify2_return_wit_6 : atype_unify2_return_wit_6.
+Lemma proof_of_atype_unify2_return_wit_8 : atype_unify2_return_wit_8.
 Proof.
   pre_process.
   Right.
@@ -449,7 +449,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_atype_unify2_return_wit_8 : atype_unify2_return_wit_8.
+Lemma proof_of_atype_unify2_return_wit_6 : atype_unify2_return_wit_6.
 Proof.
   pre_process.
   Right.
@@ -477,7 +477,7 @@ Proof.
   eapply unify_rel_arrow; eauto.
 Qed.
 
-Lemma proof_of_atype_unify2_return_wit_9 : atype_unify2_return_wit_9.
+Lemma proof_of_atype_unify2_return_wit_5 : atype_unify2_return_wit_5.
 Proof.
   pre_process.
   Right.
@@ -490,7 +490,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_atype_unify2_return_wit_11 : atype_unify2_return_wit_11.
+Lemma proof_of_atype_unify2_return_wit_3 : atype_unify2_return_wit_3.
 Proof.
   pre_process.
   Right.
@@ -503,7 +503,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_atype_unify2_return_wit_10 : atype_unify2_return_wit_10.
+Lemma proof_of_atype_unify2_return_wit_4 : atype_unify2_return_wit_4.
 Proof.
   pre_process.
   Left.
@@ -518,7 +518,7 @@ Proof.
   eapply unify_rel_apply; eauto.
 Qed.
 
-Lemma proof_of_atype_unify2_return_wit_12 : atype_unify2_return_wit_12.
+Lemma proof_of_atype_unify2_return_wit_2 : atype_unify2_return_wit_2.
 Proof.
   pre_process.
   Left.
@@ -531,7 +531,7 @@ Proof.
   eapply unify_rel_atom; eauto.
 Qed.
 
-Lemma proof_of_atype_unify2_return_wit_13 : atype_unify2_return_wit_13.
+Lemma proof_of_atype_unify2_return_wit_1 : atype_unify2_return_wit_1.
 Proof.
   pre_process.
   Right.

@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.Applications.cnf_trans Require Import cnf_trans_goal.
@@ -141,7 +141,7 @@ Proof.
   destruct bop; simpl in * ; try lia.
 Qed.
 
-Lemma proof_of_clause_gen_binary_return_wit_1 : clause_gen_binary_return_wit_1.
+Lemma proof_of_clause_gen_binary_return_wit_8 : clause_gen_binary_return_wit_8.
 Proof.
   pre_process.
   rewrite all_zero_list_3.
@@ -238,7 +238,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_clause_gen_binary_return_wit_6 : clause_gen_binary_return_wit_6.
+Lemma proof_of_clause_gen_binary_return_wit_3 : clause_gen_binary_return_wit_3.
 Proof.
   pre_process.
   rewrite all_zero_list_3.
@@ -318,7 +318,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_clause_gen_binary_return_wit_5 : clause_gen_binary_return_wit_5.
+Lemma proof_of_clause_gen_binary_return_wit_4 : clause_gen_binary_return_wit_4.
 Proof.
   pre_process.
   rewrite all_zero_list_3.

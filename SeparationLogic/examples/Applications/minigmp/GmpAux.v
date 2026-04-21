@@ -6,7 +6,7 @@ Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Permutation.
 Require Import String.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import CommonAssertion Mem SeparationLogic IntLib.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -303,7 +303,7 @@ Proof.
       unfold Z.succ in H0; rewrite H0; clear H0.
       pose proof (Zlength_nonneg l).
       pose proof (Zlength_cons z l); unfold Z.succ in H1.
-      pose proof (Znth_cons (Zlength (z :: l)) a (z :: l) 0 ltac:(lia)).
+      pose proof (Znth_cons 0 (Zlength (z :: l)) a (z :: l) (ltac:(lia))).
       assert (Zlength (z :: l) + 1 - 1 = Zlength (z :: l)). { lia. }
       rewrite H3; clear H3.
       rewrite H2.

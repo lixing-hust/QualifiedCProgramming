@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -18,8 +18,6 @@ Import naive_C_Rules.
 Require Import SimpleC.EE.QCP_democases.sll_lib.
 Require Import SimpleC.EE.QCP_democases.functional_queue_lib.
 Local Open Scope sac.
-From SimpleC.EE.QCP_democases Require Import common_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import common_strategy_proof.
 From SimpleC.EE.QCP_democases Require Import sll_strategy_goal.
 From SimpleC.EE.QCP_democases Require Import sll_strategy_proof.
 From SimpleC.EE.QCP_democases Require Import functional_queue_strategy_goal.
@@ -166,6 +164,20 @@ forall (q_pre: Z) (l: (@list Z)) (x: Z) (q_l2: Z) (q_l1: Z) (l1: (@list Z)) (l2:
 .
 
 Definition dequeue_return_wit_1 := 
+forall (q_pre: Z) (l: (@list Z)) (x: Z) (q_l1: Z) (l1: (@list Z)) (l2: (@list Z)) (p_callee_v: Z) (retval: Z) ,
+  [| (retval = x) |] 
+  &&  [| (q_l1 = 0) |] 
+  &&  [| ((cons (x) (l)) = (app (l1) ((rev (l2))))) |]
+  &&  ((&((q_pre)  # "queue" ->ₛ "l1")) # Ptr  |-> p_callee_v)
+  **  (sll p_callee_v l )
+  **  (sll q_l1 l1 )
+  **  ((&((q_pre)  # "queue" ->ₛ "l2")) # Ptr  |-> 0)
+|--
+  [| (retval = x) |]
+  &&  (store_queue q_pre l )
+.
+
+Definition dequeue_return_wit_2 := 
 forall (q_pre: Z) (l: (@list Z)) (x: Z) (q_l2: Z) (q_l1: Z) (l1: (@list Z)) (l2: (@list Z)) (z: Z) (l1_tail: (@list Z)) (p_callee_v: Z) (retval: Z) ,
   [| (retval = z) |] 
   &&  [| (l1 = (cons (z) (l1_tail))) |] 
@@ -175,20 +187,6 @@ forall (q_pre: Z) (l: (@list Z)) (x: Z) (q_l2: Z) (q_l1: Z) (l1: (@list Z)) (l2:
   **  (sll p_callee_v l1_tail )
   **  ((&((q_pre)  # "queue" ->ₛ "l2")) # Ptr  |-> q_l2)
   **  (sll q_l2 l2 )
-|--
-  [| (retval = x) |]
-  &&  (store_queue q_pre l )
-.
-
-Definition dequeue_return_wit_2 := 
-forall (q_pre: Z) (l: (@list Z)) (x: Z) (q_l1: Z) (l1: (@list Z)) (l2: (@list Z)) (p_callee_v: Z) (retval: Z) ,
-  [| (retval = x) |] 
-  &&  [| (q_l1 = 0) |] 
-  &&  [| ((cons (x) (l)) = (app (l1) ((rev (l2))))) |]
-  &&  ((&((q_pre)  # "queue" ->ₛ "l1")) # Ptr  |-> p_callee_v)
-  **  (sll p_callee_v l )
-  **  (sll q_l1 l1 )
-  **  ((&((q_pre)  # "queue" ->ₛ "l2")) # Ptr  |-> 0)
 |--
   [| (retval = x) |]
   &&  (store_queue q_pre l )
@@ -228,8 +226,7 @@ forall (q_pre: Z) (l: (@list Z)) (x: Z) (q_l1: Z) (l1: (@list Z)) (l2: (@list Z)
   **  (sll q_l1 l1 )
   **  ((&((q_pre)  # "queue" ->ₛ "l2")) # Ptr  |-> 0)
 |--
-  [| ((cons (x) (l)) = (cons (x) (l))) |] 
-  &&  [| ((rev (l2)) = (cons (x) (l))) |]
+  [| ((cons (x) (l)) = (rev (l2))) |]
 .
 
 Definition dequeue_partial_solve_wit_3_aux := 
@@ -241,12 +238,11 @@ forall (q_pre: Z) (l: (@list Z)) (x: Z) (q_l1: Z) (l1: (@list Z)) (l2: (@list Z)
   **  (sll q_l1 l1 )
   **  ((&((q_pre)  # "queue" ->ₛ "l2")) # Ptr  |-> 0)
 |--
-  [| ((cons (x) (l)) = (cons (x) (l))) |] 
-  &&  [| ((rev (l2)) = (cons (x) (l))) |] 
+  [| ((cons (x) (l)) = (rev (l2))) |] 
   &&  [| (q_l1 = 0) |] 
   &&  [| ((cons (x) (l)) = (app (l1) ((rev (l2))))) |]
   &&  ((&((q_pre)  # "queue" ->ₛ "l1")) # Ptr  |-> retval)
-  **  (sll retval (cons (x) (l)) )
+  **  (sll retval (rev (l2)) )
   **  (sll q_l1 l1 )
   **  ((&((q_pre)  # "queue" ->ₛ "l2")) # Ptr  |-> 0)
 .
@@ -358,7 +354,6 @@ forall (l1: (@list Z)) (q: Z) (q_l1: Z) ,
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 Include sll_Strategy_Correct.
 Include functional_queue_Strategy_Correct.
 

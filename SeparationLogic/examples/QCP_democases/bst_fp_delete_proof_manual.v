@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.QCP_democases Require Import bst_fp_delete_goal.
@@ -46,7 +46,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_replace_min_return_wit_1 : replace_min_return_wit_1.
+Lemma proof_of_replace_min_return_wit_2 : replace_min_return_wit_2.
 Proof.
   pre_process.
   sep_apply store_tree_zero; [ | try tauto].
@@ -64,7 +64,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_replace_min_return_wit_2 : replace_min_return_wit_2.
+Lemma proof_of_replace_min_return_wit_1 : replace_min_return_wit_1.
 Proof.
   pre_process.
   sep_apply store_tree_make_tree; [ | try tauto | try tauto].
@@ -145,7 +145,7 @@ Proof.
     first [reflexivity | Key.order].
 Qed.
 
-Lemma proof_of_Delete_return_wit_1 : Delete_return_wit_1.
+Lemma proof_of_Delete_return_wit_5 : Delete_return_wit_5.
 Proof.
   pre_process.
   sep_apply (store_tree_zero b_v_right b_v r0); [ | try tauto].
@@ -167,7 +167,7 @@ Proof.
   reflexivity.
 Qed.
 
-Lemma proof_of_Delete_return_wit_2 : Delete_return_wit_2.
+Lemma proof_of_Delete_return_wit_4 : Delete_return_wit_4.
 Proof.
   pre_process.
   sep_apply store_tree_make_tree; [ | try tauto | try tauto].
@@ -203,7 +203,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_Delete_return_wit_4 : Delete_return_wit_4.
+Lemma proof_of_Delete_return_wit_2 : Delete_return_wit_2.
 Proof.
   pre_process.
   sep_apply (store_tree_not_zero b_v_left b_v l0); [ | try tauto].
@@ -225,7 +225,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_Delete_return_wit_5 : Delete_return_wit_5.
+Lemma proof_of_Delete_return_wit_1 : Delete_return_wit_1.
 Proof.
   pre_process.
   sep_apply store_tree_zero; [ | try tauto].

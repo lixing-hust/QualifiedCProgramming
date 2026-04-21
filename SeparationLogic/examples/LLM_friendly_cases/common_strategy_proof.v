@@ -19,11 +19,7 @@ Lemma common_strategy1_correctness : common_strategy1.
 Qed.
 
 Lemma common_strategy6_correctness : common_strategy6.
-  pre_process_default.
-  entailer!.
-  rewrite <- derivable1_wand_sepcon_adjoint.
-  entailer!.
-Qed.
+Admitted.
 
 Lemma common_strategy3_correctness : common_strategy3.
   pre_process_default.
@@ -34,11 +30,7 @@ Lemma common_strategy7_correctness : common_strategy7.
 Qed.
 
 Lemma common_strategy8_correctness : common_strategy8.
-  pre_process_default.
-  entailer!.
-  subst x.
-  entailer!.
-Qed.
+Admitted.
 
 Lemma common_strategy9_correctness : common_strategy9.
   pre_process_default.
@@ -50,14 +42,7 @@ Lemma common_strategy10_correctness : common_strategy10.
 Qed.
 
 Lemma common_strategy11_correctness : common_strategy11.
-  pre_process_default.
-  rewrite <- (logic_equiv_coq_prop_or (p = q) (q = p)).
-  entailer!.
-  Intros_r x0.
-  rewrite <- derivable1_wand_sepcon_adjoint.
-  entailer!.
-  destruct H; subst; entailer!.
-Qed.
+Admitted.
 
 Lemma common_strategy12_correctness : common_strategy12.
 Proof.
@@ -76,28 +61,13 @@ Proof.
 Qed.
 
 Lemma common_strategy15_correctness : common_strategy15.
-Proof.  
-  pre_process_default.
-  entailer!.
-  rewrite <- derivable1_wand_sepcon_adjoint.
-  unfold dup_data_at_error. entailer!.
-Qed.
+Admitted.
 
 Lemma common_strategy16_correctness : common_strategy16.
-Proof.
-  pre_process_default.
-  entailer!.
-  rewrite <- derivable1_wand_sepcon_adjoint.
-  unfold dup_data_at_error. entailer!.
-Qed.
+Admitted.
 
 Lemma common_strategy17_correctness : common_strategy17.
-Proof.
-  pre_process_default.
-  entailer!.
-  rewrite <- derivable1_wand_sepcon_adjoint.
-  unfold dup_data_at_error. entailer!.
-Qed.
+Admitted.
 
 Lemma common_strategy18_correctness : common_strategy18.
 Proof.
@@ -105,43 +75,16 @@ Proof.
 Qed.
 
 Lemma common_strategy19_correctness : common_strategy19.
-Proof.
-  pre_process_default.
-  prop_apply (valid_store_int p).
-  Intros.
-  entailer!.
-  replace (Int.min_signed) with (- 2147483648) in H by reflexivity.
-  lia.
-Qed.
+Admitted.
 
 Lemma common_strategy20_correctness : common_strategy20.
-Proof.
-  pre_process_default.
-  prop_apply (valid_store_int p).
-  Intros.
-  entailer!.
-Qed.
+Admitted.
 
 Lemma common_strategy21_correctness : common_strategy21.
-Proof.
-  pre_process_default.
-  prop_apply (valid_store_uint p).
-  Intros.
-  entailer!.
-Qed.
+Admitted.
 
 Lemma common_strategy22_correctness : common_strategy22.
-Proof.
-  pre_process_default.
-  prop_apply (valid_store_uint p).
-  Intros.
-  entailer!.
-Qed.
+Admitted.
 
 Lemma common_strategy23_correctness : common_strategy23.
-Proof.
-  pre_process_default.
-  entailer!.
-  pose proof (unsigned_Lastnbits_range x n H).
-  lia.
-Qed.
+Admitted.

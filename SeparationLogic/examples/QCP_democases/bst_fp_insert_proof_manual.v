@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.QCP_democases Require Import bst_fp_insert_goal.
@@ -64,7 +64,7 @@ Proof.
     first [reflexivity | Key.order].
 Qed.
 
-Lemma proof_of_insert_return_wit_1 : insert_return_wit_1.
+Lemma proof_of_insert_return_wit_2 : insert_return_wit_2.
 Proof.
   pre_process.
   sep_apply store_tree_zero; [ | tauto].
@@ -79,7 +79,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_insert_return_wit_2 : insert_return_wit_2.
+Lemma proof_of_insert_return_wit_1 : insert_return_wit_1.
 Proof.
   pre_process.
   sep_apply store_tree_make_tree; [ | tauto ..].

@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -14,11 +14,9 @@ Local Open Scope Z_scope.
 Local Open Scope sets.
 Local Open Scope string.
 Local Open Scope list.
-Require Import SimpleC.EE.Applications.typeinfer.typeinfer_lib.
 Import naive_C_Rules.
+Require Import SimpleC.EE.Applications.typeinfer.typeinfer_lib.
 Local Open Scope sac.
-From SimpleC.EE.QCP_democases Require Import common_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import common_strategy_proof.
 Require Import typeinfer_strategy_goal.
 Require Import typeinfer_strategy_proof.
 
@@ -38,19 +36,12 @@ forall (t2_pre: Z) (t1_pre: Z) (tr2_verify: TypeTree) (tr1_verify: TypeTree) (s_
 .
 
 Definition atype_unify_return_wit_1 := 
-forall (t2_pre: Z) (t1_pre: Z) (tr2_verify: TypeTree) (tr1_verify: TypeTree) (s_pre_verify: sol) (t1_t: Z) (n: Z) (tr: (@option TypeTree)) (retval_2: Z) (tr_2: TypeTree) (s_post_3: sol) (retval: Z) ,
-  [| (retval = 0) |] 
-  &&  [| (unify_rel (TVar (n)) tr2_verify s_pre_verify s_post_3 ) |] 
-  &&  [| (tr = (Some (tr_2))) |] 
-  &&  [| (0 <= n) |] 
-  &&  [| (n < 100) |] 
-  &&  [| (tr1_verify = (TVar (n))) |] 
-  &&  [| (t1_t = 3) |] 
-  &&  [| (retval_2 <> 0) |]
+forall (t2_pre: Z) (t1_pre: Z) (tr2_verify: TypeTree) (tr1_verify: TypeTree) (s_pre_verify: sol) (t1_t: Z) (s_post_3: sol) (retval: Z) ,
+  [| (retval <> 0) |] 
+  &&  [| (t1_t <> 3) |]
   &&  (store_solution ( &( "res" ) ) s_post_3 )
+  **  (store_type t1_pre tr1_verify )
   **  (store_type t2_pre tr2_verify )
-  **  ((&((t1_pre)  # "atype" ->ₛ "d" .ₛ "VAR" .ₛ "name")) # Int  |-> n)
-  **  ((&((t1_pre)  # "atype" ->ₛ "t")) # Int  |-> 3)
 |--
   (EX (s_post: sol) ,
   [| (retval = 0) |] 
@@ -67,18 +58,13 @@ forall (t2_pre: Z) (t1_pre: Z) (tr2_verify: TypeTree) (tr1_verify: TypeTree) (s_
 .
 
 Definition atype_unify_return_wit_2 := 
-forall (t2_pre: Z) (t1_pre: Z) (tr2_verify: TypeTree) (tr1_verify: TypeTree) (s_pre_verify: sol) (t1_t: Z) (n: Z) (tr: (@option TypeTree)) (retval_2: Z) (tr_2: TypeTree) (s_post_3: sol) (retval: Z) ,
-  [| (retval <> 0) |] 
-  &&  [| (tr = (Some (tr_2))) |] 
-  &&  [| (0 <= n) |] 
-  &&  [| (n < 100) |] 
-  &&  [| (tr1_verify = (TVar (n))) |] 
-  &&  [| (t1_t = 3) |] 
-  &&  [| (retval_2 <> 0) |]
+forall (t2_pre: Z) (t1_pre: Z) (tr2_verify: TypeTree) (tr1_verify: TypeTree) (s_pre_verify: sol) (t1_t: Z) (s_post_3: sol) (retval: Z) ,
+  [| (retval = 0) |] 
+  &&  [| (unify_rel tr1_verify tr2_verify s_pre_verify s_post_3 ) |] 
+  &&  [| (t1_t <> 3) |]
   &&  (store_solution ( &( "res" ) ) s_post_3 )
+  **  (store_type t1_pre tr1_verify )
   **  (store_type t2_pre tr2_verify )
-  **  ((&((t1_pre)  # "atype" ->ₛ "d" .ₛ "VAR" .ₛ "name")) # Int  |-> n)
-  **  ((&((t1_pre)  # "atype" ->ₛ "t")) # Int  |-> 3)
 |--
   (EX (s_post: sol) ,
   [| (retval = 0) |] 
@@ -96,8 +82,7 @@ forall (t2_pre: Z) (t1_pre: Z) (tr2_verify: TypeTree) (tr1_verify: TypeTree) (s_
 
 Definition atype_unify_return_wit_3 := 
 forall (t2_pre: Z) (t1_pre: Z) (tr2_verify: TypeTree) (tr1_verify: TypeTree) (s_pre_verify: sol) (t1_t: Z) (n: Z) (tr: (@option TypeTree)) (retval_2: Z) (s_post_3: sol) (retval: Z) ,
-  [| (retval = 0) |] 
-  &&  [| (unify_rel tr1_verify tr2_verify s_pre_verify s_post_3 ) |] 
+  [| (retval <> 0) |] 
   &&  [| (tr = None) |] 
   &&  [| (0 <= n) |] 
   &&  [| (n < 100) |] 
@@ -124,7 +109,8 @@ forall (t2_pre: Z) (t1_pre: Z) (tr2_verify: TypeTree) (tr1_verify: TypeTree) (s_
 
 Definition atype_unify_return_wit_4 := 
 forall (t2_pre: Z) (t1_pre: Z) (tr2_verify: TypeTree) (tr1_verify: TypeTree) (s_pre_verify: sol) (t1_t: Z) (n: Z) (tr: (@option TypeTree)) (retval_2: Z) (s_post_3: sol) (retval: Z) ,
-  [| (retval <> 0) |] 
+  [| (retval = 0) |] 
+  &&  [| (unify_rel tr1_verify tr2_verify s_pre_verify s_post_3 ) |] 
   &&  [| (tr = None) |] 
   &&  [| (0 <= n) |] 
   &&  [| (n < 100) |] 
@@ -150,13 +136,18 @@ forall (t2_pre: Z) (t1_pre: Z) (tr2_verify: TypeTree) (tr1_verify: TypeTree) (s_
 .
 
 Definition atype_unify_return_wit_5 := 
-forall (t2_pre: Z) (t1_pre: Z) (tr2_verify: TypeTree) (tr1_verify: TypeTree) (s_pre_verify: sol) (t1_t: Z) (s_post_3: sol) (retval: Z) ,
-  [| (retval = 0) |] 
-  &&  [| (unify_rel tr1_verify tr2_verify s_pre_verify s_post_3 ) |] 
-  &&  [| (t1_t <> 3) |]
+forall (t2_pre: Z) (t1_pre: Z) (tr2_verify: TypeTree) (tr1_verify: TypeTree) (s_pre_verify: sol) (t1_t: Z) (n: Z) (tr: (@option TypeTree)) (retval_2: Z) (tr_2: TypeTree) (s_post_3: sol) (retval: Z) ,
+  [| (retval <> 0) |] 
+  &&  [| (tr = (Some (tr_2))) |] 
+  &&  [| (0 <= n) |] 
+  &&  [| (n < 100) |] 
+  &&  [| (tr1_verify = (TVar (n))) |] 
+  &&  [| (t1_t = 3) |] 
+  &&  [| (retval_2 <> 0) |]
   &&  (store_solution ( &( "res" ) ) s_post_3 )
-  **  (store_type t1_pre tr1_verify )
   **  (store_type t2_pre tr2_verify )
+  **  ((&((t1_pre)  # "atype" ->ₛ "d" .ₛ "VAR" .ₛ "name")) # Int  |-> n)
+  **  ((&((t1_pre)  # "atype" ->ₛ "t")) # Int  |-> 3)
 |--
   (EX (s_post: sol) ,
   [| (retval = 0) |] 
@@ -173,12 +164,19 @@ forall (t2_pre: Z) (t1_pre: Z) (tr2_verify: TypeTree) (tr1_verify: TypeTree) (s_
 .
 
 Definition atype_unify_return_wit_6 := 
-forall (t2_pre: Z) (t1_pre: Z) (tr2_verify: TypeTree) (tr1_verify: TypeTree) (s_pre_verify: sol) (t1_t: Z) (s_post_3: sol) (retval: Z) ,
-  [| (retval <> 0) |] 
-  &&  [| (t1_t <> 3) |]
+forall (t2_pre: Z) (t1_pre: Z) (tr2_verify: TypeTree) (tr1_verify: TypeTree) (s_pre_verify: sol) (t1_t: Z) (n: Z) (tr: (@option TypeTree)) (retval_2: Z) (tr_2: TypeTree) (s_post_3: sol) (retval: Z) ,
+  [| (retval = 0) |] 
+  &&  [| (unify_rel (TVar (n)) tr2_verify s_pre_verify s_post_3 ) |] 
+  &&  [| (tr = (Some (tr_2))) |] 
+  &&  [| (0 <= n) |] 
+  &&  [| (n < 100) |] 
+  &&  [| (tr1_verify = (TVar (n))) |] 
+  &&  [| (t1_t = 3) |] 
+  &&  [| (retval_2 <> 0) |]
   &&  (store_solution ( &( "res" ) ) s_post_3 )
-  **  (store_type t1_pre tr1_verify )
   **  (store_type t2_pre tr2_verify )
+  **  ((&((t1_pre)  # "atype" ->ₛ "d" .ₛ "VAR" .ₛ "name")) # Int  |-> n)
+  **  ((&((t1_pre)  # "atype" ->ₛ "t")) # Int  |-> 3)
 |--
   (EX (s_post: sol) ,
   [| (retval = 0) |] 
@@ -741,19 +739,12 @@ forall (t2_pre: Z) (t1_pre: Z) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTr
 .
 
 Definition atype_unify1_return_wit_1 := 
-forall (t2_pre: Z) (t1_pre: Z) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t2_t: Z) (n: Z) (tr: (@option TypeTree)) (retval_2: Z) (tr_2: TypeTree) (s_post_3: sol) (retval: Z) ,
-  [| (retval = 0) |] 
-  &&  [| (unify_rel tr1_prev (TVar (n)) s_pre s_post_3 ) |] 
-  &&  [| (tr = (Some (tr_2))) |] 
-  &&  [| (0 <= n) |] 
-  &&  [| (n < 100) |] 
-  &&  [| (tr2 = (TVar (n))) |] 
-  &&  [| (t2_t = 3) |] 
-  &&  [| (retval_2 <> 0) |]
+forall (t2_pre: Z) (t1_pre: Z) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t2_t: Z) (s_post_3: sol) (retval: Z) ,
+  [| (retval <> 0) |] 
+  &&  [| (t2_t <> 3) |]
   &&  (store_solution ( &( "res" ) ) s_post_3 )
   **  (store_type t1_pre tr1 )
-  **  ((&((t2_pre)  # "atype" ->ₛ "d" .ₛ "VAR" .ₛ "name")) # Int  |-> n)
-  **  ((&((t2_pre)  # "atype" ->ₛ "t")) # Int  |-> 3)
+  **  (store_type t2_pre tr2 )
 |--
   (EX (s_post: sol) ,
   [| (retval = 0) |] 
@@ -770,18 +761,13 @@ forall (t2_pre: Z) (t1_pre: Z) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTr
 .
 
 Definition atype_unify1_return_wit_2 := 
-forall (t2_pre: Z) (t1_pre: Z) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t2_t: Z) (n: Z) (tr: (@option TypeTree)) (retval_2: Z) (tr_2: TypeTree) (s_post_3: sol) (retval: Z) ,
-  [| (retval <> 0) |] 
-  &&  [| (tr = (Some (tr_2))) |] 
-  &&  [| (0 <= n) |] 
-  &&  [| (n < 100) |] 
-  &&  [| (tr2 = (TVar (n))) |] 
-  &&  [| (t2_t = 3) |] 
-  &&  [| (retval_2 <> 0) |]
+forall (t2_pre: Z) (t1_pre: Z) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t2_t: Z) (s_post_3: sol) (retval: Z) ,
+  [| (retval = 0) |] 
+  &&  [| (unify_rel tr1_prev tr2 s_pre s_post_3 ) |] 
+  &&  [| (t2_t <> 3) |]
   &&  (store_solution ( &( "res" ) ) s_post_3 )
   **  (store_type t1_pre tr1 )
-  **  ((&((t2_pre)  # "atype" ->ₛ "d" .ₛ "VAR" .ₛ "name")) # Int  |-> n)
-  **  ((&((t2_pre)  # "atype" ->ₛ "t")) # Int  |-> 3)
+  **  (store_type t2_pre tr2 )
 |--
   (EX (s_post: sol) ,
   [| (retval = 0) |] 
@@ -799,8 +785,7 @@ forall (t2_pre: Z) (t1_pre: Z) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTr
 
 Definition atype_unify1_return_wit_3 := 
 forall (t2_pre: Z) (t1_pre: Z) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t2_t: Z) (n: Z) (tr: (@option TypeTree)) (retval_2: Z) (s_post_3: sol) (retval: Z) ,
-  [| (retval = 0) |] 
-  &&  [| (unify_rel tr1_prev tr2 s_pre s_post_3 ) |] 
+  [| (retval <> 0) |] 
   &&  [| (tr = None) |] 
   &&  [| (0 <= n) |] 
   &&  [| (n < 100) |] 
@@ -827,7 +812,8 @@ forall (t2_pre: Z) (t1_pre: Z) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTr
 
 Definition atype_unify1_return_wit_4 := 
 forall (t2_pre: Z) (t1_pre: Z) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t2_t: Z) (n: Z) (tr: (@option TypeTree)) (retval_2: Z) (s_post_3: sol) (retval: Z) ,
-  [| (retval <> 0) |] 
+  [| (retval = 0) |] 
+  &&  [| (unify_rel tr1_prev tr2 s_pre s_post_3 ) |] 
   &&  [| (tr = None) |] 
   &&  [| (0 <= n) |] 
   &&  [| (n < 100) |] 
@@ -853,13 +839,18 @@ forall (t2_pre: Z) (t1_pre: Z) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTr
 .
 
 Definition atype_unify1_return_wit_5 := 
-forall (t2_pre: Z) (t1_pre: Z) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t2_t: Z) (s_post_3: sol) (retval: Z) ,
-  [| (retval = 0) |] 
-  &&  [| (unify_rel tr1_prev tr2 s_pre s_post_3 ) |] 
-  &&  [| (t2_t <> 3) |]
+forall (t2_pre: Z) (t1_pre: Z) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t2_t: Z) (n: Z) (tr: (@option TypeTree)) (retval_2: Z) (tr_2: TypeTree) (s_post_3: sol) (retval: Z) ,
+  [| (retval <> 0) |] 
+  &&  [| (tr = (Some (tr_2))) |] 
+  &&  [| (0 <= n) |] 
+  &&  [| (n < 100) |] 
+  &&  [| (tr2 = (TVar (n))) |] 
+  &&  [| (t2_t = 3) |] 
+  &&  [| (retval_2 <> 0) |]
   &&  (store_solution ( &( "res" ) ) s_post_3 )
   **  (store_type t1_pre tr1 )
-  **  (store_type t2_pre tr2 )
+  **  ((&((t2_pre)  # "atype" ->ₛ "d" .ₛ "VAR" .ₛ "name")) # Int  |-> n)
+  **  ((&((t2_pre)  # "atype" ->ₛ "t")) # Int  |-> 3)
 |--
   (EX (s_post: sol) ,
   [| (retval = 0) |] 
@@ -876,12 +867,19 @@ forall (t2_pre: Z) (t1_pre: Z) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTr
 .
 
 Definition atype_unify1_return_wit_6 := 
-forall (t2_pre: Z) (t1_pre: Z) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t2_t: Z) (s_post_3: sol) (retval: Z) ,
-  [| (retval <> 0) |] 
-  &&  [| (t2_t <> 3) |]
+forall (t2_pre: Z) (t1_pre: Z) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t2_t: Z) (n: Z) (tr: (@option TypeTree)) (retval_2: Z) (tr_2: TypeTree) (s_post_3: sol) (retval: Z) ,
+  [| (retval = 0) |] 
+  &&  [| (unify_rel tr1_prev (TVar (n)) s_pre s_post_3 ) |] 
+  &&  [| (tr = (Some (tr_2))) |] 
+  &&  [| (0 <= n) |] 
+  &&  [| (n < 100) |] 
+  &&  [| (tr2 = (TVar (n))) |] 
+  &&  [| (t2_t = 3) |] 
+  &&  [| (retval_2 <> 0) |]
   &&  (store_solution ( &( "res" ) ) s_post_3 )
   **  (store_type t1_pre tr1 )
-  **  (store_type t2_pre tr2 )
+  **  ((&((t2_pre)  # "atype" ->ₛ "d" .ₛ "VAR" .ₛ "name")) # Int  |-> n)
+  **  ((&((t2_pre)  # "atype" ->ₛ "t")) # Int  |-> 3)
 |--
   (EX (s_post: sol) ,
   [| (retval = 0) |] 
@@ -2290,138 +2288,23 @@ forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: T
 .
 
 Definition atype_unify2_return_wit_1 := 
-forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t1_t: Z) (n: Z) (retval: Z) ,
-  [| (retval <> 0) |] 
-  &&  [| (0 <= n) |] 
-  &&  [| (n < 100) |] 
-  &&  [| (tr1 = (TVar (n))) |] 
-  &&  [| (t1_t = 3) |] 
-  &&  [| (repr_rel_node s_pre tr1_prev tr1 ) |] 
-  &&  [| (repr_rel_node s_pre tr2_prev tr2 ) |] 
-  &&  [| (retval <> 0) |]
-  &&  (store_type t2_pre tr2 )
-  **  (store_solution ( &( "res" ) ) s_pre )
-  **  ((&((t1_pre)  # "atype" ->ₛ "t")) # Int  |-> 3)
-  **  ((&((t1_pre)  # "atype" ->ₛ "d" .ₛ "VAR" .ₛ "name")) # Int  |-> n)
-|--
-  (EX (s_post: sol) ,
-  [| (1 = 0) |] 
-  &&  [| (unify_rel tr1_prev tr2_prev s_pre s_post ) |]
-  &&  (store_solution ( &( "res" ) ) s_post )
-  **  (store_type t1_pre tr1 )
-  **  (store_type t2_pre tr2 ))
-  ||
-  (EX (s_post_2: sol) ,
-  [| (1 <> 0) |]
-  &&  (store_solution ( &( "res" ) ) s_post_2 )
-  **  (store_type t1_pre tr1 )
-  **  (store_type t2_pre tr2 ))
-.
-
-Definition atype_unify2_return_wit_2 := 
-forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t1_t: Z) (n: Z) (retval: Z) (s_post_3: sol) ,
-  [| ((sol_update (s_pre) (n) (tr2)) = s_post_3) |] 
-  &&  [| (retval = 0) |] 
-  &&  [| (not_occur_final s_pre n tr2 ) |] 
-  &&  [| (0 <= n) |] 
-  &&  [| (n < 100) |] 
-  &&  [| (tr1 = (TVar (n))) |] 
-  &&  [| (t1_t = 3) |] 
-  &&  [| (repr_rel_node s_pre tr1_prev tr1 ) |] 
-  &&  [| (repr_rel_node s_pre tr2_prev tr2 ) |] 
-  &&  [| (retval = 0) |]
-  &&  (store_solution ( &( "res" ) ) s_post_3 )
-  **  (store_type t2_pre tr2 )
-  **  ((&((t1_pre)  # "atype" ->ₛ "t")) # Int  |-> 3)
-  **  ((&((t1_pre)  # "atype" ->ₛ "d" .ₛ "VAR" .ₛ "name")) # Int  |-> n)
-|--
-  (EX (s_post: sol) ,
-  [| (0 = 0) |] 
-  &&  [| (unify_rel tr1_prev tr2_prev s_pre s_post ) |]
-  &&  (store_solution ( &( "res" ) ) s_post )
-  **  (store_type t1_pre tr1 )
-  **  (store_type t2_pre tr2 ))
-  ||
-  (EX (s_post_2: sol) ,
-  [| (0 <> 0) |]
-  &&  (store_solution ( &( "res" ) ) s_post_2 )
-  **  (store_type t1_pre tr1 )
-  **  (store_type t2_pre tr2 ))
-.
-
-Definition atype_unify2_return_wit_3 := 
-forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t1_t: Z) (t2_t: Z) (n: Z) (retval: Z) ,
-  [| (retval <> 0) |] 
-  &&  [| (0 <= n) |] 
-  &&  [| (n < 100) |] 
-  &&  [| (tr2 = (TVar (n))) |] 
-  &&  [| (t2_t = 3) |] 
-  &&  [| (t1_t <> 3) |] 
-  &&  [| (repr_rel_node s_pre tr1_prev tr1 ) |] 
-  &&  [| (repr_rel_node s_pre tr2_prev tr2 ) |] 
-  &&  [| (retval <> 0) |]
-  &&  (store_type t1_pre tr1 )
-  **  (store_solution ( &( "res" ) ) s_pre )
-  **  ((&((t2_pre)  # "atype" ->ₛ "t")) # Int  |-> 3)
-  **  ((&((t2_pre)  # "atype" ->ₛ "d" .ₛ "VAR" .ₛ "name")) # Int  |-> n)
-|--
-  (EX (s_post: sol) ,
-  [| (1 = 0) |] 
-  &&  [| (unify_rel tr1_prev tr2_prev s_pre s_post ) |]
-  &&  (store_solution ( &( "res" ) ) s_post )
-  **  (store_type t1_pre tr1 )
-  **  (store_type t2_pre tr2 ))
-  ||
-  (EX (s_post_2: sol) ,
-  [| (1 <> 0) |]
-  &&  (store_solution ( &( "res" ) ) s_post_2 )
-  **  (store_type t1_pre tr1 )
-  **  (store_type t2_pre tr2 ))
-.
-
-Definition atype_unify2_return_wit_4 := 
-forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t1_t: Z) (t2_t: Z) (n: Z) (retval: Z) (s_post_3: sol) ,
-  [| ((sol_update (s_pre) (n) (tr1)) = s_post_3) |] 
-  &&  [| (retval = 0) |] 
-  &&  [| (not_occur_final s_pre n tr1 ) |] 
-  &&  [| (0 <= n) |] 
-  &&  [| (n < 100) |] 
-  &&  [| (tr2 = (TVar (n))) |] 
-  &&  [| (t2_t = 3) |] 
-  &&  [| (t1_t <> 3) |] 
-  &&  [| (repr_rel_node s_pre tr1_prev tr1 ) |] 
-  &&  [| (repr_rel_node s_pre tr2_prev tr2 ) |] 
-  &&  [| (retval = 0) |]
-  &&  (store_solution ( &( "res" ) ) s_post_3 )
-  **  (store_type t1_pre tr1 )
-  **  ((&((t2_pre)  # "atype" ->ₛ "t")) # Int  |-> 3)
-  **  ((&((t2_pre)  # "atype" ->ₛ "d" .ₛ "VAR" .ₛ "name")) # Int  |-> n)
-|--
-  (EX (s_post: sol) ,
-  [| (0 = 0) |] 
-  &&  [| (unify_rel tr1_prev tr2_prev s_pre s_post ) |]
-  &&  (store_solution ( &( "res" ) ) s_post )
-  **  (store_type t1_pre tr1 )
-  **  (store_type t2_pre tr2 ))
-  ||
-  (EX (s_post_2: sol) ,
-  [| (0 <> 0) |]
-  &&  (store_solution ( &( "res" ) ) s_post_2 )
-  **  (store_type t1_pre tr1 )
-  **  (store_type t2_pre tr2 ))
-.
-
-Definition atype_unify2_return_wit_5 := 
-forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t1_t: Z) (t2_t: Z) ,
-  [| (t1_t <> t2_t) |] 
+forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t1_t: Z) (t2_t: Z) (m: Z) (n: Z) ,
+  [| (n <> m) |] 
+  &&  [| (t1_t = 0) |] 
+  &&  [| (t1_t = 0) |] 
+  &&  [| (tr1 = (TAtom (n))) |] 
+  &&  [| (tr2 = (TAtom (m))) |] 
+  &&  [| (t1_t <> 2) |] 
+  &&  [| (t1_t <> 1) |] 
+  &&  [| (t1_t = t2_t) |] 
   &&  [| (t2_t <> 3) |] 
   &&  [| (t1_t <> 3) |] 
   &&  [| (repr_rel_node s_pre tr1_prev tr1 ) |] 
   &&  [| (repr_rel_node s_pre tr2_prev tr2 ) |]
-  &&  ((&((t2_pre)  # "atype" ->ₛ "t")) # Int  |-> t2_t)
-  **  (store_type_aux t2_pre t2_t tr2 )
-  **  ((&((t1_pre)  # "atype" ->ₛ "t")) # Int  |-> t1_t)
-  **  (store_type_aux t1_pre t1_t tr1 )
+  &&  ((&((t1_pre)  # "atype" ->ₛ "t")) # Int  |-> t1_t)
+  **  ((&((t2_pre)  # "atype" ->ₛ "t")) # Int  |-> t1_t)
+  **  ((&((t1_pre)  # "atype" ->ₛ "d" .ₛ "ATOM" .ₛ "name")) # Int  |-> n)
+  **  ((&((t2_pre)  # "atype" ->ₛ "d" .ₛ "ATOM" .ₛ "name")) # Int  |-> m)
   **  (store_solution ( &( "res" ) ) s_pre )
 |--
   (EX (s_post: sol) ,
@@ -2438,10 +2321,171 @@ forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: T
   **  (store_type t2_pre tr2 ))
 .
 
-Definition atype_unify2_return_wit_6 := 
-forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t1_t: Z) (t2_t: Z) (tr2_to: TypeTree) (t2_to: Z) (tr2_from: TypeTree) (t2_from: Z) (tr1_to: TypeTree) (t1_to: Z) (tr1_from: TypeTree) (t1_from: Z) (s_post_3: sol) (retval: Z) ,
+Definition atype_unify2_return_wit_2 := 
+forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t1_t: Z) (t2_t: Z) (m: Z) (n: Z) ,
+  [| (n = m) |] 
+  &&  [| (t1_t = 0) |] 
+  &&  [| (t1_t = 0) |] 
+  &&  [| (tr1 = (TAtom (n))) |] 
+  &&  [| (tr2 = (TAtom (m))) |] 
+  &&  [| (t1_t <> 2) |] 
+  &&  [| (t1_t <> 1) |] 
+  &&  [| (t1_t = t2_t) |] 
+  &&  [| (t2_t <> 3) |] 
+  &&  [| (t1_t <> 3) |] 
+  &&  [| (repr_rel_node s_pre tr1_prev tr1 ) |] 
+  &&  [| (repr_rel_node s_pre tr2_prev tr2 ) |]
+  &&  ((&((t1_pre)  # "atype" ->ₛ "t")) # Int  |-> t1_t)
+  **  ((&((t2_pre)  # "atype" ->ₛ "t")) # Int  |-> t1_t)
+  **  ((&((t1_pre)  # "atype" ->ₛ "d" .ₛ "ATOM" .ₛ "name")) # Int  |-> n)
+  **  ((&((t2_pre)  # "atype" ->ₛ "d" .ₛ "ATOM" .ₛ "name")) # Int  |-> m)
+  **  (store_solution ( &( "res" ) ) s_pre )
+|--
+  (EX (s_post: sol) ,
+  [| (0 = 0) |] 
+  &&  [| (unify_rel tr1_prev tr2_prev s_pre s_post ) |]
+  &&  (store_solution ( &( "res" ) ) s_post )
+  **  (store_type t1_pre tr1 )
+  **  (store_type t2_pre tr2 ))
+  ||
+  (EX (s_post_2: sol) ,
+  [| (0 <> 0) |]
+  &&  (store_solution ( &( "res" ) ) s_post_2 )
+  **  (store_type t1_pre tr1 )
+  **  (store_type t2_pre tr2 ))
+.
+
+Definition atype_unify2_return_wit_3 := 
+forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t1_t: Z) (t2_t: Z) (tr2_rand: TypeTree) (t2_rand: Z) (tr2_tfn: TypeTree) (t2_tfn: Z) (tr1_rand: TypeTree) (t1_rand: Z) (tr1_tfn: TypeTree) (t1_tfn: Z) (s_post_3: sol) (retval_2: Z) (s_post_4: sol) (retval: Z) ,
+  [| (retval <> 0) |] 
+  &&  [| (retval_2 = 0) |] 
+  &&  [| (retval_2 = 0) |] 
+  &&  [| (unify_rel tr1_tfn tr2_tfn s_pre s_post_3 ) |] 
+  &&  [| (tr1 = (TApply (tr1_tfn) (tr1_rand))) |] 
+  &&  [| (tr2 = (TApply (tr2_tfn) (tr2_rand))) |] 
+  &&  [| (t2_t = 2) |] 
+  &&  [| (t1_t = 2) |] 
+  &&  [| (t1_t <> 1) |] 
+  &&  [| (t1_t = t2_t) |] 
+  &&  [| (t2_t <> 3) |] 
+  &&  [| (t1_t <> 3) |] 
+  &&  [| (repr_rel_node s_pre tr1_prev tr1 ) |] 
+  &&  [| (repr_rel_node s_pre tr2_prev tr2 ) |]
+  &&  (store_solution ( &( "res" ) ) s_post_4 )
+  **  (store_type t1_rand tr1_rand )
+  **  (store_type t2_rand tr2_rand )
+  **  (store_type t1_tfn tr1_tfn )
+  **  (store_type t2_tfn tr2_tfn )
+  **  ((&((t1_pre)  # "atype" ->ₛ "d" .ₛ "APP" .ₛ "tfn")) # Ptr  |-> t1_tfn)
+  **  ((&((t1_pre)  # "atype" ->ₛ "d" .ₛ "APP" .ₛ "rand")) # Ptr  |-> t1_rand)
+  **  ((&((t2_pre)  # "atype" ->ₛ "d" .ₛ "APP" .ₛ "tfn")) # Ptr  |-> t2_tfn)
+  **  ((&((t2_pre)  # "atype" ->ₛ "d" .ₛ "APP" .ₛ "rand")) # Ptr  |-> t2_rand)
+  **  ((&((t1_pre)  # "atype" ->ₛ "t")) # Int  |-> 2)
+  **  ((&((t2_pre)  # "atype" ->ₛ "t")) # Int  |-> t2_t)
+|--
+  (EX (s_post: sol) ,
+  [| (retval = 0) |] 
+  &&  [| (unify_rel tr1_prev tr2_prev s_pre s_post ) |]
+  &&  (store_solution ( &( "res" ) ) s_post )
+  **  (store_type t1_pre tr1 )
+  **  (store_type t2_pre tr2 ))
+  ||
+  (EX (s_post_2: sol) ,
+  [| (retval <> 0) |]
+  &&  (store_solution ( &( "res" ) ) s_post_2 )
+  **  (store_type t1_pre tr1 )
+  **  (store_type t2_pre tr2 ))
+.
+
+Definition atype_unify2_return_wit_4 := 
+forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t1_t: Z) (t2_t: Z) (tr2_rand: TypeTree) (t2_rand: Z) (tr2_tfn: TypeTree) (t2_tfn: Z) (tr1_rand: TypeTree) (t1_rand: Z) (tr1_tfn: TypeTree) (t1_tfn: Z) (s_post_3: sol) (retval_2: Z) (s_post_4: sol) (retval: Z) ,
+  [| (retval = 0) |] 
+  &&  [| (unify_rel tr1_rand tr2_rand s_post_3 s_post_4 ) |] 
+  &&  [| (retval_2 = 0) |] 
+  &&  [| (retval_2 = 0) |] 
+  &&  [| (unify_rel tr1_tfn tr2_tfn s_pre s_post_3 ) |] 
+  &&  [| (tr1 = (TApply (tr1_tfn) (tr1_rand))) |] 
+  &&  [| (tr2 = (TApply (tr2_tfn) (tr2_rand))) |] 
+  &&  [| (t2_t = 2) |] 
+  &&  [| (t1_t = 2) |] 
+  &&  [| (t1_t <> 1) |] 
+  &&  [| (t1_t = t2_t) |] 
+  &&  [| (t2_t <> 3) |] 
+  &&  [| (t1_t <> 3) |] 
+  &&  [| (repr_rel_node s_pre tr1_prev tr1 ) |] 
+  &&  [| (repr_rel_node s_pre tr2_prev tr2 ) |]
+  &&  (store_solution ( &( "res" ) ) s_post_4 )
+  **  (store_type t1_rand tr1_rand )
+  **  (store_type t2_rand tr2_rand )
+  **  (store_type t1_tfn tr1_tfn )
+  **  (store_type t2_tfn tr2_tfn )
+  **  ((&((t1_pre)  # "atype" ->ₛ "d" .ₛ "APP" .ₛ "tfn")) # Ptr  |-> t1_tfn)
+  **  ((&((t1_pre)  # "atype" ->ₛ "d" .ₛ "APP" .ₛ "rand")) # Ptr  |-> t1_rand)
+  **  ((&((t2_pre)  # "atype" ->ₛ "d" .ₛ "APP" .ₛ "tfn")) # Ptr  |-> t2_tfn)
+  **  ((&((t2_pre)  # "atype" ->ₛ "d" .ₛ "APP" .ₛ "rand")) # Ptr  |-> t2_rand)
+  **  ((&((t1_pre)  # "atype" ->ₛ "t")) # Int  |-> 2)
+  **  ((&((t2_pre)  # "atype" ->ₛ "t")) # Int  |-> t2_t)
+|--
+  (EX (s_post: sol) ,
+  [| (retval = 0) |] 
+  &&  [| (unify_rel tr1_prev tr2_prev s_pre s_post ) |]
+  &&  (store_solution ( &( "res" ) ) s_post )
+  **  (store_type t1_pre tr1 )
+  **  (store_type t2_pre tr2 ))
+  ||
+  (EX (s_post_2: sol) ,
+  [| (retval <> 0) |]
+  &&  (store_solution ( &( "res" ) ) s_post_2 )
+  **  (store_type t1_pre tr1 )
+  **  (store_type t2_pre tr2 ))
+.
+
+Definition atype_unify2_return_wit_5 := 
+forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t1_t: Z) (t2_t: Z) (tr2_rand: TypeTree) (t2_rand: Z) (tr2_tfn: TypeTree) (t2_tfn: Z) (tr1_rand: TypeTree) (t1_rand: Z) (tr1_tfn: TypeTree) (t1_tfn: Z) (s_post_3: sol) (retval: Z) ,
   [| (retval <> 0) |] 
   &&  [| (retval <> 0) |] 
+  &&  [| (tr1 = (TApply (tr1_tfn) (tr1_rand))) |] 
+  &&  [| (tr2 = (TApply (tr2_tfn) (tr2_rand))) |] 
+  &&  [| (t2_t = 2) |] 
+  &&  [| (t1_t = 2) |] 
+  &&  [| (t1_t <> 1) |] 
+  &&  [| (t1_t = t2_t) |] 
+  &&  [| (t2_t <> 3) |] 
+  &&  [| (t1_t <> 3) |] 
+  &&  [| (repr_rel_node s_pre tr1_prev tr1 ) |] 
+  &&  [| (repr_rel_node s_pre tr2_prev tr2 ) |]
+  &&  (store_solution ( &( "res" ) ) s_post_3 )
+  **  (store_type t1_tfn tr1_tfn )
+  **  (store_type t2_tfn tr2_tfn )
+  **  ((&((t1_pre)  # "atype" ->ₛ "d" .ₛ "APP" .ₛ "tfn")) # Ptr  |-> t1_tfn)
+  **  ((&((t1_pre)  # "atype" ->ₛ "d" .ₛ "APP" .ₛ "rand")) # Ptr  |-> t1_rand)
+  **  (store_type t1_rand tr1_rand )
+  **  ((&((t2_pre)  # "atype" ->ₛ "d" .ₛ "APP" .ₛ "tfn")) # Ptr  |-> t2_tfn)
+  **  ((&((t2_pre)  # "atype" ->ₛ "d" .ₛ "APP" .ₛ "rand")) # Ptr  |-> t2_rand)
+  **  (store_type t2_rand tr2_rand )
+  **  ((&((t1_pre)  # "atype" ->ₛ "t")) # Int  |-> 2)
+  **  ((&((t2_pre)  # "atype" ->ₛ "t")) # Int  |-> t2_t)
+|--
+  (EX (s_post: sol) ,
+  [| (retval = 0) |] 
+  &&  [| (unify_rel tr1_prev tr2_prev s_pre s_post ) |]
+  &&  (store_solution ( &( "res" ) ) s_post )
+  **  (store_type t1_pre tr1 )
+  **  (store_type t2_pre tr2 ))
+  ||
+  (EX (s_post_2: sol) ,
+  [| (retval <> 0) |]
+  &&  (store_solution ( &( "res" ) ) s_post_2 )
+  **  (store_type t1_pre tr1 )
+  **  (store_type t2_pre tr2 ))
+.
+
+Definition atype_unify2_return_wit_6 := 
+forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t1_t: Z) (t2_t: Z) (tr2_to: TypeTree) (t2_to: Z) (tr2_from: TypeTree) (t2_from: Z) (tr1_to: TypeTree) (t1_to: Z) (tr1_from: TypeTree) (t1_from: Z) (s_post_3: sol) (retval_2: Z) (s_post_4: sol) (retval: Z) ,
+  [| (retval <> 0) |] 
+  &&  [| (retval_2 = 0) |] 
+  &&  [| (retval_2 = 0) |] 
+  &&  [| (unify_rel tr1_from tr2_from s_pre s_post_3 ) |] 
   &&  [| (tr1 = (TArrow (tr1_from) (tr1_to))) |] 
   &&  [| (tr2 = (TArrow (tr2_from) (tr2_to))) |] 
   &&  [| (t2_t = 1) |] 
@@ -2451,15 +2495,15 @@ forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: T
   &&  [| (t1_t <> 3) |] 
   &&  [| (repr_rel_node s_pre tr1_prev tr1 ) |] 
   &&  [| (repr_rel_node s_pre tr2_prev tr2 ) |]
-  &&  (store_solution ( &( "res" ) ) s_post_3 )
+  &&  (store_solution ( &( "res" ) ) s_post_4 )
+  **  (store_type t1_to tr1_to )
+  **  (store_type t2_to tr2_to )
   **  (store_type t1_from tr1_from )
   **  (store_type t2_from tr2_from )
   **  ((&((t1_pre)  # "atype" ->ₛ "d" .ₛ "ARROW" .ₛ "from")) # Ptr  |-> t1_from)
   **  ((&((t1_pre)  # "atype" ->ₛ "d" .ₛ "ARROW" .ₛ "to")) # Ptr  |-> t1_to)
-  **  (store_type t1_to tr1_to )
   **  ((&((t2_pre)  # "atype" ->ₛ "d" .ₛ "ARROW" .ₛ "from")) # Ptr  |-> t2_from)
   **  ((&((t2_pre)  # "atype" ->ₛ "d" .ₛ "ARROW" .ₛ "to")) # Ptr  |-> t2_to)
-  **  (store_type t2_to tr2_to )
   **  ((&((t1_pre)  # "atype" ->ₛ "t")) # Int  |-> 1)
   **  ((&((t2_pre)  # "atype" ->ₛ "t")) # Int  |-> t2_t)
 |--
@@ -2520,11 +2564,9 @@ forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: T
 .
 
 Definition atype_unify2_return_wit_8 := 
-forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t1_t: Z) (t2_t: Z) (tr2_to: TypeTree) (t2_to: Z) (tr2_from: TypeTree) (t2_from: Z) (tr1_to: TypeTree) (t1_to: Z) (tr1_from: TypeTree) (t1_from: Z) (s_post_3: sol) (retval_2: Z) (s_post_4: sol) (retval: Z) ,
+forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t1_t: Z) (t2_t: Z) (tr2_to: TypeTree) (t2_to: Z) (tr2_from: TypeTree) (t2_from: Z) (tr1_to: TypeTree) (t1_to: Z) (tr1_from: TypeTree) (t1_from: Z) (s_post_3: sol) (retval: Z) ,
   [| (retval <> 0) |] 
-  &&  [| (retval_2 = 0) |] 
-  &&  [| (retval_2 = 0) |] 
-  &&  [| (unify_rel tr1_from tr2_from s_pre s_post_3 ) |] 
+  &&  [| (retval <> 0) |] 
   &&  [| (tr1 = (TArrow (tr1_from) (tr1_to))) |] 
   &&  [| (tr2 = (TArrow (tr2_from) (tr2_to))) |] 
   &&  [| (t2_t = 1) |] 
@@ -2534,15 +2576,15 @@ forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: T
   &&  [| (t1_t <> 3) |] 
   &&  [| (repr_rel_node s_pre tr1_prev tr1 ) |] 
   &&  [| (repr_rel_node s_pre tr2_prev tr2 ) |]
-  &&  (store_solution ( &( "res" ) ) s_post_4 )
-  **  (store_type t1_to tr1_to )
-  **  (store_type t2_to tr2_to )
+  &&  (store_solution ( &( "res" ) ) s_post_3 )
   **  (store_type t1_from tr1_from )
   **  (store_type t2_from tr2_from )
   **  ((&((t1_pre)  # "atype" ->ₛ "d" .ₛ "ARROW" .ₛ "from")) # Ptr  |-> t1_from)
   **  ((&((t1_pre)  # "atype" ->ₛ "d" .ₛ "ARROW" .ₛ "to")) # Ptr  |-> t1_to)
+  **  (store_type t1_to tr1_to )
   **  ((&((t2_pre)  # "atype" ->ₛ "d" .ₛ "ARROW" .ₛ "from")) # Ptr  |-> t2_from)
   **  ((&((t2_pre)  # "atype" ->ₛ "d" .ₛ "ARROW" .ₛ "to")) # Ptr  |-> t2_to)
+  **  (store_type t2_to tr2_to )
   **  ((&((t1_pre)  # "atype" ->ₛ "t")) # Int  |-> 1)
   **  ((&((t2_pre)  # "atype" ->ₛ "t")) # Int  |-> t2_t)
 |--
@@ -2561,149 +2603,110 @@ forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: T
 .
 
 Definition atype_unify2_return_wit_9 := 
-forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t1_t: Z) (t2_t: Z) (tr2_rand: TypeTree) (t2_rand: Z) (tr2_tfn: TypeTree) (t2_tfn: Z) (tr1_rand: TypeTree) (t1_rand: Z) (tr1_tfn: TypeTree) (t1_tfn: Z) (s_post_3: sol) (retval: Z) ,
-  [| (retval <> 0) |] 
-  &&  [| (retval <> 0) |] 
-  &&  [| (tr1 = (TApply (tr1_tfn) (tr1_rand))) |] 
-  &&  [| (tr2 = (TApply (tr2_tfn) (tr2_rand))) |] 
-  &&  [| (t2_t = 2) |] 
-  &&  [| (t1_t = 2) |] 
-  &&  [| (t1_t <> 1) |] 
-  &&  [| (t1_t = t2_t) |] 
+forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t1_t: Z) (t2_t: Z) ,
+  [| (t1_t <> t2_t) |] 
   &&  [| (t2_t <> 3) |] 
   &&  [| (t1_t <> 3) |] 
   &&  [| (repr_rel_node s_pre tr1_prev tr1 ) |] 
   &&  [| (repr_rel_node s_pre tr2_prev tr2 ) |]
-  &&  (store_solution ( &( "res" ) ) s_post_3 )
-  **  (store_type t1_tfn tr1_tfn )
-  **  (store_type t2_tfn tr2_tfn )
-  **  ((&((t1_pre)  # "atype" ->ₛ "d" .ₛ "APP" .ₛ "tfn")) # Ptr  |-> t1_tfn)
-  **  ((&((t1_pre)  # "atype" ->ₛ "d" .ₛ "APP" .ₛ "rand")) # Ptr  |-> t1_rand)
-  **  (store_type t1_rand tr1_rand )
-  **  ((&((t2_pre)  # "atype" ->ₛ "d" .ₛ "APP" .ₛ "tfn")) # Ptr  |-> t2_tfn)
-  **  ((&((t2_pre)  # "atype" ->ₛ "d" .ₛ "APP" .ₛ "rand")) # Ptr  |-> t2_rand)
-  **  (store_type t2_rand tr2_rand )
-  **  ((&((t1_pre)  # "atype" ->ₛ "t")) # Int  |-> 2)
-  **  ((&((t2_pre)  # "atype" ->ₛ "t")) # Int  |-> t2_t)
+  &&  ((&((t2_pre)  # "atype" ->ₛ "t")) # Int  |-> t2_t)
+  **  (store_type_aux t2_pre t2_t tr2 )
+  **  ((&((t1_pre)  # "atype" ->ₛ "t")) # Int  |-> t1_t)
+  **  (store_type_aux t1_pre t1_t tr1 )
+  **  (store_solution ( &( "res" ) ) s_pre )
 |--
   (EX (s_post: sol) ,
-  [| (retval = 0) |] 
+  [| (2 = 0) |] 
   &&  [| (unify_rel tr1_prev tr2_prev s_pre s_post ) |]
   &&  (store_solution ( &( "res" ) ) s_post )
   **  (store_type t1_pre tr1 )
   **  (store_type t2_pre tr2 ))
   ||
   (EX (s_post_2: sol) ,
-  [| (retval <> 0) |]
+  [| (2 <> 0) |]
   &&  (store_solution ( &( "res" ) ) s_post_2 )
   **  (store_type t1_pre tr1 )
   **  (store_type t2_pre tr2 ))
 .
 
 Definition atype_unify2_return_wit_10 := 
-forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t1_t: Z) (t2_t: Z) (tr2_rand: TypeTree) (t2_rand: Z) (tr2_tfn: TypeTree) (t2_tfn: Z) (tr1_rand: TypeTree) (t1_rand: Z) (tr1_tfn: TypeTree) (t1_tfn: Z) (s_post_3: sol) (retval_2: Z) (s_post_4: sol) (retval: Z) ,
-  [| (retval = 0) |] 
-  &&  [| (unify_rel tr1_rand tr2_rand s_post_3 s_post_4 ) |] 
-  &&  [| (retval_2 = 0) |] 
-  &&  [| (retval_2 = 0) |] 
-  &&  [| (unify_rel tr1_tfn tr2_tfn s_pre s_post_3 ) |] 
-  &&  [| (tr1 = (TApply (tr1_tfn) (tr1_rand))) |] 
-  &&  [| (tr2 = (TApply (tr2_tfn) (tr2_rand))) |] 
-  &&  [| (t2_t = 2) |] 
-  &&  [| (t1_t = 2) |] 
-  &&  [| (t1_t <> 1) |] 
-  &&  [| (t1_t = t2_t) |] 
-  &&  [| (t2_t <> 3) |] 
+forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t1_t: Z) (t2_t: Z) (n: Z) (retval: Z) (s_post_3: sol) ,
+  [| ((sol_update (s_pre) (n) (tr1)) = s_post_3) |] 
+  &&  [| (retval = 0) |] 
+  &&  [| (not_occur_final s_pre n tr1 ) |] 
+  &&  [| (0 <= n) |] 
+  &&  [| (n < 100) |] 
+  &&  [| (tr2 = (TVar (n))) |] 
+  &&  [| (t2_t = 3) |] 
   &&  [| (t1_t <> 3) |] 
   &&  [| (repr_rel_node s_pre tr1_prev tr1 ) |] 
-  &&  [| (repr_rel_node s_pre tr2_prev tr2 ) |]
-  &&  (store_solution ( &( "res" ) ) s_post_4 )
-  **  (store_type t1_rand tr1_rand )
-  **  (store_type t2_rand tr2_rand )
-  **  (store_type t1_tfn tr1_tfn )
-  **  (store_type t2_tfn tr2_tfn )
-  **  ((&((t1_pre)  # "atype" ->ₛ "d" .ₛ "APP" .ₛ "tfn")) # Ptr  |-> t1_tfn)
-  **  ((&((t1_pre)  # "atype" ->ₛ "d" .ₛ "APP" .ₛ "rand")) # Ptr  |-> t1_rand)
-  **  ((&((t2_pre)  # "atype" ->ₛ "d" .ₛ "APP" .ₛ "tfn")) # Ptr  |-> t2_tfn)
-  **  ((&((t2_pre)  # "atype" ->ₛ "d" .ₛ "APP" .ₛ "rand")) # Ptr  |-> t2_rand)
-  **  ((&((t1_pre)  # "atype" ->ₛ "t")) # Int  |-> 2)
-  **  ((&((t2_pre)  # "atype" ->ₛ "t")) # Int  |-> t2_t)
+  &&  [| (repr_rel_node s_pre tr2_prev tr2 ) |] 
+  &&  [| (retval = 0) |]
+  &&  (store_solution ( &( "res" ) ) s_post_3 )
+  **  (store_type t1_pre tr1 )
+  **  ((&((t2_pre)  # "atype" ->ₛ "t")) # Int  |-> 3)
+  **  ((&((t2_pre)  # "atype" ->ₛ "d" .ₛ "VAR" .ₛ "name")) # Int  |-> n)
 |--
   (EX (s_post: sol) ,
-  [| (retval = 0) |] 
+  [| (0 = 0) |] 
   &&  [| (unify_rel tr1_prev tr2_prev s_pre s_post ) |]
   &&  (store_solution ( &( "res" ) ) s_post )
   **  (store_type t1_pre tr1 )
   **  (store_type t2_pre tr2 ))
   ||
   (EX (s_post_2: sol) ,
-  [| (retval <> 0) |]
+  [| (0 <> 0) |]
   &&  (store_solution ( &( "res" ) ) s_post_2 )
   **  (store_type t1_pre tr1 )
   **  (store_type t2_pre tr2 ))
 .
 
 Definition atype_unify2_return_wit_11 := 
-forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t1_t: Z) (t2_t: Z) (tr2_rand: TypeTree) (t2_rand: Z) (tr2_tfn: TypeTree) (t2_tfn: Z) (tr1_rand: TypeTree) (t1_rand: Z) (tr1_tfn: TypeTree) (t1_tfn: Z) (s_post_3: sol) (retval_2: Z) (s_post_4: sol) (retval: Z) ,
+forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t1_t: Z) (t2_t: Z) (n: Z) (retval: Z) ,
   [| (retval <> 0) |] 
-  &&  [| (retval_2 = 0) |] 
-  &&  [| (retval_2 = 0) |] 
-  &&  [| (unify_rel tr1_tfn tr2_tfn s_pre s_post_3 ) |] 
-  &&  [| (tr1 = (TApply (tr1_tfn) (tr1_rand))) |] 
-  &&  [| (tr2 = (TApply (tr2_tfn) (tr2_rand))) |] 
-  &&  [| (t2_t = 2) |] 
-  &&  [| (t1_t = 2) |] 
-  &&  [| (t1_t <> 1) |] 
-  &&  [| (t1_t = t2_t) |] 
-  &&  [| (t2_t <> 3) |] 
+  &&  [| (0 <= n) |] 
+  &&  [| (n < 100) |] 
+  &&  [| (tr2 = (TVar (n))) |] 
+  &&  [| (t2_t = 3) |] 
   &&  [| (t1_t <> 3) |] 
   &&  [| (repr_rel_node s_pre tr1_prev tr1 ) |] 
-  &&  [| (repr_rel_node s_pre tr2_prev tr2 ) |]
-  &&  (store_solution ( &( "res" ) ) s_post_4 )
-  **  (store_type t1_rand tr1_rand )
-  **  (store_type t2_rand tr2_rand )
-  **  (store_type t1_tfn tr1_tfn )
-  **  (store_type t2_tfn tr2_tfn )
-  **  ((&((t1_pre)  # "atype" ->ₛ "d" .ₛ "APP" .ₛ "tfn")) # Ptr  |-> t1_tfn)
-  **  ((&((t1_pre)  # "atype" ->ₛ "d" .ₛ "APP" .ₛ "rand")) # Ptr  |-> t1_rand)
-  **  ((&((t2_pre)  # "atype" ->ₛ "d" .ₛ "APP" .ₛ "tfn")) # Ptr  |-> t2_tfn)
-  **  ((&((t2_pre)  # "atype" ->ₛ "d" .ₛ "APP" .ₛ "rand")) # Ptr  |-> t2_rand)
-  **  ((&((t1_pre)  # "atype" ->ₛ "t")) # Int  |-> 2)
-  **  ((&((t2_pre)  # "atype" ->ₛ "t")) # Int  |-> t2_t)
+  &&  [| (repr_rel_node s_pre tr2_prev tr2 ) |] 
+  &&  [| (retval <> 0) |]
+  &&  (store_type t1_pre tr1 )
+  **  (store_solution ( &( "res" ) ) s_pre )
+  **  ((&((t2_pre)  # "atype" ->ₛ "t")) # Int  |-> 3)
+  **  ((&((t2_pre)  # "atype" ->ₛ "d" .ₛ "VAR" .ₛ "name")) # Int  |-> n)
 |--
   (EX (s_post: sol) ,
-  [| (retval = 0) |] 
+  [| (1 = 0) |] 
   &&  [| (unify_rel tr1_prev tr2_prev s_pre s_post ) |]
   &&  (store_solution ( &( "res" ) ) s_post )
   **  (store_type t1_pre tr1 )
   **  (store_type t2_pre tr2 ))
   ||
   (EX (s_post_2: sol) ,
-  [| (retval <> 0) |]
+  [| (1 <> 0) |]
   &&  (store_solution ( &( "res" ) ) s_post_2 )
   **  (store_type t1_pre tr1 )
   **  (store_type t2_pre tr2 ))
 .
 
 Definition atype_unify2_return_wit_12 := 
-forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t1_t: Z) (t2_t: Z) (m: Z) (n: Z) ,
-  [| (n = m) |] 
-  &&  [| (t1_t = 0) |] 
-  &&  [| (t1_t = 0) |] 
-  &&  [| (tr1 = (TAtom (n))) |] 
-  &&  [| (tr2 = (TAtom (m))) |] 
-  &&  [| (t1_t <> 2) |] 
-  &&  [| (t1_t <> 1) |] 
-  &&  [| (t1_t = t2_t) |] 
-  &&  [| (t2_t <> 3) |] 
-  &&  [| (t1_t <> 3) |] 
+forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t1_t: Z) (n: Z) (retval: Z) (s_post_3: sol) ,
+  [| ((sol_update (s_pre) (n) (tr2)) = s_post_3) |] 
+  &&  [| (retval = 0) |] 
+  &&  [| (not_occur_final s_pre n tr2 ) |] 
+  &&  [| (0 <= n) |] 
+  &&  [| (n < 100) |] 
+  &&  [| (tr1 = (TVar (n))) |] 
+  &&  [| (t1_t = 3) |] 
   &&  [| (repr_rel_node s_pre tr1_prev tr1 ) |] 
-  &&  [| (repr_rel_node s_pre tr2_prev tr2 ) |]
-  &&  ((&((t1_pre)  # "atype" ->ₛ "t")) # Int  |-> t1_t)
-  **  ((&((t2_pre)  # "atype" ->ₛ "t")) # Int  |-> t1_t)
-  **  ((&((t1_pre)  # "atype" ->ₛ "d" .ₛ "ATOM" .ₛ "name")) # Int  |-> n)
-  **  ((&((t2_pre)  # "atype" ->ₛ "d" .ₛ "ATOM" .ₛ "name")) # Int  |-> m)
-  **  (store_solution ( &( "res" ) ) s_pre )
+  &&  [| (repr_rel_node s_pre tr2_prev tr2 ) |] 
+  &&  [| (retval = 0) |]
+  &&  (store_solution ( &( "res" ) ) s_post_3 )
+  **  (store_type t2_pre tr2 )
+  **  ((&((t1_pre)  # "atype" ->ₛ "t")) # Int  |-> 3)
+  **  ((&((t1_pre)  # "atype" ->ₛ "d" .ₛ "VAR" .ₛ "name")) # Int  |-> n)
 |--
   (EX (s_post: sol) ,
   [| (0 = 0) |] 
@@ -2720,34 +2723,29 @@ forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: T
 .
 
 Definition atype_unify2_return_wit_13 := 
-forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t1_t: Z) (t2_t: Z) (m: Z) (n: Z) ,
-  [| (n <> m) |] 
-  &&  [| (t1_t = 0) |] 
-  &&  [| (t1_t = 0) |] 
-  &&  [| (tr1 = (TAtom (n))) |] 
-  &&  [| (tr2 = (TAtom (m))) |] 
-  &&  [| (t1_t <> 2) |] 
-  &&  [| (t1_t <> 1) |] 
-  &&  [| (t1_t = t2_t) |] 
-  &&  [| (t2_t <> 3) |] 
-  &&  [| (t1_t <> 3) |] 
+forall (t2_pre: Z) (t1_pre: Z) (tr2_prev: TypeTree) (tr1_prev: TypeTree) (tr2: TypeTree) (tr1: TypeTree) (s_pre: sol) (t1_t: Z) (n: Z) (retval: Z) ,
+  [| (retval <> 0) |] 
+  &&  [| (0 <= n) |] 
+  &&  [| (n < 100) |] 
+  &&  [| (tr1 = (TVar (n))) |] 
+  &&  [| (t1_t = 3) |] 
   &&  [| (repr_rel_node s_pre tr1_prev tr1 ) |] 
-  &&  [| (repr_rel_node s_pre tr2_prev tr2 ) |]
-  &&  ((&((t1_pre)  # "atype" ->ₛ "t")) # Int  |-> t1_t)
-  **  ((&((t2_pre)  # "atype" ->ₛ "t")) # Int  |-> t1_t)
-  **  ((&((t1_pre)  # "atype" ->ₛ "d" .ₛ "ATOM" .ₛ "name")) # Int  |-> n)
-  **  ((&((t2_pre)  # "atype" ->ₛ "d" .ₛ "ATOM" .ₛ "name")) # Int  |-> m)
+  &&  [| (repr_rel_node s_pre tr2_prev tr2 ) |] 
+  &&  [| (retval <> 0) |]
+  &&  (store_type t2_pre tr2 )
   **  (store_solution ( &( "res" ) ) s_pre )
+  **  ((&((t1_pre)  # "atype" ->ₛ "t")) # Int  |-> 3)
+  **  ((&((t1_pre)  # "atype" ->ₛ "d" .ₛ "VAR" .ₛ "name")) # Int  |-> n)
 |--
   (EX (s_post: sol) ,
-  [| (2 = 0) |] 
+  [| (1 = 0) |] 
   &&  [| (unify_rel tr1_prev tr2_prev s_pre s_post ) |]
   &&  (store_solution ( &( "res" ) ) s_post )
   **  (store_type t1_pre tr1 )
   **  (store_type t2_pre tr2 ))
   ||
   (EX (s_post_2: sol) ,
-  [| (2 <> 0) |]
+  [| (1 <> 0) |]
   &&  (store_solution ( &( "res" ) ) s_post_2 )
   **  (store_type t1_pre tr1 )
   **  (store_type t2_pre tr2 ))
@@ -3724,7 +3722,6 @@ EX (s_pre_verify: sol) (tr1_verify: TypeTree) (tr2_verify: TypeTree) ,
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 Include typeinfer_Strategy_Correct.
 
 Axiom proof_of_atype_unify_safety_wit_1 : atype_unify_safety_wit_1.

@@ -2,8 +2,8 @@
 //max rule id:30
 
 
-#include "verification_list.h"
-#include "verification_stdlib.h"
+
+
 #include "poly_sll_def.h"
 
 id : 1
@@ -118,3 +118,8 @@ check : absense(l == nil{A});
 action : right_erase(0);
          right_add(l == nil{A});
 
+
+id : 19
+priority : Tagcancel(1)
+left : sll_para{?A}(?storeA) at 0
+action : left_erase(0);

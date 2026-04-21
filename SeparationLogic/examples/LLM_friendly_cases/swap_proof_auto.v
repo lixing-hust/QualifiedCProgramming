@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.LLM_friendly_cases Require Import swap_goal.
@@ -19,10 +19,10 @@ Import naive_C_Rules.
 Require Import SimpleC.EE.LLM_friendly_cases.swap_lib.
 Local Open Scope sac.
 
-Lemma proof_of_swap0_return_wit_1_neq : swap0_return_wit_1_neq.
+Lemma proof_of_swap0_return_wit_1_eq : swap0_return_wit_1_eq.
 Proof. Admitted. 
 
-Lemma proof_of_swap0_return_wit_2_eq : swap0_return_wit_2_eq.
+Lemma proof_of_swap0_return_wit_2_neq : swap0_return_wit_2_neq.
 Proof. Admitted. 
 
 Lemma proof_of_swap0_partial_solve_wit_1_eq : swap0_partial_solve_wit_1_eq.

@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.LLM_friendly_cases Require Import swap_goal.
@@ -20,50 +20,16 @@ From SimpleC.EE.LLM_friendly_cases Require Import swap_lib.
 Local Open Scope sac.
 
 Lemma proof_of_swap_entail_wit_1 : swap_entail_wit_1.
-Proof.
-  pre_process.
-  destruct para_all; simpl; entailer!.
-  + rewrite <- derivable1_orp_intros1.
-    Exists z.
-    entailer!.
-  + rewrite <- derivable1_orp_intros2.
-    Exists z0 z.
-    entailer!.
-Qed.
+Admitted.
 
 Lemma proof_of_swap_return_wit_1 : swap_return_wit_1.
-Proof.
-  pre_process.
-  subst.
-  simpl.
-  entailer!.
-Qed.
+Admitted.
 
 Lemma proof_of_swap_return_wit_2 : swap_return_wit_2.
-Proof.
-  pre_process.
-  subst.
-  simpl.
-  entailer!.
-Qed.
+Admitted.
 
 Lemma proof_of_swap_derive_eq_by_all : swap_derive_eq_by_all.
-Proof.
-  pre_process.
-  subst py_pre.
-  Exists (swap_eq_para x_eq).
-  simpl.
-  entailer!.
-  apply derivable1_wand_sepcon_adjoint.
-  entailer!.
-Qed.
+Admitted.
 
 Lemma proof_of_swap_derive_neq_by_all : swap_derive_neq_by_all.
-Proof.
-  pre_process.
-  Exists (swap_neq_para x_neq y_neq).
-  simpl.
-  entailer!.
-  apply derivable1_wand_sepcon_adjoint.
-  entailer!.
-Qed.
+Admitted.

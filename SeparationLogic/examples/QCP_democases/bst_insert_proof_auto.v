@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.QCP_democases Require Import bst_insert_goal.
@@ -15,9 +15,9 @@ Local Open Scope Z_scope.
 Local Open Scope sets.
 Local Open Scope string.
 Local Open Scope list.
+Import naive_C_Rules.
 Require Import SimpleC.EE.QCP_democases.bst_lib.
 Import get_right_most.
-Import naive_C_Rules.
 Local Open Scope sac.
 
 Lemma proof_of_insert_safety_wit_1 : insert_safety_wit_1.

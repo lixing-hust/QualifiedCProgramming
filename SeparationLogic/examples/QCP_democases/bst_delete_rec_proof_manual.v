@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.QCP_democases Require Import bst_delete_rec_goal.
@@ -20,7 +20,7 @@ Import get_right_most.
 Import naive_C_Rules.
 Local Open Scope sac.
 
-Lemma proof_of_get_pre_return_wit_1 : get_pre_return_wit_1.
+Lemma proof_of_get_pre_return_wit_2 : get_pre_return_wit_2.
 Proof.
   pre_process.
   subst; simpl.
@@ -36,7 +36,7 @@ Proof.
   + tauto.
 Qed.
 
-Lemma proof_of_get_pre_return_wit_2 : get_pre_return_wit_2.
+Lemma proof_of_get_pre_return_wit_1 : get_pre_return_wit_1.
 Proof.
   pre_process.
   Exists retval_left_2 0.
@@ -72,7 +72,7 @@ Proof.
 Qed.
 
 
-Lemma proof_of_delete_return_wit_5 : delete_return_wit_5.
+Lemma proof_of_delete_return_wit_1 : delete_return_wit_1.
 Proof. 
   pre_process.
   Exists b_pre_v_2.
@@ -84,7 +84,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_delete_return_wit_1 : delete_return_wit_1.
+Lemma proof_of_delete_return_wit_5 : delete_return_wit_5.
 Proof.
   pre_process.
   Exists p_left.
@@ -99,7 +99,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_delete_return_wit_2 : delete_return_wit_2.
+Lemma proof_of_delete_return_wit_4 : delete_return_wit_4.
 Proof. 
   pre_process.
   Exists p_right.
@@ -132,7 +132,7 @@ Proof.
   reflexivity.
 Qed.
 
-Lemma proof_of_delete_return_wit_4 : delete_return_wit_4.
+Lemma proof_of_delete_return_wit_2 : delete_return_wit_2.
 Proof. 
   pre_process.
   Exists b_pre_v_2.

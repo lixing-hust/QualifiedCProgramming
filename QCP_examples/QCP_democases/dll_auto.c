@@ -1,5 +1,5 @@
-#include "verification_stdlib.h"
-#include "verification_list.h"
+
+
 #include "dll_shape_def.h"
 
 struct list *malloc_dlist(int data)

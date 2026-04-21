@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -21,8 +21,6 @@ Require Import SimpleC.EE.Applications.LiteOS.lib.sortlink.
 Require Import SimpleC.EE.Applications.LiteOS.lib.dll.
 Require Import SimpleC.EE.Applications.LiteOS.lib.tick_backup.
 Local Open Scope sac.
-From SimpleC.EE.QCP_democases Require Import common_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import common_strategy_proof.
 From SimpleC.EE.Applications Require Import los_sortlink_strategy_goal.
 From SimpleC.EE.Applications Require Import los_sortlink_strategy_proof.
 
@@ -66,7 +64,8 @@ forall (type_pre: Z) (u: Z) ,
 
 Definition OsGetSortLinkAttribute_return_wit_1 := 
 forall (type_pre: Z) (u: Z) ,
-  [| (type_pre = 1) |] 
+  [| (type_pre <> 2) |] 
+  &&  [| (type_pre <> 1) |] 
   &&  [| (( &( "g_taskSortLink" ) ) <> 0) |] 
   &&  [| (( &( "g_swtmrSortLink" ) ) <> 0) |] 
   &&  [| (type_pre = u) |]
@@ -74,17 +73,17 @@ forall (type_pre: Z) (u: Z) ,
 |--
   ([| (u <> 1) |] 
   &&  [| (u <> 2) |] 
-  &&  [| (( &( "g_taskSortLink" ) ) = 0) |] 
+  &&  [| (0 = 0) |] 
   &&  [| (type_pre = u) |]
   &&  emp)
   ||
   ([| (u = 2) |] 
-  &&  [| (( &( "g_taskSortLink" ) ) = ( &( "g_swtmrSortLink" ) )) |] 
+  &&  [| (0 = ( &( "g_swtmrSortLink" ) )) |] 
   &&  [| (type_pre = u) |]
   &&  emp)
   ||
   ([| (u = 1) |] 
-  &&  [| (( &( "g_taskSortLink" ) ) = ( &( "g_taskSortLink" ) )) |] 
+  &&  [| (0 = ( &( "g_taskSortLink" ) )) |] 
   &&  [| (type_pre = u) |]
   &&  emp)
 .
@@ -117,8 +116,7 @@ forall (type_pre: Z) (u: Z) ,
 
 Definition OsGetSortLinkAttribute_return_wit_3 := 
 forall (type_pre: Z) (u: Z) ,
-  [| (type_pre <> 2) |] 
-  &&  [| (type_pre <> 1) |] 
+  [| (type_pre = 1) |] 
   &&  [| (( &( "g_taskSortLink" ) ) <> 0) |] 
   &&  [| (( &( "g_swtmrSortLink" ) ) <> 0) |] 
   &&  [| (type_pre = u) |]
@@ -126,24 +124,23 @@ forall (type_pre: Z) (u: Z) ,
 |--
   ([| (u <> 1) |] 
   &&  [| (u <> 2) |] 
-  &&  [| (0 = 0) |] 
+  &&  [| (( &( "g_taskSortLink" ) ) = 0) |] 
   &&  [| (type_pre = u) |]
   &&  emp)
   ||
   ([| (u = 2) |] 
-  &&  [| (0 = ( &( "g_swtmrSortLink" ) )) |] 
+  &&  [| (( &( "g_taskSortLink" ) ) = ( &( "g_swtmrSortLink" ) )) |] 
   &&  [| (type_pre = u) |]
   &&  emp)
   ||
   ([| (u = 1) |] 
-  &&  [| (0 = ( &( "g_taskSortLink" ) )) |] 
+  &&  [| (( &( "g_taskSortLink" ) ) = ( &( "g_taskSortLink" ) )) |] 
   &&  [| (type_pre = u) |]
   &&  emp)
 .
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 Include los_sortlink_Strategy_Correct.
 
 Axiom proof_of_OsGetSortLinkAttribute_safety_wit_1 : OsGetSortLinkAttribute_safety_wit_1.

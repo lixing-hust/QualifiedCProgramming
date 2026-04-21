@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.QCP_democases Require Import sll_merge_rel_goal.
@@ -73,7 +73,7 @@ Proof.
     abs_ret_step.
 Qed.
 
-Lemma proof_of_merge_return_wit_1 : merge_return_wit_1.
+Lemma proof_of_merge_return_wit_2 : merge_return_wit_2.
 Proof.
   pre_process.
   sep_apply (sll_zero y); [ | tauto].
@@ -88,7 +88,7 @@ Proof.
   destruct l1; abs_ret_step.
 Qed.
 
-Lemma proof_of_merge_return_wit_2 : merge_return_wit_2.
+Lemma proof_of_merge_return_wit_1 : merge_return_wit_1.
 Proof.
   pre_process.
   sep_apply (sll_zero x); [ | tauto].
@@ -112,7 +112,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_split_rec_return_wit_2 : split_rec_return_wit_2.
+Lemma proof_of_split_rec_return_wit_1 : split_rec_return_wit_1.
 Proof. 
   pre_process.
   sep_apply sll_zero;auto.
@@ -127,7 +127,7 @@ Proof.
   auto.
 Qed. 
 
-Lemma proof_of_split_rec_return_wit_1 : split_rec_return_wit_1.
+Lemma proof_of_split_rec_return_wit_2 : split_rec_return_wit_2.
 Proof. 
   pre_process.
   clear H0.
@@ -188,7 +188,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_merge_sort_return_wit_1 : merge_sort_return_wit_1.
+Lemma proof_of_merge_sort_return_wit_2 : merge_sort_return_wit_2.
 Proof.
   pre_process.
   sep_apply (sll_zero q_callee_v); [ | tauto].
@@ -242,7 +242,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_merge_sort3_return_wit_1 : merge_sort3_return_wit_1.
+Lemma proof_of_merge_sort3_return_wit_2 : merge_sort3_return_wit_2.
 Proof.
   pre_process.
   rewrite (gmergesortrec_unfold l_low_level_spec) in H4.

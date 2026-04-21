@@ -2,7 +2,7 @@
 //max rule id:30
 
 
-#include "verification_stdlib.h"
+
 
 id : 0
 priority : core(0)

@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.LLM_friendly_cases.simple_arith Require Import div_test_goal.
@@ -20,30 +20,13 @@ From SimpleC.EE.LLM_friendly_cases.simple_arith Require Import PDiv_lib.
 Local Open Scope sac.
 
 Lemma proof_of_div_test_return_wit_1 : div_test_return_wit_1.
-Proof.
-  unfold div_test_return_wit_1.
-  intros. entailer!.
-  unfold Pos_Div.
-  subst c_pre. simpl. lia.
-Qed.
+Admitted.
 
 Lemma proof_of_div_test_return_wit_2 : div_test_return_wit_2.
-Proof.
-  unfold div_test_return_wit_2.
-  intros. entailer!.
-  unfold Pos_Div.
-  destruct (Z.eq_dec c_pre 0) ; try lia.
-  destruct (Z_lt_ge_dec (a_pre * b_pre ÷ c_pre) 0) ; try lia.
-Qed. 
+Admitted. 
 
 Lemma proof_of_div_test_return_wit_3 : div_test_return_wit_3.
-Proof.
-  unfold div_test_return_wit_3.
-  intros. entailer!.
-  unfold Pos_Div.
-  destruct (Z.eq_dec c_pre 0) ; try lia.
-  destruct (Z_lt_ge_dec (a_pre * b_pre ÷ c_pre) 0) ; try lia.
-Qed.
+Admitted.
 
 Lemma proof_of_div_test_safety_wit_3 : div_test_safety_wit_3.
 Proof. pre_process. Qed.

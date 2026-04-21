@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.QCP_democases.simple_arith Require Import gcd_goal.
@@ -18,9 +18,9 @@ Local Open Scope list.
 Import naive_C_Rules.
 Local Open Scope sac.
 
-Lemma proof_of_gcd_return_wit_1 : gcd_return_wit_1.
+Lemma proof_of_gcd_return_wit_2 : gcd_return_wit_2.
 Proof.
-  unfold gcd_return_wit_1.
+  unfold gcd_return_wit_2.
   intros.
   entailer!.
   subst.
@@ -28,9 +28,9 @@ Proof.
   reflexivity.
 Qed.
 
-Lemma proof_of_gcd_return_wit_2 : gcd_return_wit_2.
+Lemma proof_of_gcd_return_wit_1 : gcd_return_wit_1.
 Proof.
-  unfold gcd_return_wit_2.
+  unfold gcd_return_wit_1.
   intros.
   entailer!.
   subst.

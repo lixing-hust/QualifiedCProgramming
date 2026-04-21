@@ -1,5 +1,5 @@
 /*@ Import Coq Require Import SimpleC.EE.Applications.fme.fme_lib */
-/*@ Import Coq Import naive_C_Rules */
+
 
 /*@ Extern Coq (Constraint :: *) */
 /*@ Extern Coq (BP :: *) */

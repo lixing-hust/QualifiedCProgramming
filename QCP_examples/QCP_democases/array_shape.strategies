@@ -1,9 +1,9 @@
 //test curent rules
 //max rule id:30
 
-#include "int_array_def.h"
-#include "verification_list.h"
-#include "verification_stdlib.h"
+
+
+
 
 id : 1
 priority : core(1)

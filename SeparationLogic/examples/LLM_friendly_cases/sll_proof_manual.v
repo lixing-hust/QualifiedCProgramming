@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.LLM_friendly_cases Require Import sll_goal.
@@ -341,7 +341,7 @@ Proof.
       reflexivity.
 Qed.
 
-Lemma proof_of_append_return_wit_1 : append_return_wit_1.
+Lemma proof_of_append_return_wit_2 : append_return_wit_2.
 Proof.
   pre_process.
   rewrite H.
@@ -353,7 +353,7 @@ Proof.
   cancel (sll y_pre l2).
 Qed.
 
-Lemma proof_of_append_return_wit_2 : append_return_wit_2.
+Lemma proof_of_append_return_wit_1 : append_return_wit_1.
 Proof.
   pre_process.
   subst t_next.
@@ -424,7 +424,7 @@ Proof.
       exact H2.
 Qed.
 
-Lemma proof_of_append_long_return_wit_1 : append_long_return_wit_1.
+Lemma proof_of_append_long_return_wit_3 : append_long_return_wit_3.
 Proof.
   pre_process.
   rewrite H.
@@ -450,7 +450,7 @@ Proof.
   cancel.
 Qed.
 
-Lemma proof_of_append_long_return_wit_3 : append_long_return_wit_3.
+Lemma proof_of_append_long_return_wit_1 : append_long_return_wit_1.
 Proof.
   pre_process.
   subst t_next.

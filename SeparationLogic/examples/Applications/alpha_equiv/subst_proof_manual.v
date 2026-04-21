@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.Applications.alpha_equiv Require Import subst_goal.
@@ -18,7 +18,7 @@ Local Open Scope list.
 Import naive_C_Rules.
 From SimpleC.EE.QCP_democases Require Import sll_merge_rel_lib.
 Local Open Scope monad.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap relations.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap relations.
 From FP Require Import PartialOrder_Setoid BourbakiWitt.
 From SimpleC.EE.Applications.alpha_equiv Require Import ast_lib.
 From SimpleC.EE.Applications Require Import malloc.
@@ -32,7 +32,7 @@ Proof.
     destruct trm; lia.
 Qed.
 
-Lemma proof_of_subst_var_return_wit_1 : subst_var_return_wit_1.
+Lemma proof_of_subst_var_return_wit_6 : subst_var_return_wit_6.
 Proof.    
     pre_process.
     unfold list_Z_cmp in H.
@@ -47,7 +47,7 @@ Proof.
     entailer!.
 Qed.  
 
-Lemma proof_of_subst_var_return_wit_2 : subst_var_return_wit_2.
+Lemma proof_of_subst_var_return_wit_5 : subst_var_return_wit_5.
 Proof. 
     pre_process.
     unfold list_Z_cmp in H0.
@@ -63,7 +63,7 @@ Proof.
     entailer!.
 Qed.
 
-Lemma proof_of_subst_var_return_wit_3 : subst_var_return_wit_3.
+Lemma proof_of_subst_var_return_wit_4 : subst_var_return_wit_4.
 Proof. 
     pre_process.
     unfold term_subst_v at 3.
@@ -77,7 +77,7 @@ Proof.
     entailer!.
 Qed. 
 
-Lemma proof_of_subst_var_return_wit_4 : subst_var_return_wit_4.
+Lemma proof_of_subst_var_return_wit_3 : subst_var_return_wit_3.
 Proof.
     pre_process.
     unfold term_subst_v.
@@ -86,7 +86,7 @@ Proof.
     entailer!.
 Qed. 
 
-Lemma proof_of_subst_var_return_wit_5 : subst_var_return_wit_5.
+Lemma proof_of_subst_var_return_wit_2 : subst_var_return_wit_2.
 Proof. 
     pre_process.
     unfold list_Z_cmp in H0.
@@ -98,7 +98,7 @@ Proof.
     entailer!.
 Qed.
 
-Lemma proof_of_subst_var_return_wit_6 : subst_var_return_wit_6.
+Lemma proof_of_subst_var_return_wit_1 : subst_var_return_wit_1.
 Proof.
     pre_process.
     unfold list_Z_cmp in H1.
@@ -196,7 +196,7 @@ Proof.
     destruct trm; lia.
 Qed.
 
-Lemma proof_of_subst_term_return_wit_1 : subst_term_return_wit_1.
+Lemma proof_of_subst_term_return_wit_6 : subst_term_return_wit_6.
 Proof. 
     pre_process.
     unfold list_Z_cmp in H.
@@ -210,7 +210,7 @@ Proof.
     entailer!.
 Qed.
 
-Lemma proof_of_subst_term_return_wit_2 : subst_term_return_wit_2.
+Lemma proof_of_subst_term_return_wit_5 : subst_term_return_wit_5.
 Proof.  
     pre_process.
     unfold list_Z_cmp in H.
@@ -224,7 +224,7 @@ Proof.
     entailer!.
 Qed.
 
-Lemma proof_of_subst_term_return_wit_3 : subst_term_return_wit_3.
+Lemma proof_of_subst_term_return_wit_4 : subst_term_return_wit_4.
 Proof. 
     pre_process.
     unfold term_subst_t at 3.
@@ -236,7 +236,7 @@ Proof.
     entailer!.
 Qed.
 
-Lemma proof_of_subst_term_return_wit_4 : subst_term_return_wit_4.
+Lemma proof_of_subst_term_return_wit_3 : subst_term_return_wit_3.
 Proof.  
     pre_process.
     unfold term_subst_t.
@@ -245,7 +245,7 @@ Proof.
     entailer!.
 Qed.
 
-Lemma proof_of_subst_term_return_wit_5 : subst_term_return_wit_5.
+Lemma proof_of_subst_term_return_wit_2 : subst_term_return_wit_2.
 Proof. 
     pre_process.
     unfold list_Z_cmp in H0.
@@ -257,7 +257,7 @@ Proof.
     entailer!.
 Qed.
 
-Lemma proof_of_subst_term_return_wit_6 : subst_term_return_wit_6.
+Lemma proof_of_subst_term_return_wit_1 : subst_term_return_wit_1.
 Proof. 
     pre_process.
     unfold list_Z_cmp in H1.

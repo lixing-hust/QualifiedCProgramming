@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -17,16 +17,6 @@ Local Open Scope list.
 Import naive_C_Rules.
 Require Import SimpleC.EE.QCP_democases.sortArray_lib.
 Local Open Scope sac.
-From SimpleC.EE.QCP_democases Require Import common_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import common_strategy_proof.
-From SimpleC.EE.QCP_democases Require Import int_array_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import int_array_strategy_proof.
-From SimpleC.EE.QCP_democases Require Import uint_array_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import uint_array_strategy_proof.
-From SimpleC.EE.QCP_democases Require Import undef_uint_array_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import undef_uint_array_strategy_proof.
-From SimpleC.EE.QCP_democases Require Import array_shape_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import array_shape_strategy_proof.
 
 (*----- Function sortArray -----*)
 
@@ -773,11 +763,6 @@ forall (returnSize_pre: Z) (numsSize_pre: Z) (nums_pre: Z) (l: (@list Z)) (j: Z)
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
-Include int_array_Strategy_Correct.
-Include uint_array_Strategy_Correct.
-Include undef_uint_array_Strategy_Correct.
-Include array_shape_Strategy_Correct.
 
 Axiom proof_of_sortArray_safety_wit_1 : sortArray_safety_wit_1.
 Axiom proof_of_sortArray_safety_wit_2 : sortArray_safety_wit_2.

@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -17,8 +17,6 @@ Local Open Scope list.
 Import naive_C_Rules.
 Require Import SimpleC.EE.QCP_democases.sll_shape_lib.
 Local Open Scope sac.
-From SimpleC.EE.QCP_democases Require Import common_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import common_strategy_proof.
 From SimpleC.EE.QCP_democases Require Import sll_shape_strategy_goal.
 From SimpleC.EE.QCP_democases Require Import sll_shape_strategy_proof.
 
@@ -107,15 +105,6 @@ forall (x_pre: Z) (retval_next: Z) (retval: Z) (y: Z) (p: Z) (v_2: Z) (t_next_2:
 .
 
 Definition sll_copy_return_wit_1 := 
-forall (x_pre: Z) ,
-  [| (x_pre = 0) |]
-  &&  (listrep x_pre )
-|--
-  (listrep 0 )
-  **  (listrep x_pre )
-.
-
-Definition sll_copy_return_wit_2 := 
 forall (x_pre: Z) (retval_next: Z) (retval: Z) (y: Z) (p: Z) (v: Z) (t_next: Z) (t: Z) ,
   [| (t <> 0) |] 
   &&  [| (t_next = 0) |] 
@@ -130,6 +119,15 @@ forall (x_pre: Z) (retval_next: Z) (retval: Z) (y: Z) (p: Z) (v: Z) (t_next: Z) 
   **  (lseg y t )
 |--
   (listrep y )
+  **  (listrep x_pre )
+.
+
+Definition sll_copy_return_wit_2 := 
+forall (x_pre: Z) ,
+  [| (x_pre = 0) |]
+  &&  (listrep x_pre )
+|--
+  (listrep 0 )
   **  (listrep x_pre )
 .
 
@@ -426,15 +424,6 @@ forall (x_pre: Z) (x: Z) (y: Z) (w_2: Z) (u: Z) (t: Z) (x_2: Z) (y_2: Z) ,
 .
 
 Definition append_return_wit_1 := 
-forall (y_pre: Z) (x_pre: Z) ,
-  [| (x_pre = 0) |]
-  &&  (listrep x_pre )
-  **  (listrep y_pre )
-|--
-  (listrep y_pre )
-.
-
-Definition append_return_wit_2 := 
 forall (x_pre: Z) (x: Z) (y: Z) (w: Z) (u: Z) (t: Z) ,
   [| (t <> 0) |] 
   &&  [| (x_pre <> 0) |] 
@@ -446,6 +435,15 @@ forall (x_pre: Z) (x: Z) (y: Z) (w: Z) (u: Z) (t: Z) ,
   **  (lseg x t )
 |--
   (listrep x )
+.
+
+Definition append_return_wit_2 := 
+forall (y_pre: Z) (x_pre: Z) ,
+  [| (x_pre = 0) |]
+  &&  (listrep x_pre )
+  **  (listrep y_pre )
+|--
+  (listrep y_pre )
 .
 
 Definition append_partial_solve_wit_1 := 
@@ -561,12 +559,16 @@ forall (x_pre: Z) (z: Z) (x: Z) (t: Z) (y_3: Z) (x_2: Z) (y: Z) (x_3: Z) (y_2: Z
 .
 
 Definition merge_return_wit_1 := 
-forall (y_pre: Z) (x_pre: Z) ,
-  [| (x_pre = 0) |]
-  &&  (listrep x_pre )
-  **  (listrep y_pre )
+forall (x_pre: Z) (z: Z) (x: Z) (t: Z) (y: Z) ,
+  [| (y = t) |] 
+  &&  [| (x <> 0) |] 
+  &&  [| (x_pre <> 0) |] 
+  &&  [| (y = 0) |]
+  &&  (lseg z x )
+  **  (listrep x )
+  **  (listrep y )
 |--
-  (listrep y_pre )
+  (listrep z )
 .
 
 Definition merge_return_wit_2 := 
@@ -588,16 +590,12 @@ forall (x_pre: Z) (z: Z) (x: Z) (t: Z) (y: Z) (x_2: Z) (y_2: Z) (x_3: Z) (y_3: Z
 .
 
 Definition merge_return_wit_3 := 
-forall (x_pre: Z) (z: Z) (x: Z) (t: Z) (y: Z) ,
-  [| (y = t) |] 
-  &&  [| (x <> 0) |] 
-  &&  [| (x_pre <> 0) |] 
-  &&  [| (y = 0) |]
-  &&  (lseg z x )
-  **  (listrep x )
-  **  (listrep y )
+forall (y_pre: Z) (x_pre: Z) ,
+  [| (x_pre = 0) |]
+  &&  (listrep x_pre )
+  **  (listrep y_pre )
 |--
-  (listrep z )
+  (listrep y_pre )
 .
 
 Definition merge_partial_solve_wit_1 := 
@@ -714,11 +712,16 @@ forall (x_pre: Z) (x: Z) (z: Z) (y_3: Z) (u: Z) (v_2: Z) (t: Z) (x_2: Z) (y: Z) 
 .
 
 Definition multi_append_return_wit_1 := 
-forall (x_pre: Z) (retval: Z) ,
-  [| (x_pre = 0) |]
+forall (x_pre: Z) (x: Z) (u: Z) (v: Z) (t: Z) (retval: Z) ,
+  [| (t <> 0) |] 
+  &&  [| (x_pre <> 0) |] 
+  &&  [| (u = 0) |]
   &&  (listrep retval )
+  **  ((&((t)  # "list" ->ₛ "data")) # Int  |-> v)
+  **  ((&((t)  # "list" ->ₛ "next")) # Ptr  |-> retval)
+  **  (lseg x t )
 |--
-  (listrep retval )
+  (listrep x )
 .
 
 Definition multi_append_return_wit_2 := 
@@ -736,16 +739,11 @@ forall (x_pre: Z) (x: Z) (y: Z) (u: Z) (v: Z) (t: Z) (retval: Z) ,
 .
 
 Definition multi_append_return_wit_3 := 
-forall (x_pre: Z) (x: Z) (u: Z) (v: Z) (t: Z) (retval: Z) ,
-  [| (t <> 0) |] 
-  &&  [| (x_pre <> 0) |] 
-  &&  [| (u = 0) |]
+forall (x_pre: Z) (retval: Z) ,
+  [| (x_pre = 0) |]
   &&  (listrep retval )
-  **  ((&((t)  # "list" ->ₛ "data")) # Int  |-> v)
-  **  ((&((t)  # "list" ->ₛ "next")) # Ptr  |-> retval)
-  **  (lseg x t )
 |--
-  (listrep x )
+  (listrep retval )
 .
 
 Definition multi_append_partial_solve_wit_1 := 
@@ -884,7 +882,6 @@ forall (x_pre: Z) (x: Z) (z: Z) (y: Z) (u: Z) (v: Z) (t: Z) ,
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 Include sll_shape_Strategy_Correct.
 
 Axiom proof_of_sll_copy_safety_wit_1 : sll_copy_safety_wit_1.

@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -16,10 +16,7 @@ Local Open Scope string.
 Local Open Scope list.
 Import naive_C_Rules.
 Require Import SimpleC.EE.Applications.fme.fme_lib.
-Import naive_C_Rules.
 Local Open Scope sac.
-From SimpleC.EE.QCP_democases Require Import common_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import common_strategy_proof.
 Require Import fme_strategy_goal.
 Require Import fme_strategy_proof.
 
@@ -53,6 +50,19 @@ forall (b_pre: Z) (a_pre: Z) ,
 .
 
 Definition gcd_return_wit_1 := 
+forall (b_pre: Z) (a_pre: Z) ,
+  [| (b_pre = 0) |] 
+  &&  [| (0 < a_pre) |] 
+  &&  [| (a_pre <= INT_MAX) |] 
+  &&  [| (0 <= b_pre) |] 
+  &&  [| (b_pre <= INT_MAX) |]
+  &&  emp
+|--
+  [| (a_pre = (Zgcd (a_pre) (b_pre))) |]
+  &&  emp
+.
+
+Definition gcd_return_wit_2 := 
 forall (b_pre: Z) (a_pre: Z) (retval: Z) ,
   [| (retval = (Zgcd (b_pre) ((a_pre % ( b_pre ) )))) |] 
   &&  [| (b_pre <> 0) |] 
@@ -63,19 +73,6 @@ forall (b_pre: Z) (a_pre: Z) (retval: Z) ,
   &&  emp
 |--
   [| (retval = (Zgcd (a_pre) (b_pre))) |]
-  &&  emp
-.
-
-Definition gcd_return_wit_2 := 
-forall (b_pre: Z) (a_pre: Z) ,
-  [| (b_pre = 0) |] 
-  &&  [| (0 < a_pre) |] 
-  &&  [| (a_pre <= INT_MAX) |] 
-  &&  [| (0 <= b_pre) |] 
-  &&  [| (b_pre <= INT_MAX) |]
-  &&  emp
-|--
-  [| (a_pre = (Zgcd (a_pre) (b_pre))) |]
   &&  emp
 .
 
@@ -204,27 +201,8 @@ forall (y_pre: Z) (x_pre: Z) ,
 
 Definition check_add_safe_return_wit_1 := 
 forall (y_pre: Z) (x_pre: Z) ,
-  [| (y_pre > (INT_MAX - x_pre )) |] 
-  &&  [| (x_pre > 0) |] 
-  &&  [| ((-INT_MAX) <= x_pre) |] 
-  &&  [| (x_pre <= INT_MAX) |] 
-  &&  [| ((-INT_MAX) <= y_pre) |] 
-  &&  [| (y_pre <= INT_MAX) |]
-  &&  emp
-|--
-  ([| (0 = 0) |]
-  &&  emp)
-  ||
-  ([| (0 = 1) |] 
-  &&  [| ((-INT_MAX) <= (x_pre + y_pre )) |] 
-  &&  [| ((x_pre + y_pre ) <= INT_MAX) |]
-  &&  emp)
-.
-
-Definition check_add_safe_return_wit_2 := 
-forall (y_pre: Z) (x_pre: Z) ,
-  [| (y_pre <= (INT_MAX - x_pre )) |] 
-  &&  [| (x_pre > 0) |] 
+  [| (y_pre >= ((-INT_MAX) - x_pre )) |] 
+  &&  [| (x_pre <= 0) |] 
   &&  [| ((-INT_MAX) <= x_pre) |] 
   &&  [| (x_pre <= INT_MAX) |] 
   &&  [| ((-INT_MAX) <= y_pre) |] 
@@ -240,7 +218,7 @@ forall (y_pre: Z) (x_pre: Z) ,
   &&  emp)
 .
 
-Definition check_add_safe_return_wit_3 := 
+Definition check_add_safe_return_wit_2 := 
 forall (y_pre: Z) (x_pre: Z) ,
   [| (y_pre < ((-INT_MAX) - x_pre )) |] 
   &&  [| (x_pre <= 0) |] 
@@ -259,10 +237,10 @@ forall (y_pre: Z) (x_pre: Z) ,
   &&  emp)
 .
 
-Definition check_add_safe_return_wit_4 := 
+Definition check_add_safe_return_wit_3 := 
 forall (y_pre: Z) (x_pre: Z) ,
-  [| (y_pre >= ((-INT_MAX) - x_pre )) |] 
-  &&  [| (x_pre <= 0) |] 
+  [| (y_pre <= (INT_MAX - x_pre )) |] 
+  &&  [| (x_pre > 0) |] 
   &&  [| ((-INT_MAX) <= x_pre) |] 
   &&  [| (x_pre <= INT_MAX) |] 
   &&  [| ((-INT_MAX) <= y_pre) |] 
@@ -273,6 +251,25 @@ forall (y_pre: Z) (x_pre: Z) ,
   &&  emp)
   ||
   ([| (1 = 1) |] 
+  &&  [| ((-INT_MAX) <= (x_pre + y_pre )) |] 
+  &&  [| ((x_pre + y_pre ) <= INT_MAX) |]
+  &&  emp)
+.
+
+Definition check_add_safe_return_wit_4 := 
+forall (y_pre: Z) (x_pre: Z) ,
+  [| (y_pre > (INT_MAX - x_pre )) |] 
+  &&  [| (x_pre > 0) |] 
+  &&  [| ((-INT_MAX) <= x_pre) |] 
+  &&  [| (x_pre <= INT_MAX) |] 
+  &&  [| ((-INT_MAX) <= y_pre) |] 
+  &&  [| (y_pre <= INT_MAX) |]
+  &&  emp
+|--
+  ([| (0 = 0) |]
+  &&  emp)
+  ||
+  ([| (0 = 1) |] 
   &&  [| ((-INT_MAX) <= (x_pre + y_pre )) |] 
   &&  [| ((x_pre + y_pre ) <= INT_MAX) |]
   &&  emp)
@@ -376,13 +373,9 @@ forall (p_pre: Z) (l: (@list Constraint)) (n: Z) (x: Constraint) (l0: (@list Con
 .
 
 Definition free_InequList_return_wit_1 := 
-forall (p_pre: Z) (l: (@list Constraint)) (x: Constraint) (l0: (@list Constraint)) (y: Z) (h: Z) ,
-  [| (y <> 0) |] 
-  &&  [| (h <> 0) |] 
-  &&  [| (h <> 0) |] 
-  &&  [| (l = (cons (x) (l0))) |] 
-  &&  [| (p_pre <> 0) |]
-  &&  emp
+forall (p_pre: Z) (l: (@list Constraint)) (n: Z) ,
+  [| (p_pre = 0) |]
+  &&  (InequList p_pre n l )
 |--
   TT && emp 
 .
@@ -400,9 +393,13 @@ forall (p_pre: Z) (l: (@list Constraint)) (n: Z) (x: Constraint) (l0: (@list Con
 .
 
 Definition free_InequList_return_wit_3 := 
-forall (p_pre: Z) (l: (@list Constraint)) (n: Z) ,
-  [| (p_pre = 0) |]
-  &&  (InequList p_pre n l )
+forall (p_pre: Z) (l: (@list Constraint)) (x: Constraint) (l0: (@list Constraint)) (y: Z) (h: Z) ,
+  [| (y <> 0) |] 
+  &&  [| (h <> 0) |] 
+  &&  [| (h <> 0) |] 
+  &&  [| (l = (cons (x) (l0))) |] 
+  &&  [| (p_pre <> 0) |]
+  &&  emp
 |--
   TT && emp 
 .
@@ -2806,10 +2803,20 @@ forall (cur_num_pre: Z) (num_pre: Z) (r2_pre: Z) (r1_pre: Z) (c2: Constraint) (c
 .
 
 Definition generate_new_constr_return_wit_1 := 
-forall (cur_num_pre: Z) (num_pre: Z) (r2_pre: Z) (r1_pre: Z) (c2: Constraint) (c1: Constraint) (retval: Z) (m1v: Z) (m2v: Z) (lb2: Z) (ub2: Z) (lb1: Z) (ub1: Z) (i: Z) ,
-  [| ((coef_Znth (i) (c1) (0)) > ub1) |] 
-  &&  [| ((coef_Znth (i) (c1) (0)) >= lb1) |] 
-  &&  [| (i <= num_pre) |] 
+forall (cur_num_pre: Z) (num_pre: Z) (r2_pre: Z) (r1_pre: Z) (c2: Constraint) (c1: Constraint) (retval: Z) (m1v: Z) (m2v: Z) (lb2: Z) (ub2: Z) (lb1: Z) (ub1: Z) (i: Z) (l: Constraint) (retval_2: Z) (res: Z) (c3_2: Constraint) (i_2: Z) ,
+  [| (i_2 > num_pre) |] 
+  &&  [| (m1v > 0) |] 
+  &&  [| (m2v > 0) |] 
+  &&  [| (0 <= i_2) |] 
+  &&  [| (i_2 <= (num_pre + 1 )) |] 
+  &&  [| (in_int_range (num_pre + 1 ) m1v c1 ) |] 
+  &&  [| (in_int_range (num_pre + 1 ) m2v c2 ) |] 
+  &&  [| (generate_new_constraint_partial cur_num_pre i_2 m1v m2v c1 c2 c3_2 ) |] 
+  &&  [| (res <> 0) |] 
+  &&  [| (abs_in_int_range (num_pre + 1 ) c3_2 ) |] 
+  &&  [| (retval_2 <> 0) |] 
+  &&  [| (abs_in_int_range (num_pre + 1 ) l ) |] 
+  &&  [| (i > num_pre) |] 
   &&  [| (m1v > 0) |] 
   &&  [| (m2v > 0) |] 
   &&  [| (0 <= i) |] 
@@ -2834,152 +2841,22 @@ forall (cur_num_pre: Z) (num_pre: Z) (r2_pre: Z) (r1_pre: Z) (c2: Constraint) (c
   &&  [| ((-(coef_Znth (cur_num_pre) (c2) (0))) <= INT_MAX) |]
   &&  (coef_array r1_pre (num_pre + 1 ) c1 )
   **  (coef_array r2_pre (num_pre + 1 ) c2 )
+  **  (coef_array res (num_pre + 1 ) c3_2 )
 |--
   (EX (c3: Constraint) ,
-  [| (0 <> 0) |] 
+  [| (res <> 0) |] 
   &&  [| (generate_new_constraint cur_num_pre c1 c2 c3 ) |] 
   &&  [| (abs_in_int_range (num_pre + 1 ) c3 ) |]
   &&  (coef_array r1_pre (num_pre + 1 ) c1 )
   **  (coef_array r2_pre (num_pre + 1 ) c2 )
-  **  (coef_array 0 (num_pre + 1 ) c3 ))
+  **  (coef_array res (num_pre + 1 ) c3 ))
   ||
-  ([| (0 = 0) |]
+  ([| (res = 0) |]
   &&  (coef_array r1_pre (num_pre + 1 ) c1 )
   **  (coef_array r2_pre (num_pre + 1 ) c2 ))
 .
 
 Definition generate_new_constr_return_wit_2 := 
-forall (cur_num_pre: Z) (num_pre: Z) (r2_pre: Z) (r1_pre: Z) (c2: Constraint) (c1: Constraint) (retval: Z) (m1v: Z) (m2v: Z) (lb2: Z) (ub2: Z) (lb1: Z) (ub1: Z) (i: Z) ,
-  [| ((coef_Znth (i) (c1) (0)) < lb1) |] 
-  &&  [| (i <= num_pre) |] 
-  &&  [| (m1v > 0) |] 
-  &&  [| (m2v > 0) |] 
-  &&  [| (0 <= i) |] 
-  &&  [| (i <= (num_pre + 1 )) |] 
-  &&  [| (ub1 = (INT_MAX ÷ m1v )) |] 
-  &&  [| (lb1 = ((-INT_MAX) ÷ m1v )) |] 
-  &&  [| (ub2 = (INT_MAX ÷ m2v )) |] 
-  &&  [| (lb2 = ((-INT_MAX) ÷ m2v )) |] 
-  &&  [| (in_int_range i m1v c1 ) |] 
-  &&  [| (in_int_range i m2v c2 ) |] 
-  &&  [| (m1v = ((-(coef_Znth (cur_num_pre) (c2) (0))) ÷ retval )) |] 
-  &&  [| (m2v = ((coef_Znth (cur_num_pre) (c1) (0)) ÷ retval )) |] 
-  &&  [| (retval = (Zgcd ((coef_Znth (cur_num_pre) (c1) (0))) ((-(coef_Znth (cur_num_pre) (c2) (0)))))) |] 
-  &&  [| (1 <= cur_num_pre) |] 
-  &&  [| (cur_num_pre < (num_pre + 1 )) |] 
-  &&  [| ((num_pre + 1 ) <= INT_MAX) |] 
-  &&  [| (r1_pre <> 0) |] 
-  &&  [| (r2_pre <> 0) |] 
-  &&  [| ((coef_Znth (cur_num_pre) (c1) (0)) > 0) |] 
-  &&  [| ((coef_Znth (cur_num_pre) (c1) (0)) <= INT_MAX) |] 
-  &&  [| ((coef_Znth (cur_num_pre) (c2) (0)) < 0) |] 
-  &&  [| ((-(coef_Znth (cur_num_pre) (c2) (0))) <= INT_MAX) |]
-  &&  (coef_array r1_pre (num_pre + 1 ) c1 )
-  **  (coef_array r2_pre (num_pre + 1 ) c2 )
-|--
-  (EX (c3: Constraint) ,
-  [| (0 <> 0) |] 
-  &&  [| (generate_new_constraint cur_num_pre c1 c2 c3 ) |] 
-  &&  [| (abs_in_int_range (num_pre + 1 ) c3 ) |]
-  &&  (coef_array r1_pre (num_pre + 1 ) c1 )
-  **  (coef_array r2_pre (num_pre + 1 ) c2 )
-  **  (coef_array 0 (num_pre + 1 ) c3 ))
-  ||
-  ([| (0 = 0) |]
-  &&  (coef_array r1_pre (num_pre + 1 ) c1 )
-  **  (coef_array r2_pre (num_pre + 1 ) c2 ))
-.
-
-Definition generate_new_constr_return_wit_3 := 
-forall (cur_num_pre: Z) (num_pre: Z) (r2_pre: Z) (r1_pre: Z) (c2: Constraint) (c1: Constraint) (retval: Z) (m1v: Z) (m2v: Z) (lb2: Z) (ub2: Z) (lb1: Z) (ub1: Z) (i: Z) ,
-  [| ((coef_Znth (i) (c2) (0)) > ub2) |] 
-  &&  [| ((coef_Znth (i) (c2) (0)) >= lb2) |] 
-  &&  [| ((coef_Znth (i) (c1) (0)) <= ub1) |] 
-  &&  [| ((coef_Znth (i) (c1) (0)) >= lb1) |] 
-  &&  [| (i <= num_pre) |] 
-  &&  [| (m1v > 0) |] 
-  &&  [| (m2v > 0) |] 
-  &&  [| (0 <= i) |] 
-  &&  [| (i <= (num_pre + 1 )) |] 
-  &&  [| (ub1 = (INT_MAX ÷ m1v )) |] 
-  &&  [| (lb1 = ((-INT_MAX) ÷ m1v )) |] 
-  &&  [| (ub2 = (INT_MAX ÷ m2v )) |] 
-  &&  [| (lb2 = ((-INT_MAX) ÷ m2v )) |] 
-  &&  [| (in_int_range i m1v c1 ) |] 
-  &&  [| (in_int_range i m2v c2 ) |] 
-  &&  [| (m1v = ((-(coef_Znth (cur_num_pre) (c2) (0))) ÷ retval )) |] 
-  &&  [| (m2v = ((coef_Znth (cur_num_pre) (c1) (0)) ÷ retval )) |] 
-  &&  [| (retval = (Zgcd ((coef_Znth (cur_num_pre) (c1) (0))) ((-(coef_Znth (cur_num_pre) (c2) (0)))))) |] 
-  &&  [| (1 <= cur_num_pre) |] 
-  &&  [| (cur_num_pre < (num_pre + 1 )) |] 
-  &&  [| ((num_pre + 1 ) <= INT_MAX) |] 
-  &&  [| (r1_pre <> 0) |] 
-  &&  [| (r2_pre <> 0) |] 
-  &&  [| ((coef_Znth (cur_num_pre) (c1) (0)) > 0) |] 
-  &&  [| ((coef_Znth (cur_num_pre) (c1) (0)) <= INT_MAX) |] 
-  &&  [| ((coef_Znth (cur_num_pre) (c2) (0)) < 0) |] 
-  &&  [| ((-(coef_Znth (cur_num_pre) (c2) (0))) <= INT_MAX) |]
-  &&  (coef_array r2_pre (num_pre + 1 ) c2 )
-  **  (coef_array r1_pre (num_pre + 1 ) c1 )
-|--
-  (EX (c3: Constraint) ,
-  [| (0 <> 0) |] 
-  &&  [| (generate_new_constraint cur_num_pre c1 c2 c3 ) |] 
-  &&  [| (abs_in_int_range (num_pre + 1 ) c3 ) |]
-  &&  (coef_array r1_pre (num_pre + 1 ) c1 )
-  **  (coef_array r2_pre (num_pre + 1 ) c2 )
-  **  (coef_array 0 (num_pre + 1 ) c3 ))
-  ||
-  ([| (0 = 0) |]
-  &&  (coef_array r1_pre (num_pre + 1 ) c1 )
-  **  (coef_array r2_pre (num_pre + 1 ) c2 ))
-.
-
-Definition generate_new_constr_return_wit_4 := 
-forall (cur_num_pre: Z) (num_pre: Z) (r2_pre: Z) (r1_pre: Z) (c2: Constraint) (c1: Constraint) (retval: Z) (m1v: Z) (m2v: Z) (lb2: Z) (ub2: Z) (lb1: Z) (ub1: Z) (i: Z) ,
-  [| ((coef_Znth (i) (c2) (0)) < lb2) |] 
-  &&  [| ((coef_Znth (i) (c1) (0)) <= ub1) |] 
-  &&  [| ((coef_Znth (i) (c1) (0)) >= lb1) |] 
-  &&  [| (i <= num_pre) |] 
-  &&  [| (m1v > 0) |] 
-  &&  [| (m2v > 0) |] 
-  &&  [| (0 <= i) |] 
-  &&  [| (i <= (num_pre + 1 )) |] 
-  &&  [| (ub1 = (INT_MAX ÷ m1v )) |] 
-  &&  [| (lb1 = ((-INT_MAX) ÷ m1v )) |] 
-  &&  [| (ub2 = (INT_MAX ÷ m2v )) |] 
-  &&  [| (lb2 = ((-INT_MAX) ÷ m2v )) |] 
-  &&  [| (in_int_range i m1v c1 ) |] 
-  &&  [| (in_int_range i m2v c2 ) |] 
-  &&  [| (m1v = ((-(coef_Znth (cur_num_pre) (c2) (0))) ÷ retval )) |] 
-  &&  [| (m2v = ((coef_Znth (cur_num_pre) (c1) (0)) ÷ retval )) |] 
-  &&  [| (retval = (Zgcd ((coef_Znth (cur_num_pre) (c1) (0))) ((-(coef_Znth (cur_num_pre) (c2) (0)))))) |] 
-  &&  [| (1 <= cur_num_pre) |] 
-  &&  [| (cur_num_pre < (num_pre + 1 )) |] 
-  &&  [| ((num_pre + 1 ) <= INT_MAX) |] 
-  &&  [| (r1_pre <> 0) |] 
-  &&  [| (r2_pre <> 0) |] 
-  &&  [| ((coef_Znth (cur_num_pre) (c1) (0)) > 0) |] 
-  &&  [| ((coef_Znth (cur_num_pre) (c1) (0)) <= INT_MAX) |] 
-  &&  [| ((coef_Znth (cur_num_pre) (c2) (0)) < 0) |] 
-  &&  [| ((-(coef_Znth (cur_num_pre) (c2) (0))) <= INT_MAX) |]
-  &&  (coef_array r2_pre (num_pre + 1 ) c2 )
-  **  (coef_array r1_pre (num_pre + 1 ) c1 )
-|--
-  (EX (c3: Constraint) ,
-  [| (0 <> 0) |] 
-  &&  [| (generate_new_constraint cur_num_pre c1 c2 c3 ) |] 
-  &&  [| (abs_in_int_range (num_pre + 1 ) c3 ) |]
-  &&  (coef_array r1_pre (num_pre + 1 ) c1 )
-  **  (coef_array r2_pre (num_pre + 1 ) c2 )
-  **  (coef_array 0 (num_pre + 1 ) c3 ))
-  ||
-  ([| (0 = 0) |]
-  &&  (coef_array r1_pre (num_pre + 1 ) c1 )
-  **  (coef_array r2_pre (num_pre + 1 ) c2 ))
-.
-
-Definition generate_new_constr_return_wit_5 := 
 forall (cur_num_pre: Z) (num_pre: Z) (r2_pre: Z) (r1_pre: Z) (c2: Constraint) (c1: Constraint) (retval: Z) (m1v: Z) (m2v: Z) (lb2: Z) (ub2: Z) (lb1: Z) (ub1: Z) (i: Z) (l: Constraint) (retval_2: Z) (res: Z) (c3_2: Constraint) (i_2: Z) (retval_3: Z) ,
   [| (retval_3 = 0) |] 
   &&  [| (retval_3 = 0) |] 
@@ -3034,21 +2911,99 @@ forall (cur_num_pre: Z) (num_pre: Z) (r2_pre: Z) (r1_pre: Z) (c2: Constraint) (c
   **  (coef_array r2_pre (num_pre + 1 ) c2 ))
 .
 
-Definition generate_new_constr_return_wit_6 := 
-forall (cur_num_pre: Z) (num_pre: Z) (r2_pre: Z) (r1_pre: Z) (c2: Constraint) (c1: Constraint) (retval: Z) (m1v: Z) (m2v: Z) (lb2: Z) (ub2: Z) (lb1: Z) (ub1: Z) (i: Z) (l: Constraint) (retval_2: Z) (res: Z) (c3_2: Constraint) (i_2: Z) ,
-  [| (i_2 > num_pre) |] 
+Definition generate_new_constr_return_wit_3 := 
+forall (cur_num_pre: Z) (num_pre: Z) (r2_pre: Z) (r1_pre: Z) (c2: Constraint) (c1: Constraint) (retval: Z) (m1v: Z) (m2v: Z) (lb2: Z) (ub2: Z) (lb1: Z) (ub1: Z) (i: Z) ,
+  [| ((coef_Znth (i) (c2) (0)) < lb2) |] 
+  &&  [| ((coef_Znth (i) (c1) (0)) <= ub1) |] 
+  &&  [| ((coef_Znth (i) (c1) (0)) >= lb1) |] 
+  &&  [| (i <= num_pre) |] 
   &&  [| (m1v > 0) |] 
   &&  [| (m2v > 0) |] 
-  &&  [| (0 <= i_2) |] 
-  &&  [| (i_2 <= (num_pre + 1 )) |] 
-  &&  [| (in_int_range (num_pre + 1 ) m1v c1 ) |] 
-  &&  [| (in_int_range (num_pre + 1 ) m2v c2 ) |] 
-  &&  [| (generate_new_constraint_partial cur_num_pre i_2 m1v m2v c1 c2 c3_2 ) |] 
-  &&  [| (res <> 0) |] 
-  &&  [| (abs_in_int_range (num_pre + 1 ) c3_2 ) |] 
-  &&  [| (retval_2 <> 0) |] 
-  &&  [| (abs_in_int_range (num_pre + 1 ) l ) |] 
-  &&  [| (i > num_pre) |] 
+  &&  [| (0 <= i) |] 
+  &&  [| (i <= (num_pre + 1 )) |] 
+  &&  [| (ub1 = (INT_MAX ÷ m1v )) |] 
+  &&  [| (lb1 = ((-INT_MAX) ÷ m1v )) |] 
+  &&  [| (ub2 = (INT_MAX ÷ m2v )) |] 
+  &&  [| (lb2 = ((-INT_MAX) ÷ m2v )) |] 
+  &&  [| (in_int_range i m1v c1 ) |] 
+  &&  [| (in_int_range i m2v c2 ) |] 
+  &&  [| (m1v = ((-(coef_Znth (cur_num_pre) (c2) (0))) ÷ retval )) |] 
+  &&  [| (m2v = ((coef_Znth (cur_num_pre) (c1) (0)) ÷ retval )) |] 
+  &&  [| (retval = (Zgcd ((coef_Znth (cur_num_pre) (c1) (0))) ((-(coef_Znth (cur_num_pre) (c2) (0)))))) |] 
+  &&  [| (1 <= cur_num_pre) |] 
+  &&  [| (cur_num_pre < (num_pre + 1 )) |] 
+  &&  [| ((num_pre + 1 ) <= INT_MAX) |] 
+  &&  [| (r1_pre <> 0) |] 
+  &&  [| (r2_pre <> 0) |] 
+  &&  [| ((coef_Znth (cur_num_pre) (c1) (0)) > 0) |] 
+  &&  [| ((coef_Znth (cur_num_pre) (c1) (0)) <= INT_MAX) |] 
+  &&  [| ((coef_Znth (cur_num_pre) (c2) (0)) < 0) |] 
+  &&  [| ((-(coef_Znth (cur_num_pre) (c2) (0))) <= INT_MAX) |]
+  &&  (coef_array r2_pre (num_pre + 1 ) c2 )
+  **  (coef_array r1_pre (num_pre + 1 ) c1 )
+|--
+  (EX (c3: Constraint) ,
+  [| (0 <> 0) |] 
+  &&  [| (generate_new_constraint cur_num_pre c1 c2 c3 ) |] 
+  &&  [| (abs_in_int_range (num_pre + 1 ) c3 ) |]
+  &&  (coef_array r1_pre (num_pre + 1 ) c1 )
+  **  (coef_array r2_pre (num_pre + 1 ) c2 )
+  **  (coef_array 0 (num_pre + 1 ) c3 ))
+  ||
+  ([| (0 = 0) |]
+  &&  (coef_array r1_pre (num_pre + 1 ) c1 )
+  **  (coef_array r2_pre (num_pre + 1 ) c2 ))
+.
+
+Definition generate_new_constr_return_wit_4 := 
+forall (cur_num_pre: Z) (num_pre: Z) (r2_pre: Z) (r1_pre: Z) (c2: Constraint) (c1: Constraint) (retval: Z) (m1v: Z) (m2v: Z) (lb2: Z) (ub2: Z) (lb1: Z) (ub1: Z) (i: Z) ,
+  [| ((coef_Znth (i) (c2) (0)) > ub2) |] 
+  &&  [| ((coef_Znth (i) (c2) (0)) >= lb2) |] 
+  &&  [| ((coef_Znth (i) (c1) (0)) <= ub1) |] 
+  &&  [| ((coef_Znth (i) (c1) (0)) >= lb1) |] 
+  &&  [| (i <= num_pre) |] 
+  &&  [| (m1v > 0) |] 
+  &&  [| (m2v > 0) |] 
+  &&  [| (0 <= i) |] 
+  &&  [| (i <= (num_pre + 1 )) |] 
+  &&  [| (ub1 = (INT_MAX ÷ m1v )) |] 
+  &&  [| (lb1 = ((-INT_MAX) ÷ m1v )) |] 
+  &&  [| (ub2 = (INT_MAX ÷ m2v )) |] 
+  &&  [| (lb2 = ((-INT_MAX) ÷ m2v )) |] 
+  &&  [| (in_int_range i m1v c1 ) |] 
+  &&  [| (in_int_range i m2v c2 ) |] 
+  &&  [| (m1v = ((-(coef_Znth (cur_num_pre) (c2) (0))) ÷ retval )) |] 
+  &&  [| (m2v = ((coef_Znth (cur_num_pre) (c1) (0)) ÷ retval )) |] 
+  &&  [| (retval = (Zgcd ((coef_Znth (cur_num_pre) (c1) (0))) ((-(coef_Znth (cur_num_pre) (c2) (0)))))) |] 
+  &&  [| (1 <= cur_num_pre) |] 
+  &&  [| (cur_num_pre < (num_pre + 1 )) |] 
+  &&  [| ((num_pre + 1 ) <= INT_MAX) |] 
+  &&  [| (r1_pre <> 0) |] 
+  &&  [| (r2_pre <> 0) |] 
+  &&  [| ((coef_Znth (cur_num_pre) (c1) (0)) > 0) |] 
+  &&  [| ((coef_Znth (cur_num_pre) (c1) (0)) <= INT_MAX) |] 
+  &&  [| ((coef_Znth (cur_num_pre) (c2) (0)) < 0) |] 
+  &&  [| ((-(coef_Znth (cur_num_pre) (c2) (0))) <= INT_MAX) |]
+  &&  (coef_array r2_pre (num_pre + 1 ) c2 )
+  **  (coef_array r1_pre (num_pre + 1 ) c1 )
+|--
+  (EX (c3: Constraint) ,
+  [| (0 <> 0) |] 
+  &&  [| (generate_new_constraint cur_num_pre c1 c2 c3 ) |] 
+  &&  [| (abs_in_int_range (num_pre + 1 ) c3 ) |]
+  &&  (coef_array r1_pre (num_pre + 1 ) c1 )
+  **  (coef_array r2_pre (num_pre + 1 ) c2 )
+  **  (coef_array 0 (num_pre + 1 ) c3 ))
+  ||
+  ([| (0 = 0) |]
+  &&  (coef_array r1_pre (num_pre + 1 ) c1 )
+  **  (coef_array r2_pre (num_pre + 1 ) c2 ))
+.
+
+Definition generate_new_constr_return_wit_5 := 
+forall (cur_num_pre: Z) (num_pre: Z) (r2_pre: Z) (r1_pre: Z) (c2: Constraint) (c1: Constraint) (retval: Z) (m1v: Z) (m2v: Z) (lb2: Z) (ub2: Z) (lb1: Z) (ub1: Z) (i: Z) ,
+  [| ((coef_Znth (i) (c1) (0)) < lb1) |] 
+  &&  [| (i <= num_pre) |] 
   &&  [| (m1v > 0) |] 
   &&  [| (m2v > 0) |] 
   &&  [| (0 <= i) |] 
@@ -3073,17 +3028,59 @@ forall (cur_num_pre: Z) (num_pre: Z) (r2_pre: Z) (r1_pre: Z) (c2: Constraint) (c
   &&  [| ((-(coef_Znth (cur_num_pre) (c2) (0))) <= INT_MAX) |]
   &&  (coef_array r1_pre (num_pre + 1 ) c1 )
   **  (coef_array r2_pre (num_pre + 1 ) c2 )
-  **  (coef_array res (num_pre + 1 ) c3_2 )
 |--
   (EX (c3: Constraint) ,
-  [| (res <> 0) |] 
+  [| (0 <> 0) |] 
   &&  [| (generate_new_constraint cur_num_pre c1 c2 c3 ) |] 
   &&  [| (abs_in_int_range (num_pre + 1 ) c3 ) |]
   &&  (coef_array r1_pre (num_pre + 1 ) c1 )
   **  (coef_array r2_pre (num_pre + 1 ) c2 )
-  **  (coef_array res (num_pre + 1 ) c3 ))
+  **  (coef_array 0 (num_pre + 1 ) c3 ))
   ||
-  ([| (res = 0) |]
+  ([| (0 = 0) |]
+  &&  (coef_array r1_pre (num_pre + 1 ) c1 )
+  **  (coef_array r2_pre (num_pre + 1 ) c2 ))
+.
+
+Definition generate_new_constr_return_wit_6 := 
+forall (cur_num_pre: Z) (num_pre: Z) (r2_pre: Z) (r1_pre: Z) (c2: Constraint) (c1: Constraint) (retval: Z) (m1v: Z) (m2v: Z) (lb2: Z) (ub2: Z) (lb1: Z) (ub1: Z) (i: Z) ,
+  [| ((coef_Znth (i) (c1) (0)) > ub1) |] 
+  &&  [| ((coef_Znth (i) (c1) (0)) >= lb1) |] 
+  &&  [| (i <= num_pre) |] 
+  &&  [| (m1v > 0) |] 
+  &&  [| (m2v > 0) |] 
+  &&  [| (0 <= i) |] 
+  &&  [| (i <= (num_pre + 1 )) |] 
+  &&  [| (ub1 = (INT_MAX ÷ m1v )) |] 
+  &&  [| (lb1 = ((-INT_MAX) ÷ m1v )) |] 
+  &&  [| (ub2 = (INT_MAX ÷ m2v )) |] 
+  &&  [| (lb2 = ((-INT_MAX) ÷ m2v )) |] 
+  &&  [| (in_int_range i m1v c1 ) |] 
+  &&  [| (in_int_range i m2v c2 ) |] 
+  &&  [| (m1v = ((-(coef_Znth (cur_num_pre) (c2) (0))) ÷ retval )) |] 
+  &&  [| (m2v = ((coef_Znth (cur_num_pre) (c1) (0)) ÷ retval )) |] 
+  &&  [| (retval = (Zgcd ((coef_Znth (cur_num_pre) (c1) (0))) ((-(coef_Znth (cur_num_pre) (c2) (0)))))) |] 
+  &&  [| (1 <= cur_num_pre) |] 
+  &&  [| (cur_num_pre < (num_pre + 1 )) |] 
+  &&  [| ((num_pre + 1 ) <= INT_MAX) |] 
+  &&  [| (r1_pre <> 0) |] 
+  &&  [| (r2_pre <> 0) |] 
+  &&  [| ((coef_Znth (cur_num_pre) (c1) (0)) > 0) |] 
+  &&  [| ((coef_Znth (cur_num_pre) (c1) (0)) <= INT_MAX) |] 
+  &&  [| ((coef_Znth (cur_num_pre) (c2) (0)) < 0) |] 
+  &&  [| ((-(coef_Znth (cur_num_pre) (c2) (0))) <= INT_MAX) |]
+  &&  (coef_array r1_pre (num_pre + 1 ) c1 )
+  **  (coef_array r2_pre (num_pre + 1 ) c2 )
+|--
+  (EX (c3: Constraint) ,
+  [| (0 <> 0) |] 
+  &&  [| (generate_new_constraint cur_num_pre c1 c2 c3 ) |] 
+  &&  [| (abs_in_int_range (num_pre + 1 ) c3 ) |]
+  &&  (coef_array r1_pre (num_pre + 1 ) c1 )
+  **  (coef_array r2_pre (num_pre + 1 ) c2 )
+  **  (coef_array 0 (num_pre + 1 ) c3 ))
+  ||
+  ([| (0 = 0) |]
   &&  (coef_array r1_pre (num_pre + 1 ) c1 )
   **  (coef_array r2_pre (num_pre + 1 ) c2 ))
 .
@@ -4562,7 +4559,7 @@ forall (cur_num_pre: Z) (num_pre: Z) (r2_pre: Z) (r1_pre: Z) (l_init: (@list Con
   &&  [| (LP_abs_in_int_range n l1 ) |] 
   &&  [| (LP_abs_in_int_range n l2 ) |] 
   &&  [| (LP_abs_in_int_range n l_init ) |]
-  &&  (InequList retval n (cons (c3) (l3_3)) )
+  &&  (InequList retval (num_pre + 1 ) (cons (c3) (l3_3)) )
   **  (coef_array p1_coef_3 (num_pre + 1 ) x1_2 )
   **  (coef_array p2_coef (num_pre + 1 ) x_2 )
   **  ((&((p2)  # "InequList" ->ₛ "coef")) # Ptr  |-> p2_coef)
@@ -4689,6 +4686,45 @@ forall (cur_num_pre: Z) (num_pre: Z) (r2_pre: Z) (r1_pre: Z) (l_init: (@list Con
 .
 
 Definition generate_new_constraint_list_return_wit_1 := 
+forall (cur_num_pre: Z) (num_pre: Z) (r2_pre: Z) (r1_pre: Z) (l_init: (@list Constraint)) (l2: (@list Constraint)) (l1: (@list Constraint)) (n: Z) (res: Z) (p1: Z) (l3_2: (@list Constraint)) (l4_2: (@list Constraint)) (l11: (@list Constraint)) (l12: (@list Constraint)) ,
+  [| (p1 = 0) |] 
+  &&  [| (n = (num_pre + 1 )) |] 
+  &&  [| (1 <= cur_num_pre) |] 
+  &&  [| (cur_num_pre < n) |] 
+  &&  [| (InequList_nth_pos cur_num_pre l1 ) |] 
+  &&  [| (InequList_nth_neg cur_num_pre l2 ) |] 
+  &&  [| (l1 = (app (l11) (l12))) |] 
+  &&  [| (generate_new_constraints cur_num_pre l11 l2 l4_2 ) |] 
+  &&  [| (l3_2 = (app (l4_2) (l_init))) |] 
+  &&  [| (LP_abs_in_int_range n l3_2 ) |] 
+  &&  [| (n = (num_pre + 1 )) |] 
+  &&  [| (1 <= cur_num_pre) |] 
+  &&  [| (cur_num_pre < n) |] 
+  &&  [| (n <= INT_MAX) |] 
+  &&  [| (InequList_nth_pos cur_num_pre l1 ) |] 
+  &&  [| (InequList_nth_neg cur_num_pre l2 ) |] 
+  &&  [| (LP_abs_in_int_range n l1 ) |] 
+  &&  [| (LP_abs_in_int_range n l2 ) |] 
+  &&  [| (LP_abs_in_int_range n l_init ) |]
+  &&  (InequList_seg r1_pre p1 n l11 )
+  **  (InequList p1 n l12 )
+  **  (InequList r2_pre n l2 )
+  **  (InequList res n l3_2 )
+|--
+  ([| (res = 0) |]
+  &&  (InequList r1_pre n l1 )
+  **  (InequList r2_pre n l2 ))
+  ||
+  (EX (l3: (@list Constraint))  (l4: (@list Constraint)) ,
+  [| (generate_new_constraints cur_num_pre l1 l2 l4 ) |] 
+  &&  [| (l3 = (app (l4) (l_init))) |] 
+  &&  [| (LP_abs_in_int_range n l3 ) |]
+  &&  (InequList r1_pre n l1 )
+  **  (InequList r2_pre n l2 )
+  **  (InequList res n l3 ))
+.
+
+Definition generate_new_constraint_list_return_wit_2 := 
 forall (cur_num_pre: Z) (num_pre: Z) (r2_pre: Z) (r1_pre: Z) (l_init: (@list Constraint)) (l2: (@list Constraint)) (l1: (@list Constraint)) (n: Z) (p1: Z) (l3_2: (@list Constraint)) (l4_2: (@list Constraint)) (l11: (@list Constraint)) (l12: (@list Constraint)) (p1_coef: Z) (x: Constraint) (l13: (@list Constraint)) (p2: Z) (p1_next: Z) (p1_coef_2: Z) (l3_3: (@list Constraint)) (l4_3: (@list Constraint)) (p1_2: Z) (l21: (@list Constraint)) (l22: (@list Constraint)) (l11_2: (@list Constraint)) (x1: Constraint) (l12_2: (@list Constraint)) (p2_next: Z) (p2_coef: Z) (x_2: Constraint) (l23: (@list Constraint)) (retval: Z) ,
   [| (retval = 0) |] 
   &&  [| (retval = 0) |] 
@@ -4750,45 +4786,6 @@ forall (cur_num_pre: Z) (num_pre: Z) (r2_pre: Z) (r1_pre: Z) (l_init: (@list Con
   &&  (InequList r1_pre n l1 )
   **  (InequList r2_pre n l2 )
   **  (InequList 0 n l3 ))
-.
-
-Definition generate_new_constraint_list_return_wit_2 := 
-forall (cur_num_pre: Z) (num_pre: Z) (r2_pre: Z) (r1_pre: Z) (l_init: (@list Constraint)) (l2: (@list Constraint)) (l1: (@list Constraint)) (n: Z) (res: Z) (p1: Z) (l3_2: (@list Constraint)) (l4_2: (@list Constraint)) (l11: (@list Constraint)) (l12: (@list Constraint)) ,
-  [| (p1 = 0) |] 
-  &&  [| (n = (num_pre + 1 )) |] 
-  &&  [| (1 <= cur_num_pre) |] 
-  &&  [| (cur_num_pre < n) |] 
-  &&  [| (InequList_nth_pos cur_num_pre l1 ) |] 
-  &&  [| (InequList_nth_neg cur_num_pre l2 ) |] 
-  &&  [| (l1 = (app (l11) (l12))) |] 
-  &&  [| (generate_new_constraints cur_num_pre l11 l2 l4_2 ) |] 
-  &&  [| (l3_2 = (app (l4_2) (l_init))) |] 
-  &&  [| (LP_abs_in_int_range n l3_2 ) |] 
-  &&  [| (n = (num_pre + 1 )) |] 
-  &&  [| (1 <= cur_num_pre) |] 
-  &&  [| (cur_num_pre < n) |] 
-  &&  [| (n <= INT_MAX) |] 
-  &&  [| (InequList_nth_pos cur_num_pre l1 ) |] 
-  &&  [| (InequList_nth_neg cur_num_pre l2 ) |] 
-  &&  [| (LP_abs_in_int_range n l1 ) |] 
-  &&  [| (LP_abs_in_int_range n l2 ) |] 
-  &&  [| (LP_abs_in_int_range n l_init ) |]
-  &&  (InequList_seg r1_pre p1 n l11 )
-  **  (InequList p1 n l12 )
-  **  (InequList r2_pre n l2 )
-  **  (InequList res n l3_2 )
-|--
-  ([| (res = 0) |]
-  &&  (InequList r1_pre n l1 )
-  **  (InequList r2_pre n l2 ))
-  ||
-  (EX (l3: (@list Constraint))  (l4: (@list Constraint)) ,
-  [| (generate_new_constraints cur_num_pre l1 l2 l4 ) |] 
-  &&  [| (l3 = (app (l4) (l_init))) |] 
-  &&  [| (LP_abs_in_int_range n l3 ) |]
-  &&  (InequList r1_pre n l1 )
-  **  (InequList r2_pre n l2 )
-  **  (InequList res n l3 ))
 .
 
 Definition generate_new_constraint_list_partial_solve_wit_1_pure := 
@@ -5475,8 +5472,8 @@ forall (cur_num_pre: Z) (num_pre: Z) (r2_pre: Z) (r1_pre: Z) (l_init: (@list Con
   &&  [| (LP_abs_in_int_range n l1 ) |] 
   &&  [| (LP_abs_in_int_range n l2 ) |] 
   &&  [| (LP_abs_in_int_range n l_init ) |]
-  &&  (coef_array retval n c3 )
-  **  (InequList res n l3_2 )
+  &&  (coef_array retval (num_pre + 1 ) c3 )
+  **  (InequList res (num_pre + 1 ) l3_2 )
   **  (coef_array p1_coef_2 (num_pre + 1 ) x1 )
   **  (coef_array p2_coef (num_pre + 1 ) x_2 )
   **  ((&((p2)  # "InequList" ->ₛ "coef")) # Ptr  |-> p2_coef)
@@ -6809,17 +6806,8 @@ forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0: Z) (BP0_upp
 .
 
 Definition real_shadow_return_wit_1 := 
-forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0: Z) (BP0_upper: Z) (BP0_lower: Z) (BP0_remain: Z) (l2_2: (@list Constraint)) (cnt: Z) (BP0_remain_2: Z) (BP0_lower_2: Z) (BP0_upper_2: Z) (up: (@list Constraint)) (lo: (@list Constraint)) (re: (@list Constraint)) (b: BP) ,
-  [| (BP0_upper_2 = 0) |] 
-  &&  [| (BP0_remain_2 = 0) |] 
-  &&  [| (eliminate_xn cnt l2_2 b ) |] 
-  &&  [| (form_BP up lo re b ) |] 
-  &&  [| (InequList_nth_pos cnt up ) |] 
-  &&  [| (InequList_nth_neg cnt lo ) |] 
-  &&  [| (LP_abs_in_int_range (n_pre + 1 ) up ) |] 
-  &&  [| (LP_abs_in_int_range (n_pre + 1 ) lo ) |] 
-  &&  [| (LP_abs_in_int_range (n_pre + 1 ) re ) |] 
-  &&  [| (cnt >= 1) |] 
+forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0: Z) (BP0_upper: Z) (BP0_lower: Z) (BP0_remain: Z) (r: Z) (l2_2: (@list Constraint)) (cnt: Z) ,
+  [| (cnt < 1) |] 
   &&  [| (BP0 <> 0) |] 
   &&  [| (pr_pre <> 0) |] 
   &&  [| (0 <= cnt) |] 
@@ -6837,12 +6825,11 @@ forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0: Z) (BP0_upp
   &&  [| (BP0_remain = 0) |] 
   &&  [| (LP_abs_in_int_range (n_pre + 1 ) l1 ) |]
   &&  ((( &( "BP0" ) )) # Ptr  |-> BP0)
-  **  ((&((BP0)  # "BoundPair" ->ₛ "upper")) # Ptr  |-> BP0_upper_2)
-  **  (InequList BP0_upper_2 (n_pre + 1 ) up )
-  **  ((&((BP0)  # "BoundPair" ->ₛ "lower")) # Ptr  |-> BP0_lower_2)
-  **  ((&((BP0)  # "BoundPair" ->ₛ "remain")) # Ptr  |-> BP0_remain_2)
-  **  (InequList BP0_remain_2 (n_pre + 1 ) re )
-  **  ((pr_pre) # Ptr  |-> 0)
+  **  ((&((BP0)  # "BoundPair" ->ₛ "upper")) # Ptr  |->_)
+  **  ((&((BP0)  # "BoundPair" ->ₛ "lower")) # Ptr  |->_)
+  **  ((&((BP0)  # "BoundPair" ->ₛ "remain")) # Ptr  |->_)
+  **  ((pr_pre) # Ptr  |-> r)
+  **  (InequList r (n_pre + 1 ) l2_2 )
 |--
   ([| (0 = 1) |]
   &&  ((( &( "BP0" ) )) # Ptr  |-> BP0)
@@ -6864,11 +6851,13 @@ forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0: Z) (BP0_upp
 .
 
 Definition real_shadow_return_wit_2 := 
-forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0: Z) (BP0_upper: Z) (BP0_lower: Z) (BP0_remain: Z) (l2_2: (@list Constraint)) (cnt: Z) (BP0_remain_2: Z) (BP0_lower_2: Z) (BP0_upper_2: Z) (up: (@list Constraint)) (lo: (@list Constraint)) (re: (@list Constraint)) (b: BP) ,
-  [| (BP0_lower_2 = 0) |] 
-  &&  [| (BP0_remain_2 = 0) |] 
-  &&  [| (BP0_upper_2 <> 0) |] 
-  &&  [| (BP0_remain_2 = 0) |] 
+forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0: Z) (BP0_upper: Z) (BP0_lower: Z) (BP0_remain: Z) (l2_2: (@list Constraint)) (cnt: Z) (BP0_remain_2: Z) (BP0_lower_2: Z) (BP0_upper_2: Z) (up: (@list Constraint)) (lo: (@list Constraint)) (re: (@list Constraint)) (b: BP) (l3: (@list Constraint)) (l4: (@list Constraint)) (retval: Z) ,
+  [| (retval = 0) |] 
+  &&  [| (generate_new_constraints cnt up lo l4 ) |] 
+  &&  [| (l3 = (app (l4) (re))) |] 
+  &&  [| (LP_abs_in_int_range (n_pre + 1 ) l3 ) |] 
+  &&  [| (BP0_remain_2 <> 0) |] 
+  &&  [| (BP0_remain_2 <> 0) |] 
   &&  [| (eliminate_xn cnt l2_2 b ) |] 
   &&  [| (form_BP up lo re b ) |] 
   &&  [| (InequList_nth_pos cnt up ) |] 
@@ -6893,15 +6882,14 @@ forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0: Z) (BP0_upp
   &&  [| (BP0_lower = 0) |] 
   &&  [| (BP0_remain = 0) |] 
   &&  [| (LP_abs_in_int_range (n_pre + 1 ) l1 ) |]
-  &&  ((( &( "BP0" ) )) # Ptr  |-> BP0)
+  &&  (InequList retval (n_pre + 1 ) l3 )
+  **  ((( &( "BP0" ) )) # Ptr  |-> BP0)
   **  ((&((BP0)  # "BoundPair" ->ₛ "upper")) # Ptr  |-> BP0_upper_2)
   **  ((&((BP0)  # "BoundPair" ->ₛ "lower")) # Ptr  |-> BP0_lower_2)
-  **  (InequList BP0_lower_2 (n_pre + 1 ) lo )
   **  ((&((BP0)  # "BoundPair" ->ₛ "remain")) # Ptr  |-> BP0_remain_2)
-  **  (InequList BP0_remain_2 (n_pre + 1 ) re )
-  **  ((pr_pre) # Ptr  |-> 0)
+  **  ((pr_pre) # Ptr  |-> p1)
 |--
-  ([| (0 = 1) |]
+  ([| (1 = 1) |]
   &&  ((( &( "BP0" ) )) # Ptr  |-> BP0)
   **  ((pr_pre) # Ptr  |-> p1)
   **  ((&((BP0)  # "BoundPair" ->ₛ "upper")) # Ptr  |->_)
@@ -6909,7 +6897,7 @@ forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0: Z) (BP0_upp
   **  ((&((BP0)  # "BoundPair" ->ₛ "remain")) # Ptr  |->_))
   ||
   (EX (p2: Z)  (l2: (@list Constraint)) ,
-  [| (0 = 0) |] 
+  [| (1 = 0) |] 
   &&  [| (LP_implies l1 l2 ) |] 
   &&  [| (InequList_Zeros l2 1 (n_pre + 1 ) ) |]
   &&  ((( &( "BP0" ) )) # Ptr  |-> BP0)
@@ -6924,10 +6912,8 @@ Definition real_shadow_return_wit_3 :=
 forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0: Z) (BP0_upper: Z) (BP0_lower: Z) (BP0_remain: Z) (l2_2: (@list Constraint)) (cnt: Z) (BP0_remain_2: Z) (BP0_lower_2: Z) (BP0_upper_2: Z) (up: (@list Constraint)) (lo: (@list Constraint)) (re: (@list Constraint)) (b: BP) (retval: Z) ,
   [| (retval = 0) |] 
   &&  [| (retval = 0) |] 
-  &&  [| (BP0_lower_2 <> 0) |] 
-  &&  [| (BP0_remain_2 = 0) |] 
-  &&  [| (BP0_upper_2 <> 0) |] 
-  &&  [| (BP0_remain_2 = 0) |] 
+  &&  [| (BP0_remain_2 <> 0) |] 
+  &&  [| (BP0_remain_2 <> 0) |] 
   &&  [| (eliminate_xn cnt l2_2 b ) |] 
   &&  [| (form_BP up lo re b ) |] 
   &&  [| (InequList_nth_pos cnt up ) |] 
@@ -7041,8 +7027,10 @@ Definition real_shadow_return_wit_5 :=
 forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0: Z) (BP0_upper: Z) (BP0_lower: Z) (BP0_remain: Z) (l2_2: (@list Constraint)) (cnt: Z) (BP0_remain_2: Z) (BP0_lower_2: Z) (BP0_upper_2: Z) (up: (@list Constraint)) (lo: (@list Constraint)) (re: (@list Constraint)) (b: BP) (retval: Z) ,
   [| (retval = 0) |] 
   &&  [| (retval = 0) |] 
-  &&  [| (BP0_remain_2 <> 0) |] 
-  &&  [| (BP0_remain_2 <> 0) |] 
+  &&  [| (BP0_lower_2 <> 0) |] 
+  &&  [| (BP0_remain_2 = 0) |] 
+  &&  [| (BP0_upper_2 <> 0) |] 
+  &&  [| (BP0_remain_2 = 0) |] 
   &&  [| (eliminate_xn cnt l2_2 b ) |] 
   &&  [| (form_BP up lo re b ) |] 
   &&  [| (InequList_nth_pos cnt up ) |] 
@@ -7093,13 +7081,11 @@ forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0: Z) (BP0_upp
 .
 
 Definition real_shadow_return_wit_6 := 
-forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0: Z) (BP0_upper: Z) (BP0_lower: Z) (BP0_remain: Z) (l2_2: (@list Constraint)) (cnt: Z) (BP0_remain_2: Z) (BP0_lower_2: Z) (BP0_upper_2: Z) (up: (@list Constraint)) (lo: (@list Constraint)) (re: (@list Constraint)) (b: BP) (l3: (@list Constraint)) (l4: (@list Constraint)) (retval: Z) ,
-  [| (retval = 0) |] 
-  &&  [| (generate_new_constraints cnt up lo l4 ) |] 
-  &&  [| (l3 = (app (l4) (re))) |] 
-  &&  [| (LP_abs_in_int_range (n_pre + 1 ) l3 ) |] 
-  &&  [| (BP0_remain_2 <> 0) |] 
-  &&  [| (BP0_remain_2 <> 0) |] 
+forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0: Z) (BP0_upper: Z) (BP0_lower: Z) (BP0_remain: Z) (l2_2: (@list Constraint)) (cnt: Z) (BP0_remain_2: Z) (BP0_lower_2: Z) (BP0_upper_2: Z) (up: (@list Constraint)) (lo: (@list Constraint)) (re: (@list Constraint)) (b: BP) ,
+  [| (BP0_lower_2 = 0) |] 
+  &&  [| (BP0_remain_2 = 0) |] 
+  &&  [| (BP0_upper_2 <> 0) |] 
+  &&  [| (BP0_remain_2 = 0) |] 
   &&  [| (eliminate_xn cnt l2_2 b ) |] 
   &&  [| (form_BP up lo re b ) |] 
   &&  [| (InequList_nth_pos cnt up ) |] 
@@ -7124,14 +7110,15 @@ forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0: Z) (BP0_upp
   &&  [| (BP0_lower = 0) |] 
   &&  [| (BP0_remain = 0) |] 
   &&  [| (LP_abs_in_int_range (n_pre + 1 ) l1 ) |]
-  &&  (InequList retval (n_pre + 1 ) l3 )
-  **  ((( &( "BP0" ) )) # Ptr  |-> BP0)
+  &&  ((( &( "BP0" ) )) # Ptr  |-> BP0)
   **  ((&((BP0)  # "BoundPair" ->ₛ "upper")) # Ptr  |-> BP0_upper_2)
   **  ((&((BP0)  # "BoundPair" ->ₛ "lower")) # Ptr  |-> BP0_lower_2)
+  **  (InequList BP0_lower_2 (n_pre + 1 ) lo )
   **  ((&((BP0)  # "BoundPair" ->ₛ "remain")) # Ptr  |-> BP0_remain_2)
-  **  ((pr_pre) # Ptr  |-> p1)
+  **  (InequList BP0_remain_2 (n_pre + 1 ) re )
+  **  ((pr_pre) # Ptr  |-> 0)
 |--
-  ([| (1 = 1) |]
+  ([| (0 = 1) |]
   &&  ((( &( "BP0" ) )) # Ptr  |-> BP0)
   **  ((pr_pre) # Ptr  |-> p1)
   **  ((&((BP0)  # "BoundPair" ->ₛ "upper")) # Ptr  |->_)
@@ -7139,7 +7126,7 @@ forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0: Z) (BP0_upp
   **  ((&((BP0)  # "BoundPair" ->ₛ "remain")) # Ptr  |->_))
   ||
   (EX (p2: Z)  (l2: (@list Constraint)) ,
-  [| (1 = 0) |] 
+  [| (0 = 0) |] 
   &&  [| (LP_implies l1 l2 ) |] 
   &&  [| (InequList_Zeros l2 1 (n_pre + 1 ) ) |]
   &&  ((( &( "BP0" ) )) # Ptr  |-> BP0)
@@ -7151,8 +7138,17 @@ forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0: Z) (BP0_upp
 .
 
 Definition real_shadow_return_wit_7 := 
-forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0: Z) (BP0_upper: Z) (BP0_lower: Z) (BP0_remain: Z) (r: Z) (l2_2: (@list Constraint)) (cnt: Z) ,
-  [| (cnt < 1) |] 
+forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0: Z) (BP0_upper: Z) (BP0_lower: Z) (BP0_remain: Z) (l2_2: (@list Constraint)) (cnt: Z) (BP0_remain_2: Z) (BP0_lower_2: Z) (BP0_upper_2: Z) (up: (@list Constraint)) (lo: (@list Constraint)) (re: (@list Constraint)) (b: BP) ,
+  [| (BP0_upper_2 = 0) |] 
+  &&  [| (BP0_remain_2 = 0) |] 
+  &&  [| (eliminate_xn cnt l2_2 b ) |] 
+  &&  [| (form_BP up lo re b ) |] 
+  &&  [| (InequList_nth_pos cnt up ) |] 
+  &&  [| (InequList_nth_neg cnt lo ) |] 
+  &&  [| (LP_abs_in_int_range (n_pre + 1 ) up ) |] 
+  &&  [| (LP_abs_in_int_range (n_pre + 1 ) lo ) |] 
+  &&  [| (LP_abs_in_int_range (n_pre + 1 ) re ) |] 
+  &&  [| (cnt >= 1) |] 
   &&  [| (BP0 <> 0) |] 
   &&  [| (pr_pre <> 0) |] 
   &&  [| (0 <= cnt) |] 
@@ -7170,11 +7166,12 @@ forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0: Z) (BP0_upp
   &&  [| (BP0_remain = 0) |] 
   &&  [| (LP_abs_in_int_range (n_pre + 1 ) l1 ) |]
   &&  ((( &( "BP0" ) )) # Ptr  |-> BP0)
-  **  ((&((BP0)  # "BoundPair" ->ₛ "upper")) # Ptr  |->_)
-  **  ((&((BP0)  # "BoundPair" ->ₛ "lower")) # Ptr  |->_)
-  **  ((&((BP0)  # "BoundPair" ->ₛ "remain")) # Ptr  |->_)
-  **  ((pr_pre) # Ptr  |-> r)
-  **  (InequList r (n_pre + 1 ) l2_2 )
+  **  ((&((BP0)  # "BoundPair" ->ₛ "upper")) # Ptr  |-> BP0_upper_2)
+  **  (InequList BP0_upper_2 (n_pre + 1 ) up )
+  **  ((&((BP0)  # "BoundPair" ->ₛ "lower")) # Ptr  |-> BP0_lower_2)
+  **  ((&((BP0)  # "BoundPair" ->ₛ "remain")) # Ptr  |-> BP0_remain_2)
+  **  (InequList BP0_remain_2 (n_pre + 1 ) re )
+  **  ((pr_pre) # Ptr  |-> 0)
 |--
   ([| (0 = 1) |]
   &&  ((( &( "BP0" ) )) # Ptr  |-> BP0)
@@ -8847,55 +8844,14 @@ forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (BP0: Z) (BP0_upper: Z) (
 .
 
 Definition lia_deduction_return_wit_1 := 
-forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0_4: Z) (BP0_upper: Z) (BP0_lower: Z) (BP0_remain: Z) (retval: Z) ,
-  [| (retval = 1) |] 
-  &&  [| (retval = 1) |] 
-  &&  [| (BP0_4 <> 0) |] 
-  &&  [| (pr_pre <> 0) |] 
-  &&  [| (n_pre >= 1) |] 
-  &&  [| (n_pre <= (INT_MAX - 1 )) |] 
-  &&  [| (BP0_upper = 0) |] 
-  &&  [| (BP0_lower = 0) |] 
-  &&  [| (BP0_remain = 0) |] 
-  &&  [| (LP_abs_in_int_range (n_pre + 1 ) l1 ) |]
-  &&  ((( &( "BP0" ) )) # Ptr  |-> BP0_4)
-  **  ((pr_pre) # Ptr  |-> p1)
-  **  ((&((BP0_4)  # "BoundPair" ->ₛ "upper")) # Ptr  |->_)
-  **  ((&((BP0_4)  # "BoundPair" ->ₛ "lower")) # Ptr  |->_)
-  **  ((&((BP0_4)  # "BoundPair" ->ₛ "remain")) # Ptr  |->_)
-|--
-  (EX (BP0: Z) ,
-  [| ((-1) = (-1)) |]
-  &&  ((pr_pre) # Ptr  |-> p1)
-  **  ((( &( "BP0" ) )) # Ptr  |-> BP0)
-  **  ((&((BP0)  # "BoundPair" ->ₛ "upper")) # Ptr  |->_)
-  **  ((&((BP0)  # "BoundPair" ->ₛ "lower")) # Ptr  |->_)
-  **  ((&((BP0)  # "BoundPair" ->ₛ "remain")) # Ptr  |->_))
-  ||
-  (EX (BP0_2: Z)  (p2: Z) ,
-  [| ((-1) = 1) |] 
-  &&  [| (UNSAT l1 ) |]
-  &&  ((pr_pre) # Ptr  |-> p2)
-  **  ((( &( "BP0" ) )) # Ptr  |-> BP0_2)
-  **  ((&((BP0_2)  # "BoundPair" ->ₛ "upper")) # Ptr  |->_)
-  **  ((&((BP0_2)  # "BoundPair" ->ₛ "lower")) # Ptr  |->_)
-  **  ((&((BP0_2)  # "BoundPair" ->ₛ "remain")) # Ptr  |->_))
-  ||
-  (EX (BP0_3: Z)  (p2_2: Z)  (l2: (@list Constraint)) ,
-  [| ((-1) = 0) |] 
-  &&  [| (LP_implies l1 l2 ) |] 
-  &&  [| (InequList_Zeros l2 1 (n_pre + 1 ) ) |]
-  &&  ((pr_pre) # Ptr  |-> p2_2)
-  **  (InequList p2_2 (n_pre + 1 ) l2 )
-  **  ((( &( "BP0" ) )) # Ptr  |-> BP0_3)
-  **  ((&((BP0_3)  # "BoundPair" ->ₛ "upper")) # Ptr  |->_)
-  **  ((&((BP0_3)  # "BoundPair" ->ₛ "lower")) # Ptr  |->_)
-  **  ((&((BP0_3)  # "BoundPair" ->ₛ "remain")) # Ptr  |->_))
-.
-
-Definition lia_deduction_return_wit_2 := 
-forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0_4: Z) (BP0_upper: Z) (BP0_lower: Z) (BP0_remain: Z) (p2_3: Z) (l2_2: (@list Constraint)) (retval: Z) ,
-  [| (p2_3 = 0) |] 
+forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0_4: Z) (BP0_upper: Z) (BP0_lower: Z) (BP0_remain: Z) (retval: Z) (p2_3: Z) (l2_2: (@list Constraint)) (p: Z) (l21: (@list Constraint)) (l22: (@list Constraint)) (x: Constraint) (l0: (@list Constraint)) (y: Z) (h: Z) ,
+  [| (y = 0) |] 
+  &&  [| (h <> 0) |] 
+  &&  [| (l22 = (cons (x) (l0))) |] 
+  &&  [| (l2_2 = (app (l21) (l22))) |] 
+  &&  [| (NonPos l21 ) |] 
+  &&  [| (p <> 0) |] 
+  &&  [| (p2_3 <> 0) |] 
   &&  [| (retval <> 1) |] 
   &&  [| (retval = 0) |] 
   &&  [| (LP_implies l1 l2_2 ) |] 
@@ -8908,9 +8864,13 @@ forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0_4: Z) (BP0_u
   &&  [| (BP0_lower = 0) |] 
   &&  [| (BP0_remain = 0) |] 
   &&  [| (LP_abs_in_int_range (n_pre + 1 ) l1 ) |]
-  &&  ((( &( "BP0" ) )) # Ptr  |-> BP0_4)
+  &&  ((&((p)  # "InequList" ->ₛ "next")) # Ptr  |-> y)
+  **  (InequList y (n_pre + 1 ) l0 )
+  **  (coef_array h (n_pre + 1 ) x )
+  **  ((&((p)  # "InequList" ->ₛ "coef")) # Ptr  |-> h)
+  **  (InequList_seg p2_3 p (n_pre + 1 ) l21 )
+  **  ((( &( "BP0" ) )) # Ptr  |-> BP0_4)
   **  ((pr_pre) # Ptr  |-> p2_3)
-  **  (InequList p2_3 (n_pre + 1 ) l2_2 )
   **  ((&((BP0_4)  # "BoundPair" ->ₛ "upper")) # Ptr  |->_)
   **  ((&((BP0_4)  # "BoundPair" ->ₛ "lower")) # Ptr  |->_)
   **  ((&((BP0_4)  # "BoundPair" ->ₛ "remain")) # Ptr  |->_)
@@ -8944,7 +8904,7 @@ forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0_4: Z) (BP0_u
   **  ((&((BP0_3)  # "BoundPair" ->ₛ "remain")) # Ptr  |->_))
 .
 
-Definition lia_deduction_return_wit_3 := 
+Definition lia_deduction_return_wit_2 := 
 forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0_4: Z) (BP0_upper: Z) (BP0_lower: Z) (BP0_remain: Z) (retval: Z) (p2_3: Z) (l2_2: (@list Constraint)) (p: Z) (l21: (@list Constraint)) (l22: (@list Constraint)) (x: Constraint) (l0: (@list Constraint)) (y: Z) (h: Z) ,
   [| ((coef_Zlength (x)) = (n_pre + 1 )) |] 
   &&  [| ((coef_Znth (0) (x) (0)) > 0) |] 
@@ -9002,15 +8962,9 @@ forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0_4: Z) (BP0_u
   **  ((&((BP0_3)  # "BoundPair" ->ₛ "remain")) # Ptr  |->_))
 .
 
-Definition lia_deduction_return_wit_4 := 
-forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0_4: Z) (BP0_upper: Z) (BP0_lower: Z) (BP0_remain: Z) (retval: Z) (p2_3: Z) (l2_2: (@list Constraint)) (p: Z) (l21: (@list Constraint)) (l22: (@list Constraint)) (x: Constraint) (l0: (@list Constraint)) (y: Z) (h: Z) ,
-  [| (y = 0) |] 
-  &&  [| (h <> 0) |] 
-  &&  [| (l22 = (cons (x) (l0))) |] 
-  &&  [| (l2_2 = (app (l21) (l22))) |] 
-  &&  [| (NonPos l21 ) |] 
-  &&  [| (p <> 0) |] 
-  &&  [| (p2_3 <> 0) |] 
+Definition lia_deduction_return_wit_3 := 
+forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0_4: Z) (BP0_upper: Z) (BP0_lower: Z) (BP0_remain: Z) (p2_3: Z) (l2_2: (@list Constraint)) (retval: Z) ,
+  [| (p2_3 = 0) |] 
   &&  [| (retval <> 1) |] 
   &&  [| (retval = 0) |] 
   &&  [| (LP_implies l1 l2_2 ) |] 
@@ -9023,13 +8977,9 @@ forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0_4: Z) (BP0_u
   &&  [| (BP0_lower = 0) |] 
   &&  [| (BP0_remain = 0) |] 
   &&  [| (LP_abs_in_int_range (n_pre + 1 ) l1 ) |]
-  &&  ((&((p)  # "InequList" ->ₛ "next")) # Ptr  |-> y)
-  **  (InequList y (n_pre + 1 ) l0 )
-  **  (coef_array h (n_pre + 1 ) x )
-  **  ((&((p)  # "InequList" ->ₛ "coef")) # Ptr  |-> h)
-  **  (InequList_seg p2_3 p (n_pre + 1 ) l21 )
-  **  ((( &( "BP0" ) )) # Ptr  |-> BP0_4)
+  &&  ((( &( "BP0" ) )) # Ptr  |-> BP0_4)
   **  ((pr_pre) # Ptr  |-> p2_3)
+  **  (InequList p2_3 (n_pre + 1 ) l2_2 )
   **  ((&((BP0_4)  # "BoundPair" ->ₛ "upper")) # Ptr  |->_)
   **  ((&((BP0_4)  # "BoundPair" ->ₛ "lower")) # Ptr  |->_)
   **  ((&((BP0_4)  # "BoundPair" ->ₛ "remain")) # Ptr  |->_)
@@ -9053,6 +9003,53 @@ forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0_4: Z) (BP0_u
   ||
   (EX (BP0_3: Z)  (p2_2: Z)  (l2: (@list Constraint)) ,
   [| (0 = 0) |] 
+  &&  [| (LP_implies l1 l2 ) |] 
+  &&  [| (InequList_Zeros l2 1 (n_pre + 1 ) ) |]
+  &&  ((pr_pre) # Ptr  |-> p2_2)
+  **  (InequList p2_2 (n_pre + 1 ) l2 )
+  **  ((( &( "BP0" ) )) # Ptr  |-> BP0_3)
+  **  ((&((BP0_3)  # "BoundPair" ->ₛ "upper")) # Ptr  |->_)
+  **  ((&((BP0_3)  # "BoundPair" ->ₛ "lower")) # Ptr  |->_)
+  **  ((&((BP0_3)  # "BoundPair" ->ₛ "remain")) # Ptr  |->_))
+.
+
+Definition lia_deduction_return_wit_4 := 
+forall (n_pre: Z) (pr_pre: Z) (l1: (@list Constraint)) (p1: Z) (BP0_4: Z) (BP0_upper: Z) (BP0_lower: Z) (BP0_remain: Z) (retval: Z) ,
+  [| (retval = 1) |] 
+  &&  [| (retval = 1) |] 
+  &&  [| (BP0_4 <> 0) |] 
+  &&  [| (pr_pre <> 0) |] 
+  &&  [| (n_pre >= 1) |] 
+  &&  [| (n_pre <= (INT_MAX - 1 )) |] 
+  &&  [| (BP0_upper = 0) |] 
+  &&  [| (BP0_lower = 0) |] 
+  &&  [| (BP0_remain = 0) |] 
+  &&  [| (LP_abs_in_int_range (n_pre + 1 ) l1 ) |]
+  &&  ((( &( "BP0" ) )) # Ptr  |-> BP0_4)
+  **  ((pr_pre) # Ptr  |-> p1)
+  **  ((&((BP0_4)  # "BoundPair" ->ₛ "upper")) # Ptr  |->_)
+  **  ((&((BP0_4)  # "BoundPair" ->ₛ "lower")) # Ptr  |->_)
+  **  ((&((BP0_4)  # "BoundPair" ->ₛ "remain")) # Ptr  |->_)
+|--
+  (EX (BP0: Z) ,
+  [| ((-1) = (-1)) |]
+  &&  ((pr_pre) # Ptr  |-> p1)
+  **  ((( &( "BP0" ) )) # Ptr  |-> BP0)
+  **  ((&((BP0)  # "BoundPair" ->ₛ "upper")) # Ptr  |->_)
+  **  ((&((BP0)  # "BoundPair" ->ₛ "lower")) # Ptr  |->_)
+  **  ((&((BP0)  # "BoundPair" ->ₛ "remain")) # Ptr  |->_))
+  ||
+  (EX (BP0_2: Z)  (p2: Z) ,
+  [| ((-1) = 1) |] 
+  &&  [| (UNSAT l1 ) |]
+  &&  ((pr_pre) # Ptr  |-> p2)
+  **  ((( &( "BP0" ) )) # Ptr  |-> BP0_2)
+  **  ((&((BP0_2)  # "BoundPair" ->ₛ "upper")) # Ptr  |->_)
+  **  ((&((BP0_2)  # "BoundPair" ->ₛ "lower")) # Ptr  |->_)
+  **  ((&((BP0_2)  # "BoundPair" ->ₛ "remain")) # Ptr  |->_))
+  ||
+  (EX (BP0_3: Z)  (p2_2: Z)  (l2: (@list Constraint)) ,
+  [| ((-1) = 0) |] 
   &&  [| (LP_implies l1 l2 ) |] 
   &&  [| (InequList_Zeros l2 1 (n_pre + 1 ) ) |]
   &&  ((pr_pre) # Ptr  |-> p2_2)
@@ -9391,7 +9388,6 @@ forall (n_pre: Z) (p2: Z) (l20: (@list Constraint)) (x: Constraint) (l10: (@list
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 Include fme_Strategy_Correct.
 
 Axiom proof_of_gcd_safety_wit_1 : gcd_safety_wit_1.

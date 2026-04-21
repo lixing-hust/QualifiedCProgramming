@@ -6,7 +6,7 @@ Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Permutation.
 Require Import String.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import CommonAssertion Mem SeparationLogic IntLib.
 Require Import GmpAux. Import Aux.
@@ -188,7 +188,7 @@ Proof.
   + assert (i = 0 \/ i > 0). { lia. }
     destruct H1.
     - rewrite H1.
-      rewrite (Znth0_cons a l 0).
+      rewrite (Znth0_cons 0 a l).
       simpl in H0.
       lia.
     - rewrite Znth_cons; try lia.
@@ -224,10 +224,10 @@ Proof.
   revert H1.
   induction l; intros.
   - rewrite Zlength_nil in H0.
-    rewrite sublist_nil  ; try lia.
+    rewrite Zsublist_nil  ; try lia.
     tauto.
   - destruct (Z.eq_dec hi lo).
-    + subst. rewrite sublist_nil ; try lia.
+    + subst. rewrite Zsublist_nil ; try lia.
       simpl. tauto.
     + simpl in H1. 
       destruct (Z.eq_dec lo 0).
@@ -469,12 +469,10 @@ Lemma list_to_Z_list_append: forall (l: list Z) (i: Z),
   list_to_Z (sublist 0 (i + 1) l) = list_to_Z (sublist 0 i l) + Znth i l 0 * (Base ^ i).
 Proof.
   intros.
-  rewrite Zlength_correct in H.
   rewrite (sublist_split 0 (i + 1) i l); try lia.
-  rewrite (sublist_single i l 0) ; try lia.
+  rewrite (sublist_single 0 i l) ; try lia.
   pose proof list_within_bound_Znth l i (ltac:(lia)) H0.
   rewrite list_to_Z_concat_r ; try lia.
-  rewrite <- Zlength_correct in H.
   rewrite Zlength_sublist ; try lia.
   replace (i - 0) with i by lia.
   nia.
@@ -586,15 +584,13 @@ Lemma list_to_Z_cmp_same_length: forall l1 l2 i,
   list_to_Z l1 < list_to_Z l2.
 Proof.
   intros.
-  assert (Zlength l1 = Z.of_nat (Datatypes.length l1)). { apply Zlength_correct. }
   pose proof (sublist_split 0 (Zlength l1) i l1 ltac:(lia) ltac:(lia)).
-  assert (Zlength l2 = Z.of_nat (Datatypes.length l2)). { apply Zlength_correct. }
   pose proof (sublist_split 0 (Zlength l2) i l2 ltac:(lia) ltac:(lia)).
-  rewrite (sublist_self l1 (Zlength l1) ltac:(lia)) in H6.
-  rewrite (sublist_self l2 (Zlength l2) ltac:(lia)) in H8.
-  rewrite H6, H8.
-  rewrite H6 in H2.
-  rewrite H8 in H3.
+  rewrite (sublist_self l1 (Zlength l1) ltac:(lia)) in H5.
+  rewrite (sublist_self l2 (Zlength l2) ltac:(lia)) in H6.
+  rewrite H5, H6.
+  rewrite H5 in H2.
+  rewrite H6 in H3.
   apply list_within_bound_split in H2.
   apply list_within_bound_split in H3.
   do 2 (rewrite list_to_Z_concat ; try tauto).
@@ -604,8 +600,8 @@ Proof.
   replace (i - 0) with i in * by lia.
   rewrite (sublist_split i (Zlength l1) (i + 1)) ; try lia.
   rewrite (sublist_split i (Zlength l2) (i + 1)) ; try lia.
-  rewrite (sublist_single i l1 0) ; try lia.
-  rewrite (sublist_single i l2 0) ; try lia.
+  rewrite (sublist_single 0 i l1) ; try lia.
+  rewrite (sublist_single 0 i l2) ; try lia.
   simpl.
   rewrite H1.
   nia.

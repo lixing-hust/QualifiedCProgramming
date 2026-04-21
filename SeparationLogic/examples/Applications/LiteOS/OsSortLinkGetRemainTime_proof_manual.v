@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.Applications.LiteOS Require Import OsSortLinkGetRemainTime_goal.
@@ -21,9 +21,8 @@ Require Import SimpleC.EE.Applications.LiteOS.lib.dll.
 Require Import SimpleC.EE.Applications.LiteOS.lib.tick_backup.
 Local Open Scope sac.
 
-Lemma proof_of_OsSortLinkGetRemainTime_return_wit_1 : OsSortLinkGetRemainTime_return_wit_1.
+Lemma proof_of_OsSortLinkGetRemainTime_return_wit_2 : OsSortLinkGetRemainTime_return_wit_2.
 Proof. 
-    unfold OsSortLinkGetRemainTime_return_wit_1.  
     pre_process.
     intros.
     Right.
@@ -35,9 +34,8 @@ Proof.
     entailer!.
 Qed. 
 
-Lemma proof_of_OsSortLinkGetRemainTime_return_wit_2 : OsSortLinkGetRemainTime_return_wit_2.
+Lemma proof_of_OsSortLinkGetRemainTime_return_wit_1 : OsSortLinkGetRemainTime_return_wit_1.
 Proof. 
-    unfold OsSortLinkGetRemainTime_return_wit_2.
     pre_process.
     intros.
     Left.

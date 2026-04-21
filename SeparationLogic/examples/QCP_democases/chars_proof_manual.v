@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.QCP_democases Require Import chars_goal.
@@ -33,7 +33,12 @@ Lemma proof_of_chars_initialize_entail_wit_2 : chars_initialize_entail_wit_2.
 Proof.
   pre_process. 
   entailer!.
-  rewrite repeat_Z_tail ; try lia. 
+  rewrite repeat_Z_tail ; try lia.
+  sep_apply CharArray.seg_single.
+  sep_apply CharArray.full_to_seg.
+  sep_apply CharArray.seg_merge_to_full ; try lia.
+  replace (a_pre + 0 * sizeof (CHAR)) with a_pre by lia.
+  replace (i + 1 - 0) with (i + 1) by lia.
   entailer!.
 Qed.
 

@@ -77,6 +77,34 @@ cd ..
 make depend && make
 ```
 
+If you only want part of the generated files under SeparationLogic/examples, the build targets are now split by the same three folders:
+
+```bash
+cd SeparationLogic
+
+# Core libraries only
+make depend-core && make core
+
+# All generated examples
+make depend-examples && make examples
+
+# Only one examples subtree
+make depend-examples-applications && make examples-applications
+make depend-examples-qcp-democases && make examples-qcp-democases
+make depend-examples-llm-friendly-cases && make examples-llm-friendly-cases
+
+# Clean outputs without removing everything
+make clean-core
+make clean-examples
+make clean-examples-applications
+make clean-examples-qcp-democases
+make clean-examples-llm-friendly-cases
+make clean-deps
+```
+
+This is useful because SeparationLogic/examples is organized into Applications, QCP_democases, and LLM_friendly_cases, and you no longer need to regenerate dependencies for all example folders every time.
+The clean targets follow the same split, so you can remove only core outputs, all example outputs, one example subtree, or just the generated dependency files.
+
 ### Docker Environment Setup
 
 #### Prerequisites
@@ -316,6 +344,16 @@ Platform-specific config file locations (if you prefer manual JSON editing):
 - Linux: `~/.config/claude/`
 - macOS: `~/Library/Application Support/Claude/`
 
+**Codex**
+Add servers in terminal:
+
+```bash
+codex mcp add qcp --env PYTHONPATH=/absolute/path/to/qcp-binary-democases/mcp/qcp-mcp/src --env QCP_MCP_CONFIG=/absolute/path/to/qcp-binary-democases/mcp/qcp-mcp/CONFIGURE -- /absolute/path/to/qcp-binary-democases/mcp/qcp-mcp/.venv/bin/python -m qcp_mcp.server
+codex mcp add rocq-mcp -- rocq-mcp
+```
+Platform-specific config file locations (if you prefer manual JSON editing):
+
+- Linux: `"~/.codex/config.toml"`
 
 For more details, refer to:
 - `mcp/qcp-mcp/README.md`
@@ -326,4 +364,5 @@ For more details, refer to:
 
 Our evaluation consists of two parts: the Tool component and the VSCode Extension component. 
 - The Tool component allows you to check files in the ``QCP_examples`` tree by running ``sh ./run-example-linux.sh``, and it generates the corresponding Coq files in the ``SeparationLogic/examples/`` directory, grouped under ``Applications/``, ``QCP_democases/``, and ``LLM_friendly_cases/``. 
+- The Rocq build in ``SeparationLogic/`` mirrors this layout with folder-specific targets: ``examples-applications``, ``examples-qcp-democases``, and ``examples-llm-friendly-cases``, together with matching ``depend-examples-*`` targets.
 - The VSCode Extension component is designed to support real-time verification interaction. You can open any annotated C file to view the current assertion state, which facilitates the continued writing of annotations for proofs.

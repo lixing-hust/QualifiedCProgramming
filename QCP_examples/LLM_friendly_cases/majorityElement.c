@@ -1,6 +1,6 @@
-#include "verification_list.h"
-#include "verification_stdlib.h"
-#include "int_array_def.h"
+
+
+
 
 /*@ Extern Coq (IsMajorityElement : Z -> list Z -> Prop) */
 /*@ Extern Coq (MajorityOnReduced : Z -> Z -> Z -> list Z -> Prop) */

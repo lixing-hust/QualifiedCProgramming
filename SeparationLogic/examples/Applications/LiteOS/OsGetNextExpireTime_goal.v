@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -21,18 +21,16 @@ Require Import SimpleC.EE.Applications.LiteOS.lib.sortlink.
 Require Import SimpleC.EE.Applications.LiteOS.lib.dll.
 Require Import SimpleC.EE.Applications.LiteOS.lib.tick_backup.
 Local Open Scope sac.
-From SimpleC.EE.QCP_democases Require Import common_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import common_strategy_proof.
 From SimpleC.EE.Applications Require Import los_sortlink_strategy_goal.
 From SimpleC.EE.Applications Require Import los_sortlink_strategy_proof.
 
 (*----- Function OsGetNextExpireTime -----*)
 
 Definition OsGetNextExpireTime_return_wit_1 := 
-forall (tickPrecision_pre: Z) (startTime_pre: Z) (l2: (@list (@DL_Node (@sortedLinkNode Z)))) (l1: (@list (@DL_Node (@sortedLinkNode Z)))) (sg: StableGlobVars) (retval: Z) (retval_2: Z) ,
-  [| (retval < retval_2) |] 
-  &&  [| (retval_2 = (getFirstNodeExpireTime (l2) (startTime_pre) (tickPrecision_pre))) |] 
-  &&  [| (retval = (getFirstNodeExpireTime (l1) (startTime_pre) (tickPrecision_pre))) |]
+forall (tickPrecision_pre: Z) (startTime_pre: Z) (l2: (@list (@DL_Node (@sortedLinkNode Z)))) (l1: (@list (@DL_Node (@sortedLinkNode Z)))) (sg: StableGlobVars) (retval_2: Z) (retval: Z) ,
+  [| (retval_2 >= retval) |] 
+  &&  [| (retval = (getFirstNodeExpireTime (l2) (startTime_pre) (tickPrecision_pre))) |] 
+  &&  [| (retval_2 = (getFirstNodeExpireTime (l1) (startTime_pre) (tickPrecision_pre))) |]
   &&  (store_swtmr_sorted_dll sg l2 )
   **  ((( &( "OS_SORT_LINK_UINT64_MAX" ) )) # UInt64  |-> ((Z.lxor 2 64) - 1 ))
   **  (store_task_sorted_dll sg l1 )
@@ -44,10 +42,10 @@ forall (tickPrecision_pre: Z) (startTime_pre: Z) (l2: (@list (@DL_Node (@sortedL
 .
 
 Definition OsGetNextExpireTime_return_wit_2 := 
-forall (tickPrecision_pre: Z) (startTime_pre: Z) (l2: (@list (@DL_Node (@sortedLinkNode Z)))) (l1: (@list (@DL_Node (@sortedLinkNode Z)))) (sg: StableGlobVars) (retval_2: Z) (retval: Z) ,
-  [| (retval_2 >= retval) |] 
-  &&  [| (retval = (getFirstNodeExpireTime (l2) (startTime_pre) (tickPrecision_pre))) |] 
-  &&  [| (retval_2 = (getFirstNodeExpireTime (l1) (startTime_pre) (tickPrecision_pre))) |]
+forall (tickPrecision_pre: Z) (startTime_pre: Z) (l2: (@list (@DL_Node (@sortedLinkNode Z)))) (l1: (@list (@DL_Node (@sortedLinkNode Z)))) (sg: StableGlobVars) (retval: Z) (retval_2: Z) ,
+  [| (retval < retval_2) |] 
+  &&  [| (retval_2 = (getFirstNodeExpireTime (l2) (startTime_pre) (tickPrecision_pre))) |] 
+  &&  [| (retval = (getFirstNodeExpireTime (l1) (startTime_pre) (tickPrecision_pre))) |]
   &&  (store_swtmr_sorted_dll sg l2 )
   **  ((( &( "OS_SORT_LINK_UINT64_MAX" ) )) # UInt64  |-> ((Z.lxor 2 64) - 1 ))
   **  (store_task_sorted_dll sg l1 )
@@ -160,7 +158,6 @@ EX (storeA_highSpec: (Z -> (A -> Assertion))) (l_highSpec: (@list (@DL_Node (@so
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 Include los_sortlink_Strategy_Correct.
 
 Axiom proof_of_OsGetNextExpireTime_return_wit_1 : OsGetNextExpireTime_return_wit_1.

@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -21,8 +21,6 @@ Require Import SimpleC.EE.Applications.LiteOS.lib.sortlink.
 Require Import SimpleC.EE.Applications.LiteOS.lib.dll.
 Require Import SimpleC.EE.Applications.LiteOS.lib.tick_backup.
 Local Open Scope sac.
-From SimpleC.EE.QCP_democases Require Import common_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import common_strategy_proof.
 From SimpleC.EE.Applications Require Import los_sortlink_strategy_goal.
 From SimpleC.EE.Applications Require Import los_sortlink_strategy_proof.
 
@@ -207,23 +205,34 @@ forall (A: Type) (sortLinkHead_pre: Z) (att: archTickTimer) (ts: tickState) (l: 
 .
 
 Definition OsSortLinkGetNextExpireTime_return_wit_1 := 
-forall (A: Type) (sortLinkHead_pre: Z) (att: archTickTimer) (ts: tickState) (l: (@list (@DL_Node (@sortedLinkNode A)))) (storeA: (Z -> (A -> Assertion))) (SysTick_4: Z) (retval: Z) ,
-  [| ((map (sortedLinkNodeMapping) (l)) = nil) |] 
-  &&  [| (retval = 1) |] 
+forall (A: Type) (sortLinkHead_pre: Z) (att: archTickTimer) (ts: tickState) (l: (@list (@DL_Node (@sortedLinkNode A)))) (storeA: (Z -> (A -> Assertion))) (SysTick_4: Z) (a: (@DL_Node (@sortedLinkNode A))) (l1: (@list (@DL_Node (@sortedLinkNode A)))) (retval_2: Z) (retval_3: Z) (h: Z) (SysTick_5: Z) (retval_4: Z) (x_lSpec_pstNext: Z) (retval: Z) ,
+  [| ((getFirstNodeResponseTime ((map (sortedLinkNodeMapping) (l)))) > retval_4) |] 
+  &&  [| (retval = ((getFirstNodeResponseTime ((map (sortedLinkNodeMapping) (l)))) - retval_4 )) |] 
+  &&  [| (x_lSpec_pstNext = &((retval_3)  # "SortLinkList" ->ₛ "sortLinkNode")) |] 
+  &&  [| (SysTick_5 <> 0) |] 
+  &&  [| (( &( "g_archTickTimer" ) ) <> 0) |] 
+  &&  [| (retval_4 = (tick_getcycle_ret (ts))) |] 
+  &&  [| (h = (obtian_first_pointer (&((sortLinkHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink")) ((map (sortedLinkNodeMapping) (l))))) |] 
+  &&  [| (&((retval_3)  # "SortLinkList" ->ₛ "sortLinkNode") = (obtian_first_pointer (&((sortLinkHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink")) ((map (sortedLinkNodeMapping) (l))))) |] 
+  &&  [| ((map (sortedLinkNodeMapping) (l)) <> nil) |] 
+  &&  [| (retval_2 = 0) |] 
+  &&  [| ((map (sortedLinkNodeMapping) (l)) = (cons (a) (l1))) |] 
   &&  [| (increasingSortedNode l ) |] 
   &&  [| (SysTick_4 <> 0) |] 
   &&  [| (( &( "g_archTickTimer" ) ) <> 0) |] 
-  &&  [| (retval <> 0) |]
-  &&  (store_dll (storesortedLinkNode (storeA)) &((sortLinkHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") (map (sortedLinkNodeMapping) (l)) )
-  **  ((( &( "SysTick" ) )) # Ptr  |-> SysTick_4)
-  **  (storeTick ( &( "g_archTickTimer" ) ) SysTick_4 ts att )
+  &&  [| (retval_2 = 0) |]
+  &&  (dllseg_shift_rev (storesortedLinkNode (storeA)) &((retval_3)  # "SortLinkList" ->ₛ "sortLinkNode") &((sortLinkHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") (map (sortedLinkNodeMapping) (l)) )
+  **  ((&((sortLinkHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink" .ₛ "pstNext")) # Ptr  |-> x_lSpec_pstNext)
+  **  ((( &( "SysTick" ) )) # Ptr  |-> SysTick_5)
+  **  (storeTick ( &( "g_archTickTimer" ) ) SysTick_5 (timebase_turnover (ts)) att )
+  **  ((&((h)  # "LOS_DL_LIST" ->ₛ "pstPrev")) # Ptr  |-> &((sortLinkHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink"))
 |--
   (EX (SysTick: Z) ,
   [| (SysTick <> 0) |] 
   &&  [| (( &( "g_archTickTimer" ) ) <> 0) |] 
   &&  [| (l <> nil) |] 
   &&  [| ((getFirstNodeResponseTime (l)) > (tick_getcycle_ret (ts))) |] 
-  &&  [| (0 = ((getFirstNodeResponseTime (l)) - (tick_getcycle_ret (ts)) )) |]
+  &&  [| (retval = ((getFirstNodeResponseTime (l)) - (tick_getcycle_ret (ts)) )) |]
   &&  ((( &( "SysTick" ) )) # Ptr  |-> SysTick)
   **  (store_sorted_dll storeA &((sortLinkHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") l )
   **  (storeTick ( &( "g_archTickTimer" ) ) SysTick (timebase_turnover (ts)) att ))
@@ -233,7 +242,7 @@ forall (A: Type) (sortLinkHead_pre: Z) (att: archTickTimer) (ts: tickState) (l: 
   &&  [| (( &( "g_archTickTimer" ) ) <> 0) |] 
   &&  [| (l <> nil) |] 
   &&  [| ((getFirstNodeResponseTime (l)) <= (tick_getcycle_ret (ts))) |] 
-  &&  [| (0 = 0) |]
+  &&  [| (retval = 0) |]
   &&  ((( &( "SysTick" ) )) # Ptr  |-> SysTick_2)
   **  (store_sorted_dll storeA &((sortLinkHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") l )
   **  (storeTick ( &( "g_archTickTimer" ) ) SysTick_2 (timebase_turnover (ts)) att ))
@@ -242,7 +251,7 @@ forall (A: Type) (sortLinkHead_pre: Z) (att: archTickTimer) (ts: tickState) (l: 
   [| (SysTick_3 <> 0) |] 
   &&  [| (( &( "g_archTickTimer" ) ) <> 0) |] 
   &&  [| (l = nil) |] 
-  &&  [| (0 = 0) |]
+  &&  [| (retval = 0) |]
   &&  ((( &( "SysTick" ) )) # Ptr  |-> SysTick_3)
   **  (store_sorted_dll storeA &((sortLinkHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") l )
   **  (storeTick ( &( "g_archTickTimer" ) ) SysTick_3 ts att ))
@@ -302,34 +311,23 @@ forall (A: Type) (sortLinkHead_pre: Z) (att: archTickTimer) (ts: tickState) (l: 
 .
 
 Definition OsSortLinkGetNextExpireTime_return_wit_3 := 
-forall (A: Type) (sortLinkHead_pre: Z) (att: archTickTimer) (ts: tickState) (l: (@list (@DL_Node (@sortedLinkNode A)))) (storeA: (Z -> (A -> Assertion))) (SysTick_4: Z) (a: (@DL_Node (@sortedLinkNode A))) (l1: (@list (@DL_Node (@sortedLinkNode A)))) (retval_2: Z) (retval_3: Z) (h: Z) (SysTick_5: Z) (retval_4: Z) (x_lSpec_pstNext: Z) (retval: Z) ,
-  [| ((getFirstNodeResponseTime ((map (sortedLinkNodeMapping) (l)))) > retval_4) |] 
-  &&  [| (retval = ((getFirstNodeResponseTime ((map (sortedLinkNodeMapping) (l)))) - retval_4 )) |] 
-  &&  [| (x_lSpec_pstNext = &((retval_3)  # "SortLinkList" ->ₛ "sortLinkNode")) |] 
-  &&  [| (SysTick_5 <> 0) |] 
-  &&  [| (( &( "g_archTickTimer" ) ) <> 0) |] 
-  &&  [| (retval_4 = (tick_getcycle_ret (ts))) |] 
-  &&  [| (h = (obtian_first_pointer (&((sortLinkHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink")) ((map (sortedLinkNodeMapping) (l))))) |] 
-  &&  [| (&((retval_3)  # "SortLinkList" ->ₛ "sortLinkNode") = (obtian_first_pointer (&((sortLinkHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink")) ((map (sortedLinkNodeMapping) (l))))) |] 
-  &&  [| ((map (sortedLinkNodeMapping) (l)) <> nil) |] 
-  &&  [| (retval_2 = 0) |] 
-  &&  [| ((map (sortedLinkNodeMapping) (l)) = (cons (a) (l1))) |] 
+forall (A: Type) (sortLinkHead_pre: Z) (att: archTickTimer) (ts: tickState) (l: (@list (@DL_Node (@sortedLinkNode A)))) (storeA: (Z -> (A -> Assertion))) (SysTick_4: Z) (retval: Z) ,
+  [| ((map (sortedLinkNodeMapping) (l)) = nil) |] 
+  &&  [| (retval = 1) |] 
   &&  [| (increasingSortedNode l ) |] 
   &&  [| (SysTick_4 <> 0) |] 
   &&  [| (( &( "g_archTickTimer" ) ) <> 0) |] 
-  &&  [| (retval_2 = 0) |]
-  &&  (dllseg_shift_rev (storesortedLinkNode (storeA)) &((retval_3)  # "SortLinkList" ->ₛ "sortLinkNode") &((sortLinkHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") (map (sortedLinkNodeMapping) (l)) )
-  **  ((&((sortLinkHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink" .ₛ "pstNext")) # Ptr  |-> x_lSpec_pstNext)
-  **  ((( &( "SysTick" ) )) # Ptr  |-> SysTick_5)
-  **  (storeTick ( &( "g_archTickTimer" ) ) SysTick_5 (timebase_turnover (ts)) att )
-  **  ((&((h)  # "LOS_DL_LIST" ->ₛ "pstPrev")) # Ptr  |-> &((sortLinkHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink"))
+  &&  [| (retval <> 0) |]
+  &&  (store_dll (storesortedLinkNode (storeA)) &((sortLinkHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") (map (sortedLinkNodeMapping) (l)) )
+  **  ((( &( "SysTick" ) )) # Ptr  |-> SysTick_4)
+  **  (storeTick ( &( "g_archTickTimer" ) ) SysTick_4 ts att )
 |--
   (EX (SysTick: Z) ,
   [| (SysTick <> 0) |] 
   &&  [| (( &( "g_archTickTimer" ) ) <> 0) |] 
   &&  [| (l <> nil) |] 
   &&  [| ((getFirstNodeResponseTime (l)) > (tick_getcycle_ret (ts))) |] 
-  &&  [| (retval = ((getFirstNodeResponseTime (l)) - (tick_getcycle_ret (ts)) )) |]
+  &&  [| (0 = ((getFirstNodeResponseTime (l)) - (tick_getcycle_ret (ts)) )) |]
   &&  ((( &( "SysTick" ) )) # Ptr  |-> SysTick)
   **  (store_sorted_dll storeA &((sortLinkHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") l )
   **  (storeTick ( &( "g_archTickTimer" ) ) SysTick (timebase_turnover (ts)) att ))
@@ -339,7 +337,7 @@ forall (A: Type) (sortLinkHead_pre: Z) (att: archTickTimer) (ts: tickState) (l: 
   &&  [| (( &( "g_archTickTimer" ) ) <> 0) |] 
   &&  [| (l <> nil) |] 
   &&  [| ((getFirstNodeResponseTime (l)) <= (tick_getcycle_ret (ts))) |] 
-  &&  [| (retval = 0) |]
+  &&  [| (0 = 0) |]
   &&  ((( &( "SysTick" ) )) # Ptr  |-> SysTick_2)
   **  (store_sorted_dll storeA &((sortLinkHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") l )
   **  (storeTick ( &( "g_archTickTimer" ) ) SysTick_2 (timebase_turnover (ts)) att ))
@@ -348,7 +346,7 @@ forall (A: Type) (sortLinkHead_pre: Z) (att: archTickTimer) (ts: tickState) (l: 
   [| (SysTick_3 <> 0) |] 
   &&  [| (( &( "g_archTickTimer" ) ) <> 0) |] 
   &&  [| (l = nil) |] 
-  &&  [| (retval = 0) |]
+  &&  [| (0 = 0) |]
   &&  ((( &( "SysTick" ) )) # Ptr  |-> SysTick_3)
   **  (store_sorted_dll storeA &((sortLinkHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") l )
   **  (storeTick ( &( "g_archTickTimer" ) ) SysTick_3 ts att ))
@@ -695,7 +693,6 @@ EX (storeA_highSpec: (Z -> (A -> Assertion))) (l_highSpec: (@list (@DL_Node A)))
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 Include los_sortlink_Strategy_Correct.
 
 Axiom proof_of_OsSortLinkGetNextExpireTime_safety_wit_1 : OsSortLinkGetNextExpireTime_safety_wit_1.

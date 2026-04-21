@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.QCP_democases.simple_arith Require Import exgcd_goal.
@@ -170,7 +170,7 @@ Proof.
   apply (exgcd_reduction' _ _ _ _ H H0 H1).
 Qed.
 
-Lemma proof_of_exgcd_return_wit_3 : exgcd_return_wit_3.
+Lemma proof_of_exgcd_return_wit_4 : exgcd_return_wit_4.
 Proof.
   pre_process.
   subst b_pre.
@@ -181,7 +181,7 @@ Proof.
   + rewrite Z.gcd_0_r; exact H.
 Qed.
 
-Lemma proof_of_exgcd_return_wit_2 : exgcd_return_wit_2.
+Lemma proof_of_exgcd_return_wit_5 : exgcd_return_wit_5.
 Proof.
   pre_process.
   subst b_pre.
@@ -192,7 +192,7 @@ Proof.
   + rewrite Z.gcd_0_r; exact H.
 Qed.
 
-Lemma proof_of_exgcd_return_wit_1 : exgcd_return_wit_1.
+Lemma proof_of_exgcd_return_wit_6 : exgcd_return_wit_6.
 Proof.
   pre_process.
   subst b_pre.
@@ -203,7 +203,7 @@ Proof.
   + rewrite Z.gcd_0_r; exact H.
 Qed.
 
-Lemma proof_of_exgcd_return_wit_4 : exgcd_return_wit_4.
+Lemma proof_of_exgcd_return_wit_3 : exgcd_return_wit_3.
 Proof.
   pre_process.
   Left. Right.
@@ -214,7 +214,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_exgcd_return_wit_5 : exgcd_return_wit_5.
+Lemma proof_of_exgcd_return_wit_2 : exgcd_return_wit_2.
 Proof.
   pre_process.
   Right.
@@ -249,7 +249,7 @@ Proof.
     lia.
 Qed.
 
-Lemma proof_of_exgcd_return_wit_6 : exgcd_return_wit_6.
+Lemma proof_of_exgcd_return_wit_1 : exgcd_return_wit_1.
 Proof.
   pre_process.
   Right.

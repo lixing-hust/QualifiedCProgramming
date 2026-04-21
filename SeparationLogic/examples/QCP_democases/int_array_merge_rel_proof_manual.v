@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.QCP_democases Require Import int_array_merge_rel_goal.
@@ -268,7 +268,7 @@ Proof.
   { split.
     apply Z.quot_pos; lia.
     apply Z.quot_lt;lia. }
-  prop_apply IntArray.seg_length.
+  prop_apply IntArray.seg_Zlength.
   Intros.
   rewrite IntArray.seg_split_to_seg with (mid :=  (l_pre + (r_pre - l_pre) ÷ 2 + 1)) by lia.
   rewrite IntArray.seg_split_to_seg with (x:= ret_pre) (mid :=  (l_pre + (r_pre - l_pre) ÷ 2 + 1)) by lia.
@@ -276,25 +276,20 @@ Proof.
   entailer!.
   replace ((l_pre + (r_pre - l_pre) ÷ 2 + 1 - l_pre)) with ((r_pre - l_pre) ÷ 2 + 1) by lia.
   assert (Zlength  (sublist ((r_pre - l_pre) ÷ 2 + 1) (r_pre + 1 - l_pre) s1) = (r_pre - l_pre) - ((r_pre - l_pre) ÷ 2)).
-  { rewrite Zlength_sublist ; try lia.
-    rewrite Zlength_correct. lia.
-  }
+  { rewrite Zlength_sublist ; try lia. }
   destruct (sublist ((r_pre - l_pre) ÷ 2 + 1) (r_pre + 1 - l_pre) s1) eqn:?. 
   rewrite Zlength_nil in H6. lia.
   unfold mergesortrec_loc1.
   rewrite (gmergesortrec_unfold s1) in H0.
   unfold gmergesortrec_f in H0.
-  safe_choice_r H0.
+  safe_choice_r H0 ; try lia.
   prove_by_one_abs_step ((sublist 0 ((r_pre - l_pre) ÷ 2 + 1) s1), (z::l)).
   apply hseval_stateless_ret.
   unfold ext_split.
   rewrite <- Heql.
   rewrite <- sublist_split ; try lia.
-  rewrite <- Zlength_correct in H5.
   rewrite sublist_self by easy.
   auto.
-  rewrite Zlength_correct.
-  lia.
 Qed. 
 
 Lemma proof_of_mergeSort_entail_wit_2 : mergeSort_entail_wit_2.
@@ -315,7 +310,7 @@ Proof.
   apply (IntArray.seg_merge_to_seg); try lia.
 Qed.
 
-Lemma proof_of_mergeSort_return_wit_1 : mergeSort_return_wit_1.
+Lemma proof_of_mergeSort_return_wit_2 : mergeSort_return_wit_2.
 Proof. 
   pre_process.
   rename X_low_level_spec into X.

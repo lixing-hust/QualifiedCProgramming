@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -17,8 +17,6 @@ Local Open Scope list.
 Import naive_C_Rules.
 Require Import SimpleC.EE.QCP_democases.simple_arith.Apos_lib.
 Local Open Scope sac.
-From SimpleC.EE.QCP_democases Require Import common_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import common_strategy_proof.
 
 (*----- Function Always_positive_simple -----*)
 
@@ -215,22 +213,8 @@ forall (c_pre: Z) (b_pre: Z) (a_pre: Z) ,
 
 Definition Always_positive_simple_return_wit_1 := 
 forall (c_pre: Z) (b_pre: Z) (a_pre: Z) ,
-  [| (a_pre = 0) |] 
-  &&  [| (INT_MIN < a_pre) |] 
-  &&  [| (a_pre <= INT_MAX) |] 
-  &&  [| (INT_MIN < b_pre) |] 
-  &&  [| (b_pre <= INT_MAX) |] 
-  &&  [| (INT_MIN < c_pre) |] 
-  &&  [| (c_pre <= INT_MAX) |]
-  &&  emp
-|--
-  [| (0 = (Always_pos (a_pre) (b_pre) (c_pre))) |]
-  &&  emp
-.
-
-Definition Always_positive_simple_return_wit_2 := 
-forall (c_pre: Z) (b_pre: Z) (a_pre: Z) ,
-  [| (((b_pre * b_pre ) ÷ 4 ) >= (a_pre * c_pre )) |] 
+  [| (a_pre <= 0) |] 
+  &&  [| (((b_pre * b_pre ) ÷ 4 ) < (a_pre * c_pre )) |] 
   &&  [| (a_pre <> 0) |] 
   &&  [| (INT_MIN < a_pre) |] 
   &&  [| (a_pre <= INT_MAX) |] 
@@ -244,7 +228,7 @@ forall (c_pre: Z) (b_pre: Z) (a_pre: Z) ,
   &&  emp
 .
 
-Definition Always_positive_simple_return_wit_3 := 
+Definition Always_positive_simple_return_wit_2 := 
 forall (c_pre: Z) (b_pre: Z) (a_pre: Z) ,
   [| (a_pre > 0) |] 
   &&  [| (((b_pre * b_pre ) ÷ 4 ) < (a_pre * c_pre )) |] 
@@ -261,11 +245,25 @@ forall (c_pre: Z) (b_pre: Z) (a_pre: Z) ,
   &&  emp
 .
 
+Definition Always_positive_simple_return_wit_3 := 
+forall (c_pre: Z) (b_pre: Z) (a_pre: Z) ,
+  [| (((b_pre * b_pre ) ÷ 4 ) >= (a_pre * c_pre )) |] 
+  &&  [| (a_pre <> 0) |] 
+  &&  [| (INT_MIN < a_pre) |] 
+  &&  [| (a_pre <= INT_MAX) |] 
+  &&  [| (INT_MIN < b_pre) |] 
+  &&  [| (b_pre <= INT_MAX) |] 
+  &&  [| (INT_MIN < c_pre) |] 
+  &&  [| (c_pre <= INT_MAX) |]
+  &&  emp
+|--
+  [| (0 = (Always_pos (a_pre) (b_pre) (c_pre))) |]
+  &&  emp
+.
+
 Definition Always_positive_simple_return_wit_4 := 
 forall (c_pre: Z) (b_pre: Z) (a_pre: Z) ,
-  [| (a_pre <= 0) |] 
-  &&  [| (((b_pre * b_pre ) ÷ 4 ) < (a_pre * c_pre )) |] 
-  &&  [| (a_pre <> 0) |] 
+  [| (a_pre = 0) |] 
   &&  [| (INT_MIN < a_pre) |] 
   &&  [| (a_pre <= INT_MAX) |] 
   &&  [| (INT_MIN < b_pre) |] 
@@ -933,8 +931,17 @@ forall (c_pre: Z) (b_pre: Z) (a_pre: Z) (delta1: Z) (delta2: Z) (delta0: Z) (d: 
 .
 
 Definition Always_positive_return_wit_1 := 
-forall (c_pre: Z) (b_pre: Z) (a_pre: Z) ,
-  [| (a_pre = 0) |] 
+forall (c_pre: Z) (b_pre: Z) (a_pre: Z) (delta1: Z) (delta2: Z) (delta0: Z) (d: Z) ,
+  [| (a_pre <= 0) |] 
+  &&  [| (d <> 0) |] 
+  &&  [| (delta2 > delta1) |] 
+  &&  [| (0 < d) |] 
+  &&  [| (d <= 4) |] 
+  &&  [| (delta0 = (b_pre * b_pre )) |] 
+  &&  [| (delta2 = (a_pre * c_pre )) |] 
+  &&  [| (delta0 = (delta1 + ((4 - d ) * delta2 ) )) |] 
+  &&  [| ((a_pre * c_pre ) > 0) |] 
+  &&  [| (a_pre <> 0) |] 
   &&  [| (INT_MIN < a_pre) |] 
   &&  [| (a_pre <= INT_MAX) |] 
   &&  [| (INT_MIN < b_pre) |] 
@@ -948,8 +955,16 @@ forall (c_pre: Z) (b_pre: Z) (a_pre: Z) ,
 .
 
 Definition Always_positive_return_wit_2 := 
-forall (c_pre: Z) (b_pre: Z) (a_pre: Z) ,
-  [| ((a_pre * c_pre ) <= 0) |] 
+forall (c_pre: Z) (b_pre: Z) (a_pre: Z) (delta1: Z) (delta2: Z) (delta0: Z) (d: Z) ,
+  [| (a_pre > 0) |] 
+  &&  [| (d <> 0) |] 
+  &&  [| (delta2 > delta1) |] 
+  &&  [| (0 < d) |] 
+  &&  [| (d <= 4) |] 
+  &&  [| (delta0 = (b_pre * b_pre )) |] 
+  &&  [| (delta2 = (a_pre * c_pre )) |] 
+  &&  [| (delta0 = (delta1 + ((4 - d ) * delta2 ) )) |] 
+  &&  [| ((a_pre * c_pre ) > 0) |] 
   &&  [| (a_pre <> 0) |] 
   &&  [| (INT_MIN < a_pre) |] 
   &&  [| (a_pre <= INT_MAX) |] 
@@ -959,7 +974,7 @@ forall (c_pre: Z) (b_pre: Z) (a_pre: Z) ,
   &&  [| (c_pre <= INT_MAX) |]
   &&  emp
 |--
-  [| (0 = (Always_pos (a_pre) (b_pre) (c_pre))) |]
+  [| (1 = (Always_pos (a_pre) (b_pre) (c_pre))) |]
   &&  emp
 .
 
@@ -988,16 +1003,8 @@ forall (c_pre: Z) (b_pre: Z) (a_pre: Z) (delta1: Z) (delta2: Z) (delta0: Z) (d: 
 .
 
 Definition Always_positive_return_wit_4 := 
-forall (c_pre: Z) (b_pre: Z) (a_pre: Z) (delta1: Z) (delta2: Z) (delta0: Z) (d: Z) ,
-  [| (a_pre > 0) |] 
-  &&  [| (d <> 0) |] 
-  &&  [| (delta2 > delta1) |] 
-  &&  [| (0 < d) |] 
-  &&  [| (d <= 4) |] 
-  &&  [| (delta0 = (b_pre * b_pre )) |] 
-  &&  [| (delta2 = (a_pre * c_pre )) |] 
-  &&  [| (delta0 = (delta1 + ((4 - d ) * delta2 ) )) |] 
-  &&  [| ((a_pre * c_pre ) > 0) |] 
+forall (c_pre: Z) (b_pre: Z) (a_pre: Z) ,
+  [| ((a_pre * c_pre ) <= 0) |] 
   &&  [| (a_pre <> 0) |] 
   &&  [| (INT_MIN < a_pre) |] 
   &&  [| (a_pre <= INT_MAX) |] 
@@ -1007,22 +1014,13 @@ forall (c_pre: Z) (b_pre: Z) (a_pre: Z) (delta1: Z) (delta2: Z) (delta0: Z) (d: 
   &&  [| (c_pre <= INT_MAX) |]
   &&  emp
 |--
-  [| (1 = (Always_pos (a_pre) (b_pre) (c_pre))) |]
+  [| (0 = (Always_pos (a_pre) (b_pre) (c_pre))) |]
   &&  emp
 .
 
 Definition Always_positive_return_wit_5 := 
-forall (c_pre: Z) (b_pre: Z) (a_pre: Z) (delta1: Z) (delta2: Z) (delta0: Z) (d: Z) ,
-  [| (a_pre <= 0) |] 
-  &&  [| (d <> 0) |] 
-  &&  [| (delta2 > delta1) |] 
-  &&  [| (0 < d) |] 
-  &&  [| (d <= 4) |] 
-  &&  [| (delta0 = (b_pre * b_pre )) |] 
-  &&  [| (delta2 = (a_pre * c_pre )) |] 
-  &&  [| (delta0 = (delta1 + ((4 - d ) * delta2 ) )) |] 
-  &&  [| ((a_pre * c_pre ) > 0) |] 
-  &&  [| (a_pre <> 0) |] 
+forall (c_pre: Z) (b_pre: Z) (a_pre: Z) ,
+  [| (a_pre = 0) |] 
   &&  [| (INT_MIN < a_pre) |] 
   &&  [| (a_pre <= INT_MAX) |] 
   &&  [| (INT_MIN < b_pre) |] 
@@ -1037,7 +1035,6 @@ forall (c_pre: Z) (b_pre: Z) (a_pre: Z) (delta1: Z) (delta2: Z) (delta0: Z) (d: 
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 
 Axiom proof_of_Always_positive_simple_safety_wit_1 : Always_positive_simple_safety_wit_1.
 Axiom proof_of_Always_positive_simple_safety_wit_2 : Always_positive_simple_safety_wit_2.

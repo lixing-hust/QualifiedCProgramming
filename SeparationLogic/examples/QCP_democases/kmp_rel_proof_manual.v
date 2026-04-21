@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.QCP_democases Require Import kmp_rel_goal.
@@ -42,14 +42,28 @@ Proof.
   pre_process.
   entailer!.
   unfold inner_loop in *.
-  unfold_loop in H4.
-  unfold inner_body at 1 in H4.
-  safe_step H4.
+  unfold_loop in H3.
+  unfold inner_body at 1 in H3.
+  safe_step H3.
   rewrite app_Znth1 in H0 by auto.
-  safe_choice_r H4.
-  safe_choice_r H4; auto.
-  unfold continue in H4.
-  prog_nf in H4. auto.
+  safe_choice_r H3.
+  safe_choice_r H3; auto.
+  unfold continue in H3.
+  prog_nf in H3. auto.
+Qed. 
+
+Lemma proof_of_inner_return_wit_2 : inner_return_wit_2.
+Proof. 
+  pre_process.
+  entailer!.
+  unfold inner_loop in H2.
+  unfold_loop in H2.
+  unfold inner_body at 1 in H2.
+  repeat (prog_nf in H2 ; safe_step H2).
+  rewrite app_Znth1 in H by lia.
+  safe_choice_l H2; auto.
+  unfold break in H2.
+  prog_nf in H2. auto.
 Qed. 
 
 Lemma proof_of_inner_return_wit_1 : inner_return_wit_1.
@@ -59,26 +73,12 @@ Proof.
   unfold inner_loop in H3.
   unfold_loop in H3.
   unfold inner_body at 1 in H3.
-  repeat (prog_nf in H3 ; safe_step H3).
-  rewrite app_Znth1 in H by lia.
-  safe_choice_l H3; auto.
-  unfold break in H3.
-  prog_nf in H3. auto.
-Qed. 
-
-Lemma proof_of_inner_return_wit_2 : inner_return_wit_2.
-Proof. 
-  pre_process.
-  entailer!.
-  unfold inner_loop in H4.
-  unfold_loop in H4.
-  unfold inner_body at 1 in H4.
-  safe_step H4.
+  safe_step H3.
   rewrite app_Znth1 in H0 by lia.
-  safe_choice_r H4.
-  safe_choice_l H4.
-  unfold break in H4.
-  prog_nf in H4.
+  safe_choice_r H3.
+  safe_choice_l H3.
+  unfold break in H3.
+  prog_nf in H3.
   auto.
 Qed. 
 
@@ -89,7 +89,7 @@ Proof.
   entailer!.
   prop_apply IntArray.full_Zlength; Intros.
   destruct l.
-  rewrite Zlength_nil in H0; lia.
+  rewrite Zlength_nil in H; lia.
   replace (z::l) with ((z::nil) ++ l) by easy.
   rewrite (replace_Znth_app_l 0 0); try lia.
   2:{ lazy; auto. }
@@ -102,11 +102,11 @@ Proof.
   entailer!.
   replace ((0::nil) ++ l) with (0::l) by easy.
   replace ((z::nil) ++ l) with (z::l) by easy.
-  rewrite replace_Znth_length in H0.
+  rewrite replace_Znth_length in H.
   rewrite (sublist_cons2 1 n_low_level_spec); try lia.
   2:{
     rewrite Zlength_cons.
-    rewrite Zlength_cons in H0. lia. 
+    rewrite Zlength_cons in H. lia. 
   }
   rewrite (sublist_cons2 1 n_low_level_spec); try lia.
   entailer!.
@@ -197,12 +197,12 @@ Lemma proof_of_match_entail_wit_2 : match_entail_wit_2.
 Proof. 
   pre_process.
   prop_apply CharArray.full_Zlength; entailer!.
-  apply string_Zlength in H14. 
+  apply string_Zlength in H12. 
   unfold match_loop_from_after, applyf in H0.
   safe_choice_r H0; [auto | lia].
 Qed. 
 
-Lemma proof_of_match_return_wit_1 : match_return_wit_1.
+Lemma proof_of_match_return_wit_2 : match_return_wit_2.
 Proof.
   pre_process; subst.
   unfold match_loop_from_after, applyf in H0.
@@ -213,12 +213,12 @@ Proof.
   safe_choice_l H0; auto.
 Qed. 
 
-Lemma proof_of_match_return_wit_2 : match_return_wit_2.
+Lemma proof_of_match_return_wit_1 : match_return_wit_1.
 Proof. 
   pre_process.
   prop_apply (CharArray.full_Zlength text_pre).
   Exists None; entailer!.
-  apply string_Zlength in H11.
+  apply string_Zlength in H9.
   unfold match_loop_from in H0.
   unfold_loop in H0.
   prog_nf in H0.

@@ -1,10 +1,3 @@
-/*@ Extern Coq (should_be_equal: {A} -> A -> A -> Prop) */
-/*@ Extern Coq (dup_data_at_error : Z -> Assertion)*/
-/*@ Extern Coq (dup_data_at_error_prop : Prop) */
-/*@ Extern Coq (option :: * => *) */
-/*@ Extern Coq (Some: {A} -> A -> option A)
-               (None: {A} -> option A) */
-/*@ Extern Coq (UINT_MAX : Z) */
 
 enum TypeOp
 {
@@ -41,7 +34,7 @@ struct atype
 };
 
 /*@ Import Coq Require Import SimpleC.EE.Applications.typeinfer.typeinfer_lib */
-/*@ Import Coq Import naive_C_Rules */
+
 
 
 /*@ Extern Coq (TypeTree :: *) */
@@ -66,5 +59,4 @@ struct atype
     (debug : Assertion)
 */
 
-/*@ include strategies "common.strategies" */
 /*@ include strategies "typeinfer.strategies" */

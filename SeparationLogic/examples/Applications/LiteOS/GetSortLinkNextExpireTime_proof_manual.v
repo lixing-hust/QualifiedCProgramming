@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.Applications.LiteOS Require Import GetSortLinkNextExpireTime_goal.
@@ -155,9 +155,8 @@ Proof.
 Qed. 
 
 
-Lemma proof_of_GetSortLinkNextExpireTime_return_wit_1 : GetSortLinkNextExpireTime_return_wit_1.
+Lemma proof_of_GetSortLinkNextExpireTime_return_wit_3 : GetSortLinkNextExpireTime_return_wit_3.
 Proof. 
-    unfold GetSortLinkNextExpireTime_return_wit_1.
     pre_process.
     intros.
     unfold store_sorted_dll.
@@ -179,7 +178,6 @@ Qed.
 
 Lemma proof_of_GetSortLinkNextExpireTime_return_wit_2 : GetSortLinkNextExpireTime_return_wit_2.
 Proof. 
-    unfold GetSortLinkNextExpireTime_return_wit_2.
     pre_process.
     intros.
     unfold store_sorted_dll.
@@ -228,9 +226,8 @@ Proof.
     auto.
 Qed. 
 
-Lemma proof_of_GetSortLinkNextExpireTime_return_wit_3 : GetSortLinkNextExpireTime_return_wit_3.
+Lemma proof_of_GetSortLinkNextExpireTime_return_wit_1 : GetSortLinkNextExpireTime_return_wit_1.
 Proof.  
-    unfold GetSortLinkNextExpireTime_return_wit_2.
     pre_process.
     intros.
     csimpl.

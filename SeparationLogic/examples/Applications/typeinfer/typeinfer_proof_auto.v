@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.Applications.typeinfer Require Import typeinfer_goal.
@@ -15,23 +15,23 @@ Local Open Scope Z_scope.
 Local Open Scope sets.
 Local Open Scope string.
 Local Open Scope list.
-Require Import SimpleC.EE.Applications.typeinfer.typeinfer_lib.
 Import naive_C_Rules.
+Require Import SimpleC.EE.Applications.typeinfer.typeinfer_lib.
 Local Open Scope sac.
 
 Lemma proof_of_atype_unify_safety_wit_1 : atype_unify_safety_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_atype_unify_return_wit_1 : atype_unify_return_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_atype_unify_return_wit_2 : atype_unify_return_wit_2.
 Proof. Admitted. 
 
 Lemma proof_of_atype_unify_return_wit_3 : atype_unify_return_wit_3.
 Proof. Admitted. 
 
 Lemma proof_of_atype_unify_return_wit_4 : atype_unify_return_wit_4.
-Proof. Admitted. 
-
-Lemma proof_of_atype_unify_return_wit_5 : atype_unify_return_wit_5.
-Proof. Admitted. 
-
-Lemma proof_of_atype_unify_return_wit_6 : atype_unify_return_wit_6.
 Proof. Admitted. 
 
 Lemma proof_of_atype_unify_partial_solve_wit_1 : atype_unify_partial_solve_wit_1.
@@ -100,16 +100,16 @@ Proof. Admitted.
 Lemma proof_of_atype_unify1_safety_wit_1 : atype_unify1_safety_wit_1.
 Proof. Admitted. 
 
+Lemma proof_of_atype_unify1_return_wit_1 : atype_unify1_return_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_atype_unify1_return_wit_2 : atype_unify1_return_wit_2.
+Proof. Admitted. 
+
 Lemma proof_of_atype_unify1_return_wit_3 : atype_unify1_return_wit_3.
 Proof. Admitted. 
 
 Lemma proof_of_atype_unify1_return_wit_4 : atype_unify1_return_wit_4.
-Proof. Admitted. 
-
-Lemma proof_of_atype_unify1_return_wit_5 : atype_unify1_return_wit_5.
-Proof. Admitted. 
-
-Lemma proof_of_atype_unify1_return_wit_6 : atype_unify1_return_wit_6.
 Proof. Admitted. 
 
 Lemma proof_of_atype_unify1_partial_solve_wit_1 : atype_unify1_partial_solve_wit_1.

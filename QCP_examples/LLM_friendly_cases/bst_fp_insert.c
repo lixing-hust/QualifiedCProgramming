@@ -1,4 +1,4 @@
-#include "verification_stdlib.h"
+
 #include "bst_fp_def.h"
 
 struct tree * malloc_tree_node()

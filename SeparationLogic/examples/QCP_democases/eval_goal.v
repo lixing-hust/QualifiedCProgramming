@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -17,16 +17,6 @@ Local Open Scope list.
 Import naive_C_Rules.
 Require Import SimpleC.EE.QCP_democases.eval_lib.
 Local Open Scope sac.
-From SimpleC.EE.QCP_democases Require Import common_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import common_strategy_proof.
-From SimpleC.EE.QCP_democases Require Import int_array_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import int_array_strategy_proof.
-From SimpleC.EE.QCP_democases Require Import uint_array_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import uint_array_strategy_proof.
-From SimpleC.EE.QCP_democases Require Import undef_uint_array_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import undef_uint_array_strategy_proof.
-From SimpleC.EE.QCP_democases Require Import array_shape_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import array_shape_strategy_proof.
 From SimpleC.EE.QCP_democases Require Import eval_strategy_goal.
 From SimpleC.EE.QCP_democases Require Import eval_strategy_proof.
 
@@ -915,276 +905,77 @@ forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) ,
 .
 
 Definition eval_return_wit_1 := 
-forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (n: Z) ,
-  [| (0 = 0) |] 
-  &&  [| (e0 = (EConst (n))) |] 
+forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (op: unop) (e1: expr) (retval: Z) ,
+  [| (retval = (expr_eval (e1) (l))) |] 
+  &&  [| (v_2 <> 1) |] 
+  &&  [| (e0 = (EUnop (op) (e1))) |] 
+  &&  [| (v_2 = (UnOpID (op))) |] 
   &&  [| (safe_eval e0 l ) |] 
-  &&  [| (0 = e_t) |]
-  &&  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 0)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "CONST" .ₛ "value")) # Int  |-> n)
+  &&  [| (0 <> e_t) |] 
+  &&  [| (1 <> e_t) |] 
+  &&  [| (2 <> e_t) |] 
+  &&  [| (3 = e_t) |]
+  &&  (store_expr v e1 )
   **  (IntArray.full var_value_pre 100 l )
+  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 3)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "UNOP" .ₛ "op")) # Int  |-> v_2)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "UNOP" .ₛ "arg")) # Ptr  |-> v)
 |--
-  [| (n = (expr_eval (e0) (l))) |]
+  [| ((-retval) = (expr_eval (e0) (l))) |]
   &&  (store_expr e_pre e0 )
   **  (IntArray.full var_value_pre 100 l )
 .
 
 Definition eval_return_wit_2 := 
-forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (n: Z) ,
-  [| (0 <= n) |] 
-  &&  [| (n < 100) |] 
-  &&  [| (e0 = (EVar (n))) |] 
+forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (op: unop) (e1: expr) (retval: Z) ,
+  [| (retval = 0) |] 
+  &&  [| (retval = (expr_eval (e1) (l))) |] 
+  &&  [| (v_2 = 1) |] 
+  &&  [| (e0 = (EUnop (op) (e1))) |] 
+  &&  [| (v_2 = (UnOpID (op))) |] 
   &&  [| (safe_eval e0 l ) |] 
   &&  [| (0 <> e_t) |] 
-  &&  [| (1 = e_t) |]
-  &&  (IntArray.full var_value_pre 100 l )
-  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 1)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "VAR" .ₛ "name")) # Int  |-> n)
+  &&  [| (1 <> e_t) |] 
+  &&  [| (2 <> e_t) |] 
+  &&  [| (3 = e_t) |]
+  &&  (store_expr v e1 )
+  **  (IntArray.full var_value_pre 100 l )
+  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 3)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "UNOP" .ₛ "op")) # Int  |-> v_2)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "UNOP" .ₛ "arg")) # Ptr  |-> v)
 |--
-  [| ((Znth n l 0) = (expr_eval (e0) (l))) |]
+  [| (1 = (expr_eval (e0) (l))) |]
   &&  (store_expr e_pre e0 )
   **  (IntArray.full var_value_pre 100 l )
 .
 
 Definition eval_return_wit_3 := 
-forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
-  [| (retval_2 = (expr_eval (e2) (l))) |] 
+forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (op: unop) (e1: expr) (retval: Z) ,
+  [| (retval <> 0) |] 
   &&  [| (retval = (expr_eval (e1) (l))) |] 
-  &&  [| (v_3 = 11) |] 
-  &&  [| (e0 = (EBinop (op) (e1) (e2))) |] 
-  &&  [| (v_3 = (BinOpID (op))) |] 
+  &&  [| (v_2 = 1) |] 
+  &&  [| (e0 = (EUnop (op) (e1))) |] 
+  &&  [| (v_2 = (UnOpID (op))) |] 
   &&  [| (safe_eval e0 l ) |] 
   &&  [| (0 <> e_t) |] 
   &&  [| (1 <> e_t) |] 
-  &&  [| (2 = e_t) |] 
-  &&  [| (retval <> 0) |] 
-  &&  [| (retval_2 <> 0) |]
-  &&  (store_expr v e2 )
+  &&  [| (2 <> e_t) |] 
+  &&  [| (3 = e_t) |]
+  &&  (store_expr v e1 )
   **  (IntArray.full var_value_pre 100 l )
-  **  (store_expr v_2 e1 )
-  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 2)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "op")) # Int  |-> v_3)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
+  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 3)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "UNOP" .ₛ "op")) # Int  |-> v_2)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "UNOP" .ₛ "arg")) # Ptr  |-> v)
 |--
-  [| (1 = (expr_eval (e0) (l))) |]
+  [| (0 = (expr_eval (e0) (l))) |]
   &&  (store_expr e_pre e0 )
   **  (IntArray.full var_value_pre 100 l )
 .
 
 Definition eval_return_wit_4 := 
 forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
-  [| (retval_2 = (expr_eval (e2) (l))) |] 
-  &&  [| (retval = (expr_eval (e1) (l))) |] 
-  &&  [| (v_3 = 11) |] 
-  &&  [| (e0 = (EBinop (op) (e1) (e2))) |] 
-  &&  [| (v_3 = (BinOpID (op))) |] 
-  &&  [| (safe_eval e0 l ) |] 
-  &&  [| (0 <> e_t) |] 
-  &&  [| (1 <> e_t) |] 
-  &&  [| (2 = e_t) |] 
-  &&  [| (retval <> 0) |] 
-  &&  [| (retval_2 = 0) |]
-  &&  (store_expr v e2 )
-  **  (IntArray.full var_value_pre 100 l )
-  **  (store_expr v_2 e1 )
-  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 2)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "op")) # Int  |-> v_3)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
-|--
-  [| (0 = (expr_eval (e0) (l))) |]
-  &&  (store_expr e_pre e0 )
-  **  (IntArray.full var_value_pre 100 l )
-.
-
-Definition eval_return_wit_5 := 
-forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) ,
-  [| (retval = (expr_eval (e1) (l))) |] 
-  &&  [| (v_3 = 11) |] 
-  &&  [| (e0 = (EBinop (op) (e1) (e2))) |] 
-  &&  [| (v_3 = (BinOpID (op))) |] 
-  &&  [| (safe_eval e0 l ) |] 
-  &&  [| (0 <> e_t) |] 
-  &&  [| (1 <> e_t) |] 
-  &&  [| (2 = e_t) |] 
-  &&  [| (retval = 0) |]
-  &&  (store_expr v_2 e1 )
-  **  (IntArray.full var_value_pre 100 l )
-  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 2)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "op")) # Int  |-> v_3)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
-  **  (store_expr v e2 )
-|--
-  [| (0 = (expr_eval (e0) (l))) |]
-  &&  (store_expr e_pre e0 )
-  **  (IntArray.full var_value_pre 100 l )
-.
-
-Definition eval_return_wit_6 := 
-forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) ,
-  [| (retval = (expr_eval (e1) (l))) |] 
-  &&  [| (v_3 = 12) |] 
-  &&  [| (v_3 <> 11) |] 
-  &&  [| (e0 = (EBinop (op) (e1) (e2))) |] 
-  &&  [| (v_3 = (BinOpID (op))) |] 
-  &&  [| (safe_eval e0 l ) |] 
-  &&  [| (0 <> e_t) |] 
-  &&  [| (1 <> e_t) |] 
-  &&  [| (2 = e_t) |] 
-  &&  [| (retval <> 0) |]
-  &&  (store_expr v_2 e1 )
-  **  (IntArray.full var_value_pre 100 l )
-  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 2)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "op")) # Int  |-> v_3)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
-  **  (store_expr v e2 )
-|--
-  [| (1 = (expr_eval (e0) (l))) |]
-  &&  (store_expr e_pre e0 )
-  **  (IntArray.full var_value_pre 100 l )
-.
-
-Definition eval_return_wit_7 := 
-forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
-  [| (retval_2 = (expr_eval (e2) (l))) |] 
-  &&  [| (retval = (expr_eval (e1) (l))) |] 
-  &&  [| (v_3 = 12) |] 
-  &&  [| (v_3 <> 11) |] 
-  &&  [| (e0 = (EBinop (op) (e1) (e2))) |] 
-  &&  [| (v_3 = (BinOpID (op))) |] 
-  &&  [| (safe_eval e0 l ) |] 
-  &&  [| (0 <> e_t) |] 
-  &&  [| (1 <> e_t) |] 
-  &&  [| (2 = e_t) |] 
-  &&  [| (retval = 0) |] 
-  &&  [| (retval_2 <> 0) |]
-  &&  (store_expr v e2 )
-  **  (IntArray.full var_value_pre 100 l )
-  **  (store_expr v_2 e1 )
-  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 2)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "op")) # Int  |-> v_3)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
-|--
-  [| (1 = (expr_eval (e0) (l))) |]
-  &&  (store_expr e_pre e0 )
-  **  (IntArray.full var_value_pre 100 l )
-.
-
-Definition eval_return_wit_8 := 
-forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
-  [| (retval_2 = (expr_eval (e2) (l))) |] 
-  &&  [| (retval = (expr_eval (e1) (l))) |] 
-  &&  [| (v_3 = 12) |] 
-  &&  [| (v_3 <> 11) |] 
-  &&  [| (e0 = (EBinop (op) (e1) (e2))) |] 
-  &&  [| (v_3 = (BinOpID (op))) |] 
-  &&  [| (safe_eval e0 l ) |] 
-  &&  [| (0 <> e_t) |] 
-  &&  [| (1 <> e_t) |] 
-  &&  [| (2 = e_t) |] 
-  &&  [| (retval = 0) |] 
-  &&  [| (retval_2 = 0) |]
-  &&  (store_expr v e2 )
-  **  (IntArray.full var_value_pre 100 l )
-  **  (store_expr v_2 e1 )
-  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 2)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "op")) # Int  |-> v_3)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
-|--
-  [| (0 = (expr_eval (e0) (l))) |]
-  &&  (store_expr e_pre e0 )
-  **  (IntArray.full var_value_pre 100 l )
-.
-
-Definition eval_return_wit_9 := 
-forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
-  [| (retval_2 = (expr_eval (e2) (l))) |] 
-  &&  [| (retval = (expr_eval (e1) (l))) |] 
-  &&  [| (v_3 <> 12) |] 
-  &&  [| (v_3 <> 11) |] 
-  &&  [| (e0 = (EBinop (op) (e1) (e2))) |] 
-  &&  [| (v_3 = (BinOpID (op))) |] 
-  &&  [| (safe_eval e0 l ) |] 
-  &&  [| (0 <> e_t) |] 
-  &&  [| (1 <> e_t) |] 
-  &&  [| (2 = e_t) |] 
-  &&  [| (0 = v_3) |]
-  &&  (store_expr v e2 )
-  **  (IntArray.full var_value_pre 100 l )
-  **  (store_expr v_2 e1 )
-  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 2)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "op")) # Int  |-> v_3)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
-|--
-  [| ((retval + retval_2 ) = (expr_eval (e0) (l))) |]
-  &&  (store_expr e_pre e0 )
-  **  (IntArray.full var_value_pre 100 l )
-.
-
-Definition eval_return_wit_10 := 
-forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
-  [| (retval_2 = (expr_eval (e2) (l))) |] 
-  &&  [| (retval = (expr_eval (e1) (l))) |] 
-  &&  [| (v_3 <> 12) |] 
-  &&  [| (v_3 <> 11) |] 
-  &&  [| (e0 = (EBinop (op) (e1) (e2))) |] 
-  &&  [| (v_3 = (BinOpID (op))) |] 
-  &&  [| (safe_eval e0 l ) |] 
-  &&  [| (0 <> e_t) |] 
-  &&  [| (1 <> e_t) |] 
-  &&  [| (2 = e_t) |] 
-  &&  [| (0 <> v_3) |] 
-  &&  [| (1 = v_3) |]
-  &&  (store_expr v e2 )
-  **  (IntArray.full var_value_pre 100 l )
-  **  (store_expr v_2 e1 )
-  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 2)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "op")) # Int  |-> v_3)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
-|--
-  [| ((retval - retval_2 ) = (expr_eval (e0) (l))) |]
-  &&  (store_expr e_pre e0 )
-  **  (IntArray.full var_value_pre 100 l )
-.
-
-Definition eval_return_wit_11 := 
-forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
-  [| (retval_2 = (expr_eval (e2) (l))) |] 
-  &&  [| (retval = (expr_eval (e1) (l))) |] 
-  &&  [| (v_3 <> 12) |] 
-  &&  [| (v_3 <> 11) |] 
-  &&  [| (e0 = (EBinop (op) (e1) (e2))) |] 
-  &&  [| (v_3 = (BinOpID (op))) |] 
-  &&  [| (safe_eval e0 l ) |] 
-  &&  [| (0 <> e_t) |] 
-  &&  [| (1 <> e_t) |] 
-  &&  [| (2 = e_t) |] 
-  &&  [| (0 <> v_3) |] 
-  &&  [| (1 <> v_3) |] 
-  &&  [| (2 = v_3) |]
-  &&  (store_expr v e2 )
-  **  (IntArray.full var_value_pre 100 l )
-  **  (store_expr v_2 e1 )
-  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 2)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "op")) # Int  |-> v_3)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
-|--
-  [| ((retval * retval_2 ) = (expr_eval (e0) (l))) |]
-  &&  (store_expr e_pre e0 )
-  **  (IntArray.full var_value_pre 100 l )
-.
-
-Definition eval_return_wit_12 := 
-forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
-  [| (retval_2 = (expr_eval (e2) (l))) |] 
+  [| (retval <> retval_2) |] 
+  &&  [| (retval_2 = (expr_eval (e2) (l))) |] 
   &&  [| (retval = (expr_eval (e1) (l))) |] 
   &&  [| (v_3 <> 12) |] 
   &&  [| (v_3 <> 11) |] 
@@ -1197,7 +988,14 @@ forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (
   &&  [| (0 <> v_3) |] 
   &&  [| (1 <> v_3) |] 
   &&  [| (2 <> v_3) |] 
-  &&  [| (3 = v_3) |]
+  &&  [| (3 <> v_3) |] 
+  &&  [| (4 <> v_3) |] 
+  &&  [| (5 <> v_3) |] 
+  &&  [| (6 <> v_3) |] 
+  &&  [| (7 <> v_3) |] 
+  &&  [| (8 <> v_3) |] 
+  &&  [| (9 <> v_3) |] 
+  &&  [| (10 = v_3) |]
   &&  (store_expr v e2 )
   **  (IntArray.full var_value_pre 100 l )
   **  (store_expr v_2 e1 )
@@ -1206,12 +1004,389 @@ forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (
   **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
   **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
 |--
-  [| ((retval ÷ retval_2 ) = (expr_eval (e0) (l))) |]
+  [| (1 = (expr_eval (e0) (l))) |]
+  &&  (store_expr e_pre e0 )
+  **  (IntArray.full var_value_pre 100 l )
+.
+
+Definition eval_return_wit_5 := 
+forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
+  [| (retval = retval_2) |] 
+  &&  [| (retval_2 = (expr_eval (e2) (l))) |] 
+  &&  [| (retval = (expr_eval (e1) (l))) |] 
+  &&  [| (v_3 <> 12) |] 
+  &&  [| (v_3 <> 11) |] 
+  &&  [| (e0 = (EBinop (op) (e1) (e2))) |] 
+  &&  [| (v_3 = (BinOpID (op))) |] 
+  &&  [| (safe_eval e0 l ) |] 
+  &&  [| (0 <> e_t) |] 
+  &&  [| (1 <> e_t) |] 
+  &&  [| (2 = e_t) |] 
+  &&  [| (0 <> v_3) |] 
+  &&  [| (1 <> v_3) |] 
+  &&  [| (2 <> v_3) |] 
+  &&  [| (3 <> v_3) |] 
+  &&  [| (4 <> v_3) |] 
+  &&  [| (5 <> v_3) |] 
+  &&  [| (6 <> v_3) |] 
+  &&  [| (7 <> v_3) |] 
+  &&  [| (8 <> v_3) |] 
+  &&  [| (9 <> v_3) |] 
+  &&  [| (10 = v_3) |]
+  &&  (store_expr v e2 )
+  **  (IntArray.full var_value_pre 100 l )
+  **  (store_expr v_2 e1 )
+  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 2)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "op")) # Int  |-> v_3)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
+|--
+  [| (0 = (expr_eval (e0) (l))) |]
+  &&  (store_expr e_pre e0 )
+  **  (IntArray.full var_value_pre 100 l )
+.
+
+Definition eval_return_wit_6 := 
+forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
+  [| (retval = retval_2) |] 
+  &&  [| (retval_2 = (expr_eval (e2) (l))) |] 
+  &&  [| (retval = (expr_eval (e1) (l))) |] 
+  &&  [| (v_3 <> 12) |] 
+  &&  [| (v_3 <> 11) |] 
+  &&  [| (e0 = (EBinop (op) (e1) (e2))) |] 
+  &&  [| (v_3 = (BinOpID (op))) |] 
+  &&  [| (safe_eval e0 l ) |] 
+  &&  [| (0 <> e_t) |] 
+  &&  [| (1 <> e_t) |] 
+  &&  [| (2 = e_t) |] 
+  &&  [| (0 <> v_3) |] 
+  &&  [| (1 <> v_3) |] 
+  &&  [| (2 <> v_3) |] 
+  &&  [| (3 <> v_3) |] 
+  &&  [| (4 <> v_3) |] 
+  &&  [| (5 <> v_3) |] 
+  &&  [| (6 <> v_3) |] 
+  &&  [| (7 <> v_3) |] 
+  &&  [| (8 <> v_3) |] 
+  &&  [| (9 = v_3) |]
+  &&  (store_expr v e2 )
+  **  (IntArray.full var_value_pre 100 l )
+  **  (store_expr v_2 e1 )
+  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 2)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "op")) # Int  |-> v_3)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
+|--
+  [| (1 = (expr_eval (e0) (l))) |]
+  &&  (store_expr e_pre e0 )
+  **  (IntArray.full var_value_pre 100 l )
+.
+
+Definition eval_return_wit_7 := 
+forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
+  [| (retval <> retval_2) |] 
+  &&  [| (retval_2 = (expr_eval (e2) (l))) |] 
+  &&  [| (retval = (expr_eval (e1) (l))) |] 
+  &&  [| (v_3 <> 12) |] 
+  &&  [| (v_3 <> 11) |] 
+  &&  [| (e0 = (EBinop (op) (e1) (e2))) |] 
+  &&  [| (v_3 = (BinOpID (op))) |] 
+  &&  [| (safe_eval e0 l ) |] 
+  &&  [| (0 <> e_t) |] 
+  &&  [| (1 <> e_t) |] 
+  &&  [| (2 = e_t) |] 
+  &&  [| (0 <> v_3) |] 
+  &&  [| (1 <> v_3) |] 
+  &&  [| (2 <> v_3) |] 
+  &&  [| (3 <> v_3) |] 
+  &&  [| (4 <> v_3) |] 
+  &&  [| (5 <> v_3) |] 
+  &&  [| (6 <> v_3) |] 
+  &&  [| (7 <> v_3) |] 
+  &&  [| (8 <> v_3) |] 
+  &&  [| (9 = v_3) |]
+  &&  (store_expr v e2 )
+  **  (IntArray.full var_value_pre 100 l )
+  **  (store_expr v_2 e1 )
+  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 2)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "op")) # Int  |-> v_3)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
+|--
+  [| (0 = (expr_eval (e0) (l))) |]
+  &&  (store_expr e_pre e0 )
+  **  (IntArray.full var_value_pre 100 l )
+.
+
+Definition eval_return_wit_8 := 
+forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
+  [| (retval >= retval_2) |] 
+  &&  [| (retval_2 = (expr_eval (e2) (l))) |] 
+  &&  [| (retval = (expr_eval (e1) (l))) |] 
+  &&  [| (v_3 <> 12) |] 
+  &&  [| (v_3 <> 11) |] 
+  &&  [| (e0 = (EBinop (op) (e1) (e2))) |] 
+  &&  [| (v_3 = (BinOpID (op))) |] 
+  &&  [| (safe_eval e0 l ) |] 
+  &&  [| (0 <> e_t) |] 
+  &&  [| (1 <> e_t) |] 
+  &&  [| (2 = e_t) |] 
+  &&  [| (0 <> v_3) |] 
+  &&  [| (1 <> v_3) |] 
+  &&  [| (2 <> v_3) |] 
+  &&  [| (3 <> v_3) |] 
+  &&  [| (4 <> v_3) |] 
+  &&  [| (5 <> v_3) |] 
+  &&  [| (6 <> v_3) |] 
+  &&  [| (7 <> v_3) |] 
+  &&  [| (8 = v_3) |]
+  &&  (store_expr v e2 )
+  **  (IntArray.full var_value_pre 100 l )
+  **  (store_expr v_2 e1 )
+  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 2)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "op")) # Int  |-> v_3)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
+|--
+  [| (1 = (expr_eval (e0) (l))) |]
+  &&  (store_expr e_pre e0 )
+  **  (IntArray.full var_value_pre 100 l )
+.
+
+Definition eval_return_wit_9 := 
+forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
+  [| (retval < retval_2) |] 
+  &&  [| (retval_2 = (expr_eval (e2) (l))) |] 
+  &&  [| (retval = (expr_eval (e1) (l))) |] 
+  &&  [| (v_3 <> 12) |] 
+  &&  [| (v_3 <> 11) |] 
+  &&  [| (e0 = (EBinop (op) (e1) (e2))) |] 
+  &&  [| (v_3 = (BinOpID (op))) |] 
+  &&  [| (safe_eval e0 l ) |] 
+  &&  [| (0 <> e_t) |] 
+  &&  [| (1 <> e_t) |] 
+  &&  [| (2 = e_t) |] 
+  &&  [| (0 <> v_3) |] 
+  &&  [| (1 <> v_3) |] 
+  &&  [| (2 <> v_3) |] 
+  &&  [| (3 <> v_3) |] 
+  &&  [| (4 <> v_3) |] 
+  &&  [| (5 <> v_3) |] 
+  &&  [| (6 <> v_3) |] 
+  &&  [| (7 <> v_3) |] 
+  &&  [| (8 = v_3) |]
+  &&  (store_expr v e2 )
+  **  (IntArray.full var_value_pre 100 l )
+  **  (store_expr v_2 e1 )
+  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 2)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "op")) # Int  |-> v_3)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
+|--
+  [| (0 = (expr_eval (e0) (l))) |]
+  &&  (store_expr e_pre e0 )
+  **  (IntArray.full var_value_pre 100 l )
+.
+
+Definition eval_return_wit_10 := 
+forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
+  [| (retval <= retval_2) |] 
+  &&  [| (retval_2 = (expr_eval (e2) (l))) |] 
+  &&  [| (retval = (expr_eval (e1) (l))) |] 
+  &&  [| (v_3 <> 12) |] 
+  &&  [| (v_3 <> 11) |] 
+  &&  [| (e0 = (EBinop (op) (e1) (e2))) |] 
+  &&  [| (v_3 = (BinOpID (op))) |] 
+  &&  [| (safe_eval e0 l ) |] 
+  &&  [| (0 <> e_t) |] 
+  &&  [| (1 <> e_t) |] 
+  &&  [| (2 = e_t) |] 
+  &&  [| (0 <> v_3) |] 
+  &&  [| (1 <> v_3) |] 
+  &&  [| (2 <> v_3) |] 
+  &&  [| (3 <> v_3) |] 
+  &&  [| (4 <> v_3) |] 
+  &&  [| (5 <> v_3) |] 
+  &&  [| (6 <> v_3) |] 
+  &&  [| (7 = v_3) |]
+  &&  (store_expr v e2 )
+  **  (IntArray.full var_value_pre 100 l )
+  **  (store_expr v_2 e1 )
+  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 2)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "op")) # Int  |-> v_3)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
+|--
+  [| (1 = (expr_eval (e0) (l))) |]
+  &&  (store_expr e_pre e0 )
+  **  (IntArray.full var_value_pre 100 l )
+.
+
+Definition eval_return_wit_11 := 
+forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
+  [| (retval > retval_2) |] 
+  &&  [| (retval_2 = (expr_eval (e2) (l))) |] 
+  &&  [| (retval = (expr_eval (e1) (l))) |] 
+  &&  [| (v_3 <> 12) |] 
+  &&  [| (v_3 <> 11) |] 
+  &&  [| (e0 = (EBinop (op) (e1) (e2))) |] 
+  &&  [| (v_3 = (BinOpID (op))) |] 
+  &&  [| (safe_eval e0 l ) |] 
+  &&  [| (0 <> e_t) |] 
+  &&  [| (1 <> e_t) |] 
+  &&  [| (2 = e_t) |] 
+  &&  [| (0 <> v_3) |] 
+  &&  [| (1 <> v_3) |] 
+  &&  [| (2 <> v_3) |] 
+  &&  [| (3 <> v_3) |] 
+  &&  [| (4 <> v_3) |] 
+  &&  [| (5 <> v_3) |] 
+  &&  [| (6 <> v_3) |] 
+  &&  [| (7 = v_3) |]
+  &&  (store_expr v e2 )
+  **  (IntArray.full var_value_pre 100 l )
+  **  (store_expr v_2 e1 )
+  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 2)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "op")) # Int  |-> v_3)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
+|--
+  [| (0 = (expr_eval (e0) (l))) |]
+  &&  (store_expr e_pre e0 )
+  **  (IntArray.full var_value_pre 100 l )
+.
+
+Definition eval_return_wit_12 := 
+forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
+  [| (retval > retval_2) |] 
+  &&  [| (retval_2 = (expr_eval (e2) (l))) |] 
+  &&  [| (retval = (expr_eval (e1) (l))) |] 
+  &&  [| (v_3 <> 12) |] 
+  &&  [| (v_3 <> 11) |] 
+  &&  [| (e0 = (EBinop (op) (e1) (e2))) |] 
+  &&  [| (v_3 = (BinOpID (op))) |] 
+  &&  [| (safe_eval e0 l ) |] 
+  &&  [| (0 <> e_t) |] 
+  &&  [| (1 <> e_t) |] 
+  &&  [| (2 = e_t) |] 
+  &&  [| (0 <> v_3) |] 
+  &&  [| (1 <> v_3) |] 
+  &&  [| (2 <> v_3) |] 
+  &&  [| (3 <> v_3) |] 
+  &&  [| (4 <> v_3) |] 
+  &&  [| (5 <> v_3) |] 
+  &&  [| (6 = v_3) |]
+  &&  (store_expr v e2 )
+  **  (IntArray.full var_value_pre 100 l )
+  **  (store_expr v_2 e1 )
+  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 2)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "op")) # Int  |-> v_3)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
+|--
+  [| (1 = (expr_eval (e0) (l))) |]
   &&  (store_expr e_pre e0 )
   **  (IntArray.full var_value_pre 100 l )
 .
 
 Definition eval_return_wit_13 := 
+forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
+  [| (retval <= retval_2) |] 
+  &&  [| (retval_2 = (expr_eval (e2) (l))) |] 
+  &&  [| (retval = (expr_eval (e1) (l))) |] 
+  &&  [| (v_3 <> 12) |] 
+  &&  [| (v_3 <> 11) |] 
+  &&  [| (e0 = (EBinop (op) (e1) (e2))) |] 
+  &&  [| (v_3 = (BinOpID (op))) |] 
+  &&  [| (safe_eval e0 l ) |] 
+  &&  [| (0 <> e_t) |] 
+  &&  [| (1 <> e_t) |] 
+  &&  [| (2 = e_t) |] 
+  &&  [| (0 <> v_3) |] 
+  &&  [| (1 <> v_3) |] 
+  &&  [| (2 <> v_3) |] 
+  &&  [| (3 <> v_3) |] 
+  &&  [| (4 <> v_3) |] 
+  &&  [| (5 <> v_3) |] 
+  &&  [| (6 = v_3) |]
+  &&  (store_expr v e2 )
+  **  (IntArray.full var_value_pre 100 l )
+  **  (store_expr v_2 e1 )
+  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 2)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "op")) # Int  |-> v_3)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
+|--
+  [| (0 = (expr_eval (e0) (l))) |]
+  &&  (store_expr e_pre e0 )
+  **  (IntArray.full var_value_pre 100 l )
+.
+
+Definition eval_return_wit_14 := 
+forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
+  [| (retval < retval_2) |] 
+  &&  [| (retval_2 = (expr_eval (e2) (l))) |] 
+  &&  [| (retval = (expr_eval (e1) (l))) |] 
+  &&  [| (v_3 <> 12) |] 
+  &&  [| (v_3 <> 11) |] 
+  &&  [| (e0 = (EBinop (op) (e1) (e2))) |] 
+  &&  [| (v_3 = (BinOpID (op))) |] 
+  &&  [| (safe_eval e0 l ) |] 
+  &&  [| (0 <> e_t) |] 
+  &&  [| (1 <> e_t) |] 
+  &&  [| (2 = e_t) |] 
+  &&  [| (0 <> v_3) |] 
+  &&  [| (1 <> v_3) |] 
+  &&  [| (2 <> v_3) |] 
+  &&  [| (3 <> v_3) |] 
+  &&  [| (4 <> v_3) |] 
+  &&  [| (5 = v_3) |]
+  &&  (store_expr v e2 )
+  **  (IntArray.full var_value_pre 100 l )
+  **  (store_expr v_2 e1 )
+  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 2)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "op")) # Int  |-> v_3)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
+|--
+  [| (1 = (expr_eval (e0) (l))) |]
+  &&  (store_expr e_pre e0 )
+  **  (IntArray.full var_value_pre 100 l )
+.
+
+Definition eval_return_wit_15 := 
+forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
+  [| (retval >= retval_2) |] 
+  &&  [| (retval_2 = (expr_eval (e2) (l))) |] 
+  &&  [| (retval = (expr_eval (e1) (l))) |] 
+  &&  [| (v_3 <> 12) |] 
+  &&  [| (v_3 <> 11) |] 
+  &&  [| (e0 = (EBinop (op) (e1) (e2))) |] 
+  &&  [| (v_3 = (BinOpID (op))) |] 
+  &&  [| (safe_eval e0 l ) |] 
+  &&  [| (0 <> e_t) |] 
+  &&  [| (1 <> e_t) |] 
+  &&  [| (2 = e_t) |] 
+  &&  [| (0 <> v_3) |] 
+  &&  [| (1 <> v_3) |] 
+  &&  [| (2 <> v_3) |] 
+  &&  [| (3 <> v_3) |] 
+  &&  [| (4 <> v_3) |] 
+  &&  [| (5 = v_3) |]
+  &&  (store_expr v e2 )
+  **  (IntArray.full var_value_pre 100 l )
+  **  (store_expr v_2 e1 )
+  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 2)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "op")) # Int  |-> v_3)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
+|--
+  [| (0 = (expr_eval (e0) (l))) |]
+  &&  (store_expr e_pre e0 )
+  **  (IntArray.full var_value_pre 100 l )
+.
+
+Definition eval_return_wit_16 := 
 forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
   [| (retval_2 = (expr_eval (e2) (l))) |] 
   &&  [| (retval = (expr_eval (e1) (l))) |] 
@@ -1241,107 +1416,9 @@ forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (
   **  (IntArray.full var_value_pre 100 l )
 .
 
-Definition eval_return_wit_14 := 
-forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
-  [| (retval >= retval_2) |] 
-  &&  [| (retval_2 = (expr_eval (e2) (l))) |] 
-  &&  [| (retval = (expr_eval (e1) (l))) |] 
-  &&  [| (v_3 <> 12) |] 
-  &&  [| (v_3 <> 11) |] 
-  &&  [| (e0 = (EBinop (op) (e1) (e2))) |] 
-  &&  [| (v_3 = (BinOpID (op))) |] 
-  &&  [| (safe_eval e0 l ) |] 
-  &&  [| (0 <> e_t) |] 
-  &&  [| (1 <> e_t) |] 
-  &&  [| (2 = e_t) |] 
-  &&  [| (0 <> v_3) |] 
-  &&  [| (1 <> v_3) |] 
-  &&  [| (2 <> v_3) |] 
-  &&  [| (3 <> v_3) |] 
-  &&  [| (4 <> v_3) |] 
-  &&  [| (5 = v_3) |]
-  &&  (store_expr v e2 )
-  **  (IntArray.full var_value_pre 100 l )
-  **  (store_expr v_2 e1 )
-  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 2)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "op")) # Int  |-> v_3)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
-|--
-  [| (0 = (expr_eval (e0) (l))) |]
-  &&  (store_expr e_pre e0 )
-  **  (IntArray.full var_value_pre 100 l )
-.
-
-Definition eval_return_wit_15 := 
-forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
-  [| (retval < retval_2) |] 
-  &&  [| (retval_2 = (expr_eval (e2) (l))) |] 
-  &&  [| (retval = (expr_eval (e1) (l))) |] 
-  &&  [| (v_3 <> 12) |] 
-  &&  [| (v_3 <> 11) |] 
-  &&  [| (e0 = (EBinop (op) (e1) (e2))) |] 
-  &&  [| (v_3 = (BinOpID (op))) |] 
-  &&  [| (safe_eval e0 l ) |] 
-  &&  [| (0 <> e_t) |] 
-  &&  [| (1 <> e_t) |] 
-  &&  [| (2 = e_t) |] 
-  &&  [| (0 <> v_3) |] 
-  &&  [| (1 <> v_3) |] 
-  &&  [| (2 <> v_3) |] 
-  &&  [| (3 <> v_3) |] 
-  &&  [| (4 <> v_3) |] 
-  &&  [| (5 = v_3) |]
-  &&  (store_expr v e2 )
-  **  (IntArray.full var_value_pre 100 l )
-  **  (store_expr v_2 e1 )
-  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 2)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "op")) # Int  |-> v_3)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
-|--
-  [| (1 = (expr_eval (e0) (l))) |]
-  &&  (store_expr e_pre e0 )
-  **  (IntArray.full var_value_pre 100 l )
-.
-
-Definition eval_return_wit_16 := 
-forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
-  [| (retval <= retval_2) |] 
-  &&  [| (retval_2 = (expr_eval (e2) (l))) |] 
-  &&  [| (retval = (expr_eval (e1) (l))) |] 
-  &&  [| (v_3 <> 12) |] 
-  &&  [| (v_3 <> 11) |] 
-  &&  [| (e0 = (EBinop (op) (e1) (e2))) |] 
-  &&  [| (v_3 = (BinOpID (op))) |] 
-  &&  [| (safe_eval e0 l ) |] 
-  &&  [| (0 <> e_t) |] 
-  &&  [| (1 <> e_t) |] 
-  &&  [| (2 = e_t) |] 
-  &&  [| (0 <> v_3) |] 
-  &&  [| (1 <> v_3) |] 
-  &&  [| (2 <> v_3) |] 
-  &&  [| (3 <> v_3) |] 
-  &&  [| (4 <> v_3) |] 
-  &&  [| (5 <> v_3) |] 
-  &&  [| (6 = v_3) |]
-  &&  (store_expr v e2 )
-  **  (IntArray.full var_value_pre 100 l )
-  **  (store_expr v_2 e1 )
-  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 2)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "op")) # Int  |-> v_3)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
-|--
-  [| (0 = (expr_eval (e0) (l))) |]
-  &&  (store_expr e_pre e0 )
-  **  (IntArray.full var_value_pre 100 l )
-.
-
 Definition eval_return_wit_17 := 
 forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
-  [| (retval > retval_2) |] 
-  &&  [| (retval_2 = (expr_eval (e2) (l))) |] 
+  [| (retval_2 = (expr_eval (e2) (l))) |] 
   &&  [| (retval = (expr_eval (e1) (l))) |] 
   &&  [| (v_3 <> 12) |] 
   &&  [| (v_3 <> 11) |] 
@@ -1354,10 +1431,7 @@ forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (
   &&  [| (0 <> v_3) |] 
   &&  [| (1 <> v_3) |] 
   &&  [| (2 <> v_3) |] 
-  &&  [| (3 <> v_3) |] 
-  &&  [| (4 <> v_3) |] 
-  &&  [| (5 <> v_3) |] 
-  &&  [| (6 = v_3) |]
+  &&  [| (3 = v_3) |]
   &&  (store_expr v e2 )
   **  (IntArray.full var_value_pre 100 l )
   **  (store_expr v_2 e1 )
@@ -1366,15 +1440,14 @@ forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (
   **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
   **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
 |--
-  [| (1 = (expr_eval (e0) (l))) |]
+  [| ((retval ÷ retval_2 ) = (expr_eval (e0) (l))) |]
   &&  (store_expr e_pre e0 )
   **  (IntArray.full var_value_pre 100 l )
 .
 
 Definition eval_return_wit_18 := 
 forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
-  [| (retval > retval_2) |] 
-  &&  [| (retval_2 = (expr_eval (e2) (l))) |] 
+  [| (retval_2 = (expr_eval (e2) (l))) |] 
   &&  [| (retval = (expr_eval (e1) (l))) |] 
   &&  [| (v_3 <> 12) |] 
   &&  [| (v_3 <> 11) |] 
@@ -1386,12 +1459,7 @@ forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (
   &&  [| (2 = e_t) |] 
   &&  [| (0 <> v_3) |] 
   &&  [| (1 <> v_3) |] 
-  &&  [| (2 <> v_3) |] 
-  &&  [| (3 <> v_3) |] 
-  &&  [| (4 <> v_3) |] 
-  &&  [| (5 <> v_3) |] 
-  &&  [| (6 <> v_3) |] 
-  &&  [| (7 = v_3) |]
+  &&  [| (2 = v_3) |]
   &&  (store_expr v e2 )
   **  (IntArray.full var_value_pre 100 l )
   **  (store_expr v_2 e1 )
@@ -1400,15 +1468,14 @@ forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (
   **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
   **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
 |--
-  [| (0 = (expr_eval (e0) (l))) |]
+  [| ((retval * retval_2 ) = (expr_eval (e0) (l))) |]
   &&  (store_expr e_pre e0 )
   **  (IntArray.full var_value_pre 100 l )
 .
 
 Definition eval_return_wit_19 := 
 forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
-  [| (retval <= retval_2) |] 
-  &&  [| (retval_2 = (expr_eval (e2) (l))) |] 
+  [| (retval_2 = (expr_eval (e2) (l))) |] 
   &&  [| (retval = (expr_eval (e1) (l))) |] 
   &&  [| (v_3 <> 12) |] 
   &&  [| (v_3 <> 11) |] 
@@ -1419,13 +1486,7 @@ forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (
   &&  [| (1 <> e_t) |] 
   &&  [| (2 = e_t) |] 
   &&  [| (0 <> v_3) |] 
-  &&  [| (1 <> v_3) |] 
-  &&  [| (2 <> v_3) |] 
-  &&  [| (3 <> v_3) |] 
-  &&  [| (4 <> v_3) |] 
-  &&  [| (5 <> v_3) |] 
-  &&  [| (6 <> v_3) |] 
-  &&  [| (7 = v_3) |]
+  &&  [| (1 = v_3) |]
   &&  (store_expr v e2 )
   **  (IntArray.full var_value_pre 100 l )
   **  (store_expr v_2 e1 )
@@ -1434,15 +1495,14 @@ forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (
   **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
   **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
 |--
-  [| (1 = (expr_eval (e0) (l))) |]
+  [| ((retval - retval_2 ) = (expr_eval (e0) (l))) |]
   &&  (store_expr e_pre e0 )
   **  (IntArray.full var_value_pre 100 l )
 .
 
 Definition eval_return_wit_20 := 
 forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
-  [| (retval < retval_2) |] 
-  &&  [| (retval_2 = (expr_eval (e2) (l))) |] 
+  [| (retval_2 = (expr_eval (e2) (l))) |] 
   &&  [| (retval = (expr_eval (e1) (l))) |] 
   &&  [| (v_3 <> 12) |] 
   &&  [| (v_3 <> 11) |] 
@@ -1452,15 +1512,34 @@ forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (
   &&  [| (0 <> e_t) |] 
   &&  [| (1 <> e_t) |] 
   &&  [| (2 = e_t) |] 
-  &&  [| (0 <> v_3) |] 
-  &&  [| (1 <> v_3) |] 
-  &&  [| (2 <> v_3) |] 
-  &&  [| (3 <> v_3) |] 
-  &&  [| (4 <> v_3) |] 
-  &&  [| (5 <> v_3) |] 
-  &&  [| (6 <> v_3) |] 
-  &&  [| (7 <> v_3) |] 
-  &&  [| (8 = v_3) |]
+  &&  [| (0 = v_3) |]
+  &&  (store_expr v e2 )
+  **  (IntArray.full var_value_pre 100 l )
+  **  (store_expr v_2 e1 )
+  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 2)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "op")) # Int  |-> v_3)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
+|--
+  [| ((retval + retval_2 ) = (expr_eval (e0) (l))) |]
+  &&  (store_expr e_pre e0 )
+  **  (IntArray.full var_value_pre 100 l )
+.
+
+Definition eval_return_wit_21 := 
+forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
+  [| (retval_2 = (expr_eval (e2) (l))) |] 
+  &&  [| (retval = (expr_eval (e1) (l))) |] 
+  &&  [| (v_3 = 12) |] 
+  &&  [| (v_3 <> 11) |] 
+  &&  [| (e0 = (EBinop (op) (e1) (e2))) |] 
+  &&  [| (v_3 = (BinOpID (op))) |] 
+  &&  [| (safe_eval e0 l ) |] 
+  &&  [| (0 <> e_t) |] 
+  &&  [| (1 <> e_t) |] 
+  &&  [| (2 = e_t) |] 
+  &&  [| (retval = 0) |] 
+  &&  [| (retval_2 = 0) |]
   &&  (store_expr v e2 )
   **  (IntArray.full var_value_pre 100 l )
   **  (store_expr v_2 e1 )
@@ -1474,12 +1553,11 @@ forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (
   **  (IntArray.full var_value_pre 100 l )
 .
 
-Definition eval_return_wit_21 := 
+Definition eval_return_wit_22 := 
 forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
-  [| (retval >= retval_2) |] 
-  &&  [| (retval_2 = (expr_eval (e2) (l))) |] 
+  [| (retval_2 = (expr_eval (e2) (l))) |] 
   &&  [| (retval = (expr_eval (e1) (l))) |] 
-  &&  [| (v_3 <> 12) |] 
+  &&  [| (v_3 = 12) |] 
   &&  [| (v_3 <> 11) |] 
   &&  [| (e0 = (EBinop (op) (e1) (e2))) |] 
   &&  [| (v_3 = (BinOpID (op))) |] 
@@ -1487,15 +1565,8 @@ forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (
   &&  [| (0 <> e_t) |] 
   &&  [| (1 <> e_t) |] 
   &&  [| (2 = e_t) |] 
-  &&  [| (0 <> v_3) |] 
-  &&  [| (1 <> v_3) |] 
-  &&  [| (2 <> v_3) |] 
-  &&  [| (3 <> v_3) |] 
-  &&  [| (4 <> v_3) |] 
-  &&  [| (5 <> v_3) |] 
-  &&  [| (6 <> v_3) |] 
-  &&  [| (7 <> v_3) |] 
-  &&  [| (8 = v_3) |]
+  &&  [| (retval = 0) |] 
+  &&  [| (retval_2 <> 0) |]
   &&  (store_expr v e2 )
   **  (IntArray.full var_value_pre 100 l )
   **  (store_expr v_2 e1 )
@@ -1509,48 +1580,10 @@ forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (
   **  (IntArray.full var_value_pre 100 l )
 .
 
-Definition eval_return_wit_22 := 
-forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
-  [| (retval <> retval_2) |] 
-  &&  [| (retval_2 = (expr_eval (e2) (l))) |] 
-  &&  [| (retval = (expr_eval (e1) (l))) |] 
-  &&  [| (v_3 <> 12) |] 
-  &&  [| (v_3 <> 11) |] 
-  &&  [| (e0 = (EBinop (op) (e1) (e2))) |] 
-  &&  [| (v_3 = (BinOpID (op))) |] 
-  &&  [| (safe_eval e0 l ) |] 
-  &&  [| (0 <> e_t) |] 
-  &&  [| (1 <> e_t) |] 
-  &&  [| (2 = e_t) |] 
-  &&  [| (0 <> v_3) |] 
-  &&  [| (1 <> v_3) |] 
-  &&  [| (2 <> v_3) |] 
-  &&  [| (3 <> v_3) |] 
-  &&  [| (4 <> v_3) |] 
-  &&  [| (5 <> v_3) |] 
-  &&  [| (6 <> v_3) |] 
-  &&  [| (7 <> v_3) |] 
-  &&  [| (8 <> v_3) |] 
-  &&  [| (9 = v_3) |]
-  &&  (store_expr v e2 )
-  **  (IntArray.full var_value_pre 100 l )
-  **  (store_expr v_2 e1 )
-  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 2)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "op")) # Int  |-> v_3)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
-|--
-  [| (0 = (expr_eval (e0) (l))) |]
-  &&  (store_expr e_pre e0 )
-  **  (IntArray.full var_value_pre 100 l )
-.
-
 Definition eval_return_wit_23 := 
-forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
-  [| (retval = retval_2) |] 
-  &&  [| (retval_2 = (expr_eval (e2) (l))) |] 
-  &&  [| (retval = (expr_eval (e1) (l))) |] 
-  &&  [| (v_3 <> 12) |] 
+forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) ,
+  [| (retval = (expr_eval (e1) (l))) |] 
+  &&  [| (v_3 = 12) |] 
   &&  [| (v_3 <> 11) |] 
   &&  [| (e0 = (EBinop (op) (e1) (e2))) |] 
   &&  [| (v_3 = (BinOpID (op))) |] 
@@ -1558,23 +1591,14 @@ forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (
   &&  [| (0 <> e_t) |] 
   &&  [| (1 <> e_t) |] 
   &&  [| (2 = e_t) |] 
-  &&  [| (0 <> v_3) |] 
-  &&  [| (1 <> v_3) |] 
-  &&  [| (2 <> v_3) |] 
-  &&  [| (3 <> v_3) |] 
-  &&  [| (4 <> v_3) |] 
-  &&  [| (5 <> v_3) |] 
-  &&  [| (6 <> v_3) |] 
-  &&  [| (7 <> v_3) |] 
-  &&  [| (8 <> v_3) |] 
-  &&  [| (9 = v_3) |]
-  &&  (store_expr v e2 )
+  &&  [| (retval <> 0) |]
+  &&  (store_expr v_2 e1 )
   **  (IntArray.full var_value_pre 100 l )
-  **  (store_expr v_2 e1 )
   **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 2)
   **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "op")) # Int  |-> v_3)
   **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
   **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
+  **  (store_expr v e2 )
 |--
   [| (1 = (expr_eval (e0) (l))) |]
   &&  (store_expr e_pre e0 )
@@ -1582,36 +1606,23 @@ forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (
 .
 
 Definition eval_return_wit_24 := 
-forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
-  [| (retval = retval_2) |] 
-  &&  [| (retval_2 = (expr_eval (e2) (l))) |] 
-  &&  [| (retval = (expr_eval (e1) (l))) |] 
-  &&  [| (v_3 <> 12) |] 
-  &&  [| (v_3 <> 11) |] 
+forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) ,
+  [| (retval = (expr_eval (e1) (l))) |] 
+  &&  [| (v_3 = 11) |] 
   &&  [| (e0 = (EBinop (op) (e1) (e2))) |] 
   &&  [| (v_3 = (BinOpID (op))) |] 
   &&  [| (safe_eval e0 l ) |] 
   &&  [| (0 <> e_t) |] 
   &&  [| (1 <> e_t) |] 
   &&  [| (2 = e_t) |] 
-  &&  [| (0 <> v_3) |] 
-  &&  [| (1 <> v_3) |] 
-  &&  [| (2 <> v_3) |] 
-  &&  [| (3 <> v_3) |] 
-  &&  [| (4 <> v_3) |] 
-  &&  [| (5 <> v_3) |] 
-  &&  [| (6 <> v_3) |] 
-  &&  [| (7 <> v_3) |] 
-  &&  [| (8 <> v_3) |] 
-  &&  [| (9 <> v_3) |] 
-  &&  [| (10 = v_3) |]
-  &&  (store_expr v e2 )
+  &&  [| (retval = 0) |]
+  &&  (store_expr v_2 e1 )
   **  (IntArray.full var_value_pre 100 l )
-  **  (store_expr v_2 e1 )
   **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 2)
   **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "op")) # Int  |-> v_3)
   **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
   **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
+  **  (store_expr v e2 )
 |--
   [| (0 = (expr_eval (e0) (l))) |]
   &&  (store_expr e_pre e0 )
@@ -1620,28 +1631,43 @@ forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (
 
 Definition eval_return_wit_25 := 
 forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
-  [| (retval <> retval_2) |] 
-  &&  [| (retval_2 = (expr_eval (e2) (l))) |] 
+  [| (retval_2 = (expr_eval (e2) (l))) |] 
   &&  [| (retval = (expr_eval (e1) (l))) |] 
-  &&  [| (v_3 <> 12) |] 
-  &&  [| (v_3 <> 11) |] 
+  &&  [| (v_3 = 11) |] 
   &&  [| (e0 = (EBinop (op) (e1) (e2))) |] 
   &&  [| (v_3 = (BinOpID (op))) |] 
   &&  [| (safe_eval e0 l ) |] 
   &&  [| (0 <> e_t) |] 
   &&  [| (1 <> e_t) |] 
   &&  [| (2 = e_t) |] 
-  &&  [| (0 <> v_3) |] 
-  &&  [| (1 <> v_3) |] 
-  &&  [| (2 <> v_3) |] 
-  &&  [| (3 <> v_3) |] 
-  &&  [| (4 <> v_3) |] 
-  &&  [| (5 <> v_3) |] 
-  &&  [| (6 <> v_3) |] 
-  &&  [| (7 <> v_3) |] 
-  &&  [| (8 <> v_3) |] 
-  &&  [| (9 <> v_3) |] 
-  &&  [| (10 = v_3) |]
+  &&  [| (retval <> 0) |] 
+  &&  [| (retval_2 = 0) |]
+  &&  (store_expr v e2 )
+  **  (IntArray.full var_value_pre 100 l )
+  **  (store_expr v_2 e1 )
+  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 2)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "op")) # Int  |-> v_3)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "left")) # Ptr  |-> v_2)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "BINOP" .ₛ "right")) # Ptr  |-> v)
+|--
+  [| (0 = (expr_eval (e0) (l))) |]
+  &&  (store_expr e_pre e0 )
+  **  (IntArray.full var_value_pre 100 l )
+.
+
+Definition eval_return_wit_26 := 
+forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (v_3: Z) (op: binop) (e1: expr) (e2: expr) (retval: Z) (retval_2: Z) ,
+  [| (retval_2 = (expr_eval (e2) (l))) |] 
+  &&  [| (retval = (expr_eval (e1) (l))) |] 
+  &&  [| (v_3 = 11) |] 
+  &&  [| (e0 = (EBinop (op) (e1) (e2))) |] 
+  &&  [| (v_3 = (BinOpID (op))) |] 
+  &&  [| (safe_eval e0 l ) |] 
+  &&  [| (0 <> e_t) |] 
+  &&  [| (1 <> e_t) |] 
+  &&  [| (2 = e_t) |] 
+  &&  [| (retval <> 0) |] 
+  &&  [| (retval_2 <> 0) |]
   &&  (store_expr v e2 )
   **  (IntArray.full var_value_pre 100 l )
   **  (store_expr v_2 e1 )
@@ -1655,70 +1681,34 @@ forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (
   **  (IntArray.full var_value_pre 100 l )
 .
 
-Definition eval_return_wit_26 := 
-forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (op: unop) (e1: expr) (retval: Z) ,
-  [| (retval <> 0) |] 
-  &&  [| (retval = (expr_eval (e1) (l))) |] 
-  &&  [| (v_2 = 1) |] 
-  &&  [| (e0 = (EUnop (op) (e1))) |] 
-  &&  [| (v_2 = (UnOpID (op))) |] 
-  &&  [| (safe_eval e0 l ) |] 
-  &&  [| (0 <> e_t) |] 
-  &&  [| (1 <> e_t) |] 
-  &&  [| (2 <> e_t) |] 
-  &&  [| (3 = e_t) |]
-  &&  (store_expr v e1 )
-  **  (IntArray.full var_value_pre 100 l )
-  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 3)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "UNOP" .ₛ "op")) # Int  |-> v_2)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "UNOP" .ₛ "arg")) # Ptr  |-> v)
-|--
-  [| (0 = (expr_eval (e0) (l))) |]
-  &&  (store_expr e_pre e0 )
-  **  (IntArray.full var_value_pre 100 l )
-.
-
 Definition eval_return_wit_27 := 
-forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (op: unop) (e1: expr) (retval: Z) ,
-  [| (retval = 0) |] 
-  &&  [| (retval = (expr_eval (e1) (l))) |] 
-  &&  [| (v_2 = 1) |] 
-  &&  [| (e0 = (EUnop (op) (e1))) |] 
-  &&  [| (v_2 = (UnOpID (op))) |] 
+forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (n: Z) ,
+  [| (0 <= n) |] 
+  &&  [| (n < 100) |] 
+  &&  [| (e0 = (EVar (n))) |] 
   &&  [| (safe_eval e0 l ) |] 
   &&  [| (0 <> e_t) |] 
-  &&  [| (1 <> e_t) |] 
-  &&  [| (2 <> e_t) |] 
-  &&  [| (3 = e_t) |]
-  &&  (store_expr v e1 )
-  **  (IntArray.full var_value_pre 100 l )
-  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 3)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "UNOP" .ₛ "op")) # Int  |-> v_2)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "UNOP" .ₛ "arg")) # Ptr  |-> v)
+  &&  [| (1 = e_t) |]
+  &&  (IntArray.full var_value_pre 100 l )
+  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 1)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "VAR" .ₛ "name")) # Int  |-> n)
 |--
-  [| (1 = (expr_eval (e0) (l))) |]
+  [| ((Znth n l 0) = (expr_eval (e0) (l))) |]
   &&  (store_expr e_pre e0 )
   **  (IntArray.full var_value_pre 100 l )
 .
 
 Definition eval_return_wit_28 := 
-forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (v: Z) (v_2: Z) (op: unop) (e1: expr) (retval: Z) ,
-  [| (retval = (expr_eval (e1) (l))) |] 
-  &&  [| (v_2 <> 1) |] 
-  &&  [| (e0 = (EUnop (op) (e1))) |] 
-  &&  [| (v_2 = (UnOpID (op))) |] 
+forall (var_value_pre: Z) (e_pre: Z) (l: (@list Z)) (e0: expr) (e_t: Z) (n: Z) ,
+  [| (0 = 0) |] 
+  &&  [| (e0 = (EConst (n))) |] 
   &&  [| (safe_eval e0 l ) |] 
-  &&  [| (0 <> e_t) |] 
-  &&  [| (1 <> e_t) |] 
-  &&  [| (2 <> e_t) |] 
-  &&  [| (3 = e_t) |]
-  &&  (store_expr v e1 )
+  &&  [| (0 = e_t) |]
+  &&  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 0)
+  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "CONST" .ₛ "value")) # Int  |-> n)
   **  (IntArray.full var_value_pre 100 l )
-  **  ((&((e_pre)  # "expr" ->ₛ "t")) # Int  |-> 3)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "UNOP" .ₛ "op")) # Int  |-> v_2)
-  **  ((&((e_pre)  # "expr" ->ₛ "d" .ₛ "UNOP" .ₛ "arg")) # Ptr  |-> v)
 |--
-  [| ((-retval) = (expr_eval (e0) (l))) |]
+  [| (n = (expr_eval (e0) (l))) |]
   &&  (store_expr e_pre e0 )
   **  (IntArray.full var_value_pre 100 l )
 .
@@ -2477,11 +2467,6 @@ forall (e0: expr) (e: Z) (e_t: Z) ,
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
-Include int_array_Strategy_Correct.
-Include uint_array_Strategy_Correct.
-Include undef_uint_array_Strategy_Correct.
-Include array_shape_Strategy_Correct.
 Include eval_Strategy_Correct.
 
 Axiom proof_of_eval_safety_wit_1 : eval_safety_wit_1.

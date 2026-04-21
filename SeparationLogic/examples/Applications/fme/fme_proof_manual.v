@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.Applications.fme Require Import fme_goal.
@@ -20,7 +20,7 @@ From SimpleC.EE.Applications.fme Require Import fme_lib.
 Import naive_C_Rules.
 Local Open Scope sac.
 
-Lemma proof_of_gcd_return_wit_1 : gcd_return_wit_1.
+Lemma proof_of_gcd_return_wit_2 : gcd_return_wit_2.
 Proof.
   pre_process.
   entailer!.
@@ -30,7 +30,7 @@ Proof.
   - auto.
 Qed.
 
-Lemma proof_of_gcd_return_wit_2 : gcd_return_wit_2.
+Lemma proof_of_gcd_return_wit_1 : gcd_return_wit_1.
 Proof.
   pre_process.
   entailer!.
@@ -50,7 +50,7 @@ Proof.
     + lia.
 Qed.
 
-Lemma proof_of_free_InequList_return_wit_3 : free_InequList_return_wit_3.
+Lemma proof_of_free_InequList_return_wit_1 : free_InequList_return_wit_1.
 Proof.
   pre_process. subst.
   sep_apply inequlist_0_implies_nil. entailer!.
@@ -471,7 +471,7 @@ Proof.
   }
 Qed. 
 
-Lemma proof_of_generate_new_constr_return_wit_6 : generate_new_constr_return_wit_6.
+Lemma proof_of_generate_new_constr_return_wit_1 : generate_new_constr_return_wit_1.
 Proof.  
   pre_process.
   prop_apply (coef_array_length r2_pre). 
@@ -596,7 +596,7 @@ Proof.
     auto.
 Qed. 
 
-Lemma proof_of_generate_new_constraint_list_return_wit_1 : generate_new_constraint_list_return_wit_1.
+Lemma proof_of_generate_new_constraint_list_return_wit_2 : generate_new_constraint_list_return_wit_2.
 Proof.
   pre_process.
   Left.
@@ -608,7 +608,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_generate_new_constraint_list_return_wit_2 : generate_new_constraint_list_return_wit_2.
+Lemma proof_of_generate_new_constraint_list_return_wit_1 : generate_new_constraint_list_return_wit_1.
 Proof.
   pre_process.
   Right.
@@ -699,7 +699,7 @@ Proof.
     constructor; tauto.
 Qed.
 
-Lemma proof_of_real_shadow_return_wit_1 : real_shadow_return_wit_1.
+Lemma proof_of_real_shadow_return_wit_7 : real_shadow_return_wit_7.
 Proof. 
   pre_process.
   Right.
@@ -714,7 +714,7 @@ Proof.
   - apply LP_implies_nil.
 Qed.
 
-Lemma proof_of_real_shadow_return_wit_2 : real_shadow_return_wit_2.
+Lemma proof_of_real_shadow_return_wit_6 : real_shadow_return_wit_6.
 Proof. 
   pre_process. subst.
   Right; Exists 0 nil.
@@ -727,7 +727,7 @@ Proof.
 Qed.
 
 
-Lemma proof_of_real_shadow_return_wit_6 : real_shadow_return_wit_6.
+Lemma proof_of_real_shadow_return_wit_2 : real_shadow_return_wit_2.
 Proof.
   pre_process.
   Left. entailer!. do 3 sep_apply (store_ptr_undef_store_ptr).
@@ -772,7 +772,7 @@ Proof.
     subst. auto.
 Qed.
 
-Lemma proof_of_lia_deduction_return_wit_3 : lia_deduction_return_wit_3.
+Lemma proof_of_lia_deduction_return_wit_2 : lia_deduction_return_wit_2.
 Proof.
   pre_process.
   Left. Right.
@@ -794,7 +794,7 @@ Proof.
   rewrite H. auto.
 Qed.
   
-Lemma proof_of_lia_deduction_return_wit_4 : lia_deduction_return_wit_4.
+Lemma proof_of_lia_deduction_return_wit_1 : lia_deduction_return_wit_1.
 Proof.
   pre_process.
   Right.

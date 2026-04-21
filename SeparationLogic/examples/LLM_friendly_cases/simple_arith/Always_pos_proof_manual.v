@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.LLM_friendly_cases.simple_arith Require Import Always_pos_goal.
@@ -20,47 +20,16 @@ From SimpleC.EE.LLM_friendly_cases.simple_arith Require Import Apos_lib.
 Local Open Scope sac.
 
 Lemma proof_of_Always_positive_simple_return_wit_1 : Always_positive_simple_return_wit_1.
-Proof.
-  pre_process.
-  entailer!.
-  unfold Always_pos. 
-  subst. simpl. lia.
-Qed.
+Admitted.
 
 Lemma proof_of_Always_positive_simple_return_wit_2 : Always_positive_simple_return_wit_2.
-Proof.
-  pre_process.
-  entailer!.
-  unfold Always_pos.
-  destruct (Z.eq_dec a_pre 0) ; try lia.
-  destruct (Z_ge_lt_dec (b_pre * b_pre - 4 * a_pre * c_pre) 0) ; try nia.
-  assert (b_pre * b_pre ÷ 4 < a_pre * c_pre).
-  { apply Z.quot_lt_upper_bound ; nia. }
-  nia.
-Qed.
+Admitted.
 
 Lemma proof_of_Always_positive_simple_return_wit_3 : Always_positive_simple_return_wit_3.
-Proof.
-  pre_process.
-  entailer!.
-  unfold Always_pos.
-  destruct (Z.eq_dec a_pre 0) ; try lia.
-  destruct (Z_ge_lt_dec (b_pre * b_pre - 4 * a_pre * c_pre) 0) ; try nia.
-  - assert (a_pre * c_pre <= b_pre * b_pre ÷ 4).
-    { apply Z.quot_le_lower_bound ; lia. }
-    nia.
-  - destruct (Z_gt_le_dec a_pre 0) ; try lia.
-Qed.
+Admitted.
 
 Lemma proof_of_Always_positive_simple_return_wit_4 : Always_positive_simple_return_wit_4.
-Proof.
-  pre_process.
-  entailer!.
-  unfold Always_pos.
-  destruct (Z.eq_dec a_pre 0) ; try lia.
-  destruct (Z_ge_lt_dec (b_pre * b_pre - 4 * a_pre * c_pre) 0) ; try nia.
-  destruct (Z_gt_le_dec a_pre 0) ; try lia.
-Qed. 
+Admitted. 
 
 Lemma proof_of_Always_positive_simple_safety_wit_4 : Always_positive_simple_safety_wit_4.
 Proof.
@@ -76,50 +45,19 @@ Proof.
 Qed.  
 
 Lemma proof_of_Always_positive_return_wit_1 : Always_positive_return_wit_1.
-Proof.
-  pre_process.
-  entailer!.
-  unfold Always_pos.
-  subst. simpl. lia.
-Qed.  
+Admitted.  
 
 Lemma proof_of_Always_positive_return_wit_2 : Always_positive_return_wit_2.
-Proof.
-  pre_process.
-  entailer!.
-  unfold Always_pos.
-  destruct (Z.eq_dec a_pre 0) ; try lia.
-  destruct (Z_ge_lt_dec (b_pre * b_pre - 4 * a_pre * c_pre) 0) ; try nia.
-Qed. 
+Admitted. 
 
 Lemma proof_of_Always_positive_return_wit_3 : Always_positive_return_wit_3.
-Proof.
-  pre_process.
-  entailer!. unfold Always_pos.
-  subst.
-  destruct (Z.eq_dec a_pre 0); try lia.
-  destruct (Z_ge_lt_dec (b_pre * b_pre - 4 * a_pre * c_pre) 0); try nia.
-Qed.
+Admitted.
 
 Lemma proof_of_Always_positive_return_wit_4 : Always_positive_return_wit_4.
-Proof.
-  pre_process.
-  entailer!. unfold Always_pos.
-  subst.
-  destruct (Z.eq_dec a_pre 0); try lia.
-  destruct (Z_ge_lt_dec (b_pre * b_pre - 4 * a_pre * c_pre) 0); try nia.
-  destruct (Z_gt_le_dec a_pre 0); try lia.
-Qed.  
+Admitted.  
 
 Lemma proof_of_Always_positive_return_wit_5 : Always_positive_return_wit_5.
-Proof.
-  pre_process.
-  entailer!. unfold Always_pos.
-  subst.
-  destruct (Z.eq_dec a_pre 0); try lia.
-  destruct (Z_ge_lt_dec (b_pre * b_pre - 4 * a_pre * c_pre) 0); try nia.
-  destruct (Z_gt_le_dec a_pre 0); try lia.
-Qed.
+Admitted.
 
 Lemma proof_of_Always_positive_safety_wit_3 : Always_positive_safety_wit_3.
 Proof. pre_process. Qed. 

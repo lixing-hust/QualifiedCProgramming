@@ -1,5 +1,5 @@
-#include "verification_stdlib.h"
-#include "verification_list.h"
+
+
 #include "poly_sll_def.h"
 
 struct list *reverse(struct list *p) 

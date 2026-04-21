@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -21,8 +21,6 @@ Require Import SimpleC.EE.Applications.LiteOS.lib.sortlink.
 Require Import SimpleC.EE.Applications.LiteOS.lib.dll.
 Require Import SimpleC.EE.Applications.LiteOS.lib.tick_backup.
 Local Open Scope sac.
-From SimpleC.EE.QCP_democases Require Import common_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import common_strategy_proof.
 From SimpleC.EE.Applications Require Import los_sortlink_strategy_goal.
 From SimpleC.EE.Applications Require Import los_sortlink_strategy_proof.
 
@@ -132,7 +130,6 @@ forall (A: Type) (a: A) (storeA: (Z -> (A -> Assertion))) (t: Z) (sortList: Z) ,
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 Include los_sortlink_Strategy_Correct.
 
 Axiom proof_of_OsDeleteNodeSortLink_safety_wit_1 : OsDeleteNodeSortLink_safety_wit_1.

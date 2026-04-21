@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.LLM_friendly_cases Require Import sll_split_while_goal.
@@ -19,7 +19,7 @@ Import naive_C_Rules.
 Require Import SimpleC.EE.LLM_friendly_cases.sll_lib.
 Require Import SimpleC.EE.LLM_friendly_cases.sll_merge_rel_lib.
 Local Open Scope monad.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap relations.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap relations.
 From FP Require Import PartialOrder_Setoid BourbakiWitt.
 Local Open Scope sac.
 

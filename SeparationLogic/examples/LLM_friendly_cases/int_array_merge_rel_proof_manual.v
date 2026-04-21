@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.LLM_friendly_cases Require Import int_array_merge_rel_goal.
@@ -72,12 +72,11 @@ Admitted.
 Lemma proof_of_mergeSort_entail_wit_3 : mergeSort_entail_wit_3.
 Admitted.
 
-Lemma proof_of_mergeSort_return_wit_1 : mergeSort_return_wit_1.
+Lemma proof_of_mergeSort_return_wit_2 : mergeSort_return_wit_2.
 Admitted.
 
 Lemma proof_of_mergeSort_partial_solve_wit_1_pure : mergeSort_partial_solve_wit_1_pure.
 Admitted.
-
 
 Lemma proof_of_mergeSort_derive_low_level_spec_aux_by_low_level_spec : mergeSort_derive_low_level_spec_aux_by_low_level_spec.
 Admitted.

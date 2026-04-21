@@ -7,7 +7,7 @@ From SimpleC.SL Require Import SeparationLogic.
 From SimpleC.EE.QCP_democases Require Import safeexec_strategy_goal.
 From SimpleC.EE.QCP_democases Require Import sll_merge_rel_lib.
 Local Open Scope monad.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap relations.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap relations.
 Import naive_C_Rules.
 Local Open Scope Z_scope.
 Local Open Scope sac.

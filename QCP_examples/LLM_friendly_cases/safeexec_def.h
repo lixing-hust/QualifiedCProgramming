@@ -17,7 +17,7 @@
 
 /*@ Import Coq Require Import SimpleC.EE.LLM_friendly_cases.sll_merge_rel_lib */
 /*@ Import Coq Local Open Scope monad */
-/*@ Import Coq From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap relations */
+/*@ Import Coq From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap relations */
 /*@ Import Coq From FP Require Import PartialOrder_Setoid BourbakiWitt */
 
 /*@ include strategies "safeexec.strategies" */

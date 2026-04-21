@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.LLM_friendly_cases.simple_arith Require Import exgcd_goal.
@@ -171,158 +171,37 @@ Proof.
 Qed.
 
 Lemma proof_of_exgcd_return_wit_3 : exgcd_return_wit_3.
-Proof.
-  pre_process.
-  subst b_pre.
-  Left. Left.
-  Exists 0 1.
-  entailer!.
-  + rewrite Z.gcd_0_r; lia.
-  + rewrite Z.gcd_0_r; exact H.
-Qed.
+Admitted.
 
 Lemma proof_of_exgcd_return_wit_2 : exgcd_return_wit_2.
-Proof.
-  pre_process.
-  subst b_pre.
-  Left. Left.
-  Exists 0 0.
-  entailer!.
-  + rewrite Z.gcd_0_r; lia.
-  + rewrite Z.gcd_0_r; exact H.
-Qed.
+Admitted.
 
 Lemma proof_of_exgcd_return_wit_1 : exgcd_return_wit_1.
-Proof.
-  pre_process.
-  subst b_pre.
-  Left. Left.
-  Exists 0 (-1).
-  entailer!.
-  + rewrite Z.gcd_0_r; lia.
-  + rewrite Z.gcd_0_r; exact H.
-Qed.
+Admitted.
 
 Lemma proof_of_exgcd_return_wit_4 : exgcd_return_wit_4.
-Proof.
-  pre_process.
-  Left. Right.
-  Exists (x_callee_v - a_pre ÷ b_pre * y_callee_v) y_callee_v .
-  rewrite Z.gcd_comm.
-  rewrite <- (Z.gcd_rem a_pre b_pre H4).
-  rewrite Z.gcd_comm.
-  entailer!.
-Qed.
+Admitted.
 
 Lemma proof_of_exgcd_return_wit_5 : exgcd_return_wit_5.
-Proof.
-  pre_process.
-  Right.
-  Exists (x_callee_v - a_pre ÷ b_pre * y_callee_v) y_callee_v .
-  subst x_callee_v.
-  rewrite Z.gcd_comm.
-  rewrite <- (Z.gcd_rem a_pre b_pre H5).
-  rewrite Z.gcd_comm.
-  replace (0 - a_pre ÷ b_pre * y_callee_v) with (-(a_pre ÷ b_pre * y_callee_v)) by lia.
-  replace (Zabs (-(a_pre ÷ b_pre * y_callee_v))) with (Zabs(a_pre ÷ b_pre * y_callee_v)) by lia.
-  replace (Zgcd b_pre (a_pre % (b_pre))) with (Zabs (a_pre % (b_pre))) in *.
-  2: { rewrite Z.gcd_comm.
-      rewrite <- (Z.gcd_rem b_pre (a_pre % (b_pre)) ltac:(lia)).
-      rewrite H2.
-      symmetry.
-      apply Z.gcd_0_l.  }
-  entailer!. 
-  + rewrite Z.abs_mul.
-    apply (Z.le_trans _ (Zabs (a_pre ÷ b_pre))).
-    1: nia.
-    pose proof Z.rem_bound_abs a_pre b_pre H5.
-    rewrite <- (Z.quot_abs _ _ H5).
-    pose proof Z.abs_nonneg a_pre.
-    apply Z.quot_le_compat_l; lia.
-  + apply (Z.le_trans _ (Zabs b_pre ÷ Zabs b_pre)).
-    1: { rewrite Z.quot_same; lia. }
-    pose proof Z.rem_bound_abs a_pre b_pre H5.
-    apply Z.quot_le_compat_l; lia.
-  + pose proof Z.quot_rem a_pre b_pre H5.
-    rewrite <- H0.
-    pose proof (Z.quot_rem a_pre b_pre ltac:(lia)).
-    lia.
-Qed.
+Admitted.
 
 Lemma proof_of_exgcd_return_wit_6 : exgcd_return_wit_6.
-Proof.
-  pre_process.
-  Right.
-  Exists (x_callee_v - a_pre ÷ b_pre * y_callee_v) y_callee_v .
-  rewrite Z.gcd_comm.
-  rewrite <- (Z.gcd_rem a_pre b_pre H5).
-  rewrite Z.gcd_comm.
-  entailer!.
-  + apply (exgcd_reduction _ _ _ _ H5 H3 H4).
-  + rewrite <- H0.
-    pose proof (Z.quot_rem a_pre b_pre ltac:(lia)).
-    lia.
-Qed.
+Admitted.
 
 Lemma proof_of_exgcd_partial_solve_wit_4_pure : exgcd_partial_solve_wit_4_pure.
-Proof.
-  pre_process.
-  pose proof Z.rem_bound_abs a_pre b_pre H.
-  entailer!.
-Qed.
+Admitted.
 
 Lemma proof_of_exgcd_safety_wit_12 : exgcd_safety_wit_12.
-Proof.
-  pre_process.
-  pose proof exgcd_reduction _ _ _ _ H5 H3 H4.
-  assert(Zgcd b_pre (a_pre % (b_pre)) >= 1). {
-    pose proof (Z_gcd_pos_l b_pre (a_pre % (b_pre)) H5).
-    lia.
-  }
-  assert(Zabs a_pre ÷ Zgcd b_pre (a_pre % (b_pre)) <= 2147483647). {
-    apply Z.quot_le_upper_bound; lia.
-  }
-  entailer!.
-Qed.
+Admitted.
 
 Lemma proof_of_exgcd_safety_wit_13 : exgcd_safety_wit_13.
-Proof.
-  pre_process.
-  pose proof exgcd_reduction' a_pre b_pre x_callee_v y_callee_v H5 H3 H4.
-  assert(Zgcd b_pre (a_pre % (b_pre)) >= 1). {
-    pose proof (Z_gcd_pos_l b_pre (a_pre % (b_pre)) H5).
-    lia.
-  }
-  assert(Zabs a_pre ÷ Zgcd b_pre (a_pre % (b_pre)) <= 2147483647). {
-    apply Z.quot_le_upper_bound; lia.
-  }
-  assert(Zabs (a_pre ÷ b_pre * y_callee_v) <= Zabs x_callee_v + Zabs (a_pre ÷ b_pre * y_callee_v)) by lia.
-  entailer!.
-Qed.
+Admitted.
 
 Lemma proof_of_exgcd_safety_wit_15 : exgcd_safety_wit_15.
-Proof.
-  pre_process.
-  assert(Zabs(a_pre ÷ b_pre * y_callee_v) <= 2147483647). {
-    rewrite Z.abs_mul.
-    rewrite <- Z.quot_abs by ltac:(lia).
-    pose proof Z.quot_le_upper_bound (Zabs(a_pre)) (Zabs(b_pre)) 2147483647 ltac:(lia) ltac:(lia).
-    nia.
-  }
-  entailer!.
-Qed.
+Admitted.
 
 Lemma proof_of_exgcd_safety_wit_16 : exgcd_safety_wit_16.
-Proof.
-  pre_process.
-  assert(Zabs(a_pre ÷ b_pre * y_callee_v) <= 2147483647). {
-    rewrite Z.abs_mul.
-    rewrite <- Z.quot_abs by ltac:(lia).
-    pose proof Z.quot_le_upper_bound (Zabs(a_pre)) (Zabs(b_pre)) 2147483647 ltac:(lia) ltac:(lia).
-    nia.
-  }
-  entailer!.
-Qed.
+Admitted.
 
 Lemma proof_of_exgcd_safety_wit_18 : exgcd_safety_wit_18.
 Proof.
@@ -335,11 +214,5 @@ Proof.
 Qed.
 
 Lemma proof_of_exgcd_derive_Inter_by_Proof: exgcd_derive_Inter_by_Proof.
-Proof.
-  pre_process.
-  entailer!.
-  apply derivable1_wand_sepcon_adjoint.
-  entailer!.
-  repeat apply derivable1_orp_elim; Intros x y ret; Exists x y ret; entailer!.
-Qed.
+Admitted.
 

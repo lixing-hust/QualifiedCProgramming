@@ -1,5 +1,5 @@
-#include "verification_stdlib.h"
-#include "verification_list.h"
+
+
 #include "dll_queue_def.h"
 
 struct list * malloc_list_cell()

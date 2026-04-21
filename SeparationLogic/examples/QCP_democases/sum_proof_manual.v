@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.QCP_democases Require Import sum_goal.
@@ -30,12 +30,12 @@ Lemma proof_of_arr_sum_entail_wit_2 : arr_sum_entail_wit_2.
 Proof. 
   unfold arr_sum_entail_wit_2.
   intros. Intros.
-  prop_apply IntArray.full_length.
+  prop_apply IntArray.full_Zlength.
   entailer!.
   subst ret.
   rewrite (sublist_split 0 (i_2 + 1) i_2)  ; try lia.
   rewrite sum_app.
-  rewrite (sublist_single _ _ 0) ; try lia.
+  rewrite (sublist_single 0 _ _ ) ; try lia.
   simpl.
   lia.
 Qed.
@@ -57,7 +57,7 @@ Proof.
   unfold arr_sum_safety_wit_3.
   intros.
   Intros.
-  prop_apply IntArray.full_length.
+  prop_apply IntArray.full_Zlength.
   Intros.
   destruct (Z.eq_dec i 0).
   + subst i. simpl in *. subst ret.
@@ -83,9 +83,9 @@ Qed.
 Lemma proof_of_arr_sum_do_while_entail_wit_2 : arr_sum_do_while_entail_wit_2.
 Proof.
    pre_process.
-   prop_apply IntArray.full_length.
+   prop_apply IntArray.full_Zlength.
    entailer!.
-   rewrite (sublist_single 0 l 0) by lia.
+   rewrite (sublist_single 0 0 l) by lia.
    unfold sum; simpl.
    lia.
 Qed.
@@ -93,12 +93,12 @@ Qed.
 Lemma proof_of_arr_sum_do_while_entail_wit_1 : arr_sum_do_while_entail_wit_1.
 Proof.
    pre_process.
-   prop_apply IntArray.full_length.
+   prop_apply IntArray.full_Zlength.
    entailer!.
    subst ret.
    rewrite (sublist_split 0 (i_2 + 1) i_2 l) by lia.
    rewrite sum_app.
-   rewrite (sublist_single i_2 l 0) by lia.
+   rewrite (sublist_single 0 i_2 l) by lia.
    unfold sum; simpl.
    lia. 
 Qed. 
@@ -117,7 +117,7 @@ Qed.
 Lemma proof_of_arr_sum_do_while_safety_wit_6 : arr_sum_do_while_safety_wit_6.
 Proof.
    pre_process.
-   prop_apply IntArray.full_length.
+   prop_apply IntArray.full_Zlength.
    Intros.
    destruct (Z.eq_dec i 0).
    + subst i. simpl in *. subst ret.
@@ -151,11 +151,11 @@ Lemma proof_of_arr_sum_for_entail_wit_2 : arr_sum_for_entail_wit_2.
 Proof.
    unfold arr_sum_for_entail_wit_2.
    intros. Intros.
-   prop_apply IntArray.full_length.
+   prop_apply IntArray.full_Zlength.
    entailer!. subst ret.
    rewrite (sublist_split 0 (i_2 + 1) i_2)  ; try lia.
    rewrite sum_app.
-   rewrite (sublist_single _ _ 0) ; try lia.
+   rewrite (sublist_single 0 _ _ ) ; try lia.
    simpl.
    lia.
 Qed. 
@@ -177,7 +177,7 @@ Proof.
    unfold arr_sum_for_safety_wit_3.
    intros.
    Intros.
-   prop_apply IntArray.full_length.
+   prop_apply IntArray.full_Zlength.
    Intros.
    destruct (Z.eq_dec i 0).
    + subst i. simpl in *. subst ret.
@@ -208,12 +208,12 @@ Qed.
 Lemma proof_of_arr_sum_which_implies_entail_wit_2 : arr_sum_which_implies_entail_wit_2.
 Proof.
   pre_process.
-  prop_apply IntArray.full_length.
+  prop_apply IntArray.full_Zlength.
   entailer!.
   subst ret.
   rewrite (sublist_split 0 (i_2 + 1) i_2)  ; try lia.
   rewrite sum_app.
-  rewrite (sublist_single _ _ 0) ; try lia.
+  rewrite (sublist_single 0 _ _) ; try lia.
   simpl.
   lia.
 Qed. 
@@ -241,8 +241,8 @@ Lemma proof_of_arr_sum_which_implies_safety_wit_3 : arr_sum_which_implies_safety
 Proof.
   pre_process.
   sep_apply (IntArray.missing_i_merge_to_full); [ | tauto].
-  prop_apply IntArray.full_length. Intros.
-  assert (length (replace_Znth i (Znth i l 0) l) = length l).
+  prop_apply IntArray.full_Zlength. Intros.
+  assert (Zlength (replace_Znth i (Znth i l 0) l) = Zlength l).
   {
     rewrite replace_Znth_Znth; auto.
   }
@@ -288,12 +288,11 @@ Qed.
 Lemma proof_of_arr_sum_update_entail_wit_2 : arr_sum_update_entail_wit_2.
 Proof.
   pre_process.
-  rewrite Zlength_correct in *.
   entailer!.
   subst ret.
   rewrite (sublist_split 0 (i_2 + 1) i_2)  ; try lia.
   rewrite sum_app.
-  rewrite (sublist_single _ _ 0) ; try lia.
+  rewrite (sublist_single 0 _ _) ; try lia.
   simpl.
   lia.
 Qed. 
@@ -301,22 +300,17 @@ Qed.
 Lemma proof_of_arr_sum_update_return_wit_1 : arr_sum_update_return_wit_1.
 Proof.
   pre_process.
-  rewrite Zlength_correct in *.
   replace i_2 with n_pre in * by lia.
   assert (zeros n_pre ++ sublist n_pre n_pre l = zeros n_pre).
   {
-    unfold sublist. 
-    rewrite skipn_firstn.
-    replace (Z.to_nat n_pre - Z.to_nat n_pre)%nat with 0%nat by lia.
-    simpl firstn.
+    rewrite Zsublist_nil by lia.
     rewrite app_nil_r.
     auto.
   }
   rewrite H7.
   entailer!.
   subst n_pre ret.
-  unfold sublist.
-  simpl. rewrite firstn_all2 ; try lia.
+  rewrite sublist_self ; try lia.
 Qed.
 
 Lemma proof_of_arr_sum_update_which_implies_wit_1 : arr_sum_update_which_implies_wit_1.
@@ -336,7 +330,6 @@ Lemma proof_of_arr_sum_update_which_implies_wit_2 : arr_sum_update_which_implies
 Proof.
   pre_process.
   sep_apply (IntArray.missing_i_merge_to_full); [ | tauto].
-  rewrite Zlength_correct in *.
   assert (replace_Znth i 0 (zeros i ++ sublist i n_pre l) = zeros (i + 1) ++ sublist (i + 1) n_pre l).
   {
     assert (Zlength (zeros i) = i) by (rewrite Zlength_correct; unfold zeros; rewrite repeat_length; lia).
@@ -351,7 +344,7 @@ Proof.
       reflexivity.
     }
     rewrite sublist_split with (mid := (i + 1)) ; try lia.
-    rewrite sublist_single with (a := 0) ; try lia.
+    rewrite sublist_single with (d := 0) ; try lia.
     simpl. unfold replace_Znth. simpl.
     rewrite <- app_assoc. simpl. reflexivity.
   }
@@ -363,7 +356,6 @@ Lemma proof_of_arr_sum_update_safety_wit_3 : arr_sum_update_safety_wit_3.
 Proof.
   pre_process.
   sep_apply (IntArray.missing_i_merge_to_full); [ | tauto].
-  rewrite Zlength_correct in *.
   destruct (Z.eq_dec i 0).
   + subst i. simpl in *. subst ret.
     specialize (H6 0). 
@@ -378,9 +370,7 @@ Proof.
       - intro. rewrite H8 in H3. simpl in *; lia.
       - intros. rewrite <- H3 in H8.
         rewrite Znth_sublist_lt ; try lia.
-        
         apply H6. lia.
-        
     }
   assert (0 <= Znth i l 0 < 100).
   { apply H6. lia. }
@@ -409,11 +399,11 @@ Qed.
 Lemma proof_of_arr_sum_pointer_entail_wit_3: arr_sum_pointer_entail_wit_3.
 Proof.
   pre_process.
-  prop_apply IntArray.full_length.
+  prop_apply IntArray.full_Zlength.
   entailer!. subst ret.
   rewrite (sublist_split 0 (i_2 + 1) i_2); try lia.
   rewrite sum_app.
-  rewrite (sublist_single _ _ 0) ; try lia.
+  rewrite (sublist_single 0 _ _) ; try lia.
   simpl.
   lia.
 Qed.
@@ -438,7 +428,7 @@ Qed.
 Lemma proof_of_arr_sum_pointer_safety_wit_4: arr_sum_pointer_safety_wit_4.
 Proof.
   pre_process.
-  prop_apply IntArray.full_length.
+  prop_apply IntArray.full_Zlength.
   Intros.
   destruct (Z.eq_dec i 0).
   + subst i. simpl in *. subst ret.
@@ -454,9 +444,7 @@ Proof.
      - intro. rewrite H8 in H3. simpl in *; lia.
      - intros. rewrite <- H3 in H8.
         rewrite Znth_sublist_lt ; try lia.
-        
         apply H6. lia.
-        
   }
   assert (0 <= Znth i l 0 < 100).
   { apply H6. lia. }

@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -18,16 +18,6 @@ Import naive_C_Rules.
 Require Import SimpleC.EE.Applications.minigmp.GmpAux SimpleC.EE.Applications.minigmp.GmpNumber.
 Import Aux.
 Local Open Scope sac.
-From SimpleC.EE.QCP_democases Require Import common_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import common_strategy_proof.
-From SimpleC.EE.QCP_democases Require Import int_array_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import int_array_strategy_proof.
-From SimpleC.EE.QCP_democases Require Import uint_array_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import uint_array_strategy_proof.
-From SimpleC.EE.QCP_democases Require Import undef_uint_array_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import undef_uint_array_strategy_proof.
-From SimpleC.EE.QCP_democases Require Import array_shape_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import array_shape_strategy_proof.
 
 (*----- Function gmp_abs -----*)
 
@@ -53,17 +43,6 @@ forall (x_pre: Z) ,
 
 Definition gmp_abs_return_wit_1 := 
 forall (x_pre: Z) ,
-  [| (x_pre >= 0) |] 
-  &&  [| (INT_MIN < x_pre) |] 
-  &&  [| (x_pre <= INT_MAX) |]
-  &&  emp
-|--
-  [| (x_pre = (Zabs (x_pre))) |]
-  &&  emp
-.
-
-Definition gmp_abs_return_wit_2 := 
-forall (x_pre: Z) ,
   [| (x_pre < 0) |] 
   &&  [| (INT_MIN < x_pre) |] 
   &&  [| (x_pre <= INT_MAX) |]
@@ -73,23 +52,34 @@ forall (x_pre: Z) ,
   &&  emp
 .
 
-(*----- Function gmp_max -----*)
-
-Definition gmp_max_return_wit_1 := 
-forall (b_pre: Z) (a_pre: Z) ,
-  [| (a_pre > b_pre) |]
+Definition gmp_abs_return_wit_2 := 
+forall (x_pre: Z) ,
+  [| (x_pre >= 0) |] 
+  &&  [| (INT_MIN < x_pre) |] 
+  &&  [| (x_pre <= INT_MAX) |]
   &&  emp
 |--
-  [| (a_pre = (Z.max (a_pre) (b_pre))) |]
+  [| (x_pre = (Zabs (x_pre))) |]
   &&  emp
 .
 
-Definition gmp_max_return_wit_2 := 
+(*----- Function gmp_max -----*)
+
+Definition gmp_max_return_wit_1 := 
 forall (b_pre: Z) (a_pre: Z) ,
   [| (a_pre <= b_pre) |]
   &&  emp
 |--
   [| (b_pre = (Z.max (a_pre) (b_pre))) |]
+  &&  emp
+.
+
+Definition gmp_max_return_wit_2 := 
+forall (b_pre: Z) (a_pre: Z) ,
+  [| (a_pre > b_pre) |]
+  &&  emp
+|--
+  [| (a_pre = (Z.max (a_pre) (b_pre))) |]
   &&  emp
 .
 
@@ -141,19 +131,19 @@ forall (b_pre: Z) (a_pre: Z) ,
 Definition gmp_cmp_return_wit_1 := 
 forall (b_pre: Z) (a_pre: Z) ,
   [| (a_pre >= b_pre) |] 
-  &&  [| (a_pre <= b_pre) |]
+  &&  [| (a_pre > b_pre) |]
   &&  emp
 |--
   ([| (a_pre < b_pre) |] 
-  &&  [| ((0 - 0 ) = (-1)) |]
+  &&  [| ((1 - 0 ) = (-1)) |]
   &&  emp)
   ||
   ([| (a_pre = b_pre) |] 
-  &&  [| ((0 - 0 ) = 0) |]
+  &&  [| ((1 - 0 ) = 0) |]
   &&  emp)
   ||
   ([| (a_pre > b_pre) |] 
-  &&  [| ((0 - 0 ) = 1) |]
+  &&  [| ((1 - 0 ) = 1) |]
   &&  emp)
 .
 
@@ -179,19 +169,19 @@ forall (b_pre: Z) (a_pre: Z) ,
 Definition gmp_cmp_return_wit_3 := 
 forall (b_pre: Z) (a_pre: Z) ,
   [| (a_pre >= b_pre) |] 
-  &&  [| (a_pre > b_pre) |]
+  &&  [| (a_pre <= b_pre) |]
   &&  emp
 |--
   ([| (a_pre < b_pre) |] 
-  &&  [| ((1 - 0 ) = (-1)) |]
+  &&  [| ((0 - 0 ) = (-1)) |]
   &&  emp)
   ||
   ([| (a_pre = b_pre) |] 
-  &&  [| ((1 - 0 ) = 0) |]
+  &&  [| ((0 - 0 ) = 0) |]
   &&  emp)
   ||
   ([| (a_pre > b_pre) |] 
-  &&  [| ((1 - 0 ) = 1) |]
+  &&  [| ((0 - 0 ) = 1) |]
   &&  emp)
 .
 
@@ -604,9 +594,7 @@ forall (n_pre: Z) (bp_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) (l1: (@list Z)) (l
 
 Definition mpn_cmp_return_wit_1 := 
 forall (n_pre: Z) (bp_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) (l1: (@list Z)) (l2: (@list Z)) (n: Z) ,
-  [| ((Znth n l1 0) > (Znth n l2 0)) |] 
-  &&  [| ((Znth n l1 0) <> (Znth n l2 0)) |] 
-  &&  [| (n >= 0) |] 
+  [| (n < 0) |] 
   &&  [| ((-1) <= n) |] 
   &&  [| (n < n_pre) |] 
   &&  [| ((sublist ((n + 1 )) (n_pre) (l1)) = (sublist ((n + 1 )) (n_pre) (l2))) |] 
@@ -619,21 +607,21 @@ forall (n_pre: Z) (bp_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) (l1: (@list Z)) (l
   &&  [| (n_pre = (Zlength (l1))) |] 
   &&  [| (n_pre = (Zlength (l2))) |] 
   &&  [| (0 <= n_pre) |]
-  &&  (UIntArray.full bp_pre n_pre l2 )
-  **  (UIntArray.full ap_pre n_pre l1 )
+  &&  (UIntArray.full ap_pre n_pre l1 )
+  **  (UIntArray.full bp_pre n_pre l2 )
 |--
   ([| (val1 < val2) |] 
-  &&  [| (1 = (-1)) |]
+  &&  [| (0 = (-1)) |]
   &&  (mpd_store_Z_compact UINT_MOD ap_pre val1 n_pre )
   **  (mpd_store_Z_compact UINT_MOD bp_pre val2 n_pre ))
   ||
   ([| (val1 = val2) |] 
-  &&  [| (1 = 0) |]
+  &&  [| (0 = 0) |]
   &&  (mpd_store_Z_compact UINT_MOD ap_pre val1 n_pre )
   **  (mpd_store_Z_compact UINT_MOD bp_pre val2 n_pre ))
   ||
   ([| (val1 > val2) |] 
-  &&  [| (1 = 1) |]
+  &&  [| (0 = 1) |]
   &&  (mpd_store_Z_compact UINT_MOD ap_pre val1 n_pre )
   **  (mpd_store_Z_compact UINT_MOD bp_pre val2 n_pre ))
 .
@@ -676,7 +664,9 @@ forall (n_pre: Z) (bp_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) (l1: (@list Z)) (l
 
 Definition mpn_cmp_return_wit_3 := 
 forall (n_pre: Z) (bp_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) (l1: (@list Z)) (l2: (@list Z)) (n: Z) ,
-  [| (n < 0) |] 
+  [| ((Znth n l1 0) > (Znth n l2 0)) |] 
+  &&  [| ((Znth n l1 0) <> (Znth n l2 0)) |] 
+  &&  [| (n >= 0) |] 
   &&  [| ((-1) <= n) |] 
   &&  [| (n < n_pre) |] 
   &&  [| ((sublist ((n + 1 )) (n_pre) (l1)) = (sublist ((n + 1 )) (n_pre) (l2))) |] 
@@ -689,21 +679,21 @@ forall (n_pre: Z) (bp_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) (l1: (@list Z)) (l
   &&  [| (n_pre = (Zlength (l1))) |] 
   &&  [| (n_pre = (Zlength (l2))) |] 
   &&  [| (0 <= n_pre) |]
-  &&  (UIntArray.full ap_pre n_pre l1 )
-  **  (UIntArray.full bp_pre n_pre l2 )
+  &&  (UIntArray.full bp_pre n_pre l2 )
+  **  (UIntArray.full ap_pre n_pre l1 )
 |--
   ([| (val1 < val2) |] 
-  &&  [| (0 = (-1)) |]
+  &&  [| (1 = (-1)) |]
   &&  (mpd_store_Z_compact UINT_MOD ap_pre val1 n_pre )
   **  (mpd_store_Z_compact UINT_MOD bp_pre val2 n_pre ))
   ||
   ([| (val1 = val2) |] 
-  &&  [| (0 = 0) |]
+  &&  [| (1 = 0) |]
   &&  (mpd_store_Z_compact UINT_MOD ap_pre val1 n_pre )
   **  (mpd_store_Z_compact UINT_MOD bp_pre val2 n_pre ))
   ||
   ([| (val1 > val2) |] 
-  &&  [| (0 = 1) |]
+  &&  [| (1 = 1) |]
   &&  (mpd_store_Z_compact UINT_MOD ap_pre val1 n_pre )
   **  (mpd_store_Z_compact UINT_MOD bp_pre val2 n_pre ))
 .
@@ -938,51 +928,53 @@ forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) ,
 .
 
 Definition mpn_cmp4_return_wit_1 := 
-forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) ,
-  [| (an_pre < bn_pre) |] 
-  &&  [| (an_pre <> bn_pre) |] 
+forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) (retval: Z) ,
+  [| (val1 > val2) |] 
+  &&  [| (retval = 1) |] 
+  &&  [| (an_pre = bn_pre) |] 
   &&  [| (an_pre >= 0) |] 
   &&  [| (bn_pre >= 0) |]
   &&  (mpd_store_Z_compact UINT_MOD ap_pre val1 an_pre )
-  **  (mpd_store_Z_compact UINT_MOD bp_pre val2 bn_pre )
+  **  (mpd_store_Z_compact UINT_MOD bp_pre val2 an_pre )
 |--
   ([| (val1 < val2) |] 
-  &&  [| ((-1) = (-1)) |]
+  &&  [| (retval = (-1)) |]
   &&  (mpd_store_Z_compact UINT_MOD ap_pre val1 an_pre )
   **  (mpd_store_Z_compact UINT_MOD bp_pre val2 bn_pre ))
   ||
   ([| (val1 = val2) |] 
-  &&  [| ((-1) = 0) |]
+  &&  [| (retval = 0) |]
   &&  (mpd_store_Z_compact UINT_MOD ap_pre val1 an_pre )
   **  (mpd_store_Z_compact UINT_MOD bp_pre val2 bn_pre ))
   ||
   ([| (val1 > val2) |] 
-  &&  [| ((-1) = 1) |]
+  &&  [| (retval = 1) |]
   &&  (mpd_store_Z_compact UINT_MOD ap_pre val1 an_pre )
   **  (mpd_store_Z_compact UINT_MOD bp_pre val2 bn_pre ))
 .
 
 Definition mpn_cmp4_return_wit_2 := 
-forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) ,
-  [| (an_pre >= bn_pre) |] 
-  &&  [| (an_pre <> bn_pre) |] 
+forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) (retval: Z) ,
+  [| (val1 = val2) |] 
+  &&  [| (retval = 0) |] 
+  &&  [| (an_pre = bn_pre) |] 
   &&  [| (an_pre >= 0) |] 
   &&  [| (bn_pre >= 0) |]
   &&  (mpd_store_Z_compact UINT_MOD ap_pre val1 an_pre )
-  **  (mpd_store_Z_compact UINT_MOD bp_pre val2 bn_pre )
+  **  (mpd_store_Z_compact UINT_MOD bp_pre val2 an_pre )
 |--
   ([| (val1 < val2) |] 
-  &&  [| (1 = (-1)) |]
+  &&  [| (retval = (-1)) |]
   &&  (mpd_store_Z_compact UINT_MOD ap_pre val1 an_pre )
   **  (mpd_store_Z_compact UINT_MOD bp_pre val2 bn_pre ))
   ||
   ([| (val1 = val2) |] 
-  &&  [| (1 = 0) |]
+  &&  [| (retval = 0) |]
   &&  (mpd_store_Z_compact UINT_MOD ap_pre val1 an_pre )
   **  (mpd_store_Z_compact UINT_MOD bp_pre val2 bn_pre ))
   ||
   ([| (val1 > val2) |] 
-  &&  [| (1 = 1) |]
+  &&  [| (retval = 1) |]
   &&  (mpd_store_Z_compact UINT_MOD ap_pre val1 an_pre )
   **  (mpd_store_Z_compact UINT_MOD bp_pre val2 bn_pre ))
 .
@@ -1014,53 +1006,51 @@ forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) (retv
 .
 
 Definition mpn_cmp4_return_wit_4 := 
-forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) (retval: Z) ,
-  [| (val1 = val2) |] 
-  &&  [| (retval = 0) |] 
-  &&  [| (an_pre = bn_pre) |] 
+forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) ,
+  [| (an_pre >= bn_pre) |] 
+  &&  [| (an_pre <> bn_pre) |] 
   &&  [| (an_pre >= 0) |] 
   &&  [| (bn_pre >= 0) |]
   &&  (mpd_store_Z_compact UINT_MOD ap_pre val1 an_pre )
-  **  (mpd_store_Z_compact UINT_MOD bp_pre val2 an_pre )
+  **  (mpd_store_Z_compact UINT_MOD bp_pre val2 bn_pre )
 |--
   ([| (val1 < val2) |] 
-  &&  [| (retval = (-1)) |]
+  &&  [| (1 = (-1)) |]
   &&  (mpd_store_Z_compact UINT_MOD ap_pre val1 an_pre )
   **  (mpd_store_Z_compact UINT_MOD bp_pre val2 bn_pre ))
   ||
   ([| (val1 = val2) |] 
-  &&  [| (retval = 0) |]
+  &&  [| (1 = 0) |]
   &&  (mpd_store_Z_compact UINT_MOD ap_pre val1 an_pre )
   **  (mpd_store_Z_compact UINT_MOD bp_pre val2 bn_pre ))
   ||
   ([| (val1 > val2) |] 
-  &&  [| (retval = 1) |]
+  &&  [| (1 = 1) |]
   &&  (mpd_store_Z_compact UINT_MOD ap_pre val1 an_pre )
   **  (mpd_store_Z_compact UINT_MOD bp_pre val2 bn_pre ))
 .
 
 Definition mpn_cmp4_return_wit_5 := 
-forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) (retval: Z) ,
-  [| (val1 > val2) |] 
-  &&  [| (retval = 1) |] 
-  &&  [| (an_pre = bn_pre) |] 
+forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (val2: Z) (val1: Z) ,
+  [| (an_pre < bn_pre) |] 
+  &&  [| (an_pre <> bn_pre) |] 
   &&  [| (an_pre >= 0) |] 
   &&  [| (bn_pre >= 0) |]
   &&  (mpd_store_Z_compact UINT_MOD ap_pre val1 an_pre )
-  **  (mpd_store_Z_compact UINT_MOD bp_pre val2 an_pre )
+  **  (mpd_store_Z_compact UINT_MOD bp_pre val2 bn_pre )
 |--
   ([| (val1 < val2) |] 
-  &&  [| (retval = (-1)) |]
+  &&  [| ((-1) = (-1)) |]
   &&  (mpd_store_Z_compact UINT_MOD ap_pre val1 an_pre )
   **  (mpd_store_Z_compact UINT_MOD bp_pre val2 bn_pre ))
   ||
   ([| (val1 = val2) |] 
-  &&  [| (retval = 0) |]
+  &&  [| ((-1) = 0) |]
   &&  (mpd_store_Z_compact UINT_MOD ap_pre val1 an_pre )
   **  (mpd_store_Z_compact UINT_MOD bp_pre val2 bn_pre ))
   ||
   ([| (val1 > val2) |] 
-  &&  [| (retval = 1) |]
+  &&  [| ((-1) = 1) |]
   &&  (mpd_store_Z_compact UINT_MOD ap_pre val1 an_pre )
   **  (mpd_store_Z_compact UINT_MOD bp_pre val2 bn_pre ))
 .
@@ -1270,8 +1260,7 @@ forall (n_pre: Z) (xp_pre: Z) (val: Z) (l: (@list Z)) (n: Z) ,
 
 Definition mpn_normalized_size_return_wit_1 := 
 forall (n_pre: Z) (xp_pre: Z) (val: Z) (l: (@list Z)) (n: Z) ,
-  [| ((Znth (n - 1 ) (sublist (0) (n) (l)) 0) <> 0) |] 
-  &&  [| (n > 0) |] 
+  [| (n <= 0) |] 
   &&  [| (n >= 0) |] 
   &&  [| (n <= n_pre) |] 
   &&  [| ((list_to_Z (UINT_MOD) ((sublist (0) (n) (l)))) = val) |] 
@@ -1291,7 +1280,8 @@ forall (n_pre: Z) (xp_pre: Z) (val: Z) (l: (@list Z)) (n: Z) ,
 
 Definition mpn_normalized_size_return_wit_2 := 
 forall (n_pre: Z) (xp_pre: Z) (val: Z) (l: (@list Z)) (n: Z) ,
-  [| (n <= 0) |] 
+  [| ((Znth (n - 1 ) (sublist (0) (n) (l)) 0) <> 0) |] 
+  &&  [| (n > 0) |] 
   &&  [| (n >= 0) |] 
   &&  [| (n <= n_pre) |] 
   &&  [| ((list_to_Z (UINT_MOD) ((sublist (0) (n) (l)))) = val) |] 
@@ -1380,16 +1370,16 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (val: Z) (l: (@list Z)) ,
 .
 
 Definition mpn_add_1_safety_wit_2 := 
-forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (val: Z) (l: (@list Z)) ,
-  [| ((unsigned_last_nbits (((Znth 0 l 0) + b_pre )) (32)) >= b_pre) |] 
+forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (val: Z) (l: (@list Z)) (l_2: (@list (@option Z))) ,
+  [| (SingleSome l_2 0 (unsigned_last_nbits (((Znth 0 l 0) + b_pre )) (32)) ) |] 
+  &&  [| ((unsigned_last_nbits (((Znth 0 l 0) + b_pre )) (32)) >= b_pre) |] 
   &&  [| ((Zlength (l)) = n_pre) |] 
   &&  [| ((list_to_Z (UINT_MOD) (l)) = val) |] 
   &&  [| (list_within_bound UINT_MOD l ) |] 
   &&  [| (n_pre > 0) |] 
   &&  [| (0 <= b_pre) |] 
   &&  [| (b_pre <= UINT_MAX) |]
-  &&  (((rp_pre + (0 * sizeof(UINT) ) )) # UInt  |-> (unsigned_last_nbits (((Znth 0 l 0) + b_pre )) (32)))
-  **  (UIntArray.undef_seg rp_pre 1 n_pre )
+  &&  (UIntArray.mixed_full rp_pre n_pre l_2 )
   **  (UIntArray.full ap_pre n_pre l )
   **  ((( &( "r" ) )) # UInt  |-> (unsigned_last_nbits (((Znth 0 l 0) + b_pre )) (32)))
   **  ((( &( "i" ) )) # Int  |-> 0)
@@ -1403,16 +1393,16 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (val: Z) (l: (@list Z)) ,
 .
 
 Definition mpn_add_1_safety_wit_3 := 
-forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (val: Z) (l: (@list Z)) ,
-  [| ((unsigned_last_nbits (((Znth 0 l 0) + b_pre )) (32)) < b_pre) |] 
+forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (val: Z) (l: (@list Z)) (l_2: (@list (@option Z))) ,
+  [| (SingleSome l_2 0 (unsigned_last_nbits (((Znth 0 l 0) + b_pre )) (32)) ) |] 
+  &&  [| ((unsigned_last_nbits (((Znth 0 l 0) + b_pre )) (32)) < b_pre) |] 
   &&  [| ((Zlength (l)) = n_pre) |] 
   &&  [| ((list_to_Z (UINT_MOD) (l)) = val) |] 
   &&  [| (list_within_bound UINT_MOD l ) |] 
   &&  [| (n_pre > 0) |] 
   &&  [| (0 <= b_pre) |] 
   &&  [| (b_pre <= UINT_MAX) |]
-  &&  (((rp_pre + (0 * sizeof(UINT) ) )) # UInt  |-> (unsigned_last_nbits (((Znth 0 l 0) + b_pre )) (32)))
-  **  (UIntArray.undef_seg rp_pre 1 n_pre )
+  &&  (UIntArray.mixed_full rp_pre n_pre l_2 )
   **  (UIntArray.full ap_pre n_pre l )
   **  ((( &( "r" ) )) # UInt  |-> (unsigned_last_nbits (((Znth 0 l 0) + b_pre )) (32)))
   **  ((( &( "i" ) )) # Int  |-> 0)
@@ -1566,16 +1556,16 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (val: Z) (l: (@list Z)) (l'
 .
 
 Definition mpn_add_1_entail_wit_2_1 := 
-forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (val: Z) (l: (@list Z)) ,
-  [| ((unsigned_last_nbits (((Znth 0 l 0) + b_pre )) (32)) < b_pre) |] 
+forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (val: Z) (l: (@list Z)) (l_2: (@list (@option Z))) ,
+  [| (SingleSome l_2 0 (unsigned_last_nbits (((Znth 0 l 0) + b_pre )) (32)) ) |] 
+  &&  [| ((unsigned_last_nbits (((Znth 0 l 0) + b_pre )) (32)) < b_pre) |] 
   &&  [| ((Zlength (l)) = n_pre) |] 
   &&  [| ((list_to_Z (UINT_MOD) (l)) = val) |] 
   &&  [| (list_within_bound UINT_MOD l ) |] 
   &&  [| (n_pre > 0) |] 
   &&  [| (0 <= b_pre) |] 
   &&  [| (b_pre <= UINT_MAX) |]
-  &&  (((rp_pre + (0 * sizeof(UINT) ) )) # UInt  |-> (unsigned_last_nbits (((Znth 0 l 0) + b_pre )) (32)))
-  **  (UIntArray.undef_seg rp_pre 1 n_pre )
+  &&  (UIntArray.mixed_full rp_pre n_pre l_2 )
   **  (UIntArray.full ap_pre n_pre l )
 |--
   EX (l': (@list Z))  (val1: Z)  (val2: Z) ,
@@ -1597,16 +1587,16 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (val: Z) (l: (@list Z)) ,
 .
 
 Definition mpn_add_1_entail_wit_2_2 := 
-forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (val: Z) (l: (@list Z)) ,
-  [| ((unsigned_last_nbits (((Znth 0 l 0) + b_pre )) (32)) >= b_pre) |] 
+forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (val: Z) (l: (@list Z)) (l_2: (@list (@option Z))) ,
+  [| (SingleSome l_2 0 (unsigned_last_nbits (((Znth 0 l 0) + b_pre )) (32)) ) |] 
+  &&  [| ((unsigned_last_nbits (((Znth 0 l 0) + b_pre )) (32)) >= b_pre) |] 
   &&  [| ((Zlength (l)) = n_pre) |] 
   &&  [| ((list_to_Z (UINT_MOD) (l)) = val) |] 
   &&  [| (list_within_bound UINT_MOD l ) |] 
   &&  [| (n_pre > 0) |] 
   &&  [| (0 <= b_pre) |] 
   &&  [| (b_pre <= UINT_MAX) |]
-  &&  (((rp_pre + (0 * sizeof(UINT) ) )) # UInt  |-> (unsigned_last_nbits (((Znth 0 l 0) + b_pre )) (32)))
-  **  (UIntArray.undef_seg rp_pre 1 n_pre )
+  &&  (UIntArray.mixed_full rp_pre n_pre l_2 )
   **  (UIntArray.full ap_pre n_pre l )
 |--
   EX (l': (@list Z))  (val1: Z)  (val2: Z) ,
@@ -1709,7 +1699,7 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (val: Z) (l: (@list Z)) ,
   &&  [| (0 <= b_pre) |] 
   &&  [| (b_pre <= UINT_MAX) |]
   &&  (((rp_pre + (0 * sizeof(UINT) ) )) # UInt  |->_)
-  **  (UIntArray.undef_seg rp_pre 1 n_pre )
+  **  (UIntArray.undef_missing_i rp_pre 0 0 n_pre )
   **  (UIntArray.full ap_pre n_pre l )
 .
 
@@ -1733,7 +1723,7 @@ forall (b_pre: Z) (n_pre: Z) (ap_pre: Z) (rp_pre: Z) (val: Z) (l: (@list Z)) ,
   &&  [| (0 <= b_pre) |] 
   &&  [| (b_pre <= UINT_MAX) |]
   &&  (((rp_pre + (0 * sizeof(UINT) ) )) # UInt  |->_)
-  **  (UIntArray.undef_seg rp_pre 1 n_pre )
+  **  (UIntArray.undef_missing_i rp_pre 0 0 n_pre )
   **  (UIntArray.full ap_pre n_pre l )
 .
 
@@ -2785,36 +2775,6 @@ forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (val_b: Z) (v
 .
 
 Definition mpn_add_return_wit_1 := 
-forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (val_b: Z) (val_a: Z) (val_a_low: Z) (val_a_high: Z) (val_r_out_2: Z) (retval: Z) (l_r: (@list Z)) ,
-  [| (an_pre <= bn_pre) |] 
-  &&  [| (0 <= retval) |] 
-  &&  [| (retval <= UINT_MAX) |] 
-  &&  [| (an_pre <= INT_MAX) |] 
-  &&  [| (bn_pre <= INT_MAX) |] 
-  &&  [| (an_pre >= INT_MIN) |] 
-  &&  [| (bn_pre >= INT_MIN) |] 
-  &&  [| ((Zlength (l_r)) = bn_pre) |] 
-  &&  [| ((list_to_Z (UINT_MOD) (l_r)) = val_r_out_2) |] 
-  &&  [| (list_within_bound UINT_MOD l_r ) |] 
-  &&  [| ((val_r_out_2 + (retval * (Z.pow (UINT_MOD) (bn_pre)) ) ) = (val_a_low + val_b )) |] 
-  &&  [| (val_a = (val_a_low + (val_a_high * (Z.pow (UINT_MOD) (bn_pre)) ) )) |] 
-  &&  [| (an_pre >= bn_pre) |] 
-  &&  [| (an_pre >= 0) |] 
-  &&  [| (bn_pre >= 0) |]
-  &&  (UIntArray.full rp_pre bn_pre l_r )
-  **  (mpd_store_Z UINT_MOD ap_pre val_a_low bn_pre )
-  **  (mpd_store_Z UINT_MOD bp_pre val_b bn_pre )
-  **  (UIntArray.undef_full (rp_pre + (bn_pre * sizeof(UINT) ) ) (an_pre - bn_pre ) )
-  **  (mpd_store_Z UINT_MOD (ap_pre + (bn_pre * sizeof(UINT) ) ) val_a_high (an_pre - bn_pre ) )
-|--
-  EX (val_r_out: Z) ,
-  [| ((val_r_out + (retval * (Z.pow (UINT_MOD) (an_pre)) ) ) = (val_a + val_b )) |]
-  &&  (mpd_store_Z UINT_MOD ap_pre val_a an_pre )
-  **  (mpd_store_Z UINT_MOD bp_pre val_b bn_pre )
-  **  (mpd_store_Z UINT_MOD rp_pre val_r_out an_pre )
-.
-
-Definition mpn_add_return_wit_2 := 
 forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (val_b: Z) (val_a: Z) (val_a_low: Z) (val_a_high: Z) (val_r_out_2: Z) (retval_2: Z) (l_r: (@list Z)) (val': Z) (retval: Z) ,
   [| ((val' + (retval * (Z.pow (UINT_MOD) ((an_pre - bn_pre ))) ) ) = (val_a_high + retval_2 )) |] 
   &&  [| (an_pre > bn_pre) |] 
@@ -2837,6 +2797,36 @@ forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (val_b: Z) (v
   **  (UIntArray.full rp_pre bn_pre l_r )
   **  (mpd_store_Z UINT_MOD ap_pre val_a_low bn_pre )
   **  (mpd_store_Z UINT_MOD bp_pre val_b bn_pre )
+|--
+  EX (val_r_out: Z) ,
+  [| ((val_r_out + (retval * (Z.pow (UINT_MOD) (an_pre)) ) ) = (val_a + val_b )) |]
+  &&  (mpd_store_Z UINT_MOD ap_pre val_a an_pre )
+  **  (mpd_store_Z UINT_MOD bp_pre val_b bn_pre )
+  **  (mpd_store_Z UINT_MOD rp_pre val_r_out an_pre )
+.
+
+Definition mpn_add_return_wit_2 := 
+forall (bn_pre: Z) (bp_pre: Z) (an_pre: Z) (ap_pre: Z) (rp_pre: Z) (val_b: Z) (val_a: Z) (val_a_low: Z) (val_a_high: Z) (val_r_out_2: Z) (retval: Z) (l_r: (@list Z)) ,
+  [| (an_pre <= bn_pre) |] 
+  &&  [| (0 <= retval) |] 
+  &&  [| (retval <= UINT_MAX) |] 
+  &&  [| (an_pre <= INT_MAX) |] 
+  &&  [| (bn_pre <= INT_MAX) |] 
+  &&  [| (an_pre >= INT_MIN) |] 
+  &&  [| (bn_pre >= INT_MIN) |] 
+  &&  [| ((Zlength (l_r)) = bn_pre) |] 
+  &&  [| ((list_to_Z (UINT_MOD) (l_r)) = val_r_out_2) |] 
+  &&  [| (list_within_bound UINT_MOD l_r ) |] 
+  &&  [| ((val_r_out_2 + (retval * (Z.pow (UINT_MOD) (bn_pre)) ) ) = (val_a_low + val_b )) |] 
+  &&  [| (val_a = (val_a_low + (val_a_high * (Z.pow (UINT_MOD) (bn_pre)) ) )) |] 
+  &&  [| (an_pre >= bn_pre) |] 
+  &&  [| (an_pre >= 0) |] 
+  &&  [| (bn_pre >= 0) |]
+  &&  (UIntArray.full rp_pre bn_pre l_r )
+  **  (mpd_store_Z UINT_MOD ap_pre val_a_low bn_pre )
+  **  (mpd_store_Z UINT_MOD bp_pre val_b bn_pre )
+  **  (UIntArray.undef_full (rp_pre + (bn_pre * sizeof(UINT) ) ) (an_pre - bn_pre ) )
+  **  (mpd_store_Z UINT_MOD (ap_pre + (bn_pre * sizeof(UINT) ) ) val_a_high (an_pre - bn_pre ) )
 |--
   EX (val_r_out: Z) ,
   [| ((val_r_out + (retval * (Z.pow (UINT_MOD) (an_pre)) ) ) = (val_a + val_b )) |]
@@ -3127,10 +3117,8 @@ forall (r_pre: Z) (n: Z) (ptr_2: Z) (cap_2: Z) (size_2: Z) ,
   [| ((Zabs (size_2)) <= cap_2) |] 
   &&  [| (size_2 < 0) |] 
   &&  [| (n < 0) |] 
-  &&  [| (cap_2 = 0) |]
-  &&  (mpd_store_Z_compact UINT_MOD ptr_2 (-n) (-size_2) )
-  **  (UIntArray.undef_seg ptr_2 (-size_2) cap_2 )
-  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size_2)
+  &&  [| (cap_2 <> 0) |]
+  &&  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size_2)
   **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap_2)
   **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_2)
 |--
@@ -3141,6 +3129,22 @@ forall (r_pre: Z) (n: Z) (ptr_2: Z) (cap_2: Z) (size_2: Z) ,
 .
 
 Definition mpz_clear_return_wit_2 := 
+forall (r_pre: Z) (n: Z) (ptr_2: Z) (cap_2: Z) (size_2: Z) ,
+  [| ((Zabs (size_2)) <= cap_2) |] 
+  &&  [| (size_2 >= 0) |] 
+  &&  [| (n >= 0) |] 
+  &&  [| (cap_2 <> 0) |]
+  &&  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size_2)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap_2)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_2)
+|--
+  EX (ptr: Z)  (cap: Z)  (size: Z) ,
+  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
+.
+
+Definition mpz_clear_return_wit_3 := 
 forall (r_pre: Z) (n: Z) (ptr_2: Z) (cap_2: Z) (size_2: Z) ,
   [| ((Zabs (size_2)) <= cap_2) |] 
   &&  [| (size_2 >= 0) |] 
@@ -3158,29 +3162,15 @@ forall (r_pre: Z) (n: Z) (ptr_2: Z) (cap_2: Z) (size_2: Z) ,
   **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
 .
 
-Definition mpz_clear_return_wit_3 := 
-forall (r_pre: Z) (n: Z) (ptr_2: Z) (cap_2: Z) (size_2: Z) ,
-  [| ((Zabs (size_2)) <= cap_2) |] 
-  &&  [| (size_2 >= 0) |] 
-  &&  [| (n >= 0) |] 
-  &&  [| (cap_2 <> 0) |]
-  &&  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size_2)
-  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap_2)
-  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_2)
-|--
-  EX (ptr: Z)  (cap: Z)  (size: Z) ,
-  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size)
-  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
-  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
-.
-
 Definition mpz_clear_return_wit_4 := 
 forall (r_pre: Z) (n: Z) (ptr_2: Z) (cap_2: Z) (size_2: Z) ,
   [| ((Zabs (size_2)) <= cap_2) |] 
   &&  [| (size_2 < 0) |] 
   &&  [| (n < 0) |] 
-  &&  [| (cap_2 <> 0) |]
-  &&  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size_2)
+  &&  [| (cap_2 = 0) |]
+  &&  (mpd_store_Z_compact UINT_MOD ptr_2 (-n) (-size_2) )
+  **  (UIntArray.undef_seg ptr_2 (-size_2) cap_2 )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size_2)
   **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap_2)
   **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_2)
 |--
@@ -3416,7 +3406,7 @@ forall (size_pre: Z) (r_pre: Z) (n_neg: Z) (cap_neg: Z) (old_neg: Z) (retval: Z)
 
 Definition mpz_realloc_return_wit_1_pos := 
 forall (size_pre: Z) (r_pre: Z) (n_pos: Z) (cap_pos: Z) (old_pos: Z) (ptr_pos: Z) (retval_2: Z) (retval: Z) (retval_3: Z) ,
-  [| (retval_3 > retval_2) |] 
+  [| (retval_3 <= retval_2) |] 
   &&  [| (retval_3 = (Zabs (old_pos))) |] 
   &&  [| (retval_2 = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap_pos) |] 
@@ -3430,7 +3420,7 @@ forall (size_pre: Z) (r_pre: Z) (n_pos: Z) (cap_pos: Z) (old_pos: Z) (ptr_pos: Z
   &&  (UIntArray.undef_full retval retval_2 )
   **  (mpd_store_Z_compact UINT_MOD ptr_pos n_pos old_pos )
   **  (UIntArray.undef_seg ptr_pos old_pos cap_pos )
-  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> 0)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old_pos)
   **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval_2)
   **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval)
 |--
@@ -3446,7 +3436,7 @@ forall (size_pre: Z) (r_pre: Z) (n_pos: Z) (cap_pos: Z) (old_pos: Z) (ptr_pos: Z
 
 Definition mpz_realloc_return_wit_2_neg := 
 forall (size_pre: Z) (r_pre: Z) (n_neg: Z) (cap_neg: Z) (old_neg: Z) (ptr_neg: Z) (retval_2: Z) (retval: Z) (retval_3: Z) ,
-  [| (retval_3 > retval_2) |] 
+  [| (retval_3 <= retval_2) |] 
   &&  [| (retval_3 = (Zabs (old_neg))) |] 
   &&  [| (retval_2 = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap_neg) |] 
@@ -3460,7 +3450,7 @@ forall (size_pre: Z) (r_pre: Z) (n_neg: Z) (cap_neg: Z) (old_neg: Z) (ptr_neg: Z
   &&  (UIntArray.undef_full retval retval_2 )
   **  (mpd_store_Z_compact UINT_MOD ptr_neg (-n_neg) (-old_neg) )
   **  (UIntArray.undef_seg ptr_neg (-old_neg) cap_neg )
-  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> 0)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old_neg)
   **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval_2)
   **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval)
 |--
@@ -3476,7 +3466,7 @@ forall (size_pre: Z) (r_pre: Z) (n_neg: Z) (cap_neg: Z) (old_neg: Z) (ptr_neg: Z
 
 Definition mpz_realloc_return_wit_3_pos := 
 forall (size_pre: Z) (r_pre: Z) (n_pos: Z) (cap_pos: Z) (old_pos: Z) (retval_2: Z) (retval: Z) (retval_3: Z) ,
-  [| (retval_3 > retval_2) |] 
+  [| (retval_3 <= retval_2) |] 
   &&  [| (retval_3 = (Zabs (old_pos))) |] 
   &&  [| (retval_2 = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap_pos) |] 
@@ -3489,7 +3479,7 @@ forall (size_pre: Z) (r_pre: Z) (n_pos: Z) (cap_pos: Z) (old_pos: Z) (retval_2: 
   &&  [| (cap_pos <> 0) |]
   &&  (mpd_store_Z_compact UINT_MOD retval n_pos old_pos )
   **  (UIntArray.undef_seg retval old_pos retval_2 )
-  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> 0)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old_pos)
   **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval_2)
   **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval)
 |--
@@ -3505,6 +3495,35 @@ forall (size_pre: Z) (r_pre: Z) (n_pos: Z) (cap_pos: Z) (old_pos: Z) (retval_2: 
 
 Definition mpz_realloc_return_wit_4_neg := 
 forall (size_pre: Z) (r_pre: Z) (n_neg: Z) (cap_neg: Z) (old_neg: Z) (retval_2: Z) (retval: Z) (retval_3: Z) ,
+  [| (retval_3 <= retval_2) |] 
+  &&  [| (retval_3 = (Zabs (old_neg))) |] 
+  &&  [| (retval_2 = (Z.max (size_pre) (1))) |] 
+  &&  [| (size_pre >= cap_neg) |] 
+  &&  [| (size_pre <= INT_MAX) |] 
+  &&  [| (cap_neg >= 0) |] 
+  &&  [| (cap_neg <= INT_MAX) |] 
+  &&  [| ((Zabs (old_neg)) <= cap_neg) |] 
+  &&  [| (old_neg < 0) |] 
+  &&  [| (n_neg < 0) |] 
+  &&  [| (cap_neg <> 0) |]
+  &&  (mpd_store_Z_compact UINT_MOD retval (-n_neg) (-old_neg) )
+  **  (UIntArray.undef_seg retval (-old_neg) retval_2 )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old_neg)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval_2)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval)
+|--
+  EX (r_pre__mp_alloc: Z) ,
+  [| (n_neg < 0) |] 
+  &&  [| (r_pre__mp_alloc = (Z.max (size_pre) (1))) |]
+  &&  (mpd_store_Z_compact UINT_MOD retval (-n_neg) (-old_neg) )
+  **  (UIntArray.undef_seg retval (-old_neg) (Z.max (size_pre) (1)) )
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old_neg)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> r_pre__mp_alloc)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval)
+.
+
+Definition mpz_realloc_return_wit_5_neg := 
+forall (size_pre: Z) (r_pre: Z) (n_neg: Z) (cap_neg: Z) (old_neg: Z) (retval_2: Z) (retval: Z) (retval_3: Z) ,
   [| (retval_3 > retval_2) |] 
   &&  [| (retval_3 = (Zabs (old_neg))) |] 
   &&  [| (retval_2 = (Z.max (size_pre) (1))) |] 
@@ -3532,38 +3551,9 @@ forall (size_pre: Z) (r_pre: Z) (n_neg: Z) (cap_neg: Z) (old_neg: Z) (retval_2: 
   **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval)
 .
 
-Definition mpz_realloc_return_wit_5_neg := 
-forall (size_pre: Z) (r_pre: Z) (n_neg: Z) (cap_neg: Z) (old_neg: Z) (retval_2: Z) (retval: Z) (retval_3: Z) ,
-  [| (retval_3 <= retval_2) |] 
-  &&  [| (retval_3 = (Zabs (old_neg))) |] 
-  &&  [| (retval_2 = (Z.max (size_pre) (1))) |] 
-  &&  [| (size_pre >= cap_neg) |] 
-  &&  [| (size_pre <= INT_MAX) |] 
-  &&  [| (cap_neg >= 0) |] 
-  &&  [| (cap_neg <= INT_MAX) |] 
-  &&  [| ((Zabs (old_neg)) <= cap_neg) |] 
-  &&  [| (old_neg < 0) |] 
-  &&  [| (n_neg < 0) |] 
-  &&  [| (cap_neg <> 0) |]
-  &&  (mpd_store_Z_compact UINT_MOD retval (-n_neg) (-old_neg) )
-  **  (UIntArray.undef_seg retval (-old_neg) retval_2 )
-  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old_neg)
-  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval_2)
-  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval)
-|--
-  EX (r_pre__mp_alloc: Z) ,
-  [| (n_neg < 0) |] 
-  &&  [| (r_pre__mp_alloc = (Z.max (size_pre) (1))) |]
-  &&  (mpd_store_Z_compact UINT_MOD retval (-n_neg) (-old_neg) )
-  **  (UIntArray.undef_seg retval (-old_neg) (Z.max (size_pre) (1)) )
-  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old_neg)
-  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> r_pre__mp_alloc)
-  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval)
-.
-
 Definition mpz_realloc_return_wit_6_pos := 
 forall (size_pre: Z) (r_pre: Z) (n_pos: Z) (cap_pos: Z) (old_pos: Z) (retval_2: Z) (retval: Z) (retval_3: Z) ,
-  [| (retval_3 <= retval_2) |] 
+  [| (retval_3 > retval_2) |] 
   &&  [| (retval_3 = (Zabs (old_pos))) |] 
   &&  [| (retval_2 = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap_pos) |] 
@@ -3576,7 +3566,7 @@ forall (size_pre: Z) (r_pre: Z) (n_pos: Z) (cap_pos: Z) (old_pos: Z) (retval_2: 
   &&  [| (cap_pos <> 0) |]
   &&  (mpd_store_Z_compact UINT_MOD retval n_pos old_pos )
   **  (UIntArray.undef_seg retval old_pos retval_2 )
-  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old_pos)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> 0)
   **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval_2)
   **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval)
 |--
@@ -3592,7 +3582,7 @@ forall (size_pre: Z) (r_pre: Z) (n_pos: Z) (cap_pos: Z) (old_pos: Z) (retval_2: 
 
 Definition mpz_realloc_return_wit_7_neg := 
 forall (size_pre: Z) (r_pre: Z) (n_neg: Z) (cap_neg: Z) (old_neg: Z) (ptr_neg: Z) (retval_2: Z) (retval: Z) (retval_3: Z) ,
-  [| (retval_3 <= retval_2) |] 
+  [| (retval_3 > retval_2) |] 
   &&  [| (retval_3 = (Zabs (old_neg))) |] 
   &&  [| (retval_2 = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap_neg) |] 
@@ -3606,7 +3596,7 @@ forall (size_pre: Z) (r_pre: Z) (n_neg: Z) (cap_neg: Z) (old_neg: Z) (ptr_neg: Z
   &&  (UIntArray.undef_full retval retval_2 )
   **  (mpd_store_Z_compact UINT_MOD ptr_neg (-n_neg) (-old_neg) )
   **  (UIntArray.undef_seg ptr_neg (-old_neg) cap_neg )
-  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old_neg)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> 0)
   **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval_2)
   **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval)
 |--
@@ -3622,7 +3612,7 @@ forall (size_pre: Z) (r_pre: Z) (n_neg: Z) (cap_neg: Z) (old_neg: Z) (ptr_neg: Z
 
 Definition mpz_realloc_return_wit_8_pos := 
 forall (size_pre: Z) (r_pre: Z) (n_pos: Z) (cap_pos: Z) (old_pos: Z) (ptr_pos: Z) (retval_2: Z) (retval: Z) (retval_3: Z) ,
-  [| (retval_3 <= retval_2) |] 
+  [| (retval_3 > retval_2) |] 
   &&  [| (retval_3 = (Zabs (old_pos))) |] 
   &&  [| (retval_2 = (Z.max (size_pre) (1))) |] 
   &&  [| (size_pre >= cap_pos) |] 
@@ -3636,7 +3626,7 @@ forall (size_pre: Z) (r_pre: Z) (n_pos: Z) (cap_pos: Z) (old_pos: Z) (ptr_pos: Z
   &&  (UIntArray.undef_full retval retval_2 )
   **  (mpd_store_Z_compact UINT_MOD ptr_pos n_pos old_pos )
   **  (UIntArray.undef_seg ptr_pos old_pos cap_pos )
-  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old_pos)
+  **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> 0)
   **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> retval_2)
   **  ((&((r_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval)
 |--
@@ -4197,33 +4187,56 @@ Definition mpz_realloc_partial_solve_wit_10_pos := mpz_realloc_partial_solve_wit
 (*----- Function mrz_realloc_if -----*)
 
 Definition mrz_realloc_if_return_wit_1_pos := 
-forall (n_pre: Z) (z_pre: Z) (m_pos: Z) (cap_pos: Z) (old_pos: Z) (r_callee__mp_alloc: Z) (retval: Z) ,
-  [| (m_pos >= 0) |] 
-  &&  [| (r_callee__mp_alloc = (Z.max (n_pre) (1))) |] 
-  &&  [| (n_pre > cap_pos) |] 
+forall (n_pre: Z) (z_pre: Z) (m_pos: Z) (cap_pos: Z) (old_pos: Z) (ptr_pos: Z) ,
+  [| (n_pre <= cap_pos) |] 
   &&  [| (cap_pos >= 0) |] 
   &&  [| (cap_pos <= INT_MAX) |] 
   &&  [| (n_pre >= 1) |] 
   &&  [| ((Zabs (old_pos)) <= cap_pos) |] 
   &&  [| (old_pos >= 0) |] 
   &&  [| (m_pos >= 0) |]
-  &&  (mpd_store_Z_compact UINT_MOD retval m_pos old_pos )
-  **  (UIntArray.undef_seg retval old_pos (Z.max (n_pre) (1)) )
+  &&  (mpd_store_Z_compact UINT_MOD ptr_pos m_pos old_pos )
+  **  (UIntArray.undef_seg ptr_pos old_pos cap_pos )
   **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old_pos)
-  **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> r_callee__mp_alloc)
-  **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval)
+  **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap_pos)
+  **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_pos)
 |--
   EX (z_pre__mp_alloc: Z) ,
   [| (m_pos >= 0) |] 
   &&  [| (z_pre__mp_alloc = (Z.max ((Z.max (n_pre) (1))) (cap_pos))) |]
-  &&  (mpd_store_Z_compact UINT_MOD retval m_pos old_pos )
-  **  (UIntArray.undef_seg retval old_pos (Z.max ((Z.max (n_pre) (1))) (cap_pos)) )
+  &&  (mpd_store_Z_compact UINT_MOD ptr_pos m_pos old_pos )
+  **  (UIntArray.undef_seg ptr_pos old_pos (Z.max ((Z.max (n_pre) (1))) (cap_pos)) )
   **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old_pos)
   **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> z_pre__mp_alloc)
-  **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval)
+  **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_pos)
 .
 
 Definition mrz_realloc_if_return_wit_2_neg := 
+forall (n_pre: Z) (z_pre: Z) (m_neg: Z) (cap_neg: Z) (old_neg: Z) (ptr_neg: Z) ,
+  [| (n_pre <= cap_neg) |] 
+  &&  [| (cap_neg >= 0) |] 
+  &&  [| (cap_neg <= INT_MAX) |] 
+  &&  [| (n_pre >= 1) |] 
+  &&  [| ((Zabs (old_neg)) <= cap_neg) |] 
+  &&  [| (old_neg < 0) |] 
+  &&  [| (m_neg < 0) |]
+  &&  (mpd_store_Z_compact UINT_MOD ptr_neg (-m_neg) (-old_neg) )
+  **  (UIntArray.undef_seg ptr_neg (-old_neg) cap_neg )
+  **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old_neg)
+  **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap_neg)
+  **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_neg)
+|--
+  EX (z_pre__mp_alloc: Z) ,
+  [| (m_neg < 0) |] 
+  &&  [| (z_pre__mp_alloc = (Z.max ((Z.max (n_pre) (1))) (cap_neg))) |]
+  &&  (mpd_store_Z_compact UINT_MOD ptr_neg (-m_neg) (-old_neg) )
+  **  (UIntArray.undef_seg ptr_neg (-old_neg) (Z.max ((Z.max (n_pre) (1))) (cap_neg)) )
+  **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old_neg)
+  **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> z_pre__mp_alloc)
+  **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_neg)
+.
+
+Definition mrz_realloc_if_return_wit_3_neg := 
 forall (n_pre: Z) (z_pre: Z) (m_neg: Z) (cap_neg: Z) (old_neg: Z) (r_callee__mp_alloc: Z) (retval: Z) ,
   [| (m_neg < 0) |] 
   &&  [| (r_callee__mp_alloc = (Z.max (n_pre) (1))) |] 
@@ -4250,54 +4263,31 @@ forall (n_pre: Z) (z_pre: Z) (m_neg: Z) (cap_neg: Z) (old_neg: Z) (r_callee__mp_
   **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval)
 .
 
-Definition mrz_realloc_if_return_wit_3_neg := 
-forall (n_pre: Z) (z_pre: Z) (m_neg: Z) (cap_neg: Z) (old_neg: Z) (ptr_neg: Z) ,
-  [| (n_pre <= cap_neg) |] 
-  &&  [| (cap_neg >= 0) |] 
-  &&  [| (cap_neg <= INT_MAX) |] 
-  &&  [| (n_pre >= 1) |] 
-  &&  [| ((Zabs (old_neg)) <= cap_neg) |] 
-  &&  [| (old_neg < 0) |] 
-  &&  [| (m_neg < 0) |]
-  &&  (mpd_store_Z_compact UINT_MOD ptr_neg (-m_neg) (-old_neg) )
-  **  (UIntArray.undef_seg ptr_neg (-old_neg) cap_neg )
-  **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old_neg)
-  **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap_neg)
-  **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_neg)
-|--
-  EX (z_pre__mp_alloc: Z) ,
-  [| (m_neg < 0) |] 
-  &&  [| (z_pre__mp_alloc = (Z.max ((Z.max (n_pre) (1))) (cap_neg))) |]
-  &&  (mpd_store_Z_compact UINT_MOD ptr_neg (-m_neg) (-old_neg) )
-  **  (UIntArray.undef_seg ptr_neg (-old_neg) (Z.max ((Z.max (n_pre) (1))) (cap_neg)) )
-  **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old_neg)
-  **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> z_pre__mp_alloc)
-  **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_neg)
-.
-
 Definition mrz_realloc_if_return_wit_4_pos := 
-forall (n_pre: Z) (z_pre: Z) (m_pos: Z) (cap_pos: Z) (old_pos: Z) (ptr_pos: Z) ,
-  [| (n_pre <= cap_pos) |] 
+forall (n_pre: Z) (z_pre: Z) (m_pos: Z) (cap_pos: Z) (old_pos: Z) (r_callee__mp_alloc: Z) (retval: Z) ,
+  [| (m_pos >= 0) |] 
+  &&  [| (r_callee__mp_alloc = (Z.max (n_pre) (1))) |] 
+  &&  [| (n_pre > cap_pos) |] 
   &&  [| (cap_pos >= 0) |] 
   &&  [| (cap_pos <= INT_MAX) |] 
   &&  [| (n_pre >= 1) |] 
   &&  [| ((Zabs (old_pos)) <= cap_pos) |] 
   &&  [| (old_pos >= 0) |] 
   &&  [| (m_pos >= 0) |]
-  &&  (mpd_store_Z_compact UINT_MOD ptr_pos m_pos old_pos )
-  **  (UIntArray.undef_seg ptr_pos old_pos cap_pos )
+  &&  (mpd_store_Z_compact UINT_MOD retval m_pos old_pos )
+  **  (UIntArray.undef_seg retval old_pos (Z.max (n_pre) (1)) )
   **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old_pos)
-  **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap_pos)
-  **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_pos)
+  **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> r_callee__mp_alloc)
+  **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval)
 |--
   EX (z_pre__mp_alloc: Z) ,
   [| (m_pos >= 0) |] 
   &&  [| (z_pre__mp_alloc = (Z.max ((Z.max (n_pre) (1))) (cap_pos))) |]
-  &&  (mpd_store_Z_compact UINT_MOD ptr_pos m_pos old_pos )
-  **  (UIntArray.undef_seg ptr_pos old_pos (Z.max ((Z.max (n_pre) (1))) (cap_pos)) )
+  &&  (mpd_store_Z_compact UINT_MOD retval m_pos old_pos )
+  **  (UIntArray.undef_seg retval old_pos (Z.max ((Z.max (n_pre) (1))) (cap_pos)) )
   **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> old_pos)
   **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> z_pre__mp_alloc)
-  **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr_pos)
+  **  ((&((z_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> retval)
 .
 
 Definition mrz_realloc_if_partial_solve_wit_1_pos_pure := 
@@ -4515,13 +4505,13 @@ forall (u_pre: Z) (n: Z) (ptr: Z) (cap: Z) (size: Z) (retval: Z) ,
 
 Definition mpz_sgn_return_wit_1 := 
 forall (u_pre: Z) (n: Z) (ptr: Z) (cap: Z) (size: Z) (retval: Z) ,
-  [| (size < 0) |] 
-  &&  [| (retval = (-1)) |] 
+  [| (size > 0) |] 
+  &&  [| (retval = 1) |] 
   &&  [| ((Zabs (size)) <= cap) |] 
-  &&  [| (size < 0) |] 
-  &&  [| (n < 0) |]
-  &&  (mpd_store_Z_compact UINT_MOD ptr (-n) (-size) )
-  **  (UIntArray.undef_seg ptr (-size) cap )
+  &&  [| (size >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  (mpd_store_Z_compact UINT_MOD ptr n size )
+  **  (UIntArray.undef_seg ptr size cap )
   **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size)
   **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
   **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
@@ -4567,13 +4557,13 @@ forall (u_pre: Z) (n: Z) (ptr: Z) (cap: Z) (size: Z) (retval: Z) ,
 
 Definition mpz_sgn_return_wit_3 := 
 forall (u_pre: Z) (n: Z) (ptr: Z) (cap: Z) (size: Z) (retval: Z) ,
-  [| (size > 0) |] 
-  &&  [| (retval = 1) |] 
+  [| (size < 0) |] 
+  &&  [| (retval = (-1)) |] 
   &&  [| ((Zabs (size)) <= cap) |] 
-  &&  [| (size >= 0) |] 
-  &&  [| (n >= 0) |]
-  &&  (mpd_store_Z_compact UINT_MOD ptr n size )
-  **  (UIntArray.undef_seg ptr size cap )
+  &&  [| (size < 0) |] 
+  &&  [| (n < 0) |]
+  &&  (mpd_store_Z_compact UINT_MOD ptr (-n) (-size) )
+  **  (UIntArray.undef_seg ptr (-size) cap )
   **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size)
   **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap)
   **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr)
@@ -4670,21 +4660,21 @@ forall (n: Z) (u: Z) ,
 Definition mpz_swap_return_wit_1 := 
 forall (v_pre: Z) (u_pre: Z) (m: Z) (n: Z) (ptr1: Z) (cap1: Z) (size1: Z) (ptr2: Z) (cap2: Z) (size2: Z) ,
   [| ((Zabs (size2)) <= cap2) |] 
-  &&  [| (size2 >= 0) |] 
-  &&  [| (m >= 0) |] 
+  &&  [| (size2 < 0) |] 
+  &&  [| (m < 0) |] 
   &&  [| ((Zabs (size1)) <= cap1) |] 
-  &&  [| (size1 >= 0) |] 
-  &&  [| (n >= 0) |]
+  &&  [| (size1 < 0) |] 
+  &&  [| (n < 0) |]
   &&  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
   **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
   **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
   **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
   **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
   **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
-  **  (mpd_store_Z_compact UINT_MOD ptr2 m size2 )
-  **  (UIntArray.undef_seg ptr2 size2 cap2 )
-  **  (mpd_store_Z_compact UINT_MOD ptr1 n size1 )
-  **  (UIntArray.undef_seg ptr1 size1 cap1 )
+  **  (mpd_store_Z_compact UINT_MOD ptr2 (-m) (-size2) )
+  **  (UIntArray.undef_seg ptr2 (-size2) cap2 )
+  **  (mpd_store_Z_compact UINT_MOD ptr1 (-n) (-size1) )
+  **  (UIntArray.undef_seg ptr1 (-size1) cap1 )
 |--
   (store_Z u_pre m )
   **  (store_Z v_pre n )
@@ -4693,29 +4683,6 @@ forall (v_pre: Z) (u_pre: Z) (m: Z) (n: Z) (ptr1: Z) (cap1: Z) (size1: Z) (ptr2:
 Definition mpz_swap_return_wit_2 := 
 forall (v_pre: Z) (u_pre: Z) (m: Z) (n: Z) (ptr1: Z) (cap1: Z) (size1: Z) (ptr2: Z) (cap2: Z) (size2: Z) ,
   [| ((Zabs (size2)) <= cap2) |] 
-  &&  [| (size2 < 0) |] 
-  &&  [| (m < 0) |] 
-  &&  [| ((Zabs (size1)) <= cap1) |] 
-  &&  [| (size1 >= 0) |] 
-  &&  [| (n >= 0) |]
-  &&  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
-  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
-  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
-  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
-  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
-  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
-  **  (mpd_store_Z_compact UINT_MOD ptr2 (-m) (-size2) )
-  **  (UIntArray.undef_seg ptr2 (-size2) cap2 )
-  **  (mpd_store_Z_compact UINT_MOD ptr1 n size1 )
-  **  (UIntArray.undef_seg ptr1 size1 cap1 )
-|--
-  (store_Z u_pre m )
-  **  (store_Z v_pre n )
-.
-
-Definition mpz_swap_return_wit_3 := 
-forall (v_pre: Z) (u_pre: Z) (m: Z) (n: Z) (ptr1: Z) (cap1: Z) (size1: Z) (ptr2: Z) (cap2: Z) (size2: Z) ,
-  [| ((Zabs (size2)) <= cap2) |] 
   &&  [| (size2 >= 0) |] 
   &&  [| (m >= 0) |] 
   &&  [| ((Zabs (size1)) <= cap1) |] 
@@ -4736,14 +4703,14 @@ forall (v_pre: Z) (u_pre: Z) (m: Z) (n: Z) (ptr1: Z) (cap1: Z) (size1: Z) (ptr2:
   **  (store_Z v_pre n )
 .
 
-Definition mpz_swap_return_wit_4 := 
+Definition mpz_swap_return_wit_3 := 
 forall (v_pre: Z) (u_pre: Z) (m: Z) (n: Z) (ptr1: Z) (cap1: Z) (size1: Z) (ptr2: Z) (cap2: Z) (size2: Z) ,
   [| ((Zabs (size2)) <= cap2) |] 
   &&  [| (size2 < 0) |] 
   &&  [| (m < 0) |] 
   &&  [| ((Zabs (size1)) <= cap1) |] 
-  &&  [| (size1 < 0) |] 
-  &&  [| (n < 0) |]
+  &&  [| (size1 >= 0) |] 
+  &&  [| (n >= 0) |]
   &&  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
   **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
   **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
@@ -4752,8 +4719,31 @@ forall (v_pre: Z) (u_pre: Z) (m: Z) (n: Z) (ptr1: Z) (cap1: Z) (size1: Z) (ptr2:
   **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
   **  (mpd_store_Z_compact UINT_MOD ptr2 (-m) (-size2) )
   **  (UIntArray.undef_seg ptr2 (-size2) cap2 )
-  **  (mpd_store_Z_compact UINT_MOD ptr1 (-n) (-size1) )
-  **  (UIntArray.undef_seg ptr1 (-size1) cap1 )
+  **  (mpd_store_Z_compact UINT_MOD ptr1 n size1 )
+  **  (UIntArray.undef_seg ptr1 size1 cap1 )
+|--
+  (store_Z u_pre m )
+  **  (store_Z v_pre n )
+.
+
+Definition mpz_swap_return_wit_4 := 
+forall (v_pre: Z) (u_pre: Z) (m: Z) (n: Z) (ptr1: Z) (cap1: Z) (size1: Z) (ptr2: Z) (cap2: Z) (size2: Z) ,
+  [| ((Zabs (size2)) <= cap2) |] 
+  &&  [| (size2 >= 0) |] 
+  &&  [| (m >= 0) |] 
+  &&  [| ((Zabs (size1)) <= cap1) |] 
+  &&  [| (size1 >= 0) |] 
+  &&  [| (n >= 0) |]
+  &&  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_size")) # Int  |-> size1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_d")) # Ptr  |-> ptr1)
+  **  ((&((u_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap2)
+  **  ((&((v_pre)  # "__mpz_struct" ->ₛ "_mp_alloc")) # Int  |-> cap1)
+  **  (mpd_store_Z_compact UINT_MOD ptr2 m size2 )
+  **  (UIntArray.undef_seg ptr2 size2 cap2 )
+  **  (mpd_store_Z_compact UINT_MOD ptr1 n size1 )
+  **  (UIntArray.undef_seg ptr1 size1 cap1 )
 |--
   (store_Z u_pre m )
   **  (store_Z v_pre n )
@@ -5310,11 +5300,6 @@ forall (m: Z) (v: Z) ,
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
-Include int_array_Strategy_Correct.
-Include uint_array_Strategy_Correct.
-Include undef_uint_array_Strategy_Correct.
-Include array_shape_Strategy_Correct.
 
 Axiom proof_of_gmp_abs_safety_wit_1 : gmp_abs_safety_wit_1.
 Axiom proof_of_gmp_abs_safety_wit_2 : gmp_abs_safety_wit_2.

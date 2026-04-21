@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -18,11 +18,9 @@ Import naive_C_Rules.
 Require Import SimpleC.EE.QCP_democases.sll_lib.
 Require Import SimpleC.EE.QCP_democases.sll_merge_rel_lib.
 Local Open Scope monad.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap relations.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap relations.
 From FP Require Import PartialOrder_Setoid BourbakiWitt.
 Local Open Scope sac.
-From SimpleC.EE.QCP_democases Require Import common_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import common_strategy_proof.
 From SimpleC.EE.QCP_democases Require Import sll_strategy_goal.
 From SimpleC.EE.QCP_democases Require Import sll_strategy_proof.
 From SimpleC.EE.QCP_democases Require Import safeexec_strategy_goal.
@@ -143,10 +141,9 @@ forall (X: ((@list Z) -> (unit -> Prop))) (t: Z) (y: Z) (x: Z) (l1_2: (@list Z))
 
 Definition merge_return_wit_1 := 
 forall (X: ((@list Z) -> (unit -> Prop))) (y: Z) (x: Z) (l1: (@list Z)) (l2: (@list Z)) (l3: (@list Z)) (ret: Z) ,
-  [| (y = 0) |] 
-  &&  [| (x <> 0) |] 
+  [| (x = 0) |] 
   &&  [| (safeExec ATrue (merge_from_mid_rel (l1) (l2) (l3)) X ) |]
-  &&  (sllseg ret x l3 )
+  &&  (sllseg ret y l3 )
   **  (sll x l1 )
   **  (sll y l2 )
 |--
@@ -157,9 +154,10 @@ forall (X: ((@list Z) -> (unit -> Prop))) (y: Z) (x: Z) (l1: (@list Z)) (l2: (@l
 
 Definition merge_return_wit_2 := 
 forall (X: ((@list Z) -> (unit -> Prop))) (y: Z) (x: Z) (l1: (@list Z)) (l2: (@list Z)) (l3: (@list Z)) (ret: Z) ,
-  [| (x = 0) |] 
+  [| (y = 0) |] 
+  &&  [| (x <> 0) |] 
   &&  [| (safeExec ATrue (merge_from_mid_rel (l1) (l2) (l3)) X ) |]
-  &&  (sllseg ret y l3 )
+  &&  (sllseg ret x l3 )
   **  (sll x l1 )
   **  (sll y l2 )
 |--
@@ -342,14 +340,14 @@ forall (q_pre: Z) (p_pre: Z) (x_pre: Z) (X_low_level_spec: (((@list Z) * (@list 
 .
 
 Definition split_rec_return_wit_1 := 
-forall (q_pre: Z) (p_pre: Z) (x_pre: Z) (X_low_level_spec: (((@list Z) * (@list Z)) -> (unit -> Prop))) (l_low_level_spec: (@list Z)) (x_data: Z) (l_new: (@list Z)) (q_callee_v: Z) (p_callee_v: Z) (s1_2: (@list Z)) (s2_2: (@list Z)) ,
-  [| (safeExec ATrue (applyf (reversepair) ((maketuple (s1_2) (s2_2)))) X_low_level_spec ) |] 
-  &&  [| (l_low_level_spec = (cons (x_data) (l_new))) |] 
-  &&  [| (x_pre <> 0) |]
-  &&  ((q_pre) # Ptr  |-> p_callee_v)
-  **  (sll p_callee_v s1_2 )
-  **  ((p_pre) # Ptr  |-> q_callee_v)
-  **  (sll q_callee_v s2_2 )
+forall (q_pre: Z) (p_pre: Z) (x_pre: Z) (X_low_level_spec: (((@list Z) * (@list Z)) -> (unit -> Prop))) (l2_low_level_spec: (@list Z)) (l1_low_level_spec: (@list Z)) (l_low_level_spec: (@list Z)) (p_pre_v_2: Z) (q_pre_v_2: Z) ,
+  [| (x_pre = 0) |] 
+  &&  [| (safeExec ATrue (split_rec_rel (l_low_level_spec) (l1_low_level_spec) (l2_low_level_spec)) X_low_level_spec ) |]
+  &&  (sll x_pre l_low_level_spec )
+  **  ((p_pre) # Ptr  |-> p_pre_v_2)
+  **  (sll p_pre_v_2 l1_low_level_spec )
+  **  ((q_pre) # Ptr  |-> q_pre_v_2)
+  **  (sll q_pre_v_2 l2_low_level_spec )
 |--
   EX (q_pre_v: Z)  (p_pre_v: Z)  (s1: (@list Z))  (s2: (@list Z)) ,
   [| (safeExec ATrue (return ((maketuple (s1) (s2)))) X_low_level_spec ) |]
@@ -360,14 +358,14 @@ forall (q_pre: Z) (p_pre: Z) (x_pre: Z) (X_low_level_spec: (((@list Z) * (@list 
 .
 
 Definition split_rec_return_wit_2 := 
-forall (q_pre: Z) (p_pre: Z) (x_pre: Z) (X_low_level_spec: (((@list Z) * (@list Z)) -> (unit -> Prop))) (l2_low_level_spec: (@list Z)) (l1_low_level_spec: (@list Z)) (l_low_level_spec: (@list Z)) (p_pre_v_2: Z) (q_pre_v_2: Z) ,
-  [| (x_pre = 0) |] 
-  &&  [| (safeExec ATrue (split_rec_rel (l_low_level_spec) (l1_low_level_spec) (l2_low_level_spec)) X_low_level_spec ) |]
-  &&  (sll x_pre l_low_level_spec )
-  **  ((p_pre) # Ptr  |-> p_pre_v_2)
-  **  (sll p_pre_v_2 l1_low_level_spec )
-  **  ((q_pre) # Ptr  |-> q_pre_v_2)
-  **  (sll q_pre_v_2 l2_low_level_spec )
+forall (q_pre: Z) (p_pre: Z) (x_pre: Z) (X_low_level_spec: (((@list Z) * (@list Z)) -> (unit -> Prop))) (l_low_level_spec: (@list Z)) (x_data: Z) (l_new: (@list Z)) (q_callee_v: Z) (p_callee_v: Z) (s1_2: (@list Z)) (s2_2: (@list Z)) ,
+  [| (safeExec ATrue (applyf (reversepair) ((maketuple (s1_2) (s2_2)))) X_low_level_spec ) |] 
+  &&  [| (l_low_level_spec = (cons (x_data) (l_new))) |] 
+  &&  [| (x_pre <> 0) |]
+  &&  ((q_pre) # Ptr  |-> p_callee_v)
+  **  (sll p_callee_v s1_2 )
+  **  ((p_pre) # Ptr  |-> q_callee_v)
+  **  (sll q_callee_v s2_2 )
 |--
   EX (q_pre_v: Z)  (p_pre_v: Z)  (s1: (@list Z))  (s2: (@list Z)) ,
   [| (safeExec ATrue (return ((maketuple (s1) (s2)))) X_low_level_spec ) |]
@@ -629,6 +627,17 @@ forall (X_low_level_spec: ((@list Z) -> (unit -> Prop))) (q_callee_v: Z) (retval
 .
 
 Definition merge_sort_return_wit_1 := 
+forall (X_low_level_spec: ((@list Z) -> (unit -> Prop))) (q_callee_v: Z) (s3: (@list Z)) (retval: Z) ,
+  [| (safeExec ATrue (return (s3)) X_low_level_spec ) |] 
+  &&  [| (q_callee_v <> 0) |]
+  &&  (sll retval s3 )
+|--
+  EX (l0: (@list Z)) ,
+  [| (safeExec ATrue (return (l0)) X_low_level_spec ) |]
+  &&  (sll retval l0 )
+.
+
+Definition merge_sort_return_wit_2 := 
 forall (X_low_level_spec: ((@list Z) -> (unit -> Prop))) (q_callee_v: Z) (p_callee_v: Z) (s1: (@list Z)) (s2: (@list Z)) ,
   [| (q_callee_v = 0) |] 
   &&  [| (safeExec ATrue (applyf (mergesortrec_loc0) ((maketuple (s1) (s2)))) X_low_level_spec ) |]
@@ -638,17 +647,6 @@ forall (X_low_level_spec: ((@list Z) -> (unit -> Prop))) (q_callee_v: Z) (p_call
   EX (l0: (@list Z)) ,
   [| (safeExec ATrue (return (l0)) X_low_level_spec ) |]
   &&  (sll p_callee_v l0 )
-.
-
-Definition merge_sort_return_wit_2 := 
-forall (X_low_level_spec: ((@list Z) -> (unit -> Prop))) (q_callee_v: Z) (s3: (@list Z)) (retval: Z) ,
-  [| (safeExec ATrue (return (s3)) X_low_level_spec ) |] 
-  &&  [| (q_callee_v <> 0) |]
-  &&  (sll retval s3 )
-|--
-  EX (l0: (@list Z)) ,
-  [| (safeExec ATrue (return (l0)) X_low_level_spec ) |]
-  &&  (sll retval l0 )
 .
 
 Definition merge_sort_partial_solve_wit_1_pure := 
@@ -945,6 +943,19 @@ forall (X_low_level_spec: ((@list Z) -> (unit -> Prop))) (l_low_level_spec: (@li
 .
 
 Definition merge_sort3_return_wit_1 := 
+forall (X_low_level_spec: ((@list Z) -> (unit -> Prop))) (l_low_level_spec: (@list Z)) (retval_2: Z) (s3: (@list Z)) (retval: Z) ,
+  [| (safeExec ATrue (return (s3)) X_low_level_spec ) |] 
+  &&  [| (retval_2 > 8) |] 
+  &&  [| (retval_2 = (Zlength (l_low_level_spec))) |] 
+  &&  [| ((Zlength (l_low_level_spec)) <= INT_MAX) |]
+  &&  (sll retval s3 )
+|--
+  EX (l0: (@list Z)) ,
+  [| (safeExec ATrue (return (l0)) X_low_level_spec ) |]
+  &&  (sll retval l0 )
+.
+
+Definition merge_sort3_return_wit_2 := 
 forall (X_low_level_spec: ((@list Z) -> (unit -> Prop))) (l_low_level_spec: (@list Z)) (retval_2: Z) (l0_2: (@list Z)) (retval: Z) ,
   [| (Permutation l_low_level_spec l0_2 ) |] 
   &&  [| (incr l0_2 ) |] 
@@ -953,19 +964,6 @@ forall (X_low_level_spec: ((@list Z) -> (unit -> Prop))) (l_low_level_spec: (@li
   &&  [| ((Zlength (l_low_level_spec)) <= INT_MAX) |] 
   &&  [| (safeExec ATrue (gmergesortrec (l_low_level_spec)) X_low_level_spec ) |]
   &&  (sll retval l0_2 )
-|--
-  EX (l0: (@list Z)) ,
-  [| (safeExec ATrue (return (l0)) X_low_level_spec ) |]
-  &&  (sll retval l0 )
-.
-
-Definition merge_sort3_return_wit_2 := 
-forall (X_low_level_spec: ((@list Z) -> (unit -> Prop))) (l_low_level_spec: (@list Z)) (retval_2: Z) (s3: (@list Z)) (retval: Z) ,
-  [| (safeExec ATrue (return (s3)) X_low_level_spec ) |] 
-  &&  [| (retval_2 > 8) |] 
-  &&  [| (retval_2 = (Zlength (l_low_level_spec))) |] 
-  &&  [| ((Zlength (l_low_level_spec)) <= INT_MAX) |]
-  &&  (sll retval s3 )
 |--
   EX (l0: (@list Z)) ,
   [| (safeExec ATrue (return (l0)) X_low_level_spec ) |]
@@ -1422,7 +1420,6 @@ EX (l_low_level_spec: (@list Z)) (l1_low_level_spec: (@list Z)) (l2_low_level_sp
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 Include sll_Strategy_Correct.
 Include safeexec_Strategy_Correct.
 

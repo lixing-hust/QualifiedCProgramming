@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -21,8 +21,6 @@ Require Import SimpleC.EE.Applications.LiteOS.lib.sortlink.
 Require Import SimpleC.EE.Applications.LiteOS.lib.dll.
 Require Import SimpleC.EE.Applications.LiteOS.lib.tick_backup.
 Local Open Scope sac.
-From SimpleC.EE.QCP_democases Require Import common_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import common_strategy_proof.
 From SimpleC.EE.Applications Require Import los_sortlink_strategy_goal.
 From SimpleC.EE.Applications Require Import los_sortlink_strategy_proof.
 
@@ -216,20 +214,29 @@ forall (A: Type) (tickPrecision_pre: Z) (startTime_pre: Z) (sortHead_pre: Z) (l:
 .
 
 Definition GetSortLinkNextExpireTime_return_wit_1 := 
-forall (A: Type) (tickPrecision_pre: Z) (startTime_pre: Z) (sortHead_pre: Z) (l: (@list (@DL_Node (@sortedLinkNode A)))) (storeA: (Z -> (A -> Assertion))) (retval: Z) ,
-  [| ((map (sortedLinkNodeMapping) (l)) = nil) |] 
-  &&  [| (retval = 1) |] 
+forall (A: Type) (tickPrecision_pre: Z) (startTime_pre: Z) (sortHead_pre: Z) (l: (@list (@DL_Node (@sortedLinkNode A)))) (storeA: (Z -> (A -> Assertion))) (a: (@DL_Node (@sortedLinkNode A))) (l1: (@list (@DL_Node (@sortedLinkNode A)))) (retval: Z) (retval_2: Z) (pt: Z) (pl: Z) ,
+  [| ((responseTime ((data (a)))) > (unsigned_last_nbits ((startTime_pre + tickPrecision_pre )) (64))) |] 
+  &&  [| (&((retval_2)  # "SortLinkList" ->ₛ "sortLinkNode") = (obtian_first_pointer (&((sortHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink")) ((map (sortedLinkNodeMapping) (l))))) |] 
+  &&  [| ((map (sortedLinkNodeMapping) (l)) <> nil) |] 
+  &&  [| (retval = 0) |] 
+  &&  [| ((map (sortedLinkNodeMapping) (l)) = (cons (a) (l1))) |] 
   &&  [| (increasingSortedNode l ) |] 
   &&  [| ((startTime_pre + tickPrecision_pre ) <= ULLONG_MAX) |] 
   &&  [| (startTime_pre >= 0) |] 
   &&  [| (startTime_pre <= ULLONG_MAX) |] 
   &&  [| (tickPrecision_pre >= 0) |] 
   &&  [| (tickPrecision_pre <= ULLONG_MAX) |] 
-  &&  [| (retval <> 0) |]
-  &&  (store_dll (storesortedLinkNode (storeA)) &((sortHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") (map (sortedLinkNodeMapping) (l)) )
+  &&  [| (retval = 0) |]
+  &&  (storeA &((retval_2)  # "SortLinkList" ->ₛ "sortLinkNode") (sl_data ((data (a)))) )
+  **  ((&((retval_2)  # "SortLinkList" ->ₛ "responseTime")) # UInt64  |-> (responseTime ((data (a)))))
+  **  ((&((retval_2)  # "SortLinkList" ->ₛ "sortLinkNode" .ₛ "pstNext")) # Ptr  |-> pl)
+  **  ((&((retval_2)  # "SortLinkList" ->ₛ "sortLinkNode" .ₛ "pstPrev")) # Ptr  |-> &((sortHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink"))
+  **  ((&((sortHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink" .ₛ "pstNext")) # Ptr  |-> &((retval_2)  # "SortLinkList" ->ₛ "sortLinkNode"))
+  **  ((&((sortHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink" .ₛ "pstPrev")) # Ptr  |-> pt)
+  **  (dllseg (storesortedLinkNode (storeA)) pl &((retval_2)  # "SortLinkList" ->ₛ "sortLinkNode") &((sortHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") pt l1 )
   **  ((( &( "OS_SORT_LINK_UINT64_MAX" ) )) # UInt64  |-> ((2^64) - 1 ))
 |--
-  [| ((unsigned_last_nbits ((((2^64) - 1 ) - tickPrecision_pre )) (64)) = (getFirstNodeExpireTime (l) (startTime_pre) (tickPrecision_pre))) |]
+  [| ((responseTime ((data (a)))) = (getFirstNodeExpireTime (l) (startTime_pre) (tickPrecision_pre))) |]
   &&  (store_sorted_dll storeA &((sortHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") l )
   **  ((( &( "OS_SORT_LINK_UINT64_MAX" ) )) # UInt64  |-> ((2^64) - 1 ))
 .
@@ -263,29 +270,20 @@ forall (A: Type) (tickPrecision_pre: Z) (startTime_pre: Z) (sortHead_pre: Z) (l:
 .
 
 Definition GetSortLinkNextExpireTime_return_wit_3 := 
-forall (A: Type) (tickPrecision_pre: Z) (startTime_pre: Z) (sortHead_pre: Z) (l: (@list (@DL_Node (@sortedLinkNode A)))) (storeA: (Z -> (A -> Assertion))) (a: (@DL_Node (@sortedLinkNode A))) (l1: (@list (@DL_Node (@sortedLinkNode A)))) (retval: Z) (retval_2: Z) (pt: Z) (pl: Z) ,
-  [| ((responseTime ((data (a)))) > (unsigned_last_nbits ((startTime_pre + tickPrecision_pre )) (64))) |] 
-  &&  [| (&((retval_2)  # "SortLinkList" ->ₛ "sortLinkNode") = (obtian_first_pointer (&((sortHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink")) ((map (sortedLinkNodeMapping) (l))))) |] 
-  &&  [| ((map (sortedLinkNodeMapping) (l)) <> nil) |] 
-  &&  [| (retval = 0) |] 
-  &&  [| ((map (sortedLinkNodeMapping) (l)) = (cons (a) (l1))) |] 
+forall (A: Type) (tickPrecision_pre: Z) (startTime_pre: Z) (sortHead_pre: Z) (l: (@list (@DL_Node (@sortedLinkNode A)))) (storeA: (Z -> (A -> Assertion))) (retval: Z) ,
+  [| ((map (sortedLinkNodeMapping) (l)) = nil) |] 
+  &&  [| (retval = 1) |] 
   &&  [| (increasingSortedNode l ) |] 
   &&  [| ((startTime_pre + tickPrecision_pre ) <= ULLONG_MAX) |] 
   &&  [| (startTime_pre >= 0) |] 
   &&  [| (startTime_pre <= ULLONG_MAX) |] 
   &&  [| (tickPrecision_pre >= 0) |] 
   &&  [| (tickPrecision_pre <= ULLONG_MAX) |] 
-  &&  [| (retval = 0) |]
-  &&  (storeA &((retval_2)  # "SortLinkList" ->ₛ "sortLinkNode") (sl_data ((data (a)))) )
-  **  ((&((retval_2)  # "SortLinkList" ->ₛ "responseTime")) # UInt64  |-> (responseTime ((data (a)))))
-  **  ((&((retval_2)  # "SortLinkList" ->ₛ "sortLinkNode" .ₛ "pstNext")) # Ptr  |-> pl)
-  **  ((&((retval_2)  # "SortLinkList" ->ₛ "sortLinkNode" .ₛ "pstPrev")) # Ptr  |-> &((sortHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink"))
-  **  ((&((sortHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink" .ₛ "pstNext")) # Ptr  |-> &((retval_2)  # "SortLinkList" ->ₛ "sortLinkNode"))
-  **  ((&((sortHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink" .ₛ "pstPrev")) # Ptr  |-> pt)
-  **  (dllseg (storesortedLinkNode (storeA)) pl &((retval_2)  # "SortLinkList" ->ₛ "sortLinkNode") &((sortHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") pt l1 )
+  &&  [| (retval <> 0) |]
+  &&  (store_dll (storesortedLinkNode (storeA)) &((sortHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") (map (sortedLinkNodeMapping) (l)) )
   **  ((( &( "OS_SORT_LINK_UINT64_MAX" ) )) # UInt64  |-> ((2^64) - 1 ))
 |--
-  [| ((responseTime ((data (a)))) = (getFirstNodeExpireTime (l) (startTime_pre) (tickPrecision_pre))) |]
+  [| ((unsigned_last_nbits ((((2^64) - 1 ) - tickPrecision_pre )) (64)) = (getFirstNodeExpireTime (l) (startTime_pre) (tickPrecision_pre))) |]
   &&  (store_sorted_dll storeA &((sortHead_pre)  # "SortLinkAttribute" ->ₛ "sortLink") l )
   **  ((( &( "OS_SORT_LINK_UINT64_MAX" ) )) # UInt64  |-> ((2^64) - 1 ))
 .
@@ -559,7 +557,6 @@ EX (storeA_highSpec: (Z -> (A -> Assertion))) (l_highSpec: (@list (@DL_Node A)))
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 Include los_sortlink_Strategy_Correct.
 
 Axiom proof_of_GetSortLinkNextExpireTime_safety_wit_1 : GetSortLinkNextExpireTime_safety_wit_1.

@@ -9,7 +9,6 @@ Require Import SimpleC.EE.Applications.LiteOS.lib.glob_vars_and_defs.
 Require Import SimpleC.EE.Applications.LiteOS.lib.Los_Verify_State_def.
 Require Import SimpleC.EE.Applications.LiteOS.lib.dll.
 Require Import SimpleC.EE.Applications.LiteOS.lib.sortlink.
-Import naive_C_Rules.
 Local Open Scope Z_scope.
 Local Open Scope sac.
 Local Open Scope string.

@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.Applications.LiteOS Require Import LOS_ListEmpty_goal.
@@ -22,7 +22,7 @@ Require Import SimpleC.EE.Applications.LiteOS.lib.dll.
 Require Import SimpleC.EE.Applications.LiteOS.lib.tick_backup.
 Local Open Scope sac.
 
-Lemma proof_of_LOS_ListEmpty_return_wit_2 : LOS_ListEmpty_return_wit_2.
+Lemma proof_of_LOS_ListEmpty_return_wit_1 : LOS_ListEmpty_return_wit_1.
 Proof. 
     pre_process.
     intros.
@@ -62,7 +62,7 @@ Proof.
 Qed.
 
 
-Lemma proof_of_LOS_ListEmpty_return_wit_1 : LOS_ListEmpty_return_wit_1.
+Lemma proof_of_LOS_ListEmpty_return_wit_2 : LOS_ListEmpty_return_wit_2.
 Proof. 
     pre_process.
     intros.

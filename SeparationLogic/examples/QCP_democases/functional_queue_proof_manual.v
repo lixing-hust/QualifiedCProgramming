@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.QCP_democases Require Import functional_queue_goal.
@@ -40,7 +40,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_dequeue_return_wit_1 : dequeue_return_wit_1.
+Lemma proof_of_dequeue_return_wit_2 : dequeue_return_wit_2.
 Proof.
   pre_process.
   subst.
@@ -52,7 +52,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_dequeue_return_wit_2 : dequeue_return_wit_2.
+Lemma proof_of_dequeue_return_wit_1 : dequeue_return_wit_1.
 Proof.
   pre_process.
   subst.

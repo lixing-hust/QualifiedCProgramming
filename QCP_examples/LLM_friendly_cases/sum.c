@@ -1,6 +1,8 @@
-#include "verification_stdlib.h"
-#include "verification_list.h"
-#include "int_array_def.h"
+/*@ Extern Coq (sum : list Z -> Z)
+               (zeros: Z -> list Z)
+*/
+
+
 
 int arr_sum(int n, int *a)
 /*@ With l

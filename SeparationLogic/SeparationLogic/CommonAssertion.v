@@ -7,7 +7,7 @@ Require Import Coq.micromega.Psatz.
 Require Import String.
 Require Import Permutation.
 
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From compcert.lib Require Import Coqlib Integers.
 

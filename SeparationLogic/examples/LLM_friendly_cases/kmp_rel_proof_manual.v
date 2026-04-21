@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.LLM_friendly_cases Require Import kmp_rel_goal.
@@ -64,19 +64,15 @@ Proof.
     + Intros_p H6.
       Intros_p H7.
       dump_pre_spatial.
-      lia.
-    + Intros_p H6.
-      Intros_p H7.
-      dump_pre_spatial.
       exact H'.
     + Intros_p H6.
       Intros_p H7.
       dump_pre_spatial.
-      exact H0.
+      lia.
     + Intros_p H6.
       Intros_p H7.
       dump_pre_spatial.
-      exact H1.
+      lia.
 Qed. 
 
 Lemma proof_of_inner_entail_wit_3 : inner_entail_wit_3.
@@ -87,32 +83,13 @@ Proof.
   - split_pures.
     + dump_pre_spatial.
       unfold inner_loop in *.
-      unfold_loop in H4.
-      unfold inner_body at 1 in H4.
-      safe_step H4.
-      rewrite app_Znth1 in H0 by auto.
-      safe_choice_r H4.
-      safe_choice_r H4; auto.
-      unfold continue in H4.
-      prog_nf in H4. auto.
-    + dump_pre_spatial. exact H5.
-    + dump_pre_spatial. exact H6.
-Qed. 
-
-Lemma proof_of_inner_return_wit_1 : inner_return_wit_1.
-Proof. 
-  pre_process.
-  split_pure_spatial.
-  - apply derivable1_refl.
-  - split_pures.
-    + dump_pre_spatial.
-      unfold inner_loop in H3.
       unfold_loop in H3.
       unfold inner_body at 1 in H3.
-      repeat (prog_nf in H3 ; safe_step H3).
-      rewrite app_Znth1 in H by lia.
-      safe_choice_l H3; auto.
-      unfold break in H3.
+      safe_step H3.
+      rewrite app_Znth1 in H0 by auto.
+      safe_choice_r H3.
+      safe_choice_r H3; auto.
+      unfold continue in H3.
       prog_nf in H3. auto.
     + dump_pre_spatial. lia.
     + dump_pre_spatial. lia.
@@ -125,15 +102,34 @@ Proof.
   - apply derivable1_refl.
   - split_pures.
     + dump_pre_spatial.
-      unfold inner_loop in H4.
-      unfold_loop in H4.
-      unfold inner_body at 1 in H4.
-      safe_step H4.
+      unfold inner_loop in H2.
+      unfold_loop in H2.
+      unfold inner_body at 1 in H2.
+      repeat (prog_nf in H2 ; safe_step H2).
+      rewrite app_Znth1 in H by lia.
+      safe_choice_l H2; auto.
+      unfold break in H2.
+      prog_nf in H2. auto.
+    + dump_pre_spatial. lia.
+    + dump_pre_spatial. lia.
+Qed. 
+
+Lemma proof_of_inner_return_wit_1 : inner_return_wit_1.
+Proof. 
+  pre_process.
+  split_pure_spatial.
+  - apply derivable1_refl.
+  - split_pures.
+    + dump_pre_spatial.
+      unfold inner_loop in H3.
+      unfold_loop in H3.
+      unfold inner_body at 1 in H3.
+      safe_step H3.
       rewrite app_Znth1 in H0 by lia.
-      safe_choice_r H4.
-      safe_choice_l H4.
-      unfold break in H4.
-      prog_nf in H4.
+      safe_choice_r H3.
+      safe_choice_l H3.
+      unfold break in H3.
+      prog_nf in H3.
       auto.
     + dump_pre_spatial. lia.
     + dump_pre_spatial. lia.
@@ -146,7 +142,7 @@ Proof.
   kmp_solve.
   prop_apply IntArray.full_Zlength; Intros.
   destruct l.
-  rewrite Zlength_nil in H0; lia.
+  rewrite Zlength_nil in H; lia.
   replace (z::l) with ((z::nil) ++ l) by easy.
   rewrite (replace_Znth_app_l 0 0); try lia.
   2:{ lazy; auto. }
@@ -158,11 +154,11 @@ Proof.
   rewrite sublist_self; eauto.
   replace ((0::nil) ++ l) with (0::l) by easy.
   replace ((z::nil) ++ l) with (z::l) by easy.
-  rewrite replace_Znth_length in H0.
+  rewrite replace_Znth_length in H.
   rewrite (sublist_cons2 1 n_low_level_spec); try lia.
   2:{
     rewrite Zlength_cons.
-    rewrite Zlength_cons in H0. lia. 
+    rewrite Zlength_cons in H. lia. 
   }
   rewrite (sublist_cons2 1 n_low_level_spec); try lia.
   cancel.
@@ -171,9 +167,9 @@ Proof.
   cbn in H1.
   unfold constr_loop_from.
   cbn.
-  exact H1.
+  exact H0.
   dump_pre_spatial.
-  exact H3.
+  lia.
   dump_pre_spatial.
   lia.
 Qed. 
@@ -220,14 +216,14 @@ Proof.
   destruct l0_2.
   - prop_apply (IntArray.full_Zlength vnext).
     Intros.
-    rewrite H4 in H8.
-    rewrite replace_Znth_length in H8.
-    rewrite Zlength_app, Zlength_nil in H8.
+    rewrite H3 in H7.
+    rewrite replace_Znth_length in H7.
+    rewrite Zlength_app, Zlength_nil in H7.
     lia.
   - subst l.
     Exists l0_2 (vnext0_2 ++ (j :: nil)).
-    rewrite (replace_Znth_app_r i j vnext0_2 (z :: l0_2)) by (rewrite H5; lia).
-    rewrite replace_Znth_nothing by (rewrite H5; lia).
+    rewrite (replace_Znth_app_r i j vnext0_2 (z :: l0_2)) by (rewrite H4; lia).
+    rewrite replace_Znth_nothing by (rewrite H4; lia).
     replace (i - Zlength vnext0_2) with 0 by lia.
     cbn.
     split_pure_spatial.
@@ -245,9 +241,7 @@ Proof.
           + reflexivity.
           + symmetry; exact Hzj.
         - lia.
-        - assert (Hbound: i + 1 <= Z.of_nat (Datatypes.length (vnext0_2 ++ (j :: nil)))).
-          { rewrite <- Zlength_correct. rewrite Hzj. lia. }
-          exact Hbound.
+        - lia. 
       }
       assert (Hsuffix: sublist (i + 1) n_low_level_spec (((vnext0_2 ++ (j :: nil)) ++ l0_2)) = l0_2).
       {
@@ -263,9 +257,9 @@ Proof.
       apply derivable1_refl.
     + split_pures.
       * dump_pre_spatial.
-        exact H0.
+        exact H.
       * dump_pre_spatial.
-        exact H1.
+        lia.
       * dump_pre_spatial.
         lia.
 Qed. 
@@ -378,12 +372,12 @@ Proof.
     cancel (&( "patn_len") # Int |-> n_low_level_spec).
   - dump_pre_spatial.
     unfold match_loop_from.
-    unfold match_loop in H3.
-    exact H3.
+    unfold match_loop in H1.
+    exact H1.
   - dump_pre_spatial.
-    exact H5.
+    lia.
   - dump_pre_spatial.
-    exact H6.
+    lia.
   - dump_pre_spatial.
     lia.
 Qed. 
@@ -407,14 +401,14 @@ Proof.
     rewrite Htext in H0.
     safe_choice_r H0; [auto | lia].
   - dump_pre_spatial.
-    exact H6.
+    lia.
   - dump_pre_spatial.
-    exact H7.
+    lia.
   - dump_pre_spatial.
     lia.
 Qed. 
 
-Lemma proof_of_match_return_wit_1 : match_return_wit_1.
+Lemma proof_of_match_return_wit_2 : match_return_wit_2.
 Proof.
   pre_process; subst.
   unfold match_loop_from_after, applyf in H0.
@@ -436,7 +430,7 @@ Proof.
     reflexivity.
 Qed. 
 
-Lemma proof_of_match_return_wit_2 : match_return_wit_2.
+Lemma proof_of_match_return_wit_1 : match_return_wit_1.
 Proof. 
   pre_process.
   prop_apply (CharArray.full_Zlength text_pre).
@@ -469,7 +463,7 @@ Proof.
   split_pures.
   - dump_pre_spatial.
     eapply safeExec_proequiv.
-    2: exact H1.
+    2: exact H0.
     rewrite app_Znth1 by lia.
     unfold match_loop_from_after.
     unfold match_loop_from.
@@ -490,7 +484,7 @@ Proof.
   - dump_pre_spatial.
     lia.
   - dump_pre_spatial.
-    exact H2.
+    lia.
   - dump_pre_spatial.
     rewrite app_Znth1 by lia.
     unfold match_loop_from_after.

@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -14,14 +14,12 @@ Local Open Scope Z_scope.
 Local Open Scope sets.
 Local Open Scope string.
 Local Open Scope list.
+Import naive_C_Rules.
 Require Import SimpleC.EE.LLM_friendly_cases.bst_lib.
 Import get_right_most.
-Import naive_C_Rules.
 Local Open Scope sac.
 From SimpleC.EE.LLM_friendly_cases Require Import bst_strategy_goal.
 From SimpleC.EE.LLM_friendly_cases Require Import bst_strategy_proof.
-From SimpleC.EE.LLM_friendly_cases Require Import common_strategy_goal.
-From SimpleC.EE.LLM_friendly_cases Require Import common_strategy_proof.
 
 (*----- Function insert -----*)
 
@@ -190,24 +188,6 @@ forall (value_pre: Z) (x_pre: Z) (b_pre: Z) (tr_low_level_spec: tree) (pt0_2: pa
 .
 
 Definition insert_return_wit_1 := 
-forall (value_pre: Z) (x_pre: Z) (b_pre: Z) (tr_low_level_spec: tree) (b_v: Z) (b: Z) (pt0: partial_tree) (tr0: tree) (retval: Z) ,
-  [| (retval <> 0) |] 
-  &&  [| (b_v = 0) |] 
-  &&  [| ((combine_tree (pt0) ((tree_insert (x_pre) (value_pre) (tr0)))) = (tree_insert (x_pre) (value_pre) (tr_low_level_spec))) |]
-  &&  ((&((retval)  # "tree" ->ₛ "key")) # Int  |-> x_pre)
-  **  ((&((retval)  # "tree" ->ₛ "value")) # Int  |-> value_pre)
-  **  ((&((retval)  # "tree" ->ₛ "left")) # Ptr  |-> 0)
-  **  ((&((retval)  # "tree" ->ₛ "right")) # Ptr  |-> 0)
-  **  (store_ptb b b_pre pt0 )
-  **  ((b) # Ptr  |-> retval)
-  **  (store_tree b_v tr0 )
-|--
-  EX (b_pre_v: Z) ,
-  ((b_pre) # Ptr  |-> b_pre_v)
-  **  (store_tree b_pre_v (tree_insert (x_pre) (value_pre) (tr_low_level_spec)) )
-.
-
-Definition insert_return_wit_2 := 
 forall (value_pre: Z) (x_pre: Z) (b_pre: Z) (tr_low_level_spec: tree) (pt0: partial_tree) (tr0: tree) (l0: tree) (r0: tree) (p: Z) (b: Z) (b_v: Z) (p_key: Z) (p_value: Z) (p_left: Z) (p_right: Z) ,
   [| (p_key >= x_pre) |] 
   &&  [| (x_pre >= p_key) |] 
@@ -226,6 +206,24 @@ forall (value_pre: Z) (x_pre: Z) (b_pre: Z) (tr_low_level_spec: tree) (pt0: part
   **  (store_tree p_left l0 )
   **  ((&((p)  # "tree" ->ₛ "right")) # Ptr  |-> p_right)
   **  (store_tree p_right r0 )
+|--
+  EX (b_pre_v: Z) ,
+  ((b_pre) # Ptr  |-> b_pre_v)
+  **  (store_tree b_pre_v (tree_insert (x_pre) (value_pre) (tr_low_level_spec)) )
+.
+
+Definition insert_return_wit_2 := 
+forall (value_pre: Z) (x_pre: Z) (b_pre: Z) (tr_low_level_spec: tree) (b_v: Z) (b: Z) (pt0: partial_tree) (tr0: tree) (retval: Z) ,
+  [| (retval <> 0) |] 
+  &&  [| (b_v = 0) |] 
+  &&  [| ((combine_tree (pt0) ((tree_insert (x_pre) (value_pre) (tr0)))) = (tree_insert (x_pre) (value_pre) (tr_low_level_spec))) |]
+  &&  ((&((retval)  # "tree" ->ₛ "key")) # Int  |-> x_pre)
+  **  ((&((retval)  # "tree" ->ₛ "value")) # Int  |-> value_pre)
+  **  ((&((retval)  # "tree" ->ₛ "left")) # Ptr  |-> 0)
+  **  ((&((retval)  # "tree" ->ₛ "right")) # Ptr  |-> 0)
+  **  (store_ptb b b_pre pt0 )
+  **  ((b) # Ptr  |-> retval)
+  **  (store_tree b_v tr0 )
 |--
   EX (b_pre_v: Z) ,
   ((b_pre) # Ptr  |-> b_pre_v)
@@ -274,7 +272,6 @@ EX (tr_low_level_spec: tree) ,
 Module Type VC_Correct.
 
 Include bst_Strategy_Correct.
-Include common_Strategy_Correct.
 
 Axiom proof_of_insert_safety_wit_1 : insert_safety_wit_1.
 Axiom proof_of_insert_safety_wit_2 : insert_safety_wit_2.

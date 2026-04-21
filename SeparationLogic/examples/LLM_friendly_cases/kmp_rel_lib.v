@@ -5,7 +5,7 @@ Require Import Coq.Lists.List.
 Require Import Coq.Classes.RelationClasses.
 Require Import Coq.micromega.Psatz.
 From SetsClass Require Import SetsClass.
-From AUXLib Require Import List_lemma VMap relations.
+From AUXLib Require Import ListLib VMap relations.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import AUXLib.ListLib.
 

@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.Applications.minigmp Require Import gmp_goal.
@@ -57,7 +57,6 @@ Proof.
   sep_apply UIntArray.seg_merge_to_full ; try lia.
   replace (d_pre + 0 * sizeof ( UINT )) with (d_pre) by lia.
   replace (i + 1 - 0) with (i + 1) by lia.
-  rewrite Zlength_correct in H2.
   rewrite (sublist_split 0 (i + 1) i) ; try lia.
   rewrite <- sublist_single ; try lia.
   entailer!.
@@ -91,8 +90,8 @@ Proof.
   pre_process.
   entailer!.
   replace (n_pre - 1 + 1) with (n_pre) by lia.
-  rewrite sublist_nil ; try lia.
-  rewrite sublist_nil ; try lia.
+  rewrite Zsublist_nil ; try lia.
+  rewrite Zsublist_nil ; try lia.
   auto.
 Qed. 
 
@@ -101,11 +100,10 @@ Proof.
   pre_process.
   entailer!.
   replace (n - 1 + 1) with n by lia.
-  rewrite Zlength_correct in *.
   do 2 (rewrite (sublist_split n n_pre (n + 1)) ; try lia).
   rewrite H3.
-  rewrite (sublist_single n l1 0) ; try lia.
-  rewrite (sublist_single n l2 0) ; try lia.
+  rewrite (sublist_single 0 n l1) ; try lia.
+  rewrite (sublist_single 0 n l2) ; try lia.
   rewrite H.
   reflexivity.
 Qed.
@@ -129,7 +127,7 @@ Proof.
     auto.
 Qed. 
 
-Lemma proof_of_mpn_cmp_return_wit_1 : mpn_cmp_return_wit_1.
+Lemma proof_of_mpn_cmp_return_wit_3 : mpn_cmp_return_wit_3.
 Proof.
   pre_process.
   Right.
@@ -148,7 +146,7 @@ Proof.
     lia.
 Qed.
 
-Lemma proof_of_mpn_cmp_return_wit_3 : mpn_cmp_return_wit_3.
+Lemma proof_of_mpn_cmp_return_wit_1 : mpn_cmp_return_wit_1.
 Proof. 
   pre_process.
   Left. Right.
@@ -174,7 +172,7 @@ Proof.
   entailer!.
 Qed. 
 
-Lemma proof_of_mpn_cmp4_return_wit_2 : mpn_cmp4_return_wit_2.
+Lemma proof_of_mpn_cmp4_return_wit_4 : mpn_cmp4_return_wit_4.
 Proof.
   pre_process.
   Right.
@@ -187,7 +185,7 @@ Proof.
   lia. 
 Qed. 
 
-Lemma proof_of_mpn_cmp4_return_wit_1 : mpn_cmp4_return_wit_1.
+Lemma proof_of_mpn_cmp4_return_wit_5 : mpn_cmp4_return_wit_5.
 Proof.
   pre_process.
   Left. Left.
@@ -200,14 +198,14 @@ Proof.
   lia.
 Qed.
 
-Lemma proof_of_mpn_cmp4_return_wit_5 : mpn_cmp4_return_wit_5.
+Lemma proof_of_mpn_cmp4_return_wit_1 : mpn_cmp4_return_wit_1.
 Proof.
   pre_process.
   Right. subst.
   entailer!.
 Qed.
 
-Lemma proof_of_mpn_cmp4_return_wit_4 : mpn_cmp4_return_wit_4.
+Lemma proof_of_mpn_cmp4_return_wit_2 : mpn_cmp4_return_wit_2.
 Proof.
   pre_process.
   Left. Right. subst.
@@ -232,16 +230,15 @@ Qed.
 Lemma proof_of_mpn_normalized_size_entail_wit_3 : mpn_normalized_size_entail_wit_3.
 Proof.
   pre_process.
-  rewrite Zlength_correct in H7.
   rewrite Znth_sublist in H ; try lia.
   replace (n - 1 + 0) with (n - 1) in * by lia.
   rewrite (sublist_split 0 n (n-1)) in *  ; try lia.
   set (m := n - 1) in *.
   replace n with (m + 1) in * by lia.
-  rewrite (sublist_single m l 0) in * ; try lia.
+  rewrite (sublist_single 0 m l) in * ; try lia.
   rewrite H in *.
   unfold UINT_MOD in *.
-  rewrite list_to_Z_concat in H3 ; [ | lia | apply list_within_bound_sublist ; [ lia | rewrite Zlength_correct ; lia | tauto] | simpl ; lia].
+  rewrite list_to_Z_concat in H3 ; [ | lia | apply list_within_bound_sublist ; [ lia | lia | tauto] | simpl ; lia].
   sep_apply (UIntArray.full_split_to_seg xp_pre m) ; try lia.
   sep_apply (UIntArray.seg_to_undef_seg xp_pre m ).
   sep_apply UIntArray.undef_seg_merge_to_undef_seg ; try lia.
@@ -251,28 +248,26 @@ Proof.
   assert (m = Zlength(sublist 0 m l)).
   {
     rewrite Zlength_sublist ; try lia.
-    rewrite Zlength_correct. lia.
   }
   rewrite H11 at 2.
   rewrite sublist_app_exact1.
   simpl in H3.
   entailer!.
-  rewrite Zlength_correct. lia.
 Qed. 
 
-Lemma proof_of_mpn_normalized_size_return_wit_2 : mpn_normalized_size_return_wit_2.
+Lemma proof_of_mpn_normalized_size_return_wit_1 : mpn_normalized_size_return_wit_1.
 Proof.
   pre_process.
   unfold mpd_store_Z_compact.
   assert (n = 0) by lia.
   subst n.
-  rewrite sublist_nil in * ; try lia.
+  rewrite Zsublist_nil in * ; try lia.
   unfold mpd_store_list.
   Exists nil.
   entailer!.
 Qed. 
 
-Lemma proof_of_mpn_normalized_size_return_wit_1 : mpn_normalized_size_return_wit_1.
+Lemma proof_of_mpn_normalized_size_return_wit_2 : mpn_normalized_size_return_wit_2.
 Proof.
   pre_process.
   unfold mpd_store_Z_compact.
@@ -307,9 +302,16 @@ Qed.
 Lemma proof_of_mpn_add_1_entail_wit_2_1 : mpn_add_1_entail_wit_2_1.
 Proof.
   pre_process.
-  replace (0 + 1) with 1 by lia.
-  rewrite UIntArray.seg_single.
-  rewrite UIntArray.seg_to_full.
+  unfold SingleSome in H.
+  destruct H.
+  destruct l_2 ; simpl in * ; [ discriminate H | ].
+  rewrite UIntArray.mixed_full_unfold.
+  rewrite Znth0_cons in H. subst o.
+  simpl.
+  replace (rp_pre + 0) with (rp_pre + 0 * sizeof ( UINT )) by lia.
+  sep_apply UIntArray.seg_single.
+  sep_apply UIntArray.seg_to_full.
+  sep_apply UIntArray.mixed_seg_to_undef_seg.
   replace (rp_pre + 0 * sizeof ( UINT )) with (rp_pre) by lia.
   replace (0 + 1 - 0) with 1 by lia.
   Exists (unsigned_last_nbits (Znth 0 l 0 + b_pre) 32 :: nil).
@@ -317,20 +319,27 @@ Proof.
   Exists (list_to_Z UINT_MOD (unsigned_last_nbits (Znth 0 l 0 + b_pre) 32 :: nil)).
   entailer! ; unfold UINT_MOD in * ; simpl ; pose proof (unsigned_Lastnbits_range (Znth 0 l 0 + b_pre) 32) ; try lia.
   replace 1 with (0 + 1) at 1 by lia.
-  rewrite Zlength_correct in H0.
-  rewrite (sublist_single 0 l 0) ; try lia.
+  rewrite (sublist_single 0 0 l) ; try lia.
   simpl.
   unfold unsigned_last_nbits in *.
   replace (2 ^ 32) with 4294967296 in * by reflexivity.
-  apply Z_mod_add_carry in H ; try lia.
+  apply Z_mod_add_carry in H0 ; try lia.
   apply list_within_bound_Znth ; try lia. auto.
 Qed.
 
 Lemma proof_of_mpn_add_1_entail_wit_2_2 : mpn_add_1_entail_wit_2_2.
 Proof.
   pre_process.
+  unfold SingleSome in H.
+  destruct H.
+  destruct l_2 ; simpl in * ; [ discriminate H | ].
+  rewrite UIntArray.mixed_full_unfold.
+  rewrite Znth0_cons in H. subst o.
+  simpl.
+  replace (rp_pre + 0) with (rp_pre + 0 * sizeof ( UINT )) by lia.
   rewrite UIntArray.seg_single.
   rewrite UIntArray.seg_to_full.
+  sep_apply UIntArray.mixed_seg_to_undef_seg.
   replace (rp_pre + 0 * sizeof ( UINT )) with (rp_pre) by lia.
   replace (0 + 1 - 0) with 1 by lia.
   Exists (unsigned_last_nbits (Znth 0 l 0 + b_pre) 32 :: nil).
@@ -338,12 +347,11 @@ Proof.
   Exists (list_to_Z UINT_MOD (unsigned_last_nbits (Znth 0 l 0 + b_pre) 32 :: nil)).
   entailer! ; unfold UINT_MOD in * ; simpl ; pose proof (unsigned_Lastnbits_range (Znth 0 l 0 + b_pre) 32) ; try lia.
   replace 1 with (0 + 1) at 1 by lia.
-  rewrite Zlength_correct in H0.
-  rewrite (sublist_single 0 l 0) ; try lia.
+  rewrite (sublist_single 0 0 l) ; try lia.
   simpl.
   unfold unsigned_last_nbits in *.
   replace (2 ^ 32) with 4294967296 in * by reflexivity.
-  apply Z_mod_add_uncarry in H ; try lia.
+  apply Z_mod_add_uncarry in H0 ; try lia.
   apply list_within_bound_Znth ; try lia. auto.
 Qed.
 
@@ -368,10 +376,8 @@ Proof.
   - rewrite list_to_Z_concat ; try lia ; try tauto.
     rewrite H8. simpl list_to_Z.
     rewrite H6.
-    rewrite Zlength_correct in H10. 
     rewrite (sublist_split 0 (i + 1) i) ; try lia.
-    rewrite (sublist_single i l 0 ) ; try lia.
-    rewrite <- Zlength_correct in H10 ; try lia.
+    rewrite (sublist_single 0 i l) ; try lia.
     rewrite list_to_Z_concat ; try lia ; try tauto.
     + rewrite H7. simpl list_to_Z.
       rewrite Zlength_sublist ; try lia.
@@ -413,10 +419,8 @@ Proof.
   - rewrite list_to_Z_concat ; try lia ; try tauto.
     rewrite H8. simpl list_to_Z.
     rewrite H6.
-    rewrite Zlength_correct in H10. 
     rewrite (sublist_split 0 (i + 1) i) ; try lia.
-    rewrite (sublist_single i l 0 ) ; try lia.
-    rewrite <- Zlength_correct in H10 ; try lia.
+    rewrite (sublist_single 0 i l) ; try lia.
     rewrite list_to_Z_concat ; try lia ; try tauto.
     + rewrite H7. simpl list_to_Z.
       rewrite Zlength_sublist ; try lia.
@@ -507,19 +511,15 @@ Proof.
   + apply list_within_bound_concat ; try tauto.
   + rewrite list_to_Z_concat ; try lia ; try tauto. 
     simpl list_to_Z. lia.
-  + rewrite Zlength_correct in H13.
-    rewrite (sublist_split 0 (i + 1) i) ; try lia.
-    rewrite (sublist_single i l_b 0) ; try lia.
-    rewrite <- Zlength_correct in H13.
+  + rewrite (sublist_split 0 (i + 1) i) ; try lia.
+    rewrite (sublist_single 0 i l_b) ; try lia.
     rewrite list_to_Z_concat ; try lia ; try tauto.
     - simpl list_to_Z. rewrite Zlength_sublist ; try lia.
       replace (i - 0) with i by lia. lia.
     - apply list_within_bound_sublist ; try lia ; try tauto.
     - simpl. split ; try tauto.
-  + rewrite Zlength_correct in H12.
-    rewrite (sublist_split 0 (i + 1) i) ; try lia.
-    rewrite (sublist_single i l_a 0) ; try lia.
-    rewrite <- Zlength_correct in H12.
+  + rewrite (sublist_split 0 (i + 1) i) ; try lia.
+    rewrite (sublist_single 0 i l_a) ; try lia.
     rewrite list_to_Z_concat ; try lia ; try tauto.
     - simpl list_to_Z. rewrite Zlength_sublist ; try lia.
       replace (i - 0) with i by lia. lia.
@@ -565,19 +565,15 @@ Proof.
   + apply list_within_bound_concat ; try tauto.
   + rewrite list_to_Z_concat ; try lia ; try tauto. 
     simpl list_to_Z. lia.
-  + rewrite Zlength_correct in H13.
-    rewrite (sublist_split 0 (i + 1) i) ; try lia.
-    rewrite (sublist_single i l_b 0) ; try lia.
-    rewrite <- Zlength_correct in H13.
+  + rewrite (sublist_split 0 (i + 1) i) ; try lia.
+    rewrite (sublist_single 0 i l_b) ; try lia.
     rewrite list_to_Z_concat ; try lia ; try tauto.
     - simpl list_to_Z. rewrite Zlength_sublist ; try lia.
       replace (i - 0) with i by lia. lia.
     - apply list_within_bound_sublist ; try lia ; try tauto.
     - simpl. split ; try tauto.
-  + rewrite Zlength_correct in H12.
-    rewrite (sublist_split 0 (i + 1) i) ; try lia.
-    rewrite (sublist_single i l_a 0) ; try lia.
-    rewrite <- Zlength_correct in H12.
+  + rewrite (sublist_split 0 (i + 1) i) ; try lia.
+    rewrite (sublist_single 0 i l_a) ; try lia.
     rewrite list_to_Z_concat ; try lia ; try tauto.
     - simpl list_to_Z. rewrite Zlength_sublist ; try lia.
       replace (i - 0) with i by lia. lia.
@@ -619,19 +615,15 @@ Proof.
   + apply list_within_bound_concat ; try tauto.
   + rewrite list_to_Z_concat ; try lia ; try tauto. 
     simpl list_to_Z. lia.
-  + rewrite Zlength_correct in H13.
-    rewrite (sublist_split 0 (i + 1) i) ; try lia.
-    rewrite (sublist_single i l_b 0) ; try lia.
-    rewrite <- Zlength_correct in H13.
+  + rewrite (sublist_split 0 (i + 1) i) ; try lia.
+    rewrite (sublist_single 0 i l_b) ; try lia.
     rewrite list_to_Z_concat ; try lia ; try tauto.
     - simpl list_to_Z. rewrite Zlength_sublist ; try lia.
       replace (i - 0) with i by lia. lia.
     - apply list_within_bound_sublist ; try lia ; try tauto.
     - simpl. split ; try tauto.
-  + rewrite Zlength_correct in H12.
-    rewrite (sublist_split 0 (i + 1) i) ; try lia.
-    rewrite (sublist_single i l_a 0) ; try lia.
-    rewrite <- Zlength_correct in H12.
+  + rewrite (sublist_split 0 (i + 1) i) ; try lia.
+    rewrite (sublist_single 0 i l_a) ; try lia.
     rewrite list_to_Z_concat ; try lia ; try tauto.
     - simpl list_to_Z. rewrite Zlength_sublist ; try lia.
       replace (i - 0) with i by lia. lia.
@@ -677,19 +669,15 @@ Proof.
   + apply list_within_bound_concat ; try tauto.
   + rewrite list_to_Z_concat ; try lia ; try tauto. 
     simpl list_to_Z. lia.
-  + rewrite Zlength_correct in H13.
-    rewrite (sublist_split 0 (i + 1) i) ; try lia.
-    rewrite (sublist_single i l_b 0) ; try lia.
-    rewrite <- Zlength_correct in H13.
+  + rewrite (sublist_split 0 (i + 1) i) ; try lia.
+    rewrite (sublist_single 0 i l_b) ; try lia.
     rewrite list_to_Z_concat ; try lia ; try tauto.
     - simpl list_to_Z. rewrite Zlength_sublist ; try lia.
       replace (i - 0) with i by lia. lia.
     - apply list_within_bound_sublist ; try lia ; try tauto.
     - simpl. split ; try tauto.
-  + rewrite Zlength_correct in H12.
-    rewrite (sublist_split 0 (i + 1) i) ; try lia.
-    rewrite (sublist_single i l_a 0) ; try lia.
-    rewrite <- Zlength_correct in H12.
+  + rewrite (sublist_split 0 (i + 1) i) ; try lia.
+    rewrite (sublist_single 0 i l_a) ; try lia.
     rewrite list_to_Z_concat ; try lia ; try tauto.
     - simpl list_to_Z. rewrite Zlength_sublist ; try lia.
       replace (i - 0) with i by lia. lia.
@@ -723,7 +711,7 @@ Proof.
 Qed. 
 
 
-Lemma proof_of_mpn_add_return_wit_1 : mpn_add_return_wit_1.
+Lemma proof_of_mpn_add_return_wit_2 : mpn_add_return_wit_2.
 Proof.
   pre_process.
   assert (an_pre = bn_pre) by lia. subst an_pre.
@@ -744,7 +732,7 @@ Proof.
   entailer!.
 Qed. 
 
-Lemma proof_of_mpn_add_return_wit_2 : mpn_add_return_wit_2.
+Lemma proof_of_mpn_add_return_wit_1 : mpn_add_return_wit_1.
 Proof. 
   pre_process.
   Exists (val_r_out_2 + val' * UINT_MOD ^ bn_pre).
@@ -785,7 +773,6 @@ Proof.
   destruct H1.
   rewrite <- H1.
   rewrite <- (sublist_self l an) at 1; try lia.
-  rewrite Zlength_correct in H2.
   rewrite (sublist_split 0 an bn) ; try lia.
   unfold UINT_MOD in *.
   rewrite list_to_Z_concat ; try lia.
@@ -793,7 +780,7 @@ Proof.
   replace (bn - 0) with bn by lia.
   lia.
   all : 
-  rewrite <- Zlength_correct in H2 ; apply list_within_bound_sublist ; try lia ; try tauto.
+  apply list_within_bound_sublist ; try lia ; try tauto.
 Qed. 
 
 Lemma proof_of_mpn_add_which_implies_wit_2 : mpn_add_which_implies_wit_2.
@@ -812,7 +799,7 @@ Proof.
   entailer!.
 Qed. 
 
-Lemma proof_of_mpz_clear_return_wit_2 : mpz_clear_return_wit_2.
+Lemma proof_of_mpz_clear_return_wit_3 : mpz_clear_return_wit_3.
 Proof.
   pre_process.
   subst cap_2.
@@ -830,7 +817,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_mpz_clear_return_wit_1 : mpz_clear_return_wit_1.
+Lemma proof_of_mpz_clear_return_wit_4 : mpz_clear_return_wit_4.
 Proof. pre_process. Qed. 
 
 Lemma proof_of_mpz_clear_which_implies_wit_1 : mpz_clear_which_implies_wit_1.
@@ -841,7 +828,7 @@ Proof.
   Split ; Intros ; [Left | Right ] ; Exists ptr cap size ;  entailer!.
 Qed. 
 
-Lemma proof_of_mpz_realloc_return_wit_8_pos : mpz_realloc_return_wit_8_pos.
+Lemma proof_of_mpz_realloc_return_wit_1_pos : mpz_realloc_return_wit_1_pos.
 Proof. 
   pre_process.
   sep_apply (UIntArray.undef_full_to_undef_seg retval) ; try lia.
@@ -859,19 +846,19 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_mpz_realloc_return_wit_7_neg : mpz_realloc_return_wit_7_neg.
-Proof. pre_process. Qed. 
-
-Lemma proof_of_mpz_realloc_return_wit_4_neg : mpz_realloc_return_wit_4_neg.
-Proof. pre_process. Qed. 
-
-Lemma proof_of_mpz_realloc_return_wit_3_pos : mpz_realloc_return_wit_3_pos.
-Proof. pre_process. Qed.
-
 Lemma proof_of_mpz_realloc_return_wit_2_neg : mpz_realloc_return_wit_2_neg.
 Proof. pre_process. Qed. 
 
-Lemma proof_of_mpz_realloc_return_wit_1_pos : mpz_realloc_return_wit_1_pos.
+Lemma proof_of_mpz_realloc_return_wit_5_neg : mpz_realloc_return_wit_5_neg.
+Proof. pre_process. Qed. 
+
+Lemma proof_of_mpz_realloc_return_wit_6_pos : mpz_realloc_return_wit_6_pos.
+Proof. pre_process. Qed.
+
+Lemma proof_of_mpz_realloc_return_wit_7_neg : mpz_realloc_return_wit_7_neg.
+Proof. pre_process. Qed. 
+
+Lemma proof_of_mpz_realloc_return_wit_8_pos : mpz_realloc_return_wit_8_pos.
 Proof. pre_process. Qed. 
 
 Lemma proof_of_mpz_realloc_partial_solve_wit_3_neg_pure : mpz_realloc_partial_solve_wit_3_neg_pure.
@@ -893,7 +880,7 @@ Lemma proof_of_mpz_realloc_partial_solve_wit_9_neg_pure : mpz_realloc_partial_so
 Proof. pre_process. Qed. 
 
 
-Lemma proof_of_mrz_realloc_if_return_wit_1_pos : mrz_realloc_if_return_wit_1_pos.
+Lemma proof_of_mrz_realloc_if_return_wit_4_pos : mrz_realloc_if_return_wit_4_pos.
 Proof.
   pre_process.
   Exists r_callee__mp_alloc.
@@ -906,7 +893,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_mrz_realloc_if_return_wit_2_neg : mrz_realloc_if_return_wit_2_neg.
+Lemma proof_of_mrz_realloc_if_return_wit_3_neg : mrz_realloc_if_return_wit_3_neg.
 Proof.
   pre_process.
   Exists r_callee__mp_alloc.
@@ -919,7 +906,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_mrz_realloc_if_return_wit_4_pos : mrz_realloc_if_return_wit_4_pos.
+Lemma proof_of_mrz_realloc_if_return_wit_1_pos : mrz_realloc_if_return_wit_1_pos.
 Proof.
   pre_process.
   Exists cap_pos.
@@ -932,7 +919,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_mrz_realloc_if_return_wit_3_neg : mrz_realloc_if_return_wit_3_neg.
+Lemma proof_of_mrz_realloc_if_return_wit_2_neg : mrz_realloc_if_return_wit_2_neg.
 Proof.
   pre_process.
   Exists cap_neg.
@@ -945,7 +932,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_mpz_sgn_return_wit_3 : mpz_sgn_return_wit_3.
+Lemma proof_of_mpz_sgn_return_wit_1 : mpz_sgn_return_wit_1.
 Proof. 
   pre_process. 
   Right. unfold store_Z.
@@ -966,8 +953,8 @@ Proof.
   Intros. entailer!.
 Qed. 
 
-Lemma proof_of_mpz_sgn_return_wit_1 : mpz_sgn_return_wit_1.
-Proof. 
+Lemma proof_of_mpz_sgn_return_wit_3 : mpz_sgn_return_wit_3.
+Proof.
   pre_process. 
   Left. Left. unfold store_Z.
   Exists ptr size cap.
@@ -982,7 +969,7 @@ Proof.
   Split ; Intros ; [Left | Right ] ; Exists ptr cap size ;  entailer!.
 Qed. 
 
-Lemma proof_of_mpz_swap_return_wit_4 : mpz_swap_return_wit_4.
+Lemma proof_of_mpz_swap_return_wit_1 : mpz_swap_return_wit_1.
 Proof. 
   pre_process.
   unfold store_Z.
@@ -991,7 +978,7 @@ Proof.
   Left. Left. entailer!.
 Qed. 
 
-Lemma proof_of_mpz_swap_return_wit_3 : mpz_swap_return_wit_3.
+Lemma proof_of_mpz_swap_return_wit_2 : mpz_swap_return_wit_2.
 Proof. 
   pre_process.
   unfold store_Z.
@@ -1000,7 +987,7 @@ Proof.
   Left. Right. entailer!.
 Qed. 
 
-Lemma proof_of_mpz_swap_return_wit_2 : mpz_swap_return_wit_2.
+Lemma proof_of_mpz_swap_return_wit_3 : mpz_swap_return_wit_3.
 Proof. 
   pre_process.
   unfold store_Z.
@@ -1009,7 +996,7 @@ Proof.
   Right. Left. entailer!.
 Qed.
 
-Lemma proof_of_mpz_swap_return_wit_1 : mpz_swap_return_wit_1.
+Lemma proof_of_mpz_swap_return_wit_4 : mpz_swap_return_wit_4.
 Proof. 
   pre_process.
   unfold store_Z.

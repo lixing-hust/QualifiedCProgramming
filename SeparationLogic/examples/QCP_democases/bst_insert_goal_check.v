@@ -2,7 +2,6 @@ From SimpleC.EE.QCP_democases Require Import bst_insert_goal bst_insert_proof_au
 
 Module VC_Correctness : VC_Correct.
   Include bst_strategy_proof.
-  Include common_strategy_proof.
   Include bst_insert_proof_auto.
   Include bst_insert_proof_manual.
 End VC_Correctness.

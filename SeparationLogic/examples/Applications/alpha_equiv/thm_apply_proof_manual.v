@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.Applications.alpha_equiv Require Import thm_apply_goal.
@@ -18,7 +18,7 @@ Local Open Scope list.
 Import naive_C_Rules.
 From SimpleC.EE.QCP_democases Require Import sll_merge_rel_lib.
 Local Open Scope monad.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap relations.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap relations.
 From FP Require Import PartialOrder_Setoid BourbakiWitt.
 From SimpleC.EE.Applications.alpha_equiv Require Import ast_lib.
 From SimpleC.EE.Applications Require Import malloc.
@@ -55,7 +55,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_sub_thm_return_wit_1 : sub_thm_return_wit_1.
+Lemma proof_of_sub_thm_return_wit_3 : sub_thm_return_wit_3.
 Proof.
   pre_process.
   rewrite H.
@@ -83,7 +83,7 @@ Proof.
   rewrite H3; entailer!.
 Qed.
 
-Lemma proof_of_sub_thm_return_wit_3 : sub_thm_return_wit_3.
+Lemma proof_of_sub_thm_return_wit_1 : sub_thm_return_wit_1.
 Proof. 
   pre_process.
   unfold store_var_sub.
@@ -153,7 +153,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_separate_imply_return_wit_1 : separate_imply_return_wit_1.
+Lemma proof_of_separate_imply_return_wit_5 : separate_imply_return_wit_5.
 Proof.
   pre_process.
   unfold store_imply_res.
@@ -171,7 +171,7 @@ Proof.
     entailer!.
 Qed.
 
-Lemma proof_of_separate_imply_return_wit_2 : separate_imply_return_wit_2.
+Lemma proof_of_separate_imply_return_wit_4 : separate_imply_return_wit_4.
 Proof.
   pre_process.
   rewrite H1.
@@ -216,7 +216,7 @@ Proof.
   - entailer!.
 Qed.
 
-Lemma proof_of_separate_imply_return_wit_4 : separate_imply_return_wit_4.
+Lemma proof_of_separate_imply_return_wit_2 : separate_imply_return_wit_2.
 Proof.
   pre_process.
   rewrite H6.
@@ -248,7 +248,7 @@ Proof.
   - contradiction.
 Qed. 
 
-Lemma proof_of_separate_imply_return_wit_5 : separate_imply_return_wit_5.
+Lemma proof_of_separate_imply_return_wit_1 : separate_imply_return_wit_1.
 Proof.
   pre_process.
   unfold store_imply_res.
@@ -352,7 +352,7 @@ Proof.
     abs_ret_step.
 Qed.
 
-Lemma proof_of_check_list_gen_return_wit_1 : check_list_gen_return_wit_1.
+Lemma proof_of_check_list_gen_return_wit_2 : check_list_gen_return_wit_2.
 Proof.
   pre_process.
   subst.
@@ -369,7 +369,7 @@ Proof.
   abs_ret_step.
 Qed.
 
-Lemma proof_of_check_list_gen_return_wit_2 : check_list_gen_return_wit_2.
+Lemma proof_of_check_list_gen_return_wit_1 : check_list_gen_return_wit_1.
 Proof.
   pre_process.
   Exists t_2 l_2.
@@ -459,7 +459,7 @@ Proof.
     auto.
 Qed.
 
-Lemma proof_of_thm_apply_return_wit_1 : thm_apply_return_wit_1.
+Lemma proof_of_thm_apply_return_wit_3 : thm_apply_return_wit_3.
 Proof. 
   pre_process.
   Exists (thm_subst' t_2 l) (SRTList l_2).
@@ -500,7 +500,7 @@ Proof.
   + entailer!.
 Qed. 
 
-Lemma proof_of_thm_apply_return_wit_3 : thm_apply_return_wit_3.
+Lemma proof_of_thm_apply_return_wit_1 : thm_apply_return_wit_1.
 Proof.
   pre_process.
   Exists (thm_subst' t_2 l) (SRBool 0).

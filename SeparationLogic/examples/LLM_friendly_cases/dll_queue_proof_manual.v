@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.LLM_friendly_cases Require Import dll_queue_goal.
@@ -66,7 +66,7 @@ Proof.
 			reflexivity.
 Qed.
 
-Lemma proof_of_enqueue_return_wit_1 : enqueue_return_wit_1.
+Lemma proof_of_enqueue_return_wit_2 : enqueue_return_wit_2.
 Proof.
 	pre_process.
 	unfold store_queue.
@@ -87,7 +87,7 @@ Proof.
 	cancel (dllseg qhead 0 0 p (l ++ x_pre :: nil)).
 Qed.
 
-Lemma proof_of_enqueue_return_wit_2 : enqueue_return_wit_2.
+Lemma proof_of_enqueue_return_wit_1 : enqueue_return_wit_1.
 Proof.
 	pre_process.
 	sep_apply (dllseg_head_zero qhead 0 0 qtail l ltac:(lia)).
@@ -154,7 +154,7 @@ Proof.
 			reflexivity.
 Qed.
 
-Lemma proof_of_dequeue_return_wit_1 : dequeue_return_wit_1.
+Lemma proof_of_dequeue_return_wit_2 : dequeue_return_wit_2.
 Proof.
 	pre_process.
 	unfold store_queue.
@@ -173,7 +173,7 @@ Proof.
 		reflexivity.
 Qed.
 
-Lemma proof_of_dequeue_return_wit_2 : dequeue_return_wit_2.
+Lemma proof_of_dequeue_return_wit_1 : dequeue_return_wit_1.
 Proof.
 	pre_process.
 	sep_apply (dllseg_head_zero qhead_next 0 qhead qtail l ltac:(lia)).

@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -17,8 +17,6 @@ Local Open Scope list.
 Import naive_C_Rules.
 Require Import SimpleC.EE.LLM_friendly_cases.dll_queue_lib.
 Local Open Scope sac.
-From SimpleC.EE.LLM_friendly_cases Require Import common_strategy_goal.
-From SimpleC.EE.LLM_friendly_cases Require Import common_strategy_proof.
 From SimpleC.EE.LLM_friendly_cases Require Import dll_queue_strategy_goal.
 From SimpleC.EE.LLM_friendly_cases Require Import dll_queue_strategy_proof.
 
@@ -140,6 +138,20 @@ forall (x_pre: Z) (q_pre: Z) (l: (@list Z)) (qhead_2: Z) (qtail_2: Z) (retval: Z
 .
 
 Definition enqueue_return_wit_1 := 
+forall (x_pre: Z) (q_pre: Z) (l: (@list Z)) (qhead: Z) (qtail: Z) (retval: Z) ,
+  [| (qhead = 0) |] 
+  &&  [| (retval <> 0) |]
+  &&  ((&((retval)  # "list" ->ₛ "next")) # Ptr  |-> 0)
+  **  ((&((retval)  # "list" ->ₛ "prev")) # Ptr  |-> 0)
+  **  ((&((retval)  # "list" ->ₛ "data")) # Int  |-> x_pre)
+  **  (dllseg qhead 0 0 qtail l )
+  **  ((&((q_pre)  # "queue" ->ₛ "head")) # Ptr  |-> retval)
+  **  ((&((q_pre)  # "queue" ->ₛ "tail")) # Ptr  |-> retval)
+|--
+  (store_queue q_pre (app (l) ((cons (x_pre) (nil)))) )
+.
+
+Definition enqueue_return_wit_2 := 
 forall (x_pre: Z) (q_pre: Z) (l: (@list Z)) (l0: (@list Z)) (qtailv: Z) (qtail: Z) (qhead: Z) (qtailnext: Z) (qtailprev: Z) (p: Z) ,
   [| (p <> 0) |] 
   &&  [| (qtail <> 0) |] 
@@ -155,20 +167,6 @@ forall (x_pre: Z) (q_pre: Z) (l: (@list Z)) (l0: (@list Z)) (qtailv: Z) (qtail: 
   **  ((&((p)  # "list" ->ₛ "next")) # Ptr  |-> 0)
   **  ((&((p)  # "list" ->ₛ "prev")) # Ptr  |-> qtail)
   **  ((&((p)  # "list" ->ₛ "data")) # Int  |-> x_pre)
-|--
-  (store_queue q_pre (app (l) ((cons (x_pre) (nil)))) )
-.
-
-Definition enqueue_return_wit_2 := 
-forall (x_pre: Z) (q_pre: Z) (l: (@list Z)) (qhead: Z) (qtail: Z) (retval: Z) ,
-  [| (qhead = 0) |] 
-  &&  [| (retval <> 0) |]
-  &&  ((&((retval)  # "list" ->ₛ "next")) # Ptr  |-> 0)
-  **  ((&((retval)  # "list" ->ₛ "prev")) # Ptr  |-> 0)
-  **  ((&((retval)  # "list" ->ₛ "data")) # Int  |-> x_pre)
-  **  (dllseg qhead 0 0 qtail l )
-  **  ((&((q_pre)  # "queue" ->ₛ "head")) # Ptr  |-> retval)
-  **  ((&((q_pre)  # "queue" ->ₛ "tail")) # Ptr  |-> retval)
 |--
   (store_queue q_pre (app (l) ((cons (x_pre) (nil)))) )
 .
@@ -273,6 +271,19 @@ forall (q_pre: Z) (l: (@list Z)) (qhead: Z) (qtail_2: Z) (qhead_prev_2: Z) (qhea
 .
 
 Definition dequeue_return_wit_1 := 
+forall (q_pre: Z) (l: (@list Z)) (x: Z) (qhead: Z) (qtail: Z) (qhead_prev: Z) (qhead_next: Z) ,
+  [| (qhead_next = 0) |] 
+  &&  [| (qhead <> 0) |] 
+  &&  [| (qhead_prev = 0) |]
+  &&  (dllseg qhead_next 0 qhead qtail l )
+  **  ((&((q_pre)  # "queue" ->ₛ "head")) # Ptr  |-> qhead_next)
+  **  ((&((q_pre)  # "queue" ->ₛ "tail")) # Ptr  |-> 0)
+|--
+  [| (x = x) |]
+  &&  (store_queue q_pre l )
+.
+
+Definition dequeue_return_wit_2 := 
 forall (q_pre: Z) (l: (@list Z)) (x: Z) (qhead: Z) (qtail: Z) (headv: Z) (l0: (@list Z)) (qhead_prev: Z) (p: Z) (qhead_next: Z) ,
   [| (qhead <> 0) |] 
   &&  [| (l = (cons (headv) (l0))) |] 
@@ -283,19 +294,6 @@ forall (q_pre: Z) (l: (@list Z)) (x: Z) (qhead: Z) (qtail: Z) (headv: Z) (l0: (@
   **  (dllseg qhead_next 0 qhead qtail l0 )
   **  ((&((q_pre)  # "queue" ->ₛ "head")) # Ptr  |-> qhead)
   **  ((&((q_pre)  # "queue" ->ₛ "tail")) # Ptr  |-> qtail)
-|--
-  [| (x = x) |]
-  &&  (store_queue q_pre l )
-.
-
-Definition dequeue_return_wit_2 := 
-forall (q_pre: Z) (l: (@list Z)) (x: Z) (qhead: Z) (qtail: Z) (qhead_prev: Z) (qhead_next: Z) ,
-  [| (qhead_next = 0) |] 
-  &&  [| (qhead <> 0) |] 
-  &&  [| (qhead_prev = 0) |]
-  &&  (dllseg qhead_next 0 qhead qtail l )
-  **  ((&((q_pre)  # "queue" ->ₛ "head")) # Ptr  |-> qhead_next)
-  **  ((&((q_pre)  # "queue" ->ₛ "tail")) # Ptr  |-> 0)
 |--
   [| (x = x) |]
   &&  (store_queue q_pre l )
@@ -324,7 +322,6 @@ forall (q_pre: Z) (l: (@list Z)) (x: Z) (qhead: Z) (qtail: Z) (qhead_prev: Z) (q
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 Include dll_queue_Strategy_Correct.
 
 Axiom proof_of_enqueue_safety_wit_1 : enqueue_safety_wit_1.

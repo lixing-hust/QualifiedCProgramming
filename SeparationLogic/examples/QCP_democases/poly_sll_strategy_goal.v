@@ -137,6 +137,22 @@ Definition poly_sll_strategy18 :=
     ((sll storeA p l0))
     ).
 
+Definition poly_sll_strategy19 :=
+  forall (A : Type) (storeA : (Z -> (A -> Assertion))),
+    TT &&
+    ([| (sll_para storeA) |]) &&
+    emp
+    |--
+    (
+    TT &&
+    emp
+    ) ** (
+    TT &&
+    emp -*
+    TT &&
+    emp
+    ).
+
 Definition poly_sll_strategy7 :=
   forall (A : Type) (storeA : (Z -> (A -> Assertion))) (l0 : (@list A)) (p : Z),
     TT &&
@@ -269,6 +285,7 @@ Module Type poly_sll_Strategy_Correct.
   Axiom poly_sll_strategy16_correctness : poly_sll_strategy16.
   Axiom poly_sll_strategy17_correctness : poly_sll_strategy17.
   Axiom poly_sll_strategy18_correctness : poly_sll_strategy18.
+  Axiom poly_sll_strategy19_correctness : poly_sll_strategy19.
   Axiom poly_sll_strategy7_correctness : poly_sll_strategy7.
   Axiom poly_sll_strategy10_correctness : poly_sll_strategy10.
   Axiom poly_sll_strategy11_correctness : poly_sll_strategy11.

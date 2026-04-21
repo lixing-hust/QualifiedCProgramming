@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -17,14 +17,12 @@ Local Open Scope list.
 Import naive_C_Rules.
 Require Import SimpleC.EE.QCP_democases.sll_merge_rel_lib.
 Local Open Scope monad.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap relations.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap relations.
 From FP Require Import PartialOrder_Setoid BourbakiWitt.
 Require Import ast_lib.
 Require Import malloc.
 Require Import super_poly_sll2.
 Local Open Scope sac.
-From SimpleC.EE.QCP_democases Require Import common_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import common_strategy_proof.
 From SimpleC.EE.QCP_democases Require Import safeexec_strategy_goal.
 From SimpleC.EE.QCP_democases Require Import safeexec_strategy_proof.
 
@@ -375,378 +373,6 @@ forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) ,
 .
 
 Definition alpha_equiv_return_wit_1 := 
-forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) ,
-  [| (t2_pre = 0) |] 
-  &&  [| (t1_pre <> 0) |]
-  &&  (store_term t1_pre term1 )
-  **  (store_term t2_pre term2 )
-|--
-  [| (0 = (term_alpha_eqn (term1) (term2))) |]
-  &&  (store_term t1_pre term1 )
-  **  (store_term t2_pre term2 )
-.
-
-Definition alpha_equiv_return_wit_2 := 
-forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) ,
-  [| (t1_pre = 0) |]
-  &&  (store_term t1_pre term1 )
-  **  (store_term t2_pre term2 )
-|--
-  [| (0 = (term_alpha_eqn (term1) (term2))) |]
-  &&  (store_term t1_pre term1 )
-  **  (store_term t2_pre term2 )
-.
-
-Definition alpha_equiv_return_wit_3 := 
-forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) ,
-  [| ((termtypeID (term1)) <> (termtypeID (term2))) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (t1_pre <> 0) |]
-  &&  ((&((t1_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term1)))
-  **  ((&((t2_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term2)))
-  **  (store_term' t1_pre term1 )
-  **  (store_term' t2_pre term2 )
-|--
-  [| (0 = (term_alpha_eqn (term1) (term2))) |]
-  &&  (store_term t1_pre term1 )
-  **  (store_term t2_pre term2 )
-.
-
-Definition alpha_equiv_return_wit_4 := 
-forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) (z: Z) (y: Z) (str2: (@list Z)) (str1: (@list Z)) (retval: Z) ,
-  [| (retval <> 0) |] 
-  &&  [| (retval = (list_Z_cmp (str1) (str2))) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (term1 = (TermVar (str1))) |] 
-  &&  [| (term2 = (TermVar (str2))) |] 
-  &&  [| ((termtypeID (term1)) = (termtypeID (term2))) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (0 = (termtypeID (term1))) |]
-  &&  (store_string y str1 )
-  **  (store_string z str2 )
-  **  ((&((t1_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term1)))
-  **  ((&((t2_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term2)))
-  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Var")) # Ptr  |-> y)
-  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Var")) # Ptr  |-> z)
-|--
-  [| (0 = (term_alpha_eqn (term1) (term2))) |]
-  &&  (store_term t1_pre term1 )
-  **  (store_term t2_pre term2 )
-.
-
-Definition alpha_equiv_return_wit_5 := 
-forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) (z: Z) (y: Z) (str2: (@list Z)) (str1: (@list Z)) (retval: Z) ,
-  [| (retval = 0) |] 
-  &&  [| (retval = (list_Z_cmp (str1) (str2))) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (term1 = (TermVar (str1))) |] 
-  &&  [| (term2 = (TermVar (str2))) |] 
-  &&  [| ((termtypeID (term1)) = (termtypeID (term2))) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (0 = (termtypeID (term1))) |]
-  &&  (store_string y str1 )
-  **  (store_string z str2 )
-  **  ((&((t1_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term1)))
-  **  ((&((t2_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term2)))
-  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Var")) # Ptr  |-> y)
-  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Var")) # Ptr  |-> z)
-|--
-  [| (1 = (term_alpha_eqn (term1) (term2))) |]
-  &&  (store_term t1_pre term1 )
-  **  (store_term t2_pre term2 )
-.
-
-Definition alpha_equiv_return_wit_6 := 
-forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) (typ2: const_type) (con2: Z) (typ1: const_type) (con1: Z) ,
-  [| ((ctID (typ1)) <> (ctID (typ2))) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (term1 = (TermConst (typ1) (con1))) |] 
-  &&  [| (term2 = (TermConst (typ2) (con2))) |] 
-  &&  [| ((termtypeID (term1)) = (termtypeID (term2))) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (0 <> (termtypeID (term1))) |] 
-  &&  [| (1 = (termtypeID (term1))) |]
-  &&  ((&((t1_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term1)))
-  **  ((&((t2_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term2)))
-  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "type")) # Int  |-> (ctID (typ1)))
-  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "type")) # Int  |-> (ctID (typ2)))
-  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "content")) # Int  |-> con1)
-  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "content")) # Int  |-> con2)
-|--
-  [| (0 = (term_alpha_eqn (term1) (term2))) |]
-  &&  (store_term t1_pre term1 )
-  **  (store_term t2_pre term2 )
-.
-
-Definition alpha_equiv_return_wit_7 := 
-forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) (typ2: const_type) (con2: Z) (typ1: const_type) (con1: Z) ,
-  [| (con1 <> con2) |] 
-  &&  [| ((ctID (typ1)) = 0) |] 
-  &&  [| ((ctID (typ1)) = (ctID (typ2))) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (term1 = (TermConst (typ1) (con1))) |] 
-  &&  [| (term2 = (TermConst (typ2) (con2))) |] 
-  &&  [| ((termtypeID (term1)) = (termtypeID (term2))) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (0 <> (termtypeID (term1))) |] 
-  &&  [| (1 = (termtypeID (term1))) |]
-  &&  ((&((t1_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term1)))
-  **  ((&((t2_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term2)))
-  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "type")) # Int  |-> (ctID (typ1)))
-  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "type")) # Int  |-> (ctID (typ2)))
-  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "content")) # Int  |-> con1)
-  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "content")) # Int  |-> con2)
-|--
-  [| (0 = (term_alpha_eqn (term1) (term2))) |]
-  &&  (store_term t1_pre term1 )
-  **  (store_term t2_pre term2 )
-.
-
-Definition alpha_equiv_return_wit_8 := 
-forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) (typ2: const_type) (con2: Z) (typ1: const_type) (con1: Z) ,
-  [| (con1 = con2) |] 
-  &&  [| ((ctID (typ1)) = 0) |] 
-  &&  [| ((ctID (typ1)) = (ctID (typ2))) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (term1 = (TermConst (typ1) (con1))) |] 
-  &&  [| (term2 = (TermConst (typ2) (con2))) |] 
-  &&  [| ((termtypeID (term1)) = (termtypeID (term2))) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (0 <> (termtypeID (term1))) |] 
-  &&  [| (1 = (termtypeID (term1))) |]
-  &&  ((&((t1_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term1)))
-  **  ((&((t2_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term2)))
-  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "type")) # Int  |-> (ctID (typ1)))
-  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "type")) # Int  |-> (ctID (typ2)))
-  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "content")) # Int  |-> con1)
-  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "content")) # Int  |-> con2)
-|--
-  [| (1 = (term_alpha_eqn (term1) (term2))) |]
-  &&  (store_term t1_pre term1 )
-  **  (store_term t2_pre term2 )
-.
-
-Definition alpha_equiv_return_wit_9 := 
-forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) (typ2: const_type) (con2: Z) (typ1: const_type) (con1: Z) ,
-  [| ((ctID (typ1)) <> 0) |] 
-  &&  [| ((ctID (typ1)) = (ctID (typ2))) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (term1 = (TermConst (typ1) (con1))) |] 
-  &&  [| (term2 = (TermConst (typ2) (con2))) |] 
-  &&  [| ((termtypeID (term1)) = (termtypeID (term2))) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (0 <> (termtypeID (term1))) |] 
-  &&  [| (1 = (termtypeID (term1))) |]
-  &&  ((&((t1_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term1)))
-  **  ((&((t2_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term2)))
-  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "type")) # Int  |-> (ctID (typ1)))
-  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "type")) # Int  |-> (ctID (typ2)))
-  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "content")) # Int  |-> con1)
-  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "content")) # Int  |-> con2)
-|--
-  [| (1 = (term_alpha_eqn (term1) (term2))) |]
-  &&  (store_term t1_pre term1 )
-  **  (store_term t2_pre term2 )
-.
-
-Definition alpha_equiv_return_wit_10 := 
-forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) (z2: Z) (z1: Z) (y2: Z) (y1: Z) (lt2: term) (rt2: term) (lt1: term) (rt1: term) (retval: Z) ,
-  [| (retval = 0) |] 
-  &&  [| (retval = (term_alpha_eqn (lt1) (lt2))) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (term1 = (TermApply (lt1) (rt1))) |] 
-  &&  [| (term2 = (TermApply (lt2) (rt2))) |] 
-  &&  [| ((termtypeID (term1)) = (termtypeID (term2))) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (0 <> (termtypeID (term1))) |] 
-  &&  [| (1 <> (termtypeID (term1))) |] 
-  &&  [| (2 = (termtypeID (term1))) |]
-  &&  (store_term y1 lt1 )
-  **  (store_term y2 lt2 )
-  **  ((&((t1_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term1)))
-  **  ((&((t2_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term2)))
-  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "left")) # Ptr  |-> y1)
-  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "left")) # Ptr  |-> y2)
-  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "right")) # Ptr  |-> z1)
-  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "right")) # Ptr  |-> z2)
-  **  (store_term z1 rt1 )
-  **  (store_term z2 rt2 )
-|--
-  [| (0 = (term_alpha_eqn (term1) (term2))) |]
-  &&  (store_term t1_pre term1 )
-  **  (store_term t2_pre term2 )
-.
-
-Definition alpha_equiv_return_wit_11 := 
-forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) (z2: Z) (z1: Z) (y2: Z) (y1: Z) (lt2: term) (rt2: term) (lt1: term) (rt1: term) (retval: Z) (retval_2: Z) ,
-  [| (retval_2 <> 0) |] 
-  &&  [| (retval_2 = (term_alpha_eqn (rt1) (rt2))) |] 
-  &&  [| (retval <> 0) |] 
-  &&  [| (retval = (term_alpha_eqn (lt1) (lt2))) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (term1 = (TermApply (lt1) (rt1))) |] 
-  &&  [| (term2 = (TermApply (lt2) (rt2))) |] 
-  &&  [| ((termtypeID (term1)) = (termtypeID (term2))) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (0 <> (termtypeID (term1))) |] 
-  &&  [| (1 <> (termtypeID (term1))) |] 
-  &&  [| (2 = (termtypeID (term1))) |]
-  &&  (store_term z1 rt1 )
-  **  (store_term z2 rt2 )
-  **  (store_term y1 lt1 )
-  **  (store_term y2 lt2 )
-  **  ((&((t1_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term1)))
-  **  ((&((t2_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term2)))
-  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "left")) # Ptr  |-> y1)
-  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "left")) # Ptr  |-> y2)
-  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "right")) # Ptr  |-> z1)
-  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "right")) # Ptr  |-> z2)
-|--
-  [| (1 = (term_alpha_eqn (term1) (term2))) |]
-  &&  (store_term t1_pre term1 )
-  **  (store_term t2_pre term2 )
-.
-
-Definition alpha_equiv_return_wit_12 := 
-forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) (z2: Z) (z1: Z) (y2: Z) (y1: Z) (lt2: term) (rt2: term) (lt1: term) (rt1: term) (retval: Z) (retval_2: Z) ,
-  [| (retval_2 = 0) |] 
-  &&  [| (retval_2 = (term_alpha_eqn (rt1) (rt2))) |] 
-  &&  [| (retval <> 0) |] 
-  &&  [| (retval = (term_alpha_eqn (lt1) (lt2))) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (term1 = (TermApply (lt1) (rt1))) |] 
-  &&  [| (term2 = (TermApply (lt2) (rt2))) |] 
-  &&  [| ((termtypeID (term1)) = (termtypeID (term2))) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (0 <> (termtypeID (term1))) |] 
-  &&  [| (1 <> (termtypeID (term1))) |] 
-  &&  [| (2 = (termtypeID (term1))) |]
-  &&  (store_term z1 rt1 )
-  **  (store_term z2 rt2 )
-  **  (store_term y1 lt1 )
-  **  (store_term y2 lt2 )
-  **  ((&((t1_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term1)))
-  **  ((&((t2_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term2)))
-  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "left")) # Ptr  |-> y1)
-  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "left")) # Ptr  |-> y2)
-  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "right")) # Ptr  |-> z1)
-  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "right")) # Ptr  |-> z2)
-|--
-  [| (0 = (term_alpha_eqn (term1) (term2))) |]
-  &&  (store_term t1_pre term1 )
-  **  (store_term t2_pre term2 )
-.
-
-Definition alpha_equiv_return_wit_13 := 
-forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) (z2: Z) (z1: Z) (y2: Z) (y1: Z) (qt2: quant_type) (qv2: (@list Z)) (qterm2: term) (qt1: quant_type) (qv1: (@list Z)) (qterm1: term) ,
-  [| ((qtID (qt1)) <> (qtID (qt2))) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (term1 = (TermQuant (qt1) (qv1) (qterm1))) |] 
-  &&  [| (term2 = (TermQuant (qt2) (qv2) (qterm2))) |] 
-  &&  [| ((termtypeID (term1)) = (termtypeID (term2))) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (0 <> (termtypeID (term1))) |] 
-  &&  [| (1 <> (termtypeID (term1))) |] 
-  &&  [| (2 <> (termtypeID (term1))) |] 
-  &&  [| (3 = (termtypeID (term1))) |]
-  &&  ((&((t1_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term1)))
-  **  ((&((t2_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term2)))
-  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "type")) # Int  |-> (qtID (qt1)))
-  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "type")) # Int  |-> (qtID (qt2)))
-  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "var")) # Ptr  |-> y1)
-  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "var")) # Ptr  |-> y2)
-  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "body")) # Ptr  |-> z1)
-  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "body")) # Ptr  |-> z2)
-  **  (store_string y1 qv1 )
-  **  (store_term z1 qterm1 )
-  **  (store_string y2 qv2 )
-  **  (store_term z2 qterm2 )
-|--
-  [| (0 = (term_alpha_eqn (term1) (term2))) |]
-  &&  (store_term t1_pre term1 )
-  **  (store_term t2_pre term2 )
-.
-
-Definition alpha_equiv_return_wit_14 := 
-forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) (z2: Z) (z1: Z) (y2: Z) (y1: Z) (qt2: quant_type) (qv2: (@list Z)) (qterm2: term) (qt1: quant_type) (qv1: (@list Z)) (qterm1: term) (retval_2: Z) (retval: Z) ,
-  [| (retval = (term_alpha_eqn (qterm1) (qterm2))) |] 
-  &&  [| (retval_2 = 0) |] 
-  &&  [| (retval_2 = (list_Z_cmp (qv1) (qv2))) |] 
-  &&  [| ((qtID (qt1)) = (qtID (qt2))) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (term1 = (TermQuant (qt1) (qv1) (qterm1))) |] 
-  &&  [| (term2 = (TermQuant (qt2) (qv2) (qterm2))) |] 
-  &&  [| ((termtypeID (term1)) = (termtypeID (term2))) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (t2_pre <> 0) |] 
-  &&  [| (t1_pre <> 0) |] 
-  &&  [| (0 <> (termtypeID (term1))) |] 
-  &&  [| (1 <> (termtypeID (term1))) |] 
-  &&  [| (2 <> (termtypeID (term1))) |] 
-  &&  [| (3 = (termtypeID (term1))) |]
-  &&  (store_term z1 qterm1 )
-  **  (store_term z2 qterm2 )
-  **  (store_string y1 qv1 )
-  **  (store_string y2 qv2 )
-  **  ((&((t1_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term1)))
-  **  ((&((t2_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term2)))
-  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "type")) # Int  |-> (qtID (qt1)))
-  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "type")) # Int  |-> (qtID (qt2)))
-  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "var")) # Ptr  |-> y1)
-  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "var")) # Ptr  |-> y2)
-  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "body")) # Ptr  |-> z1)
-  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "body")) # Ptr  |-> z2)
-|--
-  [| (retval = (term_alpha_eqn (term1) (term2))) |]
-  &&  (store_term t1_pre term1 )
-  **  (store_term t2_pre term2 )
-.
-
-Definition alpha_equiv_return_wit_15 := 
 forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) (z2: Z) (z1: Z) (y2: Z) (y1: Z) (qt2: quant_type) (qv2: (@list Z)) (qterm2: term) (qt1: quant_type) (qv1: (@list Z)) (qterm1: term) (retval_2: Z) (retval_3: Z) (retval_4: Z) (retval: Z) ,
   [| (retval = (term_alpha_eqn (qterm1) ((term_subst_v (qv1) (qv2) (qterm2))))) |] 
   &&  [| (retval_4 = retval_3) |] 
@@ -783,6 +409,378 @@ forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) (z2: Z) (z1: Z) (y2: 
   **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "body")) # Ptr  |-> z2)
 |--
   [| (retval = (term_alpha_eqn (term1) (term2))) |]
+  &&  (store_term t1_pre term1 )
+  **  (store_term t2_pre term2 )
+.
+
+Definition alpha_equiv_return_wit_2 := 
+forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) (z2: Z) (z1: Z) (y2: Z) (y1: Z) (qt2: quant_type) (qv2: (@list Z)) (qterm2: term) (qt1: quant_type) (qv1: (@list Z)) (qterm1: term) (retval_2: Z) (retval: Z) ,
+  [| (retval = (term_alpha_eqn (qterm1) (qterm2))) |] 
+  &&  [| (retval_2 = 0) |] 
+  &&  [| (retval_2 = (list_Z_cmp (qv1) (qv2))) |] 
+  &&  [| ((qtID (qt1)) = (qtID (qt2))) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (term1 = (TermQuant (qt1) (qv1) (qterm1))) |] 
+  &&  [| (term2 = (TermQuant (qt2) (qv2) (qterm2))) |] 
+  &&  [| ((termtypeID (term1)) = (termtypeID (term2))) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (0 <> (termtypeID (term1))) |] 
+  &&  [| (1 <> (termtypeID (term1))) |] 
+  &&  [| (2 <> (termtypeID (term1))) |] 
+  &&  [| (3 = (termtypeID (term1))) |]
+  &&  (store_term z1 qterm1 )
+  **  (store_term z2 qterm2 )
+  **  (store_string y1 qv1 )
+  **  (store_string y2 qv2 )
+  **  ((&((t1_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term1)))
+  **  ((&((t2_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term2)))
+  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "type")) # Int  |-> (qtID (qt1)))
+  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "type")) # Int  |-> (qtID (qt2)))
+  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "var")) # Ptr  |-> y1)
+  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "var")) # Ptr  |-> y2)
+  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "body")) # Ptr  |-> z1)
+  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "body")) # Ptr  |-> z2)
+|--
+  [| (retval = (term_alpha_eqn (term1) (term2))) |]
+  &&  (store_term t1_pre term1 )
+  **  (store_term t2_pre term2 )
+.
+
+Definition alpha_equiv_return_wit_3 := 
+forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) (z2: Z) (z1: Z) (y2: Z) (y1: Z) (qt2: quant_type) (qv2: (@list Z)) (qterm2: term) (qt1: quant_type) (qv1: (@list Z)) (qterm1: term) ,
+  [| ((qtID (qt1)) <> (qtID (qt2))) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (term1 = (TermQuant (qt1) (qv1) (qterm1))) |] 
+  &&  [| (term2 = (TermQuant (qt2) (qv2) (qterm2))) |] 
+  &&  [| ((termtypeID (term1)) = (termtypeID (term2))) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (0 <> (termtypeID (term1))) |] 
+  &&  [| (1 <> (termtypeID (term1))) |] 
+  &&  [| (2 <> (termtypeID (term1))) |] 
+  &&  [| (3 = (termtypeID (term1))) |]
+  &&  ((&((t1_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term1)))
+  **  ((&((t2_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term2)))
+  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "type")) # Int  |-> (qtID (qt1)))
+  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "type")) # Int  |-> (qtID (qt2)))
+  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "var")) # Ptr  |-> y1)
+  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "var")) # Ptr  |-> y2)
+  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "body")) # Ptr  |-> z1)
+  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "body")) # Ptr  |-> z2)
+  **  (store_string y1 qv1 )
+  **  (store_term z1 qterm1 )
+  **  (store_string y2 qv2 )
+  **  (store_term z2 qterm2 )
+|--
+  [| (0 = (term_alpha_eqn (term1) (term2))) |]
+  &&  (store_term t1_pre term1 )
+  **  (store_term t2_pre term2 )
+.
+
+Definition alpha_equiv_return_wit_4 := 
+forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) (z2: Z) (z1: Z) (y2: Z) (y1: Z) (lt2: term) (rt2: term) (lt1: term) (rt1: term) (retval: Z) (retval_2: Z) ,
+  [| (retval_2 = 0) |] 
+  &&  [| (retval_2 = (term_alpha_eqn (rt1) (rt2))) |] 
+  &&  [| (retval <> 0) |] 
+  &&  [| (retval = (term_alpha_eqn (lt1) (lt2))) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (term1 = (TermApply (lt1) (rt1))) |] 
+  &&  [| (term2 = (TermApply (lt2) (rt2))) |] 
+  &&  [| ((termtypeID (term1)) = (termtypeID (term2))) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (0 <> (termtypeID (term1))) |] 
+  &&  [| (1 <> (termtypeID (term1))) |] 
+  &&  [| (2 = (termtypeID (term1))) |]
+  &&  (store_term z1 rt1 )
+  **  (store_term z2 rt2 )
+  **  (store_term y1 lt1 )
+  **  (store_term y2 lt2 )
+  **  ((&((t1_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term1)))
+  **  ((&((t2_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term2)))
+  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "left")) # Ptr  |-> y1)
+  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "left")) # Ptr  |-> y2)
+  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "right")) # Ptr  |-> z1)
+  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "right")) # Ptr  |-> z2)
+|--
+  [| (0 = (term_alpha_eqn (term1) (term2))) |]
+  &&  (store_term t1_pre term1 )
+  **  (store_term t2_pre term2 )
+.
+
+Definition alpha_equiv_return_wit_5 := 
+forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) (z2: Z) (z1: Z) (y2: Z) (y1: Z) (lt2: term) (rt2: term) (lt1: term) (rt1: term) (retval: Z) (retval_2: Z) ,
+  [| (retval_2 <> 0) |] 
+  &&  [| (retval_2 = (term_alpha_eqn (rt1) (rt2))) |] 
+  &&  [| (retval <> 0) |] 
+  &&  [| (retval = (term_alpha_eqn (lt1) (lt2))) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (term1 = (TermApply (lt1) (rt1))) |] 
+  &&  [| (term2 = (TermApply (lt2) (rt2))) |] 
+  &&  [| ((termtypeID (term1)) = (termtypeID (term2))) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (0 <> (termtypeID (term1))) |] 
+  &&  [| (1 <> (termtypeID (term1))) |] 
+  &&  [| (2 = (termtypeID (term1))) |]
+  &&  (store_term z1 rt1 )
+  **  (store_term z2 rt2 )
+  **  (store_term y1 lt1 )
+  **  (store_term y2 lt2 )
+  **  ((&((t1_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term1)))
+  **  ((&((t2_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term2)))
+  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "left")) # Ptr  |-> y1)
+  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "left")) # Ptr  |-> y2)
+  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "right")) # Ptr  |-> z1)
+  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "right")) # Ptr  |-> z2)
+|--
+  [| (1 = (term_alpha_eqn (term1) (term2))) |]
+  &&  (store_term t1_pre term1 )
+  **  (store_term t2_pre term2 )
+.
+
+Definition alpha_equiv_return_wit_6 := 
+forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) (z2: Z) (z1: Z) (y2: Z) (y1: Z) (lt2: term) (rt2: term) (lt1: term) (rt1: term) (retval: Z) ,
+  [| (retval = 0) |] 
+  &&  [| (retval = (term_alpha_eqn (lt1) (lt2))) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (term1 = (TermApply (lt1) (rt1))) |] 
+  &&  [| (term2 = (TermApply (lt2) (rt2))) |] 
+  &&  [| ((termtypeID (term1)) = (termtypeID (term2))) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (0 <> (termtypeID (term1))) |] 
+  &&  [| (1 <> (termtypeID (term1))) |] 
+  &&  [| (2 = (termtypeID (term1))) |]
+  &&  (store_term y1 lt1 )
+  **  (store_term y2 lt2 )
+  **  ((&((t1_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term1)))
+  **  ((&((t2_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term2)))
+  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "left")) # Ptr  |-> y1)
+  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "left")) # Ptr  |-> y2)
+  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "right")) # Ptr  |-> z1)
+  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "right")) # Ptr  |-> z2)
+  **  (store_term z1 rt1 )
+  **  (store_term z2 rt2 )
+|--
+  [| (0 = (term_alpha_eqn (term1) (term2))) |]
+  &&  (store_term t1_pre term1 )
+  **  (store_term t2_pre term2 )
+.
+
+Definition alpha_equiv_return_wit_7 := 
+forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) (typ2: const_type) (con2: Z) (typ1: const_type) (con1: Z) ,
+  [| ((ctID (typ1)) <> 0) |] 
+  &&  [| ((ctID (typ1)) = (ctID (typ2))) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (term1 = (TermConst (typ1) (con1))) |] 
+  &&  [| (term2 = (TermConst (typ2) (con2))) |] 
+  &&  [| ((termtypeID (term1)) = (termtypeID (term2))) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (0 <> (termtypeID (term1))) |] 
+  &&  [| (1 = (termtypeID (term1))) |]
+  &&  ((&((t1_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term1)))
+  **  ((&((t2_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term2)))
+  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "type")) # Int  |-> (ctID (typ1)))
+  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "type")) # Int  |-> (ctID (typ2)))
+  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "content")) # Int  |-> con1)
+  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "content")) # Int  |-> con2)
+|--
+  [| (1 = (term_alpha_eqn (term1) (term2))) |]
+  &&  (store_term t1_pre term1 )
+  **  (store_term t2_pre term2 )
+.
+
+Definition alpha_equiv_return_wit_8 := 
+forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) (typ2: const_type) (con2: Z) (typ1: const_type) (con1: Z) ,
+  [| (con1 = con2) |] 
+  &&  [| ((ctID (typ1)) = 0) |] 
+  &&  [| ((ctID (typ1)) = (ctID (typ2))) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (term1 = (TermConst (typ1) (con1))) |] 
+  &&  [| (term2 = (TermConst (typ2) (con2))) |] 
+  &&  [| ((termtypeID (term1)) = (termtypeID (term2))) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (0 <> (termtypeID (term1))) |] 
+  &&  [| (1 = (termtypeID (term1))) |]
+  &&  ((&((t1_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term1)))
+  **  ((&((t2_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term2)))
+  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "type")) # Int  |-> (ctID (typ1)))
+  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "type")) # Int  |-> (ctID (typ2)))
+  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "content")) # Int  |-> con1)
+  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "content")) # Int  |-> con2)
+|--
+  [| (1 = (term_alpha_eqn (term1) (term2))) |]
+  &&  (store_term t1_pre term1 )
+  **  (store_term t2_pre term2 )
+.
+
+Definition alpha_equiv_return_wit_9 := 
+forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) (typ2: const_type) (con2: Z) (typ1: const_type) (con1: Z) ,
+  [| (con1 <> con2) |] 
+  &&  [| ((ctID (typ1)) = 0) |] 
+  &&  [| ((ctID (typ1)) = (ctID (typ2))) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (term1 = (TermConst (typ1) (con1))) |] 
+  &&  [| (term2 = (TermConst (typ2) (con2))) |] 
+  &&  [| ((termtypeID (term1)) = (termtypeID (term2))) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (0 <> (termtypeID (term1))) |] 
+  &&  [| (1 = (termtypeID (term1))) |]
+  &&  ((&((t1_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term1)))
+  **  ((&((t2_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term2)))
+  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "type")) # Int  |-> (ctID (typ1)))
+  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "type")) # Int  |-> (ctID (typ2)))
+  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "content")) # Int  |-> con1)
+  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "content")) # Int  |-> con2)
+|--
+  [| (0 = (term_alpha_eqn (term1) (term2))) |]
+  &&  (store_term t1_pre term1 )
+  **  (store_term t2_pre term2 )
+.
+
+Definition alpha_equiv_return_wit_10 := 
+forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) (typ2: const_type) (con2: Z) (typ1: const_type) (con1: Z) ,
+  [| ((ctID (typ1)) <> (ctID (typ2))) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (term1 = (TermConst (typ1) (con1))) |] 
+  &&  [| (term2 = (TermConst (typ2) (con2))) |] 
+  &&  [| ((termtypeID (term1)) = (termtypeID (term2))) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (0 <> (termtypeID (term1))) |] 
+  &&  [| (1 = (termtypeID (term1))) |]
+  &&  ((&((t1_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term1)))
+  **  ((&((t2_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term2)))
+  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "type")) # Int  |-> (ctID (typ1)))
+  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "type")) # Int  |-> (ctID (typ2)))
+  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "content")) # Int  |-> con1)
+  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "content")) # Int  |-> con2)
+|--
+  [| (0 = (term_alpha_eqn (term1) (term2))) |]
+  &&  (store_term t1_pre term1 )
+  **  (store_term t2_pre term2 )
+.
+
+Definition alpha_equiv_return_wit_11 := 
+forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) (z: Z) (y: Z) (str2: (@list Z)) (str1: (@list Z)) (retval: Z) ,
+  [| (retval = 0) |] 
+  &&  [| (retval = (list_Z_cmp (str1) (str2))) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (term1 = (TermVar (str1))) |] 
+  &&  [| (term2 = (TermVar (str2))) |] 
+  &&  [| ((termtypeID (term1)) = (termtypeID (term2))) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (0 = (termtypeID (term1))) |]
+  &&  (store_string y str1 )
+  **  (store_string z str2 )
+  **  ((&((t1_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term1)))
+  **  ((&((t2_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term2)))
+  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Var")) # Ptr  |-> y)
+  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Var")) # Ptr  |-> z)
+|--
+  [| (1 = (term_alpha_eqn (term1) (term2))) |]
+  &&  (store_term t1_pre term1 )
+  **  (store_term t2_pre term2 )
+.
+
+Definition alpha_equiv_return_wit_12 := 
+forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) (z: Z) (y: Z) (str2: (@list Z)) (str1: (@list Z)) (retval: Z) ,
+  [| (retval <> 0) |] 
+  &&  [| (retval = (list_Z_cmp (str1) (str2))) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (term1 = (TermVar (str1))) |] 
+  &&  [| (term2 = (TermVar (str2))) |] 
+  &&  [| ((termtypeID (term1)) = (termtypeID (term2))) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (0 = (termtypeID (term1))) |]
+  &&  (store_string y str1 )
+  **  (store_string z str2 )
+  **  ((&((t1_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term1)))
+  **  ((&((t2_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term2)))
+  **  ((&((t1_pre)  # "term" ->ₛ "content" .ₛ "Var")) # Ptr  |-> y)
+  **  ((&((t2_pre)  # "term" ->ₛ "content" .ₛ "Var")) # Ptr  |-> z)
+|--
+  [| (0 = (term_alpha_eqn (term1) (term2))) |]
+  &&  (store_term t1_pre term1 )
+  **  (store_term t2_pre term2 )
+.
+
+Definition alpha_equiv_return_wit_13 := 
+forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) ,
+  [| ((termtypeID (term1)) <> (termtypeID (term2))) |] 
+  &&  [| (t1_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (t2_pre <> 0) |] 
+  &&  [| (t1_pre <> 0) |]
+  &&  ((&((t1_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term1)))
+  **  ((&((t2_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (term2)))
+  **  (store_term' t1_pre term1 )
+  **  (store_term' t2_pre term2 )
+|--
+  [| (0 = (term_alpha_eqn (term1) (term2))) |]
+  &&  (store_term t1_pre term1 )
+  **  (store_term t2_pre term2 )
+.
+
+Definition alpha_equiv_return_wit_14 := 
+forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) ,
+  [| (t1_pre = 0) |]
+  &&  (store_term t1_pre term1 )
+  **  (store_term t2_pre term2 )
+|--
+  [| (0 = (term_alpha_eqn (term1) (term2))) |]
+  &&  (store_term t1_pre term1 )
+  **  (store_term t2_pre term2 )
+.
+
+Definition alpha_equiv_return_wit_15 := 
+forall (t2_pre: Z) (t1_pre: Z) (term2: term) (term1: term) ,
+  [| (t2_pre = 0) |] 
+  &&  [| (t1_pre <> 0) |]
+  &&  (store_term t1_pre term1 )
+  **  (store_term t2_pre term2 )
+|--
+  [| (0 = (term_alpha_eqn (term1) (term2))) |]
   &&  (store_term t1_pre term1 )
   **  (store_term t2_pre term2 )
 .
@@ -1806,7 +1804,6 @@ forall (qv2: (@list Z)) (qv1: (@list Z)) (t1: Z) (v: Z) (t2: Z) (v_2: Z) ,
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 Include safeexec_Strategy_Correct.
 
 Axiom proof_of_alpha_equiv_safety_wit_1 : alpha_equiv_safety_wit_1.

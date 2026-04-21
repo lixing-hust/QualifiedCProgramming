@@ -1,4 +1,4 @@
-#include "../verification_stdlib.h"
+
 
 int max3(int x, int y, int z)
   /*@ Require

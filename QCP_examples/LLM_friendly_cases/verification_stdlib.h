@@ -6,5 +6,5 @@
                (None: {A} -> option A) */
 /*@ Extern Coq (UINT_MAX : Z) */
 
-/*@ Import Coq Import naive_C_Rules */
+
 /*@ include strategies "common.strategies" */

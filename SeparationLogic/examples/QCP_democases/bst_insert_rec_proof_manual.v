@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.QCP_democases Require Import bst_insert_rec_goal.
@@ -20,7 +20,7 @@ Import get_right_most.
 Import naive_C_Rules.
 Local Open Scope sac.
 
-Lemma proof_of_insert_return_wit_1 : insert_return_wit_1.
+Lemma proof_of_insert_return_wit_4 : insert_return_wit_4.
 Proof.
   pre_process.
   sep_apply (store_tree_zero); [ | tauto].
@@ -28,18 +28,6 @@ Proof.
   subst.
   simpl.
   Exists 0 0.
-  entailer!.
-Qed.
-
-Lemma proof_of_insert_return_wit_2 : insert_return_wit_2.
-Proof.
-  pre_process.
-  subst.
-  simpl.
-  destruct (Key.dec x_pre b_key) as [[? | ?] | ?];
-    try Key.order.
-  simpl.
-  Exists retval b_right.
   entailer!.
 Qed.
 
@@ -51,11 +39,23 @@ Proof.
   destruct (Key.dec x_pre b_key) as [[? | ?] | ?];
     try Key.order.
   simpl.
+  Exists retval b_right.
+  entailer!.
+Qed.
+
+Lemma proof_of_insert_return_wit_2 : insert_return_wit_2.
+Proof.
+  pre_process.
+  subst.
+  simpl.
+  destruct (Key.dec x_pre b_key) as [[? | ?] | ?];
+    try Key.order.
+  simpl.
   Exists b_left retval.
   entailer!.
 Qed.
 
-Lemma proof_of_insert_return_wit_4 : insert_return_wit_4.
+Lemma proof_of_insert_return_wit_1 : insert_return_wit_1.
 Proof.
   pre_process.
   subst.

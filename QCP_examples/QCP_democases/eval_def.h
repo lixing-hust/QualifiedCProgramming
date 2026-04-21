@@ -1,4 +1,4 @@
-#include "int_array_def.h"
+
 /*@ Import Coq Require Import SimpleC.EE.QCP_democases.eval_lib */
 
 /*@ Extern Coq (expr :: *) */

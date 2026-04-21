@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -21,8 +21,6 @@ Require Import SimpleC.EE.Applications.LiteOS.lib.sortlink.
 Require Import SimpleC.EE.Applications.LiteOS.lib.dll.
 Require Import SimpleC.EE.Applications.LiteOS.lib.tick_backup.
 Local Open Scope sac.
-From SimpleC.EE.QCP_democases Require Import common_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import common_strategy_proof.
 From SimpleC.EE.Applications Require Import los_sortlink_strategy_goal.
 From SimpleC.EE.Applications Require Import los_sortlink_strategy_proof.
 
@@ -70,19 +68,18 @@ forall (A: Type) (node_pre: Z) (l2: (@list (@DL_Node (@sortedLinkNode A)))) (l1:
 .
 
 Definition OsDeleteSortLink_return_wit_1 := 
-forall (A: Type) (node_pre: Z) (l2: (@list (@DL_Node (@sortedLinkNode A)))) (l1: (@list (@DL_Node (@sortedLinkNode A)))) (a: A) (storeA: (Z -> (A -> Assertion))) (g: Z) (o: Z) (t: Z) (x: Z) (v_pstPrev: Z) (v_5: Z) (v_pstNext: Z) (v_6: Z) ,
-  [| (t = (unsigned_last_nbits ((-1)) (64))) |] 
+forall (A: Type) (node_pre: Z) (l2: (@list (@DL_Node (@sortedLinkNode A)))) (l1: (@list (@DL_Node (@sortedLinkNode A)))) (a: A) (storeA: (Z -> (A -> Assertion))) (g: Z) (o: Z) (t: Z) (x: Z) (v_pstPrev: Z) (v_pstNext: Z) (v_5: Z) (v_6: Z) ,
+  [| (v_6 = 0) |] 
+  &&  [| (v_5 = 0) |] 
+  &&  [| (t > g) |] 
+  &&  [| (t <> (unsigned_last_nbits ((-1)) (64))) |] 
   &&  [| (v_pstNext = &((node_pre)  # "SortLinkList" ->ₛ "sortLinkNode")) |] 
   &&  [| (v_pstPrev = &((node_pre)  # "SortLinkList" ->ₛ "sortLinkNode")) |] 
   &&  [| (increasingSortedNode (app (l1) ((cons ((Build_DL_Node ((mksortedLinkNode (a) (t))) (node_pre))) (l2)))) ) |]
-  &&  (storeA &((node_pre)  # "SortLinkList" ->ₛ "sortLinkNode") a )
-  **  ((&((node_pre)  # "SortLinkList" ->ₛ "responseTime")) # UInt64  |-> t)
-  **  ((&((node_pre)  # "SortLinkList" ->ₛ "sortLinkNode" .ₛ "pstPrev")) # Ptr  |-> v_6)
-  **  ((&((v_6)  # "LOS_DL_LIST" ->ₛ "pstNext")) # Ptr  |-> v_pstNext)
+  &&  ((&((node_pre)  # "SortLinkList" ->ₛ "sortLinkNode" .ₛ "pstPrev")) # Ptr  |-> v_6)
   **  ((&((node_pre)  # "SortLinkList" ->ₛ "sortLinkNode" .ₛ "pstNext")) # Ptr  |-> v_5)
-  **  ((&((v_5)  # "LOS_DL_LIST" ->ₛ "pstPrev")) # Ptr  |-> v_pstPrev)
-  **  (dllseg_shift_rev (storesortedLinkNode (storeA)) v_5 x (map (sortedLinkNodeMapping) (l2)) )
-  **  (dllseg_shift (storesortedLinkNode (storeA)) x v_6 (map (sortedLinkNodeMapping) (l1)) )
+  **  (storesortedLinkNode storeA &((node_pre)  # "SortLinkList" ->ₛ "sortLinkNode") (mksortedLinkNode (a) ((unsigned_last_nbits ((-1)) (64)))) )
+  **  (store_sorted_dll storeA x (app (l1) (l2)) )
   **  ((( &( "g_schedResponseTime" ) )) # UInt64  |-> g)
   **  ((( &( "OS_SCHED_MAX_RESPONSE_TIME" ) )) # UInt64  |-> o)
 |--
@@ -163,18 +160,19 @@ forall (A: Type) (node_pre: Z) (l2: (@list (@DL_Node (@sortedLinkNode A)))) (l1:
 .
 
 Definition OsDeleteSortLink_return_wit_3 := 
-forall (A: Type) (node_pre: Z) (l2: (@list (@DL_Node (@sortedLinkNode A)))) (l1: (@list (@DL_Node (@sortedLinkNode A)))) (a: A) (storeA: (Z -> (A -> Assertion))) (g: Z) (o: Z) (t: Z) (x: Z) (v_pstPrev: Z) (v_pstNext: Z) (v_5: Z) (v_6: Z) ,
-  [| (v_6 = 0) |] 
-  &&  [| (v_5 = 0) |] 
-  &&  [| (t > g) |] 
-  &&  [| (t <> (unsigned_last_nbits ((-1)) (64))) |] 
+forall (A: Type) (node_pre: Z) (l2: (@list (@DL_Node (@sortedLinkNode A)))) (l1: (@list (@DL_Node (@sortedLinkNode A)))) (a: A) (storeA: (Z -> (A -> Assertion))) (g: Z) (o: Z) (t: Z) (x: Z) (v_pstPrev: Z) (v_5: Z) (v_pstNext: Z) (v_6: Z) ,
+  [| (t = (unsigned_last_nbits ((-1)) (64))) |] 
   &&  [| (v_pstNext = &((node_pre)  # "SortLinkList" ->ₛ "sortLinkNode")) |] 
   &&  [| (v_pstPrev = &((node_pre)  # "SortLinkList" ->ₛ "sortLinkNode")) |] 
   &&  [| (increasingSortedNode (app (l1) ((cons ((Build_DL_Node ((mksortedLinkNode (a) (t))) (node_pre))) (l2)))) ) |]
-  &&  ((&((node_pre)  # "SortLinkList" ->ₛ "sortLinkNode" .ₛ "pstPrev")) # Ptr  |-> v_6)
+  &&  (storeA &((node_pre)  # "SortLinkList" ->ₛ "sortLinkNode") a )
+  **  ((&((node_pre)  # "SortLinkList" ->ₛ "responseTime")) # UInt64  |-> t)
+  **  ((&((node_pre)  # "SortLinkList" ->ₛ "sortLinkNode" .ₛ "pstPrev")) # Ptr  |-> v_6)
+  **  ((&((v_6)  # "LOS_DL_LIST" ->ₛ "pstNext")) # Ptr  |-> v_pstNext)
   **  ((&((node_pre)  # "SortLinkList" ->ₛ "sortLinkNode" .ₛ "pstNext")) # Ptr  |-> v_5)
-  **  (storesortedLinkNode storeA &((node_pre)  # "SortLinkList" ->ₛ "sortLinkNode") (mksortedLinkNode (a) ((unsigned_last_nbits ((-1)) (64)))) )
-  **  (store_sorted_dll storeA x (app (l1) (l2)) )
+  **  ((&((v_5)  # "LOS_DL_LIST" ->ₛ "pstPrev")) # Ptr  |-> v_pstPrev)
+  **  (dllseg_shift_rev (storesortedLinkNode (storeA)) v_5 x (map (sortedLinkNodeMapping) (l2)) )
+  **  (dllseg_shift (storesortedLinkNode (storeA)) x v_6 (map (sortedLinkNodeMapping) (l1)) )
   **  ((( &( "g_schedResponseTime" ) )) # UInt64  |-> g)
   **  ((( &( "OS_SCHED_MAX_RESPONSE_TIME" ) )) # UInt64  |-> o)
 |--
@@ -482,7 +480,6 @@ forall (A: Type) (l2: (@list (@DL_Node (@sortedLinkNode A)))) (l1: (@list (@DL_N
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 Include los_sortlink_Strategy_Correct.
 
 Axiom proof_of_OsDeleteSortLink_safety_wit_1 : OsDeleteSortLink_safety_wit_1.

@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.Applications.cnf_trans Require Import cnf_trans_goal.
@@ -29,7 +29,7 @@ Proof.
   destruct prop; simpl in * ; try lia.
 Qed.
 
-Lemma proof_of_prop2cnf_return_wit_1 : prop2cnf_return_wit_1.
+Lemma proof_of_prop2cnf_return_wit_3 : prop2cnf_return_wit_3.
 Proof.
   pre_process.
   clear H8 H7.
@@ -134,7 +134,7 @@ Proof.
       lia.
 Qed.
 
-Lemma proof_of_prop2cnf_return_wit_3 : prop2cnf_return_wit_3.
+Lemma proof_of_prop2cnf_return_wit_1 : prop2cnf_return_wit_1.
 Proof.
   pre_process.
   rename H into Hs.

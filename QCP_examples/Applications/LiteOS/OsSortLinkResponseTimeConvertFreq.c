@@ -1,4 +1,4 @@
-#include "verification_stdlib.h"
+
 /*@ Import Coq Require Import SimpleC.EE.Applications.LiteOS.lib.glob_vars_and_defs */
 /*@ Import Coq Require Import SimpleC.EE.Applications.LiteOS.lib.Los_Verify_State_def*/
 /*@ Extern Coq (not: Prop -> Prop) */

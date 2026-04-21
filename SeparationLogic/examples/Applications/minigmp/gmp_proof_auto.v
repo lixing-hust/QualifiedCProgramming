@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.Applications.minigmp Require Import gmp_goal.
@@ -242,10 +242,10 @@ Proof. Admitted.
 Lemma proof_of_mpn_add_partial_solve_wit_5 : mpn_add_partial_solve_wit_5.
 Proof. Admitted. 
 
-Lemma proof_of_mpz_clear_return_wit_3 : mpz_clear_return_wit_3.
+Lemma proof_of_mpz_clear_return_wit_1 : mpz_clear_return_wit_1.
 Proof. Admitted. 
 
-Lemma proof_of_mpz_clear_return_wit_4 : mpz_clear_return_wit_4.
+Lemma proof_of_mpz_clear_return_wit_2 : mpz_clear_return_wit_2.
 Proof. Admitted. 
 
 Lemma proof_of_mpz_clear_partial_solve_wit_1 : mpz_clear_partial_solve_wit_1.
@@ -275,10 +275,10 @@ Proof. Admitted.
 Lemma proof_of_mpz_realloc_safety_wit_6_neg : mpz_realloc_safety_wit_6_neg.
 Proof. Admitted. 
 
-Lemma proof_of_mpz_realloc_return_wit_5_neg : mpz_realloc_return_wit_5_neg.
+Lemma proof_of_mpz_realloc_return_wit_3_pos : mpz_realloc_return_wit_3_pos.
 Proof. Admitted. 
 
-Lemma proof_of_mpz_realloc_return_wit_6_pos : mpz_realloc_return_wit_6_pos.
+Lemma proof_of_mpz_realloc_return_wit_4_neg : mpz_realloc_return_wit_4_neg.
 Proof. Admitted. 
 
 Lemma proof_of_mpz_realloc_partial_solve_wit_1_pos : mpz_realloc_partial_solve_wit_1_pos.

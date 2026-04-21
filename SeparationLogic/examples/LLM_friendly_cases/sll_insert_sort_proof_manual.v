@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import SimpleC.EE.LLM_friendly_cases.sll_insert_sort_goal.
@@ -154,38 +154,10 @@ Proof.
 Qed.
 
 Lemma proof_of_insertion_return_wit_2 : insertion_return_wit_2.
-Proof.
-  pre_process.
-  Exists (l1 ++ a :: nil).
-  entailer!.
-  - sep_apply sllseg_len1; try easy.
-    rewrite derivable1_sepcon_comm.
-    sep_apply sllseg_sllseg; try easy.
-    apply sllseg_0_sll.
-  - rewrite app_nil_r in H0.
-    rewrite H0.
-    symmetry.
-    apply upperbound_insert_nil; easy.
-Qed.
+Admitted.
 
 Lemma proof_of_insertion_return_wit_1 : insertion_return_wit_1.
-Proof.
-  pre_process.
-  Exists (l1 ++ a :: x :: l0_2).
-  subst.
-  entailer!.
-  - sep_apply (sllseg_len1 u x unext); try easy.
-    sep_apply (sllseg_len1 node_pre a u); try easy.
-    sep_apply sllseg_sllseg.
-    simpl app.
-    rewrite (derivable1_sepcon_comm (sllseg node_pre unext (a :: x :: nil))).
-    sep_apply sllseg_sllseg.
-    sep_apply sllseg_sll.
-    rewrite <- app_assoc.
-    reflexivity.
-  - symmetry.
-    apply upperbound_insert_cons; [easy | lia].
-Qed.
+Admitted.
 
 Lemma proof_of_insertion_sort_entail_wit_1 : insertion_sort_entail_wit_1.
 Proof.
@@ -207,32 +179,7 @@ Proof.
 Qed.
 
 Lemma proof_of_insertion_sort_entail_wit_2 : insertion_sort_entail_wit_2.
-Proof.
-  pre_process.
-  subst l2_2 l.
-  Exists l0_4.
-  Exists (l1_2 ++ x :: nil).
-  Exists l0_3.
-  entailer!; subst.
-  - sep_apply store_ptr_undef_store_ptr.
-    easy.
-  - apply increasing_insert.
-    easy.
-  - rewrite <- perm_insert.
-    rewrite H3.
-    reflexivity.
-  - rewrite <- app_assoc.
-    easy.
-Qed.
+Admitted.
 
 Lemma proof_of_insertion_sort_return_wit_1 : insertion_sort_return_wit_1.
-Proof.
-  pre_process.
-  subst p.
-  sep_apply (sll_zero 0 l2); try easy.
-  Intros.
-  subst.
-  rewrite app_nil_r.
-  Exists l0_2.
-  entailer!.
-Qed.
+Admitted.

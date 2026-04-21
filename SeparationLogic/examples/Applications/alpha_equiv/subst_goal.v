@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -17,14 +17,12 @@ Local Open Scope list.
 Import naive_C_Rules.
 Require Import SimpleC.EE.QCP_democases.sll_merge_rel_lib.
 Local Open Scope monad.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap relations.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap relations.
 From FP Require Import PartialOrder_Setoid BourbakiWitt.
 Require Import ast_lib.
 Require Import malloc.
 Require Import super_poly_sll2.
 Local Open Scope sac.
-From SimpleC.EE.QCP_democases Require Import common_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import common_strategy_proof.
 From SimpleC.EE.QCP_democases Require Import safeexec_strategy_goal.
 From SimpleC.EE.QCP_democases Require Import safeexec_strategy_proof.
 
@@ -130,27 +128,22 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
 .
 
 Definition subst_var_return_wit_1 := 
-forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@list Z)) (trm: term) (z: Z) (y: Z) (qt: quant_type) (qvar: (@list Z)) (qterm: term) (retval: Z) ,
-  [| (retval = (list_Z_cmp (qvar) (src_str))) |] 
+forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@list Z)) (trm: term) (var: (@list Z)) (retval: Z) (retval_2: Z) ,
+  [| (retval_2 <> 0) |] 
+  &&  [| (retval = 0) |] 
+  &&  [| (retval = (list_Z_cmp (var) (src_str))) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| (trm = (TermQuant (qt) (qvar) (qterm))) |] 
+  &&  [| (trm = (TermVar (var))) |] 
   &&  [| (t_pre <> 0) |] 
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| (0 <> (termtypeID (trm))) |] 
-  &&  [| (1 <> (termtypeID (trm))) |] 
-  &&  [| (2 <> (termtypeID (trm))) |] 
-  &&  [| (3 = (termtypeID (trm))) |] 
-  &&  [| (retval = 0) |]
-  &&  (store_string y qvar )
+  &&  [| (0 = (termtypeID (trm))) |]
+  &&  (store_string den_pre den_str )
+  **  (store_string retval_2 den_str )
   **  (store_string src_pre src_str )
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
-  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "type")) # Int  |-> (qtID (qt)))
-  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "var")) # Ptr  |-> y)
-  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "body")) # Ptr  |-> z)
-  **  (store_term z qterm )
-  **  (store_string den_pre den_str )
+  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Var")) # Ptr  |-> retval_2)
 |--
   [| (t_pre = t_pre) |]
   &&  (store_term t_pre (term_subst_v (den_str) (src_str) (trm)) )
@@ -159,6 +152,78 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
 .
 
 Definition subst_var_return_wit_2 := 
+forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@list Z)) (trm: term) (y: Z) (var: (@list Z)) (retval: Z) ,
+  [| (retval <> 0) |] 
+  &&  [| (retval = (list_Z_cmp (var) (src_str))) |] 
+  &&  [| (t_pre <> 0) |] 
+  &&  [| (trm = (TermVar (var))) |] 
+  &&  [| (t_pre <> 0) |] 
+  &&  [| (den_pre <> 0) |] 
+  &&  [| (src_pre <> 0) |] 
+  &&  [| (t_pre <> 0) |] 
+  &&  [| (0 = (termtypeID (trm))) |]
+  &&  (store_string y var )
+  **  (store_string src_pre src_str )
+  **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
+  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Var")) # Ptr  |-> y)
+  **  (store_string den_pre den_str )
+|--
+  [| (t_pre = t_pre) |]
+  &&  (store_term t_pre (term_subst_v (den_str) (src_str) (trm)) )
+  **  (store_string den_pre den_str )
+  **  (store_string src_pre src_str )
+.
+
+Definition subst_var_return_wit_3 := 
+forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@list Z)) (trm: term) (typ: const_type) (con: Z) ,
+  [| (t_pre <> 0) |] 
+  &&  [| (trm = (TermConst (typ) (con))) |] 
+  &&  [| (t_pre <> 0) |] 
+  &&  [| (den_pre <> 0) |] 
+  &&  [| (src_pre <> 0) |] 
+  &&  [| (t_pre <> 0) |] 
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 = (termtypeID (trm))) |]
+  &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
+  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "type")) # Int  |-> (ctID (typ)))
+  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "content")) # Int  |-> con)
+  **  (store_string src_pre src_str )
+  **  (store_string den_pre den_str )
+|--
+  [| (t_pre = t_pre) |]
+  &&  (store_term t_pre (term_subst_v (den_str) (src_str) (trm)) )
+  **  (store_string den_pre den_str )
+  **  (store_string src_pre src_str )
+.
+
+Definition subst_var_return_wit_4 := 
+forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@list Z)) (trm: term) (z: Z) (y: Z) (lt: term) (rt: term) (retval: Z) (retval_2: Z) ,
+  [| (retval_2 = z) |] 
+  &&  [| (retval = y) |] 
+  &&  [| (t_pre <> 0) |] 
+  &&  [| (trm = (TermApply (lt) (rt))) |] 
+  &&  [| (t_pre <> 0) |] 
+  &&  [| (den_pre <> 0) |] 
+  &&  [| (src_pre <> 0) |] 
+  &&  [| (t_pre <> 0) |] 
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 = (termtypeID (trm))) |]
+  &&  (store_term z (term_subst_v (den_str) (src_str) (rt)) )
+  **  (store_string den_pre den_str )
+  **  (store_string src_pre src_str )
+  **  (store_term y (term_subst_v (den_str) (src_str) (lt)) )
+  **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
+  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "left")) # Ptr  |-> retval)
+  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "right")) # Ptr  |-> retval_2)
+|--
+  [| (t_pre = t_pre) |]
+  &&  (store_term t_pre (term_subst_v (den_str) (src_str) (trm)) )
+  **  (store_string den_pre den_str )
+  **  (store_string src_pre src_str )
+.
+
+Definition subst_var_return_wit_5 := 
 forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@list Z)) (trm: term) (z: Z) (y: Z) (qt: quant_type) (qvar: (@list Z)) (qterm: term) (retval: Z) (retval_2: Z) ,
   [| (retval_2 = z) |] 
   &&  [| (retval = (list_Z_cmp (qvar) (src_str))) |] 
@@ -188,95 +253,28 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@lis
   **  (store_string src_pre src_str )
 .
 
-Definition subst_var_return_wit_3 := 
-forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@list Z)) (trm: term) (z: Z) (y: Z) (lt: term) (rt: term) (retval: Z) (retval_2: Z) ,
-  [| (retval_2 = z) |] 
-  &&  [| (retval = y) |] 
+Definition subst_var_return_wit_6 := 
+forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@list Z)) (trm: term) (z: Z) (y: Z) (qt: quant_type) (qvar: (@list Z)) (qterm: term) (retval: Z) ,
+  [| (retval = (list_Z_cmp (qvar) (src_str))) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| (trm = (TermApply (lt) (rt))) |] 
+  &&  [| (trm = (TermQuant (qt) (qvar) (qterm))) |] 
   &&  [| (t_pre <> 0) |] 
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
   &&  [| (0 <> (termtypeID (trm))) |] 
   &&  [| (1 <> (termtypeID (trm))) |] 
-  &&  [| (2 = (termtypeID (trm))) |]
-  &&  (store_term z (term_subst_v (den_str) (src_str) (rt)) )
-  **  (store_string den_pre den_str )
-  **  (store_string src_pre src_str )
-  **  (store_term y (term_subst_v (den_str) (src_str) (lt)) )
-  **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
-  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "left")) # Ptr  |-> retval)
-  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "right")) # Ptr  |-> retval_2)
-|--
-  [| (t_pre = t_pre) |]
-  &&  (store_term t_pre (term_subst_v (den_str) (src_str) (trm)) )
-  **  (store_string den_pre den_str )
-  **  (store_string src_pre src_str )
-.
-
-Definition subst_var_return_wit_4 := 
-forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@list Z)) (trm: term) (typ: const_type) (con: Z) ,
-  [| (t_pre <> 0) |] 
-  &&  [| (trm = (TermConst (typ) (con))) |] 
-  &&  [| (t_pre <> 0) |] 
-  &&  [| (den_pre <> 0) |] 
-  &&  [| (src_pre <> 0) |] 
-  &&  [| (t_pre <> 0) |] 
-  &&  [| (0 <> (termtypeID (trm))) |] 
-  &&  [| (1 = (termtypeID (trm))) |]
-  &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
-  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "type")) # Int  |-> (ctID (typ)))
-  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "content")) # Int  |-> con)
-  **  (store_string src_pre src_str )
-  **  (store_string den_pre den_str )
-|--
-  [| (t_pre = t_pre) |]
-  &&  (store_term t_pre (term_subst_v (den_str) (src_str) (trm)) )
-  **  (store_string den_pre den_str )
-  **  (store_string src_pre src_str )
-.
-
-Definition subst_var_return_wit_5 := 
-forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@list Z)) (trm: term) (y: Z) (var: (@list Z)) (retval: Z) ,
-  [| (retval <> 0) |] 
-  &&  [| (retval = (list_Z_cmp (var) (src_str))) |] 
-  &&  [| (t_pre <> 0) |] 
-  &&  [| (trm = (TermVar (var))) |] 
-  &&  [| (t_pre <> 0) |] 
-  &&  [| (den_pre <> 0) |] 
-  &&  [| (src_pre <> 0) |] 
-  &&  [| (t_pre <> 0) |] 
-  &&  [| (0 = (termtypeID (trm))) |]
-  &&  (store_string y var )
+  &&  [| (2 <> (termtypeID (trm))) |] 
+  &&  [| (3 = (termtypeID (trm))) |] 
+  &&  [| (retval = 0) |]
+  &&  (store_string y qvar )
   **  (store_string src_pre src_str )
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
-  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Var")) # Ptr  |-> y)
+  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "type")) # Int  |-> (qtID (qt)))
+  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "var")) # Ptr  |-> y)
+  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "body")) # Ptr  |-> z)
+  **  (store_term z qterm )
   **  (store_string den_pre den_str )
-|--
-  [| (t_pre = t_pre) |]
-  &&  (store_term t_pre (term_subst_v (den_str) (src_str) (trm)) )
-  **  (store_string den_pre den_str )
-  **  (store_string src_pre src_str )
-.
-
-Definition subst_var_return_wit_6 := 
-forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_str: (@list Z)) (src_str: (@list Z)) (trm: term) (var: (@list Z)) (retval: Z) (retval_2: Z) ,
-  [| (retval_2 <> 0) |] 
-  &&  [| (retval = 0) |] 
-  &&  [| (retval = (list_Z_cmp (var) (src_str))) |] 
-  &&  [| (t_pre <> 0) |] 
-  &&  [| (trm = (TermVar (var))) |] 
-  &&  [| (t_pre <> 0) |] 
-  &&  [| (den_pre <> 0) |] 
-  &&  [| (src_pre <> 0) |] 
-  &&  [| (t_pre <> 0) |] 
-  &&  [| (0 = (termtypeID (trm))) |]
-  &&  (store_string den_pre den_str )
-  **  (store_string retval_2 den_str )
-  **  (store_string src_pre src_str )
-  **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
-  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Var")) # Ptr  |-> retval_2)
 |--
   [| (t_pre = t_pre) |]
   &&  (store_term t_pre (term_subst_v (den_str) (src_str) (trm)) )
@@ -1061,26 +1059,41 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
 .
 
 Definition subst_term_return_wit_1 := 
-forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)) (trm: term) (z: Z) (y: Z) (qt: quant_type) (qvar: (@list Z)) (qterm: term) (retval: Z) ,
-  [| (retval = (list_Z_cmp (qvar) (src_str))) |] 
+forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)) (trm: term) (var: (@list Z)) (retval_2: Z) (retval: Z) ,
+  [| (retval <> 0) |] 
+  &&  [| (retval_2 = 0) |] 
+  &&  [| (retval_2 = (list_Z_cmp (var) (src_str))) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| (trm = (TermQuant (qt) (qvar) (qterm))) |] 
+  &&  [| (trm = (TermVar (var))) |] 
   &&  [| (t_pre <> 0) |] 
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
-  &&  [| (0 <> (termtypeID (trm))) |] 
-  &&  [| (1 <> (termtypeID (trm))) |] 
-  &&  [| (2 <> (termtypeID (trm))) |] 
-  &&  [| (3 = (termtypeID (trm))) |] 
-  &&  [| (retval = 0) |]
-  &&  (store_string y qvar )
+  &&  [| (0 = (termtypeID (trm))) |]
+  &&  (store_term den_pre den_term )
+  **  (store_term retval den_term )
+  **  (store_string src_pre src_str )
+|--
+  (store_term retval (term_subst_t (den_term) (src_str) (trm)) )
+  **  (store_term den_pre den_term )
+  **  (store_string src_pre src_str )
+.
+
+Definition subst_term_return_wit_2 := 
+forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)) (trm: term) (y: Z) (var: (@list Z)) (retval: Z) ,
+  [| (retval <> 0) |] 
+  &&  [| (retval = (list_Z_cmp (var) (src_str))) |] 
+  &&  [| (t_pre <> 0) |] 
+  &&  [| (trm = (TermVar (var))) |] 
+  &&  [| (t_pre <> 0) |] 
+  &&  [| (den_pre <> 0) |] 
+  &&  [| (src_pre <> 0) |] 
+  &&  [| (t_pre <> 0) |] 
+  &&  [| (0 = (termtypeID (trm))) |]
+  &&  (store_string y var )
   **  (store_string src_pre src_str )
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
-  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "type")) # Int  |-> (qtID (qt)))
-  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "var")) # Ptr  |-> y)
-  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "body")) # Ptr  |-> z)
-  **  (store_term z qterm )
+  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Var")) # Ptr  |-> y)
   **  (store_term den_pre den_term )
 |--
   (store_term t_pre (term_subst_t (den_term) (src_str) (trm)) )
@@ -1088,7 +1101,52 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   **  (store_string src_pre src_str )
 .
 
-Definition subst_term_return_wit_2 := 
+Definition subst_term_return_wit_3 := 
+forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)) (trm: term) (typ: const_type) (con: Z) ,
+  [| (t_pre <> 0) |] 
+  &&  [| (trm = (TermConst (typ) (con))) |] 
+  &&  [| (t_pre <> 0) |] 
+  &&  [| (den_pre <> 0) |] 
+  &&  [| (src_pre <> 0) |] 
+  &&  [| (t_pre <> 0) |] 
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 = (termtypeID (trm))) |]
+  &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
+  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "type")) # Int  |-> (ctID (typ)))
+  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "content")) # Int  |-> con)
+  **  (store_string src_pre src_str )
+  **  (store_term den_pre den_term )
+|--
+  (store_term t_pre (term_subst_t (den_term) (src_str) (trm)) )
+  **  (store_term den_pre den_term )
+  **  (store_string src_pre src_str )
+.
+
+Definition subst_term_return_wit_4 := 
+forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)) (trm: term) (lt: term) (rt: term) (retval: Z) (retval_2: Z) ,
+  [| (t_pre <> 0) |] 
+  &&  [| (trm = (TermApply (lt) (rt))) |] 
+  &&  [| (t_pre <> 0) |] 
+  &&  [| (den_pre <> 0) |] 
+  &&  [| (src_pre <> 0) |] 
+  &&  [| (t_pre <> 0) |] 
+  &&  [| (0 <> (termtypeID (trm))) |] 
+  &&  [| (1 <> (termtypeID (trm))) |] 
+  &&  [| (2 = (termtypeID (trm))) |]
+  &&  (store_term retval_2 (term_subst_t (den_term) (src_str) (rt)) )
+  **  (store_term den_pre den_term )
+  **  (store_string src_pre src_str )
+  **  (store_term retval (term_subst_t (den_term) (src_str) (lt)) )
+  **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
+  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "left")) # Ptr  |-> retval)
+  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "right")) # Ptr  |-> retval_2)
+|--
+  (store_term t_pre (term_subst_t (den_term) (src_str) (trm)) )
+  **  (store_term den_pre den_term )
+  **  (store_string src_pre src_str )
+.
+
+Definition subst_term_return_wit_5 := 
 forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)) (trm: term) (y: Z) (qt: quant_type) (qvar: (@list Z)) (qterm: term) (retval: Z) (retval_2: Z) ,
   [| (retval = (list_Z_cmp (qvar) (src_str))) |] 
   &&  [| (t_pre <> 0) |] 
@@ -1116,90 +1174,30 @@ forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)
   **  (store_string src_pre src_str )
 .
 
-Definition subst_term_return_wit_3 := 
-forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)) (trm: term) (lt: term) (rt: term) (retval: Z) (retval_2: Z) ,
-  [| (t_pre <> 0) |] 
-  &&  [| (trm = (TermApply (lt) (rt))) |] 
+Definition subst_term_return_wit_6 := 
+forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)) (trm: term) (z: Z) (y: Z) (qt: quant_type) (qvar: (@list Z)) (qterm: term) (retval: Z) ,
+  [| (retval = (list_Z_cmp (qvar) (src_str))) |] 
+  &&  [| (t_pre <> 0) |] 
+  &&  [| (trm = (TermQuant (qt) (qvar) (qterm))) |] 
   &&  [| (t_pre <> 0) |] 
   &&  [| (den_pre <> 0) |] 
   &&  [| (src_pre <> 0) |] 
   &&  [| (t_pre <> 0) |] 
   &&  [| (0 <> (termtypeID (trm))) |] 
   &&  [| (1 <> (termtypeID (trm))) |] 
-  &&  [| (2 = (termtypeID (trm))) |]
-  &&  (store_term retval_2 (term_subst_t (den_term) (src_str) (rt)) )
-  **  (store_term den_pre den_term )
-  **  (store_string src_pre src_str )
-  **  (store_term retval (term_subst_t (den_term) (src_str) (lt)) )
-  **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
-  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "left")) # Ptr  |-> retval)
-  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Apply" .ₛ "right")) # Ptr  |-> retval_2)
-|--
-  (store_term t_pre (term_subst_t (den_term) (src_str) (trm)) )
-  **  (store_term den_pre den_term )
-  **  (store_string src_pre src_str )
-.
-
-Definition subst_term_return_wit_4 := 
-forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)) (trm: term) (typ: const_type) (con: Z) ,
-  [| (t_pre <> 0) |] 
-  &&  [| (trm = (TermConst (typ) (con))) |] 
-  &&  [| (t_pre <> 0) |] 
-  &&  [| (den_pre <> 0) |] 
-  &&  [| (src_pre <> 0) |] 
-  &&  [| (t_pre <> 0) |] 
-  &&  [| (0 <> (termtypeID (trm))) |] 
-  &&  [| (1 = (termtypeID (trm))) |]
-  &&  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
-  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "type")) # Int  |-> (ctID (typ)))
-  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Const" .ₛ "content")) # Int  |-> con)
-  **  (store_string src_pre src_str )
-  **  (store_term den_pre den_term )
-|--
-  (store_term t_pre (term_subst_t (den_term) (src_str) (trm)) )
-  **  (store_term den_pre den_term )
-  **  (store_string src_pre src_str )
-.
-
-Definition subst_term_return_wit_5 := 
-forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)) (trm: term) (y: Z) (var: (@list Z)) (retval: Z) ,
-  [| (retval <> 0) |] 
-  &&  [| (retval = (list_Z_cmp (var) (src_str))) |] 
-  &&  [| (t_pre <> 0) |] 
-  &&  [| (trm = (TermVar (var))) |] 
-  &&  [| (t_pre <> 0) |] 
-  &&  [| (den_pre <> 0) |] 
-  &&  [| (src_pre <> 0) |] 
-  &&  [| (t_pre <> 0) |] 
-  &&  [| (0 = (termtypeID (trm))) |]
-  &&  (store_string y var )
+  &&  [| (2 <> (termtypeID (trm))) |] 
+  &&  [| (3 = (termtypeID (trm))) |] 
+  &&  [| (retval = 0) |]
+  &&  (store_string y qvar )
   **  (store_string src_pre src_str )
   **  ((&((t_pre)  # "term" ->ₛ "type")) # Int  |-> (termtypeID (trm)))
-  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Var")) # Ptr  |-> y)
+  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "type")) # Int  |-> (qtID (qt)))
+  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "var")) # Ptr  |-> y)
+  **  ((&((t_pre)  # "term" ->ₛ "content" .ₛ "Quant" .ₛ "body")) # Ptr  |-> z)
+  **  (store_term z qterm )
   **  (store_term den_pre den_term )
 |--
   (store_term t_pre (term_subst_t (den_term) (src_str) (trm)) )
-  **  (store_term den_pre den_term )
-  **  (store_string src_pre src_str )
-.
-
-Definition subst_term_return_wit_6 := 
-forall (t_pre: Z) (src_pre: Z) (den_pre: Z) (den_term: term) (src_str: (@list Z)) (trm: term) (var: (@list Z)) (retval_2: Z) (retval: Z) ,
-  [| (retval <> 0) |] 
-  &&  [| (retval_2 = 0) |] 
-  &&  [| (retval_2 = (list_Z_cmp (var) (src_str))) |] 
-  &&  [| (t_pre <> 0) |] 
-  &&  [| (trm = (TermVar (var))) |] 
-  &&  [| (t_pre <> 0) |] 
-  &&  [| (den_pre <> 0) |] 
-  &&  [| (src_pre <> 0) |] 
-  &&  [| (t_pre <> 0) |] 
-  &&  [| (0 = (termtypeID (trm))) |]
-  &&  (store_term den_pre den_term )
-  **  (store_term retval den_term )
-  **  (store_string src_pre src_str )
-|--
-  (store_term retval (term_subst_t (den_term) (src_str) (trm)) )
   **  (store_term den_pre den_term )
   **  (store_string src_pre src_str )
 .
@@ -1916,7 +1914,6 @@ forall (trm: term) (t: Z) ,
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 Include safeexec_Strategy_Correct.
 
 Axiom proof_of_subst_var_safety_wit_1 : subst_var_safety_wit_1.

@@ -7,7 +7,7 @@ Require Import Coq.Logic.Classical_Prop.
 Require Import Coq.micromega.Psatz.
 Require Import Permutation.
 Require Import String.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 Require Import Logic.LogicGenerator.demo932.Interface.
 Local Open Scope Z_scope.
@@ -682,14 +682,14 @@ Proof.
       apply presuffix_ub_add1_sublist.
       * lia.
       * rewrite Zlength_sublist by lia.
-        rewrite sublist_sublist0 by lia.
+        rewrite Zsublist_Zsublist0 by lia.
         replace (i - 0 - 1) with (i - 1) by lia.
         replace (Znth i vnext 0 + 1 - 1) with (Znth i vnext 0) by lia.
         tauto.
     - right.
       pose proof H1.(in_range_gen) i ltac:(lia).
       pose proof prefix_presuffix1 (sublist 0 i str_p) str_p (Znth i vnext 0) (i - 1) i.
-      rewrite sublist_sublist0 in H7 by lia.
+      rewrite Zsublist_Zsublist0 in H7 by lia.
       specialize (H7 ltac:(lia)).
       tauto.
 Qed.
@@ -756,7 +756,7 @@ Proof.
   revert H5; apply H9; clear H9.
   intros.
   specialize (H4 k ltac:(lia)).
-  rewrite sublist_sublist0 by lia.
+  rewrite Zsublist_Zsublist0 by lia.
   destruct H4.
   split.
   + apply prefix_presuffix2.

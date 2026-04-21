@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -20,16 +20,6 @@ Require Import cnf_trans_lib.
 Require Import malloc.
 Require Import super_poly_sll2.
 Local Open Scope sac.
-From SimpleC.EE.QCP_democases Require Import common_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import common_strategy_proof.
-From SimpleC.EE.QCP_democases Require Import int_array_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import int_array_strategy_proof.
-From SimpleC.EE.QCP_democases Require Import uint_array_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import uint_array_strategy_proof.
-From SimpleC.EE.QCP_democases Require Import undef_uint_array_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import undef_uint_array_strategy_proof.
-From SimpleC.EE.QCP_democases Require Import array_shape_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import array_shape_strategy_proof.
 
 (*----- Function clause_gen_unary -----*)
 
@@ -759,11 +749,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   &&  [| (max_size <= 40000) |] 
   &&  [| (pcnt <= 40000) |]
   &&  ((( &( "size" ) )) # Int  |->_)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (3 <= INT_MAX) |] 
@@ -800,11 +790,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  (IntArray.full retval 3 (all_zero_list (3)) )
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (0 <= INT_MAX) |] 
@@ -841,11 +831,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  (IntArray.full retval 3 (all_zero_list (3)) )
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (1 <= INT_MAX) |] 
@@ -883,11 +873,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  (IntArray.full retval 3 (all_zero_list (3)) )
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (0 <= INT_MAX) |] 
@@ -925,11 +915,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  (IntArray.full retval 3 (all_zero_list (3)) )
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (p1_pre <> (INT_MIN)) |]
@@ -966,11 +956,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (1 <= INT_MAX) |] 
@@ -1008,11 +998,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (0 <= INT_MAX) |] 
@@ -1050,11 +1040,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (p2_pre <> (INT_MIN)) |]
@@ -1091,11 +1081,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (1 <= INT_MAX) |] 
@@ -1134,11 +1124,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (0 <= INT_MAX) |] 
@@ -1177,11 +1167,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (1 <= INT_MAX) |] 
@@ -1220,11 +1210,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (2 <= INT_MAX) |] 
@@ -1263,11 +1253,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (p3_pre <> (INT_MIN)) |]
@@ -1305,11 +1295,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (0 <= INT_MAX) |] 
@@ -1348,11 +1338,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (1 <= INT_MAX) |] 
@@ -1391,11 +1381,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (p3_pre <> (INT_MIN)) |]
@@ -1433,11 +1423,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| ((0 + 3 ) <= INT_MAX) |] 
@@ -1476,11 +1466,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (3 <= INT_MAX) |] 
@@ -1519,11 +1509,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| ((0 + 3 ) <= INT_MAX) |] 
@@ -1562,11 +1552,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (3 <= INT_MAX) |] 
@@ -1604,11 +1594,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  (IntArray.full retval 3 (all_zero_list (3)) )
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (0 <= INT_MAX) |] 
@@ -1647,11 +1637,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  (IntArray.full retval 3 (all_zero_list (3)) )
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (0 <= INT_MAX) |] 
@@ -1690,11 +1680,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (1 <= INT_MAX) |] 
@@ -1733,11 +1723,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (p3_pre <> (INT_MIN)) |]
@@ -1775,11 +1765,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (0 <= INT_MAX) |] 
@@ -1818,11 +1808,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (1 <= INT_MAX) |] 
@@ -1861,11 +1851,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (p3_pre <> (INT_MIN)) |]
@@ -1904,11 +1894,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (0 <= INT_MAX) |] 
@@ -1948,11 +1938,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (p1_pre <> (INT_MIN)) |]
@@ -1991,11 +1981,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (1 <= INT_MAX) |] 
@@ -2035,11 +2025,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (p2_pre <> (INT_MIN)) |]
@@ -2078,11 +2068,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (2 <= INT_MAX) |] 
@@ -2122,11 +2112,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (0 <= INT_MAX) |] 
@@ -2166,11 +2156,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (p1_pre <> (INT_MIN)) |]
@@ -2209,11 +2199,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (1 <= INT_MAX) |] 
@@ -2253,11 +2243,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| ((0 + 3 ) <= INT_MAX) |] 
@@ -2297,11 +2287,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (3 <= INT_MAX) |] 
@@ -2341,11 +2331,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| ((0 + 3 ) <= INT_MAX) |] 
@@ -2385,11 +2375,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (3 <= INT_MAX) |] 
@@ -2428,11 +2418,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  (IntArray.full retval 3 (all_zero_list (3)) )
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (2 <= INT_MAX) |] 
@@ -2473,11 +2463,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  (IntArray.full retval 3 (all_zero_list (3)) )
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (0 <= INT_MAX) |] 
@@ -2518,11 +2508,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (1 <= INT_MAX) |] 
@@ -2563,11 +2553,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (0 <= INT_MAX) |] 
@@ -2608,11 +2598,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (p2_pre <> (INT_MIN)) |]
@@ -2652,11 +2642,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (1 <= INT_MAX) |] 
@@ -2697,11 +2687,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (0 <= INT_MAX) |] 
@@ -2742,11 +2732,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (p1_pre <> (INT_MIN)) |]
@@ -2786,11 +2776,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (1 <= INT_MAX) |] 
@@ -2831,11 +2821,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (2 <= INT_MAX) |] 
@@ -2876,11 +2866,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (p3_pre <> (INT_MIN)) |]
@@ -2920,11 +2910,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| ((0 + 3 ) <= INT_MAX) |] 
@@ -2965,11 +2955,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (3 <= INT_MAX) |] 
@@ -3010,11 +3000,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  (IntArray.full retval 3 (all_zero_list (3)) )
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (0 <= INT_MAX) |] 
@@ -3055,11 +3045,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| ((0 + 1 ) <= INT_MAX) |] 
@@ -3100,11 +3090,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (1 <= INT_MAX) |] 
@@ -3144,11 +3134,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  (IntArray.full retval 3 (all_zero_list (3)) )
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (3 <= INT_MAX) |] 
@@ -3190,11 +3180,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  (IntArray.full retval 3 (all_zero_list (3)) )
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (0 <= INT_MAX) |] 
@@ -3236,11 +3226,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (1 <= INT_MAX) |] 
@@ -3282,11 +3272,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (2 <= INT_MAX) |] 
@@ -3328,11 +3318,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (0 <= INT_MAX) |] 
@@ -3374,11 +3364,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (p1_pre <> (INT_MIN)) |]
@@ -3419,11 +3409,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (1 <= INT_MAX) |] 
@@ -3465,11 +3455,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (p2_pre <> (INT_MIN)) |]
@@ -3510,11 +3500,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (2 <= INT_MAX) |] 
@@ -3556,11 +3546,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (0 <= INT_MAX) |] 
@@ -3602,11 +3592,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (1 <= INT_MAX) |] 
@@ -3648,11 +3638,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (p2_pre <> (INT_MIN)) |]
@@ -3693,11 +3683,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (2 <= INT_MAX) |] 
@@ -3739,11 +3729,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (p3_pre <> (INT_MIN)) |]
@@ -3784,11 +3774,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (0 <= INT_MAX) |] 
@@ -3830,11 +3820,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (p1_pre <> (INT_MIN)) |]
@@ -3875,11 +3865,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (1 <= INT_MAX) |] 
@@ -3921,11 +3911,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (2 <= INT_MAX) |] 
@@ -3967,11 +3957,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (p3_pre <> (INT_MIN)) |]
@@ -4012,11 +4002,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| ((0 + 4 ) <= INT_MAX) |] 
@@ -4058,11 +4048,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (4 <= INT_MAX) |] 
@@ -4104,11 +4094,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  (IntArray.full retval 3 (all_zero_list (3)) )
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (0 <= INT_MAX) |] 
@@ -4150,11 +4140,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| ((0 + 1 ) <= INT_MAX) |] 
@@ -4196,11 +4186,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (1 <= INT_MAX) |] 
@@ -4241,11 +4231,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  (IntArray.full retval 3 (all_zero_list (3)) )
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| False |]
@@ -4312,11 +4302,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (1 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 1) |]
@@ -4383,11 +4373,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (1 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 1) |]
@@ -4453,11 +4443,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (1 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 1) |]
@@ -4523,11 +4513,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (1 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 1) |]
@@ -4592,11 +4582,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (1 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 1) |]
@@ -4661,11 +4651,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (1 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 1) |]
@@ -4729,11 +4719,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (1 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 1) |]
@@ -4797,11 +4787,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (1 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 1) |]
@@ -4869,11 +4859,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| False |]
 .
@@ -4940,11 +4930,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| False |]
 .
@@ -5010,11 +5000,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| False |]
 .
@@ -5080,11 +5070,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| False |]
 .
@@ -5149,11 +5139,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| False |]
 .
@@ -5218,11 +5208,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| False |]
 .
@@ -5286,11 +5276,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| False |]
 .
@@ -5354,11 +5344,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| False |]
 .
@@ -5424,11 +5414,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| ((ccnt + 1 ) <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= (ccnt + 1 )) |]
@@ -5495,11 +5485,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (1 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 1) |]
@@ -5567,11 +5557,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| ((ccnt + 1 ) <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= (ccnt + 1 )) |]
@@ -5639,11 +5629,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (1 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 1) |]
@@ -5708,11 +5698,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (2 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 2) |]
@@ -5777,11 +5767,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (2 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 2) |]
@@ -5847,11 +5837,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (2 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 2) |]
@@ -5917,11 +5907,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (2 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 2) |]
@@ -5988,11 +5978,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (2 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 2) |]
@@ -6060,11 +6050,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (2 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 2) |]
@@ -6130,11 +6120,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| False |]
 .
@@ -6199,11 +6189,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| False |]
 .
@@ -6269,11 +6259,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| False |]
 .
@@ -6339,11 +6329,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| False |]
 .
@@ -6410,11 +6400,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| False |]
 .
@@ -6482,11 +6472,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| False |]
 .
@@ -6554,11 +6544,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (3 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 3) |]
@@ -6626,11 +6616,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (3 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 3) |]
@@ -6697,11 +6687,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (3 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 3) |]
@@ -6768,11 +6758,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (3 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 3) |]
@@ -6838,11 +6828,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (3 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 3) |]
@@ -6908,11 +6898,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (3 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 3) |]
@@ -6982,11 +6972,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| False |]
 .
@@ -7054,11 +7044,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| False |]
 .
@@ -7125,11 +7115,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| False |]
 .
@@ -7196,11 +7186,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| False |]
 .
@@ -7266,11 +7256,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| False |]
 .
@@ -7336,11 +7326,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| False |]
 .
@@ -7406,11 +7396,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| ((ccnt + 3 ) <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= (ccnt + 3 )) |]
@@ -7477,11 +7467,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (3 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 3) |]
@@ -7548,11 +7538,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| ((ccnt + 3 ) <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= (ccnt + 3 )) |]
@@ -7619,11 +7609,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (3 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 3) |]
@@ -7691,11 +7681,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| ((ccnt + 3 ) <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= (ccnt + 3 )) |]
@@ -7763,11 +7753,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (3 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 3) |]
@@ -7835,11 +7825,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| ((ccnt + 3 ) <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= (ccnt + 3 )) |]
@@ -7907,11 +7897,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (3 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 3) |]
@@ -7980,11 +7970,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| ((ccnt + 3 ) <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= (ccnt + 3 )) |]
@@ -8053,11 +8043,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (3 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 3) |]
@@ -8127,11 +8117,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| ((ccnt + 4 ) <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= (ccnt + 4 )) |]
@@ -8201,17 +8191,377 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_2)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (4 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 4) |]
 .
 
 Definition clause_gen_binary_return_wit_1 := 
+forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: Z) (bop: SmtPropBop) (ccnt: Z) (pcnt: Z) (clist: (@list (@list Z))) (retval: Z) (retval_2: Z) (retval_3: Z) (retval_4: Z) (retval_5: Z) (retval_6: Z) (retval_7: Z) (retval_8: Z) (y: Z) ,
+  [| ((0 + 1 ) = 1) |] 
+  &&  [| (data_pre <> 0) |] 
+  &&  [| ((Zlength (clist)) = ccnt) |] 
+  &&  [| (retval_8 <> 0) |] 
+  &&  [| (retval_7 <> 0) |] 
+  &&  [| (retval_6 <> 0) |] 
+  &&  [| (retval_5 <> 0) |] 
+  &&  [| (p1_pre = p2_pre) |] 
+  &&  [| (retval_4 <> 0) |] 
+  &&  [| (retval_3 <> 0) |] 
+  &&  [| (retval_2 <> 0) |] 
+  &&  [| (retval <> 0) |] 
+  &&  [| (p1_pre <> 0) |] 
+  &&  [| (p2_pre <> 0) |] 
+  &&  [| (p3_pre <> 0) |] 
+  &&  [| (p1_pre <= pcnt) |] 
+  &&  [| (p2_pre <= pcnt) |] 
+  &&  [| (p3_pre <= pcnt) |] 
+  &&  [| ((-p1_pre) <= pcnt) |] 
+  &&  [| ((-p2_pre) <= pcnt) |] 
+  &&  [| ((-p3_pre) <= pcnt) |] 
+  &&  [| (((prop_cnt_inf (clist)) + 1 ) <= pcnt) |] 
+  &&  [| (op_pre = (SmtPBID (bop))) |] 
+  &&  [| ((Zlength (clist)) <= max_size) |] 
+  &&  [| (max_size <= 40000) |] 
+  &&  [| (pcnt <= 40000) |] 
+  &&  [| (1 <> op_pre) |] 
+  &&  [| (0 <> op_pre) |] 
+  &&  [| (2 = op_pre) |]
+  &&  ((&((data_pre)  # "PreData" ->ₛ "cnf_res")) # Ptr  |-> retval_5)
+  **  ((&((data_pre)  # "PreData" ->ₛ "prop_cnt")) # Int  |-> pcnt)
+  **  ((&((data_pre)  # "PreData" ->ₛ "clause_cnt")) # Int  |-> (ccnt + 1 ))
+  **  (sll_cnf_list y clist )
+  **  ((&((retval_5)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
+  **  ((&((retval_5)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval)
+  **  ((&((retval_5)  # "cnf_list" ->ₛ "next")) # Ptr  |-> y)
+  **  (IntArray.full retval 3 (replace_Znth (0) (p3_pre) ((all_zero_list (3)))) )
+|--
+  [| ((Zlength (clist)) <= max_size) |] 
+  &&  [| (max_size <= 40000) |]
+  &&  (store_predata data_pre (app ((iff2cnf_binary (p1_pre) (p2_pre) (p3_pre) (bop))) (clist)) pcnt (ccnt + (iff2cnf_length_binary (p1_pre) (p2_pre) (p3_pre) (bop)) ) )
+.
+
+Definition clause_gen_binary_return_wit_2 := 
+forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: Z) (bop: SmtPropBop) (ccnt: Z) (pcnt: Z) (clist: (@list (@list Z))) (retval: Z) (retval_2: Z) (retval_3: Z) (retval_4: Z) (retval_5: Z) (retval_6: Z) (retval_7: Z) (retval_8: Z) (y: Z) ,
+  [| ((0 + 1 ) = 1) |] 
+  &&  [| (data_pre <> 0) |] 
+  &&  [| ((Zlength (clist)) = ccnt) |] 
+  &&  [| (retval_8 <> 0) |] 
+  &&  [| (retval_7 <> 0) |] 
+  &&  [| (retval_6 <> 0) |] 
+  &&  [| (retval_5 <> 0) |] 
+  &&  [| (p1_pre = p2_pre) |] 
+  &&  [| (retval_4 <> 0) |] 
+  &&  [| (retval_3 <> 0) |] 
+  &&  [| (retval_2 <> 0) |] 
+  &&  [| (retval <> 0) |] 
+  &&  [| (p1_pre <> 0) |] 
+  &&  [| (p2_pre <> 0) |] 
+  &&  [| (p3_pre <> 0) |] 
+  &&  [| (p1_pre <= pcnt) |] 
+  &&  [| (p2_pre <= pcnt) |] 
+  &&  [| (p3_pre <= pcnt) |] 
+  &&  [| ((-p1_pre) <= pcnt) |] 
+  &&  [| ((-p2_pre) <= pcnt) |] 
+  &&  [| ((-p3_pre) <= pcnt) |] 
+  &&  [| (((prop_cnt_inf (clist)) + 1 ) <= pcnt) |] 
+  &&  [| (op_pre = (SmtPBID (bop))) |] 
+  &&  [| ((Zlength (clist)) <= max_size) |] 
+  &&  [| (max_size <= 40000) |] 
+  &&  [| (pcnt <= 40000) |] 
+  &&  [| (1 <> op_pre) |] 
+  &&  [| (0 <> op_pre) |] 
+  &&  [| (2 <> op_pre) |] 
+  &&  [| (3 = op_pre) |]
+  &&  ((&((data_pre)  # "PreData" ->ₛ "cnf_res")) # Ptr  |-> retval_5)
+  **  ((&((data_pre)  # "PreData" ->ₛ "prop_cnt")) # Int  |-> pcnt)
+  **  ((&((data_pre)  # "PreData" ->ₛ "clause_cnt")) # Int  |-> (ccnt + 1 ))
+  **  (sll_cnf_list y clist )
+  **  ((&((retval_5)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
+  **  ((&((retval_5)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval)
+  **  ((&((retval_5)  # "cnf_list" ->ₛ "next")) # Ptr  |-> y)
+  **  (IntArray.full retval 3 (replace_Znth (0) (p3_pre) ((all_zero_list (3)))) )
+|--
+  [| ((Zlength (clist)) <= max_size) |] 
+  &&  [| (max_size <= 40000) |]
+  &&  (store_predata data_pre (app ((iff2cnf_binary (p1_pre) (p2_pre) (p3_pre) (bop))) (clist)) pcnt (ccnt + (iff2cnf_length_binary (p1_pre) (p2_pre) (p3_pre) (bop)) ) )
+.
+
+Definition clause_gen_binary_return_wit_3 := 
+forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: Z) (bop: SmtPropBop) (ccnt: Z) (pcnt: Z) (clist: (@list (@list Z))) (retval: Z) (retval_2: Z) (retval_3: Z) (retval_4: Z) (retval_5: Z) (retval_6: Z) (retval_7: Z) (retval_8: Z) (y: Z) ,
+  [| ((0 + 3 ) = 3) |] 
+  &&  [| ((0 + 3 ) <> 2) |] 
+  &&  [| ((0 + 3 ) <> 1) |] 
+  &&  [| (data_pre <> 0) |] 
+  &&  [| ((Zlength (clist)) = ccnt) |] 
+  &&  [| (retval_8 <> 0) |] 
+  &&  [| (retval_7 <> 0) |] 
+  &&  [| (retval_6 <> 0) |] 
+  &&  [| (retval_5 <> 0) |] 
+  &&  [| (p1_pre = p2_pre) |] 
+  &&  [| (retval_4 <> 0) |] 
+  &&  [| (retval_3 <> 0) |] 
+  &&  [| (retval_2 <> 0) |] 
+  &&  [| (retval <> 0) |] 
+  &&  [| (p1_pre <> 0) |] 
+  &&  [| (p2_pre <> 0) |] 
+  &&  [| (p3_pre <> 0) |] 
+  &&  [| (p1_pre <= pcnt) |] 
+  &&  [| (p2_pre <= pcnt) |] 
+  &&  [| (p3_pre <= pcnt) |] 
+  &&  [| ((-p1_pre) <= pcnt) |] 
+  &&  [| ((-p2_pre) <= pcnt) |] 
+  &&  [| ((-p3_pre) <= pcnt) |] 
+  &&  [| (((prop_cnt_inf (clist)) + 1 ) <= pcnt) |] 
+  &&  [| (op_pre = (SmtPBID (bop))) |] 
+  &&  [| ((Zlength (clist)) <= max_size) |] 
+  &&  [| (max_size <= 40000) |] 
+  &&  [| (pcnt <= 40000) |] 
+  &&  [| (1 = op_pre) |]
+  &&  ((&((data_pre)  # "PreData" ->ₛ "cnf_res")) # Ptr  |-> retval_5)
+  **  ((&((data_pre)  # "PreData" ->ₛ "prop_cnt")) # Int  |-> pcnt)
+  **  ((&((data_pre)  # "PreData" ->ₛ "clause_cnt")) # Int  |-> (ccnt + 3 ))
+  **  (sll_cnf_list y clist )
+  **  ((&((retval_7)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
+  **  ((&((retval_7)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval_3)
+  **  ((&((retval_7)  # "cnf_list" ->ₛ "next")) # Ptr  |-> y)
+  **  ((&((retval_6)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
+  **  ((&((retval_6)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval_2)
+  **  ((&((retval_6)  # "cnf_list" ->ₛ "next")) # Ptr  |-> retval_7)
+  **  ((&((retval_5)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
+  **  ((&((retval_5)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval)
+  **  ((&((retval_5)  # "cnf_list" ->ₛ "next")) # Ptr  |-> retval_6)
+  **  (IntArray.full retval_3 3 (replace_Znth (1) ((-p3_pre)) ((replace_Znth (0) (p1_pre) ((all_zero_list (3)))))) )
+  **  (IntArray.full retval_2 3 (replace_Znth (1) (p3_pre) ((replace_Znth (0) ((-p2_pre)) ((all_zero_list (3)))))) )
+  **  (IntArray.full retval 3 (replace_Znth (1) (p3_pre) ((replace_Znth (0) ((-p1_pre)) ((all_zero_list (3)))))) )
+|--
+  [| ((Zlength (clist)) <= max_size) |] 
+  &&  [| (max_size <= 40000) |]
+  &&  (store_predata data_pre (app ((iff2cnf_binary (p1_pre) (p2_pre) (p3_pre) (bop))) (clist)) pcnt (ccnt + (iff2cnf_length_binary (p1_pre) (p2_pre) (p3_pre) (bop)) ) )
+.
+
+Definition clause_gen_binary_return_wit_4 := 
+forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: Z) (bop: SmtPropBop) (ccnt: Z) (pcnt: Z) (clist: (@list (@list Z))) (retval: Z) (retval_2: Z) (retval_3: Z) (retval_4: Z) (retval_5: Z) (retval_6: Z) (retval_7: Z) (retval_8: Z) (y: Z) ,
+  [| ((0 + 3 ) = 3) |] 
+  &&  [| ((0 + 3 ) <> 2) |] 
+  &&  [| ((0 + 3 ) <> 1) |] 
+  &&  [| (data_pre <> 0) |] 
+  &&  [| ((Zlength (clist)) = ccnt) |] 
+  &&  [| (retval_8 <> 0) |] 
+  &&  [| (retval_7 <> 0) |] 
+  &&  [| (retval_6 <> 0) |] 
+  &&  [| (retval_5 <> 0) |] 
+  &&  [| (p1_pre <> p2_pre) |] 
+  &&  [| (retval_4 <> 0) |] 
+  &&  [| (retval_3 <> 0) |] 
+  &&  [| (retval_2 <> 0) |] 
+  &&  [| (retval <> 0) |] 
+  &&  [| (p1_pre <> 0) |] 
+  &&  [| (p2_pre <> 0) |] 
+  &&  [| (p3_pre <> 0) |] 
+  &&  [| (p1_pre <= pcnt) |] 
+  &&  [| (p2_pre <= pcnt) |] 
+  &&  [| (p3_pre <= pcnt) |] 
+  &&  [| ((-p1_pre) <= pcnt) |] 
+  &&  [| ((-p2_pre) <= pcnt) |] 
+  &&  [| ((-p3_pre) <= pcnt) |] 
+  &&  [| (((prop_cnt_inf (clist)) + 1 ) <= pcnt) |] 
+  &&  [| (op_pre = (SmtPBID (bop))) |] 
+  &&  [| ((Zlength (clist)) <= max_size) |] 
+  &&  [| (max_size <= 40000) |] 
+  &&  [| (pcnt <= 40000) |] 
+  &&  [| (1 = op_pre) |]
+  &&  ((&((data_pre)  # "PreData" ->ₛ "cnf_res")) # Ptr  |-> retval_5)
+  **  ((&((data_pre)  # "PreData" ->ₛ "prop_cnt")) # Int  |-> pcnt)
+  **  ((&((data_pre)  # "PreData" ->ₛ "clause_cnt")) # Int  |-> (ccnt + 3 ))
+  **  (sll_cnf_list y clist )
+  **  ((&((retval_7)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
+  **  ((&((retval_7)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval_3)
+  **  ((&((retval_7)  # "cnf_list" ->ₛ "next")) # Ptr  |-> y)
+  **  ((&((retval_6)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
+  **  ((&((retval_6)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval_2)
+  **  ((&((retval_6)  # "cnf_list" ->ₛ "next")) # Ptr  |-> retval_7)
+  **  ((&((retval_5)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
+  **  ((&((retval_5)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval)
+  **  ((&((retval_5)  # "cnf_list" ->ₛ "next")) # Ptr  |-> retval_6)
+  **  (IntArray.full retval_3 3 (replace_Znth (2) ((-p3_pre)) ((replace_Znth (1) (p2_pre) ((replace_Znth (0) (p1_pre) ((all_zero_list (3)))))))) )
+  **  (IntArray.full retval_2 3 (replace_Znth (1) (p3_pre) ((replace_Znth (0) ((-p2_pre)) ((all_zero_list (3)))))) )
+  **  (IntArray.full retval 3 (replace_Znth (1) (p3_pre) ((replace_Znth (0) ((-p1_pre)) ((all_zero_list (3)))))) )
+|--
+  [| ((Zlength (clist)) <= max_size) |] 
+  &&  [| (max_size <= 40000) |]
+  &&  (store_predata data_pre (app ((iff2cnf_binary (p1_pre) (p2_pre) (p3_pre) (bop))) (clist)) pcnt (ccnt + (iff2cnf_length_binary (p1_pre) (p2_pre) (p3_pre) (bop)) ) )
+.
+
+Definition clause_gen_binary_return_wit_5 := 
+forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: Z) (bop: SmtPropBop) (ccnt: Z) (pcnt: Z) (clist: (@list (@list Z))) (retval: Z) (retval_2: Z) (retval_3: Z) (retval_4: Z) (retval_5: Z) (retval_6: Z) (retval_7: Z) (retval_8: Z) (y: Z) ,
+  [| ((0 + 3 ) = 3) |] 
+  &&  [| ((0 + 3 ) <> 2) |] 
+  &&  [| ((0 + 3 ) <> 1) |] 
+  &&  [| (data_pre <> 0) |] 
+  &&  [| ((Zlength (clist)) = ccnt) |] 
+  &&  [| (retval_8 <> 0) |] 
+  &&  [| (retval_7 <> 0) |] 
+  &&  [| (retval_6 <> 0) |] 
+  &&  [| (retval_5 <> 0) |] 
+  &&  [| (p1_pre = p2_pre) |] 
+  &&  [| (retval_4 <> 0) |] 
+  &&  [| (retval_3 <> 0) |] 
+  &&  [| (retval_2 <> 0) |] 
+  &&  [| (retval <> 0) |] 
+  &&  [| (p1_pre <> 0) |] 
+  &&  [| (p2_pre <> 0) |] 
+  &&  [| (p3_pre <> 0) |] 
+  &&  [| (p1_pre <= pcnt) |] 
+  &&  [| (p2_pre <= pcnt) |] 
+  &&  [| (p3_pre <= pcnt) |] 
+  &&  [| ((-p1_pre) <= pcnt) |] 
+  &&  [| ((-p2_pre) <= pcnt) |] 
+  &&  [| ((-p3_pre) <= pcnt) |] 
+  &&  [| (((prop_cnt_inf (clist)) + 1 ) <= pcnt) |] 
+  &&  [| (op_pre = (SmtPBID (bop))) |] 
+  &&  [| ((Zlength (clist)) <= max_size) |] 
+  &&  [| (max_size <= 40000) |] 
+  &&  [| (pcnt <= 40000) |] 
+  &&  [| (1 <> op_pre) |] 
+  &&  [| (0 = op_pre) |]
+  &&  ((&((data_pre)  # "PreData" ->ₛ "cnf_res")) # Ptr  |-> retval_5)
+  **  ((&((data_pre)  # "PreData" ->ₛ "prop_cnt")) # Int  |-> pcnt)
+  **  ((&((data_pre)  # "PreData" ->ₛ "clause_cnt")) # Int  |-> (ccnt + 3 ))
+  **  (sll_cnf_list y clist )
+  **  ((&((retval_7)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
+  **  ((&((retval_7)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval_3)
+  **  ((&((retval_7)  # "cnf_list" ->ₛ "next")) # Ptr  |-> y)
+  **  ((&((retval_6)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
+  **  ((&((retval_6)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval_2)
+  **  ((&((retval_6)  # "cnf_list" ->ₛ "next")) # Ptr  |-> retval_7)
+  **  ((&((retval_5)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
+  **  ((&((retval_5)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval)
+  **  ((&((retval_5)  # "cnf_list" ->ₛ "next")) # Ptr  |-> retval_6)
+  **  (IntArray.full retval_3 3 (replace_Znth (1) (p3_pre) ((replace_Znth (0) ((-p1_pre)) ((all_zero_list (3)))))) )
+  **  (IntArray.full retval_2 3 (replace_Znth (1) ((-p3_pre)) ((replace_Znth (0) (p2_pre) ((all_zero_list (3)))))) )
+  **  (IntArray.full retval 3 (replace_Znth (1) ((-p3_pre)) ((replace_Znth (0) (p1_pre) ((all_zero_list (3)))))) )
+|--
+  [| ((Zlength (clist)) <= max_size) |] 
+  &&  [| (max_size <= 40000) |]
+  &&  (store_predata data_pre (app ((iff2cnf_binary (p1_pre) (p2_pre) (p3_pre) (bop))) (clist)) pcnt (ccnt + (iff2cnf_length_binary (p1_pre) (p2_pre) (p3_pre) (bop)) ) )
+.
+
+Definition clause_gen_binary_return_wit_6 := 
+forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: Z) (bop: SmtPropBop) (ccnt: Z) (pcnt: Z) (clist: (@list (@list Z))) (retval: Z) (retval_2: Z) (retval_3: Z) (retval_4: Z) (retval_5: Z) (retval_6: Z) (retval_7: Z) (retval_8: Z) (y: Z) ,
+  [| ((0 + 3 ) = 3) |] 
+  &&  [| ((0 + 3 ) <> 2) |] 
+  &&  [| ((0 + 3 ) <> 1) |] 
+  &&  [| (data_pre <> 0) |] 
+  &&  [| ((Zlength (clist)) = ccnt) |] 
+  &&  [| (retval_8 <> 0) |] 
+  &&  [| (retval_7 <> 0) |] 
+  &&  [| (retval_6 <> 0) |] 
+  &&  [| (retval_5 <> 0) |] 
+  &&  [| (p1_pre <> p2_pre) |] 
+  &&  [| (retval_4 <> 0) |] 
+  &&  [| (retval_3 <> 0) |] 
+  &&  [| (retval_2 <> 0) |] 
+  &&  [| (retval <> 0) |] 
+  &&  [| (p1_pre <> 0) |] 
+  &&  [| (p2_pre <> 0) |] 
+  &&  [| (p3_pre <> 0) |] 
+  &&  [| (p1_pre <= pcnt) |] 
+  &&  [| (p2_pre <= pcnt) |] 
+  &&  [| (p3_pre <= pcnt) |] 
+  &&  [| ((-p1_pre) <= pcnt) |] 
+  &&  [| ((-p2_pre) <= pcnt) |] 
+  &&  [| ((-p3_pre) <= pcnt) |] 
+  &&  [| (((prop_cnt_inf (clist)) + 1 ) <= pcnt) |] 
+  &&  [| (op_pre = (SmtPBID (bop))) |] 
+  &&  [| ((Zlength (clist)) <= max_size) |] 
+  &&  [| (max_size <= 40000) |] 
+  &&  [| (pcnt <= 40000) |] 
+  &&  [| (1 <> op_pre) |] 
+  &&  [| (0 = op_pre) |]
+  &&  ((&((data_pre)  # "PreData" ->ₛ "cnf_res")) # Ptr  |-> retval_5)
+  **  ((&((data_pre)  # "PreData" ->ₛ "prop_cnt")) # Int  |-> pcnt)
+  **  ((&((data_pre)  # "PreData" ->ₛ "clause_cnt")) # Int  |-> (ccnt + 3 ))
+  **  (sll_cnf_list y clist )
+  **  ((&((retval_7)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
+  **  ((&((retval_7)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval_3)
+  **  ((&((retval_7)  # "cnf_list" ->ₛ "next")) # Ptr  |-> y)
+  **  ((&((retval_6)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
+  **  ((&((retval_6)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval_2)
+  **  ((&((retval_6)  # "cnf_list" ->ₛ "next")) # Ptr  |-> retval_7)
+  **  ((&((retval_5)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
+  **  ((&((retval_5)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval)
+  **  ((&((retval_5)  # "cnf_list" ->ₛ "next")) # Ptr  |-> retval_6)
+  **  (IntArray.full retval_3 3 (replace_Znth (2) (p3_pre) ((replace_Znth (1) ((-p2_pre)) ((replace_Znth (0) ((-p1_pre)) ((all_zero_list (3)))))))) )
+  **  (IntArray.full retval_2 3 (replace_Znth (1) ((-p3_pre)) ((replace_Znth (0) (p2_pre) ((all_zero_list (3)))))) )
+  **  (IntArray.full retval 3 (replace_Znth (1) ((-p3_pre)) ((replace_Znth (0) (p1_pre) ((all_zero_list (3)))))) )
+|--
+  [| ((Zlength (clist)) <= max_size) |] 
+  &&  [| (max_size <= 40000) |]
+  &&  (store_predata data_pre (app ((iff2cnf_binary (p1_pre) (p2_pre) (p3_pre) (bop))) (clist)) pcnt (ccnt + (iff2cnf_length_binary (p1_pre) (p2_pre) (p3_pre) (bop)) ) )
+.
+
+Definition clause_gen_binary_return_wit_7 := 
+forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: Z) (bop: SmtPropBop) (ccnt: Z) (pcnt: Z) (clist: (@list (@list Z))) (retval: Z) (retval_2: Z) (retval_3: Z) (retval_4: Z) (retval_5: Z) (retval_6: Z) (retval_7: Z) (retval_8: Z) (y: Z) ,
+  [| ((0 + 3 ) = 3) |] 
+  &&  [| ((0 + 3 ) <> 2) |] 
+  &&  [| ((0 + 3 ) <> 1) |] 
+  &&  [| (data_pre <> 0) |] 
+  &&  [| ((Zlength (clist)) = ccnt) |] 
+  &&  [| (retval_8 <> 0) |] 
+  &&  [| (retval_7 <> 0) |] 
+  &&  [| (retval_6 <> 0) |] 
+  &&  [| (retval_5 <> 0) |] 
+  &&  [| (p1_pre <> p2_pre) |] 
+  &&  [| (retval_4 <> 0) |] 
+  &&  [| (retval_3 <> 0) |] 
+  &&  [| (retval_2 <> 0) |] 
+  &&  [| (retval <> 0) |] 
+  &&  [| (p1_pre <> 0) |] 
+  &&  [| (p2_pre <> 0) |] 
+  &&  [| (p3_pre <> 0) |] 
+  &&  [| (p1_pre <= pcnt) |] 
+  &&  [| (p2_pre <= pcnt) |] 
+  &&  [| (p3_pre <= pcnt) |] 
+  &&  [| ((-p1_pre) <= pcnt) |] 
+  &&  [| ((-p2_pre) <= pcnt) |] 
+  &&  [| ((-p3_pre) <= pcnt) |] 
+  &&  [| (((prop_cnt_inf (clist)) + 1 ) <= pcnt) |] 
+  &&  [| (op_pre = (SmtPBID (bop))) |] 
+  &&  [| ((Zlength (clist)) <= max_size) |] 
+  &&  [| (max_size <= 40000) |] 
+  &&  [| (pcnt <= 40000) |] 
+  &&  [| (1 <> op_pre) |] 
+  &&  [| (0 <> op_pre) |] 
+  &&  [| (2 = op_pre) |]
+  &&  ((&((data_pre)  # "PreData" ->ₛ "cnf_res")) # Ptr  |-> retval_5)
+  **  ((&((data_pre)  # "PreData" ->ₛ "prop_cnt")) # Int  |-> pcnt)
+  **  ((&((data_pre)  # "PreData" ->ₛ "clause_cnt")) # Int  |-> (ccnt + 3 ))
+  **  (sll_cnf_list y clist )
+  **  ((&((retval_7)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
+  **  ((&((retval_7)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval_3)
+  **  ((&((retval_7)  # "cnf_list" ->ₛ "next")) # Ptr  |-> y)
+  **  ((&((retval_6)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
+  **  ((&((retval_6)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval_2)
+  **  ((&((retval_6)  # "cnf_list" ->ₛ "next")) # Ptr  |-> retval_7)
+  **  ((&((retval_5)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
+  **  ((&((retval_5)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval)
+  **  ((&((retval_5)  # "cnf_list" ->ₛ "next")) # Ptr  |-> retval_6)
+  **  (IntArray.full retval_3 3 (replace_Znth (2) ((-p3_pre)) ((replace_Znth (1) (p2_pre) ((replace_Znth (0) ((-p1_pre)) ((all_zero_list (3)))))))) )
+  **  (IntArray.full retval_2 3 (replace_Znth (1) (p3_pre) ((replace_Znth (0) ((-p2_pre)) ((all_zero_list (3)))))) )
+  **  (IntArray.full retval 3 (replace_Znth (1) (p3_pre) ((replace_Znth (0) (p1_pre) ((all_zero_list (3)))))) )
+|--
+  [| ((Zlength (clist)) <= max_size) |] 
+  &&  [| (max_size <= 40000) |]
+  &&  (store_predata data_pre (app ((iff2cnf_binary (p1_pre) (p2_pre) (p3_pre) (bop))) (clist)) pcnt (ccnt + (iff2cnf_length_binary (p1_pre) (p2_pre) (p3_pre) (bop)) ) )
+.
+
+Definition clause_gen_binary_return_wit_8 := 
 forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: Z) (bop: SmtPropBop) (ccnt: Z) (pcnt: Z) (clist: (@list (@list Z))) (retval: Z) (retval_2: Z) (retval_3: Z) (retval_4: Z) (retval_5: Z) (retval_6: Z) (retval_7: Z) (retval_8: Z) (y: Z) ,
   [| ((0 + 4 ) <> 3) |] 
   &&  [| ((0 + 4 ) <> 2) |] 
@@ -8271,366 +8621,6 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   &&  (store_predata data_pre (app ((iff2cnf_binary (p1_pre) (p2_pre) (p3_pre) (bop))) (clist)) pcnt (ccnt + (iff2cnf_length_binary (p1_pre) (p2_pre) (p3_pre) (bop)) ) )
 .
 
-Definition clause_gen_binary_return_wit_2 := 
-forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: Z) (bop: SmtPropBop) (ccnt: Z) (pcnt: Z) (clist: (@list (@list Z))) (retval: Z) (retval_2: Z) (retval_3: Z) (retval_4: Z) (retval_5: Z) (retval_6: Z) (retval_7: Z) (retval_8: Z) (y: Z) ,
-  [| ((0 + 3 ) = 3) |] 
-  &&  [| ((0 + 3 ) <> 2) |] 
-  &&  [| ((0 + 3 ) <> 1) |] 
-  &&  [| (data_pre <> 0) |] 
-  &&  [| ((Zlength (clist)) = ccnt) |] 
-  &&  [| (retval_8 <> 0) |] 
-  &&  [| (retval_7 <> 0) |] 
-  &&  [| (retval_6 <> 0) |] 
-  &&  [| (retval_5 <> 0) |] 
-  &&  [| (p1_pre <> p2_pre) |] 
-  &&  [| (retval_4 <> 0) |] 
-  &&  [| (retval_3 <> 0) |] 
-  &&  [| (retval_2 <> 0) |] 
-  &&  [| (retval <> 0) |] 
-  &&  [| (p1_pre <> 0) |] 
-  &&  [| (p2_pre <> 0) |] 
-  &&  [| (p3_pre <> 0) |] 
-  &&  [| (p1_pre <= pcnt) |] 
-  &&  [| (p2_pre <= pcnt) |] 
-  &&  [| (p3_pre <= pcnt) |] 
-  &&  [| ((-p1_pre) <= pcnt) |] 
-  &&  [| ((-p2_pre) <= pcnt) |] 
-  &&  [| ((-p3_pre) <= pcnt) |] 
-  &&  [| (((prop_cnt_inf (clist)) + 1 ) <= pcnt) |] 
-  &&  [| (op_pre = (SmtPBID (bop))) |] 
-  &&  [| ((Zlength (clist)) <= max_size) |] 
-  &&  [| (max_size <= 40000) |] 
-  &&  [| (pcnt <= 40000) |] 
-  &&  [| (1 <> op_pre) |] 
-  &&  [| (0 <> op_pre) |] 
-  &&  [| (2 = op_pre) |]
-  &&  ((&((data_pre)  # "PreData" ->ₛ "cnf_res")) # Ptr  |-> retval_5)
-  **  ((&((data_pre)  # "PreData" ->ₛ "prop_cnt")) # Int  |-> pcnt)
-  **  ((&((data_pre)  # "PreData" ->ₛ "clause_cnt")) # Int  |-> (ccnt + 3 ))
-  **  (sll_cnf_list y clist )
-  **  ((&((retval_7)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
-  **  ((&((retval_7)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval_3)
-  **  ((&((retval_7)  # "cnf_list" ->ₛ "next")) # Ptr  |-> y)
-  **  ((&((retval_6)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
-  **  ((&((retval_6)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval_2)
-  **  ((&((retval_6)  # "cnf_list" ->ₛ "next")) # Ptr  |-> retval_7)
-  **  ((&((retval_5)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
-  **  ((&((retval_5)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval)
-  **  ((&((retval_5)  # "cnf_list" ->ₛ "next")) # Ptr  |-> retval_6)
-  **  (IntArray.full retval_3 3 (replace_Znth (2) ((-p3_pre)) ((replace_Znth (1) (p2_pre) ((replace_Znth (0) ((-p1_pre)) ((all_zero_list (3)))))))) )
-  **  (IntArray.full retval_2 3 (replace_Znth (1) (p3_pre) ((replace_Znth (0) ((-p2_pre)) ((all_zero_list (3)))))) )
-  **  (IntArray.full retval 3 (replace_Znth (1) (p3_pre) ((replace_Znth (0) (p1_pre) ((all_zero_list (3)))))) )
-|--
-  [| ((Zlength (clist)) <= max_size) |] 
-  &&  [| (max_size <= 40000) |]
-  &&  (store_predata data_pre (app ((iff2cnf_binary (p1_pre) (p2_pre) (p3_pre) (bop))) (clist)) pcnt (ccnt + (iff2cnf_length_binary (p1_pre) (p2_pre) (p3_pre) (bop)) ) )
-.
-
-Definition clause_gen_binary_return_wit_3 := 
-forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: Z) (bop: SmtPropBop) (ccnt: Z) (pcnt: Z) (clist: (@list (@list Z))) (retval: Z) (retval_2: Z) (retval_3: Z) (retval_4: Z) (retval_5: Z) (retval_6: Z) (retval_7: Z) (retval_8: Z) (y: Z) ,
-  [| ((0 + 3 ) = 3) |] 
-  &&  [| ((0 + 3 ) <> 2) |] 
-  &&  [| ((0 + 3 ) <> 1) |] 
-  &&  [| (data_pre <> 0) |] 
-  &&  [| ((Zlength (clist)) = ccnt) |] 
-  &&  [| (retval_8 <> 0) |] 
-  &&  [| (retval_7 <> 0) |] 
-  &&  [| (retval_6 <> 0) |] 
-  &&  [| (retval_5 <> 0) |] 
-  &&  [| (p1_pre <> p2_pre) |] 
-  &&  [| (retval_4 <> 0) |] 
-  &&  [| (retval_3 <> 0) |] 
-  &&  [| (retval_2 <> 0) |] 
-  &&  [| (retval <> 0) |] 
-  &&  [| (p1_pre <> 0) |] 
-  &&  [| (p2_pre <> 0) |] 
-  &&  [| (p3_pre <> 0) |] 
-  &&  [| (p1_pre <= pcnt) |] 
-  &&  [| (p2_pre <= pcnt) |] 
-  &&  [| (p3_pre <= pcnt) |] 
-  &&  [| ((-p1_pre) <= pcnt) |] 
-  &&  [| ((-p2_pre) <= pcnt) |] 
-  &&  [| ((-p3_pre) <= pcnt) |] 
-  &&  [| (((prop_cnt_inf (clist)) + 1 ) <= pcnt) |] 
-  &&  [| (op_pre = (SmtPBID (bop))) |] 
-  &&  [| ((Zlength (clist)) <= max_size) |] 
-  &&  [| (max_size <= 40000) |] 
-  &&  [| (pcnt <= 40000) |] 
-  &&  [| (1 <> op_pre) |] 
-  &&  [| (0 = op_pre) |]
-  &&  ((&((data_pre)  # "PreData" ->ₛ "cnf_res")) # Ptr  |-> retval_5)
-  **  ((&((data_pre)  # "PreData" ->ₛ "prop_cnt")) # Int  |-> pcnt)
-  **  ((&((data_pre)  # "PreData" ->ₛ "clause_cnt")) # Int  |-> (ccnt + 3 ))
-  **  (sll_cnf_list y clist )
-  **  ((&((retval_7)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
-  **  ((&((retval_7)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval_3)
-  **  ((&((retval_7)  # "cnf_list" ->ₛ "next")) # Ptr  |-> y)
-  **  ((&((retval_6)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
-  **  ((&((retval_6)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval_2)
-  **  ((&((retval_6)  # "cnf_list" ->ₛ "next")) # Ptr  |-> retval_7)
-  **  ((&((retval_5)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
-  **  ((&((retval_5)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval)
-  **  ((&((retval_5)  # "cnf_list" ->ₛ "next")) # Ptr  |-> retval_6)
-  **  (IntArray.full retval_3 3 (replace_Znth (2) (p3_pre) ((replace_Znth (1) ((-p2_pre)) ((replace_Znth (0) ((-p1_pre)) ((all_zero_list (3)))))))) )
-  **  (IntArray.full retval_2 3 (replace_Znth (1) ((-p3_pre)) ((replace_Znth (0) (p2_pre) ((all_zero_list (3)))))) )
-  **  (IntArray.full retval 3 (replace_Znth (1) ((-p3_pre)) ((replace_Znth (0) (p1_pre) ((all_zero_list (3)))))) )
-|--
-  [| ((Zlength (clist)) <= max_size) |] 
-  &&  [| (max_size <= 40000) |]
-  &&  (store_predata data_pre (app ((iff2cnf_binary (p1_pre) (p2_pre) (p3_pre) (bop))) (clist)) pcnt (ccnt + (iff2cnf_length_binary (p1_pre) (p2_pre) (p3_pre) (bop)) ) )
-.
-
-Definition clause_gen_binary_return_wit_4 := 
-forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: Z) (bop: SmtPropBop) (ccnt: Z) (pcnt: Z) (clist: (@list (@list Z))) (retval: Z) (retval_2: Z) (retval_3: Z) (retval_4: Z) (retval_5: Z) (retval_6: Z) (retval_7: Z) (retval_8: Z) (y: Z) ,
-  [| ((0 + 3 ) = 3) |] 
-  &&  [| ((0 + 3 ) <> 2) |] 
-  &&  [| ((0 + 3 ) <> 1) |] 
-  &&  [| (data_pre <> 0) |] 
-  &&  [| ((Zlength (clist)) = ccnt) |] 
-  &&  [| (retval_8 <> 0) |] 
-  &&  [| (retval_7 <> 0) |] 
-  &&  [| (retval_6 <> 0) |] 
-  &&  [| (retval_5 <> 0) |] 
-  &&  [| (p1_pre = p2_pre) |] 
-  &&  [| (retval_4 <> 0) |] 
-  &&  [| (retval_3 <> 0) |] 
-  &&  [| (retval_2 <> 0) |] 
-  &&  [| (retval <> 0) |] 
-  &&  [| (p1_pre <> 0) |] 
-  &&  [| (p2_pre <> 0) |] 
-  &&  [| (p3_pre <> 0) |] 
-  &&  [| (p1_pre <= pcnt) |] 
-  &&  [| (p2_pre <= pcnt) |] 
-  &&  [| (p3_pre <= pcnt) |] 
-  &&  [| ((-p1_pre) <= pcnt) |] 
-  &&  [| ((-p2_pre) <= pcnt) |] 
-  &&  [| ((-p3_pre) <= pcnt) |] 
-  &&  [| (((prop_cnt_inf (clist)) + 1 ) <= pcnt) |] 
-  &&  [| (op_pre = (SmtPBID (bop))) |] 
-  &&  [| ((Zlength (clist)) <= max_size) |] 
-  &&  [| (max_size <= 40000) |] 
-  &&  [| (pcnt <= 40000) |] 
-  &&  [| (1 <> op_pre) |] 
-  &&  [| (0 = op_pre) |]
-  &&  ((&((data_pre)  # "PreData" ->ₛ "cnf_res")) # Ptr  |-> retval_5)
-  **  ((&((data_pre)  # "PreData" ->ₛ "prop_cnt")) # Int  |-> pcnt)
-  **  ((&((data_pre)  # "PreData" ->ₛ "clause_cnt")) # Int  |-> (ccnt + 3 ))
-  **  (sll_cnf_list y clist )
-  **  ((&((retval_7)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
-  **  ((&((retval_7)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval_3)
-  **  ((&((retval_7)  # "cnf_list" ->ₛ "next")) # Ptr  |-> y)
-  **  ((&((retval_6)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
-  **  ((&((retval_6)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval_2)
-  **  ((&((retval_6)  # "cnf_list" ->ₛ "next")) # Ptr  |-> retval_7)
-  **  ((&((retval_5)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
-  **  ((&((retval_5)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval)
-  **  ((&((retval_5)  # "cnf_list" ->ₛ "next")) # Ptr  |-> retval_6)
-  **  (IntArray.full retval_3 3 (replace_Znth (1) (p3_pre) ((replace_Znth (0) ((-p1_pre)) ((all_zero_list (3)))))) )
-  **  (IntArray.full retval_2 3 (replace_Znth (1) ((-p3_pre)) ((replace_Znth (0) (p2_pre) ((all_zero_list (3)))))) )
-  **  (IntArray.full retval 3 (replace_Znth (1) ((-p3_pre)) ((replace_Znth (0) (p1_pre) ((all_zero_list (3)))))) )
-|--
-  [| ((Zlength (clist)) <= max_size) |] 
-  &&  [| (max_size <= 40000) |]
-  &&  (store_predata data_pre (app ((iff2cnf_binary (p1_pre) (p2_pre) (p3_pre) (bop))) (clist)) pcnt (ccnt + (iff2cnf_length_binary (p1_pre) (p2_pre) (p3_pre) (bop)) ) )
-.
-
-Definition clause_gen_binary_return_wit_5 := 
-forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: Z) (bop: SmtPropBop) (ccnt: Z) (pcnt: Z) (clist: (@list (@list Z))) (retval: Z) (retval_2: Z) (retval_3: Z) (retval_4: Z) (retval_5: Z) (retval_6: Z) (retval_7: Z) (retval_8: Z) (y: Z) ,
-  [| ((0 + 3 ) = 3) |] 
-  &&  [| ((0 + 3 ) <> 2) |] 
-  &&  [| ((0 + 3 ) <> 1) |] 
-  &&  [| (data_pre <> 0) |] 
-  &&  [| ((Zlength (clist)) = ccnt) |] 
-  &&  [| (retval_8 <> 0) |] 
-  &&  [| (retval_7 <> 0) |] 
-  &&  [| (retval_6 <> 0) |] 
-  &&  [| (retval_5 <> 0) |] 
-  &&  [| (p1_pre <> p2_pre) |] 
-  &&  [| (retval_4 <> 0) |] 
-  &&  [| (retval_3 <> 0) |] 
-  &&  [| (retval_2 <> 0) |] 
-  &&  [| (retval <> 0) |] 
-  &&  [| (p1_pre <> 0) |] 
-  &&  [| (p2_pre <> 0) |] 
-  &&  [| (p3_pre <> 0) |] 
-  &&  [| (p1_pre <= pcnt) |] 
-  &&  [| (p2_pre <= pcnt) |] 
-  &&  [| (p3_pre <= pcnt) |] 
-  &&  [| ((-p1_pre) <= pcnt) |] 
-  &&  [| ((-p2_pre) <= pcnt) |] 
-  &&  [| ((-p3_pre) <= pcnt) |] 
-  &&  [| (((prop_cnt_inf (clist)) + 1 ) <= pcnt) |] 
-  &&  [| (op_pre = (SmtPBID (bop))) |] 
-  &&  [| ((Zlength (clist)) <= max_size) |] 
-  &&  [| (max_size <= 40000) |] 
-  &&  [| (pcnt <= 40000) |] 
-  &&  [| (1 = op_pre) |]
-  &&  ((&((data_pre)  # "PreData" ->ₛ "cnf_res")) # Ptr  |-> retval_5)
-  **  ((&((data_pre)  # "PreData" ->ₛ "prop_cnt")) # Int  |-> pcnt)
-  **  ((&((data_pre)  # "PreData" ->ₛ "clause_cnt")) # Int  |-> (ccnt + 3 ))
-  **  (sll_cnf_list y clist )
-  **  ((&((retval_7)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
-  **  ((&((retval_7)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval_3)
-  **  ((&((retval_7)  # "cnf_list" ->ₛ "next")) # Ptr  |-> y)
-  **  ((&((retval_6)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
-  **  ((&((retval_6)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval_2)
-  **  ((&((retval_6)  # "cnf_list" ->ₛ "next")) # Ptr  |-> retval_7)
-  **  ((&((retval_5)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
-  **  ((&((retval_5)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval)
-  **  ((&((retval_5)  # "cnf_list" ->ₛ "next")) # Ptr  |-> retval_6)
-  **  (IntArray.full retval_3 3 (replace_Znth (2) ((-p3_pre)) ((replace_Znth (1) (p2_pre) ((replace_Znth (0) (p1_pre) ((all_zero_list (3)))))))) )
-  **  (IntArray.full retval_2 3 (replace_Znth (1) (p3_pre) ((replace_Znth (0) ((-p2_pre)) ((all_zero_list (3)))))) )
-  **  (IntArray.full retval 3 (replace_Znth (1) (p3_pre) ((replace_Znth (0) ((-p1_pre)) ((all_zero_list (3)))))) )
-|--
-  [| ((Zlength (clist)) <= max_size) |] 
-  &&  [| (max_size <= 40000) |]
-  &&  (store_predata data_pre (app ((iff2cnf_binary (p1_pre) (p2_pre) (p3_pre) (bop))) (clist)) pcnt (ccnt + (iff2cnf_length_binary (p1_pre) (p2_pre) (p3_pre) (bop)) ) )
-.
-
-Definition clause_gen_binary_return_wit_6 := 
-forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: Z) (bop: SmtPropBop) (ccnt: Z) (pcnt: Z) (clist: (@list (@list Z))) (retval: Z) (retval_2: Z) (retval_3: Z) (retval_4: Z) (retval_5: Z) (retval_6: Z) (retval_7: Z) (retval_8: Z) (y: Z) ,
-  [| ((0 + 3 ) = 3) |] 
-  &&  [| ((0 + 3 ) <> 2) |] 
-  &&  [| ((0 + 3 ) <> 1) |] 
-  &&  [| (data_pre <> 0) |] 
-  &&  [| ((Zlength (clist)) = ccnt) |] 
-  &&  [| (retval_8 <> 0) |] 
-  &&  [| (retval_7 <> 0) |] 
-  &&  [| (retval_6 <> 0) |] 
-  &&  [| (retval_5 <> 0) |] 
-  &&  [| (p1_pre = p2_pre) |] 
-  &&  [| (retval_4 <> 0) |] 
-  &&  [| (retval_3 <> 0) |] 
-  &&  [| (retval_2 <> 0) |] 
-  &&  [| (retval <> 0) |] 
-  &&  [| (p1_pre <> 0) |] 
-  &&  [| (p2_pre <> 0) |] 
-  &&  [| (p3_pre <> 0) |] 
-  &&  [| (p1_pre <= pcnt) |] 
-  &&  [| (p2_pre <= pcnt) |] 
-  &&  [| (p3_pre <= pcnt) |] 
-  &&  [| ((-p1_pre) <= pcnt) |] 
-  &&  [| ((-p2_pre) <= pcnt) |] 
-  &&  [| ((-p3_pre) <= pcnt) |] 
-  &&  [| (((prop_cnt_inf (clist)) + 1 ) <= pcnt) |] 
-  &&  [| (op_pre = (SmtPBID (bop))) |] 
-  &&  [| ((Zlength (clist)) <= max_size) |] 
-  &&  [| (max_size <= 40000) |] 
-  &&  [| (pcnt <= 40000) |] 
-  &&  [| (1 = op_pre) |]
-  &&  ((&((data_pre)  # "PreData" ->ₛ "cnf_res")) # Ptr  |-> retval_5)
-  **  ((&((data_pre)  # "PreData" ->ₛ "prop_cnt")) # Int  |-> pcnt)
-  **  ((&((data_pre)  # "PreData" ->ₛ "clause_cnt")) # Int  |-> (ccnt + 3 ))
-  **  (sll_cnf_list y clist )
-  **  ((&((retval_7)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
-  **  ((&((retval_7)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval_3)
-  **  ((&((retval_7)  # "cnf_list" ->ₛ "next")) # Ptr  |-> y)
-  **  ((&((retval_6)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
-  **  ((&((retval_6)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval_2)
-  **  ((&((retval_6)  # "cnf_list" ->ₛ "next")) # Ptr  |-> retval_7)
-  **  ((&((retval_5)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
-  **  ((&((retval_5)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval)
-  **  ((&((retval_5)  # "cnf_list" ->ₛ "next")) # Ptr  |-> retval_6)
-  **  (IntArray.full retval_3 3 (replace_Znth (1) ((-p3_pre)) ((replace_Znth (0) (p1_pre) ((all_zero_list (3)))))) )
-  **  (IntArray.full retval_2 3 (replace_Znth (1) (p3_pre) ((replace_Znth (0) ((-p2_pre)) ((all_zero_list (3)))))) )
-  **  (IntArray.full retval 3 (replace_Znth (1) (p3_pre) ((replace_Znth (0) ((-p1_pre)) ((all_zero_list (3)))))) )
-|--
-  [| ((Zlength (clist)) <= max_size) |] 
-  &&  [| (max_size <= 40000) |]
-  &&  (store_predata data_pre (app ((iff2cnf_binary (p1_pre) (p2_pre) (p3_pre) (bop))) (clist)) pcnt (ccnt + (iff2cnf_length_binary (p1_pre) (p2_pre) (p3_pre) (bop)) ) )
-.
-
-Definition clause_gen_binary_return_wit_7 := 
-forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: Z) (bop: SmtPropBop) (ccnt: Z) (pcnt: Z) (clist: (@list (@list Z))) (retval: Z) (retval_2: Z) (retval_3: Z) (retval_4: Z) (retval_5: Z) (retval_6: Z) (retval_7: Z) (retval_8: Z) (y: Z) ,
-  [| ((0 + 1 ) = 1) |] 
-  &&  [| (data_pre <> 0) |] 
-  &&  [| ((Zlength (clist)) = ccnt) |] 
-  &&  [| (retval_8 <> 0) |] 
-  &&  [| (retval_7 <> 0) |] 
-  &&  [| (retval_6 <> 0) |] 
-  &&  [| (retval_5 <> 0) |] 
-  &&  [| (p1_pre = p2_pre) |] 
-  &&  [| (retval_4 <> 0) |] 
-  &&  [| (retval_3 <> 0) |] 
-  &&  [| (retval_2 <> 0) |] 
-  &&  [| (retval <> 0) |] 
-  &&  [| (p1_pre <> 0) |] 
-  &&  [| (p2_pre <> 0) |] 
-  &&  [| (p3_pre <> 0) |] 
-  &&  [| (p1_pre <= pcnt) |] 
-  &&  [| (p2_pre <= pcnt) |] 
-  &&  [| (p3_pre <= pcnt) |] 
-  &&  [| ((-p1_pre) <= pcnt) |] 
-  &&  [| ((-p2_pre) <= pcnt) |] 
-  &&  [| ((-p3_pre) <= pcnt) |] 
-  &&  [| (((prop_cnt_inf (clist)) + 1 ) <= pcnt) |] 
-  &&  [| (op_pre = (SmtPBID (bop))) |] 
-  &&  [| ((Zlength (clist)) <= max_size) |] 
-  &&  [| (max_size <= 40000) |] 
-  &&  [| (pcnt <= 40000) |] 
-  &&  [| (1 <> op_pre) |] 
-  &&  [| (0 <> op_pre) |] 
-  &&  [| (2 <> op_pre) |] 
-  &&  [| (3 = op_pre) |]
-  &&  ((&((data_pre)  # "PreData" ->ₛ "cnf_res")) # Ptr  |-> retval_5)
-  **  ((&((data_pre)  # "PreData" ->ₛ "prop_cnt")) # Int  |-> pcnt)
-  **  ((&((data_pre)  # "PreData" ->ₛ "clause_cnt")) # Int  |-> (ccnt + 1 ))
-  **  (sll_cnf_list y clist )
-  **  ((&((retval_5)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
-  **  ((&((retval_5)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval)
-  **  ((&((retval_5)  # "cnf_list" ->ₛ "next")) # Ptr  |-> y)
-  **  (IntArray.full retval 3 (replace_Znth (0) (p3_pre) ((all_zero_list (3)))) )
-|--
-  [| ((Zlength (clist)) <= max_size) |] 
-  &&  [| (max_size <= 40000) |]
-  &&  (store_predata data_pre (app ((iff2cnf_binary (p1_pre) (p2_pre) (p3_pre) (bop))) (clist)) pcnt (ccnt + (iff2cnf_length_binary (p1_pre) (p2_pre) (p3_pre) (bop)) ) )
-.
-
-Definition clause_gen_binary_return_wit_8 := 
-forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: Z) (bop: SmtPropBop) (ccnt: Z) (pcnt: Z) (clist: (@list (@list Z))) (retval: Z) (retval_2: Z) (retval_3: Z) (retval_4: Z) (retval_5: Z) (retval_6: Z) (retval_7: Z) (retval_8: Z) (y: Z) ,
-  [| ((0 + 1 ) = 1) |] 
-  &&  [| (data_pre <> 0) |] 
-  &&  [| ((Zlength (clist)) = ccnt) |] 
-  &&  [| (retval_8 <> 0) |] 
-  &&  [| (retval_7 <> 0) |] 
-  &&  [| (retval_6 <> 0) |] 
-  &&  [| (retval_5 <> 0) |] 
-  &&  [| (p1_pre = p2_pre) |] 
-  &&  [| (retval_4 <> 0) |] 
-  &&  [| (retval_3 <> 0) |] 
-  &&  [| (retval_2 <> 0) |] 
-  &&  [| (retval <> 0) |] 
-  &&  [| (p1_pre <> 0) |] 
-  &&  [| (p2_pre <> 0) |] 
-  &&  [| (p3_pre <> 0) |] 
-  &&  [| (p1_pre <= pcnt) |] 
-  &&  [| (p2_pre <= pcnt) |] 
-  &&  [| (p3_pre <= pcnt) |] 
-  &&  [| ((-p1_pre) <= pcnt) |] 
-  &&  [| ((-p2_pre) <= pcnt) |] 
-  &&  [| ((-p3_pre) <= pcnt) |] 
-  &&  [| (((prop_cnt_inf (clist)) + 1 ) <= pcnt) |] 
-  &&  [| (op_pre = (SmtPBID (bop))) |] 
-  &&  [| ((Zlength (clist)) <= max_size) |] 
-  &&  [| (max_size <= 40000) |] 
-  &&  [| (pcnt <= 40000) |] 
-  &&  [| (1 <> op_pre) |] 
-  &&  [| (0 <> op_pre) |] 
-  &&  [| (2 = op_pre) |]
-  &&  ((&((data_pre)  # "PreData" ->ₛ "cnf_res")) # Ptr  |-> retval_5)
-  **  ((&((data_pre)  # "PreData" ->ₛ "prop_cnt")) # Int  |-> pcnt)
-  **  ((&((data_pre)  # "PreData" ->ₛ "clause_cnt")) # Int  |-> (ccnt + 1 ))
-  **  (sll_cnf_list y clist )
-  **  ((&((retval_5)  # "cnf_list" ->ₛ "size")) # Int  |-> 3)
-  **  ((&((retval_5)  # "cnf_list" ->ₛ "clause")) # Ptr  |-> retval)
-  **  ((&((retval_5)  # "cnf_list" ->ₛ "next")) # Ptr  |-> y)
-  **  (IntArray.full retval 3 (replace_Znth (0) (p3_pre) ((all_zero_list (3)))) )
-|--
-  [| ((Zlength (clist)) <= max_size) |] 
-  &&  [| (max_size <= 40000) |]
-  &&  (store_predata data_pre (app ((iff2cnf_binary (p1_pre) (p2_pre) (p3_pre) (bop))) (clist)) pcnt (ccnt + (iff2cnf_length_binary (p1_pre) (p2_pre) (p3_pre) (bop)) ) )
-.
-
 Definition clause_gen_binary_partial_solve_wit_1_pure := 
 forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: Z) (bop: SmtPropBop) (ccnt: Z) (pcnt: Z) (clist: (@list (@list Z))) ,
   [| (p1_pre <> 0) |] 
@@ -8649,11 +8639,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   &&  [| (pcnt <= 40000) |]
   &&  ((( &( "clause1" ) )) # Ptr  |->_)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (3 > 0) |]
@@ -8718,11 +8708,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  (IntArray.full retval 3 (all_zero_list (3)) )
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (3 > 0) |]
@@ -8794,11 +8784,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  (IntArray.full retval 3 (all_zero_list (3)) )
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (3 > 0) |]
@@ -8877,11 +8867,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  (IntArray.full retval 3 (all_zero_list (3)) )
   **  ((( &( "clause1" ) )) # Ptr  |-> retval)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  (store_predata data_pre clist pcnt ccnt )
 |--
   [| (3 > 0) |]
@@ -14255,11 +14245,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval_2)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (retval <> 0) |] 
   &&  [| (3 > 0) |]
@@ -14435,11 +14425,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval_2)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (retval <> 0) |] 
   &&  [| (3 > 0) |]
@@ -14612,11 +14602,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_3)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval_2)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (retval <> 0) |] 
   &&  [| (3 > 0) |]
@@ -14788,11 +14778,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_3)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval_2)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (retval <> 0) |] 
   &&  [| (3 > 0) |]
@@ -14965,11 +14955,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_3)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval_2)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (retval <> 0) |] 
   &&  [| (3 > 0) |]
@@ -15139,11 +15129,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_3)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval_2)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (retval <> 0) |] 
   &&  [| (3 > 0) |]
@@ -15310,11 +15300,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_3)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval_2)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (retval <> 0) |]
 .
@@ -15478,11 +15468,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_3)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval_2)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (retval <> 0) |]
 .
@@ -15645,11 +15635,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_3)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval_2)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (retval <> 0) |]
 .
@@ -15805,11 +15795,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_3)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval_2)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (retval <> 0) |]
 .
@@ -15960,11 +15950,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_3)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval_2)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (retval <> 0) |]
 .
@@ -16110,11 +16100,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_3)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval_2)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (retval <> 0) |]
 .
@@ -16272,11 +16262,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_3)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval_2)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (retval <> 0) |] 
   &&  [| (3 > 0) |]
@@ -16455,11 +16445,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_3)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval_2)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (retval <> 0) |] 
   &&  [| (3 > 0) |]
@@ -16636,11 +16626,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_3)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval_2)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (retval <> 0) |] 
   &&  [| (3 > 0) |]
@@ -16816,11 +16806,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_3)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval_2)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (retval <> 0) |] 
   &&  [| (3 > 0) |]
@@ -16994,11 +16984,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_3)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval_2)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (retval <> 0) |] 
   &&  [| (3 > 0) |]
@@ -17171,11 +17161,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_3)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval_2)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (retval <> 0) |]
 .
@@ -17344,11 +17334,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_3)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval_2)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (retval <> 0) |]
 .
@@ -17518,11 +17508,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_3)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval_2)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (retval <> 0) |]
 .
@@ -17694,11 +17684,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_3)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval_2)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (retval <> 0) |]
 .
@@ -17871,11 +17861,11 @@ forall (data_pre: Z) (op_pre: Z) (p3_pre: Z) (p2_pre: Z) (p1_pre: Z) (max_size: 
   **  ((( &( "clause2" ) )) # Ptr  |-> retval_3)
   **  ((( &( "clause1" ) )) # Ptr  |-> retval_2)
   **  ((( &( "size" ) )) # Int  |-> 3)
-  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
   **  ((( &( "data" ) )) # Ptr  |-> data_pre)
   **  ((( &( "op" ) )) # Int  |-> op_pre)
   **  ((( &( "p3" ) )) # Int  |-> p3_pre)
   **  ((( &( "p2" ) )) # Int  |-> p2_pre)
+  **  ((( &( "p1" ) )) # Int  |-> p1_pre)
 |--
   [| (retval <> 0) |]
 .
@@ -18499,25 +18489,57 @@ forall (data_pre: Z) (p_pre: Z) (ccnt: Z) (pcnt: Z) (clist: (@list (@list Z))) (
 .
 
 Definition prop2cnf_return_wit_1 := 
-forall (data_pre: Z) (p_pre: Z) (ccnt: Z) (pcnt: Z) (clist: (@list (@list Z))) (prop: smt_prop) (t: Z) (var: Z) ,
-  [| (prop = (SmtV (var))) |] 
-  &&  [| (var <> 0) |] 
+forall (data_pre: Z) (p_pre: Z) (ccnt: Z) (pcnt: Z) (clist: (@list (@list Z))) (prop: smt_prop) (p2: Z) (p1: Z) (v: Z) (v_2: Z) (v_3: Z) (p_pre_type: Z) (res_2: Z) (ccnt'_2: Z) (pcnt'_2: Z) (clist'_2: (@list (@list Z))) (rt': smt_prop) (clist'_1: (@list (@list Z))) (pcnt'_1: Z) (ccnt'_1: Z) (lt': smt_prop) (op': SmtPropBop) (t': Z) ,
+  [| ((Zlength (clist'_2)) <= (((Zlength (clist)) + (4 * (SmtProp_size (prop)) ) ) - 4 )) |] 
+  &&  [| ((((Zlength (clist)) + (4 * (SmtProp_size (prop)) ) ) - 4 ) <= 40000) |] 
+  &&  [| (((4 * (SmtProp_size (prop)) ) - 4 ) <= 39996) |] 
+  &&  [| ((Zlength (clist'_2)) <= (((Zlength (clist)) + (4 * (SmtProp_size (prop)) ) ) - 4 )) |] 
+  &&  [| (((prop_cnt_inf (clist'_2)) + 1 ) <= (pcnt'_2 + 1 )) |] 
+  &&  [| ((pcnt'_2 + 1 ) <> 0) |] 
+  &&  [| (pcnt'_2 <= ((pcnt + (SmtProp_size (prop)) ) - 1 )) |] 
+  &&  [| (pcnt'_2 <= 39999) |] 
+  &&  [| (data_pre <> 0) |] 
+  &&  [| ((Zlength (clist'_2)) = ccnt'_2) |] 
+  &&  [| ((prop_cnt_inf (clist'_2)) <= pcnt'_2) |] 
+  &&  [| (pcnt'_2 >= 0) |] 
+  &&  [| ((make_prop2cnf_ret ((make_predata (clist'_2) (pcnt'_2) (ccnt'_2))) (p2)) = (prop2cnf_logic (rt') ((make_predata (clist'_1) (pcnt'_1) (ccnt'_1))))) |] 
+  &&  [| (p2 <> 0) |] 
+  &&  [| (p2 <= pcnt'_2) |] 
+  &&  [| ((-p2) <= pcnt'_2) |] 
+  &&  [| ((Zlength (clist'_2)) <= ((Zlength (clist'_1)) + (4 * (SmtProp_size (rt')) ) )) |] 
+  &&  [| (pcnt'_2 <= (pcnt'_1 + (SmtProp_size (rt')) )) |] 
+  &&  [| (pcnt <= pcnt'_1) |] 
+  &&  [| ((prop_cnt_inf_SmtProp (rt')) <= pcnt'_1) |] 
+  &&  [| ((make_prop2cnf_ret ((make_predata (clist'_1) (pcnt'_1) (ccnt'_1))) (p1)) = (prop2cnf_logic (lt') ((make_predata (clist) (pcnt) (ccnt))))) |] 
+  &&  [| (p1 <> 0) |] 
+  &&  [| (p1 <= pcnt'_1) |] 
+  &&  [| ((-p1) <= pcnt'_1) |] 
+  &&  [| ((Zlength (clist'_1)) <= ((Zlength (clist)) + (4 * (SmtProp_size (lt')) ) )) |] 
+  &&  [| (pcnt'_1 <= (pcnt + (SmtProp_size (lt')) )) |] 
+  &&  [| ((prop_cnt_inf_SmtProp (lt')) <= pcnt) |] 
+  &&  [| ((prop_cnt_inf_SmtProp (rt')) <= pcnt) |] 
+  &&  [| (prop = (SmtB (op') (lt') (rt'))) |] 
   &&  [| (p_pre <> 0) |] 
-  &&  [| (t = (SmtPTID (prop))) |] 
+  &&  [| (t' = (SmtPTID (prop))) |] 
   &&  [| ((prop_cnt_inf_SmtProp (prop)) <= pcnt) |] 
   &&  [| ((SmtProp_size (prop)) <= 10000) |] 
   &&  [| ((Zlength (clist)) <= (40000 - (4 * (SmtProp_size (prop)) ) )) |] 
   &&  [| (pcnt <= (40000 - (SmtProp_size (prop)) )) |] 
-  &&  [| (5 <> t) |] 
-  &&  [| (6 <> t) |] 
-  &&  [| (7 = t) |]
-  &&  ((&((p_pre)  # "SmtProp" ->ₛ "prop" .ₛ "Propvar")) # Int  |-> var)
-  **  ((&((p_pre)  # "SmtProp" ->ₛ "type")) # Int  |-> (SmtPTID (prop)))
-  **  (store_predata data_pre clist pcnt ccnt )
+  &&  [| (t' = 5) |] 
+  &&  [| (v_3 = (SmtPBID (op'))) |] 
+  &&  [| (p_pre_type = (SmtPTID (prop))) |] 
+  &&  [| (res_2 = 0) |]
+  &&  (store_predata data_pre (app ((iff2cnf_binary (p1) (p2) ((pcnt'_2 + 1 )) (op'))) (clist'_2)) (pcnt'_2 + 1 ) (ccnt'_2 + (iff2cnf_length_binary (p1) (p2) ((pcnt'_2 + 1 )) (op')) ) )
+  **  ((&((p_pre)  # "SmtProp" ->ₛ "prop" .ₛ "Binary_prop" .ₛ "prop2")) # Ptr  |-> v)
+  **  (store_SmtProp v rt' )
+  **  ((&((p_pre)  # "SmtProp" ->ₛ "prop" .ₛ "Binary_prop" .ₛ "prop1")) # Ptr  |-> v_2)
+  **  (store_SmtProp v_2 lt' )
+  **  ((&((p_pre)  # "SmtProp" ->ₛ "prop" .ₛ "Binary_prop" .ₛ "op")) # Int  |-> v_3)
+  **  ((&((p_pre)  # "SmtProp" ->ₛ "type")) # Int  |-> p_pre_type)
 |--
   EX (clist': (@list (@list Z)))  (pcnt': Z)  (ccnt': Z)  (res: Z) ,
   [| ((make_prop2cnf_ret ((make_predata (clist') (pcnt') (ccnt'))) (res)) = (prop2cnf_logic (prop) ((make_predata (clist) (pcnt) (ccnt))))) |] 
-  &&  [| (var = res) |] 
+  &&  [| ((pcnt'_2 + 1 ) = res) |] 
   &&  [| (res <> 0) |] 
   &&  [| (res <= pcnt') |] 
   &&  [| ((-res) <= pcnt') |] 
@@ -18579,57 +18601,25 @@ forall (data_pre: Z) (p_pre: Z) (ccnt: Z) (pcnt: Z) (clist: (@list (@list Z))) (
 .
 
 Definition prop2cnf_return_wit_3 := 
-forall (data_pre: Z) (p_pre: Z) (ccnt: Z) (pcnt: Z) (clist: (@list (@list Z))) (prop: smt_prop) (p2: Z) (p1: Z) (v: Z) (v_2: Z) (v_3: Z) (p_pre_type: Z) (res_2: Z) (ccnt'_2: Z) (pcnt'_2: Z) (clist'_2: (@list (@list Z))) (rt': smt_prop) (clist'_1: (@list (@list Z))) (pcnt'_1: Z) (ccnt'_1: Z) (lt': smt_prop) (op': SmtPropBop) (t': Z) ,
-  [| ((Zlength (clist'_2)) <= (((Zlength (clist)) + (4 * (SmtProp_size (prop)) ) ) - 4 )) |] 
-  &&  [| ((((Zlength (clist)) + (4 * (SmtProp_size (prop)) ) ) - 4 ) <= 40000) |] 
-  &&  [| (((4 * (SmtProp_size (prop)) ) - 4 ) <= 39996) |] 
-  &&  [| ((Zlength (clist'_2)) <= (((Zlength (clist)) + (4 * (SmtProp_size (prop)) ) ) - 4 )) |] 
-  &&  [| (((prop_cnt_inf (clist'_2)) + 1 ) <= (pcnt'_2 + 1 )) |] 
-  &&  [| ((pcnt'_2 + 1 ) <> 0) |] 
-  &&  [| (pcnt'_2 <= ((pcnt + (SmtProp_size (prop)) ) - 1 )) |] 
-  &&  [| (pcnt'_2 <= 39999) |] 
-  &&  [| (data_pre <> 0) |] 
-  &&  [| ((Zlength (clist'_2)) = ccnt'_2) |] 
-  &&  [| ((prop_cnt_inf (clist'_2)) <= pcnt'_2) |] 
-  &&  [| (pcnt'_2 >= 0) |] 
-  &&  [| ((make_prop2cnf_ret ((make_predata (clist'_2) (pcnt'_2) (ccnt'_2))) (p2)) = (prop2cnf_logic (rt') ((make_predata (clist'_1) (pcnt'_1) (ccnt'_1))))) |] 
-  &&  [| (p2 <> 0) |] 
-  &&  [| (p2 <= pcnt'_2) |] 
-  &&  [| ((-p2) <= pcnt'_2) |] 
-  &&  [| ((Zlength (clist'_2)) <= ((Zlength (clist'_1)) + (4 * (SmtProp_size (rt')) ) )) |] 
-  &&  [| (pcnt'_2 <= (pcnt'_1 + (SmtProp_size (rt')) )) |] 
-  &&  [| (pcnt <= pcnt'_1) |] 
-  &&  [| ((prop_cnt_inf_SmtProp (rt')) <= pcnt'_1) |] 
-  &&  [| ((make_prop2cnf_ret ((make_predata (clist'_1) (pcnt'_1) (ccnt'_1))) (p1)) = (prop2cnf_logic (lt') ((make_predata (clist) (pcnt) (ccnt))))) |] 
-  &&  [| (p1 <> 0) |] 
-  &&  [| (p1 <= pcnt'_1) |] 
-  &&  [| ((-p1) <= pcnt'_1) |] 
-  &&  [| ((Zlength (clist'_1)) <= ((Zlength (clist)) + (4 * (SmtProp_size (lt')) ) )) |] 
-  &&  [| (pcnt'_1 <= (pcnt + (SmtProp_size (lt')) )) |] 
-  &&  [| ((prop_cnt_inf_SmtProp (lt')) <= pcnt) |] 
-  &&  [| ((prop_cnt_inf_SmtProp (rt')) <= pcnt) |] 
-  &&  [| (prop = (SmtB (op') (lt') (rt'))) |] 
+forall (data_pre: Z) (p_pre: Z) (ccnt: Z) (pcnt: Z) (clist: (@list (@list Z))) (prop: smt_prop) (t: Z) (var: Z) ,
+  [| (prop = (SmtV (var))) |] 
+  &&  [| (var <> 0) |] 
   &&  [| (p_pre <> 0) |] 
-  &&  [| (t' = (SmtPTID (prop))) |] 
+  &&  [| (t = (SmtPTID (prop))) |] 
   &&  [| ((prop_cnt_inf_SmtProp (prop)) <= pcnt) |] 
   &&  [| ((SmtProp_size (prop)) <= 10000) |] 
   &&  [| ((Zlength (clist)) <= (40000 - (4 * (SmtProp_size (prop)) ) )) |] 
   &&  [| (pcnt <= (40000 - (SmtProp_size (prop)) )) |] 
-  &&  [| (t' = 5) |] 
-  &&  [| (v_3 = (SmtPBID (op'))) |] 
-  &&  [| (p_pre_type = (SmtPTID (prop))) |] 
-  &&  [| (res_2 = 0) |]
-  &&  (store_predata data_pre (app ((iff2cnf_binary (p1) (p2) ((pcnt'_2 + 1 )) (op'))) (clist'_2)) (pcnt'_2 + 1 ) (ccnt'_2 + (iff2cnf_length_binary (p1) (p2) ((pcnt'_2 + 1 )) (op')) ) )
-  **  ((&((p_pre)  # "SmtProp" ->ₛ "prop" .ₛ "Binary_prop" .ₛ "prop2")) # Ptr  |-> v)
-  **  (store_SmtProp v rt' )
-  **  ((&((p_pre)  # "SmtProp" ->ₛ "prop" .ₛ "Binary_prop" .ₛ "prop1")) # Ptr  |-> v_2)
-  **  (store_SmtProp v_2 lt' )
-  **  ((&((p_pre)  # "SmtProp" ->ₛ "prop" .ₛ "Binary_prop" .ₛ "op")) # Int  |-> v_3)
-  **  ((&((p_pre)  # "SmtProp" ->ₛ "type")) # Int  |-> p_pre_type)
+  &&  [| (5 <> t) |] 
+  &&  [| (6 <> t) |] 
+  &&  [| (7 = t) |]
+  &&  ((&((p_pre)  # "SmtProp" ->ₛ "prop" .ₛ "Propvar")) # Int  |-> var)
+  **  ((&((p_pre)  # "SmtProp" ->ₛ "type")) # Int  |-> (SmtPTID (prop)))
+  **  (store_predata data_pre clist pcnt ccnt )
 |--
   EX (clist': (@list (@list Z)))  (pcnt': Z)  (ccnt': Z)  (res: Z) ,
   [| ((make_prop2cnf_ret ((make_predata (clist') (pcnt') (ccnt'))) (res)) = (prop2cnf_logic (prop) ((make_predata (clist) (pcnt) (ccnt))))) |] 
-  &&  [| ((pcnt'_2 + 1 ) = res) |] 
+  &&  [| (var = res) |] 
   &&  [| (res <> 0) |] 
   &&  [| (res <= pcnt') |] 
   &&  [| ((-res) <= pcnt') |] 
@@ -22387,11 +22377,6 @@ forall (p_pre: Z) (prop: smt_prop) (p_pre_type: Z) ,
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
-Include int_array_Strategy_Correct.
-Include uint_array_Strategy_Correct.
-Include undef_uint_array_Strategy_Correct.
-Include array_shape_Strategy_Correct.
 
 Axiom proof_of_clause_gen_unary_safety_wit_1 : clause_gen_unary_safety_wit_1.
 Axiom proof_of_clause_gen_unary_safety_wit_2 : clause_gen_unary_safety_wit_2.

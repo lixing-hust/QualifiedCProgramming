@@ -355,8 +355,6 @@ Definition forall_term_denote : forall (t : ForallTerm)
           apply (exists_term_denote pre ty_env H0 tm_env |-- exists_term_denote post ty_env H1 tm_env) ]).
 Defined.
 
-Print forall_term_denote.
-
 (* Definition ExampleForallTerm0 : ForallTerm :=
     (TForall 0 TyZ (TForall 1 TyZ (TEntail
     (TSep (TSepCon (TSepDataAt (EVar 0 TyZ) Cint (EVar 1 TyZ)) (TSepLeaf (TSepDataAt (EVar 1 TyZ) Cint (EVar 0 TyZ)))))

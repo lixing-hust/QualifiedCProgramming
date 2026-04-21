@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -411,7 +411,7 @@ Lemma nth_a_replace_nth_b:
   forall T: Type, 
   forall l: list T, forall a b: nat, forall v u: T,
     (a <> b)%nat ->
-    nth a (replace_nth b v l) u = nth a l u.
+    nth a (replace_nth b l v) u = nth a l u.
 Proof.
   intros.
   revert a b H.
@@ -428,7 +428,7 @@ Qed.
 
 Lemma replace_nth_length:
   forall T: Type, forall l: list T, forall i v, 
-    length (replace_nth i v l) = length l.
+    length (replace_nth i l v) = length l.
 Proof.
   intros.
   revert i v.
@@ -441,7 +441,7 @@ Qed.
 Lemma nth_replace_nth_eq:
   forall T: Type, forall l: list T, forall i v u, 
     (i < length l)%nat ->
-    nth i (replace_nth i v l) u = v.
+    nth i (replace_nth i l v) u = v.
 Proof.
   intros.
   revert i H.

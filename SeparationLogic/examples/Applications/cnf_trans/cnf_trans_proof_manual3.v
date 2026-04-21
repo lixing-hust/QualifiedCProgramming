@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.Applications.cnf_trans Require Import cnf_trans_goal.
@@ -22,7 +22,7 @@ From SimpleC.EE.Applications Require Import malloc.
 From SimpleC.EE.Applications Require Import super_poly_sll2.
 Local Open Scope sac.
 
-Lemma proof_of_clause_gen_binary_return_wit_4 : clause_gen_binary_return_wit_4.
+Lemma proof_of_clause_gen_binary_return_wit_5 : clause_gen_binary_return_wit_5.
 Proof.
   pre_process.
   clear H27.
@@ -104,7 +104,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_clause_gen_binary_return_wit_3 : clause_gen_binary_return_wit_3.
+Lemma proof_of_clause_gen_binary_return_wit_6 : clause_gen_binary_return_wit_6.
 Proof.
   pre_process.
   clear H27.
@@ -190,7 +190,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_clause_gen_binary_return_wit_2 : clause_gen_binary_return_wit_2.
+Lemma proof_of_clause_gen_binary_return_wit_7 : clause_gen_binary_return_wit_7.
 Proof.
   pre_process.
   clear H28 H27.
@@ -276,7 +276,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_clause_gen_binary_return_wit_8 : clause_gen_binary_return_wit_8.
+Lemma proof_of_clause_gen_binary_return_wit_1 : clause_gen_binary_return_wit_1.
 Proof.
   pre_process.
   (* clear H24 H25.
@@ -350,7 +350,7 @@ Proof.
   entailer!.
 Qed.
 
-Lemma proof_of_clause_gen_binary_return_wit_7 : clause_gen_binary_return_wit_7.
+Lemma proof_of_clause_gen_binary_return_wit_2 : clause_gen_binary_return_wit_2.
 Proof.
   pre_process.
   clear H25.

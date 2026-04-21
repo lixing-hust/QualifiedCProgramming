@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -17,26 +17,24 @@ Local Open Scope list.
 Import naive_C_Rules.
 Require Import SimpleC.EE.QCP_democases.swap_lib.
 Local Open Scope sac.
-From SimpleC.EE.QCP_democases Require Import common_strategy_goal.
-From SimpleC.EE.QCP_democases Require Import common_strategy_proof.
 
 (*----- Function swap0 -----*)
 
-Definition swap0_return_wit_1_neq := 
+Definition swap0_return_wit_1_eq := 
+forall (py_pre: Z) (px_pre: Z) (x_eq: Z) ,
+  [| (px_pre = py_pre) |]
+  &&  ((py_pre) # Int  |-> x_eq)
+|--
+  ((px_pre) # Int  |-> x_eq)
+.
+
+Definition swap0_return_wit_2_neq := 
 forall (py_pre: Z) (px_pre: Z) (y_neq: Z) (x_neq: Z) ,
   ((px_pre) # Int  |-> y_neq)
   **  ((py_pre) # Int  |-> x_neq)
 |--
   ((px_pre) # Int  |-> y_neq)
   **  ((py_pre) # Int  |-> x_neq)
-.
-
-Definition swap0_return_wit_2_eq := 
-forall (py_pre: Z) (px_pre: Z) (x_eq: Z) ,
-  [| (px_pre = py_pre) |]
-  &&  ((py_pre) # Int  |-> x_eq)
-|--
-  ((px_pre) # Int  |-> x_eq)
 .
 
 Definition swap0_partial_solve_wit_1_eq := 
@@ -85,20 +83,20 @@ forall (py_pre: Z) (px_pre: Z) (para_all: swap_para) ,
 .
 
 Definition swap_return_wit_1 := 
-forall (py_pre: Z) (px_pre: Z) (para_all: swap_para) (x: Z) (y: Z) ,
-  [| (para_all = (swap_neq_para (x) (y))) |]
-  &&  ((px_pre) # Int  |-> y)
-  **  ((py_pre) # Int  |-> x)
-|--
-  (swap_post px_pre py_pre para_all )
-.
-
-Definition swap_return_wit_2 := 
 forall (py_pre: Z) (px_pre: Z) (para_all: swap_para) (x: Z) (py: Z) ,
   [| (px_pre = py) |] 
   &&  [| (px_pre = py_pre) |] 
   &&  [| (para_all = (swap_eq_para (x))) |]
   &&  ((py) # Int  |-> x)
+|--
+  (swap_post px_pre py_pre para_all )
+.
+
+Definition swap_return_wit_2 := 
+forall (py_pre: Z) (px_pre: Z) (para_all: swap_para) (x: Z) (y: Z) ,
+  [| (para_all = (swap_neq_para (x) (y))) |]
+  &&  ((px_pre) # Int  |-> y)
+  **  ((py_pre) # Int  |-> x)
 |--
   (swap_post px_pre py_pre para_all )
 .
@@ -241,10 +239,9 @@ EX (para_all: swap_para) ,
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 
-Axiom proof_of_swap0_return_wit_1_neq : swap0_return_wit_1_neq.
-Axiom proof_of_swap0_return_wit_2_eq : swap0_return_wit_2_eq.
+Axiom proof_of_swap0_return_wit_1_eq : swap0_return_wit_1_eq.
+Axiom proof_of_swap0_return_wit_2_neq : swap0_return_wit_2_neq.
 Axiom proof_of_swap0_partial_solve_wit_1_eq : swap0_partial_solve_wit_1_eq.
 Axiom proof_of_swap0_partial_solve_wit_2_eq : swap0_partial_solve_wit_2_eq.
 Axiom proof_of_swap0_partial_solve_wit_3_eq : swap0_partial_solve_wit_3_eq.

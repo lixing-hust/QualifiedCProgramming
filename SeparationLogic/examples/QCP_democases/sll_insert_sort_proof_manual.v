@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.QCP_democases Require Import sll_insert_sort_goal.
@@ -42,7 +42,7 @@ Proof.
     rewrite <- app_assoc. reflexivity.
 Qed.
 
-Lemma proof_of_insertion_return_wit_2 : insertion_return_wit_2.
+Lemma proof_of_insertion_return_wit_1 : insertion_return_wit_1.
 Proof.
   pre_process.
   sep_apply sll_zero; try easy. 
@@ -56,7 +56,7 @@ Proof.
     apply upperbound_insert_nil; easy.
 Qed. 
 
-Lemma proof_of_insertion_return_wit_1 : insertion_return_wit_1.
+Lemma proof_of_insertion_return_wit_2 : insertion_return_wit_2.
 Proof. 
   pre_process.
   Exists (l1 ++ a::l2).

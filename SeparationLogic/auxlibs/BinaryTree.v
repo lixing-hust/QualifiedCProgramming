@@ -6,7 +6,7 @@ Require Import Coq.Structures.Equalities.
 Require Import Coq.Structures.Orders.
 Require Import Coq.Structures.OrdersFacts.
 Require Export SetsClass.SetsClass.
-Require Import AUXLib.List_lemma.
+Require Import AUXLib.ListLib.
 Require Import AUXLib.OrdersDecFact.
 Local Open Scope sets.
 

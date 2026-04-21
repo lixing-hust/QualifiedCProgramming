@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.Applications.LiteOS Require Import OsDeleteSortLink_goal.
@@ -53,7 +53,7 @@ Proof.
     entailer!.
 Qed.
 
-Lemma proof_of_OsDeleteSortLink_return_wit_1: OsDeleteSortLink_return_wit_1.
+Lemma proof_of_OsDeleteSortLink_return_wit_3: OsDeleteSortLink_return_wit_3.
 Proof. 
   pre_process.
   Right.

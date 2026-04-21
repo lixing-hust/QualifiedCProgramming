@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE.Applications.fme Require Import fme_goal.
@@ -17,7 +17,6 @@ Local Open Scope string.
 Local Open Scope list.
 Import naive_C_Rules.
 Require Import SimpleC.EE.Applications.fme.fme_lib.
-Import naive_C_Rules.
 Local Open Scope sac.
 
 Lemma proof_of_gcd_safety_wit_1 : gcd_safety_wit_1.
@@ -83,7 +82,7 @@ Proof. Admitted.
 Lemma proof_of_free_InequList_safety_wit_4 : free_InequList_safety_wit_4.
 Proof. Admitted. 
 
-Lemma proof_of_free_InequList_return_wit_1 : free_InequList_return_wit_1.
+Lemma proof_of_free_InequList_return_wit_3 : free_InequList_return_wit_3.
 Proof. Admitted. 
 
 Lemma proof_of_free_InequList_partial_solve_wit_1 : free_InequList_partial_solve_wit_1.
@@ -206,9 +205,6 @@ Proof. Admitted.
 Lemma proof_of_generate_new_constr_entail_wit_1 : generate_new_constr_entail_wit_1.
 Proof. Admitted. 
 
-Lemma proof_of_generate_new_constr_return_wit_1 : generate_new_constr_return_wit_1.
-Proof. Admitted. 
-
 Lemma proof_of_generate_new_constr_return_wit_2 : generate_new_constr_return_wit_2.
 Proof. Admitted. 
 
@@ -219,6 +215,9 @@ Lemma proof_of_generate_new_constr_return_wit_4 : generate_new_constr_return_wit
 Proof. Admitted. 
 
 Lemma proof_of_generate_new_constr_return_wit_5 : generate_new_constr_return_wit_5.
+Proof. Admitted. 
+
+Lemma proof_of_generate_new_constr_return_wit_6 : generate_new_constr_return_wit_6.
 Proof. Admitted. 
 
 Lemma proof_of_generate_new_constr_partial_solve_wit_1 : generate_new_constr_partial_solve_wit_1.
@@ -389,13 +388,13 @@ Proof. Admitted.
 Lemma proof_of_real_shadow_safety_wit_25 : real_shadow_safety_wit_25.
 Proof. Admitted. 
 
+Lemma proof_of_real_shadow_return_wit_1 : real_shadow_return_wit_1.
+Proof. Admitted. 
+
 Lemma proof_of_real_shadow_return_wit_3 : real_shadow_return_wit_3.
 Proof. Admitted. 
 
 Lemma proof_of_real_shadow_return_wit_5 : real_shadow_return_wit_5.
-Proof. Admitted. 
-
-Lemma proof_of_real_shadow_return_wit_7 : real_shadow_return_wit_7.
 Proof. Admitted. 
 
 Lemma proof_of_real_shadow_partial_solve_wit_1_pure : real_shadow_partial_solve_wit_1_pure.
@@ -485,10 +484,10 @@ Proof. Admitted.
 Lemma proof_of_lia_deduction_safety_wit_13 : lia_deduction_safety_wit_13.
 Proof. Admitted. 
 
-Lemma proof_of_lia_deduction_return_wit_1 : lia_deduction_return_wit_1.
+Lemma proof_of_lia_deduction_return_wit_3 : lia_deduction_return_wit_3.
 Proof. Admitted. 
 
-Lemma proof_of_lia_deduction_return_wit_2 : lia_deduction_return_wit_2.
+Lemma proof_of_lia_deduction_return_wit_4 : lia_deduction_return_wit_4.
 Proof. Admitted. 
 
 Lemma proof_of_lia_deduction_partial_solve_wit_1_pure : lia_deduction_partial_solve_wit_1_pure.

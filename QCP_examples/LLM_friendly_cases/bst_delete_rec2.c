@@ -1,7 +1,7 @@
 #include "bst_def.h"
-#include "verification_stdlib.h"
 
-/*@ Import Coq Import naive_C_Rules */
+
+
 
 
 void free_tree_node(struct tree *b)

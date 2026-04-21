@@ -1,5 +1,5 @@
-#include "verification_stdlib.h"
-#include "verification_list.h"
+
+
 #include "sll_def.h"
 
 /*@ Extern Coq (count: list Z -> Z -> Z)

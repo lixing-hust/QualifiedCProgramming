@@ -1,6 +1,6 @@
-#include "verification_list.h"
-#include "verification_stdlib.h"
-#include "char_array_def.h"
+
+
+
 
 void chars_initialize(char *a, int n, char m)
 /*@ Require 0 <= n && n < INT_MAX && CharArray::undef_full(a, n)

@@ -4,9 +4,8 @@ Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 Require Import Coq.micromega.Psatz.
 From SimpleC.SL Require Import SeparationLogic.
+Import naive_C_Rules.
 Require Import SimpleC.EE.Applications.fme.fme_lib.
-Import naive_C_Rules.
-Import naive_C_Rules.
 Local Open Scope Z_scope.
 Local Open Scope sac.
 Local Open Scope string.

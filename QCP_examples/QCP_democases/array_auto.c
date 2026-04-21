@@ -1,6 +1,6 @@
-#include "verification_stdlib.h"
-#include "verification_list.h"
-#include "int_array_def.h"
+
+
+
 #include "sll_shape_def.h"
 
 unsigned int arr_sum(int n, unsigned int *a)

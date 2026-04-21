@@ -8,7 +8,7 @@ From SimpleC.EE.QCP_democases Require Import safeexecE_strategy_goal.
 Import naive_C_Rules.
 From SimpleC.EE.QCP_democases Require Import kmp_rel_lib.
 Local Open Scope monad.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap relations.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap relations.
 From FP Require Import PartialOrder_Setoid BourbakiWitt.
 Local Open Scope Z_scope.
 Local Open Scope sac.
