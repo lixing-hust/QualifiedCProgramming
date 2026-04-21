@@ -45,9 +45,9 @@ Verify 只消费 Contract 已经准备好的验证输入，不再负责设计前
 - 只在当前任务对应的 `annotated/verify_<timestamp>_<name>.c` 中补 `Inv`、`Assert`、`which implies`、bridge assert、loop-exit assertion
 - 每次改注释后都必须重新跑 `symexec`
 - 如果当前程序确实需要补 `Inv` / `Assert`，先写 `logs/annotation_reasoning.md`，再改 annotated 工作副本；如果完全不需要补任何 Verify 注释，就跳过 `annotation_reasoning.md`
-- `logs/annotation_reasoning.md` 只能追加，不能覆盖已有内容；必须写得非常具体，至少写清楚当前卡在哪个程序点、哪条注释不成立、看到了什么报错或执行现象、准备改哪一行注释、为什么这次修改预计会修复当前问题
+- `logs/annotation_reasoning.md` 只能追加，不能覆盖已有内容；必须写得非常具体，至少写清楚当前卡在哪个程序点、哪条注释不成立、看到了什么报错或执行现象、准备改哪一行注释、为什么这次修改预计会修复当前问题；每轮改 annotation 前后都要贴出关键 C/annotation 片段，包括相关 `Inv`、`Assert`、`which implies` 或 loop-exit assertion，并用自然语言解释为什么这样写、它表达了哪段程序状态、如何满足初始化/保持性/退出可用性、为什么能修复当前 VC 或 symexec 问题，不能只贴代码或只写概括
 - 如果 `proof_manual.v` 里确实有需要手工证明的 theorem，先写 `logs/proof_reasoning.md`，再改 `proof_manual.v`；如果 `proof_manual.v` 没有需要证明的目标，就跳过 `proof_reasoning.md` 和 manual proof
-- `logs/proof_reasoning.md` 只能追加，不能覆盖已有内容；必须写得非常具体，至少写清楚当前卡住的 theorem 或 witness 名、`coqc`/`coqtop` 的具体报错或剩余子目标、当前可用假设、为什么现有脚本不够、已经尝试过哪些 tactic 或 lemma、下一步准备改哪一段 proof
+- `logs/proof_reasoning.md` 只能追加，不能覆盖已有内容；必须写得非常具体，至少写清楚当前卡住的 theorem 或 witness 名、`coqc`/`coqtop` 的具体报错或剩余子目标、当前可用假设、为什么现有脚本不够、已经尝试过哪些 tactic 或 lemma、下一步准备改哪一段 proof；每轮 proof 迭代都要贴出关键 Coq 片段，包括当前 theorem/lemma、失败前后的 tactic 片段、必要的 `Show` 子目标或关键 hypotheses、准备新增或修改的 lemma 形状，并用自然语言解释为什么这样拆 lemma、为什么这个 tactic/rewrite 对应当前子目标、它依赖哪些假设、为什么这次修改能推进 proof，不能只写“尝试证明失败”
 - proof 阶段必须不断迭代，直到 `goal_check.v` 编译通过，或外部时间上限触发；其他细节统一以 `doc/experiences/PROOF.md` 为准
 - `proof_manual.v` 不得留下 `Admitted.` 或新增 `Axiom`
 - `goal_check.v` 必须编译通过
@@ -72,9 +72,9 @@ Verify 只消费 Contract 已经准备好的验证输入，不再负责设计前
 
 1. 读 `input/<name>.c` / `.v`。
 2. 先读 `doc/retrieval/INDEX.md`，再写并回填 `logs/workspace_fingerprint.json`，确保 `semantic_description` 非空，且 `keywords` 只使用受控词表中的 key 和 value。
-3. 如果需要补 `Inv` / `Assert`，读 `INV.md` 和 `ASSERTION.md`，写并持续更新 `logs/annotation_reasoning.md`，修改当前任务对应的 `annotated/*.c`；否则跳过这一步。
+3. 如果需要补 `Inv` / `Assert`，读 `INV.md` 和 `ASSERTION.md`，写并持续更新 `logs/annotation_reasoning.md`，记录关键 C/annotation 片段后再修改当前任务对应的 `annotated/*.c`；否则跳过这一步。
 4. 读 `SYMEXEC.md`，跑 `symexec`，生成最新 `goal/proof_auto/proof_manual/goal_check`。
-5. 如果 `proof_manual.v` 里还有需要手工证明的 theorem，读 `PROOF.md`，写并持续更新 `logs/proof_reasoning.md`，补 `proof_manual.v`，编译失败就继续 proof 迭代直到通过；否则跳过这一步。
+5. 如果 `proof_manual.v` 里还有需要手工证明的 theorem，读 `PROOF.md`，写并持续更新 `logs/proof_reasoning.md`，记录关键 Coq theorem/subgoal/tactic 片段后再补 `proof_manual.v`，编译失败就继续 proof 迭代直到通过；否则跳过这一步。
 6. 读 `COMPILE.md`，按完整模板编译 `goal`、`proof_auto`、`proof_manual`、`goal_check`。
 7. 每解决一个有代表性的通用问题，就同步更新对应 Experience，并在 `logs/issues.md` 记录该问题的具体踩坑和修复链路。
 8. 详细写 `logs/issues.md` 和 `logs/metrics.md`，把整个过程中的踩坑、定位和修复链路补全，在 `logs/metrics.md` 中列出 `Experience updates`，并在最后一行写 `Final Result: Success` 或 `Final Result: Fail`。
