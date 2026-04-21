@@ -160,3 +160,64 @@ verify 阶段的 `metrics.md` 至少要单列：
 - 原因
 - 处理
 - 结果
+
+## 11. 新增题目本地 Coq helper 不是 verify 阶段的首选修复
+
+如果当前 `input/<name>.v` 不存在，而 verify 阶段为了绕开复杂断言临时在 annotated 文件中新增 `Extern Coq` / `Import Coq`，要谨慎。
+
+已观察到的风险：
+
+- `symexec` 可能在正常 startup 日志前直接 segfault
+- 问题发生在 VC 生成前，无法进入 manual proof
+- 即使 helper 理论上能让 Coq proof 更清楚，也可能不如使用前端原生断言形状稳定
+
+处理顺序：
+
+1. 优先尝试把断言改写成前端支持的原生形式，例如拆分 implication、减少 disjunction、减少单条断言里的嵌套 conjunction。
+2. 只有输入阶段已经提供题目 `.v`，或已有相同模式的稳定样例时，才优先走 helper import。
+3. 如果新增 helper 后 `symexec` 立即 segfault，应回退到无 helper 的 annotation 形状，并把 helper 尝试记录到当前 workspace 的 `issues.md`。
+
+## 12. 复杂 invariant 让 `symexec` 变慢时，先简化前端表达形状，不要先删语义
+
+`merge_sorted_arrays` 暴露了一个典型问题：正确语义需要较强 invariant，但强 invariant 如果写成前端不擅长的形状，会让 `symexec` 长时间 CPU-bound 或在 VC 生成前失败。
+
+不要第一反应就删除关键语义。应先检查表达形状：
+
+- 是否在 ownership 中反复使用复杂的 `@pre` 算术表达式
+- 是否在 implication guard 内使用自由数组下标
+- 是否在量词中使用 bracket notation，例如 `la[i]`
+- 是否把多个 disjunction / implication / conjunction 堆在一条 assertion 中
+- 是否把 shape 和 value 语义混在一个过大的谓词里
+
+更稳的改写顺序：
+
+1. ownership 长度优先用当前状态的简单表达式，例如 `n + m`，再用纯命题保存它与 pre-state 的关系。
+2. 对带边界的 ghost list 访问，优先写成显式 `Znth(index, list, 0)`，不要依赖前端从 guard 推断 bracket notation 的数组大小。
+3. 对阶段切换，优先拆成较小的 loop-exit assertion 或分阶段 invariant，不要把所有情况塞进一个巨大 invariant。
+4. 如果 `symexec` 成功且剩余目标是纯 list / arithmetic witness，就不要再回注释层删语义；此时应进入 manual proof。
+
+判断标准是：
+
+- 删除后会丢失后条件所需语义的内容不能删
+- 只影响前端解析和 VC 生成复杂度的表达形式应改写
+
+## 13. `symexec` 成功后如果 witness 是 merge/list 语义，不要误判为 annotation 失败
+
+双指针归并类题在 `symexec` 成功后，常见剩余目标是：
+
+- `replace_Znth` 写入输出前缀后的 heap list 归一化
+- `merge(spec_prefix_a, spec_prefix_b)` 与 `old_prefix ++ [current]` 的等式
+- `sublist` 追加一个末尾元素的等式
+- 已消费前缀与未消费后缀的顺序关系保持
+
+这些目标通常属于 proof 阶段，不是 symbolic execution 阶段。
+
+只有当 witness 明显缺少下面信息时，才回到 invariant：
+
+- 输出数组的完整 heap shape
+- `lout_done` 与已消费前缀的语义等式
+- 输入数组未修改的长度和值
+- 跨边界顺序历史
+- 阶段切换时的 `i == n` 或 `j == m`
+
+如果这些信息都在 VC 里，剩下的困难基本就是 helper lemma 和 conservative Coq proof，不要反复改 annotation。

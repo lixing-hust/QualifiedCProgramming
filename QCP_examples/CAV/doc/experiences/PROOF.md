@@ -239,7 +239,83 @@
 
 把这层桥接写出来后，`lia` 才会稳定。
 
-## 20. `replace_Znth` 最后一步经常卡在 `nat` 索引没有化简
+## 20. merge / two-pointer proof 要先抽 append-last helper，不要在 witness 里展开递归硬证
+
+`merge_sorted_arrays` 的核心 proof 难点不是 separation logic，而是纯 list 语义：
+
+- 写 `a[i]` 后，要证明新输出前缀等于 `merge(sublist 0 (i+1) a, sublist 0 j b)`
+- 写 `b[j]` 后，要证明新输出前缀等于 `merge(sublist 0 i a, sublist 0 (j+1) b)`
+
+如果在主 witness 里直接展开 `merge` 递归，proof 会迅速失控。
+
+更稳的做法是先在 `proof_manual.v` 中抽 helper lemma：
+
+- `replace_Znth_app_suffix_head_Z`：把 `replace_Znth k x (prefix ++ sublist k n old)` 归一化成 `(prefix ++ [x]) ++ sublist (k+1) n old`
+- `sublist_prefix_snoc_Z`：把 `sublist 0 (i+1) l` 归一化成 `sublist 0 i l ++ [Znth i l 0]`
+- `merge_app_a_last`：当所有已消费 `a` 都 `<= x` 且所有已消费 `b` 都 `< x` 时，`merge(a ++ [x], b) = merge(a, b) ++ [x]`
+- `merge_app_b_last`：当所有已消费 `a` 都 `<= y` 且所有已消费 `b` 都 `<= y` 时，`merge(a, b ++ [y]) = merge(a, b) ++ [y]`
+
+主 witness 应只做：
+
+- 建立当前 snoc 形式
+- 从 invariant 的跨边界关系推出 helper lemma 的 `Forall` 条件
+- 调用 helper lemma 改写语义等式
+- 交给 `entailer!` 和 `lia` 处理剩余 shape / arithmetic
+
+这个模式适用于 merge、partition、two-sorted-array scan、双指针输出数组等题。
+
+## 21. QCP entailment 里的 disjunction / existential 用大写 tactics
+
+在 QCP assertion entailment 中，目标经常是：
+
+- `P |-- Q1 || Q2`
+- `P |-- EX x, Q x`
+
+这时不要直接用 Coq 的 lowercase `left` / `right` / `exists`，否则可能进入 model-level assertion，留下一个形如 `Q m` 的大目标，最后报 `Attempt to save an incomplete proof`。
+
+更稳的写法是：
+
+- 用 `Left` / `Right` 选择 assertion-level disjunction
+- 用 `Exists x` 提供 assertion-level existential witness
+- 分支前先 `subst` 或 `assert` 出退出等式，例如 `j = m_pre`、`i = n_pre`
+
+如果 `coqtop Show` 里出现目标末尾是 `(...) m`，说明 proof 很可能已经掉进 model-level，需要回到 assertion-level tactic。
+
+## 22. 同一个算法不同 witness 的假设编号不能复制粘贴
+
+`pre_process` 后的假设编号依赖当前 witness 的前置条件顺序。主循环、尾循环、return witness 的编号可能完全不同。
+
+常见错误：
+
+- 从 `entail_wit_2_1` 复制 proof 到 `entail_wit_4`
+- 继续使用旧的 `H10` / `H11` / `H14`
+- 结果报 `Found no subterm matching ...` 或把 sortedness lemma 应用到错误数组
+
+处理方法：
+
+- 每个新 witness 第一次失败时，用 `coqtop` 停在当前 theorem 后 `Show`
+- 明确记录当前 witness 中长度、sortedness、semantic equality、cross-boundary fact 的实际编号
+- 对关键事实尽量用 `assert` 命名成语义名，例如 `Hla_snoc`、`Hforalla`、`Hforallb`，减少后续依赖裸编号
+
+不要因为两个 witness 形状相似就默认 hypothesis 编号相同。
+
+## 23. return witness 优先做 full-prefix 和 empty-suffix 归一化
+
+对逐步写满输出数组的题，最终 return witness 往往不是新的语义问题，而是需要把 loop state 归一化成后条件形状。
+
+稳定顺序：
+
+1. 从退出条件推出所有索引到达边界，例如 `i = n`、`j = m`。
+2. 推出写入长度到达整段，例如 `k = n + m`。
+3. 用 `sublist_self` 把 `sublist 0 n a` 改成 `a`。
+4. 用 `sublist_self` 把 `sublist 0 m b` 改成 `b`。
+5. 用 `sublist_nil` 把输出未写后缀改成 `nil`。
+6. 用 `app_nil_r` 把 heap shape 改成完整输出。
+7. 最后用 invariant 保存的 semantic equality 替换 `lout_done`。
+
+不要一开始就证明最终数组相等；先把 prefix/suffix shape 化简到和后条件同形，`entailer!` 才容易收掉。
+
+## 24. `replace_Znth` 最后一步经常卡在 `nat` 索引没有化简
 
 即使在 `Z` 上已经知道索引等于 `0`，展开
 
@@ -259,7 +335,64 @@
 
 很多看起来像“最后一条列表相等还差一点”的目标，真正缺的就是这一步。
 
-## 21. Coq 脚本优先用保守写法，尤其少依赖脆弱的 `destruct ... as ...` 形状
+## 25. 局部变量值态到未定义态的权限目标要用 store-undef lemma
+
+循环体内的局部临时变量在 entailment witness 里经常出现：
+
+- 左边：`&( "x" ) # Int |-> v`
+- 右边：`&( "x" ) # Int |->_`
+
+`entailer!` 有时不会自动把这个 heap 目标消掉，继续写纯命题证明会导致 bullet 顺序整体错位。
+
+稳定写法是先单独解决这个 separation-logic 子目标：
+
+```coq
+apply store_int_undef_store_int.
+```
+
+然后再处理后续纯目标。其他类型对应使用 `StoreAux.v` 中同类的 `store_*_undef_store_*` lemma。
+
+## 26. `entailer!` 后的子目标顺序不一定等于规格文本顺序
+
+在 entailment witness 中，`pre_process; entailer!; try lia` 后剩下的目标可能会被重排：
+
+- heap 权限目标可能排在所有 pure 目标之前
+- pure 目标可能按 entailment engine 的拆分顺序排列，而不是按 `goal.v` 中右侧断言的文本顺序排列
+
+如果 bullet 脚本出现“当前目标不是预期断言”或“假设匹配失败”，不要继续猜测。
+
+更稳的做法是：
+
+1. 用 `coqtop` 在该 witness 中执行到 `pre_process; entailer!; try lia`
+2. `Show.` 查看实际剩余目标顺序
+3. 按实际目标顺序重排 bullet
+4. 对重复使用的 list / recurrence 结论抽 helper lemma，避免在 witness bullet 里手搓复杂 rewrite
+
+## 27. 溢出 witness 不要只看纯前提，先从栈槽取回 `Int` 范围
+
+如果 `safety_wit` 的目标是类似 `cnt + 1 <= INT_MAX`，而 `pre_process; entailer!` 后纯上下文里没有 `n <= INT_MAX`，不要马上判断为 contract gap。
+
+先在 `entailer!` 之前对相关栈变量使用：
+
+```coq
+sep_apply store_int_range.
+```
+
+它可以从空间断言 `(&( "n")) # Int |-> n_pre`、`(&( "i")) # Int |-> i` 这类栈槽中恢复 `Int.min_signed <= ... <= Int.max_signed`。之后再结合循环计数的纯上界，例如 prefix count `<= i - 1` 和 `i < n_pre`，通常可以完成自增溢出证明。
+
+## 28. 打开 `sac` 后局部 list 证明避免使用 `[| ...]` 和 `[x]` 语法
+
+`Local Open Scope sac` 可能干扰 Coq 对 list induction/destruct pattern 和 singleton list notation 的解析，表现为：
+
+- `Syntax error: [equality_intropattern] ... expected after 'as'`
+- `[x]` 被解析成断言/命题相关语法，而不是 list singleton
+
+在 `proof_manual.v` 的 helper lemma 中，稳定写法是：
+
+- 用 `induction xs.` / `destruct xs.`，不要写 `induction xs as [| x xs IH]`
+- 用 `cons x nil`，不要写 `[x]`
+
+## 29. Coq 脚本优先用保守写法，尤其少依赖脆弱的 `destruct ... as ...` 形状
 
 自动生成或半自动修改的 proof 中，以下写法更容易在不同环境里出问题：
 

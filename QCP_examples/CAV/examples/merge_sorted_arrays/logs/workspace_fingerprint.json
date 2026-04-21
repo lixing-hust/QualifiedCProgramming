@@ -1,0 +1,38 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260421_144632_merge_sorted_arrays",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/merge_sorted_arrays.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/merge_sorted_arrays.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_144632_merge_sorted_arrays/original/merge_sorted_arrays.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_144632_merge_sorted_arrays/original/merge_sorted_arrays.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_144632_merge_sorted_arrays.c",
+  "function_name": "merge_sorted_arrays",
+  "program_sha256": "def6d3270c056b70cdf1d44fe566cbde5f35f7b487476879b3e1af599674a039",
+  "semantic_description": "merge_sorted_arrays merges two nondecreasing integer arrays a[0..n) and b[0..m) into caller-provided output array out[0..n+m). The implementation uses three indices i, j, and k with one main two-pointer while loop followed by two tail-copy while loops. It preserves the input arrays and writes every output cell. Empty input arrays are allowed because n and m are only constrained to be nonnegative.",
+  "keywords": {
+    "algorithm_family": "two_pointers",
+    "control_flow": "while_loop",
+    "data_shape": [
+      "array",
+      "pointer"
+    ],
+    "semantic_intent": [
+      "preserve_input",
+      "in_place_update"
+    ],
+    "proof_pattern": [
+      "loop_invariant",
+      "heap_reasoning",
+      "case_split",
+      "range_bound"
+    ],
+    "numeric_properties": [
+      "nonnegative_input",
+      "int_range"
+    ],
+    "edge_case_behavior": "empty_loop_possible"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

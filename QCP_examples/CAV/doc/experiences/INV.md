@@ -169,3 +169,56 @@
 - 再在已写前缀上叠加值语义
 
 不要一开始就试图把整段数组都写成完整值语义；这很容易在初始化早期就卡住 invariant 校验。
+
+## 11. 双指针归并类题不能只记录“已合并前缀”，还要记录跨边界顺序历史
+
+`merge_sorted_arrays` 这类题难的根本原因是：程序每轮只比较当前 `a[i]` 和 `b[j]`，但 proof 里要证明“把当前元素追加到已合并结果末尾”是合法的。
+
+只写下面这些信息通常不够：
+
+- `0 <= i <= n`
+- `0 <= j <= m`
+- `k == i + j`
+- `lout_done == merge(sublist(0, i, a), sublist(0, j, b))`
+
+因为当选择 `a[i]` 时，证明需要知道所有已经消费的 `b[0..j)` 都小于当前和未来相关的 `a`；当选择 `b[j]` 时，也需要知道已经消费的 `a[0..i)` 都不大于当前和未来相关的 `b`。
+
+更稳的 invariant 要把两类历史关系显式留下来：
+
+- consumed `b` 与 future `a` 的严格顺序关系
+- consumed `a` 与 future `b` 的非严格顺序关系
+
+这两个关系不是装饰性信息，而是证明 merge-prefix 语义保持性的核心桥梁。没有它们，`symexec` 可能仍能生成 VC，但 manual proof 会在 `lout_done ++ [x] = merge(...)` 这类纯 list 目标上卡死。
+
+设计这类 invariant 时建议先用自然语言写清楚：
+
+- `lout_done` 精确等于哪两个已消费前缀的 merge
+- `out` 的 heap shape 是 `app(lout_done, sublist(k, n + m, old_out))`
+- `k` 是否始终等于 `i + j`
+- 两个输入数组是否保持原始长度和值
+- tie rule 是选择 `a` 还是选择 `b`，跨边界关系必须和 tie rule 一致
+
+尤其要注意 `<=` 和 `<` 的方向：如果代码在 `a[i] <= b[j]` 时选择 `a`，那么 consumed `a` 到 future `b` 可以是 `<=`，而 consumed `b` 到 future `a` 往往需要 `<`，否则 append-last helper lemma 的条件会对不上。
+
+## 12. 多阶段循环要为每个阶段保留足够的阶段切换事实
+
+归并程序通常有三个循环：
+
+- 主双指针循环
+- 复制 `a` 剩余元素的尾循环
+- 复制 `b` 剩余元素的尾循环
+
+难点在于第二、第三个循环不是独立扫描，它们继承了主循环退出时的历史语义。
+
+常见错误是：
+
+- 第二个循环一开始就假设 `j == m`，但真实控制流可能是 `i == n` 退出主循环
+- 第三个循环一开始就假设 `i == n`，但没有把前面阶段保存的 merge-prefix 语义带过去
+- 尾循环只保留 `k == i + j`，却丢失跨边界顺序关系，导致尾部 append 证明无法完成
+
+处理方法：
+
+- 主循环退出后先用 disjunction 或阶段 assertion 区分 `i == n` 与 `j == m`
+- 每个尾循环的 invariant 仍然保留完整的 `lout_done == merge(consumed_a, consumed_b)`
+- 尾循环继续保留跨边界关系，即使其中一侧已经到达边界；这些关系在 proof 中会变成 vacuous 或用于 append-last lemma
+- 退出到 return witness 前，要能直接推出 `i == n`、`j == m`、`k == n + m`

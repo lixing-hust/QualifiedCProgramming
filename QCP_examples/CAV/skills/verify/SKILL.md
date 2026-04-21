@@ -53,6 +53,8 @@ Verify 只消费 Contract 已经准备好的验证输入，不再负责设计前
 - `goal_check.v` 必须编译通过
 - 编译完成后清理 `coq/` 下非 `.v` 中间产物
 - `logs/issues.md` 只能追加，不能覆盖已有内容；必须写得非常具体，详细记录整个 verify 过程中的所有踩坑，而不是只记最后一个错误；每个问题至少要写清楚现象、触发条件、定位到的文件/行号或 theorem、修复动作、修复后的结果
+- 验证过程中每解决一个有代表性的通用问题，都必须立即判断是否需要更新 Experience；如果该问题能复用于后续任务，就更新对应的 `doc/experiences/*.md`，不要等到任务最后才回忆
+- Experience 只写可复用结论，不写单题流水账；按问题所属阶段写入 `SYMEXEC.md`、`ASSERTION.md`、`INV.md`、`PROOF.md` 或 `COMPILE.md`
 - `logs/workspace_fingerprint.json` 不能保留脚本初始化时的空占位；必须在任务早期回填非空的 `semantic_description` 和 `keywords`，回填 `keywords` 前先读 `doc/retrieval/INDEX.md`；`keywords` 的 key 和 value 都只能来自其中定义的受控词表
 - `logs/metrics.md` 只能追加，不能覆盖已有内容；唯一允许修改的已有内容是最后的 `Final Result: ...` 行
 - `logs/metrics.md` 的最后必须显式写一行 `Final Result: Success` 或 `Final Result: Fail`
@@ -74,7 +76,8 @@ Verify 只消费 Contract 已经准备好的验证输入，不再负责设计前
 4. 读 `SYMEXEC.md`，跑 `symexec`，生成最新 `goal/proof_auto/proof_manual/goal_check`。
 5. 如果 `proof_manual.v` 里还有需要手工证明的 theorem，读 `PROOF.md`，写并持续更新 `logs/proof_reasoning.md`，补 `proof_manual.v`，编译失败就继续 proof 迭代直到通过；否则跳过这一步。
 6. 读 `COMPILE.md`，按完整模板编译 `goal`、`proof_auto`、`proof_manual`、`goal_check`。
-7. 详细写 `logs/issues.md` 和 `logs/metrics.md`，把整个过程中的踩坑、定位和修复链路补全，并在 `logs/metrics.md` 最后一行写 `Final Result: Success` 或 `Final Result: Fail`。
+7. 每解决一个有代表性的通用问题，就同步更新对应 Experience，并在 `logs/issues.md` 记录该问题的具体踩坑和修复链路。
+8. 详细写 `logs/issues.md` 和 `logs/metrics.md`，把整个过程中的踩坑、定位和修复链路补全，在 `logs/metrics.md` 中列出 `Experience updates`，并在最后一行写 `Final Result: Success` 或 `Final Result: Fail`。
 
 ## 6. 完成标准
 
