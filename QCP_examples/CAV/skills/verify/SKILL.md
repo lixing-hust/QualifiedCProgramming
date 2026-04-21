@@ -7,6 +7,8 @@ Verify 只消费 Contract 已经准备好的验证输入，不再负责设计前
 
 所有 `reasoning` 和 `issues` 日志的核心目标只有一个：保证后来的智能体能够快速看懂当前状态、准确接管，并直接复用之前的定位、修复和证明工作；不要写成只有当前这一轮自己看得懂的简写。
 
+所有 `reasoning` 和 `issues` 条目都必须达到“独立可读”：后来的智能体只读该条目，不打开对应源码，也能知道当前上下文、失败点、关键 C/Coq/命令片段、为什么失败、为什么这样修、下一步是什么。
+
 当前任务一旦确定 workspace=`output/verify_<timestamp>_<name>/`，对应的 annotated 工作副本就唯一固定为 `annotated/verify_<timestamp>_<name>.c`。脚本调用和手动按 skill 执行都必须使用这同一个路径规则，不能各自发明不同位置或文件名。
 
 ## 1. 分步阅读规则
@@ -52,7 +54,7 @@ Verify 只消费 Contract 已经准备好的验证输入，不再负责设计前
 - `proof_manual.v` 不得留下 `Admitted.` 或新增 `Axiom`
 - `goal_check.v` 必须编译通过
 - 编译完成后清理 `coq/` 下非 `.v` 中间产物
-- `logs/issues.md` 只能追加，不能覆盖已有内容；必须写得非常具体，详细记录整个 verify 过程中的所有踩坑，而不是只记最后一个错误；每个问题至少要写清楚现象、触发条件、定位到的文件/行号或 theorem、修复动作、修复后的结果
+- `logs/issues.md` 只能追加，不能覆盖已有内容；必须写得非常具体，详细记录整个 verify 过程中的所有踩坑，而不是只记最后一个错误；每个问题至少要写清楚现象、触发条件、定位到的文件/行号或 theorem、修复动作、修复后的结果；每个代表性问题还要贴出足够读懂问题的关键代码或日志片段，例如 C annotation 片段、Coq theorem/subgoal/tactic 片段、`coqc`/`symexec` 报错片段或相关命令片段，保证后来的智能体只读 `issues.md` 也能理解问题发生在哪里、为什么发生、如何修复
 - 验证过程中每解决一个有代表性的通用问题，都必须立即判断是否需要更新 Experience；如果该问题能复用于后续任务，就更新对应的 `doc/experiences/*.md`，不要等到任务最后才回忆
 - Experience 只写可复用结论，不写单题流水账；按问题所属阶段写入 `SYMEXEC.md`、`ASSERTION.md`、`INV.md`、`PROOF.md` 或 `COMPILE.md`
 - `logs/workspace_fingerprint.json` 不能保留脚本初始化时的空占位；必须在任务早期回填非空的 `semantic_description` 和 `keywords`，回填 `keywords` 前先读 `doc/retrieval/INDEX.md`；`keywords` 的 key 和 value 都只能来自其中定义的受控词表

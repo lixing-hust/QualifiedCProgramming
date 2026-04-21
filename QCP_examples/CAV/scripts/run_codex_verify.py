@@ -128,6 +128,7 @@ def build_prompt(
     attempt: int,
 ) -> str:
     input_v_line = f"- Optional input V: `{input_v_path}`\n" if input_v_path else "- Optional input V: `<not provided>`\n"
+    continue_path = workspace_path / "logs" / "continue.md"
     if attempt <= 1:
         return f"""Use this skill as the complete workflow:
 {skill_path}
@@ -154,10 +155,15 @@ Inputs:
 {input_v_line}- Target function: `{function_name}`
 - Workspace: `{workspace_path}`
 - Active annotated C: `{annotated_c_path}`
+- Continue analysis log: `{continue_path}`
 
 Retry rule:
 - Do not restart the task from scratch.
-- First read the current logs, generated Coq files, latest compile errors, and current annotated file in this workspace.
+- First read the current logs, generated Coq files, latest compile errors, latest `codex_last_message_*`, latest `codex_stderr_*`, and current annotated file in this workspace.
+- Before editing any file, append a new section to `logs/continue.md`; never overwrite or rewrite existing `continue.md` content.
+- Every retry round must keep extending `logs/continue.md` with a fresh section for that round, even if an earlier retry already wrote one.
+- In the new `logs/continue.md` section, analyze why the previous agent/run did not finish, what concrete blocker remains now, what should be continued next, how to do it, and the step-by-step plan for this retry.
+- The continue analysis must cite concrete workspace evidence: file paths, theorem/witness names, compile errors, relevant C annotation snippets, or relevant Coq snippets. Do not write only generic text.
 - If `logs/workspace_fingerprint.json` still has empty `semantic_description` or `keywords`, first read `doc/retrieval/INDEX.md` and fill them using only its controlled vocabulary before proceeding.
 - Precisely identify the current blocker from the existing workspace state.
 - Continue repairing from that blocker in the same workspace.

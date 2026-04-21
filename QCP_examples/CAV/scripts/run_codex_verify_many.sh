@@ -54,12 +54,47 @@ fi
 
 cd "$ROOT"
 
+FAILURES=()
+SUCCESSES=()
+
 for name in "${NAMES[@]}"; do
+  INPUT_PATH="input/${name}.c"
+
+  if [[ ! -f "$INPUT_PATH" ]]; then
+    echo "[verify-many] missing input file name=$name path=$INPUT_PATH" >&2
+    FAILURES+=("$name:missing_input")
+    continue
+  fi
+
   echo "[verify-many] start name=$name"
-  VERIFY_CMD=(python3 "$VERIFY_SCRIPT" "input/${name}.c" --function-name "$name")
+  VERIFY_CMD=(python3 "$VERIFY_SCRIPT" "$INPUT_PATH" --function-name "$name")
   if [[ $EXPORT_EXAMPLES -eq 1 ]]; then
     VERIFY_CMD+=(--export-examples)
   fi
-  "${VERIFY_CMD[@]}"
+
+  if ! "${VERIFY_CMD[@]}"; then
+    echo "[verify-many] failed name=$name" >&2
+    FAILURES+=("$name:verify")
+    continue
+  fi
+
+  SUCCESSES+=("$name")
   echo "[verify-many] done name=$name"
 done
+
+echo "[verify-many] summary: total=${#NAMES[@]} success=${#SUCCESSES[@]} failure=${#FAILURES[@]}"
+
+if [[ ${#SUCCESSES[@]} -gt 0 ]]; then
+  echo "[verify-many] successes:"
+  for success in "${SUCCESSES[@]}"; do
+    echo "  $success"
+  done
+fi
+
+if [[ ${#FAILURES[@]} -gt 0 ]]; then
+  echo "[verify-many] failures:" >&2
+  for failure in "${FAILURES[@]}"; do
+    echo "  $failure" >&2
+  done
+  exit 1
+fi

@@ -6,7 +6,6 @@ CONTRACT_SCRIPT="$ROOT/scripts/run_codex_contract.py"
 VERIFY_SCRIPT="$ROOT/scripts/run_codex_verify.py"
 
 EXPORT_EXAMPLES=1
-CONTINUE_ON_ERROR=0
 
 usage() {
   cat <<'EOF'
@@ -59,6 +58,7 @@ fi
 cd "$ROOT"
 
 FAILURES=()
+SUCCESSES=()
 
 for name in "${NAMES[@]}"; do
   RAW_PATH="raw/${name}.md"
@@ -67,21 +67,21 @@ for name in "${NAMES[@]}"; do
   if [[ ! -f "$RAW_PATH" ]]; then
     echo "[contract-verify-many] missing raw file: $RAW_PATH" >&2
     FAILURES+=("$name:missing_raw")
-    exit 1
+    continue
   fi
 
   echo "[contract-verify-many] contract start name=$name"
   if ! python3 "$CONTRACT_SCRIPT" "$RAW_PATH" --function-name "$name"; then
     echo "[contract-verify-many] contract failed name=$name" >&2
     FAILURES+=("$name:contract")
-    exit 1
+    continue
   fi
   echo "[contract-verify-many] contract done name=$name"
 
   if [[ ! -f "$INPUT_PATH" ]]; then
     echo "[contract-verify-many] missing generated input after contract: $INPUT_PATH" >&2
     FAILURES+=("$name:missing_input")
-    exit 1
+    continue
   fi
 
   VERIFY_CMD=(python3 "$VERIFY_SCRIPT" "$INPUT_PATH" --function-name "$name")
@@ -93,13 +93,24 @@ for name in "${NAMES[@]}"; do
   if ! "${VERIFY_CMD[@]}"; then
     echo "[contract-verify-many] verify failed name=$name" >&2
     FAILURES+=("$name:verify")
-    exit 1
+    continue
   fi
+
+  SUCCESSES+=("$name")
   echo "[contract-verify-many] verify done name=$name"
 done
 
+echo "[contract-verify-many] summary: total=${#NAMES[@]} success=${#SUCCESSES[@]} failure=${#FAILURES[@]}"
+
+if [[ ${#SUCCESSES[@]} -gt 0 ]]; then
+  echo "[contract-verify-many] successes:"
+  for success in "${SUCCESSES[@]}"; do
+    echo "  $success"
+  done
+fi
+
 if [[ ${#FAILURES[@]} -gt 0 ]]; then
-  echo "[contract-verify-many] completed with failures:" >&2
+  echo "[contract-verify-many] failures:" >&2
   for failure in "${FAILURES[@]}"; do
     echo "  $failure" >&2
   done
