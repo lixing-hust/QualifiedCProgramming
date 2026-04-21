@@ -1,6 +1,6 @@
 {
   "name": "QCP Dev Container",
-  "image": "qcp-tase2026",
+  "image": "qcp",
   "workspaceFolder": "/home/coq/qcp",
   "customizations": {
     "vscode": {

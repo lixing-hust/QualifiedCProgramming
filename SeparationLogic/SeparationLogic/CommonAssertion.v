@@ -7,7 +7,7 @@ Require Import Coq.micromega.Psatz.
 Require Import String.
 Require Import Permutation.
 
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From compcert.lib Require Import Coqlib Integers.
 
@@ -1305,5 +1305,425 @@ Ltac pre_process :=
   try (solve [entailer!]).
 
 Tactic Notation "pre_process_default" := pre_process.
+
+(* ========== LLM-friendly tactics ========== *)
+
+(* ----- Goal decomposition and pure export ----- *)
+
+Lemma dump_spatial_left : forall P Q, Q -> P |-- [| Q |].
+Proof.
+  intros. easy.
+Qed.
+
+Ltac dump_pre_spatial :=
+  apply dump_spatial_left.
+
+Lemma split_pure_and_spatial_goals : forall P pure spatial,
+  P |-- spatial -> P |-- pure -> P |-- pure && spatial.
+Proof.
+  intros. unfold andp, derivable1 in *. intros. split; auto.
+Qed.
+
+Ltac _assert_pure t :=
+  lazymatch t with
+  | [| _ |] => idtac
+  | ?A && ?B => _assert_pure A; _assert_pure B
+  | _ => fail 1 "not pure: RHS contains non-[| _ |] parts"
+  end.
+
+Ltac _assert_no_pure t :=
+  first
+  [ lazymatch t with
+    | context [ [| _ |] ] => fail 1 "spatial part contains a pure [| _ |]"
+    | ?A ** ?B => _assert_no_pure A; _assert_no_pure B
+    | ?A && ?B => _assert_no_pure A; _assert_no_pure B
+    | _ => idtac
+    end
+  | fail 1 "spatial part contains a pure [| _ |]"
+  ].
+
+Ltac split_pure_spatial :=
+  normalize;
+  asrt_simpl_pure;
+  try repeat rewrite <- logic_equiv_andp_assoc;
+  match goal with
+  | |- _ |-- (?A && ?B) =>
+      first
+      [ _assert_pure A; _assert_no_pure B; apply split_pure_and_spatial_goals
+      | _assert_pure B; _assert_no_pure A;
+        rewrite (logic_equiv_andp_comm A B) at 1;
+        apply split_pure_and_spatial_goals
+      ]
+  | |- _ => fail "split_pure_spatial: RHS must be (pure && spatial) or (spatial && pure)"
+  end.
+
+Lemma _derivable1_andp_intros : forall P A B,
+  P |-- A -> P |-- B -> P |-- A && B.
+Proof.
+  unfold derivable1, andp; auto.
+Qed.
+
+Ltac split_pures :=
+  asrt_simpl_pure;
+  repeat progress rewrite <- logic_equiv_andp_assoc;
+  repeat match goal with
+  | |- _ |-- ?A && ?B =>
+      _assert_pure A;
+      _assert_pure B;
+      apply _derivable1_andp_intros
+  end.
+
+(* ----- Pure facts from the precondition ----- *)
+
+Tactic Notation "Intros_p" simple_intropattern(x) :=
+  asrt_simpl_pure;
+  lazymatch goal with
+  | |- ?P |-- ?Q =>
+      lazymatch P with
+      | context [ [| ?B |] ] =>
+          apply (coq_prop_andp_left B);
+          intro x
+      | _ => fail 1 "Intros_p: no pure [| _ |] on the left"
+      end
+  | _ => fail "Intros_p: goal is not an entailment"
+  end.
+
+Lemma add_pure_split : forall (P : Prop) (C F : expr) ,
+  C |-- [| P |] ->
+  ([| P |] && C) |-- F ->
+  C |-- F.
+Proof.
+  unfold derivable1, andp, coq_prop; firstorder.
+Qed.
+
+(* Internal helper used by atomic lemma application. *)
+Tactic Notation "add_pure" constr(p) "as" ident(H) :=
+  apply (add_pure_split p); [ | Intros_p H ].
+
+(* ----- Targeted cancellation on the spatial precondition ----- *)
+
+Ltac same_asrt x p :=
+  first
+  [ constr_eq x p; idtac
+  | tryif unify x p then idtac else fail 1
+  ].
+
+Lemma sepcon_cancel_lhs_emp :
+  forall P Q, Q |-- emp -> P ** Q |-- P.
+Proof.
+  intros.
+  rewrite <- (sepcon_emp_equiv P) at 2.
+  eapply derivable1_sepcon_mono; [derivable1_refl_tac | ].
+  exact H.
+Qed.
+
+Ltac sepcon_cancel1_p' p P :=
+  lazymatch P with
+  | ?x ** ?P' =>
+      first
+      [ same_asrt x p;
+        lazymatch goal with
+        | |- x ** P' |-- x ** _ =>
+            eapply derivable1_sepcon_mono; [derivable1_refl_tac | ];
+            idtac
+        | |- x ** P' |-- x =>
+            eapply sepcon_cancel_lhs_emp;
+            idtac
+        | |- _ |-- ?Q =>
+            pure_find_lift x Q; sepcon_lift x;
+            eapply derivable1_sepcon_mono; [derivable1_refl_tac | ];
+            idtac
+        end
+      | sepcon_cancel1_p' p P'
+      ]
+  | ?x =>
+      first
+      [ same_asrt x p;
+        sepcon_lift x;
+        first
+        [ lazymatch goal with
+          | |- x |-- x => derivable1_refl_tac
+          | |- x ** ?P0 |-- x ** _ =>
+              eapply derivable1_sepcon_mono; [derivable1_refl_tac | ]
+          | |- x ** ?P0 |-- x =>
+              eapply sepcon_cancel_lhs_emp
+          | |- x |-- x ** _ =>
+              eapply sepcon_cancel_res_emp
+          end
+        | idtac ]
+      | idtac ]
+  | _ => idtac
+  end.
+
+Ltac sepcon_cancel1_p p :=
+  lazymatch goal with
+  | |- ?x ** _ |-- ?y ** _ =>
+      first
+      [ same_asrt x p;
+        eapply derivable1_sepcon_mono; [derivable1_refl_tac | ]; idtac
+      | lazymatch goal with
+        | |- ?P |-- _ => sepcon_cancel1_p' p P
+        end
+      ]
+  | |- ?x ** _ |-- ?y =>
+      first
+      [ same_asrt x p;
+        eapply sepcon_cancel_lhs_emp; idtac
+      | lazymatch goal with
+        | |- ?P |-- _ => sepcon_cancel1_p' p P
+        end
+      ]
+  | |- ?P |-- EX _, _ => idtac
+  | |- ?P |-- _ => sepcon_cancel1_p' p P
+  end.
+
+Ltac cancel_exactly1_or_fail p :=
+  progress (sepcon_cancel1_p p)
+  || fail 1 "cancel: failed to find the specified predicate on either side; no cancellation was performed.".
+
+Ltac sepcon_right_assoc :=
+  repeat progress sepcon_assoc_change.
+
+Tactic Notation "cancel" uconstr(p) :=
+  sepcon_right_assoc; cancel_exactly1_or_fail p.
+
+(* ----- Lemma application on spatial goals ----- *)
+
+Ltac sep_apply_l_aux H :=
+  let t := constr:(H) in
+  lazymatch type of t with
+  | ?P0 |-- ?Q0 =>
+      unify_prewithgoal P0;
+      let L := (sepconlistasrts P0) in
+      sep_apply_L L t; sepcon_assoc_change
+  | ?P0 --||-- ?Q0 =>
+      let ent := constr:(proj1 t) in
+      unify_prewithgoal P0;
+      let L := (sepconlistasrts P0) in
+      sep_apply_L L ent; sepcon_assoc_change
+  | _ =>
+      fail 1 "sep_apply_l: The lemma is not an entailment; please instantiate all non-Prop parameters"
+  end.
+
+Ltac R_sepcon_lift'' p :=
+  match goal with
+  | |- ?P |-- ?Q =>
+      lazymatch Q with
+      | context [?x ** p]         => rewrite (logic_equiv_sepcon_comm x p)
+      | context [?x ** (p ** ?y)] => rewrite (logic_equiv_sepcon_swap x p y)
+      | _ => idtac
+      end
+  end.
+
+Ltac R_sepcon_lift' p := R_sepcon_lift'' p; repeat progress (R_sepcon_lift'' p).
+
+Ltac R_andp_lift'' p :=
+  match goal with
+  | |- ?P |-- ?Q =>
+      lazymatch Q with
+      | context [?x && p]               => rewrite (logic_equiv_andp_comm x p)
+      | context [?x && (p && ?y)]       => rewrite (logic_equiv_andp_swap x p y)
+      | context [?x && p ** ?q]         => rewrite (logic_equiv_andp_comm x (p ** q))
+      | context [?x && (p ** ?q && ?y)] => rewrite (logic_equiv_andp_swap x (p ** q) y)
+      | _ => idtac
+      end
+  end.
+
+Ltac R_andp_lift' p := R_andp_lift'' p; repeat progress (R_andp_lift'' p).
+
+Ltac _sep_apply_r_oneway t :=
+  lazymatch type of t with
+  | ?Q1 |-- ?Q2 =>
+      asrt_simpl_pure;
+      first
+      [ lazymatch goal with
+        | |- ?P |-- ?RHS =>
+            same_asrt RHS Q2;
+            eapply derivable1_trans with (y := Q1); [ idtac | exact t ]
+        end
+      | R_sepcon_lift' Q2;
+        lazymatch goal with
+        | |- ?P |-- (?Q2' ** ?R) =>
+            tryif unify Q2' Q2 then idtac else fail 1 "sep_apply_r: Internal unification failed";
+            eapply derivable1_trans with (y := Q1 ** R);
+            [ idtac
+            | eapply derivable1_sepcon_mono; [ exact t | derivable1_refl_tac ] ]
+        | |- ?P |-- ?RHS' =>
+            fail 1 "sep_apply_r: Internal pattern matching failed"
+        end
+      | R_andp_lift' Q2;
+        lazymatch goal with
+        | |- ?P |-- (?Q2' && ?R) =>
+            tryif unify Q2' Q2 then idtac else fail 1 "sep_apply_r: Internal unification failed";
+            eapply derivable1_trans with (y := Q1 && R);
+            [ idtac
+            | eapply derivable1_andp_mono; [ exact t | derivable1_refl_tac ] ]
+        | |- ?P |-- ?RHS' =>
+            fail 1 "sep_apply_r: Internal pattern matching failed"
+        end
+      ]
+      || fail 1 "sep_apply_r: The lemma's right-hand side does not appear in the goal's conclusion"
+  | _ => fail 1 "sep_apply_r: The lemma is not an entailment; please instantiate all non-Prop parameters"
+  end.
+
+Ltac sep_apply_r_aux H :=
+  lazymatch type of H with
+  | ?Q1 |-- ?Q2 =>
+      _sep_apply_r_oneway H
+  | ?Q1 --||-- ?Q2 =>
+      _sep_apply_r_oneway (proj1 H)
+  | _ =>
+      fail 1 "sep_apply_r: The lemma is not an entailment; please instantiate all non-Prop parameters"
+  end.
+
+Ltac prop_apply_p H :=
+  lazymatch type of H with
+  | ?P0 |-- [| ?Q0 |] =>
+      unify_prewithgoal P0;
+      let L := (sepconlistasrts P0) in
+      prop_apply_L L H; sepcon_assoc_change
+  | ?P0 --||-- [| ?Q0 |] =>
+      unify_prewithgoal P0;
+      let L := (sepconlistasrts P0) in
+      prop_apply_L L (proj1 H); sepcon_assoc_change
+  | _ =>
+      fail 1 "prop_apply_p: Please instantiate parameters and premises until the lemma has the shape P |-- [| Q |] (or P --||-- [| Q |])."
+  end.
+
+Ltac _try_sep_apply_r t := sep_apply_r_aux t.
+Ltac _try_sep_apply_l t := sep_apply_l_aux t.
+
+Ltac _consume_props_with_subgoal t k :=
+  lazymatch type of t with
+  | forall (x : ?T), ?Rest =>
+      lazymatch type of T with
+      | Prop =>
+          let Hp := fresh "Hp" in
+          add_pure T as Hp;
+          [
+          | lazymatch goal with
+            | [ H : T |- _ ] =>
+                let t' := constr:(t H) in
+                let t'' := eval cbv beta in t' in
+                _consume_props_with_subgoal t'' ltac:(fun tf => k tf)
+            | _ =>
+                fail 1 "_consume_props_with_subgoal: failed to recover the introduced Prop premise"
+            end
+          ]
+      | _ =>
+          k t
+      end
+  | ?T -> ?Rest =>
+      lazymatch type of T with
+      | Prop =>
+          let Hp := fresh "Hp" in
+          add_pure T as Hp;
+          [
+          | lazymatch goal with
+            | [ H : T |- _ ] =>
+                let t' := constr:(t H) in
+                let t'' := eval cbv beta in t' in
+                _consume_props_with_subgoal t'' ltac:(fun tf => k tf)
+            | _ =>
+                fail 1 "_consume_props_with_subgoal: failed to recover the introduced Prop premise"
+            end
+          ]
+      | _ =>
+          k t
+      end
+  | _ => k t
+  end.
+
+Tactic Notation "sep_apply_l_atomic" uconstr(t) :=
+  _consume_props_with_subgoal t ltac:(fun tfin =>
+    _try_sep_apply_l tfin).
+
+Tactic Notation "sep_apply_r_atomic" uconstr(t) :=
+  _consume_props_with_subgoal t ltac:(fun tfin =>
+    _try_sep_apply_r tfin).
+
+(* ----- Experimental / disabled ideas kept for reference ----- *)
+
+(* Lemma split_pure_right : forall P Q R, P |-- R -> P |-- [| Q |] -> P |-- R && [| Q |].
+Proof.
+  intros. split.
+  - apply H. assumption.
+  - apply H0. assumption.
+Qed. *)
+
+(* Ltac pre_process_pure_solve :=
+  pre_process;
+  repeat progress rewrite <- logic_equiv_andp_assoc;
+  repeat progress apply split_pure_right;
+  pre_process. *)
+
+(* Theorem false_wit: False.
+Admitted.
+
+Set Primitive Projections.
+Class Solved (G : Prop) := solved : G.
+#[global] Hint Mode Solved ! : typeclass_instances.
+Ltac safe_solve := exact solved; idtac "Safely solved!".
+Ltac danger_solve := pose proof false_wit; exfalso; assumption; idtac "Dangerously solved!".
+
+Ltac pure_solve :=
+  asrt_simpl_pure;
+  match goal with
+  | |- _ |-- ?RHS =>
+      _assert_pure RHS;
+      tryif (solve [ pre_process_pure_solve; entailer! ])
+      then idtac "[[[PURE DONE]]]"
+      else idtac "[[[PURE NOT DONE]]]";
+        repeat match goal with H : _ |- _ => revert H end;
+        lazymatch goal with
+        | |- ?G =>
+            idtac "[[[PURE START]]]";
+            idtac G;
+            idtac "[[[PURE END]]]";
+            first [safe_solve | danger_solve]
+        end
+  | _ => fail 1 "pure_solve: goal is not an entailment"
+  end. *)
+
+(* Ltac _consume_props_only t k :=
+  lazymatch type of t with
+  | forall (x : ?T), ?Rest =>
+      lazymatch type of T with
+      | Prop =>
+          let Hp := fresh "Hp" in
+          add_pure T as Hp;
+          [ pure_solve
+          | let t' := constr:(t Hp) in
+            let t'' := eval cbv beta in t' in
+            _consume_props_only t'' ltac:(fun tf =>
+              k tf; try clear Hp)
+          ]
+      | _ =>
+          k t
+      end
+  | ?T -> ?Rest =>
+      lazymatch type of T with
+      | Prop =>
+          let Hp := fresh "Hp" in
+          add_pure T as Hp;
+          [ pure_solve
+          | let t' := constr:(t Hp) in
+            let t'' := eval cbv beta in t' in
+            _consume_props_only t'' ltac:(fun tf =>
+              k tf; try clear Hp)
+          ]
+      | _ =>
+          k t
+      end
+  | _ => k t
+  end. *)
+
+(* Tactic Notation "sep_apply_l" uconstr(t) :=
+  _consume_props_only t ltac:(fun tfin =>
+    _try_sep_apply_l tfin).
+
+Tactic Notation "sep_apply_r" uconstr(t) :=
+  _consume_props_only t ltac:(fun tfin =>
+    _try_sep_apply_r tfin). *)
   
 End DerivedPredSig.

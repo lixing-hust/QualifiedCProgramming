@@ -229,7 +229,7 @@ Proof.
     rewrite app_nth1 by lia.
     reflexivity.
   + destruct H.
-    exists (sublist (length l1) (length l2) l2).
+    exists (Nsublist (length l1) (length l2) l2).
     eapply (nth_ext _ _ default default).
     - rewrite length_app.
       rewrite length_sublist by lia.
@@ -283,7 +283,7 @@ Proof.
     rewrite app_nth2 by lia.
     f_equal. lia.
   + destruct H.
-    exists (sublist 0 (length l2 - length l1) l2).
+    exists (Nsublist 0 (length l2 - length l1) l2).
     eapply (nth_ext _ _ default default).
     - rewrite length_app.
       rewrite length_sublist by lia.
@@ -520,7 +520,7 @@ Qed.
 Lemma prefix_iff_sublist {A: Type}:
   forall (l1 l2: list A),
     l1 is_a_prefix_of l2 <->
-    (exists j, j = length l1 /\ l1 = sublist 0 j l2).
+    (exists j, j = length l1 /\ l1 = Nsublist 0 j l2).
 Proof.
   split; intros.
   - unfold is_prefix in H.
@@ -528,22 +528,22 @@ Proof.
     exists (length l1).
     pose proof length_app l1 l3.
     subst; split; try lia.
-    rewrite sublist_split_app_l; try lia.
-    rewrite sublist_self; easy.
+    rewrite Nsublist_split_app_l; try lia.
+    rewrite Nsublist_self; easy.
   - destruct H as [j [? ?]].
     pose proof (f_equal (@length A) H0).
     rewrite length_sublist' in H1.
     unfold is_prefix.
-    exists (sublist j (length l2) l2).
-    rewrite <- sublist_self at 1 by eauto.
-    rewrite (sublist_split 0 (length l2) j); try lia.
+    exists (Nsublist j (length l2) l2).
+    rewrite <- Nsublist_self at 1 by eauto.
+    rewrite (Nsublist_split 0 (length l2) j); try lia.
     rewrite H0; auto.
 Qed.
 
 Lemma suffix_iff_sublist {A: Type}:
   forall (l1 l2: list A),
     l1 is_a_suffix_of l2 <->
-    (exists i, i = length l2 - length l1 /\ l1 = sublist i (length l2) l2).
+    (exists i, i = length l2 - length l1 /\ l1 = Nsublist i (length l2) l2).
 Proof.
   split; intros.
   - unfold is_suffix in H.
@@ -551,18 +551,18 @@ Proof.
     exists (length l3).
     pose proof length_app l3 l1.
     subst; split; try lia.
-    rewrite sublist_split_app_r with (len:= length l3); try lia.
+    rewrite Nsublist_split_app_r with (len:= length l3); try lia.
     rewrite H0.
     replace (length l3 - length l3) with 0 by lia.
     replace (length l3 + length l1 - length l3) with (length l1) by lia.
-    rewrite sublist_self; easy.
+    rewrite Nsublist_self; easy.
   - destruct H as [i [? ?]].
     pose proof (f_equal (@length A) H0).
     rewrite length_sublist in H1 by lia.
     unfold is_suffix.
-    exists (sublist 0 i l2).
-    rewrite <- sublist_self at 1 by eauto.
-    rewrite (sublist_split 0 (length l2) i); try lia.
+    exists (Nsublist 0 i l2).
+    rewrite <- Nsublist_self at 1 by eauto.
+    rewrite (Nsublist_split 0 (length l2) i); try lia.
     rewrite H0; easy.
 Qed.
 
@@ -658,12 +658,12 @@ Qed.
 Lemma prefix_sublist_iff {A: Type}:
   forall (l0 l: list A) i,
     0 <= i <= length l ->
-    l0 is_a_prefix_of (sublist 0 i l) <->
+    l0 is_a_prefix_of (Nsublist 0 i l) <->
     length l0 <= i /\ l0 is_a_prefix_of l.
 Proof.
   intros.
-  rewrite <- (sublist_self l) at 2; eauto.
-  rewrite (sublist_split 0 (length l) i); try lia.
+  rewrite <- (Nsublist_self l) at 2; eauto.
+  rewrite (Nsublist_split 0 (length l) i); try lia.
   pose proof length_sublist 0 i l ltac:(lia).
   replace (i - 0) with i in H0 by lia.
   rewrite <- H0 at 2.
@@ -673,11 +673,11 @@ Qed.
 Lemma suffix_sublist_cons_iff {A: Type}:
   forall (l0 l: list A) i,
     1 <= i <= length l ->
-    l0 is_a_suffix_of (sublist 1 i l) <->
-    length l0 <= i - 1 /\ l0 is_a_suffix_of (sublist 0 i l).
+    l0 is_a_suffix_of (Nsublist 1 i l) <->
+    length l0 <= i - 1 /\ l0 is_a_suffix_of (Nsublist 0 i l).
 Proof.
   intros.
-  rewrite (sublist_split 0 i 1); try lia.
+  rewrite (Nsublist_split 0 i 1); try lia.
   pose proof length_sublist 1 i l ltac:(lia).
   rewrite <- H0.
   apply suffix_app_iff.

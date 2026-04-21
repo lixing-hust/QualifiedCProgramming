@@ -690,10 +690,16 @@ Tactic Notation "prove_by_one_abs_step" uconstr(x) :=
   __prove_by_one_abs_step x.
 
 Ltac abs_choice_left :=
-  apply hsevalchoice_left_derive.
+  match goal with 
+  | |- ?P -@ (choice ?c1 ?c2) -⥅ ?Q ♯ ?a => apply hsevalchoice_left_derive
+  | |- _ => fail 1 "choice_left error, expected hseval/choice"
+  end.
 
 Ltac abs_choice_right :=
-  apply hsevalchoice_right_derive.
+  match goal with 
+  | |- ?P -@ (choice ?c1 ?c2) -⥅ ?Q ♯ ?a => apply hsevalchoice_right_derive
+  | |- _ => fail 1 "choice_right error, expected hseval/choice"
+  end.
 
 Ltac abs_test_step :=
   match goal with
@@ -706,6 +712,7 @@ Ltac abs_test_step :=
          refine (hsevalbind_derive' _ _ _
                    P tt Q a _ _);
           [ apply hsevaltestpure_derive | ]
+  | |- _ => fail 1 "test error, expected hseval/assume!!"
   end.
 
 Ltac abs_assert_step :=
@@ -719,6 +726,7 @@ Ltac abs_assert_step :=
           refine (hsevalbind_derive _ _ _
                     (fun _ => ATrue) tt (fun _ => ATrue) _ _ _);
           [ apply hsevalassert_derive | ]
+  | |- _ => fail 1 "test error, expected hseval/assert"
   end.
 
 Ltac abs_ret_step :=
@@ -728,16 +736,30 @@ Ltac safe_step H := prog_nf in H;
   match type of H with
   | safeExec _ ((assert _) ;;  _) _ => apply safeExec_assert_seq in H; destruct H as [? H]; try safe_step H
   | safeExec _ ((assume!! _ ) ;;  _) _ => apply safeExec_test_bind in H; [try safe_step H | auto]
+  | safeExec _ ((assume _ ) ;; _) _ => apply safeExec_testst_bind in H; [try safe_step H | auto]
+  | _ => fail 1 "no pattern in hypothesis, expected safeExec/assume or safeExec/assert"
   end.
 
 Ltac safe_choice_l H :=
-  prog_nf in H;apply safeExec_choice_l in H; try safe_step H.
+  prog_nf in H;
+  match type of H with
+  | safeExec _ (choice _ _) _ => apply safeExec_choice_l in H;try safe_step H
+  | _ => fail 1 "no pattern in hypothesis, expected safeExec/choice"
+  end.
 
 Ltac safe_choice_r H :=
-  prog_nf in H;apply safeExec_choice_r in H; try safe_step H.
+  prog_nf in H;
+  match type of H with
+  | safeExec _ (choice _ _) _ => apply safeExec_choice_r in H;try safe_step H
+  | _ => fail 1 "no pattern in hypothesis, expected safeExec/choice"
+  end.
 
 Ltac safe_equiv :=
-  eapply safeExec_proequiv; eauto.  
+  match goal with
+  | H: safeExec ?P ?c1 ?X 
+    |-  safeExec ?P ?c2 ?X => eapply (safeExec_proequiv c1 c2 P X); eauto
+  | |- _ =>  fail 1 "expected safeExec/safeExec"
+  end.  
 
 
 Section  safeexec_Hoare_composition_rules.

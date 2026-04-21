@@ -10,7 +10,7 @@ DEP_FLAG = -Q $(CURRENT_DIR) ListLib
 
 LIST_FILES = \
 	Base/Positional.v Base/Inductive.v \
-	General/Length.v General/Presuffix.v General/Forall.v General/IndexedElements.v
+	General/Length.v General/Presuffix.v General/Forall.v General/IndexedElements.v General/NoDup.v
 
 
 FILES = \

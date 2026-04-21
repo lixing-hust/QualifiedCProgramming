@@ -205,7 +205,7 @@ Proof.
   + destruct H.
     pose proof Zlength_nonneg l1.
     exists (sublist (Zlength l1) (Zlength l2) l2).
-    rewrite (list_eq_ext default).
+    rewrite (list_eq_ext _ _ default).
     split.
     - rewrite Zlength_app.
       rewrite Zlength_sublist by lia.
@@ -261,7 +261,7 @@ split; intros.
 + destruct H.
   pose proof Zlength_nonneg l1.
   exists (sublist 0 (Zlength l2 - Zlength l1) l2).
-  rewrite (list_eq_ext default).
+  rewrite (list_eq_ext _ _ default).
   split.
   - rewrite Zlength_app.
     rewrite Zlength_sublist by lia.
@@ -503,7 +503,7 @@ Lemma sublist_one_ele {A: Type}:
     sublist 0 i text ++ [ch] = sublist 0 (i + 1) text.
 Proof.
   intros.
-  eapply (list_eq_ext default _ _).
+  apply (list_eq_ext _ _ default).
   split.
   + rewrite Zlength_app.
     rewrite ! Zlength_sublist by lia.
@@ -544,7 +544,8 @@ Proof.
   remember (n-1) as t.
   assert (n = t + 1) by lia.
   rewrite H0.
-  apply sublist_single; lia.
+  apply sublist_single.
+  rewrite Zlength_correct. lia.
 Qed.
 
 Lemma prefix_iff_sublist {A: Type}:
@@ -561,14 +562,12 @@ Proof.
     pose proof Zlength_nonneg l3.
     subst; split; try lia.
     rewrite sublist_split_app_l; try lia.
-    2:{ rewrite Zlength_correct; easy. }
     rewrite sublist_self; easy.
   - destruct H as [j [? ?]].
     unfold is_prefix.
     exists (sublist j (Zlength l2) l2).
     rewrite <- sublist_self at 1 by eauto.
     rewrite (sublist_split 0 (Zlength l2) j); try lia.
-    2: { pose proof Zlength_correct l2; lia. }
     subst; easy.
 Qed.
 
@@ -911,7 +910,7 @@ Proof.
   destruct Hrp as [j0 [Hj ?]]; subst res.
   destruct j0; try lia.
   { 
-    rewrite sublist_nil by easy.
+    rewrite Zsublist_nil by easy.
     rewrite Zlength_nil.
     apply Zlength_nonneg.
   }
@@ -933,7 +932,7 @@ Lemma inner_body_prop_brk2:
 Proof.
   intros; unfold inner_inv in *.
   subst j.
-  rewrite (sublist_nil patn) by lia.
+  rewrite (Zsublist_nil patn) by lia.
   split. apply inner_jrange_brk2.
   split. apply partial_match_nil.
   intros res Hr.
@@ -941,14 +940,14 @@ Proof.
   apply prefix_iff_sublist in Hrp.
   destruct Hrp as [j0 [Hj ?]]; subst res.
   destruct j0; try lia.
-  rewrite sublist_nil by lia; easy.
+  rewrite Zsublist_nil by lia; easy.
   remember (Z.pos p) as j0; assert (j0 > 0) by lia; clear Heqj0.
   destruct H0 as [_ [_ H4]].
   unfold presuffix_inv in H4.
   specialize (H4 j0 ltac:(lia)).
   rewrite H4 in Hr.
   destruct Hr as [Hc Hr].
-  rewrite (sublist_nil _ 0 0) in Hr by lia.
+  rewrite (Zsublist_nil _ 0 0) in Hr by lia.
   apply presuffix_Zlength in Hr.
   rewrite Zlength_sublist in Hr by lia.
   rewrite Zlength_nil in Hr.
@@ -1072,7 +1071,6 @@ Proof.
   intros.
   rewrite <- (sublist_self l) at 2; eauto.
   rewrite (sublist_split 0 (Zlength l) i); try lia.
-  2:{ rewrite <- Zlength_correct; lia. }
   pose proof Zlength_sublist 0 i l ltac:(lia).
   replace (i - 0) with i in H0 by lia.
   rewrite <- H0 at 2.
@@ -1087,7 +1085,6 @@ Lemma suffix_sublist_cons_iff {A: Type}:
 Proof.
   intros.
   rewrite (sublist_split 0 i 1); try lia.
-  2:{ rewrite <- Zlength_correct; auto. }
   pose proof Zlength_sublist 1 i l ltac:(lia).
   rewrite <- H0.
   apply suffix_app_iff.
@@ -1149,11 +1146,8 @@ Lemma sublist_sublist01:
   forall {A : Type} (i j : Z) (l : list A),
    0 <= i < j -> sublist 0 i (sublist 1 j l) = sublist 1 (i+1) l.
 Proof.
-  intros. unfold sublist.
-  rewrite skipn_O. 
-  repeat rewrite skipn_firstn.
-  rewrite firstn_firstn by lia.
-  replace (Nat.sub (Z.to_nat (i + 1)) (Z.to_nat 1)) with (Z.to_nat i) by lia.
+  intros. 
+  rewrite Zsublist_Zsublist ; try lia.
   auto.
 Qed.
 
@@ -1180,7 +1174,7 @@ Proof.
   assert (i0 = 0) by lia; subst i0; simpl.
   split; try easy.
   assert (Znth 0 [0] 0 = 0) by easy. rewrite H1.
-  rewrite sublist_nil by lia.
+  rewrite Zsublist_nil by lia.
   pose proof Zlength_nil A.
   pose proof Zlength_sublist 0 1 patn ltac:(lia).
   split. split; try lia.
@@ -1363,7 +1357,6 @@ Proof.
   split; intros.
   - destruct H2 as [[H2 _] _].
     rewrite (sublist_split 0 (r + Zlength patn) r) in H2; try lia.
-    2:{ rewrite <- Zlength_correct; lia. }
     assert (patn is_a_suffix_of (sublist r (r + Zlength patn) text)).
     { 
       rewrite suffix_app_iff with (l3:=sublist 0 r text).
@@ -1387,7 +1380,6 @@ Proof.
     exists (sublist 0 r text).
     rewrite <- H2 at 2. 
     apply sublist_split; try lia.
-    rewrite <- Zlength_correct; lia.
 Qed.
 
 Definition no_occurance {A: Type} (patn: list A) (text: list A) :=
@@ -1423,14 +1415,14 @@ Proof.
   destruct H as [? [? ?]].
   split. 
   apply match_pre_jrange with (patn:=patn); tauto.
-  repeat rewrite sublist_nil by lia.
+  repeat rewrite Zsublist_nil by lia.
   repeat split.
   apply nil_suffix.
   apply nil_prefix.
   intros. destruct H2 as [? _].
   apply suffix_Zlength; auto.
   unfold no_occurance; intros.
-  rewrite sublist_of_nil; auto.
+  rewrite Zsublist_of_nil; auto.
 Qed.
 
 Lemma match_inv_no_occur(i a: Z):
@@ -1448,10 +1440,8 @@ Proof.
   remember (Zlength patn) as lp.
   destruct (Z_lt_ge_dec i0 (i-lp+1)).
   - rewrite (sublist_split 0 (i+1) i); try lia.
-    2:{ rewrite <- Zlength_correct; lia. }
     rewrite sublist_split_app_l; try lia.
     apply H1; lia.
-    rewrite <- Zlength_correct.
     rewrite Zlength_sublist by lia; lia.
   - assert (i0 = i - lp + 1) by lia; subst i0; clear Hi0 g.
     intros con. subst lp.
@@ -1464,7 +1454,7 @@ Proof.
     apply best_partial_match_iff in con.
     2:{ rewrite Zlength_sublist; lia. }
     replace (i - Zlength patn + 1 + Zlength patn) with (i + 1) in con by lia. 
-    rewrite sublist_sublist00 in con by lia.
+    rewrite Zsublist_Zsublist00 in con by lia.
     pose proof best_partial_match_inv _ _ _ _ con H3 as Ep.
     apply (f_equal (@Zlength A)) in Ep.
     rewrite Zlength_sublist in Ep; lia.

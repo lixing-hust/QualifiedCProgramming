@@ -9,7 +9,7 @@ Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
 Set Warnings "-warn-library-file-stdlib-vector".
 Require Coq.Vectors.Vector.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap ListLib.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap ListLib.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem CommonAssertion.
 From compcert.lib Require Import Coqlib Integers.
@@ -163,11 +163,6 @@ Fixpoint store_n_bytes (x : addr) n : Vector.t byte n -> CRules.expr :=
     | S n' => fun v =>
         CRules.sepcon (CRules.mstore x (Vector.hd v)) (store_n_bytes (x + 1) n' (Vector.tl v))
   end.
-  (* match v with 
-    | Vector.nil => CRules.emp
-    | Vector.cons b n v' =>
-        CRules.sepcon (CRules.mstore x b) (store_n_bytes (x + 1) n v')
-  end. *)
 
 Definition store_n_bytes_Z (x : addr) n (v : Z) : CRules.expr :=
   CRules.exp (fun bytes : Vector.t byte n =>
@@ -771,16 +766,6 @@ Proof.
   apply derivable1_sepcon_mono; entailer!.
 Qed.
 
-Lemma dup_undef_store_uint: forall x,
-  (x # UInt |->_) ** (x # UInt |->_) |-- [| False |].
-Proof.
-  intros.
-  unfold undef_store_uint.
-  eapply derivable1_trans.
-  2: apply (dup_store_4bytes_noninit x).
-  apply derivable1_sepcon_mono; entailer!.
-Qed.
-
 Lemma dup_store_int: forall x v1 v2,
   (x # Int |-> v1) ** (x # Int |-> v2) |-- [| False |].
 Proof.
@@ -788,15 +773,6 @@ Proof.
   eapply derivable1_trans.
   2: apply (dup_undef_store_int x).
   apply derivable1_sepcon_mono; apply store_int_undef_store_int.
-Qed.
-
-Lemma dup_store_uint : forall x v1 v2,
-  (x # UInt |-> v1) ** (x # UInt |-> v2) |-- [| False |].
-Proof.
-  intros.
-  eapply derivable1_trans.
-  2: apply (dup_undef_store_uint x).
-  apply derivable1_sepcon_mono; apply store_uint_undef_store_uint.
 Qed.
 
 Lemma dup_undef_store_ptr: forall x,
