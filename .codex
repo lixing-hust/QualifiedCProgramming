@@ -1,0 +1,153 @@
+# QualifiedCProgramming Codex Memory
+
+## Humaneval / IntClaude Verification
+
+### Current Status
+
+- `QCP_examples/humaneval/IntClaude` 下当前 `20` 个 `C_*.c` 都已经完成验证。
+- 已验证题目：
+  - `13 24 31 36 39 41 49 53 59 60 75 76 77 83 97 102 131 138 139 150`
+- 相关经验已经同步到：
+  - `QCP_examples/humaneval/HUMANEVAL_LLM_VERIFICATION_PLAYBOOK.md`
+  - `QCP_examples/humaneval/IntClaude/INTCLAUDE_VERIFICATION_SUMMARY.md`
+
+### Standard Compile Acceptance
+
+- 在 `QCP_examples/humaneval/IntClaude` 目录下执行。
+- 统一使用当前目录的 `_CoqProject`，不要额外手动加 `-R . SimpleC.EE.humaneval`。
+- 推荐验收命令：
+
+```bash
+eval "$(opam env --switch=coq8201 --set-switch)"
+ARGS="$(tr '\n' ' ' < _CoqProject)"
+coqc $ARGS coins_XX.v
+coqc $ARGS C_XX_goal.v
+coqc $ARGS C_XX_auto.v
+coqc $ARGS C_XX_manual.v
+coqc $ARGS C_XX_goal_check.v
+```
+
+- 如果要判断某题是否“验证完成”，至少要满足：
+  - `coins_XX.v`
+  - `C_XX_goal.v`
+  - `C_XX_auto.v`
+  - `C_XX_manual.v`
+  - `C_XX_goal_check.v`
+  全链编译通过
+- 另外还要确认：
+  - `coins_XX.v` 中没有 `Admitted.` / `Axiom`
+  - `C_XX_manual.v` 中没有 `Admitted.` / `Axiom`
+
+### Symexec Workflow
+
+- 只要改了 `C_XX.c` 中的规约/循环不变式，或者改了 `coins_XX.v`，就必须重新跑 `symexec`。
+- 不要在旧的 `goal/auto/manual/goal_check` 基础上继续证明已经过期的 VC。
+- 不要手动改 generated `.v` 文件的 import/header 路径来“救编译”。
+  - 优先修 `_CoqProject`
+  - 或重新用 `symexec` 生成
+- 普通 `symexec` 一般不会覆盖已存在的 `C_XX_manual.v`。
+- 如果要连 `manual.v` 一起重生成，用 `--gen-and-backup`。
+- 验证完成后，多余的 `C_XX_manual_backup*.v` 可以清掉，只保留：
+  - `C_XX.c`
+  - `coins_XX.v`
+  - `C_XX_goal.v`
+  - `C_XX_auto.v`
+  - `C_XX_manual.v`
+  - `C_XX_goal_check.v`
+
+### Invariant Design Rules
+
+- 如果循环里维护多个状态变量，不要急着直接把最终规格硬塞进 invariant。
+- 优先先定义一个“状态语义函数”，再让 invariant 说“当前程序状态 = 这个语义函数”。
+  - 典型例子：`C_131` 里的 `digits_state_z`
+- 一个好 invariant 往往同时要有两部分：
+  - 语义部分：当前状态对应哪个数学对象
+  - 安全部分：下一步更新不会溢出
+- 对 flag/分支类程序，通常要同时保留两边信息：
+  - 成功或未命中分支的全称性质
+  - 失败或命中分支的存在性见证
+- 对前缀累计类循环，优先写：
+  - `acc = prefix_semantics(...)`
+  而不是只写范围约束
+
+### Arithmetic / Coq Bridge Rules
+
+- 看到 `%` 时，先确认当前 goal 里实际落成的是：
+  - `Z.mod`
+  - 还是 `Z.rem`
+- 不要混着证明。
+- 常用桥接：
+  - `Z.rem_bound_pos`
+  - `Z.rem_mod_nonneg`
+  - `Z.rem_divide`
+  - `Z.quot_div_nonneg`
+  - `Z.quot_div_exact`
+- digits / `%10` / `/10` 题里，非负性条件通常是桥接成功的前提。
+
+### Common Problem Patterns
+
+- Prime / divisor search
+  - 代表题：`59 75 150`
+  - 常见 invariant：
+    - `flag != 0 -> forall k, range -> no divisor`
+    - `flag == 0 -> exists k, range /\ divisor witness`
+  - 常见难点：
+    - 从 `i > n / i` 推到 `n < i * i`
+    - 从“没找到小因子”推出 prime
+
+- Digits / decimal scan
+  - 代表题：`36 97 131`
+  - 核心做法：
+    - 定义状态语义函数
+    - 把 odd/even 或命中/未命中情况拆成单独保持引理
+
+- Prefix accumulation
+  - 代表题：`31 41 53 102 138`
+  - 核心做法：
+    - invariant 直接绑定“当前累计值 = 已处理前缀的语义”
+
+- Safety-bound dominated
+  - 代表题：`77 150`
+  - 常见现象：
+    - 数学规格没问题，但 C `int` 安全性先失败
+  - 常见修法：
+    - 收紧 precondition
+    - 收紧 invariant 上界
+    - 改写等价但更安全的循环条件
+    - 例：`i * i <= n` 改为 `i <= n / i`
+
+### Cleanup Rules
+
+- 验证完成并确认编译通过后，清理编译产物：
+  - `*.vo`
+  - `*.vos`
+  - `*.vok`
+  - `*.glob`
+  - `*.aux`
+  - 隐藏的 `.*.aux`
+- 如果用户要求，也清理多余 backup：
+  - `C_XX_manual_backup*.v`
+- 不要删：
+  - `.c`
+  - `coins_XX.v`
+  - `C_XX_goal.v`
+  - `C_XX_auto.v`
+  - `C_XX_manual.v`
+  - `C_XX_goal_check.v`
+
+### Important Cautions
+
+- 不要把 `SimpleC.EE.humaneval` 手工加到 generated `.v` 的 import 路径里。
+- 当前 `IntClaude` 工作流中，`symexec` 生成文件默认和 `SimpleC.EE` / `_CoqProject` 对齐。
+- 编译问题优先从：
+  - `_CoqProject`
+  - `symexec` 重新生成
+  - `manual.v` 证明内容
+  这三处排查，而不是先改 generated 文件头部。
+
+### Useful Single-Example Reference
+
+- 想看 digits 状态建模的完整例子，优先参考：
+  - `QCP_examples/humaneval/IntClaude/C_131.c`
+  - `QCP_examples/humaneval/IntClaude/coins_131.v`
+  - `QCP_examples/humaneval/IntClaude/C_131_VERIFICATION_EXPLAINED.md`
