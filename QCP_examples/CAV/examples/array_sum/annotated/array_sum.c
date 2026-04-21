@@ -1,3 +1,7 @@
+#include "../../verification_stdlib.h"
+#include "../../verification_list.h"
+#include "../../int_array_def.h"
+
 int array_sum(int n, int *a)
 /*@ With l
     Require

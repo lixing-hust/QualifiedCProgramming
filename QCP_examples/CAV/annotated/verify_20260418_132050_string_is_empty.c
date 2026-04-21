@@ -1,3 +1,7 @@
+#include "../../verification_stdlib.h"
+#include "../../verification_list.h"
+#include "../../char_array_def.h"
+
 int string_is_empty(char *s)
 /*@ With l n
     Require

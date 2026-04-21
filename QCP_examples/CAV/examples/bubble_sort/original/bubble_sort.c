@@ -1,3 +1,7 @@
+#include "../../verification_stdlib.h"
+#include "../../verification_list.h"
+#include "../../int_array_def.h"
+
 /*@ Extern Coq (Permutation: list Z -> list Z -> Prop)
                (sorted_z: list Z -> Prop) */
 /*@ Import Coq Require Import bubble_sort */

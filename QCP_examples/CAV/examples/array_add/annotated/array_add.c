@@ -1,3 +1,7 @@
+#include "../../verification_stdlib.h"
+#include "../../verification_list.h"
+#include "../../int_array_def.h"
+
 void array_add(int n, int *a, int *b, int *out)
 /*@ With la lb lo
     Require

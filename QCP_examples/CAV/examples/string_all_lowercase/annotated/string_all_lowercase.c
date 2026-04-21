@@ -1,3 +1,7 @@
+#include "../../verification_stdlib.h"
+#include "../../verification_list.h"
+#include "../../char_array_def.h"
+
 /*@ Extern Coq (string_all_lowercase_spec : list Z -> Z) */
 /*@ Import Coq Require Import string_all_lowercase */
 

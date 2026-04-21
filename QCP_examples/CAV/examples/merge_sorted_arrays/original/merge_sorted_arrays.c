@@ -1,3 +1,7 @@
+#include "../../verification_stdlib.h"
+#include "../../verification_list.h"
+#include "../../int_array_def.h"
+
 /*@ Extern Coq (merge_sorted_arrays_spec : list Z -> list Z -> list Z) */
 /*@ Import Coq Require Import merge_sorted_arrays */
 

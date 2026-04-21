@@ -1,3 +1,7 @@
+#include "../../verification_stdlib.h"
+#include "../../verification_list.h"
+#include "../../int_array_def.h"
+
 /*@ Extern Coq (count_positive_spec : list Z -> Z) */
 /*@ Import Coq Require Import count_positive */
 

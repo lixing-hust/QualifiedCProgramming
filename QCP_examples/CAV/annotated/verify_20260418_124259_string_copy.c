@@ -1,3 +1,7 @@
+#include "../../verification_stdlib.h"
+#include "../../verification_list.h"
+#include "../../char_array_def.h"
+
 void string_copy(char *src, char *dst)
 /*@ With l d n
     Require
