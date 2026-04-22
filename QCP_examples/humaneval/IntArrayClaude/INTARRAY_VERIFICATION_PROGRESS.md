@@ -26,8 +26,8 @@
 | `C_9` | 已全链通过 | 已切到 `INT_MIN` 语义并保留 `list_int_range`；`coins/goal/auto/manual/goal_check` 编译通过，且无 `Admitted.` / `Axiom`。 |
 | `C_25` | 已全链通过 | 结构体指针返回版本；强循环不变式记录乘积、有序、素性与无小因子性质，manual 已无 `Admitted.`。 |
 | `C_26` | 已全链通过 | 去重保留只出现一次的元素；使用两轮循环分别收集重复元素和输出非重复元素，manual 已无 `Admitted.`。 |
-| `C_40` | 已有生成文件 | 三元组求和，manual 仍含 `Admitted.`，需补组合和安全条件。 |
-| `C_42` | 已有生成文件 | 输出数组写入，manual 仍含 `Admitted.`。 |
+| `C_40` | 已全链通过 | 三元组求和；三层扫描谓词、溢出安全和 true/false 规格桥接已补完，manual 已无 `Admitted.`。 |
+| `C_42` | 已全链通过 | 已去掉输入 `out`，改为函数内部 malloc 并返回 `IntArray *` 结构体；manual 已无 `Admitted.`。 |
 | `C_43` | 已有生成文件 | manual 当前无 `Admitted.`，但本文档尚未重新跑完整验收链。 |
 | `C_52` | 已有生成文件 | manual 仍含 `Admitted.`。 |
 | `C_55` | 已有生成文件 | manual 仍含 `Admitted.`。 |
@@ -895,6 +895,182 @@ remove_duplicates_second_loop(input_l, has2_l, i, output_l)
 - 如果重新运行 symbolic execution，需要重新检查全部 manual witness；当前 manual proof 的假设名如 `H18` / `H19` 可能因 VC 变化而需要微调。
 - 本题后续类似程序可以沿用这个模式：C 注解只写抽象循环谓词，复杂列表语义放在 `coins_XX.v` 的桥接引理里。
 - 临时 malloc 出来的数组若不返回给调用者，必须用 wrapper 在 C 程序中显式消费资源。
+
+## C_40 验证记录
+
+### 结论
+
+- 状态：已全链通过。
+- 当前函数：`triples_sum_to_zero`，只读输入数组，三层循环寻找三个互不相同元素之和为 0。
+- 当前已完成：
+  - `C_40.c` 已补完函数规格和三层循环 invariant。
+  - `coins_40.v` 已补完三元组扫描谓词、整数溢出安全谓词和 `problem_40_spec` 桥接引理。
+  - `C_40_proof_manual.v` 已补完 manual witness，包括加法安全、三层循环推进和两个 return 分支。
+  - `coins_40.v` 与 `C_40_proof_manual.v` 扫描无 `Admitted.` / 手写 `Axiom`。
+
+已通过的验收链：
+
+```bash
+coqc coins_40.v
+coqc C_40_goal.v
+coqc C_40_proof_auto.v
+coqc C_40_proof_manual.v
+coqc C_40_goal_check.v
+```
+
+扫描结果：
+
+```bash
+grep -nE "Admitted\.|Axiom[[:space:]]" coins_40.v C_40_proof_manual.v
+```
+
+无输出。
+
+本次记录更新时的环境复核：当前 shell 中 `coqc` 不在 `PATH`，直接执行 `coqc coins_40.v` 报 `coqc: command not found`。后续如果需要在终端复跑，先参考 `C_5` 记录中的 `opam env --switch=coq8201` 和 load-path 处理。
+
+### 文件变更
+
+- `C_40.c`
+  - 函数规格复用 `problem_40_pre` / `problem_40_spec`。
+  - 前置条件增加 `triple_sum_int_range(input_l, l_size)`，为表达式 `l[i] + l[j] + l[k]` 的两步加法提供安全条件。
+  - 三层循环分别使用 `scanned_i`、`scanned_j`、`scanned_k` 记录已经排除的搜索空间。
+  - invariant 保留入口数组资源 `IntArray::full(l@pre, l_size@pre, input_l)`，并在外层/中层维护 `j`、`k` 的未初始化局部变量资源。
+- `coins_40.v`
+  - `Load "../spec/40".`
+  - 新增 `triple_sum_int_range` 和 `triple_sum_zero`。
+  - 新增扫描谓词 `scanned_i` / `scanned_j` / `scanned_k`，按三层循环分别描述：
+    - 已完成的所有 `p < i` 的三元组不存在和为 0。
+    - 当前 `i` 下已完成的所有 `q < j` 的组合不存在和为 0。
+    - 当前 `i, j` 下已完成的所有 `r < k` 的组合不存在和为 0。
+  - 新增初始化和推进引理：
+    - `scanned_i_init`
+    - `scanned_j_init`
+    - `scanned_k_init`
+    - `scanned_k_step`
+    - `scanned_j_step`
+    - `scanned_i_step`
+  - 新增 return 桥接引理：
+    - `problem_40_spec_true_of_triple`
+    - `problem_40_spec_false_of_scanned_i`
+    - `scanned_i_no_ordered_triple`
+    - `scanned_i_no_distinct_triple`
+- `C_40_proof_manual.v`
+  - `safety_wit_6` / `safety_wit_7` 使用 `triple_sum_int_range` 分别证明两步加法的 int 范围。
+  - `entail_wit_1` 到 `entail_wit_3` 使用扫描谓词初始化引理。
+  - `entail_wit_4` 到 `entail_wit_6` 使用三层扫描推进引理，并处理局部变量 `j` / `k` 的 `undef_data_at` 与 `store_int_undef_store_int`。
+  - `return_wit_1` 从 `scanned_i input_l l_size_pre i` 和 `i >= l_size_pre` 推出不存在任意 distinct 三元组，进而得到 `problem_40_spec input_l false`。
+  - `return_wit_2` 从当前命中的 `i < j < k` 与和为 0，推出 `problem_40_spec input_l true`。
+
+### 遇到的问题
+
+1. 三层循环的“已经搜索过哪些组合”如果只写范围条件不够。
+   处理：按循环层级拆成 `scanned_i` / `scanned_j` / `scanned_k`，每一层只负责当前循环已经排除的组合；循环退出时再用 step 引理把内层扫描结果提升到外层。
+
+2. `problem_40_spec` 使用任意三个不同下标，而 C 程序只按 `i < j < k` 搜索。
+   处理：在 `coins_40.v` 中证明 `scanned_i_no_distinct_triple`，把任意三个 distinct 下标按大小关系排列成有序三元组，再复用 `scanned_i_no_ordered_triple` 排除。
+
+3. true 分支需要把 Z 下标转换成 spec 中的 nat 下标。
+   处理：`problem_40_spec_true_of_triple` 使用 `Z.to_nat` 构造三个 witness，并用 `Zlength_correct`、`Z2Nat.id`、`Nat2Z.inj_lt` 桥接范围证明。
+
+4. `l[i] + l[j] + l[k]` 在 C 层会拆成两次加法安全 VC。
+   处理：`triple_sum_int_range` 同时记录 `Znth i l 0 + Znth j l 0` 和再加 `Znth k l 0` 的范围；manual 中两个 safety witness 分别取这两个结论。
+
+5. 中层和外层循环推进时会重新初始化内层局部变量。
+   处理：外层 invariant 带 `undef_data_at(&j) * undef_data_at(&k)`，中层 invariant 带 `undef_data_at(&k)`；对应 entail witness 中使用 `store_int_undef_store_int` 恢复下一层需要的局部变量资源。
+
+### 后续注意
+
+- 后续类似“多重循环搜索某个组合”的题，可以沿用 `scanned_i/scanned_j/scanned_k` 这种分层扫描谓词，而不是直接在 invariant 中展开完整的 `forall`。
+- 如果目标 spec 用无序 distinct 下标，而程序按有序下标枚举，建议把“任意 distinct 三元组可排序成有序三元组”的桥接放在 `coins_XX.v`，C annotation 中只保留抽象扫描谓词。
+- 多项整数表达式的溢出安全要按 C 实际求值顺序建模；这里需要同时证明二元和与三元和都在 `int` 范围。
+
+## C_42 验证记录
+
+### 结论
+
+- 状态：已全链通过。
+- 当前接口：`IntArray *incr_list(int *l, int l_size)`，不再要求调用者传入预分配 `out`。
+- 当前已完成：
+  - `C_42.c` 已改为函数内部调用 `malloc_int_array_struct()` 分配返回结构体，并调用 `malloc_int_array(l_size)` 分配内部 `data` 数组。
+  - `coins_42.v` 已新增并通过编译。
+  - `symexec --gen-and-backup` 已刷新 `C_42_goal.v` / `C_42_proof_auto.v` / `C_42_proof_manual.v` / `C_42_goal_check.v`。
+  - `C_42_proof_manual.v` 中所有 manual witness 已补完。
+  - `coins_42.v` 与 `C_42_proof_manual.v` 扫描无 `Admitted.` / 手写 `Axiom`。
+
+已通过的验收链：
+
+```bash
+coqc coins_42.v
+coqc C_42_goal.v
+coqc C_42_proof_auto.v
+coqc C_42_proof_manual.v
+coqc C_42_goal_check.v
+```
+
+扫描结果：
+
+```bash
+grep -nE "Admitted\.|Axiom[[:space:]]" coins_42.v C_42_proof_manual.v
+```
+
+无输出。
+
+### 文件变更
+
+- `C_42.c`
+  - 函数签名从 `void incr_list(int *l, int l_size, int *out)` 改为 `IntArray *incr_list(int *l, int l_size)`。
+  - 参考 `C_25.c` 新增 `IntArray` 结构体定义、`malloc_int_array_struct` 声明和 `malloc_int_array` 声明。
+  - `malloc_int_array_struct` 规格返回结构体两个字段的 `undef_data_at`，`malloc_int_array` 规格返回 `IntArray::undef_full(__return, size)`。
+  - 前置条件保留输入数组 `IntArray::full(l, l_size, input_l)`，并增加：
+    - `l_size == Zlength(input_l)`
+    - `problem_42_pre(input_l)`
+    - `list_incr_int_range(input_l)`
+  - 后置条件返回 `__return` 指向的结构体，并暴露：
+    - `data_at(&(__return -> data), data)`
+    - `data_at(&(__return -> size), output_size)`
+    - `output_size == l_size`
+    - `output_l == map_incr(input_l)`
+    - `problem_42_spec(input_l, output_l)`
+    - `IntArray::full(data, output_size, output_l)`
+  - 循环 invariant 维护已写前缀：
+    - `data_at(&(out -> data), data)`
+    - `data_at(&(out -> size), l_size)`
+    - `IntArray::seg(data, 0, i, map_incr(sublist(0, i, input_l)))`
+    - `IntArray::undef_seg(data, i, l_size)`
+- `coins_42.v`
+  - `Load "../spec/42".`
+  - 新增 `map_incr`，定义为对每个元素加 1。
+  - 新增 `list_incr_int_range`，用于证明 `l[i] + 1` 不溢出。
+  - 新增 `map_incr_Zlength`，用于 return 处证明结构体 `size` 与输出列表长度一致。
+  - 新增 `map_incr_sublist_snoc`，用于循环体写入后把单元素合并进已写前缀。
+  - 新增 `problem_42_spec_map_incr`，把 `map_incr input_l` 桥接到题目原始 `problem_42_spec`。
+- `C_42_proof_manual.v`
+  - `safety_wit_3` 使用 `list_incr_int_range` 证明 `Znth i input_l 0 + 1` 在 int 范围内。
+  - `entail_wit_1` 将 `IntArray::undef_full` 转成 `undef_seg`，并用空 `seg` 初始化循环不变式。
+  - `entail_wit_2` 用 `map_incr_sublist_snoc`、`IntArray.seg_single` 和 `IntArray.seg_merge_to_seg` 维护已写前缀。
+  - `return_wit_1` 选择返回结构体中的 `data_2`、`l_size_pre` 和 `map_incr input_l` 作为 witness，用 `sublist_self`、`IntArray.seg_to_full` 和空 `undef_seg` 把完整已写前缀转成内部数组的 `IntArray::full`，再用 `problem_42_spec_map_incr` 与 `map_incr_Zlength` 完成功能性规格和长度字段证明。
+
+### 遇到的问题
+
+1. 原接口把 `out` 作为输入参数，不符合当前需求。
+   处理：参考 `C_25.c` 的结构体返回模式，先分配 `IntArray` 结构体，再分配内部 `data` 数组，函数返回 `IntArray *`。
+
+2. 只写 `map_incr(sublist 0 i input_l)` 不足以自动证明循环推进。
+   处理：在 `coins_42.v` 中补 `map_incr_sublist_snoc`，明确说明写入第 `i` 个元素后，前缀从 `sublist 0 i` 推进到 `sublist 0 (i + 1)`。
+
+3. 题目 spec 使用 Coq `length` 和 `nth` 的 nat 下标，而验证中数组长度和下标主要是 Z。
+   处理：`problem_42_spec_map_incr` 放在 `coins_42.v` 中证明；C annotation 中只暴露 `problem_42_spec(input_l, map_incr(input_l))`。
+
+4. `l[i] + 1` 会产生 int 溢出 safety VC。
+   处理：前置条件增加 `list_incr_int_range(input_l)`，manual 中直接取当前下标 `i` 的范围事实。
+
+5. 空前缀初始化时，`IntArray::undef_full` 不能直接匹配 `seg + undef_seg`。
+   处理：先用 `IntArray.undef_full_to_undef_seg`，再用 `IntArray.seg_empty` 生成空 `seg`。
+
+### 后续注意
+
+- 这类“输入数组只读、输出数组逐项写满并以结构体返回”的题，可以沿用 `C_25` / `C_42` 模式：结构体字段用 `data_at` 保留，内部数组由 `malloc_int_array` 返回 `undef_full`，循环 invariant 使用 `seg` 记录已写前缀、`undef_seg` 记录未写后缀。
+- 如果输出是对输入逐元素 map，建议在 `coins_XX.v` 里定义 map 函数和 `map_sublist_snoc` 类引理，不要把 map 语义展开在 C annotation 中。
 
 ## 后续记录模板
 
