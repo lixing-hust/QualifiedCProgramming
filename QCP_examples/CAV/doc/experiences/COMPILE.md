@@ -133,6 +133,6 @@ coqc "${BASE[@]}" "${EXTRA[@]}" "$GEN/${NAME}_goal_check.v"
 
 ## 10. 编译后必须清理
 
-- `coq/generated/` 下删除非 `.v`
-- `coq/deps/` 下删除非 `.v`
+- `coq/` 下删除非 `.v` 的编译中间产物
+- `input/` 下删除非 `.v`、非 `.c` 的编译中间产物
 - 如果环境限制导致删不掉，要写进 `logs/issues.md`

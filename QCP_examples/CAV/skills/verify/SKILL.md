@@ -53,7 +53,7 @@ Verify 只消费 Contract 已经准备好的验证输入，不再负责设计前
 - proof 阶段必须不断迭代，直到 `goal_check.v` 编译通过，或外部时间上限触发；其他细节统一以 `doc/experiences/PROOF.md` 为准
 - `proof_manual.v` 不得留下 `Admitted.` 或新增 `Axiom`
 - `goal_check.v` 必须编译通过
-- 编译完成后清理 `coq/` 下非 `.v` 中间产物
+- 编译完成后清理 `coq/` 下非 `.v` 中间产物和 `input/` 下非 `.v`、非 `.c` 的中间产物
 - `logs/issues.md` 只能追加，不能覆盖已有内容；必须写得非常具体，详细记录整个 verify 过程中的所有踩坑，而不是只记最后一个错误；每个问题至少要写清楚现象、触发条件、定位到的文件/行号或 theorem、修复动作、修复后的结果；每个代表性问题还要贴出足够读懂问题的关键代码或日志片段，例如 C annotation 片段、Coq theorem/subgoal/tactic 片段、`coqc`/`symexec` 报错片段或相关命令片段，保证后来的智能体只读 `issues.md` 也能理解问题发生在哪里、为什么发生、如何修复
 - 验证过程中每解决一个有代表性的通用问题，都必须立即判断是否需要更新 Experience；如果该问题能复用于后续任务，就更新对应的 `doc/experiences/*.md`，不要等到任务最后才回忆
 - Experience 只写可复用结论，不写单题流水账；按问题所属阶段写入 `SYMEXEC.md`、`ASSERTION.md`、`INV.md`、`PROOF.md` 或 `COMPILE.md`
@@ -66,7 +66,7 @@ Verify 只消费 Contract 已经准备好的验证输入，不再负责设计前
   - `proof_manual.v` 中所有需要手工证明的 theorem 都已完成
   - `proof_manual.v` 不含 `Admitted.`，也没有新增 `Axiom`
   - `goal.v`、`proof_auto.v`、`proof_manual.v`、`goal_check.v` 全部按当前 workspace 的完整编译模板编译通过
-  - `coq/` 下非 `.v` 中间产物已经清理
+  - 当前 workspace 的 `coq/` 非 `.v` 中间产物和 `input/` 下非 `.v`、非 `.c` 的中间产物已经清理
   - `issues.md` 和 `metrics.md` 已完整更新
 - 每次 verify 任务完成后，都要选择性更新 `doc/experiences/SYMEXEC.md`、`doc/experiences/ASSERTION.md`、`doc/experiences/INV.md`、`doc/experiences/PROOF.md`、`doc/experiences/COMPILE.md`
 
@@ -86,5 +86,5 @@ Verify 只消费 Contract 已经准备好的验证输入，不再负责设计前
 - `goal_check.v` 编译通过
 - `proof_manual.v` 无 `Admitted.` / `Axiom`
 - 当前任务对应的 `annotated/*.c` 已补齐 Verify 注释
-- `coq/` 中间产物已清理
+- 当前 workspace 的 `coq/` 非 `.v` 中间产物和 `input/` 下非 `.v`、非 `.c` 的中间产物已清理
 - 所有日志已更新
