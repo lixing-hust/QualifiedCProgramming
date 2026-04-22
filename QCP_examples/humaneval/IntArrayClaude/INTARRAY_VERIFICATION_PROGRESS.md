@@ -28,7 +28,7 @@
 | `C_26` | 已全链通过 | 去重保留只出现一次的元素；使用两轮循环分别收集重复元素和输出非重复元素，manual 已无 `Admitted.`。 |
 | `C_40` | 已全链通过 | 三元组求和；三层扫描谓词、溢出安全和 true/false 规格桥接已补完，manual 已无 `Admitted.`。 |
 | `C_42` | 已全链通过 | 已去掉输入 `out`，改为函数内部 malloc 并返回 `IntArray *` 结构体；manual 已无 `Admitted.`。 |
-| `C_43` | 已有生成文件 | manual 当前无 `Admitted.`，但本文档尚未重新跑完整验收链。 |
+| `C_43` | 已全链通过 | 二元组求和；复用 `C_40` 的分层扫描谓词模式，manual 已无 `Admitted.`。 |
 | `C_52` | 已有生成文件 | manual 仍含 `Admitted.`。 |
 | `C_55` | 已有生成文件 | manual 仍含 `Admitted.`。 |
 | `C_72` | 已有生成文件 | manual 仍含 `Admitted.`。 |
@@ -1071,6 +1071,70 @@ grep -nE "Admitted\.|Axiom[[:space:]]" coins_42.v C_42_proof_manual.v
 
 - 这类“输入数组只读、输出数组逐项写满并以结构体返回”的题，可以沿用 `C_25` / `C_42` 模式：结构体字段用 `data_at` 保留，内部数组由 `malloc_int_array` 返回 `undef_full`，循环 invariant 使用 `seg` 记录已写前缀、`undef_seg` 记录未写后缀。
 - 如果输出是对输入逐元素 map，建议在 `coins_XX.v` 里定义 map 函数和 `map_sublist_snoc` 类引理，不要把 map 语义展开在 C annotation 中。
+
+## C_43 验证记录
+
+### 结论
+
+- 状态：已全链通过。
+- 当前函数：`pairs_sum_to_zero`，只读输入数组，双层循环寻找两个不同元素之和为 0。
+- 当前已完成：
+  - `C_43.c` 已补完函数规格和双层循环 invariant。
+  - `coins_43.v` 已新增并通过编译。
+  - `symexec --gen-and-backup` 已刷新 `C_43_goal.v` / `C_43_proof_auto.v` / `C_43_proof_manual.v` / `C_43_goal_check.v`。
+  - `C_43_proof_manual.v` 中所有 manual witness 已补完。
+  - `coins_43.v` 与 `C_43_proof_manual.v` 扫描无 `Admitted.` / 手写 `Axiom`。
+
+已通过的验收链：
+
+```bash
+coqc coins_43.v
+coqc C_43_goal.v
+coqc C_43_proof_auto.v
+coqc C_43_proof_manual.v
+coqc C_43_goal_check.v
+```
+
+### 文件变更
+
+- `C_43.c`
+  - 函数规格复用 `problem_43_pre` / `problem_43_spec`。
+  - 前置条件增加 `pair_sum_int_range(input_l, l_size)`，用于证明 `l[i] + l[j]` 不溢出。
+  - 外层循环 invariant 使用 `scanned_i(input_l, l_size@pre, i)` 记录所有 `p < i` 的有序 pair 都已经排除。
+  - 内层循环 invariant 使用 `scanned_j(input_l, l_size@pre, i, j)` 记录当前 `i` 下所有 `q < j` 的 pair 已经排除。
+  - 外层 invariant 保留 `undef_data_at(&j)`，内层退出回到外层时用 `store_int_undef_store_int` 恢复局部变量资源。
+- `coins_43.v`
+  - `Load "../spec/43".`
+  - 新增 `pair_sum_int_range`、`pair_sum_zero`。
+  - 新增 `scanned_i` / `scanned_j`，以及初始化和推进引理：
+    - `scanned_i_init`
+    - `scanned_j_init`
+    - `scanned_j_step`
+    - `scanned_i_step`
+  - 新增 `problem_43_spec_true_of_pair`，从命中的 `i < j` pair 推出 `problem_43_spec input_l true`。
+  - 新增 `problem_43_spec_false_of_scanned_i`，从完整扫描结果推出 `problem_43_spec input_l false`。
+- `C_43_proof_manual.v`
+  - `safety_wit_4` 使用 `pair_sum_int_range` 证明加法安全。
+  - `entail_wit_1` / `entail_wit_2` 初始化 `scanned_i` 和 `scanned_j`。
+  - `entail_wit_3` / `entail_wit_4` 分别推进外层和内层扫描谓词。
+  - `return_wit_1` 用 `problem_43_spec_false_of_scanned_i` 完成 false 分支。
+  - `return_wit_2` 用 `problem_43_spec_true_of_pair` 完成 true 分支。
+
+### 遇到的问题
+
+1. 程序按 `i < j` 搜索，但原始 spec 使用任意 `i <> j` 的两个下标。
+   处理：在 `coins_43.v` 中证明 `scanned_i_no_distinct_pair`，把任意 distinct pair 按大小关系转成有序 pair；反向顺序时用加法交换由 `lia` 处理。
+
+2. 只用裸 `forall` 写在 C invariant 中可读性和证明复用都差。
+   处理：仿照 `C_40`，把搜索空间封装为 `scanned_i` / `scanned_j`，C annotation 只保留抽象谓词，具体组合推理放在 `coins_43.v`。
+
+3. return false 需要从完整扫描推出“不存在任何 distinct pair”。
+   处理：外层退出时有 `i >= l_size_pre` 和 `scanned_i input_l l_size_pre i`，用 `problem_43_spec_false_of_scanned_i` 桥接到 spec。
+
+### 后续注意
+
+- 后续二重循环搜索题可以直接沿用 `C_43` 的 `scanned_i/scanned_j` 模式；三重循环则参考 `C_40`。
+- 如果 spec 使用 nat 下标而 C proof 使用 Z 下标，桥接证明集中放在 `coins_XX.v` 中，manual proof 里只调用最终 bridge lemma。
 
 ## 后续记录模板
 
