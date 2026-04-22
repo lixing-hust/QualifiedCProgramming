@@ -1,6 +1,6 @@
 # IntArrayClaude 验证进度记录
 
-更新时间：2026-04-15
+更新时间：2026-04-22
 
 这份文档用于记录 `QCP_examples/humaneval/IntArrayClaude` 下各题的验证进度，以及每题验证时遇到的具体问题。
 
@@ -25,6 +25,7 @@
 | `C_8` | 已全链通过 | sum/product 输出数组；使用前缀和/前缀积及范围约束处理溢出安全。 |
 | `C_9` | 已全链通过 | 已切到 `INT_MIN` 语义并保留 `list_int_range`；`coins/goal/auto/manual/goal_check` 编译通过，且无 `Admitted.` / `Axiom`。 |
 | `C_25` | 已全链通过 | 结构体指针返回版本；强循环不变式记录乘积、有序、素性与无小因子性质，manual 已无 `Admitted.`。 |
+| `C_26` | 已全链通过 | 去重保留只出现一次的元素；使用两轮循环分别收集重复元素和输出非重复元素，manual 已无 `Admitted.`。 |
 | `C_40` | 已有生成文件 | 三元组求和，manual 仍含 `Admitted.`，需补组合和安全条件。 |
 | `C_42` | 已有生成文件 | 输出数组写入，manual 仍含 `Admitted.`。 |
 | `C_43` | 已有生成文件 | manual 当前无 `Admitted.`，但本文档尚未重新跑完整验收链。 |
@@ -783,6 +784,117 @@ problem_25_spec_z n0 (factors ++ n :: nil)
 
 - 后续如果重新生成 goal 文件，manual 中涉及强不变式的证明可能需要按新的 hypothesis 名称微调。
 - 这题的关键不是数组内存，而是数论事实：最小因子为素数，退出时剩余数为素数。
+
+## C_26 验证记录
+
+### 结论
+
+- 状态：已全链通过。
+- 当前接口：`remove_duplicates` 返回 `IntArray *`，结构体和内部 `data` 数组在函数内分配；临时数组 `has1` / `has2` 在返回前释放。
+- 当前已完成：
+  - `symexec --gen-and-backup` 已生成 `C_26_goal.v` / `C_26_proof_auto.v` / `C_26_proof_manual.v` / `C_26_goal_check.v`。
+  - `coins_26.v`、`C_26_goal.v`、`C_26_proof_auto.v`、`C_26_proof_manual.v`、`C_26_goal_check.v` 均可编译。
+  - `C_26_proof_manual.v` 中 `contains`、第一轮循环、第二轮循环和 return witness 均已补完。
+  - `coins_26.v` 与 `C_26_proof_manual.v` 扫描无 `Admitted.` / `Axiom` / `entailer!`。
+
+已通过的验收链：
+
+```bash
+coqc coins_26.v
+coqc C_26_goal.v
+coqc C_26_proof_auto.v
+coqc C_26_proof_manual.v
+coqc C_26_goal_check.v
+```
+
+### 文件变更
+
+- `C_26.c`
+  - 参考 `C_25.c` 的结构体返回风格，引入 `malloc_int_array_struct`、`malloc_int_array` 和 `free_int_array` wrapper。
+  - `malloc_int_array` 的规格返回 `IntArray::undef_full(__return, size)`，用于后续逐个写入输出数组和临时数组。
+  - `free_int_array` 只在释放临时数组时消费 `seg + undef_seg`，不把临时数组资源写进函数后置条件。
+  - `contains` 保持原程序结构，只补必要 invariant：入口参数不变、长度一致、已扫描前缀不含目标值、数组资源保持。
+  - `remove_duplicates` 保持原两轮算法：
+    - 第一轮用 `has1` 记录见过一次的值，用 `has2` 记录重复值。
+    - 第二轮把不在 `has2` 中的输入元素写入 `data`。
+  - 循环 invariant 只保留验证需要的抽象谓词：
+    - `remove_duplicates_first_loop(input_l, i, has1_l, has2_l)`。
+    - `remove_duplicates_second_loop(input_l, has2_l, i, output_l)`。
+    - 必要的指针非空、长度、数组 `seg/undef_seg/full` 资源。
+- `coins_26.v`
+  - `Load "../spec/26".`
+  - 新增 `list_contains` / `list_not_contains`，作为 `contains` 的规格谓词。
+  - 新增 `seen_values_aux` / `seen_values` / `duplicate_values`，建模第一轮循环的 `has1` 和 `has2`。
+  - 新增 `filter_not_in`，建模第二轮输出。
+  - 新增循环推进引理：
+    - `first_loop_add_duplicate`
+    - `first_loop_add_seen`
+    - `first_loop_skip_duplicate`
+    - `second_loop_add_output`
+    - `second_loop_skip_output`
+  - 新增 return 处规格桥接引理：
+    - `duplicate_values_correct`
+    - `filter_not_in_In_iff`
+    - `filter_not_in_order`
+    - `problem_26_spec_filter_not_in_duplicate_values`
+    - `problem_26_spec_from_loops`
+- `C_26_proof_manual.v`
+  - `contains` 的两个 return 分支分别用 `In_Znth_exists` 和 `Znth_In_range` 连接数组读取与列表成员关系。
+  - 第一轮三个分支分别使用 `first_loop_add_duplicate`、`first_loop_add_seen`、`first_loop_skip_duplicate`。
+  - 第二轮两个分支分别使用 `second_loop_add_output`、`second_loop_skip_output`。
+  - return witness 选择当前 `data_2 output_l_2 output_size_2`，再用 `problem_26_spec_from_loops` 从两个循环谓词推出 `problem_26_spec input_l output_l_2`。
+
+### 遇到的问题
+
+1. 一开始试图把去重写成额外的 C helper，例如 `write_unique`。
+   处理：回到“尽量保持原程序不变”的原则，只给现有 `contains` 和两轮循环补规格与 invariant，不引入新的程序逻辑。
+
+2. `has1` / `has2` 是中间变量，不应该出现在函数后置条件中。
+   处理：函数后置条件只暴露返回结构体、输入数组资源和最终 `problem_26_spec`；`has1` / `has2` 的语义只放在循环 invariant 和 `coins_26.v` 的中间谓词中。
+
+3. 临时数组不能直接从 separation logic 资源中消失。
+   原因：`malloc_int_array` 产生的 `IntArray::seg/undef_seg` 资源必须被消费或归还，不能在 return 前凭空丢掉。
+   处理：新增 `free_int_array` wrapper，规格为消费一个已初始化前缀和未初始化后缀，后置条件 `emp`。程序返回前释放 `has1` 和 `has2`。
+
+4. annotation 过于繁杂时可读性很差。
+   处理：不在 C 注解中展开“重复元素”“输出顺序”等复杂性质，而是封装为：
+
+```c
+remove_duplicates_first_loop(input_l, i, has1_l, has2_l)
+remove_duplicates_second_loop(input_l, has2_l, i, output_l)
+```
+
+复杂列表语义放到 `coins_26.v` 中证明。
+
+5. 不需要单独写 `list_in_range`。
+   原因：本题数组内容通过 `IntArray::full/seg` 和 `Zlength` 描述，当前 VC 不需要额外元素范围谓词。
+   处理：移除无用范围谓词，避免前置条件和 invariant 膨胀。
+
+6. `contains` 的 invariant 中可以省掉很多 `@pre` 等式，但不能省掉会被循环体安全 VC 使用的入口参数事实。
+   处理：最终保留 `a == a@pre && n == n@pre && x == x@pre`、`n == Zlength(l)` 和前缀不含目标值；没有把这些事实写进 `contains` 后置条件。
+
+7. `@pre`/ghost 变量的可读性问题。
+   处理：这题没有引入 `numbers0` / `a0` 这类额外 ghost 参数；能用 `@pre` 的地方按 LLM_friendly_cases 风格直接使用 `numbers@pre`、`numbers_size@pre`。
+
+8. return 处最难的不是数组资源，而是把两轮循环结果桥接到 `problem_26_spec`。
+   处理：在 `coins_26.v` 中证明：
+   - `duplicate_values [] [] input` 恰好表示出现至少两次的值。
+   - `filter_not_in duplicates input` 中的元素来自输入、且不在重复集合中。
+   - `filter_not_in` 保持输入相对顺序。
+   - 因而 `filter_not_in (duplicate_values [] [] input) input` 满足 `problem_26_spec`。
+
+9. 证明 `duplicate_values_correct_aux` 时，`auto` 容易提前关闭某些分支，导致后续 bullet/brace 报 `No such goal` 或 `Wrong bullet`。
+   处理：相关证明分支改成显式 destruct 和显式构造，不依赖过强的 `auto`。
+
+10. 修改 `coins_26.v` 后，旧的 `C_26_goal.vo` 会与新库不一致。
+    表现：编译 `C_26_proof_manual.v` 报 `makes inconsistent assumptions over library SimpleC.EE.coins_26`。
+    处理：按依赖顺序重新编译 `coins_26.v`、`C_26_goal.v`、`C_26_proof_manual.v`，再编译 `C_26_proof_auto.v` 和 `C_26_goal_check.v`。
+
+### 后续注意
+
+- 如果重新运行 symbolic execution，需要重新检查全部 manual witness；当前 manual proof 的假设名如 `H18` / `H19` 可能因 VC 变化而需要微调。
+- 本题后续类似程序可以沿用这个模式：C 注解只写抽象循环谓词，复杂列表语义放在 `coins_XX.v` 的桥接引理里。
+- 临时 malloc 出来的数组若不返回给调用者，必须用 wrapper 在 C 程序中显式消费资源。
 
 ## 后续记录模板
 
