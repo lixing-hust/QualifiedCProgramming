@@ -29,7 +29,7 @@
 | `C_40` | 已全链通过 | 三元组求和；三层扫描谓词、溢出安全和 true/false 规格桥接已补完，manual 已无 `Admitted.`。 |
 | `C_42` | 已全链通过 | 已去掉输入 `out`，改为函数内部 malloc 并返回 `IntArray *` 结构体；manual 已无 `Admitted.`。 |
 | `C_43` | 已全链通过 | 二元组求和；复用 `C_40` 的分层扫描谓词模式，manual 已无 `Admitted.`。 |
-| `C_46` | 待继续 | 已尝试保留 `int f[100]` 做 QCP 格式适配；局部数组可解析，但 `IntArray::seg/undef_seg` 形式在 return 回收权限时失败，暂缓。 |
+| `C_46` | 已全链通过 | 已改成 4 个滚动变量，不再使用局部数组；manual 已无 `Admitted.`。 |
 | `C_52` | 已全链通过 | 单层数组扫描；改为使用 `problem_52_pre/spec`，manual 已无 `Admitted.`。 |
 | `C_55` | 已有生成文件 | manual 仍含 `Admitted.`。 |
 | `C_72` | 已有生成文件 | manual 仍含 `Admitted.`。 |
@@ -1141,13 +1141,31 @@ coqc C_43_goal_check.v
 
 ### 当前状态
 
-- 状态：待继续。
-- 当前目标：保留原程序的局部固定长度数组 `int f[100]`，尝试使用新版 QCP 的局部数组支持，而不是立刻改成滚动变量。
+- 状态：已全链通过。
+- 最终处理：放弃局部固定长度数组 `int f[100]` 路线，改成 4 个滚动变量 `a/b/c/d` 保存 `fib4(i-4)` 到 `fib4(i-1)`。
 - 当前已做：
-  - `C_46.c` 已从 `#include<stdio.h>` 改成 QCP 头文件。
-  - 已新增 `coins_46.v`，定义 `fib4_z`、`problem_46_pre_z`、`problem_46_spec_z`、`fib4_z_list`、`fib4_prefix_int_range`。
-  - `coins_46.v` 可以编译。
-  - 用 `symexec` 和 `mcp check` 做了局部数组行为实验。
+  - `C_46.c` 已改为无数组版本，只使用局部标量变量。
+  - `coins_46.v` 保留 `fib4_z`、`problem_46_pre_z`、`problem_46_spec_z`，新增 `fib4_z_step` 和 `fib4_step_int_range`。
+  - `C_46_goal.v`、`C_46_proof_auto.v`、`C_46_proof_manual.v`、`C_46_goal_check.v` 已重新生成。
+  - `C_46_proof_manual.v` 已补完 manual VC。
+
+已通过的验收链：
+
+```bash
+coqc coins_46.v
+coqc C_46_goal.v
+coqc C_46_proof_auto.v
+coqc C_46_proof_manual.v
+coqc C_46_goal_check.v
+```
+
+扫描结果：
+
+```bash
+grep -nE "Admitted\.|Axiom[[:space:]]" coins_46.v C_46_proof_manual.v
+```
+
+无输出。
 
 ### 实验结论
 
@@ -1197,7 +1215,7 @@ n == n@pre &&
 
 - 如果继续测试局部栈数组路线，下一步不要直接照搬 malloc 数组的 `seg/undef_seg` 模式；应先确认局部数组退出时需要恢复成什么资源形状。
 - `int_array_def.h` 中的 `store_array_box` / `store_array_box_array` 可能和局部数组 boxed resource 有关，但当前 `LLM_friendly_cases` 未找到完整示例，需进一步探索。
-- 如果目标是快速完成 `C_46` 的功能验证，可以暂时把程序改成 4 个滚动变量版本，避免局部数组资源回收问题。
+- 快速完成 `C_46` 的功能验证时，4 个滚动变量版本是可行路线，已经通过完整验证。
 - 如果目标是验证 QCP 对 `int f[100]` 的新版支持，则保留当前尝试分支，继续围绕“局部数组资源如何在 return 前恢复到可回收状态”做最小实验。
 
 ## C_52 验证记录
