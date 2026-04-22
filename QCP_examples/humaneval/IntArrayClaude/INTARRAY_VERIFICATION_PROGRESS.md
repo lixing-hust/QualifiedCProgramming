@@ -31,7 +31,7 @@
 | `C_43` | 已全链通过 | 二元组求和；复用 `C_40` 的分层扫描谓词模式，manual 已无 `Admitted.`。 |
 | `C_46` | 已全链通过 | 已改成 4 个滚动变量，不再使用局部数组；manual 已无 `Admitted.`。 |
 | `C_52` | 已全链通过 | 单层数组扫描；改为使用 `problem_52_pre/spec`，manual 已无 `Admitted.`。 |
-| `C_55` | 已有生成文件 | manual 仍含 `Admitted.`。 |
+| `C_55` | 已全链通过 | Fibonacci 滚动变量；已接入 `problem_55_pre/spec`，并用 `fib_step_int_range` 处理加法溢出，manual 已无 `Admitted.`。 |
 | `C_72` | 已有生成文件 | manual 仍含 `Admitted.`。 |
 | `C_73` | 已有生成文件 | manual 仍含 `Admitted.`。 |
 | `C_85` | 已有生成文件 | manual 仍含 `Admitted.`。 |
@@ -1257,6 +1257,47 @@ grep -nE "Admitted\.|Axiom[[:space:]]" coins_52.v C_52_proof_manual.v
 ### 注意
 
 - `C_52_proof_auto.v` 是 symexec 生成文件，未手动补 proof；本次只检查并保证 `coins_52.v` 与 `C_52_proof_manual.v` 无 `Admitted.` / `Axiom`。
+
+## C_55 验证记录
+
+### 结论
+
+`C_55` 已完成完整验证。
+
+已通过的验收链：
+
+```bash
+coqc coins_55.v
+coqc C_55_goal.v
+coqc C_55_proof_auto.v
+coqc C_55_proof_manual.v
+coqc C_55_goal_check.v
+```
+
+扫描结果：
+
+```bash
+grep -nE "Admitted\.|Axiom[[:space:]]" coins_55.v C_55_proof_manual.v
+```
+
+无输出。
+
+### 文件变更
+
+- `C_55.c`
+  - 保持两变量滚动 Fibonacci 实现。
+  - 前后条件使用 `problem_55_pre_z` / `problem_55_spec_z`，二者在 `coins_55.v` 中桥接到 `spec/55.v` 的 `problem_55_pre` / `problem_55_spec`。
+  - 前置条件补充 `n < 100` 和 `fib_step_int_range(n)`，用于证明循环中的 `a + b` 和 `i + 1` 不溢出。
+  - 循环 invariant 改成 `Inv Assert`，并保留 `n == n@pre`、`problem_55_pre_z(n@pre)`、`fib_step_int_range(n@pre)`、`undef_data_at(&c)`。
+- `coins_55.v`
+  - 新增 `problem_55_pre_z` / `problem_55_spec_z`，将 spec/55 的 nat 规格包装成 C 侧 Z 规格。
+  - 新增 `fib_seq`、`fib_seq_0`、`fib_seq_1`、`fib_seq_step`、`fib_step_int_range` 和 `problem_55_spec_z_of_fib_seq`。
+- `C_55_proof_manual.v`
+  - 当前 manual VC 为 `fib_safety_wit_4`、`fib_entail_wit_1`、`fib_entail_wit_2`、`fib_return_wit_1`，均已完成。
+
+### 注意
+
+- `C_55_proof_auto.v` 是 symexec 生成文件，未手动补 proof；本次只检查并保证 `coins_55.v` 与 `C_55_proof_manual.v` 无 `Admitted.` / `Axiom`。
 
 ## 后续记录模板
 
