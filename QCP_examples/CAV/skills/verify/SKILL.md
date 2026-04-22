@@ -41,23 +41,40 @@ Verify 只消费 Contract 已经准备好的验证输入，不再负责设计前
 - `output/verify_<timestamp>_<name>/logs/issues.md`
 - `output/verify_<timestamp>_<name>/logs/metrics.md`
 
-## 4. 硬规则
+## 4. 规则
+
+### 4.1 输入与边界
 
 - 默认信任 `input/<name>.c` / `.v` 的 contract，不重写 `Require` / `Ensure`
-- 如果 `input/<name>.c` 缺少基本 function specification，或发现必须修改原始 C 实现/contract 才能成立，不能在 verify 阶段静默修改 `input/`；必须停止当前 verify，记录到 `logs/issues.md`，并回到 Contract 或与用户确认修改方案
+- 如果 `input/<name>.c` 缺少基本 function specification，或发现必须修改原始 C 实现/contract 才能成立，不能在 verify 阶段静默修改 `input/`；必须停止当前 verify，记录到 `logs/issues.md`，与用户确认修改方案
+
+### 4.2 Annotation
+
 - 只在当前任务对应的 `annotated/verify_<timestamp>_<name>.c` 中补 `Inv`、`Assert`、`which implies`、bridge assert、loop-exit assertion
-- 每次改注释后都必须重新跑 `symexec`
-- `symexec` 必须跑到函数验证完成并拿到完整 witness 列表；如果修改了 annotated C、Coq 定义或辅助注释，必须重新跑 `symexec`，并以最新生成的 witness/行号为准
 - 如果当前程序确实需要补 `Inv` / `Assert`，先写 `logs/annotation_reasoning.md`，再改 annotated 工作副本；如果完全不需要补任何 Verify 注释，就跳过 `annotation_reasoning.md`
 - `logs/annotation_reasoning.md` 只能追加，不能覆盖已有内容；必须写得非常具体，至少写清楚当前卡在哪个程序点、哪条注释不成立、看到了什么报错或执行现象、准备改哪一行注释、为什么这次修改预计会修复当前问题；每轮改 annotation 前后都要贴出关键 C/annotation 片段，包括相关 `Inv`、`Assert`、`which implies` 或 loop-exit assertion，并用自然语言解释为什么这样写、它表达了哪段程序状态、如何满足初始化/保持性/退出可用性、为什么能修复当前 VC 或 symexec 问题，不能只贴代码或只写概括
+
+### 4.3 Symexec
+
+- 每次改注释后都必须重新跑 `symexec`
+- `symexec` 必须跑到函数验证完成并拿到完整 witness 列表；如果修改了 annotated C、Coq 定义或辅助注释，必须重新跑 `symexec`，并以最新生成的 witness/行号为准
+
+### 4.4 Proof
+
 - 如果 `proof_manual.v` 里确实有需要手工证明的 theorem，先写 `logs/proof_reasoning.md`，再改 `proof_manual.v`；如果 `proof_manual.v` 没有需要证明的目标，就跳过 `proof_reasoning.md` 和 manual proof
 - `logs/proof_reasoning.md` 只能追加，不能覆盖已有内容；必须写得非常具体，至少写清楚当前卡住的 theorem 或 witness 名、`coqc`/`coqtop` 的具体报错或剩余子目标、当前可用假设、为什么现有脚本不够、已经尝试过哪些 tactic 或 lemma、下一步准备改哪一段 proof；每轮 proof 迭代都要贴出关键 Coq 片段，包括当前 theorem/lemma、失败前后的 tactic 片段、必要的 `Show` 子目标或关键 hypotheses、准备新增或修改的 lemma 形状，并用自然语言解释为什么这样拆 lemma、为什么这个 tactic/rewrite 对应当前子目标、它依赖哪些假设、为什么这次修改能推进 proof，不能只写“尝试证明失败”
-- 手工 witness 要逐个证明；当前 witness 没有完成前，不要跳到下一个 witness。证明卡住时可以补必要的 helper lemma/definition，也可以用 `Search`、`coqtop` 或 `rocq-mcp` 查看可用引理、假设和子目标，但不能新增 `Axiom`
+- 手工 witness 要逐个证明；当前 witness 没有完成前，不要跳到下一个 witness。证明过程中可以补充必要的辅助引理和定义，以便更容易地完成证明；可以通过 Coq 中 `Search` tactic 查找相关可用引理。但是不能在证明过程中引入 `Axiom`，可以通过 `rocq-mcp` 的 `rocq-verify` 检查是否引入了 `Axiom`
 - 如果本轮使用 `qcp-mcp` / `rocq-mcp` 交互证明，符号执行和 witness 证明步骤只使用对应 MCP 工具推进；完成后仍要落盘生成 `goal/proof_auto/proof_manual/goal_check` 并按本 skill 的编译和日志标准收尾
 - proof 阶段必须不断迭代，直到 `goal_check.v` 编译通过，或外部时间上限触发；其他细节统一以 `doc/experiences/PROOF.md` 为准
 - `proof_manual.v` 不得留下 `Admitted.` 或新增 `Axiom`
 - `goal_check.v` 必须编译通过
+
+### 4.5 Compile
+
 - 编译完成后清理 `coq/` 下非 `.v` 中间产物和 `input/` 下非 `.v`、非 `.c` 的中间产物
+
+### 4.6 Logs, Metrics, Experience
+
 - `logs/issues.md` 只能追加，不能覆盖已有内容；必须写得非常具体，详细记录整个 verify 过程中的所有踩坑，而不是只记最后一个错误；每个问题至少要写清楚现象、触发条件、定位到的文件/行号或 theorem、修复动作、修复后的结果；每个代表性问题还要贴出足够读懂问题的关键代码或日志片段，例如 C annotation 片段、Coq theorem/subgoal/tactic 片段、`coqc`/`symexec` 报错片段或相关命令片段，保证后来的智能体只读 `issues.md` 也能理解问题发生在哪里、为什么发生、如何修复
 - 验证过程中每解决一个有代表性的通用问题，都必须立即判断是否需要更新 Experience；如果该问题能复用于后续任务，就更新对应的 `doc/experiences/*.md`，不要等到任务最后才回忆
 - Experience 只写可复用结论，不写单题流水账；按问题所属阶段写入 `SYMEXEC.md`、`ASSERTION.md`、`INV.md`、`PROOF.md` 或 `COMPILE.md`
