@@ -32,6 +32,7 @@
 | `C_46` | 已全链通过 | 已改成 4 个滚动变量，不再使用局部数组；manual 已无 `Admitted.`。 |
 | `C_52` | 已全链通过 | 单层数组扫描；改为使用 `problem_52_pre/spec`，manual 已无 `Admitted.`。 |
 | `C_55` | 已全链通过 | Fibonacci 滚动变量；已接入 `problem_55_pre/spec`，并用 `fib_step_int_range` 处理加法溢出，manual 已无 `Admitted.`。 |
+| `C_63` | 已全链通过 | FibFib 三变量滚动版本；已接入 `problem_63_pre/spec`，manual 已无 `Admitted.`。 |
 | `C_72` | 已有生成文件 | manual 仍含 `Admitted.`。 |
 | `C_73` | 已有生成文件 | manual 仍含 `Admitted.`。 |
 | `C_85` | 已有生成文件 | manual 仍含 `Admitted.`。 |
@@ -1298,6 +1299,46 @@ grep -nE "Admitted\.|Axiom[[:space:]]" coins_55.v C_55_proof_manual.v
 ### 注意
 
 - `C_55_proof_auto.v` 是 symexec 生成文件，未手动补 proof；本次只检查并保证 `coins_55.v` 与 `C_55_proof_manual.v` 无 `Admitted.` / `Axiom`。
+
+## C_63 验证记录
+
+### 结论
+
+`C_63` 已完成完整验证。
+
+已通过的验收链：
+
+```bash
+coqc coins_63.v
+coqc C_63_goal.v
+coqc C_63_proof_auto.v
+coqc C_63_proof_manual.v
+coqc C_63_goal_check.v
+```
+
+扫描结果：
+
+```bash
+grep -nE "Admitted\.|Axiom[[:space:]]" coins_63.v C_63_proof_manual.v
+```
+
+无输出。
+
+### 文件变更
+
+- `C_63.c`
+  - 从局部数组 `ff[100]` 改成三个滚动变量 `a/b/c`，分别保存 `fibfib(i-3)`、`fibfib(i-2)`、`fibfib(i-1)`。
+  - 前后条件使用 `problem_63_pre_z` / `problem_63_spec_z`，二者在 `coins_63.v` 中桥接到 `spec/63.v` 的 `problem_63_pre` / `problem_63_spec`。
+  - 前置条件补充 `n < 100` 和 `fibfib_step_int_range(n)`，用于证明循环中的 `a + b`、`a + b + c` 和 `i + 1` 不溢出。
+- `coins_63.v`
+  - 新增 `fibfib_z`、`problem_63_pre_z`、`problem_63_spec_z`。
+  - 新增 `fibfib_z_0`、`fibfib_z_1`、`fibfib_z_2`、`fibfib_z_step`、`fibfib_step_int_range` 和 `problem_63_spec_z_of_fibfib_z`。
+- `C_63_proof_manual.v`
+  - 完成两条加法安全 VC、循环初始化/步进 VC，以及四个 return 分支 VC。
+
+### 注意
+
+- `C_63_proof_auto.v` 是 symexec 生成文件，未手动补 proof；本次只检查并保证 `coins_63.v` 与 `C_63_proof_manual.v` 无 `Admitted.` / `Axiom`。
 
 ## 后续记录模板
 
