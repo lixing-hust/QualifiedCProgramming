@@ -29,7 +29,8 @@
 | `C_40` | 已全链通过 | 三元组求和；三层扫描谓词、溢出安全和 true/false 规格桥接已补完，manual 已无 `Admitted.`。 |
 | `C_42` | 已全链通过 | 已去掉输入 `out`，改为函数内部 malloc 并返回 `IntArray *` 结构体；manual 已无 `Admitted.`。 |
 | `C_43` | 已全链通过 | 二元组求和；复用 `C_40` 的分层扫描谓词模式，manual 已无 `Admitted.`。 |
-| `C_52` | 已有生成文件 | manual 仍含 `Admitted.`。 |
+| `C_46` | 待继续 | 已尝试保留 `int f[100]` 做 QCP 格式适配；局部数组可解析，但 `IntArray::seg/undef_seg` 形式在 return 回收权限时失败，暂缓。 |
+| `C_52` | 已全链通过 | 单层数组扫描；改为使用 `problem_52_pre/spec`，manual 已无 `Admitted.`。 |
 | `C_55` | 已有生成文件 | manual 仍含 `Admitted.`。 |
 | `C_72` | 已有生成文件 | manual 仍含 `Admitted.`。 |
 | `C_73` | 已有生成文件 | manual 仍含 `Admitted.`。 |
@@ -1135,6 +1136,109 @@ coqc C_43_goal_check.v
 
 - 后续二重循环搜索题可以直接沿用 `C_43` 的 `scanned_i/scanned_j` 模式；三重循环则参考 `C_40`。
 - 如果 spec 使用 nat 下标而 C proof 使用 Z 下标，桥接证明集中放在 `coins_XX.v` 中，manual proof 里只调用最终 bridge lemma。
+
+## C_46 格式适配尝试记录
+
+### 当前状态
+
+- 状态：待继续。
+- 当前目标：保留原程序的局部固定长度数组 `int f[100]`，尝试使用新版 QCP 的局部数组支持，而不是立刻改成滚动变量。
+- 当前已做：
+  - `C_46.c` 已从 `#include<stdio.h>` 改成 QCP 头文件。
+  - 已新增 `coins_46.v`，定义 `fib4_z`、`problem_46_pre_z`、`problem_46_spec_z`、`fib4_z_list`、`fib4_prefix_int_range`。
+  - `coins_46.v` 可以编译。
+  - 用 `symexec` 和 `mcp check` 做了局部数组行为实验。
+
+### 实验结论
+
+1. 新版 QCP 能解析和符号执行最小局部数组声明：
+
+```c
+int f[100];
+return 0;
+```
+
+最小程序可以 symbolic 通过，说明 `int f[100]` 本身已被支持。
+
+2. 局部数组单点资源可以被工具处理。
+
+实验中，如果只在中间状态保留单个 `data_at(f, 0)`，函数退出时可以回收局部数组资源。
+
+3. 手动把局部数组整理成 `IntArray::seg/undef_seg` 后，return 时会失败。
+
+当前尝试的循环 invariant 形状：
+
+```c
+IntArray::seg(f, 0, i, fib4_z_list(i)) *
+IntArray::undef_seg(f, i, 100)
+```
+
+可以支撑初始化和循环中的数组访问继续推进，但在小分支 `return result0;` 或最终 `return result;` 前后，`symexec` 报：
+
+```text
+Fail to Remove Memory Permission of f
+```
+
+说明局部栈数组退出回收期望的资源形状，和堆数组常用的 `IntArray::seg + IntArray::undef_seg` 还不完全一致。
+
+4. 中间 `Assert` 不能只写数组资源。
+
+一开始为了整理 `f[0]`、`f[1]`、`f[2]` 的前缀，写了只包含数组资源的 `Assert`。后续 `if (n < 4)` 会报找不到变量 `n`。处理方式是中间断言必须保留：
+
+```c
+n == n@pre &&
+0 <= n && n < 100 &&
+...
+```
+
+否则前端会把后续语句需要的局部变量事实丢掉。
+
+### 后续处理建议
+
+- 如果继续测试局部栈数组路线，下一步不要直接照搬 malloc 数组的 `seg/undef_seg` 模式；应先确认局部数组退出时需要恢复成什么资源形状。
+- `int_array_def.h` 中的 `store_array_box` / `store_array_box_array` 可能和局部数组 boxed resource 有关，但当前 `LLM_friendly_cases` 未找到完整示例，需进一步探索。
+- 如果目标是快速完成 `C_46` 的功能验证，可以暂时把程序改成 4 个滚动变量版本，避免局部数组资源回收问题。
+- 如果目标是验证 QCP 对 `int f[100]` 的新版支持，则保留当前尝试分支，继续围绕“局部数组资源如何在 return 前恢复到可回收状态”做最小实验。
+
+## C_52 验证记录
+
+### 结论
+
+`C_52` 已完成完整验证。
+
+已通过的验收链：
+
+```bash
+coqc coins_52.v
+coqc C_52_goal.v
+coqc C_52_proof_auto.v
+coqc C_52_proof_manual.v
+coqc C_52_goal_check.v
+```
+
+扫描结果：
+
+```bash
+grep -nE "Admitted\.|Axiom[[:space:]]" coins_52.v C_52_proof_manual.v
+```
+
+无输出。
+
+### 文件变更
+
+- `C_52.c`
+  - 从直接写数组下标性质的规格，改为显式使用 `problem_52_pre/spec`。
+  - 循环 invariant 维护 `0 <= i <= l_size@pre`，以及前缀 `[0, i)` 中所有元素都满足 `Znth(k, input_l, 0) < t@pre`。
+  - 提前返回 `0` 对应 `problem_52_spec input_l t false`，循环结束返回 `1` 对应 `problem_52_spec input_l t true`。
+- `coins_52.v`
+  - 新增 `Znth_In_range_52` 和 `In_Znth_exists_52`，连接 list `In` 与数组下标表示。
+  - 新增 `problem_52_spec_false_of_counter` 和 `problem_52_spec_true_of_all_below`，分别处理发现反例和扫描完成两个返回分支。
+- `C_52_proof_manual.v`
+  - 完成 `entail_wit_2`、`return_wit_1`、`return_wit_2` 三个 manual VC。
+
+### 注意
+
+- `C_52_proof_auto.v` 是 symexec 生成文件，未手动补 proof；本次只检查并保证 `coins_52.v` 与 `C_52_proof_manual.v` 无 `Admitted.` / `Axiom`。
 
 ## 后续记录模板
 
