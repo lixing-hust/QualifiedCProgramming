@@ -1,0 +1,16 @@
+Completed the contract workflow for `tribonacci`.
+
+Created:
+- [input/tribonacci.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/tribonacci.c:1)
+- [input/tribonacci.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/tribonacci.v:1)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_221153_tribonacci/logs/reasoning.md:1)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_221153_tribonacci/logs/issues.md:1)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_221153_tribonacci/logs/metrics.md:1)
+
+Key contract choices:
+- Preserved the original `int tribonacci(int n)` implementation.
+- Added `0 <= n && n <= 37` to keep signed `int` arithmetic safe.
+- Added `tribonacci.v` because the postcondition needs a task-specific mathematical Tribonacci definition.
+- No experience docs were updated; `metrics.md` records `Experience updates: none`.
+
+Verification check performed: `coqc input/tribonacci.v` passed. I removed the generated `.vo/.glob/.vok/.vos` files afterward, leaving only the requested artifacts.

@@ -1,0 +1,7 @@
+compile_start=2026-04-20T16:10:54+08:00
+compiled=original/string_to_lower_ascii.v
+compiled=generated/string_to_lower_ascii_goal.v
+compiled=generated/string_to_lower_ascii_proof_auto.v
+compiled=generated/string_to_lower_ascii_proof_manual.v
+compiled=generated/string_to_lower_ascii_goal_check.v
+compile_end=2026-04-20T16:10:59+08:00

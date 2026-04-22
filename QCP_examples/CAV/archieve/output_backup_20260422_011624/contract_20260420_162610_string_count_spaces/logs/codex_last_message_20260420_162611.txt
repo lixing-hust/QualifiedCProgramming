@@ -1,0 +1,15 @@
+Completed the contract workflow for `string_count_spaces`.
+
+Created:
+- [string_count_spaces.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_count_spaces.c)
+- [string_count_spaces.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_count_spaces.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_162610_string_count_spaces/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_162610_string_count_spaces/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_162610_string_count_spaces/logs/metrics.md)
+
+Also copied the generated C/V inputs into the workspace snapshot at:
+- `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_162610_string_count_spaces/input/`
+
+Validation done:
+- `coqtop -batch -load-vernac-source input/string_count_spaces.v` passed.
+- Scanned generated contract/logs for proof-stage terms like `Inv`, `Assert`, `which implies`, `bridge assert`, and `loop-exit`; none remain.

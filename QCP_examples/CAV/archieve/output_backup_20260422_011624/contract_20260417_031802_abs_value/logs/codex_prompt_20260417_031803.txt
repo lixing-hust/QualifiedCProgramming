@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/contract/SKILL.md
+
+Inputs:
+- Raw markdown: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/raw/abs_value.md`
+- Target function: `abs_value`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260417_031802_abs_value`
+- Output C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/abs_value.c`
+- Optional output V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/abs_value.v`

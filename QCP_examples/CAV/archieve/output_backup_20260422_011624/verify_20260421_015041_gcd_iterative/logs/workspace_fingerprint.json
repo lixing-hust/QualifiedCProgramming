@@ -1,0 +1,33 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260421_015041_gcd_iterative",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/gcd_iterative.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/gcd_iterative.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_015041_gcd_iterative/original/gcd_iterative.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_015041_gcd_iterative/original/gcd_iterative.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_015041_gcd_iterative.c",
+  "function_name": "gcd_iterative",
+  "program_sha256": "52a2165736328b9705752f2079d93e53a4274c86000f26339cbd526ca26ccc8a",
+  "semantic_description": "Verifies an iterative Euclidean algorithm over two nonnegative scalar integers with at least one positive input. The loop repeatedly replaces (a,b) with (b,a mod b) until b becomes zero, then returns a value specified to equal the Coq gcd of the original inputs. The function has while-loop control flow, no heap ownership beyond emp, and does not modify memory.",
+  "keywords": {
+    "algorithm_family": "simulation",
+    "control_flow": "while_loop",
+    "data_shape": "scalar_only",
+    "proof_pattern": [
+      "loop_invariant",
+      "pure_arithmetic"
+    ],
+    "numeric_properties": [
+      "nonnegative_input",
+      "int_range"
+    ],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": [
+      "goal_check_passed",
+      "proof_check_passed"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

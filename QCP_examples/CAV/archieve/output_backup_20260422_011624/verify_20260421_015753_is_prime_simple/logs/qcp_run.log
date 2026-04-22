@@ -1,0 +1,7 @@
+Start to symbolic execution on program : /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_015753_is_prime_simple.c
+Start to parse strategies file common
+File Path: /home/yangfp/QualifiedCProgramming/QCP_examples/common.strategies
+Finish parsing strategies file common
+Symbolic Execution into function is_prime_simple
+End of symbolic execution of function is_prime_simple
+Successfully finished symbolic execution

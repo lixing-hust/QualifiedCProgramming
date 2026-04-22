@@ -1,0 +1,12 @@
+Created the contract artifacts for `array_min` using the requested workflow.
+
+Outputs:
+- [array_min.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_min.c)
+- [array_min.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_min.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260417_231608_array_min/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260417_231608_array_min/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260417_231608_array_min/logs/metrics.md)
+
+The contract mirrors the existing `array_max` style: `1 <= n`, `Zlength(l) == n`, `IntArray::full(a, n, l)`, and a task-local Coq bridge `min_list_nonempty` for the functional postcondition.
+
+I did a readback consistency check on the written files. I did not run the verify stage.

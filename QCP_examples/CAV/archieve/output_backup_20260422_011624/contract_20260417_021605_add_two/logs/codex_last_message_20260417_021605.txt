@@ -1,0 +1,13 @@
+Generated the contract outputs for `add_two` using the requested skill workflow.
+
+The C contract is in [add_two.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/add_two.c:1). It keeps the original implementation and uses the minimal scalar contract:
+`Require INT_MIN <= a + b && a + b <= INT_MAX && emp`
+and
+`Ensure __return == a + b && emp`.
+
+The required logs were written to the workspace:
+[reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260417_021605_add_two/logs/reasoning.md:1),
+[issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260417_021605_add_two/logs/issues.md:1),
+[metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260417_021605_add_two/logs/metrics.md:1).
+
+`[add_two.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/add_two.v:1)` was not created because no extra Coq bridge definitions are needed for this function.

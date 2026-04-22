@@ -1,0 +1,12 @@
+Implemented the contract workflow for `count_multiples`.
+
+Created:
+- [input/count_multiples.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/count_multiples.c)
+- [input/count_multiples.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/count_multiples.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_045521_count_multiples/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_045521_count_multiples/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_045521_count_multiples/logs/metrics.md)
+
+The C contract keeps the original function and adds `1 <= n && n < INT_MAX && 1 <= k && emp`, with the postcondition tied to a task-specific Coq counting spec. I used a small `.v` definition because it mirrors the loop’s enumeration semantics directly.
+
+Verification performed: `coqc input/count_multiples.v` passed. I removed the generated `.vo/.glob/.vos/.vok` artifacts afterward, leaving only the requested source files.

@@ -1,0 +1,10 @@
+2026-04-17T13:23:12.490783Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260417_212212_array_increment.c:
+{
+    int i;
+
+    for (i = 0; i < n; ++i) 
+    {
+        a[i] = a[i] + 1;
+    }
+}
+2026-04-17T13:30:32.235989Z ERROR codex_core::tools::router: error=write_stdin failed: stdin is closed for this session; rerun exec_command with tty=true to keep stdin open

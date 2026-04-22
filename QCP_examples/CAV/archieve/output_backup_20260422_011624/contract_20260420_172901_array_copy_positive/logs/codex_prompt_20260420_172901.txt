@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/contract/SKILL.md
+
+Inputs:
+- Raw markdown: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/raw/array_copy_positive.md`
+- Target function: `array_copy_positive`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_172901_array_copy_positive`
+- Output C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_copy_positive.c`
+- Optional output V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_copy_positive.v`

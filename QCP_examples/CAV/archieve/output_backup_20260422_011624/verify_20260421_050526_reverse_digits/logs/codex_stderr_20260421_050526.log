@@ -1,0 +1,13 @@
+2026-04-20T21:15:07.459808Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_050526_reverse_digits/coq/generated/reverse_digits_proof_manual.v:
+    assert (0 <= n % 10) by (apply Z.rem_bound_pos; lia).
+    change Int.min_signed with (-2147483648) in *.
+    change Int.max_signed with 2147483647 in *.
+    nia.
+2026-04-20T21:15:16.328290Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_050526_reverse_digits/coq/generated/reverse_digits_proof_manual.v:
+    assert (0 <= n % 10) by (apply Z.rem_bound_pos; lia).
+    change Int.min_signed with (-2147483648) in *.
+    change Int.max_signed with 2147483647 in *.
+    nia.
+2026-04-20T21:16:49.015612Z ERROR codex_core::tools::router: error=failed to parse function arguments: missing field `cmd` at line 1 column 233
+2026-04-20T21:17:45.536164Z ERROR codex_core::tools::router: error=failed to parse function arguments: missing field `cmd` at line 1 column 232
+2026-04-20T21:19:42.205529Z ERROR codex_core::tools::router: error=failed to parse function arguments: missing field `cmd` at line 1 column 232

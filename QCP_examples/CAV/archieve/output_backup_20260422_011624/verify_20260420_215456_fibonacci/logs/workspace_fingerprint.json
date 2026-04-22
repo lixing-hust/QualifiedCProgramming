@@ -1,0 +1,42 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260420_215456_fibonacci",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/fibonacci.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/fibonacci.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_215456_fibonacci/original/fibonacci.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_215456_fibonacci/original/fibonacci.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_215456_fibonacci.c",
+  "function_name": "fibonacci",
+  "program_sha256": "38e6bdd2e5e28cfae22317778ffa0f3b4dc6a3bf0188596418f4e455a4904806",
+  "semantic_description": "Verifies an iterative scalar Fibonacci function. For input n constrained to 0 <= n <= 46, the function returns fib_z(n) without modifying memory. It initializes a = 0 and b = 1, returns 0 immediately for n == 0, and otherwise runs a for loop from i = 2 through n updating c = a + b, a = b, and b = c. The loop proof must relate the scalar accumulators to consecutive Fibonacci values while preserving the input bound used to avoid signed int overflow.",
+  "keywords": {
+    "algorithm_family": [
+      "dynamic_programming",
+      "accumulation"
+    ],
+    "control_flow": [
+      "if",
+      "for_loop"
+    ],
+    "data_shape": "scalar_only",
+    "proof_pattern": [
+      "loop_invariant",
+      "pure_arithmetic",
+      "range_bound"
+    ],
+    "numeric_properties": [
+      "nonnegative_input",
+      "overflow_guard",
+      "int_range",
+      "monotone_accumulator"
+    ],
+    "edge_case_behavior": "defined_for_nonnegative_only",
+    "verification_status": [
+      "goal_check_passed",
+      "proof_check_passed"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

@@ -1,0 +1,13 @@
+{"type":"thread.started","thread_id":"019dab49-edda-7b41-b02f-fab8cac98067"}
+{"type":"turn.started"}
+{"type":"error","message":"Reconnecting... 2/5 (unexpected status 403 Forbidden: Unknown error, url: wss://chatgpt.com/backend-api/codex/responses, cf-ray: 9ef4d47e0cdfd750-NRT)"}
+{"type":"error","message":"Reconnecting... 3/5 (unexpected status 403 Forbidden: Unknown error, url: wss://chatgpt.com/backend-api/codex/responses, cf-ray: 9ef4d48c5a0bdeb7-NRT)"}
+{"type":"error","message":"Reconnecting... 4/5 (unexpected status 403 Forbidden: Unknown error, url: wss://chatgpt.com/backend-api/codex/responses, cf-ray: 9ef4d497e8d4197b-NRT)"}
+{"type":"error","message":"Reconnecting... 5/5 (unexpected status 403 Forbidden: Unknown error, url: wss://chatgpt.com/backend-api/codex/responses, cf-ray: 9ef4d4abcbfa0d45-NRT)"}
+{"type":"error","message":"Reconnecting... 1/5 (unexpected status 403 Forbidden: Unknown error, url: https://chatgpt.com/backend-api/codex/responses, cf-ray: 9ef4d4cec8e431a1-NRT)"}
+{"type":"error","message":"Reconnecting... 2/5 (unexpected status 403 Forbidden: Unknown error, url: https://chatgpt.com/backend-api/codex/responses, cf-ray: 9ef4d5195d05e001-NRT)"}
+{"type":"error","message":"Reconnecting... 3/5 (unexpected status 403 Forbidden: Unknown error, url: https://chatgpt.com/backend-api/codex/responses, cf-ray: 9ef4d5246b5e387b-NRT)"}
+{"type":"error","message":"Reconnecting... 4/5 (unexpected status 403 Forbidden: Unknown error, url: https://chatgpt.com/backend-api/codex/responses, cf-ray: 9ef4d5485b613c0f-NRT)"}
+{"type":"error","message":"Reconnecting... 5/5 (unexpected status 403 Forbidden: Unknown error, url: https://chatgpt.com/backend-api/codex/responses, cf-ray: 9ef4d55f8b00d76b-NRT)"}
+{"type":"error","message":"unexpected status 403 Forbidden: Unknown error, url: https://chatgpt.com/backend-api/codex/responses, cf-ray: 9ef4d57f9c4cdeb5-NRT"}
+{"type":"turn.failed","error":{"message":"unexpected status 403 Forbidden: Unknown error, url: https://chatgpt.com/backend-api/codex/responses, cf-ray: 9ef4d57f9c4cdeb5-NRT"}}

@@ -1,0 +1,37 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260420_174025_array_sign",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_sign.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_174025_array_sign/original/array_sign.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_174025_array_sign.c",
+  "function_name": "array_sign",
+  "program_sha256": "bb6e4567bb64c54cda6b95716900791e14c45f2adac3d0f940677716ae835079",
+  "semantic_description": "array_sign scans indices 0..n-1 of input array a and writes a result array out of the same length where each element is 1 for positive input, -1 for negative input, and 0 for zero input. The function uses a single for loop with nested if/else branches, preserves the input array contents, and updates only the caller-provided output array. For n = 0 the loop body is skipped and the output array remains an empty logical array.",
+  "keywords": {
+    "algorithm_family": "simulation",
+    "control_flow": [
+      "for_loop",
+      "if"
+    ],
+    "data_shape": [
+      "array",
+      "pointer"
+    ],
+    "semantic_intent": [
+      "preserve_input",
+      "in_place_update"
+    ],
+    "proof_pattern": [
+      "loop_invariant",
+      "case_split",
+      "heap_reasoning"
+    ],
+    "numeric_properties": "int_range",
+    "edge_case_behavior": "empty_loop_possible"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

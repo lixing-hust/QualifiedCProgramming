@@ -1,0 +1,25 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260420_190707_string_remove_char_to_output",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_remove_char_to_output.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_remove_char_to_output.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_190707_string_remove_char_to_output/original/string_remove_char_to_output.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_190707_string_remove_char_to_output/original/string_remove_char_to_output.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_190707_string_remove_char_to_output.c",
+  "function_name": "string_remove_char_to_output",
+  "program_sha256": "f62b67dfb02c40b63bc69169129b8847836c48d61ad1d8affa2ef39879418cde",
+  "semantic_description": "Scans a null-terminated character array prefix of length n with a while loop, copies every element not equal to c into the caller-provided output buffer, writes a terminating 0 after the copied prefix, returns the copied length, preserves the input string memory, and leaves the unused suffix of the output buffer existentially unconstrained. The empty input prefix is allowed and should produce output containing only the terminator with return value 0.",
+  "keywords": {
+    "algorithm_family": "selection",
+    "control_flow": ["while_loop", "if"],
+    "data_shape": ["string", "pointer", "array"],
+    "semantic_intent": "preserve_input",
+    "proof_pattern": ["loop_invariant", "heap_reasoning", "case_split", "range_bound"],
+    "numeric_properties": ["nonnegative_input", "int_range"],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": "goal_check_passed"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

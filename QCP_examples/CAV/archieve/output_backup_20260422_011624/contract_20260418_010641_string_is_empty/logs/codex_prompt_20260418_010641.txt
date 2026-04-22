@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/contract/SKILL.md
+
+Inputs:
+- Raw markdown: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/raw/string_is_empty.md`
+- Target function: `string_is_empty`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_010641_string_is_empty`
+- Output C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_is_empty.c`
+- Optional output V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_is_empty.v`

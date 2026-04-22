@@ -1,0 +1,20 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/verify/SKILL.md
+
+Retry round for the same verify workspace.
+
+Inputs:
+- Input C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/gcd_iterative.c`
+- Optional input V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/gcd_iterative.v`
+- Target function: `gcd_iterative`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative`
+- Active annotated C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_235246_gcd_iterative.c`
+
+Retry rule:
+- Do not restart the task from scratch.
+- First read the current logs, generated Coq files, latest compile errors, and current annotated file in this workspace.
+- If `logs/workspace_fingerprint.json` still has empty `semantic_description` or `keywords`, first read `doc/retrieval/INDEX.md` and fill them using only its controlled vocabulary before proceeding.
+- Precisely identify the current blocker from the existing workspace state.
+- Continue repairing from that blocker in the same workspace.
+- Preserve existing correct work; only change what is needed for the next proof/compile step.
+- Keep iterating until verification succeeds or the external time budget is exhausted.

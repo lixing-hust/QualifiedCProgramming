@@ -1,0 +1,22 @@
+Verification succeeded for the retry workspace.
+
+I completed `proof_of_selection_sort_entail_wit_4` in [selection_sort_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_173306_selection_sort/coq/generated/selection_sort_proof_manual.v), adding local helper lemmas for the non-adjacent selection-sort swap, sorted-prefix extension, cross-order preservation, and permutation preservation.
+
+Checks completed:
+
+- `selection_sort_goal.v` compiles
+- `selection_sort_proof_auto.v` compiles
+- `selection_sort_proof_manual.v` compiles
+- `selection_sort_goal_check.v` compiles
+- `selection_sort_proof_manual.v` has no `Admitted.`
+- no new manual `Axiom`
+- non-`.v` Coq build byproducts under the workspace `coq/` tree were cleaned
+
+Updated logs:
+
+- [proof_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_173306_selection_sort/logs/proof_reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_173306_selection_sort/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_173306_selection_sort/logs/metrics.md) now ends with `Final Result: Success`
+- [workspace_fingerprint.json](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_173306_selection_sort/logs/workspace_fingerprint.json) now records `goal_check_passed` and `proof_check_passed`
+
+No annotated C changes were needed in this retry; the existing latest symexec output was used.

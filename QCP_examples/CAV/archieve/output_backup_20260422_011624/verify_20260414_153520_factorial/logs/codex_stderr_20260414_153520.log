@@ -1,0 +1,58 @@
+2026-04-14T07:46:18.987874Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/output/verify_20260414_153520_factorial/coq/generated/factorial_proof_manual.v:
+  assert (1 <= i <= 10) as Hi_range by lia.
+  destruct (Z.eq_dec i 1) as [Hi_eq_1 | Hi_neq_1].
+  - subst i.
+    vm_compute; lia.
+  - destruct (Z.eq_dec i 2) as [Hi_eq_2 | Hi_neq_2].
+    + subst i.
+      vm_compute; lia.
+    + destruct (Z.eq_dec i 3) as [Hi_eq_3 | Hi_neq_3].
+      * subst i.
+        vm_compute; lia.
+      * destruct (Z.eq_dec i 4) as [Hi_eq_4 | Hi_neq_4].
+        { subst i. vm_compute; lia. }
+        destruct (Z.eq_dec i 5) as [Hi_eq_5 | Hi_neq_5].
+        { subst i. vm_compute; lia. }
+        destruct (Z.eq_dec i 6) as [Hi_eq_6 | Hi_neq_6].
+        { subst i. vm_compute; lia. }
+        destruct (Z.eq_dec i 7) as [Hi_eq_7 | Hi_neq_7].
+        { subst i. vm_compute; lia. }
+        destruct (Z.eq_dec i 8) as [Hi_eq_8 | Hi_neq_8].
+        { subst i. vm_compute; lia. }
+        destruct (Z.eq_dec i 9) as [Hi_eq_9 | Hi_neq_9].
+        { subst i. vm_compute; lia. }
+        assert (i = 10) by lia.
+        subst i.
+        vm_compute; lia.
+  }
+2026-04-14T07:48:43.548199Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/output/verify_20260414_153520_factorial/coq/generated/factorial_proof_manual.v:
+  assert (1 <= i <= 10) as Hi_range by lia.
+  destruct (Z.eq_dec i 1) as [Hi_eq_1 | Hi_neq_1].
+  - rewrite Hi_eq_1.
+    change (0 <= 1 <= INT_MAX).
+    lia.
+  - destruct (Z.eq_dec i 2) as [Hi_eq_2 | Hi_neq_2].
+    + rewrite Hi_eq_2.
+      change (0 <= 2 <= INT_MAX).
+      lia.
+    + destruct (Z.eq_dec i 3) as [Hi_eq_3 | Hi_neq_3].
+      * rewrite Hi_eq_3.
+        change (0 <= 6 <= INT_MAX).
+        lia.
+      * destruct (Z.eq_dec i 4) as [Hi_eq_4 | Hi_neq_4].
+        { rewrite Hi_eq_4. change (0 <= 24 <= INT_MAX). lia. }
+        destruct (Z.eq_dec i 5) as [Hi_eq_5 | Hi_neq_5].
+        { rewrite Hi_eq_5. change (0 <= 120 <= INT_MAX). lia. }
+        destruct (Z.eq_dec i 6) as [Hi_eq_6 | Hi_neq_6].
+        { rewrite Hi_eq_6. change (0 <= 720 <= INT_MAX). lia. }
+        destruct (Z.eq_dec i 7) as [Hi_eq_7 | Hi_neq_7].
+        { rewrite Hi_eq_7. change (0 <= 5040 <= INT_MAX). lia. }
+        destruct (Z.eq_dec i 8) as [Hi_eq_8 | Hi_neq_8].
+        { rewrite Hi_eq_8. change (0 <= 40320 <= INT_MAX). lia. }
+        destruct (Z.eq_dec i 9) as [Hi_eq_9 | Hi_neq_9].
+        { rewrite Hi_eq_9. change (0 <= 362880 <= INT_MAX). lia. }
+        assert (i = 10) by lia.
+        subst i.
+        change (0 <= 3628800 <= INT_MAX).
+        lia.
+  }

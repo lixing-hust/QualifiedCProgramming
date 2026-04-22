@@ -1,0 +1,28 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260422_012900_17_array_first_peak",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_first_peak.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_012900_17_array_first_peak/original/array_first_peak.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260422_012900_17_array_first_peak.c",
+  "function_name": "array_first_peak",
+  "program_sha256": "9d293f601ce4f68cde879d9363e130c92ba6376f87cda01b3e630293deb9d53d",
+  "semantic_description": "Scans an integer array from index 1 upward to find the first interior peak, where an index i is a peak when 0 < i < n - 1 and l[i] is at least both neighbors. If no such interior index exists, returns -1. The loop may be skipped for arrays with fewer than three elements. The function only reads the input array and returns an index; it preserves IntArray::full(a, n, l) and does not modify memory.",
+  "keywords": {
+    "algorithm_family": "search",
+    "control_flow": "while_loop",
+    "data_shape": "array",
+    "semantic_intent": "preserve_input",
+    "proof_pattern": [
+      "loop_invariant",
+      "case_split",
+      "range_bound"
+    ],
+    "numeric_properties": "int_range",
+    "edge_case_behavior": "empty_loop_possible"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

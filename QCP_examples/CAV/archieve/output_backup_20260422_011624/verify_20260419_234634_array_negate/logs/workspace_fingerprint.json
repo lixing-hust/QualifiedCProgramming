@@ -1,0 +1,41 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260419_234634_array_negate",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_negate.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_234634_array_negate/original/array_negate.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260419_234634_array_negate.c",
+  "function_name": "array_negate",
+  "program_sha256": "a8537f69e53eb0694fb9751670db52b76599be2042ac19ece302babe5b861778",
+  "semantic_description": "array_negate copies over an integer array shape by scanning indices 0 <= i < n in a single for loop, preserving the input array a and writing each output element out[i] to the arithmetic negation of the original a[i]. The loop may be empty when n == 0. The function modifies only the caller-provided output array and relies on the contract overflow guard for each negated input element.",
+  "keywords": {
+    "algorithm_family": "simulation",
+    "control_flow": "for_loop",
+    "data_shape": [
+      "array",
+      "pointer"
+    ],
+    "semantic_intent": [
+      "preserve_input",
+      "in_place_update"
+    ],
+    "proof_pattern": [
+      "loop_invariant",
+      "heap_reasoning",
+      "range_bound"
+    ],
+    "numeric_properties": [
+      "overflow_guard",
+      "int_range"
+    ],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": [
+      "goal_check_passed",
+      "auto_proof_contains_admitted"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

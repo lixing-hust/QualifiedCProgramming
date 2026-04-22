@@ -1,0 +1,25 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260421_134943_house_robber",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/house_robber.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/house_robber.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_134943_house_robber/original/house_robber.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_134943_house_robber/original/house_robber.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_134943_house_robber.c",
+  "function_name": "house_robber",
+  "program_sha256": "c53a52eb929c4f46896621117f3f5ad9e13fc1b73f3b9020abbe0495b6836aa9",
+  "semantic_description": "Verifies house_robber, a for-loop dynamic-programming scan over a nonnegative integer array. The function keeps scalar accumulators prev2 and prev1, updates them with cur = max(prev2 + a[i], prev1), returns the Coq recurrence house_robber_spec(l), and preserves the input IntArray memory. The empty array case is handled by zero loop iterations and returns 0.",
+  "keywords": {
+    "algorithm_family": "dynamic_programming",
+    "control_flow": ["for_loop", "if"],
+    "data_shape": ["array", "scalar_only"],
+    "semantic_intent": ["return_max", "preserve_input"],
+    "proof_pattern": ["loop_invariant", "case_split", "range_bound", "heap_reasoning"],
+    "numeric_properties": ["nonnegative_input", "int_range", "monotone_accumulator"],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": "goal_check_passed"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

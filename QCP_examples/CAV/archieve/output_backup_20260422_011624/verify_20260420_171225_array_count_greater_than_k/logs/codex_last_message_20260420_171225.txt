@@ -1,0 +1,18 @@
+Verification succeeded for `array_count_greater_than_k`.
+
+Updated the active annotated C with the prefix-count loop invariant and loop-exit assertion:
+[verify_20260420_171225_array_count_greater_than_k.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_171225_array_count_greater_than_k.c)
+
+Generated and completed the manual proof:
+[array_count_greater_than_k_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_171225_array_count_greater_than_k/coq/generated/array_count_greater_than_k_proof_manual.v)
+
+Final checks passed:
+
+- `symexec` succeeded and regenerated `goal`, `proof_auto`, `proof_manual`, and `goal_check`.
+- `original/array_count_greater_than_k.v`, `goal.v`, `proof_auto.v`, `proof_manual.v`, and `goal_check.v` all compile.
+- `proof_manual.v` contains no `Admitted.` and no top-level `Axiom`.
+- Non-`.v` Coq build byproducts were cleaned from the workspace `coq/` tree.
+- `logs/metrics.md` ends with `Final Result: Success`.
+
+Logs updated in:
+[logs](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_171225_array_count_greater_than_k/logs)

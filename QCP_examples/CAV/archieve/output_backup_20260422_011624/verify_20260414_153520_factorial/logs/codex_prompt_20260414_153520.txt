@@ -1,0 +1,8 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/skills/verify/SKILL.md
+
+Inputs:
+- Input C: `/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/input/factorial.c`
+- Optional input V: `<not provided>`
+- Target function: `fac`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/output/verify_20260414_153520_factorial`

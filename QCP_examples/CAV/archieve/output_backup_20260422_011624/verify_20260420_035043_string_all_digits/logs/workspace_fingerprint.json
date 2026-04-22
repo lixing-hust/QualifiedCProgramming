@@ -1,0 +1,42 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260420_035043_string_all_digits",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_all_digits.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_all_digits.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_035043_string_all_digits/original/string_all_digits.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_035043_string_all_digits/original/string_all_digits.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_035043_string_all_digits.c",
+  "function_name": "string_all_digits",
+  "program_sha256": "b2e20ed2dd6a72f2744ea6b87752c897dd14ffc6af59df419bed13e4e505517c",
+  "semantic_description": "Verifies a read-only scan of a NUL-terminated character array. The function advances index i from 0 until it reaches the terminator, returns 0 immediately if any character before the terminator is outside the ASCII digit interval [48,57], and returns 1 when the loop reaches the terminator after only digit characters. The contract preserves the full character array memory unchanged, allows an empty string, and relates the return value to the recursive Coq list specification string_all_digits_spec.",
+  "keywords": {
+    "algorithm_family": "search",
+    "control_flow": [
+      "while_loop",
+      "if"
+    ],
+    "data_shape": [
+      "string",
+      "array",
+      "pointer"
+    ],
+    "proof_pattern": [
+      "loop_invariant",
+      "case_split",
+      "heap_reasoning"
+    ],
+    "numeric_properties": [
+      "int_range"
+    ],
+    "edge_case_behavior": [
+      "empty_loop_possible"
+    ],
+    "verification_status": [
+      "goal_check_passed",
+      "proof_check_passed"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

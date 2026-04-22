@@ -1,0 +1,12 @@
+Completed the contract workflow for `string_to_lower_ascii`.
+
+Created:
+- [input/string_to_lower_ascii.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_to_lower_ascii.c)
+- [input/string_to_lower_ascii.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_to_lower_ascii.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_155816_string_to_lower_ascii/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_155816_string_to_lower_ascii/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_155816_string_to_lower_ascii/logs/metrics.md)
+
+The C contract models a null-terminated string prefix `l`, excludes embedded zero bytes, preserves the terminator, and specifies the in-place uppercase ASCII to lowercase ASCII transformation through `string_to_lower_ascii_spec`.
+
+Verification performed: `coqtop -quiet < input/string_to_lower_ascii.v` succeeded, confirming the Coq helper definitions parse and are accepted.

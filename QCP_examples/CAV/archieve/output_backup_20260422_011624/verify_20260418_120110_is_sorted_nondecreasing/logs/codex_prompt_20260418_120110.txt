@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/verify/SKILL.md
+
+Inputs:
+- Input C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/is_sorted_nondecreasing.c`
+- Optional input V: `<not provided>`
+- Target function: `is_sorted_nondecreasing`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_120110_is_sorted_nondecreasing`
+- Active annotated C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_120110_is_sorted_nondecreasing.c`

@@ -1,0 +1,12 @@
+Completed the contract workflow for `array_is_strictly_increasing`.
+
+Created:
+
+- [array_is_strictly_increasing.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_is_strictly_increasing.c)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_153805_array_is_strictly_increasing/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_153805_array_is_strictly_increasing/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_153805_array_is_strictly_increasing/logs/metrics.md)
+
+No `input/array_is_strictly_increasing.v` was created because the contract only needs standard quantifiers, integer comparisons, list indexing, `Zlength`, and `IntArray::full`.
+
+Verification performed: scanned the generated contract/logs for forbidden verify-stage material (`Inv`, `Assert`, bridge assertions, loop-exit assertions, `which implies`) and found none.

@@ -1,0 +1,45 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260414_153520_factorial",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/input/factorial.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/output/verify_20260414_153520_factorial/original/factorial.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/output/verify_20260414_153520_factorial/annotated/factorial.c",
+  "function_name": "fac",
+  "program_sha256": "885cde2d569af924f32213f33be590d2bbef53b7f19983de82f193558062d9a7",
+  "semantic_description": "Iteratively computes n! for 0 <= n <= 10 by multiplying res with each integer from 1 through n, then returns the accumulated product.",
+  "keywords": {
+    "control_flow": [
+      "for_loop"
+    ],
+    "algorithm_family": [
+      "factorial"
+    ],
+    "data_shape": [
+      "scalar_only"
+    ],
+    "semantic_intent": [
+      "compute_factorial"
+    ],
+    "proof_pattern": [
+      "pure_arithmetic",
+      "loop_invariant"
+    ],
+    "numeric_properties": [
+      "nonnegative_input",
+      "int_range"
+    ],
+    "edge_case_behavior": [
+      "defined_for_nonnegative_only"
+    ],
+    "verification_status": [
+      "goal_check_passed",
+      "auto_proof_contains_admitted",
+      "generated_goal_contains_axioms"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "annotate_input_c"
+}

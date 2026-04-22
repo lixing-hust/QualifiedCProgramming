@@ -1,0 +1,1 @@
+2026-04-18T04:31:23.023187Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: IO error: tls handshake eof, url: wss://chatgpt.com/backend-api/codex/responses

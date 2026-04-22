@@ -1,0 +1,5 @@
+Generated the contract workflow outputs for `string_set_a`.
+
+The main result is [string_set_a.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_set_a.c:1). It keeps the original implementation and uses a shape-only precondition `CharArray::undef_full(s, n + 1)`, with the postcondition `CharArray::full(s, n + 1, app(repeat_Z('a', n), cons(0, nil)))`. I also added the required logs: [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_011842_string_set_a/logs/reasoning.md:1), [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_011842_string_set_a/logs/issues.md:1), and [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_011842_string_set_a/logs/metrics.md:1).
+
+I did not create `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_set_a.v`, because the repository’s existing `repeat_Z` and `CharArray` predicates were sufficient to express the full contract directly.

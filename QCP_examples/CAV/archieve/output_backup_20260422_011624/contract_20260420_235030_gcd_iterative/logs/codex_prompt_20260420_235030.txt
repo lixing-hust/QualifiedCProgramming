@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/contract/SKILL.md
+
+Inputs:
+- Raw markdown: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/raw/gcd_iterative.md`
+- Target function: `gcd_iterative`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_235030_gcd_iterative`
+- Output C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/gcd_iterative.c`
+- Optional output V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/gcd_iterative.v`

@@ -1,0 +1,7 @@
+## 2026-04-20 proof pass 1
+
+After fresh symexec, `coq/generated/string_count_spaces_proof_manual.v` contains five generated admitted obligations: `proof_of_string_count_spaces_safety_wit_6`, `proof_of_string_count_spaces_entail_wit_1`, `proof_of_string_count_spaces_entail_wit_2_1`, `proof_of_string_count_spaces_entail_wit_2_2`, and `proof_of_string_count_spaces_entail_wit_3`.
+I read the current `string_count_spaces_goal.v`, `proof_auto.v`, and `goal_check.v` shape through the generated goal module. The obligations are the same pattern as the verified string counting examples: prove the accumulator range before `cnt++`, initialize the invariant with `nil/l`, extend `l1` by the current character in the equal-32 branch, extend without changing the count in the not-32 branch, and use the nonzero-prefix premise to derive `i == n` at loop exit.
+Reusable proof pattern: adapt `examples/string_count_lowercase/coq/generated/string_count_lowercase_proof_manual.v` and `examples/string_count_not_char/coq/generated/string_count_not_char_proof_manual.v`. For this task the helper lemmas should be `string_count_spaces_spec_range` and `string_count_spaces_spec_app_single`; branch proofs use `Z.eq_dec x 32` instead of range or parameter equality splits.
+Next edit: add those helper lemmas and replace the five `Admitted.` bodies in the current workspace manual proof file. Then compile `proof_manual.v` and, if it fails, record the first stable Coq error before revising.
+

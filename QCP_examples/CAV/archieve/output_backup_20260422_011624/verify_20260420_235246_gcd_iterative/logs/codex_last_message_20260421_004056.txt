@@ -1,0 +1,27 @@
+Retry completed in the same workspace.
+
+Current blocker remains unchanged: `symexec` aborts before VC generation with:
+
+```text
+Old value at `pre' is not determined in .../annotated/verify_20260420_235246_gcd_iterative.c:15:1
+```
+
+The precise cause is still the fixed `Ensure` at [verify_20260420_235246_gcd_iterative.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_235246_gcd_iterative.c:13):
+
+```c
+gcd_iterative_spec(a@pre, b@pre, __return)
+```
+
+while the executable body assigns to both scalar formals at lines 34-35. The active annotations no longer contain body-level `a@pre` or `b@pre`, and prior legal `Assert`/`Inv` witness attempts did not move the failure. Under the requested Verify workflow, the remaining repair would require changing executable C shape or the official contract, which is outside the allowed Verify edits.
+
+What I updated:
+
+- Replayed `symexec` in the same workspace at `2026-04-21T00:41:47+08:00`.
+- Confirmed all generated Coq files are still zero bytes.
+- Confirmed `proof_manual.v` has no `Admitted.` or `Axiom`.
+- Confirmed there are no non-`.v` Coq intermediates to clean.
+- Appended the retry evidence to:
+  - [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/issues.md)
+  - [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/metrics.md)
+
+Final result remains `Fail` because `goal_check.v` cannot be generated or compiled from this Verify-only state.

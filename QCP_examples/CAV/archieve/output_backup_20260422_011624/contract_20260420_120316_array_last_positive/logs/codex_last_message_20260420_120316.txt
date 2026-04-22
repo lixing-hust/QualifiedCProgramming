@@ -1,0 +1,17 @@
+Completed the contract workflow for `array_last_positive`.
+
+Created [array_last_positive.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_last_positive.c) with a full contract stating:
+
+- `n >= 0`
+- `a` is represented by `IntArray::full(a, n, l)`
+- return is `-1` iff all elements are non-positive
+- otherwise return is an in-bounds positive element index with no later positive element
+- array contents are preserved
+
+Wrote the required logs:
+
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_120316_array_last_positive/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_120316_array_last_positive/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_120316_array_last_positive/logs/metrics.md)
+
+No `input/array_last_positive.v` was created; the spec is expressible directly in the C contract. No experience docs were updated. I did not run the verify stage.

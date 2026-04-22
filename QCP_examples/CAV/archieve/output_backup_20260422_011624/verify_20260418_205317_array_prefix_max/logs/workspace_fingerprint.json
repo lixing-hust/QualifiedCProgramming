@@ -1,0 +1,37 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260418_205317_array_prefix_max",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_prefix_max.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_205317_array_prefix_max/original/array_prefix_max.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_205317_array_prefix_max.c",
+  "function_name": "array_prefix_max",
+  "program_sha256": "590581a055cf90184bd489ee35491de1d547af9386e7449e753cbc2a4ed77fc1",
+  "semantic_description": "Fill an output array with the running maximum of each nonempty prefix of the input integer array while preserving the input array contents.",
+  "keywords": {
+    "algorithm": [
+      "array_prefix_max",
+      "prefix_scan",
+      "running_maximum"
+    ],
+    "data_structure": [
+      "int_array"
+    ],
+    "proof_obligations": [
+      "array_read",
+      "array_write",
+      "prefix_summary",
+      "output_prefix_construction"
+    ],
+    "spec_terms": [
+      "IntArray::full",
+      "Zlength",
+      "sublist",
+      "max_list_nonempty"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

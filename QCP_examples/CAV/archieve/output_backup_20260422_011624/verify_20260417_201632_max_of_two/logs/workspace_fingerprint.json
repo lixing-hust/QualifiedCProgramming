@@ -1,0 +1,31 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260417_201632_max_of_two",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/max_of_two.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260417_201632_max_of_two/original/max_of_two.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260417_201632_max_of_two.c",
+  "function_name": "max_of_two",
+  "program_sha256": "d4fb5b05b90cf9ea9828b03f01cff26a420cfef999b53880b4a2b5e3828e2b82",
+  "semantic_description": "Return the greater of two signed integer inputs without modifying memory; the result is equal to one of the two inputs and is greater than or equal to both.",
+  "keywords": {
+    "category": "scalar_branching",
+    "control_flow": [
+      "if_else",
+      "early_return"
+    ],
+    "data": [
+      "int",
+      "scalar"
+    ],
+    "properties": [
+      "returns_one_input",
+      "max_relation",
+      "no_memory_access"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

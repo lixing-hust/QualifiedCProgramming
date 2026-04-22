@@ -1,0 +1,32 @@
+Used the requested verify workflow and continued in the same workspace.
+
+Current result: verification still fails at the same `symexec` frontend blocker:
+
+```text
+Old value at `pre' is not determined in .../annotated/verify_20260420_235246_gcd_iterative.c:15:1
+```
+
+Fresh replay details:
+
+- `symexec` rerun at `2026-04-21T00:37:26+08:00`
+- Exit code: `1`
+- Generated Coq files remain zero bytes
+- No manual proof target was generated
+- `goal_check.v` cannot be compiled
+- No non-`.v` Coq intermediates remain
+
+The blocker is still the fixed postcondition in [verify_20260420_235246_gcd_iterative.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_235246_gcd_iterative.c:13):
+
+```c
+gcd_iterative_spec(a@pre, b@pre, __return)
+```
+
+while the executable body assigns to both scalar parameters `a` and `b` at lines 34-35. Prior legal Verify-layer attempts already removed body-level `@pre` uses and tried witness-carrying assertions/invariants. The remaining repair would require changing the executable shape or contract shape, which is outside this Verify workflow’s allowed edits.
+
+I updated the retry evidence in:
+
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/metrics.md)
+- [qcp_run.log](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/qcp_run.log)
+
+Final workspace result remains: `Final Result: Fail`.

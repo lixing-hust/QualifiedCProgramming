@@ -1,0 +1,10 @@
+Verification succeeded for `string_to_lower_ascii`.
+
+I added the loop invariant in [verify_20260420_155956_string_to_lower_ascii.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_155956_string_to_lower_ascii.c), completed the five manual Coq obligations in [string_to_lower_ascii_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_155956_string_to_lower_ascii/coq/generated/string_to_lower_ascii_proof_manual.v), and updated the workspace logs including [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_155956_string_to_lower_ascii/logs/issues.md), [proof_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_155956_string_to_lower_ascii/logs/proof_reasoning.md), and [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_155956_string_to_lower_ascii/logs/metrics.md).
+
+Checks completed:
+- `symexec` succeeded on the latest annotated file.
+- `original/string_to_lower_ascii.v`, `goal.v`, `proof_auto.v`, `proof_manual.v`, and `goal_check.v` all compiled.
+- `proof_manual.v` has no `Admitted.` and no added `Axiom`.
+- Non-`.v` intermediates under `coq/` were cleaned.
+- `logs/metrics.md` ends with `Final Result: Success`.

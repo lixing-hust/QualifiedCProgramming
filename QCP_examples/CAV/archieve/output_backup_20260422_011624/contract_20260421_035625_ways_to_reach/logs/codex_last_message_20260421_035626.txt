@@ -1,0 +1,21 @@
+Completed the contract workflow for `ways_to_reach`.
+
+Created:
+
+- [ways_to_reach.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/ways_to_reach.c)
+- [ways_to_reach.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/ways_to_reach.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_035625_ways_to_reach/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_035625_ways_to_reach/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_035625_ways_to_reach/logs/metrics.md)
+
+Key contract choices:
+
+- Precondition: `0 <= n && n <= 45 && emp`
+- Postcondition: `__return == ways_to_reach_z(n@pre) && emp`
+- Added target-specific Coq recurrence definition `ways_to_reach_z`.
+- No `Inv`, `Assert`, bridge assertion, `which implies`, or loop-exit assertion was added.
+
+Validation run:
+
+- `coqtop -quiet < input/ways_to_reach.v` passed.
+- Annotation hygiene check on `input/ways_to_reach.c` and `.v` passed.

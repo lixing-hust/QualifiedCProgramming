@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/contract/SKILL.md
+
+Inputs:
+- Raw markdown: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/raw/array_prefix_max.md`
+- Target function: `array_prefix_max`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_205151_array_prefix_max`
+- Output C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_prefix_max.c`
+- Optional output V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_prefix_max.v`

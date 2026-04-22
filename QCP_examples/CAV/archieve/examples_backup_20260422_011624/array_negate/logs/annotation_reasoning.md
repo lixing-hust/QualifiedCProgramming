@@ -1,0 +1,7 @@
+## 2026-04-19 array_negate initial loop invariant
+
+The unannotated loop cannot preserve enough information for the postcondition because the verifier needs to know exactly which prefix of `out` has already been overwritten with negated values and which suffix still has the original `lo` contents. At the loop guard, `i` is the next index to process, so the invariant should describe `out` as `app(l1, l2)` where `l1` has length `i` and satisfies `l1[t] == -la[t]` for all processed indices, while `l2` has length `n@pre - i` and matches the original suffix `lo[i + t]`. The invariant also needs the unchanged parameter equalities `a == a@pre`, `out == out@pre`, and `n == n@pre`, plus the original length facts, so the generated return witness can reconnect the loop state to the function postcondition. This mirrors the verified `array_scale` prefix/suffix pattern with multiplication replaced by unary negation.
+
+## 2026-04-19 contract binder parser repair
+
+Before running `symexec`, I checked the annotated header against existing examples and known issue logs. The active annotated copy has `/*@ With la, lo`, but the frontend expects binders separated by spaces and previously rejected the comma form with `unexpected PT_COMMA, expecting PT_REQUIRE`. I will change only the active annotated copy from `With la, lo` to `With la lo`; this does not alter the `Require` or `Ensure` formulas, and it keeps the official input contract untouched.

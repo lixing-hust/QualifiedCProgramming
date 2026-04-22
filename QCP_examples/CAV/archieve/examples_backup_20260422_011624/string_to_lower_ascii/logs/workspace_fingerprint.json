@@ -1,0 +1,25 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260420_155956_string_to_lower_ascii",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_to_lower_ascii.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_to_lower_ascii.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_155956_string_to_lower_ascii/original/string_to_lower_ascii.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_155956_string_to_lower_ascii/original/string_to_lower_ascii.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_155956_string_to_lower_ascii.c",
+  "function_name": "string_to_lower_ascii",
+  "program_sha256": "b03f81ddf7a6f921b8b3d8389e2eed1e89e18ff2e11bb6c05cceeef7fa3b59e0",
+  "semantic_description": "In-place ASCII lowercase conversion over a caller-owned null-terminated char array. The input list l contains n nonzero characters followed by a zero terminator in memory. The function scans from index 0 with a while_loop, stops when it reads the terminator, and updates only characters in the range 65..90 to their lowercase counterpart while preserving all other characters and the final zero.",
+  "keywords": {
+    "algorithm_family": "simulation",
+    "control_flow": ["while_loop", "if"],
+    "data_shape": ["string", "array", "pointer"],
+    "semantic_intent": "in_place_update",
+    "proof_pattern": ["loop_invariant", "case_split", "heap_reasoning"],
+    "numeric_properties": ["int_range", "overflow_guard"],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": "goal_check_passed"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/contract/SKILL.md
+
+Inputs:
+- Raw markdown: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/raw/is_sorted_nondecreasing.md`
+- Target function: `is_sorted_nondecreasing`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_010131_is_sorted_nondecreasing`
+- Output C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/is_sorted_nondecreasing.c`
+- Optional output V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/is_sorted_nondecreasing.v`

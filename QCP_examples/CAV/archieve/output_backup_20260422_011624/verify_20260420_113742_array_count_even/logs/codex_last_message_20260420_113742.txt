@@ -1,0 +1,19 @@
+Verification succeeded for `array_count_even`.
+
+Updated:
+- [annotated/verify_20260420_113742_array_count_even.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_113742_array_count_even.c)
+- [array_count_even_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_113742_array_count_even/coq/generated/array_count_even_proof_manual.v)
+- Workspace logs under [logs](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_113742_array_count_even/logs)
+
+Checks completed:
+- Reran `symexec` successfully on the current annotated C.
+- Completed all 5 manual proof obligations.
+- Verified `proof_manual.v` has no `Admitted.` and no added `Axiom`.
+- Compiled:
+  - `original/array_count_even.v`
+  - `array_count_even_goal.v`
+  - `array_count_even_proof_auto.v`
+  - `array_count_even_proof_manual.v`
+  - `array_count_even_goal_check.v`
+- Cleaned non-`.v` artifacts under `coq/`.
+- Wrote `Final Result: Success` in [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_113742_array_count_even/logs/metrics.md).

@@ -1,0 +1,24 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260421_015753_is_prime_simple",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/is_prime_simple.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_015753_is_prime_simple/original/is_prime_simple.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_015753_is_prime_simple.c",
+  "function_name": "is_prime_simple",
+  "program_sha256": "27e0d2e7417442728b0fec4cf822644f53578528e259c8489db56d572f6b7b88",
+  "semantic_description": "Verifies a scalar primality test over a nonnegative integer n. The function returns 0 when n < 2, returns 0 when the loop finds a divisor d with 2 <= d < n and n % d == 0, and returns 1 after the for loop has checked every d from 2 up to n - 1 without finding a divisor. The only control structures are one if statement and one for loop with an early return inside the loop. The function does not read or modify heap memory.",
+  "keywords": {
+    "algorithm_family": "search",
+    "control_flow": ["if", "for_loop"],
+    "data_shape": "scalar_only",
+    "proof_pattern": ["loop_invariant", "case_split", "range_bound"],
+    "numeric_properties": ["nonnegative_input", "int_range"],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": ["goal_check_passed", "proof_check_passed", "auto_proof_contains_admitted"]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

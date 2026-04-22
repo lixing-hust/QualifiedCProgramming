@@ -1,0 +1,10 @@
+Generated the contract artifacts for `array_equal` using the requested skill workflow.
+
+Written files:
+- [array_equal.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_equal.c)
+- [array_equal.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_equal.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_172231_array_equal/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_172231_array_equal/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_172231_array_equal/logs/metrics.md)
+
+The contract keeps the original function semantics and models the result with a task-specific Coq bridge `array_equal_spec(la, lb)`, since this repo didn’t appear to already have a shared two-list equality spec. I did not run Verify or compilation checks in this turn.

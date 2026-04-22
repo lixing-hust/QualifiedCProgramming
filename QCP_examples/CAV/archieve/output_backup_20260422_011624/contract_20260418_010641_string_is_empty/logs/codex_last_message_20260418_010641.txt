@@ -1,0 +1,10 @@
+Generated the contract workflow outputs for `string_is_empty`.
+
+The main artifact is [string_is_empty.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_is_empty.c), using the repository’s standard null-terminated string model `CharArray::full(s, n + 1, app(l, cons(0, nil)))`. The postcondition states the function returns `1` exactly when the logical string length `n` is zero, and preserves the input memory unchanged.
+
+Logs were written to:
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_010641_string_is_empty/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_010641_string_is_empty/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_010641_string_is_empty/logs/metrics.md)
+
+No [string_is_empty.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_is_empty.v) was created, because the spec is expressible directly without extra Coq definitions. I did not run the Verify stage.

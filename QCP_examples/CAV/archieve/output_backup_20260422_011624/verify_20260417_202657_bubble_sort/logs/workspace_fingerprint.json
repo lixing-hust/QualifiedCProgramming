@@ -1,0 +1,37 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260417_202657_bubble_sort",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/bubble_sort.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/bubble_sort.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260417_202657_bubble_sort/original/bubble_sort.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260417_202657_bubble_sort/original/bubble_sort.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260417_202657_bubble_sort.c",
+  "function_name": "bubble_sort",
+  "program_sha256": "7a53da9fee31cc4245fe4953729c33432c17baf24f31195ede3d7a5d6a9c5f85",
+  "semantic_description": "In-place bubble sort over an integer array. The function performs nested passes over the array, swapping adjacent out-of-order elements. The postcondition requires the final array contents to be sorted in nondecreasing order and to be a permutation of the input contents, while preserving ownership of the same array block.",
+  "keywords": {
+    "algorithm": [
+      "bubble_sort",
+      "in_place_sort",
+      "adjacent_swap",
+      "nested_loops"
+    ],
+    "data_structure": [
+      "int_array"
+    ],
+    "proof_obligations": [
+      "loop_invariant",
+      "array_ownership_preservation",
+      "sortedness",
+      "permutation"
+    ],
+    "spec_terms": [
+      "IntArray::full",
+      "sorted_z",
+      "Permutation"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

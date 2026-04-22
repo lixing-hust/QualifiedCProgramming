@@ -1,0 +1,24 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260420_114610_array_sum_even_indices",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_sum_even_indices.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_sum_even_indices.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_114610_array_sum_even_indices/original/array_sum_even_indices.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_114610_array_sum_even_indices/original/array_sum_even_indices.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_114610_array_sum_even_indices.c",
+  "function_name": "array_sum_even_indices",
+  "program_sha256": "9fb32e108127e5d334729384026b014b76584fc4eee366ed3b335891e65027a6",
+  "semantic_description": "The function scans an input integer array of length n without modifying memory, accumulates the elements whose zero-based indices are even, and returns that sum. The control structure is a single for loop with an if branch on i % 2 == 0. The loop may be empty when n is zero, in which case the result is zero. The contract relates the return value to array_sum_even_indices_spec over the whole input list and preserves IntArray::full(a, n, l).",
+  "keywords": {
+    "algorithm_family": "accumulation",
+    "control_flow": ["for_loop", "if"],
+    "data_shape": "array",
+    "semantic_intent": "sum_even_series",
+    "proof_pattern": ["loop_invariant", "case_split", "range_bound"],
+    "numeric_properties": ["overflow_guard", "int_range", "monotone_accumulator"],
+    "edge_case_behavior": "empty_loop_possible"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

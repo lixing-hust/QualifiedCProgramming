@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/verify/SKILL.md
+
+Inputs:
+- Input C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/count_equal_to_k.c`
+- Optional input V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/count_equal_to_k.v`
+- Target function: `count_equal_to_k`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_021719_count_equal_to_k`
+- Active annotated C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_021719_count_equal_to_k.c`

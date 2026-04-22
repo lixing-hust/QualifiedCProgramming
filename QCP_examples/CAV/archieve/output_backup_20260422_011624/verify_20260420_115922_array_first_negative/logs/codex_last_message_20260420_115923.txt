@@ -1,0 +1,12 @@
+Verification succeeded for `array_first_negative`.
+
+I updated the active annotated file with the required prefix invariant and loop-exit assertion at [annotated/verify_20260420_115922_array_first_negative.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_115922_array_first_negative.c:26). The workspace fingerprint now has a non-empty semantic description and controlled-vocabulary keywords.
+
+Generated and checked:
+
+- `array_first_negative_goal.v`
+- `array_first_negative_proof_auto.v`
+- `array_first_negative_proof_manual.v`
+- `array_first_negative_goal_check.v`
+
+`coqc` passed for all four generated files, `proof_manual.v` has no `Admitted.` or added `Axiom`, and non-`.v` Coq artifacts were cleaned. The final result is recorded as success in [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_115922_array_first_negative/logs/metrics.md:55).

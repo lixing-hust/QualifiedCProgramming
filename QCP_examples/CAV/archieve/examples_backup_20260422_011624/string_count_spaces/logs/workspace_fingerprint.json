@@ -1,0 +1,37 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260420_162845_string_count_spaces",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_count_spaces.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_count_spaces.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_162845_string_count_spaces/original/string_count_spaces.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_162845_string_count_spaces/original/string_count_spaces.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_162845_string_count_spaces.c",
+  "function_name": "string_count_spaces",
+  "program_sha256": "0217df1d3220b4b066b884ad9b5ef32d8bb68bca3e95dfe41b5db21a9af8430f",
+  "semantic_description": "The function scans a caller-owned null-terminated character array whose logical content is l followed by a terminating 0. It keeps an index and an accumulator, increments the accumulator exactly when the current character is ASCII space 32, stops when the terminator is reached, returns string_count_spaces_spec(l), and preserves the entire character array unchanged. The loop may exit immediately for an empty string.",
+  "keywords": {
+    "algorithm_family": "counting",
+    "control_flow": "while_loop",
+    "data_shape": [
+      "string",
+      "array",
+      "pointer"
+    ],
+    "semantic_intent": "preserve_input",
+    "proof_pattern": [
+      "loop_invariant",
+      "case_split",
+      "termination_by_bound"
+    ],
+    "numeric_properties": [
+      "nonnegative_input",
+      "monotone_accumulator",
+      "int_range"
+    ],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": "goal_check_passed"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

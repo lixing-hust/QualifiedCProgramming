@@ -1,0 +1,202 @@
+symexec_start=2026-04-20T18:40:34+08:00
+Start to symbolic execution on program : /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_183816_string_ends_with_char.c
+Start to parse strategies file common
+File Path: /home/yangfp/QualifiedCProgramming/QCP_examples/common.strategies
+Finish parsing strategies file common
+Start to parse strategies file char_array
+File Path: /home/yangfp/QualifiedCProgramming/QCP_examples/char_array.strategies
+Finish parsing strategies file char_array
+Symbolic Execution into function string_ends_with_char
+-----------This is the assertion that Partial Solve Failed-----------
+=============================================================================================
+Try to solve entailment with scope: core 
+try to find scope:core
+Get scope :core (0x62f40fadd550)
+---------------------------------------------------------------------------------------------
+Goal:
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Begin@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+  0  < n_74_free;
+ forall 87 ,  0  <= k_87 && k_87 < n_74_free -> (l_75_free[k_87]) !=  0  ]
+LOCAL[
+  Temp s s_73_addr;
+  Temp c c_70_addr ]
+SEP[
+ store ( s_73_addr , s_72_pre , signed I8* );
+ store ( c_70_addr , c_69_pre , signed I8 );
+ CharArray.full (s_72_pre, (n_74_free +  1 ), app(Z_1, l_75_free, cons(Z_1,  0 , nil(Z_1)))) ]
+|--
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+EX i_100_value 
+PROP[
+  0  <= i_100_value;
+ i_100_value < n_74_free;
+ forall 92 ,  0  <= k_92 && k_92 < n_74_free -> (l_75_free[k_92]) !=  0  ]
+LOCAL[]
+SEP[
+ store ( i_84_addr , i_100_value , signed int );
+ store ( s_73_addr , s_72_pre , signed I8* );
+ store ( c_70_addr , c_69_pre , signed I8 );
+ CharArray.full (s_72_pre, (n_74_free +  1 ), app(Z_1, l_75_free, cons(Z_1,  0 , nil(Z_1)))) ]
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@End@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+applying rule (common, 6)
+applying rule (common, 1)
+applying rule (common, 6)
+applying rule (common, 1)
+applying rule (char_array, 4)
+applying rule (common, 1)
+applying rule (common, 7)
+applying rule (common, 7)
+After applying strategies:
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Begin!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+ should_be_equal_49(Z_1, c_69_pre, c_69_pre);
+ should_be_equal_49(Z_1, s_72_pre, s_72_pre);
+  0  < n_74_free;
+ forall 87 ,  0  <= k_87 && k_87 < n_74_free -> (l_75_free[k_87]) !=  0  ]
+LOCAL[
+  Temp s s_73_addr;
+  Temp c c_70_addr ]
+SEP[]
+|--
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+EX i_100_value 
+PROP[
+  0  <= i_100_value;
+ i_100_value < n_74_free;
+ forall 92 ,  0  <= k_92 && k_92 < n_74_free -> (l_75_free[k_92]) !=  0  ]
+LOCAL[]
+SEP[
+ store ( i_84_addr , i_100_value , signed int ) ]
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!End!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+left_added:
+exist_mapping:
+100 -> NULL
+---------------------------------------------------------------------------------------------
+Before unification:
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+ should_be_equal_49(Z_1, c_69_pre, c_69_pre);
+ should_be_equal_49(Z_1, s_72_pre, s_72_pre);
+  0  < n_74_free;
+ forall 87 ,  0  <= k_87 && k_87 < n_74_free -> (l_75_free[k_87]) !=  0  ]
+LOCAL[
+  Temp s s_73_addr;
+  Temp c c_70_addr ]
+SEP[]
+|--
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+EX i_100_value 
+PROP[
+  0  <= i_100_value;
+ i_100_value < n_74_free;
+ forall 92 ,  0  <= k_92 && k_92 < n_74_free -> (l_75_free[k_92]) !=  0  ]
+LOCAL[]
+SEP[
+ store ( i_84_addr , i_100_value , signed int ) ]
+After unification:
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+ should_be_equal_49(Z_1, c_69_pre, c_69_pre);
+ should_be_equal_49(Z_1, s_72_pre, s_72_pre);
+  0  < n_74_free;
+ forall 87 ,  0  <= k_87 && k_87 < n_74_free -> (l_75_free[k_87]) !=  0  ]
+LOCAL[
+  Temp s s_73_addr;
+  Temp c c_70_addr ]
+SEP[]
+|--
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+EX i_100_value 
+PROP[
+  0  <= i_100_value ]
+LOCAL[]
+SEP[
+ sto[1;31mfatal error: [0mPartial Solve Invariant Error in /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_183816_string_ends_with_char.c:38:4
+Partial Solve Failed for Partial Invariant
+The left is 
+PROP[(Ez_val 0)PROP_LTn_74_free; forall 87, (Ez_val 0)PROP_LEk_87 PROP_AND k_87PROP_LTn_74_free PROP_IMPLY (l_75_free[k_87])PROP_NEQ(Ez_val 0)]
+
+SEP[store(s_73_addr , s_72_pre , signed I8*); store(c_70_addr , c_69_pre , signed I8); CharArray.full(s_72_pre, (n_74_free Oadd (Ez_val 1)), app(Z, l_75_free, cons(Z, (Ez_val 0), nil(Z))))]
+The right is 
+PROP[(Ez_val 0)PROP_LEi_93_value; i_93_valuePROP_LTn_74_free; forall 92, (Ez_val 0)PROP_LEk_92 PROP_AND k_92PROP_LTn_74_free PROP_IMPLY (l_75_free[k_92])PROP_NEQ(Ez_val 0)]
+
+SEP[store(i_84_addr , i_93_value , signed int); store(s_73_addr , s_72_pre , signed I8*); store(c_70_addr , c_69_pre , signed I8); CharArray.full(s_72_pre, (n_74_free Oadd (Ez_val 1)), app(Z, l_75_free, cons(Z, (Ez_val 0), nil(Z))))]
+Here are the checked results:
+Sep cannot be fully solved
+The Sep is:
+SEP[store(i_84_addr , i_100_value , signed int)]
+=============================================================================================
+re ( i_84_addr , i_100_value , signed int ) ]
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+( 0  <= i_100_value) && 
+data_at ( i_84_addr , signed int , i_100_value )
+100 ->  0 
+---------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+symexec_end=2026-04-20T18:40:34+08:00
+symexec_exit=1
+
+--- rerun after keeping i in pre-loop assertion ---
+symexec_start=2026-04-20T18:41:01+08:00
+[1;31mfatal error: [0mCannot derive the precondition of Memory Read. in /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_183816_string_ends_with_char.c:53:4
+Start to symbolic execution on program : /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_183816_string_ends_with_char.c
+Start to parse strategies file common
+File Path: /home/yangfp/QualifiedCProgramming/QCP_examples/common.strategies
+Finish parsing strategies file common
+Start to parse strategies file char_array
+File Path: /home/yangfp/QualifiedCProgramming/QCP_examples/char_array.strategies
+Finish parsing strategies file char_array
+Symbolic Execution into function string_ends_with_char
+symexec_end=2026-04-20T18:41:01+08:00
+symexec_exit=1
+
+--- rerun after strengthening loop-exit bounds ---
+symexec_start=2026-04-20T18:41:36+08:00
+Start to symbolic execution on program : /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_183816_string_ends_with_char.c
+Start to parse strategies file common
+File Path: /home/yangfp/QualifiedCProgramming/QCP_examples/common.strategies
+Finish parsing strategies file common
+Start to parse strategies file char_array
+File Path: /home/yangfp/QualifiedCProgramming/QCP_examples/char_array.strategies
+Finish parsing strategies file char_array
+Symbolic Execution into function string_ends_with_char
+End of symbolic execution of function string_ends_with_char
+Successfully finished symbolic execution
+symexec_end=2026-04-20T18:41:36+08:00
+symexec_exit=0
+
+--- rerun after preserving n upper bound ---
+symexec_start=2026-04-20T18:43:35+08:00
+Start to symbolic execution on program : /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_183816_string_ends_with_char.c
+Start to parse strategies file common
+File Path: /home/yangfp/QualifiedCProgramming/QCP_examples/common.strategies
+Finish parsing strategies file common
+Start to parse strategies file char_array
+File Path: /home/yangfp/QualifiedCProgramming/QCP_examples/char_array.strategies
+Finish parsing strategies file char_array
+Symbolic Execution into function string_ends_with_char
+End of symbolic execution of function string_ends_with_char
+Successfully finished symbolic execution
+symexec_end=2026-04-20T18:43:35+08:00
+symexec_exit=0

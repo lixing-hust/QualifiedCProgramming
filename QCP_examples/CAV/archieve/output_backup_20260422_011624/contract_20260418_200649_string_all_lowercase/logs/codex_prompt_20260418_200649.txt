@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/contract/SKILL.md
+
+Inputs:
+- Raw markdown: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/raw/string_all_lowercase.md`
+- Target function: `string_all_lowercase`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_200649_string_all_lowercase`
+- Output C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_all_lowercase.c`
+- Optional output V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_all_lowercase.v`

@@ -1,0 +1,8 @@
+Start to symbolic execution on program : /home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/output/verify_20260415_001635_climb_stairs/annotated/climb_stairs.c
+Start to parse strategies file common
+File Path: /home/yangfp/QualifiedCProgramming/QCP_examples/common.strategies
+Finish parsing strategies file common
+Symbolic Execution into function climbStairs
+End of symbolic execution of function climbStairs
+Warning: manual proof file not updated. file open failed or file already exists.
+Successfully finished symbolic execution

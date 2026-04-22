@@ -1,0 +1,25 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260419_084727_string_to_upper_ascii",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_to_upper_ascii.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_to_upper_ascii.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_084727_string_to_upper_ascii/original/string_to_upper_ascii.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_084727_string_to_upper_ascii/original/string_to_upper_ascii.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260419_084727_string_to_upper_ascii.c",
+  "function_name": "string_to_upper_ascii",
+  "program_sha256": "6bf55cfee90f2d855e0ac7bc759cce640cdbdf33dccd9ebe119fc648b064b858",
+  "semantic_description": "In-place null-terminated string update. The function scans s from index 0 with a while(1) loop until the first 0 byte, preserving the terminator. For each nonzero character before the terminator, lowercase ASCII values 97..122 are replaced by x - 97 + 65 and all other values are preserved. The input contract owns CharArray::full(s, n + 1, app(l, cons(0, nil))) with all l[0..n) nonzero, and the output must own the same buffer containing app(string_to_upper_ascii_spec(l), cons(0, nil)).",
+  "keywords": {
+    "algorithm_family": "simulation",
+    "control_flow": "while_loop",
+    "data_shape": ["string", "array", "pointer"],
+    "semantic_intent": "in_place_update",
+    "proof_pattern": ["loop_invariant", "case_split", "heap_reasoning"],
+    "numeric_properties": "int_range",
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": "goal_check_passed"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

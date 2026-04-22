@@ -1,0 +1,12 @@
+Verification did not succeed. I followed the requested workflow inside the existing workspace and stopped at a hard `symexec` blocker:
+
+`fatal error: Old value at 'pre' is not determined in .../annotated/verify_20260420_235246_gcd_iterative.c:15:1`
+
+What I updated:
+
+- [workspace_fingerprint.json](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/workspace_fingerprint.json) now has a non-empty semantic description and controlled-vocabulary keywords.
+- [verify_20260420_235246_gcd_iterative.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_235246_gcd_iterative.c) has attempted loop annotations for the Euclidean invariant.
+- [annotation_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/annotation_reasoning.md), [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/issues.md), and [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/metrics.md) document the attempts and final failure.
+- `metrics.md` ends with `Final Result: Fail`.
+
+The blocker is not a Coq proof issue: `symexec` aborts before generating valid VCs. The generated files under `coq/generated/` are zero bytes, and `goal_check.v` could not be compiled. The root cause appears to be Contract-stage: the official postcondition refers to `a@pre` and `b@pre`, while the implementation mutates both scalar parameters. Within the Verify rule set, I cannot rewrite the contract or implementation to expose stable logical entry values.

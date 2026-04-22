@@ -1,0 +1,45 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260421_034752_fibonacci_mod",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/fibonacci_mod.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/fibonacci_mod.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_034752_fibonacci_mod/original/fibonacci_mod.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_034752_fibonacci_mod/original/fibonacci_mod.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_034752_fibonacci_mod.c",
+  "function_name": "fibonacci_mod",
+  "program_sha256": "df022d6964af6ea3a2ddfb10968abe47c7db90dfcce1ea932e123d009d4a81a7",
+  "semantic_description": "The function computes the n-th Fibonacci value modulo mod for nonnegative n using scalar variables only. It returns 0 for n == 0, otherwise initializes the first two Fibonacci modulo states and advances them with a for loop from i == 2 through i == n. The intended output is fib_mod_z(n@pre, mod@pre). The function does not read or write heap memory; all state is held in local integers. The contract constrains mod to be positive and bounded and n to be nonnegative and below INT_MAX.",
+  "keywords": {
+    "algorithm_family": [
+      "dynamic_programming",
+      "accumulation"
+    ],
+    "control_flow": [
+      "if",
+      "for_loop"
+    ],
+    "data_shape": "scalar_only",
+    "proof_pattern": [
+      "loop_invariant",
+      "pure_arithmetic",
+      "range_bound",
+      "termination_by_bound"
+    ],
+    "numeric_properties": [
+      "nonnegative_input",
+      "overflow_guard",
+      "int_range"
+    ],
+    "edge_case_behavior": [
+      "empty_loop_possible",
+      "defined_for_nonnegative_only"
+    ],
+    "verification_status": [
+      "goal_check_passed",
+      "proof_check_passed"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

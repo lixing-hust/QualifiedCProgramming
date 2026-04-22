@@ -1,0 +1,13 @@
+Verification completed successfully for `min_of_three`.
+
+What changed:
+- Updated [workspace_fingerprint.json](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_053416_min_of_three/logs/workspace_fingerprint.json) with a non-empty semantic description and controlled-vocabulary keywords.
+- Generated fresh Coq artifacts under [coq/generated](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_053416_min_of_three/coq/generated).
+- Added [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_053416_min_of_three/logs/issues.md) and updated [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_053416_min_of_three/logs/metrics.md) with `Final Result: Success`.
+
+Verification checks:
+- `symexec` succeeded on the active annotated file.
+- `min_of_three_goal.v`, `min_of_three_proof_auto.v`, `min_of_three_proof_manual.v`, and `min_of_three_goal_check.v` all compiled successfully.
+- `min_of_three_proof_manual.v` contains no `Admitted.` and no top-level `Axiom`.
+- No `Inv` / `Assert` changes were needed for this scalar branch-only function.
+- Non-`.v` Coq intermediates under `coq/` were cleaned.

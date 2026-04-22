@@ -1,0 +1,1 @@
+2026-04-20T16:04:17.459809Z ERROR rmcp::transport::worker: worker quit with fatal: Transport channel closed, when Client(Reqwest(reqwest::Error { kind: Request, url: "https://chatgpt.com/backend-api/wham/apps", source: hyper_util::client::legacy::Error(Connect, Ssl(Error { code: ErrorCode(5), cause: None }, X509VerifyResult { code: 0, error: "ok" })) }))

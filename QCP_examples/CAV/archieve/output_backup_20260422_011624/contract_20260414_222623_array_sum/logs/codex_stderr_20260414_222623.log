@@ -1,0 +1,96 @@
+WARNING: proceeding, even though we could not update PATH: Read-only file system (os error 30)
+2026-04-14T14:26:26.813187Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:26.813243Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:26.831631Z ERROR codex_core::models_manager::manager: failed to renew cache TTL: Read-only file system (os error 30)
+2026-04-14T14:26:27.169485Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:31.098869Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:34.049611Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:34.049655Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:34.049724Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:34.125432Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:34.139842Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:34.139936Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:34.191124Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:34.211889Z ERROR codex_core::models_manager::manager: failed to renew cache TTL: Read-only file system (os error 30)
+2026-04-14T14:26:36.308319Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:39.689284Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:39.689340Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:39.690600Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:39.693174Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:39.768127Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:39.782429Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:39.782549Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:39.782583Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:39.853644Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:39.872829Z ERROR codex_core::models_manager::manager: failed to renew cache TTL: Read-only file system (os error 30)
+2026-04-14T14:26:44.229391Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:44.236095Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:44.236199Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:44.327076Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:44.327168Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:44.327187Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:44.346840Z ERROR codex_core::models_manager::manager: failed to renew cache TTL: Read-only file system (os error 30)
+2026-04-14T14:26:50.398167Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:51.545438Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:51.545477Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:52.589876Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:52.611301Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:52.654987Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:52.674315Z ERROR codex_core::models_manager::manager: failed to renew cache TTL: Read-only file system (os error 30)
+2026-04-14T14:26:56.758049Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:57.406973Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:57.433802Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:57.473839Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:26:57.492612Z ERROR codex_core::models_manager::manager: failed to renew cache TTL: Read-only file system (os error 30)
+2026-04-14T14:27:03.106482Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:27:03.108807Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:27:03.113151Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:27:03.203983Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:27:03.204074Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:27:03.204144Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:27:03.224125Z ERROR codex_core::models_manager::manager: failed to renew cache TTL: Read-only file system (os error 30)
+2026-04-14T14:27:07.240765Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:27:08.386262Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:27:08.409230Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:27:08.469439Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:27:08.487849Z ERROR codex_core::models_manager::manager: failed to renew cache TTL: Read-only file system (os error 30)
+2026-04-14T14:27:09.790700Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:27:10.407683Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:27:10.430760Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:27:10.471963Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:27:10.492388Z ERROR codex_core::models_manager::manager: failed to renew cache TTL: Read-only file system (os error 30)
+2026-04-14T14:27:24.393885Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:27:25.822884Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:27:25.822942Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:27:36.328304Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:27:36.343591Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:27:36.396241Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:27:36.415578Z ERROR codex_core::models_manager::manager: failed to renew cache TTL: Read-only file system (os error 30)
+2026-04-14T14:27:40.195145Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:27:41.202587Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:27:41.202628Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:27:55.681452Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:27:55.707113Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:27:55.795208Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:27:55.815192Z ERROR codex_core::models_manager::manager: failed to renew cache TTL: Read-only file system (os error 30)
+2026-04-14T14:28:00.240133Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:28:01.203969Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:28:01.204030Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:28:09.034007Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:28:09.054916Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:28:09.102293Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:28:09.122000Z ERROR codex_core::models_manager::manager: failed to renew cache TTL: Read-only file system (os error 30)
+2026-04-14T14:28:15.731741Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:28:15.731857Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:28:15.731960Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:28:15.775689Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:28:15.775781Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:28:15.797744Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:28:15.800253Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:28:15.838811Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:28:15.860075Z ERROR codex_core::models_manager::manager: failed to renew cache TTL: Read-only file system (os error 30)
+2026-04-14T14:28:20.674331Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:28:24.920921Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:28:24.920964Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:28:24.944061Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed
+2026-04-14T14:28:24.944679Z ERROR codex_core::codex: failed to record rollout items: failed to queue rollout items: channel closed

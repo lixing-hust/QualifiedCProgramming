@@ -1,0 +1,11 @@
+Verification succeeded in `output/verify_20260418_211226_array_adjacent_diff`.
+
+I kept the work inside the existing workspace, updated the active annotated file to use a loop invariant without the problematic loop-body/exit assertions, reran `symexec`, completed the regenerated manual Coq proofs, and replayed the full compile chain through `array_adjacent_diff_goal_check.v`. I also cleaned `coq/` so only `.v` files remain and updated the required logs in `logs/`.
+
+Verification status:
+- `symexec`: passed
+- `goal.v`: compiled
+- `proof_auto.v`: compiled
+- `proof_manual.v`: compiled with no `Admitted.` and no added `Axiom`
+- `goal_check.v`: compiled
+- `logs/metrics.md`: `Final Result: Success`

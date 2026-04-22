@@ -1,0 +1,19 @@
+Verification succeeded for `array_intersection_count_sorted`.
+
+Updated:
+- [annotated C](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260422_005007_array_intersection_count_sorted.c)
+- [manual proof](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_005007_array_intersection_count_sorted/coq/generated/array_intersection_count_sorted_proof_manual.v)
+- [fingerprint](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_005007_array_intersection_count_sorted/logs/workspace_fingerprint.json)
+- [annotation reasoning](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_005007_array_intersection_count_sorted/logs/annotation_reasoning.md)
+- [proof reasoning](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_005007_array_intersection_count_sorted/logs/proof_reasoning.md)
+- [issues](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_005007_array_intersection_count_sorted/logs/issues.md)
+- [metrics](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_005007_array_intersection_count_sorted/logs/metrics.md)
+
+Checks completed:
+- `symexec` succeeded and regenerated `goal`, `proof_auto`, `proof_manual`, and `goal_check`.
+- `array_intersection_count_sorted_goal_check.v` compiled successfully.
+- `proof_manual.v` has no `Admitted.` and no top-level `Axiom`.
+- Non-`.v` Coq build artifacts under workspace `coq/` were cleaned.
+- `logs/metrics.md` ends with `Final Result: Success`.
+
+I did not update repository-level experience docs because the execution rule said to work only inside the existing workspace.

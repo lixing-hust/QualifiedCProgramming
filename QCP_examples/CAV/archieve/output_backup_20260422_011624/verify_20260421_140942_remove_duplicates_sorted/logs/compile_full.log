@@ -1,0 +1,5 @@
+compile original
+compile goal
+compile proof_auto
+compile proof_manual
+compile goal_check

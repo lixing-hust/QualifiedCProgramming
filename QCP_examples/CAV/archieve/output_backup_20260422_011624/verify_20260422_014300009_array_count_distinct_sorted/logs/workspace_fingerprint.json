@@ -1,0 +1,43 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260422_014300009_array_count_distinct_sorted",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_count_distinct_sorted.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_count_distinct_sorted.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_014300009_array_count_distinct_sorted/original/array_count_distinct_sorted.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_014300009_array_count_distinct_sorted/original/array_count_distinct_sorted.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260422_014300009_array_count_distinct_sorted.c",
+  "function_name": "array_count_distinct_sorted",
+  "program_sha256": "206eb2974f0531c397d00d4671538349d33061c858117e1bcdb5bf02560cdc77",
+  "semantic_description": "The function counts the number of distinct values in a sorted integer array without modifying memory. If n is 0 it returns 0. Otherwise it initializes count to 1, scans indices i = 1..n-1 with a while loop, and increments count exactly when a[i] differs from the previous element a[i-1]. The contract relates the return value to array_count_distinct_sorted_spec(l), preserves the full input array predicate, requires Zlength(l) == n, and assumes adjacent sortedness for all valid neighboring indices.",
+  "keywords": {
+    "algorithm_family": "counting",
+    "control_flow": [
+      "if",
+      "while_loop"
+    ],
+    "data_shape": [
+      "array",
+      "pointer"
+    ],
+    "semantic_intent": "preserve_input",
+    "proof_pattern": [
+      "loop_invariant",
+      "case_split",
+      "range_bound",
+      "heap_reasoning"
+    ],
+    "numeric_properties": [
+      "nonnegative_input",
+      "int_range",
+      "monotone_accumulator"
+    ],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": [
+      "goal_check_passed",
+      "proof_check_passed"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

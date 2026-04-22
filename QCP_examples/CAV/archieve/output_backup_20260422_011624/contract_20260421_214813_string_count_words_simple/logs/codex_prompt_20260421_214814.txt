@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/contract/SKILL.md
+
+Inputs:
+- Raw markdown: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/raw/string_count_words_simple.md`
+- Target function: `string_count_words_simple`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_214813_string_count_words_simple`
+- Output C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_count_words_simple.c`
+- Optional output V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_count_words_simple.v`

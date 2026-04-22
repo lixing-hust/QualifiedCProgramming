@@ -1,0 +1,8 @@
+2026-04-19T19:34:14.036659Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_032842_string_count_not_char/coq/generated/string_count_not_char_proof_manual.v:
+      assert (i = n) by lia.
+      subst i.
+      rewrite app_Znth2 in H0 by lia.
+      replace (n - Zlength l) with 0 in H0 by lia.
+      simpl in H0.
+      contradiction H0.
+      reflexivity.

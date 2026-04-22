@@ -1,0 +1,5 @@
+Verification completed for `array_first`.
+
+The annotated source [verify_20260418_013727_array_first.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_013727_array_first.c) did not need any extra `Inv` or `Assert`. `symexec` succeeded on the existing contract, generated the Coq files under [coq/generated](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_013727_array_first/coq/generated), and `array_first_proof_manual.v` had no manual obligations.
+
+I compiled `array_first_goal.v`, `array_first_proof_auto.v`, `array_first_proof_manual.v`, and `array_first_goal_check.v` successfully, then removed non-`.v` Coq intermediates. The required logs are updated at [workspace_fingerprint.json](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_013727_array_first/logs/workspace_fingerprint.json), [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_013727_array_first/logs/issues.md), and [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_013727_array_first/logs/metrics.md).

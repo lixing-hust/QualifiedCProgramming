@@ -1,0 +1,15 @@
+Completed the contract workflow for `array_move_zeroes_to_end`.
+
+Generated/updated:
+- [array_move_zeroes_to_end.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_move_zeroes_to_end.c:1)
+- [array_move_zeroes_to_end.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_move_zeroes_to_end.v:1)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260422_000713_array_move_zeroes_to_end/logs/reasoning.md:1)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260422_000713_array_move_zeroes_to_end/logs/issues.md:1)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260422_000713_array_move_zeroes_to_end/logs/metrics.md:1)
+
+Key contract shape:
+- `Require`: `0 <= n`, logical list length equals `n`, and full writable ownership of `a`.
+- `Ensure`: final array content is `move_zeroes_to_end_spec(l)` and its length is still `n`.
+- `.v` contains only the problem-specific list transformer definitions.
+
+I did not run the Verify stage or add invariants/assertions, per the Contract workflow boundary.

@@ -1,0 +1,27 @@
+Retry round did not reach full verification success.
+
+What changed:
+- Updated the active annotated file: [verify_20260421_180807_insertion_sort.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_180807_insertion_sort.c)
+  - Added `Zlength(l_outer) == n@pre` to the outer invariant.
+  - Added `Zlength(l_base) == n@pre` to the inner invariant.
+- Reran `symexec` in the same workspace; it succeeded and regenerated the Coq files.
+- Repaired [insertion_sort_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_180807_insertion_sort/coq/generated/insertion_sort_proof_manual.v) enough to prove 4 of 6 manual witnesses:
+  - `proof_of_insertion_sort_entail_wit_1`
+  - `proof_of_insertion_sort_entail_wit_2`
+  - `proof_of_insertion_sort_entail_wit_3`
+  - `proof_of_insertion_sort_return_wit_1`
+
+Remaining blocker:
+- [insertion_sort_proof_manual.v:176](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_180807_insertion_sort/coq/generated/insertion_sort_proof_manual.v:176) still has `Admitted.` for `proof_of_insertion_sort_entail_wit_4_1`.
+- [insertion_sort_proof_manual.v:179](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_180807_insertion_sort/coq/generated/insertion_sort_proof_manual.v:179) still has `Admitted.` for `proof_of_insertion_sort_entail_wit_4_2`.
+
+Those two are the final insertion-step pure list proofs: after `a[j + 1] = key`, Coq still needs the resulting list to be a permutation of `l_base` and the prefix `sublist 0 (i + 1)` to be `sorted_z`.
+
+Verification status:
+- Full Coq compile including `goal_check.v` passes only because those two witnesses remain admitted.
+- Non-`.v` Coq artifacts under the workspace were cleaned.
+- Updated logs:
+  - [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_180807_insertion_sort/logs/issues.md)
+  - [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_180807_insertion_sort/logs/metrics.md)
+- `metrics.md` ends with `Final Result: Fail`.
+- Experience updates: none.

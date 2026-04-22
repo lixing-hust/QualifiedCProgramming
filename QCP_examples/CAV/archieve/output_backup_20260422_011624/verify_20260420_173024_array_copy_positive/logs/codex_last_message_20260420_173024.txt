@@ -1,0 +1,15 @@
+Verification succeeded for `array_copy_positive`.
+
+Changed:
+- [annotated/verify_20260420_173024_array_copy_positive.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_173024_array_copy_positive.c): added the loop invariant and fixed the annotated-copy binder syntax from `With la, lo` to `With la lo`.
+- [array_copy_positive_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_173024_array_copy_positive/coq/generated/array_copy_positive_proof_manual.v): completed all 4 manual witness proofs, with no `Admitted.` or new `Axiom`.
+- Workspace logs updated: `workspace_fingerprint.json`, `annotation_reasoning.md`, `proof_reasoning.md`, `issues.md`, and `metrics.md`.
+
+Verified:
+- `symexec` succeeded and regenerated `goal`, `proof_auto`, `proof_manual`, and `goal_check`.
+- Full Coq compile chain passed: `goal.v`, `proof_auto.v`, `proof_manual.v`, `goal_check.v`.
+- `goal_check.v` compiled successfully.
+- Coq intermediate files under `coq/` were cleaned.
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_173024_array_copy_positive/logs/metrics.md) ends with `Final Result: Success`.
+
+I did not update repository-level experience docs because your execution rule restricted work to the existing workspace.

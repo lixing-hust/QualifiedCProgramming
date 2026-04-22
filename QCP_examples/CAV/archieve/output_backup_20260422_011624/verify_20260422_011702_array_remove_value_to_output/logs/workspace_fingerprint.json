@@ -1,0 +1,24 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260422_011702_array_remove_value_to_output",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_remove_value_to_output.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_remove_value_to_output.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_011702_array_remove_value_to_output/original/array_remove_value_to_output.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_011702_array_remove_value_to_output/original/array_remove_value_to_output.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260422_011702_array_remove_value_to_output.c",
+  "function_name": "array_remove_value_to_output",
+  "program_sha256": "dff238097d762219affc2ff64ad33c60015fcdf9bc19557d9fad47ddff21c417",
+  "semantic_description": "The function scans array a from left to right for indices 0 <= i < n, copies each element not equal to k into the caller-provided output array out at the next write position, skips elements equal to k, returns the number of copied elements, preserves the input array a, and leaves the unused suffix of out existentially unspecified. The loop may execute zero times when n is 0; memory writes occur only in the output buffer prefix, while the input buffer is read-only.",
+  "keywords": {
+    "algorithm_family": "selection",
+    "control_flow": ["while_loop", "if"],
+    "data_shape": ["array", "pointer"],
+    "semantic_intent": "preserve_input",
+    "proof_pattern": ["loop_invariant", "case_split", "range_bound", "heap_reasoning"],
+    "numeric_properties": ["nonnegative_input", "monotone_accumulator", "int_range"],
+    "edge_case_behavior": "empty_loop_possible"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

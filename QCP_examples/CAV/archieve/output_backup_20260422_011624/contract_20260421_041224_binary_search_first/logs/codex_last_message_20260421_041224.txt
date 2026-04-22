@@ -1,0 +1,15 @@
+Completed the contract workflow for `binary_search_first`.
+
+Generated:
+- [binary_search_first.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/binary_search_first.c)
+- [workspace copy](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_041224_binary_search_first/input/binary_search_first.c)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_041224_binary_search_first/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_041224_binary_search_first/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_041224_binary_search_first/logs/metrics.md)
+
+No `input/binary_search_first.v` was created because the first-occurrence semantics are expressible directly in the C contract.
+
+Checks run:
+- Confirmed no `Inv`, `Assert`, or `which implies` verify-stage annotations were introduced.
+- Confirmed workspace C copy matches the main input C.
+- Ran `gcc -fsyntax-only input/binary_search_first.c` successfully.

@@ -1,0 +1,528 @@
+Welcome to Coq 8.20.1
+
+Coq < [Loading ML file ring_plugin.cmxs (using legacy method) ... done]
+[Loading ML file zify_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_core_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_plugin.cmxs (using legacy method) ... done]
+[Loading ML file btauto_plugin.cmxs (using legacy method) ... done]
+
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+
+
+
+Coq < 
+
+
+
+Coq < 1 goal
+  
+  ============================
+  remove_duplicates_sorted_return_wit_2
+
+probe < 
+probe < 1 goal
+  
+  a_pre, n_pre : Z
+  l, lc : list Z
+  j, i_2 : Z
+  H : i_2 >= n_pre
+  H0 : 1 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : 1 <= j
+  H3 : j <= i_2
+  H4 : Zlength lc = n_pre
+  H5 : j = Zlength (remove_duplicates_sorted_spec (sublist 0 i_2 l))
+  H6 :
+    forall k : Z,
+    0 <= k < j ->
+    Znth k lc 0 = Znth k (remove_duplicates_sorted_spec (sublist 0 i_2 l)) 0
+  H7 : forall k_2 : Z, i_2 <= k_2 < n_pre -> Znth k_2 lc 0 = Znth k_2 l 0
+  H8 : n_pre <> 0
+  H9 : 0 <= n_pre
+  H10 : n_pre <= 2147483647
+  H11 : Zlength l = n_pre
+  H12 :
+    forall i : Z, 0 <= i /\ i + 1 < n_pre -> Znth i l 0 <= Znth (i + 1) l 0
+  ============================
+  IntArray.full a_pre n_pre lc
+  |-- EX t : list Z,
+      EX lr : list Z,
+      [|j = Zlength (remove_duplicates_sorted_spec l)|] && [|0 <= j|] &&
+      [|j <= n_pre|] && [|Zlength lr = n_pre|] &&
+      [|lr = remove_duplicates_sorted_spec l ++ t|] &&
+      IntArray.full a_pre n_pre lr
+
+probe < 1 goal
+  
+  a_pre, n_pre : Z
+  l, lc : list Z
+  j, i_2 : Z
+  H : i_2 >= n_pre
+  H0 : 1 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : 1 <= j
+  H3 : j <= i_2
+  H4 : Zlength lc = n_pre
+  H5 : j = Zlength (remove_duplicates_sorted_spec (sublist 0 i_2 l))
+  H6 :
+    forall k : Z,
+    0 <= k < j ->
+    Znth k lc 0 = Znth k (remove_duplicates_sorted_spec (sublist 0 i_2 l)) 0
+  H7 : forall k_2 : Z, i_2 <= k_2 < n_pre -> Znth k_2 lc 0 = Znth k_2 l 0
+  H8 : n_pre <> 0
+  H9 : 0 <= n_pre
+  H10 : n_pre <= 2147483647
+  H11 : Zlength l = n_pre
+  H12 :
+    forall i : Z, 0 <= i /\ i + 1 < n_pre -> Znth i l 0 <= Znth (i + 1) l 0
+  Hi_eq : i_2 = n_pre
+  ============================
+  IntArray.full a_pre n_pre lc
+  |-- EX t : list Z,
+      EX lr : list Z,
+      [|j = Zlength (remove_duplicates_sorted_spec l)|] && [|0 <= j|] &&
+      [|j <= n_pre|] && [|Zlength lr = n_pre|] &&
+      [|lr = remove_duplicates_sorted_spec l ++ t|] &&
+      IntArray.full a_pre n_pre lr
+
+probe < 1 goal
+  
+  a_pre, n_pre : Z
+  l, lc : list Z
+  j : Z
+  H1 : n_pre <= n_pre
+  H0 : 1 <= n_pre
+  H : n_pre >= n_pre
+  H2 : 1 <= j
+  H3 : j <= n_pre
+  H4 : Zlength lc = n_pre
+  H7 : forall k_2 : Z, n_pre <= k_2 < n_pre -> Znth k_2 lc 0 = Znth k_2 l 0
+  H6 :
+    forall k : Z,
+    0 <= k < j ->
+    Znth k lc 0 =
+    Znth k (remove_duplicates_sorted_spec (sublist 0 n_pre l)) 0
+  H5 : j = Zlength (remove_duplicates_sorted_spec (sublist 0 n_pre l))
+  H8 : n_pre <> 0
+  H9 : 0 <= n_pre
+  H10 : n_pre <= 2147483647
+  H11 : Zlength l = n_pre
+  H12 :
+    forall i : Z, 0 <= i /\ i + 1 < n_pre -> Znth i l 0 <= Znth (i + 1) l 0
+  ============================
+  IntArray.full a_pre n_pre lc
+  |-- EX t : list Z,
+      EX lr : list Z,
+      [|j = Zlength (remove_duplicates_sorted_spec l)|] && [|0 <= j|] &&
+      [|j <= n_pre|] && [|Zlength lr = n_pre|] &&
+      [|lr = remove_duplicates_sorted_spec l ++ t|] &&
+      IntArray.full a_pre n_pre lr
+
+probe < 2 goals
+  
+  a_pre, n_pre : Z
+  l, lc : list Z
+  j : Z
+  H1 : n_pre <= n_pre
+  H0 : 1 <= n_pre
+  H : n_pre >= n_pre
+  H2 : 1 <= j
+  H3 : j <= n_pre
+  H4 : Zlength lc = n_pre
+  H7 : forall k_2 : Z, n_pre <= k_2 < n_pre -> Znth k_2 lc 0 = Znth k_2 l 0
+  H6 :
+    forall k : Z,
+    0 <= k < j ->
+    Znth k lc 0 =
+    Znth k (remove_duplicates_sorted_spec (sublist 0 n_pre l)) 0
+  H5 : j = Zlength (remove_duplicates_sorted_spec (sublist 0 n_pre l))
+  H8 : n_pre <> 0
+  H9 : 0 <= n_pre
+  H10 : n_pre <= 2147483647
+  H11 : Zlength l = n_pre
+  H12 :
+    forall i : Z, 0 <= i /\ i + 1 < n_pre -> Znth i l 0 <= Znth (i + 1) l 0
+  ============================
+  sublist 0 n_pre l = l
+
+goal 2 is:
+ IntArray.full a_pre n_pre lc
+ |-- EX t : list Z,
+     EX lr : list Z,
+     [|j = Zlength (remove_duplicates_sorted_spec l)|] && [|0 <= j|] &&
+     [|j <= n_pre|] && [|Zlength lr = n_pre|] &&
+     [|lr = remove_duplicates_sorted_spec l ++ t|] &&
+     IntArray.full a_pre n_pre lr
+
+probe < 1 goal
+  
+  a_pre, n_pre : Z
+  l, lc : list Z
+  j : Z
+  H1 : n_pre <= n_pre
+  H0 : 1 <= n_pre
+  H : n_pre >= n_pre
+  H2 : 1 <= j
+  H3 : j <= n_pre
+  H4 : Zlength lc = n_pre
+  H7 : forall k_2 : Z, n_pre <= k_2 < n_pre -> Znth k_2 lc 0 = Znth k_2 l 0
+  H6 :
+    forall k : Z,
+    0 <= k < j ->
+    Znth k lc 0 =
+    Znth k (remove_duplicates_sorted_spec (sublist 0 n_pre l)) 0
+  H5 : j = Zlength (remove_duplicates_sorted_spec (sublist 0 n_pre l))
+  H8 : n_pre <> 0
+  H9 : 0 <= n_pre
+  H10 : n_pre <= 2147483647
+  H11 : Zlength l = n_pre
+  H12 :
+    forall i : Z, 0 <= i /\ i + 1 < n_pre -> Znth i l 0 <= Znth (i + 1) l 0
+  ============================
+  sublist 0 n_pre l = l
+
+1 goal
+  
+  a_pre, n_pre : Z
+  l, lc : list Z
+  j : Z
+  H1 : n_pre <= n_pre
+  H0 : 1 <= n_pre
+  H : n_pre >= n_pre
+  H2 : 1 <= j
+  H3 : j <= n_pre
+  H4 : Zlength lc = n_pre
+  H7 : forall k_2 : Z, n_pre <= k_2 < n_pre -> Znth k_2 lc 0 = Znth k_2 l 0
+  H6 :
+    forall k : Z,
+    0 <= k < j ->
+    Znth k lc 0 =
+    Znth k (remove_duplicates_sorted_spec (sublist 0 n_pre l)) 0
+  H5 : j = Zlength (remove_duplicates_sorted_spec (sublist 0 n_pre l))
+  H8 : n_pre <> 0
+  H9 : 0 <= n_pre
+  H10 : n_pre <= 2147483647
+  H11 : Zlength l = n_pre
+  H12 :
+    forall i : Z, 0 <= i /\ i + 1 < n_pre -> Znth i l 0 <= Znth (i + 1) l 0
+  ============================
+  sublist 0 (Zlength l) l = l
+
+1 goal
+  
+  a_pre, n_pre : Z
+  l, lc : list Z
+  j : Z
+  H1 : n_pre <= n_pre
+  H0 : 1 <= n_pre
+  H : n_pre >= n_pre
+  H2 : 1 <= j
+  H3 : j <= n_pre
+  H4 : Zlength lc = n_pre
+  H7 : forall k_2 : Z, n_pre <= k_2 < n_pre -> Znth k_2 lc 0 = Znth k_2 l 0
+  H6 :
+    forall k : Z,
+    0 <= k < j ->
+    Znth k lc 0 =
+    Znth k (remove_duplicates_sorted_spec (sublist 0 n_pre l)) 0
+  H5 : j = Zlength (remove_duplicates_sorted_spec (sublist 0 n_pre l))
+  H8 : n_pre <> 0
+  H9 : 0 <= n_pre
+  H10 : n_pre <= 2147483647
+  H11 : Zlength l = n_pre
+  H12 :
+    forall i : Z, 0 <= i /\ i + 1 < n_pre -> Znth i l 0 <= Znth (i + 1) l 0
+  ============================
+  skipn (Z.to_nat 0) (firstn (Z.to_nat (Zlength l)) l) = l
+
+1 goal
+  
+  a_pre, n_pre : Z
+  l, lc : list Z
+  j : Z
+  H1 : n_pre <= n_pre
+  H0 : 1 <= n_pre
+  H : n_pre >= n_pre
+  H2 : 1 <= j
+  H3 : j <= n_pre
+  H4 : Zlength lc = n_pre
+  H7 : forall k_2 : Z, n_pre <= k_2 < n_pre -> Znth k_2 lc 0 = Znth k_2 l 0
+  H6 :
+    forall k : Z,
+    0 <= k < j ->
+    Znth k lc 0 =
+    Znth k (remove_duplicates_sorted_spec (sublist 0 n_pre l)) 0
+  H5 : j = Zlength (remove_duplicates_sorted_spec (sublist 0 n_pre l))
+  H8 : n_pre <> 0
+  H9 : 0 <= n_pre
+  H10 : n_pre <= 2147483647
+  H11 : Zlength l = n_pre
+  H12 :
+    forall i : Z, 0 <= i /\ i + 1 < n_pre -> Znth i l 0 <= Znth (i + 1) l 0
+  ============================
+  firstn (Z.to_nat (Zlength l)) l = l
+
+1 goal
+  
+  a_pre, n_pre : Z
+  l, lc : list Z
+  j : Z
+  H1 : n_pre <= n_pre
+  H0 : 1 <= n_pre
+  H : n_pre >= n_pre
+  H2 : 1 <= j
+  H3 : j <= n_pre
+  H4 : Zlength lc = n_pre
+  H7 : forall k_2 : Z, n_pre <= k_2 < n_pre -> Znth k_2 lc 0 = Znth k_2 l 0
+  H6 :
+    forall k : Z,
+    0 <= k < j ->
+    Znth k lc 0 =
+    Znth k (remove_duplicates_sorted_spec (sublist 0 n_pre l)) 0
+  H5 : j = Zlength (remove_duplicates_sorted_spec (sublist 0 n_pre l))
+  H8 : n_pre <> 0
+  H9 : 0 <= n_pre
+  H10 : n_pre <= 2147483647
+  H11 : Zlength l = n_pre
+  H12 :
+    forall i : Z, 0 <= i /\ i + 1 < n_pre -> Znth i l 0 <= Znth (i + 1) l 0
+  ============================
+  firstn (Z.to_nat (Z.of_nat (Datatypes.length l))) l = l
+
+1 goal
+  
+  a_pre, n_pre : Z
+  l, lc : list Z
+  j : Z
+  H1 : n_pre <= n_pre
+  H0 : 1 <= n_pre
+  H : n_pre >= n_pre
+  H2 : 1 <= j
+  H3 : j <= n_pre
+  H4 : Zlength lc = n_pre
+  H7 : forall k_2 : Z, n_pre <= k_2 < n_pre -> Znth k_2 lc 0 = Znth k_2 l 0
+  H6 :
+    forall k : Z,
+    0 <= k < j ->
+    Znth k lc 0 =
+    Znth k (remove_duplicates_sorted_spec (sublist 0 n_pre l)) 0
+  H5 : j = Zlength (remove_duplicates_sorted_spec (sublist 0 n_pre l))
+  H8 : n_pre <> 0
+  H9 : 0 <= n_pre
+  H10 : n_pre <= 2147483647
+  H11 : Zlength l = n_pre
+  H12 :
+    forall i : Z, 0 <= i /\ i + 1 < n_pre -> Znth i l 0 <= Znth (i + 1) l 0
+  ============================
+  firstn (Datatypes.length l) l = l
+
+1 goal
+  
+  a_pre, n_pre : Z
+  l, lc : list Z
+  j : Z
+  H1 : n_pre <= n_pre
+  H0 : 1 <= n_pre
+  H : n_pre >= n_pre
+  H2 : 1 <= j
+  H3 : j <= n_pre
+  H4 : Zlength lc = n_pre
+  H7 : forall k_2 : Z, n_pre <= k_2 < n_pre -> Znth k_2 lc 0 = Znth k_2 l 0
+  H6 :
+    forall k : Z,
+    0 <= k < j ->
+    Znth k lc 0 =
+    Znth k (remove_duplicates_sorted_spec (sublist 0 n_pre l)) 0
+  H5 : j = Zlength (remove_duplicates_sorted_spec (sublist 0 n_pre l))
+  H8 : n_pre <> 0
+  H9 : 0 <= n_pre
+  H10 : n_pre <= 2147483647
+  H11 : Zlength l = n_pre
+  H12 :
+    forall i : Z, 0 <= i /\ i + 1 < n_pre -> Znth i l 0 <= Znth (i + 1) l 0
+  ============================
+  l = l
+
+This subproof is complete, but there are some unfocused goals.
+Try unfocusing with "}".
+
+1 goal
+
+goal 1 is:
+ IntArray.full a_pre n_pre lc
+ |-- EX t : list Z,
+     EX lr : list Z,
+     [|j = Zlength (remove_duplicates_sorted_spec l)|] && [|0 <= j|] &&
+     [|j <= n_pre|] && [|Zlength lr = n_pre|] &&
+     [|lr = remove_duplicates_sorted_spec l ++ t|] &&
+     IntArray.full a_pre n_pre lr
+
+1 goal
+  
+  a_pre, n_pre : Z
+  l, lc : list Z
+  j : Z
+  H1 : n_pre <= n_pre
+  H0 : 1 <= n_pre
+  H : n_pre >= n_pre
+  H2 : 1 <= j
+  H3 : j <= n_pre
+  H4 : Zlength lc = n_pre
+  H7 : forall k_2 : Z, n_pre <= k_2 < n_pre -> Znth k_2 lc 0 = Znth k_2 l 0
+  H6 :
+    forall k : Z,
+    0 <= k < j ->
+    Znth k lc 0 =
+    Znth k (remove_duplicates_sorted_spec (sublist 0 n_pre l)) 0
+  H5 : j = Zlength (remove_duplicates_sorted_spec (sublist 0 n_pre l))
+  H8 : n_pre <> 0
+  H9 : 0 <= n_pre
+  H10 : n_pre <= 2147483647
+  H11 : Zlength l = n_pre
+  H12 :
+    forall i : Z, 0 <= i /\ i + 1 < n_pre -> Znth i l 0 <= Znth (i + 1) l 0
+  Hprefix_full : sublist 0 n_pre l = l
+  ============================
+  IntArray.full a_pre n_pre lc
+  |-- EX t : list Z,
+      EX lr : list Z,
+      [|j = Zlength (remove_duplicates_sorted_spec l)|] && [|0 <= j|] &&
+      [|j <= n_pre|] && [|Zlength lr = n_pre|] &&
+      [|lr = remove_duplicates_sorted_spec l ++ t|] &&
+      IntArray.full a_pre n_pre lr
+
+probe < 1 goal
+  
+  a_pre, n_pre : Z
+  l, lc : list Z
+  j : Z
+  H1 : n_pre <= n_pre
+  H0 : 1 <= n_pre
+  H : n_pre >= n_pre
+  H2 : 1 <= j
+  H3 : j <= n_pre
+  H4 : Zlength lc = n_pre
+  H7 : forall k_2 : Z, n_pre <= k_2 < n_pre -> Znth k_2 lc 0 = Znth k_2 l 0
+  H6 :
+    forall k : Z,
+    0 <= k < j -> Znth k lc 0 = Znth k (remove_duplicates_sorted_spec l) 0
+  H5 : j = Zlength (remove_duplicates_sorted_spec (sublist 0 n_pre l))
+  H8 : n_pre <> 0
+  H9 : 0 <= n_pre
+  H10 : n_pre <= 2147483647
+  H11 : Zlength l = n_pre
+  H12 :
+    forall i : Z, 0 <= i /\ i + 1 < n_pre -> Znth i l 0 <= Znth (i + 1) l 0
+  Hprefix_full : sublist 0 n_pre l = l
+  ============================
+  IntArray.full a_pre n_pre lc
+  |-- EX t : list Z,
+      EX lr : list Z,
+      [|j = Zlength (remove_duplicates_sorted_spec l)|] && [|0 <= j|] &&
+      [|j <= n_pre|] && [|Zlength lr = n_pre|] &&
+      [|lr = remove_duplicates_sorted_spec l ++ t|] &&
+      IntArray.full a_pre n_pre lr
+
+probe < 1 goal
+  
+  a_pre, n_pre : Z
+  l, lc : list Z
+  j : Z
+  H1 : n_pre <= n_pre
+  H0 : 1 <= n_pre
+  H : n_pre >= n_pre
+  H2 : 1 <= j
+  H3 : j <= n_pre
+  H4 : Zlength lc = n_pre
+  H7 : forall k_2 : Z, n_pre <= k_2 < n_pre -> Znth k_2 lc 0 = Znth k_2 l 0
+  H6 :
+    forall k : Z,
+    0 <= k < j -> Znth k lc 0 = Znth k (remove_duplicates_sorted_spec l) 0
+  H5 : j = Zlength (remove_duplicates_sorted_spec (sublist 0 n_pre l))
+  H8 : n_pre <> 0
+  H9 : 0 <= n_pre
+  H10 : n_pre <= 2147483647
+  H11 : Zlength l = n_pre
+  H12 :
+    forall i : Z, 0 <= i /\ i + 1 < n_pre -> Znth i l 0 <= Znth (i + 1) l 0
+  Hprefix_full : sublist 0 n_pre l = l
+  ============================
+  IntArray.full a_pre n_pre lc
+  |-- [|j = Zlength (remove_duplicates_sorted_spec l)|] && [|0 <= j|] &&
+      [|j <= n_pre|] && [|Zlength lc = n_pre|] &&
+      [|lc = remove_duplicates_sorted_spec l ++ sublist j n_pre lc|] &&
+      IntArray.full a_pre n_pre lc
+
+probe < 2 goals
+  
+  a_pre, n_pre : Z
+  l, lc : list Z
+  j : Z
+  H1 : n_pre <= n_pre
+  H0 : 1 <= n_pre
+  H : n_pre >= n_pre
+  H2 : 1 <= j
+  H3 : j <= n_pre
+  H4 : Zlength lc = n_pre
+  H7 : forall k_2 : Z, n_pre <= k_2 < n_pre -> Znth k_2 lc 0 = Znth k_2 l 0
+  H6 :
+    forall k : Z,
+    0 <= k < j -> Znth k lc 0 = Znth k (remove_duplicates_sorted_spec l) 0
+  H5 : j = Zlength (remove_duplicates_sorted_spec (sublist 0 n_pre l))
+  H8 : n_pre <> 0
+  H9 : 0 <= n_pre
+  H10 : n_pre <= 2147483647
+  H11 : Zlength l = n_pre
+  H12 :
+    forall i : Z, 0 <= i /\ i + 1 < n_pre -> Znth i l 0 <= Znth (i + 1) l 0
+  Hprefix_full : sublist 0 n_pre l = l
+  ============================
+  lc = remove_duplicates_sorted_spec l ++ sublist j n_pre lc
+
+goal 2 is:
+ j = Zlength (remove_duplicates_sorted_spec l)
+
+probe < 2 goals
+  
+  a_pre, n_pre : Z
+  l, lc : list Z
+  j : Z
+  H1 : n_pre <= n_pre
+  H0 : 1 <= n_pre
+  H : n_pre >= n_pre
+  H2 : 1 <= j
+  H3 : j <= n_pre
+  H4 : Zlength lc = n_pre
+  H7 : forall k_2 : Z, n_pre <= k_2 < n_pre -> Znth k_2 lc 0 = Znth k_2 l 0
+  H6 :
+    forall k : Z,
+    0 <= k < j -> Znth k lc 0 = Znth k (remove_duplicates_sorted_spec l) 0
+  H5 : j = Zlength (remove_duplicates_sorted_spec (sublist 0 n_pre l))
+  H8 : n_pre <> 0
+  H9 : 0 <= n_pre
+  H10 : n_pre <= 2147483647
+  H11 : Zlength l = n_pre
+  H12 :
+    forall i : Z, 0 <= i /\ i + 1 < n_pre -> Znth i l 0 <= Znth (i + 1) l 0
+  Hprefix_full : sublist 0 n_pre l = l
+  ============================
+  lc = remove_duplicates_sorted_spec l ++ sublist j n_pre lc
+
+goal 2 is:
+ j = Zlength (remove_duplicates_sorted_spec l)
+
+probe < 
+Coq < 

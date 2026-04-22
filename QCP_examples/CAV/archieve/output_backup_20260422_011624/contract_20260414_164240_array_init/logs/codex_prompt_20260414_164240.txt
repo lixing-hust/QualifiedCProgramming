@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/skills/annotate/SKILL.md
+
+Inputs:
+- Raw markdown: `/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/raw/array_init.md`
+- Target function: `array_init`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/output/annotate_20260414_164240_array_init`
+- Output C: `/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/input/array_init.c`
+- Optional output V: `/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/input/array_init.v`

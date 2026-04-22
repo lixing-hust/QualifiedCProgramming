@@ -1,0 +1,13 @@
+Verification succeeded for `house_robber` in the requested workspace.
+
+Changed:
+- [annotated/verify_20260421_134943_house_robber.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_134943_house_robber.c): added the loop invariant tying `prev1`/`prev2` to `house_robber_spec` over processed prefixes.
+- [house_robber_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_134943_house_robber/coq/generated/house_robber_proof_manual.v): replaced all five manual `Admitted.` witnesses with complete proofs and local helper lemmas.
+- Updated workspace logs: `workspace_fingerprint.json`, `annotation_reasoning.md`, `proof_reasoning.md`, `issues.md`, and `metrics.md`.
+
+Verified:
+- `symexec` succeeded; `logs/qcp_run.log` ends with `Successfully finished symbolic execution`.
+- `original/house_robber.v`, `goal.v`, `proof_auto.v`, `proof_manual.v`, and `goal_check.v` all compiled successfully.
+- `house_robber_proof_manual.v` has no `Admitted.` and no top-level `Axiom`.
+- Non-`.v` Coq build artifacts under the workspace `coq/` directory were cleaned.
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_134943_house_robber/logs/metrics.md) ends with `Final Result: Success`.

@@ -1,0 +1,32 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260421_022514_digit_sum",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/digit_sum.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/digit_sum.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_022514_digit_sum/original/digit_sum.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_022514_digit_sum/original/digit_sum.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_022514_digit_sum.c",
+  "function_name": "digit_sum",
+  "program_sha256": "e19a66693e69cd813d8c474c5a09791c1f1d2d96ac5c755e4fdc5911289529b2",
+  "semantic_description": "Verifies digit_sum, a pure scalar function that returns the recursive decimal digit sum of a nonnegative integer n. The loop accumulates sum += n % 10 and shrinks n by n / 10 until n <= 0; for input 0 the loop is skipped and the function returns 0. The function does not read or modify heap memory.",
+  "keywords": {
+    "algorithm_family": "accumulation",
+    "control_flow": "while_loop",
+    "data_shape": "scalar_only",
+    "proof_pattern": [
+      "loop_invariant",
+      "pure_arithmetic",
+      "termination_by_bound"
+    ],
+    "numeric_properties": [
+      "nonnegative_input",
+      "monotone_accumulator",
+      "int_range"
+    ],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": "goal_check_passed"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

@@ -1,0 +1,19 @@
+2026-04-21T15:35:43.728288Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_232321_array_reverse_in_place/coq/generated/array_reverse_in_place_proof_manual.v:
+  rewrite replace_Znth_nothing by lia.
+  replace (left - Zlength A) with 0 by lia.
+  cbn.
+  rewrite replace_Znth_app_r with (l1 := A ++ [y] ++ B) by
+    (rewrite !Zlength_app, !Zlength_cons, !Zlength_nil; lia).
+  rewrite (replace_Znth_nothing right (A ++ [y] ++ B) x) by
+    (rewrite !Zlength_app, !Zlength_cons, !Zlength_nil; lia).
+  replace (right - Zlength (A ++ [y] ++ B)) with 0 by
+    (rewrite !Zlength_app, !Zlength_cons, !Zlength_nil; lia).
+  cbn.
+2026-04-21T15:44:35.886255Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_232321_array_reverse_in_place/logs/proof_reasoning.md:
+The manual proof should reduce each generated witness to a list equality
+over the loop invariant list expression.  The preservation proof needs a
+helper lemma showing that swapping the current `left` and `right` cells
+changes the invariant list from the old segment decomposition to the next
+one.  The return proof needs a helper lemma splitting on the two possible
+exit cases, `left = right` and `left = right + 1`, because the loop exits
+with `left >= right` while the invariant keeps `left <= right + 1`.

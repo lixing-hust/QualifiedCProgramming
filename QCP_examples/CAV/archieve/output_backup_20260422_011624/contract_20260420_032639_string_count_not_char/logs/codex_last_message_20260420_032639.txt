@@ -1,0 +1,16 @@
+Completed the contract workflow for `string_count_not_char`.
+
+Created:
+
+- [input/string_count_not_char.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_count_not_char.c)
+- [input/string_count_not_char.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_count_not_char.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_032639_string_count_not_char/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_032639_string_count_not_char/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_032639_string_count_not_char/logs/metrics.md)
+
+The C contract keeps the original interface, uses the verification-stable string scan form, preserves the string memory, and specifies the result with `string_count_not_char_spec(l, c)`. The Coq file contains only the task-specific recursive list count.
+
+Verification performed:
+
+- `coqtop -batch -l input/string_count_not_char.v` passed.
+- Checked that no `Inv`, `Assert`, `which implies`, bridge-assert, or loop-exit assertion text was added to the contract outputs.

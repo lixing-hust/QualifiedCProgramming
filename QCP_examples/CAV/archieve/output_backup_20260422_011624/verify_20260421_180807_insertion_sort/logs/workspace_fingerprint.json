@@ -1,0 +1,25 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260421_180807_insertion_sort",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/insertion_sort.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/insertion_sort.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_180807_insertion_sort/original/insertion_sort.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_180807_insertion_sort/original/insertion_sort.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_180807_insertion_sort.c",
+  "function_name": "insertion_sort",
+  "program_sha256": "b6717bfb537ff01006b5bd4baf1010aa30113a35e3944d4b26b7e8c79da8b6b4",
+  "semantic_description": "The target function performs insertion sort in place on an integer array a of length n. The input contract provides ownership of the full array and bounds 0 <= n <= 2000; the postcondition requires the final array contents to be sorted_z and a Permutation of the original logical list. The implementation uses an outer for loop over i from 1 to n - 1 and an inner while loop that shifts larger elements one slot to the right before writing key at j + 1. Boundary behavior includes zero- and one-element arrays where the outer loop is skipped; all memory updates are in-place writes to the same array.",
+  "keywords": {
+    "algorithm_family": "greedy",
+    "control_flow": ["for_loop", "while_loop", "nested_loop"],
+    "data_shape": ["array", "pointer"],
+    "semantic_intent": "in_place_update",
+    "proof_pattern": ["loop_invariant", "heap_reasoning", "range_bound"],
+    "numeric_properties": ["nonnegative_input", "int_range"],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": ["goal_check_passed"]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

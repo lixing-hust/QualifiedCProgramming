@@ -1,0 +1,18 @@
+2026-04-20T04:25:34.892483Z ERROR codex_core::tools::router: error=exec_command failed for `/bin/bash -lc 'set -euo pipefail
+WS=/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_122040_array_count_transitions
+NAME=array_count_transitions
+GEN="$WS/coq/generated"
+ORIG="$WS/original"
+LP=SimpleC.EE.CAV.verify_20260420_122040_array_count_transitions
+BASE=(-R SeparationLogic SimpleC.SL -R unifysl Logic -R sets SetsClass -R compcert_lib compcert.lib -R auxlibs AUXLib -R examples SimpleC.EE -R StrategyLib SimpleC.StrategyLib -R Common SimpleC.Common -R fixedpoints FP -R MonadLib MonadLib -R listlib ListLib)
+EXTRA=(-Q "$ORIG" "" -R "$GEN" "$LP")
+cd /home/yangfp/QualifiedCProgramming/SeparationLogic
+coqc "${BASE[@]}" -Q "$ORIG" "" "$ORIG/${NAME}.v" > "$WS/logs/compile_original.log" 2>&1
+coqc "${BASE[@]}" "${EXTRA[@]}" "$GEN/${NAME}_goal.v" > "$WS/logs/compile_goal.log" 2>&1
+coqc "${BASE[@]}" "${EXTRA[@]}" "$GEN/${NAME}_proof_auto.v" > "$WS/logs/compile_proof_auto.log" 2>&1
+coqc "${BASE[@]}" "${EXTRA[@]}" "$GEN/${NAME}_proof_manual.v" > "$WS/logs/compile_proof_manual.log" 2>&1'`: CreateProcess { message: "Rejected(\"Failed to create unified exec process: No such file or directory (os error 2)\")" }
+2026-04-20T04:30:40.525387Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: IO error: tls handshake eof, url: wss://chatgpt.com/backend-api/codex/responses
+2026-04-20T04:30:40.905600Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: IO error: tls handshake eof, url: wss://chatgpt.com/backend-api/codex/responses
+2026-04-20T04:30:41.795627Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: IO error: tls handshake eof, url: wss://chatgpt.com/backend-api/codex/responses
+2026-04-20T04:30:43.359659Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: IO error: tls handshake eof, url: wss://chatgpt.com/backend-api/codex/responses
+2026-04-20T04:30:46.881478Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: IO error: tls handshake eof, url: wss://chatgpt.com/backend-api/codex/responses

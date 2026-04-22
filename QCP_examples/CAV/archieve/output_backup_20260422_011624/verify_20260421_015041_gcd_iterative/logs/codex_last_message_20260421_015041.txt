@@ -1,0 +1,15 @@
+Verification succeeded in the requested workspace.
+
+Changed:
+- Added the Euclidean loop invariant in [annotated C](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_015041_gcd_iterative.c).
+- Completed the three manual Coq witnesses in [gcd_iterative_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_015041_gcd_iterative/coq/generated/gcd_iterative_proof_manual.v).
+- Updated workspace logs: fingerprint, annotation reasoning, proof reasoning, issues, and metrics.
+
+Verified:
+- `symexec` succeeded and generated fresh `goal`, `proof_auto`, `proof_manual`, and `goal_check`.
+- Full Coq replay compiled `original/gcd_iterative.v`, `gcd_iterative_goal.v`, `gcd_iterative_proof_auto.v`, `gcd_iterative_proof_manual.v`, and `gcd_iterative_goal_check.v`.
+- `proof_manual.v` contains no `Admitted.` and no top-level `Axiom`.
+- `coq/` cleanup completed; only `.v` files remain.
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_015041_gcd_iterative/logs/metrics.md) ends with `Final Result: Success`.
+
+No experience docs were updated because the execution rule restricted writes to the existing workspace.

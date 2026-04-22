@@ -1,0 +1,5 @@
+Verification succeeded for `max_of_three`.
+
+`symexec` completed successfully and generated fresh Coq files under [coq/generated](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_053814_max_of_three/coq/generated). The full Coq compile chain passed through `max_of_three_goal_check.v`, and `max_of_three_proof_manual.v` has no `Admitted.` and no top-level `Axiom`.
+
+No extra `Inv`, `Assert`, `which implies`, or manual proof edits were needed for this scalar two-branch function. I updated [workspace_fingerprint.json](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_053814_max_of_three/logs/workspace_fingerprint.json), [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_053814_max_of_three/logs/issues.md), and [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_053814_max_of_three/logs/metrics.md). `metrics.md` ends with `Final Result: Success`, and non-`.v` Coq intermediates have been cleaned.

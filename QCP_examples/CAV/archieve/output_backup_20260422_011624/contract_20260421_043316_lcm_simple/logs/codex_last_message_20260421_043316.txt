@@ -1,0 +1,17 @@
+Completed the contract workflow for `lcm_simple`.
+
+Created:
+- [input/lcm_simple.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/lcm_simple.c)
+- [input/lcm_simple.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/lcm_simple.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_043316_lcm_simple/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_043316_lcm_simple/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_043316_lcm_simple/logs/metrics.md)
+
+The C contract requires positive inputs and `lcm_simple_value(a, b) <= INT_MAX`, then ensures the return satisfies `lcm_simple_spec(a@pre, b@pre, __return)`. The `.v` file is minimal and bridges the spec to Coq’s `Z.lcm`.
+
+Validation run:
+- Forbidden Verify-stage annotation scan: passed
+- Coq bridge check via `coqtop`: passed
+- `gcc -fsyntax-only input/lcm_simple.c`: passed
+
+No experience documents were updated.

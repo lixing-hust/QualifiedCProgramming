@@ -1,0 +1,18 @@
+Verification succeeded in the same workspace.
+
+Changed:
+- [verify_20260421_180807_insertion_sort.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_180807_insertion_sort.c): changed the sorted-prefix invariant to adjacent prefix order, preserving the existing heap/permutation/length facts.
+- [insertion_sort_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_180807_insertion_sort/coq/generated/insertion_sort_proof_manual.v): proved all 6 manual witnesses with no `Admitted.` and no local `Axiom`.
+- [INV.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/doc/experiences/INV.md): added the reusable invariant lesson for sorted prefixes.
+- Updated workspace logs: `annotation_reasoning.md`, `proof_reasoning.md`, `issues.md`, and `metrics.md`.
+
+Verified:
+- Reran `symexec` successfully in the same workspace.
+- Full Coq compile succeeded through:
+  - `original/insertion_sort.v`
+  - `insertion_sort_goal.v`
+  - `insertion_sort_proof_auto.v`
+  - `insertion_sort_proof_manual.v`
+  - `insertion_sort_goal_check.v`
+- Cleaned `coq/` non-`.v` intermediate artifacts.
+- `metrics.md` now ends with `Final Result: Success`.

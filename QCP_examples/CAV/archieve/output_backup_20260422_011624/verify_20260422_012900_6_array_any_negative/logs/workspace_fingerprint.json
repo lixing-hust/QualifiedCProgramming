@@ -1,0 +1,33 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260422_012900_6_array_any_negative",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_any_negative.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_012900_6_array_any_negative/original/array_any_negative.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260422_012900_6_array_any_negative.c",
+  "function_name": "array_any_negative",
+  "program_sha256": "27a0357d8c98b82f101e95a5942085984f800b0af082cb771de393ab768cef17",
+  "semantic_description": "Verifies a read-only integer array scan that returns 1 iff some index in [0,n) contains a negative value, otherwise returns 0 after checking the full prefix. The function uses a single for loop with an early return branch and preserves the input IntArray heap predicate unchanged. The n == 0 boundary takes the empty-loop path and returns 0 because the universal nonnegative condition over the empty range is vacuous.",
+  "keywords": {
+    "algorithm_family": "search",
+    "control_flow": [
+      "for_loop",
+      "if"
+    ],
+    "data_shape": "array",
+    "semantic_intent": "preserve_input",
+    "proof_pattern": [
+      "loop_invariant",
+      "case_split",
+      "termination_by_bound",
+      "heap_reasoning"
+    ],
+    "numeric_properties": "int_range",
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": "goal_check_passed"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

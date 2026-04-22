@@ -1,0 +1,15 @@
+Completed the contract workflow for `array_move_zeroes_to_end`.
+
+Created:
+- [input/array_move_zeroes_to_end.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_move_zeroes_to_end.c)
+- [input/array_move_zeroes_to_end.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_move_zeroes_to_end.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_234553_array_move_zeroes_to_end/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_234553_array_move_zeroes_to_end/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_234553_array_move_zeroes_to_end/logs/metrics.md)
+
+The C contract keeps the original function semantics, omits the built-in verification headers per the skill rule, and imports a small task-specific Coq definition for the stable “nonzero prefix plus zero suffix” list transformation.
+
+Verification performed:
+- `coqc input/array_move_zeroes_to_end.v` passed.
+- Generated Coq byproducts from that check were removed.
+- No experience docs were updated; `metrics.md` records `Experience updates: none`.

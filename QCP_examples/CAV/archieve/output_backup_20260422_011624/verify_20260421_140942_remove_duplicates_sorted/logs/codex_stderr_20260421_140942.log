@@ -1,0 +1,14 @@
+2026-04-21T06:19:20.935352Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_140942_remove_duplicates_sorted/coq/generated/remove_duplicates_sorted_proof_manual.v:
+        simpl in IHxs.
+        rewrite !Zlength_cons in *.
+        rewrite Znth_cons by (pose proof (Zlength_nonneg l); lia).
+        replace (Zlength (z :: l) + 1 - 1 - 1) with
+          (Zlength (z :: l) - 1) by lia.
+        exact IHxs.
+2026-04-21T06:20:14.927958Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_140942_remove_duplicates_sorted/coq/generated/remove_duplicates_sorted_proof_manual.v:
+        simpl in IHxs.
+        rewrite !Zlength_cons in *.
+        rewrite Znth_cons by (pose proof (Zlength_nonneg l); lia).
+        change (Znth (Z.succ (Z.succ (Zlength l)) - 1) (a :: z :: l) 0 =
+          rds_last a xs).
+        exact IHxs.

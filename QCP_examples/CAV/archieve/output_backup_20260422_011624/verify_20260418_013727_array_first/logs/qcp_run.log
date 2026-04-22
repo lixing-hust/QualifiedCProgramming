@@ -1,0 +1,1507 @@
+Start to symbolic execution on program : /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_013727_array_first.c
+Start to parse strategies file common
+File Path: /home/yangfp/QualifiedCProgramming/QCP_examples/common.strategies
+Start to parse rule 0 in file common
+Type inference result for strategy (common, 0):
+Current type environment:
+x -> A
+
+Current unification variable environment:
+
+Add new strategy scope: core
+Start to parse rule 1 in file common
+Type inference result for strategy (common, 1):
+Current type environment:
+x -> A
+
+Current unification variable environment:
+
+Start to parse rule 3 in file common
+Type inference result for strategy (common, 3):
+Current type environment:
+y -> A
+x -> A
+
+Current unification variable environment:
+
+Start to parse rule 6 in file common
+Type inference result for strategy (common, 6):
+Current type environment:
+y -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+
+Start to parse rule 7 in file common
+Type inference result for strategy (common, 7):
+Current type environment:
+x -> Z
+p -> Z
+
+Current unification variable environment:
+
+Start to parse rule 8 in file common
+Type inference result for strategy (common, 8):
+Current type environment:
+y -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+
+Start to parse rule 9 in file common
+Type inference result for strategy (common, 9):
+Current type environment:
+x -> Z
+p -> Z
+
+Current unification variable environment:
+
+Start to parse rule 10 in file common
+Type inference result for strategy (common, 10):
+Current type environment:
+p -> Z
+
+Current unification variable environment:
+
+Start to parse rule 11 in file common
+Type inference result for strategy (common, 11):
+Current type environment:
+y -> Z
+q -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?y_type -> Z
+?q_type -> Z
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 12 in file common
+Type inference result for strategy (common, 12):
+Current type environment:
+b -> A
+a -> A
+
+Current unification variable environment:
+?b_type -> A
+?a_type -> A
+
+New scope:Tagcancel(0x61b7f8a30080)
+Add new strategy scope: Tagcancel
+Start to parse rule 13 in file common
+Type inference result for strategy (common, 13):
+Current type environment:
+b -> A
+a -> A
+
+Current unification variable environment:
+?b_type -> A
+?a_type -> A
+
+Start to parse rule 14 in file common
+Type inference result for strategy (common, 14):
+Current type environment:
+x -> Z
+p -> Z
+
+Current unification variable environment:
+
+Start to parse rule 15 in file common
+Type inference result for strategy (common, 15):
+Current type environment:
+y -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+
+Start to parse rule 16 in file common
+Type inference result for strategy (common, 16):
+Current type environment:
+x -> Z
+p -> Z
+
+Current unification variable environment:
+
+Start to parse rule 17 in file common
+Type inference result for strategy (common, 17):
+Current type environment:
+p -> Z
+
+Current unification variable environment:
+
+Start to parse rule 18 in file common
+Type inference result for strategy (common, 18):
+Current type environment:
+
+Current unification variable environment:
+
+Start to parse rule 19 in file common
+Type inference result for strategy (common, 19):
+Current type environment:
+x -> Z
+p -> Z
+
+Current unification variable environment:
+
+New scope:local(0x61b7f8a36400)
+Add new strategy scope: local
+Start to parse rule 20 in file common
+Type inference result for strategy (common, 20):
+Current type environment:
+x -> Z
+p -> Z
+
+Current unification variable environment:
+
+Start to parse rule 21 in file common
+Type inference result for strategy (common, 21):
+Current type environment:
+x -> Z
+p -> Z
+
+Current unification variable environment:
+
+Start to parse rule 22 in file common
+Type inference result for strategy (common, 22):
+Current type environment:
+x -> Z
+p -> Z
+
+Current unification variable environment:
+
+Start to parse rule 23 in file common
+Type inference result for strategy (common, 23):
+Current type environment:
+n -> Z
+x -> Z
+
+Current unification variable environment:
+?n_type -> Z
+?x_type -> Z
+
+Finish parsing strategies file common
+Start to parse strategies file int_array
+File Path: /home/yangfp/QualifiedCProgramming/QCP_examples/int_array.strategies
+Start to parse rule 1 in file int_array
+1, unk1
+Type inference result for strategy (int_array, 1):
+Current type environment:
+v -> Z
+i -> Z
+l -> (@list Z)
+n -> Z
+p -> Z
+
+Current unification variable environment:
+?unk1 -> Z
+?v_type -> Z
+?i_type -> Z
+?l_type -> (@list Z)
+?n_type -> Z
+?p_type -> Z
+
+2, unk2
+Start to parse rule 2 in file int_array
+1, unk1
+Type inference result for strategy (int_array, 2):
+Current type environment:
+l -> (@list Z)
+n -> Z
+i -> Z
+p -> Z
+
+Current unification variable environment:
+?unk1 -> Z
+?l_type -> (@list Z)
+?n_type -> Z
+?i_type -> Z
+?p_type -> Z
+
+New scope:post(0x61b7f8a4d590)
+Add new strategy scope: post
+Start to parse rule 3 in file int_array
+Type inference result for strategy (int_array, 3):
+Current type environment:
+v -> Z
+l -> (@list Z)
+n -> Z
+i -> Z
+p -> Z
+
+Current unification variable environment:
+?v_type -> Z
+?l_type -> (@list Z)
+?n_type -> Z
+?i_type -> Z
+?p_type -> Z
+
+Start to parse rule 4 in file int_array
+Type inference result for strategy (int_array, 4):
+Current type environment:
+l2 -> (@list Z)
+l1 -> (@list Z)
+n -> Z
+p -> Z
+
+Current unification variable environment:
+?l2_type -> (@list Z)
+?l1_type -> (@list Z)
+?n_type -> Z
+?p_type -> Z
+
+Start to parse rule 5 in file int_array
+Type inference result for strategy (int_array, 5):
+Current type environment:
+l -> (@list Z)
+n -> Z
+v -> Z
+i -> Z
+p -> Z
+
+Current unification variable environment:
+?l_type -> (@list Z)
+?n_type -> Z
+?v_type -> Z
+?i_type -> Z
+?p_type -> Z
+
+Start to parse rule 6 in file int_array
+Type inference result for strategy (int_array, 6):
+Current type environment:
+l2 -> (@list Z)
+l1 -> (@list Z)
+y -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?l2_type -> (@list Z)
+?l1_type -> (@list Z)
+?y_type -> Z
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 7 in file int_array
+1, unk1
+Type inference result for strategy (int_array, 7):
+Current type environment:
+v -> Z
+i -> Z
+l -> (@list Z)
+y -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?unk1 -> Z
+?v_type -> Z
+?i_type -> Z
+?l_type -> (@list Z)
+?y_type -> Z
+?x_type -> Z
+?p_type -> Z
+
+2, unk2
+Start to parse rule 8 in file int_array
+Type inference result for strategy (int_array, 8):
+Current type environment:
+l3 -> (@list Z)
+l2 -> (@list Z)
+z -> Z
+l1 -> (@list Z)
+y -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?l3_type -> (@list Z)
+?l2_type -> (@list Z)
+?z_type -> Z
+?l1_type -> (@list Z)
+?y_type -> Z
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 9 in file int_array
+Type inference result for strategy (int_array, 9):
+Current type environment:
+l2 -> (@list Z)
+l1 -> (@list Z)
+y -> Z
+l3 -> (@list Z)
+z -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?l2_type -> (@list Z)
+?l1_type -> (@list Z)
+?y_type -> Z
+?l3_type -> (@list Z)
+?z_type -> Z
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 10 in file int_array
+Type inference result for strategy (int_array, 10):
+Current type environment:
+l -> (@list Z)
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?l_type -> (@list Z)
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 11 in file int_array
+1, unk1
+Type inference result for strategy (int_array, 11):
+Current type environment:
+l -> (@list Z)
+y -> Z
+x -> Z
+i -> Z
+p -> Z
+
+Current unification variable environment:
+?unk1 -> Z
+?l_type -> (@list Z)
+?y_type -> Z
+?x_type -> Z
+?i_type -> Z
+?p_type -> Z
+
+Start to parse rule 12 in file int_array
+Type inference result for strategy (int_array, 12):
+Current type environment:
+v -> Z
+l -> (@list Z)
+y -> Z
+x -> Z
+i -> Z
+p -> Z
+
+Current unification variable environment:
+?v_type -> Z
+?l_type -> (@list Z)
+?y_type -> Z
+?x_type -> Z
+?i_type -> Z
+?p_type -> Z
+
+Finish parsing strategies file int_array
+Start to parse strategies file uint_array
+File Path: /home/yangfp/QualifiedCProgramming/QCP_examples/uint_array.strategies
+Start to parse rule 1 in file uint_array
+1, unk1
+Type inference result for strategy (uint_array, 1):
+Current type environment:
+v -> Z
+i -> Z
+l -> (@list Z)
+n -> Z
+p -> Z
+
+Current unification variable environment:
+?unk1 -> Z
+?v_type -> Z
+?i_type -> Z
+?l_type -> (@list Z)
+?n_type -> Z
+?p_type -> Z
+
+2, unk2
+Start to parse rule 2 in file uint_array
+1, unk1
+Type inference result for strategy (uint_array, 2):
+Current type environment:
+l -> (@list Z)
+n -> Z
+i -> Z
+p -> Z
+
+Current unification variable environment:
+?unk1 -> Z
+?l_type -> (@list Z)
+?n_type -> Z
+?i_type -> Z
+?p_type -> Z
+
+Start to parse rule 3 in file uint_array
+Type inference result for strategy (uint_array, 3):
+Current type environment:
+v -> Z
+l -> (@list Z)
+n -> Z
+i -> Z
+p -> Z
+
+Current unification variable environment:
+?v_type -> Z
+?l_type -> (@list Z)
+?n_type -> Z
+?i_type -> Z
+?p_type -> Z
+
+Start to parse rule 4 in file uint_array
+Type inference result for strategy (uint_array, 4):
+Current type environment:
+l2 -> (@list Z)
+l1 -> (@list Z)
+n -> Z
+p -> Z
+
+Current unification variable environment:
+?l2_type -> (@list Z)
+?l1_type -> (@list Z)
+?n_type -> Z
+?p_type -> Z
+
+Start to parse rule 5 in file uint_array
+Type inference result for strategy (uint_array, 5):
+Current type environment:
+l -> (@list Z)
+n -> Z
+v -> Z
+i -> Z
+p -> Z
+
+Current unification variable environment:
+?l_type -> (@list Z)
+?n_type -> Z
+?v_type -> Z
+?i_type -> Z
+?p_type -> Z
+
+Start to parse rule 6 in file uint_array
+Type inference result for strategy (uint_array, 6):
+Current type environment:
+l2 -> (@list Z)
+l1 -> (@list Z)
+y -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?l2_type -> (@list Z)
+?l1_type -> (@list Z)
+?y_type -> Z
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 7 in file uint_array
+1, unk1
+Type inference result for strategy (uint_array, 7):
+Current type environment:
+v -> Z
+i -> Z
+l -> (@list Z)
+y -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?unk1 -> Z
+?v_type -> Z
+?i_type -> Z
+?l_type -> (@list Z)
+?y_type -> Z
+?x_type -> Z
+?p_type -> Z
+
+2, unk2
+Start to parse rule 8 in file uint_array
+Type inference result for strategy (uint_array, 8):
+Current type environment:
+l3 -> (@list Z)
+l2 -> (@list Z)
+z -> Z
+l1 -> (@list Z)
+y -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?l3_type -> (@list Z)
+?l2_type -> (@list Z)
+?z_type -> Z
+?l1_type -> (@list Z)
+?y_type -> Z
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 9 in file uint_array
+Type inference result for strategy (uint_array, 9):
+Current type environment:
+l2 -> (@list Z)
+l1 -> (@list Z)
+y -> Z
+l3 -> (@list Z)
+z -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?l2_type -> (@list Z)
+?l1_type -> (@list Z)
+?y_type -> Z
+?l3_type -> (@list Z)
+?z_type -> Z
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 10 in file uint_array
+Type inference result for strategy (uint_array, 10):
+Current type environment:
+l -> (@list Z)
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?l_type -> (@list Z)
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 11 in file uint_array
+1, unk1
+Type inference result for strategy (uint_array, 11):
+Current type environment:
+l -> (@list Z)
+y -> Z
+x -> Z
+i -> Z
+p -> Z
+
+Current unification variable environment:
+?unk1 -> Z
+?l_type -> (@list Z)
+?y_type -> Z
+?x_type -> Z
+?i_type -> Z
+?p_type -> Z
+
+Start to parse rule 12 in file uint_array
+Type inference result for strategy (uint_array, 12):
+Current type environment:
+v -> Z
+l -> (@list Z)
+y -> Z
+x -> Z
+i -> Z
+p -> Z
+
+Current unification variable environment:
+?v_type -> Z
+?l_type -> (@list Z)
+?y_type -> Z
+?x_type -> Z
+?i_type -> Z
+?p_type -> Z
+
+Start to parse rule 13 in file uint_array
+Type inference result for strategy (uint_array, 13):
+Current type environment:
+l -> (@list Z)
+n -> Z
+p -> Z
+
+Current unification variable environment:
+?l_type -> (@list Z)
+?n_type -> Z
+?p_type -> Z
+
+Start to parse rule 14 in file uint_array
+Type inference result for strategy (uint_array, 14):
+Current type environment:
+l1 -> (@list Z)
+a -> Z
+l -> (@list Z)
+n -> Z
+p -> Z
+
+Current unification variable environment:
+?a_type -> Z
+?l1_type -> (@list Z)
+?l_type -> (@list Z)
+?p_type -> Z
+?n_type -> Z
+
+Finish parsing strategies file uint_array
+Start to parse strategies file undef_uint_array
+File Path: /home/yangfp/QualifiedCProgramming/QCP_examples/undef_uint_array.strategies
+Start to parse rule 1 in file undef_uint_array
+Type inference result for strategy (undef_uint_array, 1):
+Current type environment:
+i -> Z
+n -> Z
+p -> Z
+
+Current unification variable environment:
+?i_type -> Z
+?n_type -> Z
+?p_type -> Z
+
+Start to parse rule 2 in file undef_uint_array
+Type inference result for strategy (undef_uint_array, 2):
+Current type environment:
+n -> Z
+i -> Z
+p -> Z
+
+Current unification variable environment:
+?n_type -> Z
+?i_type -> Z
+?p_type -> Z
+
+Start to parse rule 3 in file undef_uint_array
+Type inference result for strategy (undef_uint_array, 3):
+Current type environment:
+y -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?y_type -> Z
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 4 in file undef_uint_array
+Type inference result for strategy (undef_uint_array, 4):
+Current type environment:
+z -> Z
+y -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?z_type -> Z
+?y_type -> Z
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 5 in file undef_uint_array
+Type inference result for strategy (undef_uint_array, 5):
+Current type environment:
+y -> Z
+z -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?y_type -> Z
+?z_type -> Z
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 6 in file undef_uint_array
+Type inference result for strategy (undef_uint_array, 6):
+Current type environment:
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 7 in file undef_uint_array
+Type inference result for strategy (undef_uint_array, 7):
+Current type environment:
+n -> Z
+p -> Z
+
+Current unification variable environment:
+?n_type -> Z
+?p_type -> Z
+
+Start to parse rule 8 in file undef_uint_array
+Type inference result for strategy (undef_uint_array, 8):
+Current type environment:
+n -> Z
+p -> Z
+
+Current unification variable environment:
+?n_type -> Z
+?p_type -> Z
+
+Start to parse rule 9 in file undef_uint_array
+Type inference result for strategy (undef_uint_array, 9):
+Current type environment:
+y -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?y_type -> Z
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 10 in file undef_uint_array
+Type inference result for strategy (undef_uint_array, 10):
+Current type environment:
+y1 -> Z
+x1 -> Z
+y -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?y1_type -> Z
+?x1_type -> Z
+?y_type -> Z
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 11 in file undef_uint_array
+Type inference result for strategy (undef_uint_array, 11):
+Current type environment:
+i -> Z
+n -> Z
+p -> Z
+
+Current unification variable environment:
+?i_type -> Z
+?n_type -> Z
+?p_type -> Z
+
+Start to parse rule 12 in file undef_uint_array
+Type inference result for strategy (undef_uint_array, 12):
+Current type environment:
+n -> Z
+i -> Z
+p -> Z
+
+Current unification variable environment:
+?n_type -> Z
+?i_type -> Z
+?p_type -> Z
+
+Start to parse rule 13 in file undef_uint_array
+Type inference result for strategy (undef_uint_array, 13):
+Current type environment:
+y -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?y_type -> Z
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 14 in file undef_uint_array
+Type inference result for strategy (undef_uint_array, 14):
+Current type environment:
+z -> Z
+y -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?z_type -> Z
+?y_type -> Z
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 15 in file undef_uint_array
+Type inference result for strategy (undef_uint_array, 15):
+Current type environment:
+y -> Z
+z -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?y_type -> Z
+?z_type -> Z
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 16 in file undef_uint_array
+Type inference result for strategy (undef_uint_array, 16):
+Current type environment:
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 17 in file undef_uint_array
+Type inference result for strategy (undef_uint_array, 17):
+Current type environment:
+n -> Z
+p -> Z
+
+Current unification variable environment:
+?n_type -> Z
+?p_type -> Z
+
+Start to parse rule 18 in file undef_uint_array
+Type inference result for strategy (undef_uint_array, 18):
+Current type environment:
+n -> Z
+p -> Z
+
+Current unification variable environment:
+?n_type -> Z
+?p_type -> Z
+
+Start to parse rule 19 in file undef_uint_array
+Type inference result for strategy (undef_uint_array, 19):
+Current type environment:
+y -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?y_type -> Z
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 20 in file undef_uint_array
+Type inference result for strategy (undef_uint_array, 20):
+Current type environment:
+y1 -> Z
+x1 -> Z
+y -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?y1_type -> Z
+?x1_type -> Z
+?y_type -> Z
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 21 in file undef_uint_array
+Type inference result for strategy (undef_uint_array, 21):
+Current type environment:
+n -> Z
+p -> Z
+
+Current unification variable environment:
+?n_type -> Z
+?p_type -> Z
+
+Start to parse rule 22 in file undef_uint_array
+Type inference result for strategy (undef_uint_array, 22):
+Current type environment:
+n -> Z
+p -> Z
+
+Current unification variable environment:
+?n_type -> Z
+?p_type -> Z
+
+Finish parsing strategies file undef_uint_array
+Start to parse strategies file array_shape
+File Path: /home/yangfp/QualifiedCProgramming/QCP_examples/array_shape.strategies
+Start to parse rule 1 in file array_shape
+Type inference result for strategy (array_shape, 1):
+Current type environment:
+x -> Z
+v -> Z
+i -> Z
+n -> Z
+p -> Z
+
+Current unification variable environment:
+?x_type -> Z
+?v_type -> Z
+?i_type -> Z
+?n_type -> Z
+?p_type -> Z
+
+Start to parse rule 2 in file array_shape
+Type inference result for strategy (array_shape, 2):
+Current type environment:
+v -> Z
+n -> Z
+i -> Z
+p -> Z
+
+Current unification variable environment:
+?v_type -> Z
+?n_type -> Z
+?i_type -> Z
+?p_type -> Z
+
+Start to parse rule 3 in file array_shape
+Type inference result for strategy (array_shape, 3):
+Current type environment:
+v0 -> Z
+v -> Z
+y -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?v0_type -> Z
+?v_type -> Z
+?y_type -> Z
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 4 in file array_shape
+Type inference result for strategy (array_shape, 4):
+Current type environment:
+v -> Z
+i -> Z
+y -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?v_type -> Z
+?i_type -> Z
+?y_type -> Z
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 5 in file array_shape
+Type inference result for strategy (array_shape, 5):
+Current type environment:
+v -> Z
+z -> Z
+y -> Z
+p -> Z
+
+Current unification variable environment:
+?v_type -> Z
+?z_type -> Z
+?y_type -> Z
+?p_type -> Z
+
+Start to parse rule 6 in file array_shape
+Type inference result for strategy (array_shape, 6):
+Current type environment:
+y -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?y_type -> Z
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 7 in file array_shape
+Type inference result for strategy (array_shape, 7):
+Current type environment:
+y -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?y_type -> Z
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 8 in file array_shape
+Type inference result for strategy (array_shape, 8):
+Current type environment:
+n -> Z
+p -> Z
+
+Current unification variable environment:
+?n_type -> Z
+?p_type -> Z
+
+Start to parse rule 9 in file array_shape
+Type inference result for strategy (array_shape, 9):
+Current type environment:
+n -> Z
+i -> Z
+p -> Z
+
+Current unification variable environment:
+?n_type -> Z
+?i_type -> Z
+?p_type -> Z
+
+Start to parse rule 10 in file array_shape
+Type inference result for strategy (array_shape, 10):
+Current type environment:
+y1 -> Z
+y -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?y1_type -> Z
+?y_type -> Z
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 11 in file array_shape
+Type inference result for strategy (array_shape, 11):
+Current type environment:
+x -> Z
+v -> Z
+i -> Z
+n -> Z
+p -> Z
+
+Current unification variable environment:
+?x_type -> Z
+?v_type -> Z
+?i_type -> Z
+?n_type -> Z
+?p_type -> Z
+
+Start to parse rule 12 in file array_shape
+Type inference result for strategy (array_shape, 12):
+Current type environment:
+v -> Z
+n -> Z
+i -> Z
+p -> Z
+
+Current unification variable environment:
+?v_type -> Z
+?n_type -> Z
+?i_type -> Z
+?p_type -> Z
+
+Start to parse rule 13 in file array_shape
+Type inference result for strategy (array_shape, 13):
+Current type environment:
+v0 -> Z
+v -> Z
+y -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?v0_type -> Z
+?v_type -> Z
+?y_type -> Z
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 14 in file array_shape
+Type inference result for strategy (array_shape, 14):
+Current type environment:
+v -> Z
+i -> Z
+y -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?v_type -> Z
+?i_type -> Z
+?y_type -> Z
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 15 in file array_shape
+Type inference result for strategy (array_shape, 15):
+Current type environment:
+v -> Z
+z -> Z
+y -> Z
+p -> Z
+
+Current unification variable environment:
+?v_type -> Z
+?z_type -> Z
+?y_type -> Z
+?p_type -> Z
+
+Start to parse rule 16 in file array_shape
+Type inference result for strategy (array_shape, 16):
+Current type environment:
+y -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?y_type -> Z
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 17 in file array_shape
+Type inference result for strategy (array_shape, 17):
+Current type environment:
+y -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?y_type -> Z
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 18 in file array_shape
+Type inference result for strategy (array_shape, 18):
+Current type environment:
+n -> Z
+p -> Z
+
+Current unification variable environment:
+?n_type -> Z
+?p_type -> Z
+
+Start to parse rule 19 in file array_shape
+Type inference result for strategy (array_shape, 19):
+Current type environment:
+n -> Z
+i -> Z
+p -> Z
+
+Current unification variable environment:
+?n_type -> Z
+?i_type -> Z
+?p_type -> Z
+
+Start to parse rule 20 in file array_shape
+Type inference result for strategy (array_shape, 20):
+Current type environment:
+y1 -> Z
+y -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?y1_type -> Z
+?y_type -> Z
+?x_type -> Z
+?p_type -> Z
+
+Finish parsing strategies file array_shape
+Symbolic Execution into function array_first
+Start to execute return statement:
+(ps type 3): return (a[0]);
+Current symbolic state:
+-------Assertion begin---------
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+  1  <= n_86_pre;
+ Zlength(Z_1, l_88_free) == n_86_pre ]
+LOCAL[
+  Temp a a_84_addr;
+  Temp n n_87_addr ]
+SEP[
+ store ( a_84_addr , a_83_pre , signed int* );
+ store ( n_87_addr , n_86_pre , signed int );
+ IntArray.full (a_83_pre, n_86_pre, l_88_free) ]
+-------Assertion end ----------
+Executing partial stmt:
+(ps type 3): return (a[0]);
+pre state:
+-------Assertion begin---------
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+  1  <= n_86_pre;
+ Zlength(Z_1, l_88_free) == n_86_pre ]
+LOCAL[
+  Temp a a_84_addr;
+  Temp n n_87_addr ]
+SEP[
+ store ( a_84_addr , a_83_pre , signed int* );
+ store ( n_87_addr , n_86_pre , signed int );
+ IntArray.full (a_83_pre, n_86_pre, l_88_free) ]
+-------Assertion end ----------
+=============================================================================================
+Try to solve entailment with scope: core 
+try to find scope:core
+Get scope :core (0x61b7f8a27720)
+---------------------------------------------------------------------------------------------
+Goal:
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Begin@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+  1  <= n_86_pre;
+ Zlength(Z_1, l_88_free) == n_86_pre ]
+LOCAL[
+  Temp n n_87_addr;
+  Temp a a_84_addr ]
+SEP[
+ store ( a_84_addr , a_83_pre , signed int* );
+ store ( n_87_addr , n_86_pre , signed int );
+ IntArray.full (a_83_pre, n_86_pre, l_88_free) ]
+|--
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+EX v_95_free 
+PROP[]
+LOCAL[]
+SEP[
+ store ( (a_83_pre + ( 0  * (Size_of signed int))) , v_95_free , signed int ) ]
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@End@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+applying rule (int_array, 1)
+applying rule (common, 3)
+applying rule (common, 1)
+After applying strategies:
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Begin!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+  1  <= n_86_pre;
+ Zlength(Z_1, l_88_free) == n_86_pre ]
+LOCAL[
+  Temp n n_87_addr;
+  Temp a a_84_addr ]
+SEP[
+ IntArray.missing_i (a_83_pre,  0 ,  0 , n_86_pre, l_88_free);
+ store ( a_84_addr , a_83_pre , signed int* );
+ store ( n_87_addr , n_86_pre , signed int ) ]
+|--
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[]
+LOCAL[]
+SEP[]
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!End!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+left_added:
+exist_mapping:
+95 -> (l_88_free[ 0 ])
+try to find scope:Tagcancel
+Get scope :Tagcancel (0x61b7f8a30080)
+---------------------------------------------------------------------------------------------
+Goal:
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Begin@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+  1  <= n_86_pre;
+ Zlength(Z_1, l_88_free) == n_86_pre ]
+LOCAL[
+  Temp n n_87_addr;
+  Temp a a_84_addr ]
+SEP[
+ IntArray.missing_i (a_83_pre,  0 ,  0 , n_86_pre, l_88_free);
+ store ( a_84_addr , a_83_pre , signed int* );
+ store ( n_87_addr , n_86_pre , signed int ) ]
+|--
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[]
+LOCAL[]
+SEP[]
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@End@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+After applying strategies:
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Begin!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+  1  <= n_86_pre;
+ Zlength(Z_1, l_88_free) == n_86_pre ]
+LOCAL[
+  Temp n n_87_addr;
+  Temp a a_84_addr ]
+SEP[
+ IntArray.missing_i (a_83_pre,  0 ,  0 , n_86_pre, l_88_free);
+ store ( a_84_addr , a_83_pre , signed int* );
+ store ( n_87_addr , n_86_pre , signed int ) ]
+|--
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[]
+LOCAL[]
+SEP[]
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!End!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+left_added:
+exist_mapping:
+=============================================================================================
+try to find scope:Pcancel
+Get scope :Pcancel ((nil))
+---------------------------------------------------------------------------------------------
+Goal:
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Begin@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+  1  <= n_86_pre;
+ Zlength(Z_1, l_88_free) == n_86_pre ]
+LOCAL[
+  Temp n n_87_addr;
+  Temp a a_84_addr ]
+SEP[
+ store ( a_84_addr , a_83_pre , signed int* );
+ store ( n_87_addr , n_86_pre , signed int );
+ IntArray.full (a_83_pre, n_86_pre, l_88_free) ]
+|--
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+  1  <= n_86_pre;
+ Zlength(Z_1, l_88_free) == n_86_pre ]
+LOCAL[
+  Temp a a_84_addr;
+  Temp n n_87_addr ]
+SEP[
+ store ( (a_83_pre + ( 0  * (Size_of signed int))) , (l_88_free[ 0 ]) , signed int );
+ IntArray.missing_i (a_83_pre,  0 ,  0 , n_86_pre, l_88_free);
+ store ( a_84_addr , a_83_pre , signed int* );
+ store ( n_87_addr , n_86_pre , signed int ) ]
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@End@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+After applying strategies:
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Begin!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+  1  <= n_86_pre;
+ Zlength(Z_1, l_88_free) == n_86_pre ]
+LOCAL[
+  Temp n n_87_addr;
+  Temp a a_84_addr ]
+SEP[
+ store ( a_84_addr , a_83_pre , signed int* );
+ store ( n_87_addr , n_86_pre , signed int );
+ IntArray.full (a_83_pre, n_86_pre, l_88_free) ]
+|--
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+  1  <= n_86_pre;
+ Zlength(Z_1, l_88_free) == n_86_pre ]
+LOCAL[
+  Temp a a_84_addr;
+  Temp n n_87_addr ]
+SEP[
+ store ( (a_83_pre + ( 0  * (Size_of signed int))) , (l_88_free[ 0 ]) , signed int );
+ IntArray.missing_i (a_83_pre,  0 ,  0 , n_86_pre, l_88_free);
+ store ( a_84_addr , a_83_pre , signed int* );
+ store ( n_87_addr , n_86_pre , signed int ) ]
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!End!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+left_added:
+exist_mapping:
+<asrt_tmp>
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+  1  <= n_86_pre;
+ Zlength(Z_1, l_88_free) == n_86_pre ]
+LOCAL[
+  Temp n n_87_addr;
+  Temp a a_84_addr ]
+SEP[
+ store ( a_84_addr , a_83_pre , signed int* );
+ store ( n_87_addr , n_86_pre , signed int );
+ IntArray.full (a_83_pre, n_86_pre, l_88_free) ]
+</asrt_tmp>
+<func_post>
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+  1  <= n_86_pre;
+ Zlength(Z_1, l_88_free) == n_86_pre ]
+LOCAL[
+  Temp a a_84_addr;
+  Temp n n_87_addr ]
+SEP[
+ store ( (a_83_pre + ( 0  * (Size_of signed int))) , (l_88_free[ 0 ]) , signed int );
+ IntArray.missing_i (a_83_pre,  0 ,  0 , n_86_pre, l_88_free);
+ store ( a_84_addr , a_83_pre , signed int* );
+ store ( n_87_addr , n_86_pre , signed int ) ]
+</func_post>
+try to find scope:post
+Get scope :post (0x61b7f8a4d590)
+---------------------------------------------------------------------------------------------
+Goal:
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Begin@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+  1  <= n_86_pre;
+ Zlength(Z_1, l_88_free) == n_86_pre ]
+LOCAL[
+  Temp n n_87_addr;
+  Temp a a_84_addr ]
+SEP[
+ store ( (a_83_pre + ( 0  * (Size_of signed int))) , (l_88_free[ 0 ]) , signed int );
+ IntArray.missing_i (a_83_pre,  0 ,  0 , n_86_pre, l_88_free);
+ store ( a_84_addr , a_83_pre , signed int* );
+ store ( n_87_addr , n_86_pre , signed int ) ]
+|--
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[]
+LOCAL[]
+SEP[]
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@End@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+applying rule (int_array, 2)
+After applying strategies:
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Begin!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+  1  <= n_86_pre;
+ Zlength(Z_1, l_88_free) == n_86_pre ]
+LOCAL[
+  Temp n n_87_addr;
+  Temp a a_84_addr ]
+SEP[
+ IntArray.full (a_83_pre, n_86_pre, l_88_free);
+ store ( a_84_addr , a_83_pre , signed int* );
+ store ( n_87_addr , n_86_pre , signed int ) ]
+|--
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[]
+LOCAL[]
+SEP[]
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!End!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+left_added:
+exist_mapping:
+Return Value: (l_88_free[ 0 ])
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+  1  <= n_86_pre;
+ Zlength(Z_1, l_88_free) == n_86_pre ]
+LOCAL[
+  Temp n n_87_addr;
+  Temp a a_84_addr ]
+SEP[
+ IntArray.full (a_83_pre, n_86_pre, l_88_free);
+ store ( a_84_addr , a_83_pre , signed int* );
+ store ( n_87_addr , n_86_pre , signed int ) ]
+After PSExec: 
+Return Value: (l_88_free[ 0 ])
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+  1  <= n_86_pre;
+ Zlength(Z_1, l_88_free) == n_86_pre ]
+LOCAL[
+  Temp n n_87_addr;
+  Temp a a_84_addr ]
+SEP[
+ IntArray.full (a_83_pre, n_86_pre, l_88_free);
+ store ( a_84_addr , a_83_pre , signed int* );
+ store ( n_87_addr , n_86_pre , signed int ) ]
+End of symbolic execution of function array_first
+Start to print Coq files for the program /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_013727_array_first.c
+Successfully finished symbolic execution

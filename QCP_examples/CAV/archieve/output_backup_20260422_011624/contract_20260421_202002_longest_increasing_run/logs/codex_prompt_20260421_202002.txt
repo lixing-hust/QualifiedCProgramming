@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/contract/SKILL.md
+
+Inputs:
+- Raw markdown: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/raw/longest_increasing_run.md`
+- Target function: `longest_increasing_run`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_202002_longest_increasing_run`
+- Output C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/longest_increasing_run.c`
+- Optional output V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/longest_increasing_run.v`

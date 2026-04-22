@@ -1,0 +1,7 @@
+Completed the annotate workflow for `bubble_sort`.
+
+Generated [bubble_sort.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/bubble_sort.c) and [bubble_sort.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/bubble_sort.v). The C contract uses `IntArray::full` for full-array ownership, requires `0 <= n <= 2000`, and ensures the final array is both `sorted_z` and a `Permutation` of the pre-state. The algorithm body stays functionally identical to the raw bubble sort and does not include any verify-stage `Inv`/`Assert` scaffolding.
+
+Also wrote the required logs: [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/annotate_20260415_134334_bubble_sort/logs/reasoning.md), [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/annotate_20260415_134334_bubble_sort/logs/issues.md), and [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/annotate_20260415_134334_bubble_sort/logs/metrics.md).
+
+I did not run Verify or Coq compilation.

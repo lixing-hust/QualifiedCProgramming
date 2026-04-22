@@ -1,0 +1,15 @@
+Completed the contract workflow for `array_remove_value_to_output`.
+
+Created:
+- [array_remove_value_to_output.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_remove_value_to_output.c)
+- [array_remove_value_to_output.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_remove_value_to_output.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260422_011512_array_remove_value_to_output/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260422_011512_array_remove_value_to_output/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260422_011512_array_remove_value_to_output/logs/metrics.md)
+
+The C contract preserves `a`, specifies the filtered prefix in `out`, leaves the unused suffix existential, and returns the filtered length. The `.v` file only defines the task-specific list filter function.
+
+Validation performed:
+- `coqc input/array_remove_value_to_output.v` passed.
+- Confirmed `input/array_remove_value_to_output.c` contains no `Inv`, `Assert`, bridge assertion, or loop-exit assertion.
+- `metrics.md` records `Experience updates: none`.

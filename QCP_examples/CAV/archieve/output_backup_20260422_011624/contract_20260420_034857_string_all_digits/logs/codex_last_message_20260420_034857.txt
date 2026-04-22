@@ -1,0 +1,12 @@
+Completed the contract workflow for `string_all_digits`.
+
+Created:
+- [input/string_all_digits.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_all_digits.c)
+- [input/string_all_digits.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_all_digits.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_034857_string_all_digits/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_034857_string_all_digits/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_034857_string_all_digits/logs/metrics.md)
+
+The C contract models the input as `CharArray::full(s, n + 1, app(l, cons(0, nil)))`, excludes internal zero bytes in `l`, preserves the input string, and returns `string_all_digits_spec(l)`. The implementation keeps the same semantics but uses the verification-friendly `while (1)` scan with integer ASCII bounds `48..57`.
+
+Verification stage was not run; this turn only performed the requested Contract workflow.

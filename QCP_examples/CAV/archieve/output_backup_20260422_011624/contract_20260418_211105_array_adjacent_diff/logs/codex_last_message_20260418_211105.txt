@@ -1,0 +1,10 @@
+Generated the contract workflow outputs for `array_adjacent_diff`.
+
+The main result is [array_adjacent_diff.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_adjacent_diff.c), with a direct array contract: `a` has length `n`, `out` has length `n - 1`, `a` is preserved, and each `out[i]` equals `a[i + 1] - a[i]`. I also added the necessary signed-subtraction range precondition so the C arithmetic stays defined.
+
+Logs were written to the requested workspace:
+[reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_211105_array_adjacent_diff/logs/reasoning.md),
+[issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_211105_array_adjacent_diff/logs/issues.md),
+[metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_211105_array_adjacent_diff/logs/metrics.md).
+
+No optional `.v` file was created because the spec is expressible directly in C annotations.

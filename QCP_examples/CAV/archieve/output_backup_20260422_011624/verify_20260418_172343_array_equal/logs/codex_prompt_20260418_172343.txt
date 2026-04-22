@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/verify/SKILL.md
+
+Inputs:
+- Input C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_equal.c`
+- Optional input V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_equal.v`
+- Target function: `array_equal`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_172343_array_equal`
+- Active annotated C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_172343_array_equal.c`

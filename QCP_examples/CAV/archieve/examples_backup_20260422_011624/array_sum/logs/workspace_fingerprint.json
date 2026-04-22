@@ -1,0 +1,33 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260418_020228_array_sum",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_sum.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_020228_array_sum/original/array_sum.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_020228_array_sum.c",
+  "function_name": "array_sum",
+  "program_sha256": "0db4cf8d8dfe3d1a68bd402dc6f136f5bf393d5c94fdc4b05e12efeaf72ab64e",
+  "semantic_description": "Accumulates the sum of all elements of an integer array with a forward loop while preserving the array contents.",
+  "keywords": {
+    "algorithm_family": [
+      "accumulation"
+    ],
+    "control_flow": [
+      "for_loop"
+    ],
+    "data_shape": [
+      "array"
+    ],
+    "proof_pattern": [
+      "loop_invariant",
+      "heap_reasoning"
+    ],
+    "verification_status": [
+      "goal_check_passed"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

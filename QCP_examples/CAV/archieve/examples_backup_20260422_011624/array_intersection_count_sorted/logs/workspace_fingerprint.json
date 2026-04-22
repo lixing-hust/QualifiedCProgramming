@@ -1,0 +1,25 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260422_005007_array_intersection_count_sorted",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_intersection_count_sorted.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_intersection_count_sorted.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_005007_array_intersection_count_sorted/original/array_intersection_count_sorted.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_005007_array_intersection_count_sorted/original/array_intersection_count_sorted.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260422_005007_array_intersection_count_sorted.c",
+  "function_name": "array_intersection_count_sorted",
+  "program_sha256": "e8eae38b9f0cc3b649b6977ea3dc331058a95e26ecbe6a2ef76c31984648c8fb",
+  "semantic_description": "Counts the number of pairwise matches between two sorted integer arrays using a two-pointer while loop. The function maintains indices i and j into arrays a and b, increments count when current elements are equal, and otherwise advances the pointer whose current value is smaller. It returns the recursive sorted-intersection count specified over the original lists la and lb. Boundary behavior covers empty arrays and early loop exit when either pointer reaches its array length. The function only reads both arrays and must preserve both input array memories unchanged.",
+  "keywords": {
+    "algorithm_family": ["counting", "two_pointers"],
+    "control_flow": ["while_loop", "if"],
+    "data_shape": ["array", "pointer"],
+    "semantic_intent": "preserve_input",
+    "proof_pattern": ["loop_invariant", "case_split", "range_bound", "heap_reasoning"],
+    "numeric_properties": ["nonnegative_input", "int_range", "monotone_accumulator"],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": ["goal_check_passed", "proof_check_passed"]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

@@ -1,0 +1,14 @@
+Completed the contract workflow for `array_count_even`.
+
+Created:
+- [input/array_count_even.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_count_even.c)
+- [input/array_count_even.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_count_even.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_113550_array_count_even/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_113550_array_count_even/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_113550_array_count_even/logs/metrics.md)
+
+The C contract preserves the input array with `IntArray::full(a, n, l)` and specifies the return as `array_count_even_spec(l)`. The Coq file defines that spec using `Z.rem x 2 = 0`, matching the source `x % 2 == 0` predicate.
+
+Validation run:
+- `coqc input/array_count_even.v` succeeded.
+- Temporary Coq build artifacts from that check were removed.

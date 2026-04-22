@@ -1,0 +1,1 @@
+2026-04-20T10:27:43.886107Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to read file to update /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_182127_array_pairwise_sum/logs/metrics.md: No such file or directory (os error 2)

@@ -1,0 +1,4 @@
+2026-04-20T14:41:38.662366Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_222721_min_cost_two_steps/coq/generated/min_cost_two_steps_proof_manual.v:
+    assert (2 <= n_pre) by lia.
+    assert (Hpref : sum (sublist 0 2 l) <= sum l).
+    { apply sum_prefix_le_full_nonneg; try lia. }

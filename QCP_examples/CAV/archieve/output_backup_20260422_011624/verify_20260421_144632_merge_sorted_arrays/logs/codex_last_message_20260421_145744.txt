@@ -1,0 +1,20 @@
+Verification did not finish successfully in this retry.
+
+What changed:
+- Repaired the annotation shape in [verify_20260421_144632_merge_sorted_arrays.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_144632_merge_sorted_arrays.c) so `symexec` now succeeds.
+- Fresh Coq files were generated in [coq/generated](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_144632_merge_sorted_arrays/coq/generated).
+- Updated [annotation_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_144632_merge_sorted_arrays/logs/annotation_reasoning.md), [proof_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_144632_merge_sorted_arrays/logs/proof_reasoning.md), [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_144632_merge_sorted_arrays/logs/issues.md), and [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_144632_merge_sorted_arrays/logs/metrics.md).
+
+Current blocker:
+- `symexec` succeeds.
+- `proof_manual.v` does not compile yet.
+- The first failing theorem is `proof_of_merge_sorted_arrays_entail_wit_1`.
+- `coqc` reports: `Attempt to save an incomplete proof`.
+- The first remaining proof state needs list normalization for:
+  `nil ++ sublist 0 (n_pre + m_pre) lo = lo`
+  using the length fact `Zlength lo = n_pre + m_pre`.
+- Later witnesses will also need helper lemmas for `replace_Znth` at the end of the written prefix and for the recursive `merge_sorted_arrays_spec` step over sorted prefixes.
+
+Cleanup:
+- Removed non-`.v` Coq compilation artifacts from the workspace.
+- `metrics.md` ends with `Final Result: Fail`.

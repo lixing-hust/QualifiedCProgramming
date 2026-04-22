@@ -1,0 +1,11 @@
+symexec_start: 2026-04-21 04:00:36 +0800
+Start to symbolic execution on program : /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_035821_ways_to_reach.c
+Start to parse strategies file common
+File Path: /home/yangfp/QualifiedCProgramming/QCP_examples/common.strategies
+Finish parsing strategies file common
+Symbolic Execution into function ways_to_reach
+End of symbolic execution of function ways_to_reach
+Successfully finished symbolic execution
+symexec_end: 2026-04-21 04:00:36 +0800
+symexec_elapsed: 0
+symexec_status: 0

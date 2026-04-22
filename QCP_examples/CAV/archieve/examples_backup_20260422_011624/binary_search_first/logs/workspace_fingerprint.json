@@ -1,0 +1,42 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260421_041506_binary_search_first",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/binary_search_first.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_041506_binary_search_first/original/binary_search_first.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_041506_binary_search_first.c",
+  "function_name": "binary_search_first",
+  "program_sha256": "c996e89d2b50a47251eebc4e91fcf55b184418effa23a2a530bf671fcb99beae",
+  "semantic_description": "Verifies lower-bound style binary search that returns the first index whose sorted input array value equals target, or -1 when target does not occur. The loop maintains a half-open search interval [left, right), moves left past elements proven smaller than target, and moves right to mid otherwise. Boundary behavior includes n == 0, missing target, target before all elements, and duplicate target values where the first occurrence must be returned. The function only reads the input array and preserves IntArray::full(a, n, l).",
+  "keywords": {
+    "algorithm_family": "search",
+    "control_flow": [
+      "while_loop",
+      "if"
+    ],
+    "data_shape": "array",
+    "proof_pattern": [
+      "loop_invariant",
+      "case_split",
+      "termination_by_bound",
+      "range_bound",
+      "monotonicity"
+    ],
+    "numeric_properties": [
+      "nonnegative_input",
+      "int_range"
+    ],
+    "edge_case_behavior": [
+      "branch_on_order",
+      "empty_loop_possible"
+    ],
+    "verification_status": [
+      "goal_check_passed",
+      "proof_check_passed"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

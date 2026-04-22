@@ -1,0 +1,7 @@
+compile_start=2026-04-20 19:02:24 +0800
+compiled original/string_count_digits.v
+compiled string_count_digits_goal.v
+compiled string_count_digits_proof_auto.v
+compiled string_count_digits_proof_manual.v
+compiled string_count_digits_goal_check.v
+compile_end=2026-04-20 19:02:30 +0800

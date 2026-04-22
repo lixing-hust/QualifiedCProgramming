@@ -1,0 +1,25 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260421_173306_selection_sort",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/selection_sort.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/selection_sort.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_173306_selection_sort/original/selection_sort.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_173306_selection_sort/original/selection_sort.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_173306_selection_sort.c",
+  "function_name": "selection_sort",
+  "program_sha256": "df879c4390e7dbe787adf62ecb716b4b927e46183c0ccca5c7b015b1838a9e21",
+  "semantic_description": "Verifies selection_sort, an in-place selection sort over an integer array segment of length n. The function mutates the caller-owned IntArray::full(a, n, l) memory so that the final array contents are sorted_z and are a Permutation of the input list l. The implementation uses an outer for loop over i, an inner for loop over j to search the minimum index in the suffix, and then swaps a[i] with a[min_idx]. Boundary behavior includes n = 0, where both loops may be empty and the array remains a sorted permutation of the input.",
+  "keywords": {
+    "algorithm_family": "selection",
+    "control_flow": ["for_loop", "nested_loop", "if"],
+    "data_shape": ["array", "pointer"],
+    "semantic_intent": "in_place_update",
+    "proof_pattern": ["loop_invariant", "case_split", "termination_by_bound", "range_bound", "heap_reasoning"],
+    "numeric_properties": ["nonnegative_input", "int_range"],
+    "edge_case_behavior": ["defined_for_nonnegative_only", "empty_loop_possible"],
+    "verification_status": ["goal_check_passed", "proof_check_passed", "auto_proof_contains_admitted"]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

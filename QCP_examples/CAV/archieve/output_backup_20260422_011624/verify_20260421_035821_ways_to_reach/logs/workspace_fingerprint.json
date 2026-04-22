@@ -1,0 +1,43 @@
+{
+    "fingerprint_version": 2,
+    "workspace": "verify_20260421_035821_ways_to_reach",
+    "stage": "verify",
+    "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/ways_to_reach.c",
+    "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/ways_to_reach.v",
+    "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_035821_ways_to_reach/original/ways_to_reach.c",
+    "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_035821_ways_to_reach/original/ways_to_reach.v",
+    "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_035821_ways_to_reach.c",
+    "function_name": "ways_to_reach",
+    "program_sha256": "70124782866ca799c572e53c46938d7d644da50d78e08a4d3e5c10290e667b2a",
+    "semantic_description": "ways_to_reach computes a scalar Fibonacci-like recurrence using two accumulators a and b initialized to 1. For n == 0 it returns 1 immediately; otherwise a for-loop runs from i = 2 through n, updating c = a + b, a = b, and b = c, then returns b. The contract constrains 0 <= n <= 45 and relates the return value to the Coq function ways_to_reach_z(n@pre). The function does not modify heap memory and only uses local scalar variables; for n <= 1 the loop body is skipped.",
+    "keywords": {
+        "algorithm_family": [
+            "dynamic_programming",
+            "accumulation"
+        ],
+        "control_flow": [
+            "if",
+            "for_loop"
+        ],
+        "data_shape": "scalar_only",
+        "proof_pattern": [
+            "loop_invariant",
+            "pure_arithmetic",
+            "termination_by_bound",
+            "range_bound"
+        ],
+        "numeric_properties": [
+            "nonnegative_input",
+            "overflow_guard",
+            "int_range",
+            "monotone_accumulator"
+        ],
+        "edge_case_behavior": "empty_loop_possible",
+        "verification_status": [
+            "goal_check_passed",
+            "proof_check_passed"
+        ]
+    },
+    "assume_contract_is_correct": true,
+    "contract_source": "contract_input_c"
+}

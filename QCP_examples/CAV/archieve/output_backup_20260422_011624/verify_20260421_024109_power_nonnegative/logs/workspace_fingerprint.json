@@ -1,0 +1,24 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260421_024109_power_nonnegative",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/power_nonnegative.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/power_nonnegative.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_024109_power_nonnegative/original/power_nonnegative.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_024109_power_nonnegative/original/power_nonnegative.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_024109_power_nonnegative.c",
+  "function_name": "power_nonnegative",
+  "program_sha256": "8cdfb5c150ce61af9c4ed59f8acf8806a448b2b3f660b92bf7e83e98feaf03b7",
+  "semantic_description": "Verifies scalar exponentiation for nonnegative exp. The function initializes ans to 1, iterates i from 0 while i < exp, and multiplies ans by base on each iteration. The return value should equal power_nonnegative_z(base@pre, exp@pre). The loop may be empty when exp is 0, and the function does not read or modify heap memory. The contract assumes every intermediate power from 0 through exp is within signed int range, which supports the multiplication steps and final return.",
+  "keywords": {
+    "algorithm_family": "accumulation",
+    "control_flow": "for_loop",
+    "data_shape": "scalar_only",
+    "proof_pattern": ["loop_invariant", "pure_arithmetic", "range_bound"],
+    "numeric_properties": ["nonnegative_input", "overflow_guard"],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": "goal_check_passed"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

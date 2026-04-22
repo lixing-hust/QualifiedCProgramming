@@ -1,0 +1,18 @@
+Completed the contract workflow for `majority_candidate`.
+
+Outputs are in place:
+
+- [majority_candidate.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/majority_candidate.c)
+- [majority_candidate.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/majority_candidate.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_200839_majority_candidate/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_200839_majority_candidate/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_200839_majority_candidate/logs/metrics.md)
+
+The contract preserves the original function semantics, uses a topic-specific Coq definition for the Boyer-Moore candidate recurrence, and does not include Verify-stage `Inv`, `Assert`, bridge assertions, or loop-exit assertions.
+
+Validation done:
+
+- Confirmed official C/V outputs exist.
+- Confirmed required logs exist.
+- Confirmed `metrics.md` contains `Experience updates: none`.
+- Checked no `Inv`, `Assert`, or `which implies` text appears in the generated C/V inputs.

@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/verify/SKILL.md
+
+Inputs:
+- Input C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_is_empty.c`
+- Optional input V: `<not provided>`
+- Target function: `string_is_empty`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_145048_string_is_empty`
+- Active annotated C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_145048_string_is_empty.c`

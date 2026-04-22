@@ -1,0 +1,13 @@
+Completed the contract workflow for `fibonacci_mod`.
+
+Created:
+
+- [input/fibonacci_mod.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/fibonacci_mod.c)
+- [input/fibonacci_mod.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/fibonacci_mod.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_034603_fibonacci_mod/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_034603_fibonacci_mod/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_034603_fibonacci_mod/logs/metrics.md)
+
+Key choices: the C implementation and interface were preserved; the contract adds bounds for loop increment safety and signed addition safety before `% mod`; `input/fibonacci_mod.v` defines the task-specific `fib_mod_z` recurrence.
+
+Verification done: `coqc input/fibonacci_mod.v` succeeded, and I removed the generated Coq build artifacts afterward.

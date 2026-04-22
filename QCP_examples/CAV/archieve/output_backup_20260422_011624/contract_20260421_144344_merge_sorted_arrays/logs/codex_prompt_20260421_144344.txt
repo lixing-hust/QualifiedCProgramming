@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/contract/SKILL.md
+
+Inputs:
+- Raw markdown: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/raw/merge_sorted_arrays.md`
+- Target function: `merge_sorted_arrays`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_144344_merge_sorted_arrays`
+- Output C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/merge_sorted_arrays.c`
+- Optional output V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/merge_sorted_arrays.v`

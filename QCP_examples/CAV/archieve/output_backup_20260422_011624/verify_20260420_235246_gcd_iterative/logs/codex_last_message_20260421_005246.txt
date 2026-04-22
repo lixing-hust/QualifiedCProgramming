@@ -1,0 +1,26 @@
+Used the requested verify workflow and continued in the existing workspace.
+
+Result: verification did not succeed. The current blocker is still before VC generation:
+
+`logs/qcp_run.log` latest replay:
+`Old value at 'pre' is not determined in annotated/verify_20260420_235246_gcd_iterative.c:15:1`
+
+What I tried in this retry:
+- Read the existing workspace state, logs, generated Coq files, and active annotated C.
+- Confirmed the fingerprint was already populated, so no retrieval-index repair was needed.
+- Found an intermediate state where `symexec` could generate Coq by removing `@pre` from the active postcondition, but the generated `return_wit` was unprovable because `a_pre/b_pre` were disconnected from current `a/b`.
+- Removed shadowing locals `a_pre`/`b_pre`.
+- Tried preserving unchanged formals with `a == a@pre` and `b == b@pre`.
+- Tried a loop-exit bridge assertion.
+- Restored the original `@pre` postcondition shape for the final replay.
+
+Final state:
+- Latest `symexec`: failed before VC generation.
+- Generated Coq files: zero-byte placeholders after the final failed replay.
+- `goal_check.v`: not compiled because no valid VC files were generated.
+- `proof_manual.v`: no `Admitted.` and no added `Axiom`, but it is zero bytes after the final replay.
+- Non-`.v` Coq intermediates: cleaned.
+- Logs updated: `annotation_reasoning.md`, `issues.md`, and `metrics.md`.
+- `metrics.md` ends with `Final Result: Fail`.
+
+The remaining issue is not a Coq proof problem. The contract-preserving shape using `gcd_iterative_spec(a@pre, b@pre, __return)` is rejected by the frontend before goals are generated; the no-`@pre` workaround generates an invalid/unprovable return witness. This needs a Contract-stage shape change or frontend support change, not another Verify-layer invariant/proof edit.

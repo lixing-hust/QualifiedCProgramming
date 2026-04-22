@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/contract/SKILL.md
+
+Inputs:
+- Raw markdown: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/raw/string_count_not_char.md`
+- Target function: `string_count_not_char`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_032639_string_count_not_char`
+- Output C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_count_not_char.c`
+- Optional output V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_count_not_char.v`

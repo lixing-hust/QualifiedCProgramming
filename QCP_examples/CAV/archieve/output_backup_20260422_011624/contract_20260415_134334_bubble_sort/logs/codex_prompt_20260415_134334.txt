@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/annotate/SKILL.md
+
+Inputs:
+- Raw markdown: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/raw/bubble_sort.md`
+- Target function: `bubble_sort`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/annotate_20260415_134334_bubble_sort`
+- Output C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/bubble_sort.c`
+- Optional output V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/bubble_sort.v`

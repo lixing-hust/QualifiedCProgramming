@@ -1,0 +1,2175 @@
+Welcome to Coq 8.20.1
+
+Coq < [Loading ML file ring_plugin.cmxs (using legacy method) ... done]
+[Loading ML file zify_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_core_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_plugin.cmxs (using legacy method) ... done]
+[Loading ML file btauto_plugin.cmxs (using legacy method) ... done]
+
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 1 goal
+  
+  ============================
+  array_scale_entail_wit_2
+
+debug_entail2 < 
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l2_2, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength l2_2 = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 -> Znth t_2 l2_2 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  ============================
+  IntArray.full out_pre n_pre
+    (replace_Znth i_2 (Znth i_2 la 0 * k_pre) (l1_2 ++ l2_2)) **
+  IntArray.full a_pre n_pre la
+  |-- EX l2 : list Z,
+      EX l1 : list Z,
+      [|0 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|n_pre = Zlength la|] &&
+      [|n_pre = Zlength lo|] && [|Zlength l1 = i_2 + 1|] &&
+      [|Zlength l2 = n_pre - (i_2 + 1)|] &&
+      [|forall t : Z, 0 <= t < i_2 + 1 -> Znth t l1 0 = Znth t la 0 * k_pre|] &&
+      [|forall t_2 : Z,
+        0 <= t_2 < n_pre - (i_2 + 1) ->
+        Znth t_2 l2 0 = Znth (i_2 + 1 + t_2) lo 0|] && [|
+      0 <= n_pre|] && [|Zlength la = n_pre|] && [|
+      Zlength lo = n_pre|] &&
+      [|forall i : Z,
+        0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647|] &&
+      IntArray.full a_pre n_pre la ** IntArray.full out_pre n_pre (l1 ++ l2)
+
+debug_entail2 < 2 goals
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l2_2, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength l2_2 = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 -> Znth t_2 l2_2 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  ============================
+  l2_2 = sublist i_2 n_pre lo
+
+goal 2 is:
+ IntArray.full out_pre n_pre
+   (replace_Znth i_2 (Znth i_2 la 0 * k_pre) (l1_2 ++ l2_2)) **
+ IntArray.full a_pre n_pre la
+ |-- EX l2 : list Z,
+     EX l1 : list Z,
+     [|0 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|n_pre = Zlength la|] &&
+     [|n_pre = Zlength lo|] && [|Zlength l1 = i_2 + 1|] &&
+     [|Zlength l2 = n_pre - (i_2 + 1)|] &&
+     [|forall t : Z, 0 <= t < i_2 + 1 -> Znth t l1 0 = Znth t la 0 * k_pre|] &&
+     [|forall t_2 : Z,
+       0 <= t_2 < n_pre - (i_2 + 1) ->
+       Znth t_2 l2 0 = Znth (i_2 + 1 + t_2) lo 0|] && [|
+     0 <= n_pre|] && [|Zlength la = n_pre|] && [|Zlength lo = n_pre|] &&
+     [|forall i : Z,
+       0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647|] &&
+     IntArray.full a_pre n_pre la ** IntArray.full out_pre n_pre (l1 ++ l2)
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l2_2, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength l2_2 = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 -> Znth t_2 l2_2 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  ============================
+  l2_2 = sublist i_2 n_pre lo
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l2_2, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength l2_2 = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 -> Znth t_2 l2_2 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  ============================
+  Zlength l2_2 = Zlength (sublist i_2 n_pre lo) /\
+  (forall i : Z,
+   0 <= i < Zlength l2_2 -> Znth i l2_2 0 = Znth i (sublist i_2 n_pre lo) 0)
+
+debug_entail2 < 2 goals
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l2_2, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength l2_2 = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 -> Znth t_2 l2_2 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  ============================
+  Zlength l2_2 = Zlength (sublist i_2 n_pre lo)
+
+goal 2 is:
+ forall i : Z,
+ 0 <= i < Zlength l2_2 -> Znth i l2_2 0 = Znth i (sublist i_2 n_pre lo) 0
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l2_2, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength l2_2 = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 -> Znth t_2 l2_2 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  ============================
+  Zlength l2_2 = Zlength (sublist i_2 n_pre lo)
+
+1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l2_2, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength l2_2 = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 -> Znth t_2 l2_2 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  ============================
+  Zlength l2_2 = n_pre - i_2
+
+debug_entail2 < This subproof is complete, but there are some unfocused goals.
+Focus next goal with bullet -.
+
+2 goals
+
+goal 1 is:
+ forall i : Z,
+ 0 <= i < Zlength l2_2 -> Znth i l2_2 0 = Znth i (sublist i_2 n_pre lo) 0
+goal 2 is:
+ IntArray.full out_pre n_pre
+   (replace_Znth i_2 (Znth i_2 la 0 * k_pre) (l1_2 ++ l2_2)) **
+ IntArray.full a_pre n_pre la
+ |-- EX l2 : list Z,
+     EX l1 : list Z,
+     [|0 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|n_pre = Zlength la|] &&
+     [|n_pre = Zlength lo|] && [|Zlength l1 = i_2 + 1|] &&
+     [|Zlength l2 = n_pre - (i_2 + 1)|] &&
+     [|forall t : Z, 0 <= t < i_2 + 1 -> Znth t l1 0 = Znth t la 0 * k_pre|] &&
+     [|forall t_2 : Z,
+       0 <= t_2 < n_pre - (i_2 + 1) ->
+       Znth t_2 l2 0 = Znth (i_2 + 1 + t_2) lo 0|] && [|
+     0 <= n_pre|] && [|Zlength la = n_pre|] && [|Zlength lo = n_pre|] &&
+     [|forall i : Z,
+       0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647|] &&
+     IntArray.full a_pre n_pre la ** IntArray.full out_pre n_pre (l1 ++ l2)
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l2_2, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength l2_2 = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 -> Znth t_2 l2_2 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  ============================
+  forall i : Z,
+  0 <= i < Zlength l2_2 -> Znth i l2_2 0 = Znth i (sublist i_2 n_pre lo) 0
+
+1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l2_2, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength l2_2 = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 -> Znth t_2 l2_2 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  t : Z
+  Ht : 0 <= t < Zlength l2_2
+  ============================
+  Znth t l2_2 0 = Znth t (sublist i_2 n_pre lo) 0
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l2_2, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength l2_2 = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 -> Znth t_2 l2_2 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  t : Z
+  Ht : 0 <= t < Zlength l2_2
+  ============================
+  Znth t l2_2 0 = Znth (t + i_2) lo 0
+
+debug_entail2 < 2 goals
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l2_2, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength l2_2 = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 -> Znth t_2 l2_2 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  t : Z
+  Ht : 0 <= t < Zlength l2_2
+  ============================
+  0 <= t < n_pre - i_2
+
+goal 2 is:
+ Znth t l2_2 0 = Znth (t + i_2) lo 0
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l2_2, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength l2_2 = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 -> Znth t_2 l2_2 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  t : Z
+  Ht : 0 <= t < Zlength l2_2
+  ============================
+  0 <= t < n_pre - i_2
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l2_2, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength l2_2 = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 -> Znth t_2 l2_2 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  t : Z
+  Ht : 0 <= t < Zlength l2_2
+  ============================
+  0 <= t < Zlength l2_2
+
+debug_entail2 < This subproof is complete, but there are some unfocused goals.
+Try unfocusing with "}".
+
+2 goals
+
+goal 1 is:
+ Znth t l2_2 0 = Znth (t + i_2) lo 0
+goal 2 is:
+ IntArray.full out_pre n_pre
+   (replace_Znth i_2 (Znth i_2 la 0 * k_pre) (l1_2 ++ l2_2)) **
+ IntArray.full a_pre n_pre la
+ |-- EX l2 : list Z,
+     EX l1 : list Z,
+     [|0 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|n_pre = Zlength la|] &&
+     [|n_pre = Zlength lo|] && [|Zlength l1 = i_2 + 1|] &&
+     [|Zlength l2 = n_pre - (i_2 + 1)|] &&
+     [|forall t : Z, 0 <= t < i_2 + 1 -> Znth t l1 0 = Znth t la 0 * k_pre|] &&
+     [|forall t_2 : Z,
+       0 <= t_2 < n_pre - (i_2 + 1) ->
+       Znth t_2 l2 0 = Znth (i_2 + 1 + t_2) lo 0|] && [|
+     0 <= n_pre|] && [|Zlength la = n_pre|] && [|Zlength lo = n_pre|] &&
+     [|forall i : Z,
+       0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647|] &&
+     IntArray.full a_pre n_pre la ** IntArray.full out_pre n_pre (l1 ++ l2)
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l2_2, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength l2_2 = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 -> Znth t_2 l2_2 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  t : Z
+  Ht : 0 <= t < Zlength l2_2
+  Hrange : 0 <= t < n_pre - i_2
+  ============================
+  Znth t l2_2 0 = Znth (t + i_2) lo 0
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l2_2, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength l2_2 = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 -> Znth t_2 l2_2 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  t : Z
+  Ht : 0 <= t < Zlength l2_2
+  Hrange : 0 <= t < n_pre - i_2
+  Hsuffix : Znth t l2_2 0 = Znth (i_2 + t) lo 0
+  ============================
+  Znth t l2_2 0 = Znth (t + i_2) lo 0
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l2_2, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength l2_2 = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 -> Znth t_2 l2_2 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  t : Z
+  Ht : 0 <= t < Zlength l2_2
+  Hrange : 0 <= t < n_pre - i_2
+  Hsuffix : Znth t l2_2 0 = Znth (i_2 + t) lo 0
+  ============================
+  Znth t l2_2 0 = Znth (i_2 + t) lo 0
+
+debug_entail2 < This subproof is complete, but there are some unfocused goals.
+Try unfocusing with "}".
+
+1 goal
+
+goal 1 is:
+ IntArray.full out_pre n_pre
+   (replace_Znth i_2 (Znth i_2 la 0 * k_pre) (l1_2 ++ l2_2)) **
+ IntArray.full a_pre n_pre la
+ |-- EX l2 : list Z,
+     EX l1 : list Z,
+     [|0 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|n_pre = Zlength la|] &&
+     [|n_pre = Zlength lo|] && [|Zlength l1 = i_2 + 1|] &&
+     [|Zlength l2 = n_pre - (i_2 + 1)|] &&
+     [|forall t : Z, 0 <= t < i_2 + 1 -> Znth t l1 0 = Znth t la 0 * k_pre|] &&
+     [|forall t_2 : Z,
+       0 <= t_2 < n_pre - (i_2 + 1) ->
+       Znth t_2 l2 0 = Znth (i_2 + 1 + t_2) lo 0|] && [|
+     0 <= n_pre|] && [|Zlength la = n_pre|] && [|Zlength lo = n_pre|] &&
+     [|forall i : Z,
+       0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647|] &&
+     IntArray.full a_pre n_pre la ** IntArray.full out_pre n_pre (l1 ++ l2)
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l2_2, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength l2_2 = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 -> Znth t_2 l2_2 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  Hl2 : l2_2 = sublist i_2 n_pre lo
+  ============================
+  IntArray.full out_pre n_pre
+    (replace_Znth i_2 (Znth i_2 la 0 * k_pre) (l1_2 ++ l2_2)) **
+  IntArray.full a_pre n_pre la
+  |-- EX l2 : list Z,
+      EX l1 : list Z,
+      [|0 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|n_pre = Zlength la|] &&
+      [|n_pre = Zlength lo|] && [|Zlength l1 = i_2 + 1|] &&
+      [|Zlength l2 = n_pre - (i_2 + 1)|] &&
+      [|forall t : Z, 0 <= t < i_2 + 1 -> Znth t l1 0 = Znth t la 0 * k_pre|] &&
+      [|forall t_2 : Z,
+        0 <= t_2 < n_pre - (i_2 + 1) ->
+        Znth t_2 l2 0 = Znth (i_2 + 1 + t_2) lo 0|] && [|
+      0 <= n_pre|] && [|Zlength la = n_pre|] && [|
+      Zlength lo = n_pre|] &&
+      [|forall i : Z,
+        0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647|] &&
+      IntArray.full a_pre n_pre la ** IntArray.full out_pre n_pre (l1 ++ l2)
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  ============================
+  IntArray.full out_pre n_pre
+    (replace_Znth i_2 (Znth i_2 la 0 * k_pre) (l1_2 ++ sublist i_2 n_pre lo)) **
+  IntArray.full a_pre n_pre la
+  |-- EX l2 : list Z,
+      EX l1 : list Z,
+      [|0 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|n_pre = Zlength la|] &&
+      [|n_pre = Zlength lo|] && [|Zlength l1 = i_2 + 1|] &&
+      [|Zlength l2 = n_pre - (i_2 + 1)|] &&
+      [|forall t : Z, 0 <= t < i_2 + 1 -> Znth t l1 0 = Znth t la 0 * k_pre|] &&
+      [|forall t_2 : Z,
+        0 <= t_2 < n_pre - (i_2 + 1) ->
+        Znth t_2 l2 0 = Znth (i_2 + 1 + t_2) lo 0|] && [|
+      0 <= n_pre|] && [|Zlength la = n_pre|] && [|
+      Zlength lo = n_pre|] &&
+      [|forall i : Z,
+        0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647|] &&
+      IntArray.full a_pre n_pre la ** IntArray.full out_pre n_pre (l1 ++ l2)
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  ============================
+  IntArray.full out_pre n_pre
+    (replace_Znth i_2 (Znth i_2 la 0 * k_pre) (l1_2 ++ sublist i_2 n_pre lo)) **
+  IntArray.full a_pre n_pre la
+  |-- EX l1 : list Z,
+      [|0 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|n_pre = Zlength la|] &&
+      [|n_pre = Zlength lo|] && [|Zlength l1 = i_2 + 1|] &&
+      [|Zlength (sublist (i_2 + 1) n_pre lo) = n_pre - (i_2 + 1)|] &&
+      [|forall t : Z, 0 <= t < i_2 + 1 -> Znth t l1 0 = Znth t la 0 * k_pre|] &&
+      [|forall t_2 : Z,
+        0 <= t_2 < n_pre - (i_2 + 1) ->
+        Znth t_2 (sublist (i_2 + 1) n_pre lo) 0 = Znth (i_2 + 1 + t_2) lo 0|] &&
+      [|0 <= n_pre|] && [|Zlength la = n_pre|] && [|
+      Zlength lo = n_pre|] &&
+      [|forall i : Z,
+        0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647|] &&
+      IntArray.full a_pre n_pre la **
+      IntArray.full out_pre n_pre (l1 ++ sublist (i_2 + 1) n_pre lo)
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  ============================
+  IntArray.full out_pre n_pre
+    (replace_Znth i_2 (Znth i_2 la 0 * k_pre) (l1_2 ++ sublist i_2 n_pre lo)) **
+  IntArray.full a_pre n_pre la
+  |-- [|0 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|n_pre = Zlength la|] &&
+      [|n_pre = Zlength lo|] &&
+      [|Zlength (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) = i_2 + 1|] &&
+      [|Zlength (sublist (i_2 + 1) n_pre lo) = n_pre - (i_2 + 1)|] &&
+      [|forall t : Z,
+        0 <= t < i_2 + 1 ->
+        Znth t (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) 0 = Znth t la 0 * k_pre|] &&
+      [|forall t_2 : Z,
+        0 <= t_2 < n_pre - (i_2 + 1) ->
+        Znth t_2 (sublist (i_2 + 1) n_pre lo) 0 = Znth (i_2 + 1 + t_2) lo 0|] &&
+      [|0 <= n_pre|] && [|Zlength la = n_pre|] && [|
+      Zlength lo = n_pre|] &&
+      [|forall i : Z,
+        0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647|] &&
+      IntArray.full a_pre n_pre la **
+      IntArray.full out_pre n_pre
+        ((l1_2 ++ Znth i_2 la 0 * k_pre :: nil) ++ sublist (i_2 + 1) n_pre lo)
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  ============================
+  IntArray.full out_pre n_pre
+    (replace_Znth i_2 (Znth i_2 la 0 * k_pre) l1_2 ++
+     replace_Znth (i_2 - Zlength l1_2) (Znth i_2 la 0 * k_pre)
+       (sublist i_2 n_pre lo)) ** IntArray.full a_pre n_pre la
+  |-- [|0 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|n_pre = Zlength la|] &&
+      [|n_pre = Zlength lo|] &&
+      [|Zlength (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) = i_2 + 1|] &&
+      [|Zlength (sublist (i_2 + 1) n_pre lo) = n_pre - (i_2 + 1)|] &&
+      [|forall t : Z,
+        0 <= t < i_2 + 1 ->
+        Znth t (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) 0 = Znth t la 0 * k_pre|] &&
+      [|forall t_2 : Z,
+        0 <= t_2 < n_pre - (i_2 + 1) ->
+        Znth t_2 (sublist (i_2 + 1) n_pre lo) 0 = Znth (i_2 + 1 + t_2) lo 0|] &&
+      [|0 <= n_pre|] && [|Zlength la = n_pre|] && [|
+      Zlength lo = n_pre|] &&
+      [|forall i : Z,
+        0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647|] &&
+      IntArray.full a_pre n_pre la **
+      IntArray.full out_pre n_pre
+        ((l1_2 ++ Znth i_2 la 0 * k_pre :: nil) ++ sublist (i_2 + 1) n_pre lo)
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  ============================
+  IntArray.full out_pre n_pre
+    (replace_Znth i_2 (Znth i_2 la 0 * k_pre) l1_2 ++
+     replace_Znth (i_2 - i_2) (Znth i_2 la 0 * k_pre) (sublist i_2 n_pre lo)) **
+  IntArray.full a_pre n_pre la
+  |-- [|0 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|n_pre = Zlength la|] &&
+      [|n_pre = Zlength lo|] &&
+      [|Zlength (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) = i_2 + 1|] &&
+      [|Zlength (sublist (i_2 + 1) n_pre lo) = n_pre - (i_2 + 1)|] &&
+      [|forall t : Z,
+        0 <= t < i_2 + 1 ->
+        Znth t (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) 0 = Znth t la 0 * k_pre|] &&
+      [|forall t_2 : Z,
+        0 <= t_2 < n_pre - (i_2 + 1) ->
+        Znth t_2 (sublist (i_2 + 1) n_pre lo) 0 = Znth (i_2 + 1 + t_2) lo 0|] &&
+      [|0 <= n_pre|] && [|Zlength la = n_pre|] && [|
+      Zlength lo = n_pre|] &&
+      [|forall i : Z,
+        0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647|] &&
+      IntArray.full a_pre n_pre la **
+      IntArray.full out_pre n_pre
+        ((l1_2 ++ Znth i_2 la 0 * k_pre :: nil) ++ sublist (i_2 + 1) n_pre lo)
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  ============================
+  IntArray.full out_pre n_pre
+    (replace_Znth i_2 (Znth i_2 la 0 * k_pre) l1_2 ++
+     replace_Znth 0 (Znth i_2 la 0 * k_pre) (sublist i_2 n_pre lo)) **
+  IntArray.full a_pre n_pre la
+  |-- [|0 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|n_pre = Zlength la|] &&
+      [|n_pre = Zlength lo|] &&
+      [|Zlength (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) = i_2 + 1|] &&
+      [|Zlength (sublist (i_2 + 1) n_pre lo) = n_pre - (i_2 + 1)|] &&
+      [|forall t : Z,
+        0 <= t < i_2 + 1 ->
+        Znth t (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) 0 = Znth t la 0 * k_pre|] &&
+      [|forall t_2 : Z,
+        0 <= t_2 < n_pre - (i_2 + 1) ->
+        Znth t_2 (sublist (i_2 + 1) n_pre lo) 0 = Znth (i_2 + 1 + t_2) lo 0|] &&
+      [|0 <= n_pre|] && [|Zlength la = n_pre|] && [|
+      Zlength lo = n_pre|] &&
+      [|forall i : Z,
+        0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647|] &&
+      IntArray.full a_pre n_pre la **
+      IntArray.full out_pre n_pre
+        ((l1_2 ++ Znth i_2 la 0 * k_pre :: nil) ++ sublist (i_2 + 1) n_pre lo)
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  ============================
+  IntArray.full out_pre n_pre
+    (replace_Znth i_2 (Znth i_2 la 0 * k_pre) l1_2 ++
+     replace_Znth 0 (Znth i_2 la 0 * k_pre)
+       (sublist i_2 (i_2 + 1) lo ++ sublist (i_2 + 1) n_pre lo)) **
+  IntArray.full a_pre n_pre la
+  |-- [|0 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|n_pre = Zlength la|] &&
+      [|n_pre = Zlength lo|] &&
+      [|Zlength (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) = i_2 + 1|] &&
+      [|Zlength (sublist (i_2 + 1) n_pre lo) = n_pre - (i_2 + 1)|] &&
+      [|forall t : Z,
+        0 <= t < i_2 + 1 ->
+        Znth t (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) 0 = Znth t la 0 * k_pre|] &&
+      [|forall t_2 : Z,
+        0 <= t_2 < n_pre - (i_2 + 1) ->
+        Znth t_2 (sublist (i_2 + 1) n_pre lo) 0 = Znth (i_2 + 1 + t_2) lo 0|] &&
+      [|0 <= n_pre|] && [|Zlength la = n_pre|] && [|
+      Zlength lo = n_pre|] &&
+      [|forall i : Z,
+        0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647|] &&
+      IntArray.full a_pre n_pre la **
+      IntArray.full out_pre n_pre
+        ((l1_2 ++ Znth i_2 la 0 * k_pre :: nil) ++ sublist (i_2 + 1) n_pre lo)
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  ============================
+  IntArray.full out_pre n_pre
+    (replace_Znth i_2 (Znth i_2 la 0 * k_pre) l1_2 ++
+     replace_Znth 0 (Znth i_2 la 0 * k_pre)
+       ((Znth i_2 lo 0 :: nil) ++ sublist (i_2 + 1) n_pre lo)) **
+  IntArray.full a_pre n_pre la
+  |-- [|0 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|n_pre = Zlength la|] &&
+      [|n_pre = Zlength lo|] &&
+      [|Zlength (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) = i_2 + 1|] &&
+      [|Zlength (sublist (i_2 + 1) n_pre lo) = n_pre - (i_2 + 1)|] &&
+      [|forall t : Z,
+        0 <= t < i_2 + 1 ->
+        Znth t (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) 0 = Znth t la 0 * k_pre|] &&
+      [|forall t_2 : Z,
+        0 <= t_2 < n_pre - (i_2 + 1) ->
+        Znth t_2 (sublist (i_2 + 1) n_pre lo) 0 = Znth (i_2 + 1 + t_2) lo 0|] &&
+      [|0 <= n_pre|] && [|Zlength la = n_pre|] && [|
+      Zlength lo = n_pre|] &&
+      [|forall i : Z,
+        0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647|] &&
+      IntArray.full a_pre n_pre la **
+      IntArray.full out_pre n_pre
+        ((l1_2 ++ Znth i_2 la 0 * k_pre :: nil) ++ sublist (i_2 + 1) n_pre lo)
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  ============================
+  IntArray.full out_pre n_pre
+    (replace_Znth i_2 (Znth i_2 la 0 * k_pre) l1_2 ++
+     replace_Znth 0 (Znth i_2 la 0 * k_pre)
+       (Znth i_2 lo 0 :: sublist (i_2 + 1) n_pre lo)) **
+  IntArray.full a_pre n_pre la
+  |-- [|0 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|n_pre = Zlength la|] &&
+      [|n_pre = Zlength lo|] &&
+      [|Zlength (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) = i_2 + 1|] &&
+      [|Zlength (sublist (i_2 + 1) n_pre lo) = n_pre - (i_2 + 1)|] &&
+      [|forall t : Z,
+        0 <= t < i_2 + 1 ->
+        Znth t (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) 0 = Znth t la 0 * k_pre|] &&
+      [|forall t_2 : Z,
+        0 <= t_2 < n_pre - (i_2 + 1) ->
+        Znth t_2 (sublist (i_2 + 1) n_pre lo) 0 = Znth (i_2 + 1 + t_2) lo 0|] &&
+      [|0 <= n_pre|] && [|Zlength la = n_pre|] && [|
+      Zlength lo = n_pre|] &&
+      [|forall i : Z,
+        0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647|] &&
+      IntArray.full a_pre n_pre la **
+      IntArray.full out_pre n_pre
+        ((l1_2 ++ Znth i_2 la 0 * k_pre :: nil) ++ sublist (i_2 + 1) n_pre lo)
+
+debug_entail2 < 2 goals
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  ============================
+  forall (l : list Z) (z : Z), replace_nth (Datatypes.length l) z l = l
+
+goal 2 is:
+ IntArray.full out_pre n_pre
+   (replace_Znth i_2 (Znth i_2 la 0 * k_pre) l1_2 ++
+    replace_Znth 0 (Znth i_2 la 0 * k_pre)
+      (Znth i_2 lo 0 :: sublist (i_2 + 1) n_pre lo)) **
+ IntArray.full a_pre n_pre la
+ |-- [|0 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|n_pre = Zlength la|] &&
+     [|n_pre = Zlength lo|] &&
+     [|Zlength (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) = i_2 + 1|] &&
+     [|Zlength (sublist (i_2 + 1) n_pre lo) = n_pre - (i_2 + 1)|] &&
+     [|forall t : Z,
+       0 <= t < i_2 + 1 ->
+       Znth t (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) 0 = Znth t la 0 * k_pre|] &&
+     [|forall t_2 : Z,
+       0 <= t_2 < n_pre - (i_2 + 1) ->
+       Znth t_2 (sublist (i_2 + 1) n_pre lo) 0 = Znth (i_2 + 1 + t_2) lo 0|] &&
+     [|0 <= n_pre|] && [|Zlength la = n_pre|] && [|
+     Zlength lo = n_pre|] &&
+     [|forall i : Z,
+       0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647|] &&
+     IntArray.full a_pre n_pre la **
+     IntArray.full out_pre n_pre
+       ((l1_2 ++ Znth i_2 la 0 * k_pre :: nil) ++ sublist (i_2 + 1) n_pre lo)
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  ============================
+  forall (l : list Z) (z : Z), replace_nth (Datatypes.length l) z l = l
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  l : list Z
+  z : Z
+  ============================
+  replace_nth (Datatypes.length l) z l = l
+
+debug_entail2 < 2 goals
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  z : Z
+  ============================
+  replace_nth (Datatypes.length nil) z nil = nil
+
+goal 2 is:
+ replace_nth (Datatypes.length (a :: l)) z (a :: l) = a :: l
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  z : Z
+  ============================
+  replace_nth (Datatypes.length nil) z nil = nil
+
+1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  z : Z
+  ============================
+  nil = nil
+
+This subproof is complete, but there are some unfocused goals.
+Focus next goal with bullet -.
+
+2 goals
+
+goal 1 is:
+ replace_nth (Datatypes.length (a :: l)) z (a :: l) = a :: l
+goal 2 is:
+ IntArray.full out_pre n_pre
+   (replace_Znth i_2 (Znth i_2 la 0 * k_pre) l1_2 ++
+    replace_Znth 0 (Znth i_2 la 0 * k_pre)
+      (Znth i_2 lo 0 :: sublist (i_2 + 1) n_pre lo)) **
+ IntArray.full a_pre n_pre la
+ |-- [|0 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|n_pre = Zlength la|] &&
+     [|n_pre = Zlength lo|] &&
+     [|Zlength (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) = i_2 + 1|] &&
+     [|Zlength (sublist (i_2 + 1) n_pre lo) = n_pre - (i_2 + 1)|] &&
+     [|forall t : Z,
+       0 <= t < i_2 + 1 ->
+       Znth t (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) 0 = Znth t la 0 * k_pre|] &&
+     [|forall t_2 : Z,
+       0 <= t_2 < n_pre - (i_2 + 1) ->
+       Znth t_2 (sublist (i_2 + 1) n_pre lo) 0 = Znth (i_2 + 1 + t_2) lo 0|] &&
+     [|0 <= n_pre|] && [|Zlength la = n_pre|] && [|
+     Zlength lo = n_pre|] &&
+     [|forall i : Z,
+       0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647|] &&
+     IntArray.full a_pre n_pre la **
+     IntArray.full out_pre n_pre
+       ((l1_2 ++ Znth i_2 la 0 * k_pre :: nil) ++ sublist (i_2 + 1) n_pre lo)
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  a : Z
+  l : list Z
+  z : Z
+  IHl : replace_nth (Datatypes.length l) z l = l
+  ============================
+  replace_nth (Datatypes.length (a :: l)) z (a :: l) = a :: l
+
+1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  a : Z
+  l : list Z
+  z : Z
+  IHl : replace_nth (Datatypes.length l) z l = l
+  ============================
+  a :: replace_nth (Datatypes.length l) z l = a :: l
+
+1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  a : Z
+  l : list Z
+  z : Z
+  IHl : replace_nth (Datatypes.length l) z l = l
+  ============================
+  a :: l = a :: l
+
+This subproof is complete, but there are some unfocused goals.
+Try unfocusing with "}".
+
+1 goal
+
+goal 1 is:
+ IntArray.full out_pre n_pre
+   (replace_Znth i_2 (Znth i_2 la 0 * k_pre) l1_2 ++
+    replace_Znth 0 (Znth i_2 la 0 * k_pre)
+      (Znth i_2 lo 0 :: sublist (i_2 + 1) n_pre lo)) **
+ IntArray.full a_pre n_pre la
+ |-- [|0 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|n_pre = Zlength la|] &&
+     [|n_pre = Zlength lo|] &&
+     [|Zlength (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) = i_2 + 1|] &&
+     [|Zlength (sublist (i_2 + 1) n_pre lo) = n_pre - (i_2 + 1)|] &&
+     [|forall t : Z,
+       0 <= t < i_2 + 1 ->
+       Znth t (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) 0 = Znth t la 0 * k_pre|] &&
+     [|forall t_2 : Z,
+       0 <= t_2 < n_pre - (i_2 + 1) ->
+       Znth t_2 (sublist (i_2 + 1) n_pre lo) 0 = Znth (i_2 + 1 + t_2) lo 0|] &&
+     [|0 <= n_pre|] && [|Zlength la = n_pre|] && [|
+     Zlength lo = n_pre|] &&
+     [|forall i : Z,
+       0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647|] &&
+     IntArray.full a_pre n_pre la **
+     IntArray.full out_pre n_pre
+       ((l1_2 ++ Znth i_2 la 0 * k_pre :: nil) ++ sublist (i_2 + 1) n_pre lo)
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  Hreplace_nth_len :
+    forall (l : list Z) (z : Z), replace_nth (Datatypes.length l) z l = l
+  ============================
+  IntArray.full out_pre n_pre
+    (replace_Znth i_2 (Znth i_2 la 0 * k_pre) l1_2 ++
+     replace_Znth 0 (Znth i_2 la 0 * k_pre)
+       (Znth i_2 lo 0 :: sublist (i_2 + 1) n_pre lo)) **
+  IntArray.full a_pre n_pre la
+  |-- [|0 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|n_pre = Zlength la|] &&
+      [|n_pre = Zlength lo|] &&
+      [|Zlength (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) = i_2 + 1|] &&
+      [|Zlength (sublist (i_2 + 1) n_pre lo) = n_pre - (i_2 + 1)|] &&
+      [|forall t : Z,
+        0 <= t < i_2 + 1 ->
+        Znth t (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) 0 = Znth t la 0 * k_pre|] &&
+      [|forall t_2 : Z,
+        0 <= t_2 < n_pre - (i_2 + 1) ->
+        Znth t_2 (sublist (i_2 + 1) n_pre lo) 0 = Znth (i_2 + 1 + t_2) lo 0|] &&
+      [|0 <= n_pre|] && [|Zlength la = n_pre|] && [|
+      Zlength lo = n_pre|] &&
+      [|forall i : Z,
+        0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647|] &&
+      IntArray.full a_pre n_pre la **
+      IntArray.full out_pre n_pre
+        ((l1_2 ++ Znth i_2 la 0 * k_pre :: nil) ++ sublist (i_2 + 1) n_pre lo)
+
+debug_entail2 < 2 goals
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  Hreplace_nth_len :
+    forall (l : list Z) (z : Z), replace_nth (Datatypes.length l) z l = l
+  ============================
+  replace_Znth i_2 (Znth i_2 la 0 * k_pre) l1_2 = l1_2
+
+goal 2 is:
+ IntArray.full out_pre n_pre
+   (replace_Znth i_2 (Znth i_2 la 0 * k_pre) l1_2 ++
+    replace_Znth 0 (Znth i_2 la 0 * k_pre)
+      (Znth i_2 lo 0 :: sublist (i_2 + 1) n_pre lo)) **
+ IntArray.full a_pre n_pre la
+ |-- [|0 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|n_pre = Zlength la|] &&
+     [|n_pre = Zlength lo|] &&
+     [|Zlength (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) = i_2 + 1|] &&
+     [|Zlength (sublist (i_2 + 1) n_pre lo) = n_pre - (i_2 + 1)|] &&
+     [|forall t : Z,
+       0 <= t < i_2 + 1 ->
+       Znth t (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) 0 = Znth t la 0 * k_pre|] &&
+     [|forall t_2 : Z,
+       0 <= t_2 < n_pre - (i_2 + 1) ->
+       Znth t_2 (sublist (i_2 + 1) n_pre lo) 0 = Znth (i_2 + 1 + t_2) lo 0|] &&
+     [|0 <= n_pre|] && [|Zlength la = n_pre|] && [|
+     Zlength lo = n_pre|] &&
+     [|forall i : Z,
+       0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647|] &&
+     IntArray.full a_pre n_pre la **
+     IntArray.full out_pre n_pre
+       ((l1_2 ++ Znth i_2 la 0 * k_pre :: nil) ++ sublist (i_2 + 1) n_pre lo)
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  Hreplace_nth_len :
+    forall (l : list Z) (z : Z), replace_nth (Datatypes.length l) z l = l
+  ============================
+  replace_Znth i_2 (Znth i_2 la 0 * k_pre) l1_2 = l1_2
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  Hreplace_nth_len :
+    forall (l : list Z) (z : Z), replace_nth (Datatypes.length l) z l = l
+  ============================
+  replace_nth (Z.to_nat i_2) (Znth i_2 la 0 * k_pre) l1_2 = l1_2
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Z.of_nat (Datatypes.length l1_2) = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  Hreplace_nth_len :
+    forall (l : list Z) (z : Z), replace_nth (Datatypes.length l) z l = l
+  ============================
+  replace_nth (Z.to_nat i_2) (Znth i_2 la 0 * k_pre) l1_2 = l1_2
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Z.of_nat (Datatypes.length l1_2) = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  Hreplace_nth_len :
+    forall (l : list Z) (z : Z), replace_nth (Datatypes.length l) z l = l
+  ============================
+  replace_nth (Datatypes.length l1_2) (Znth i_2 la 0 * k_pre) l1_2 = l1_2
+
+debug_entail2 < This subproof is complete, but there are some unfocused goals.
+Try unfocusing with "}".
+
+1 goal
+
+goal 1 is:
+ IntArray.full out_pre n_pre
+   (replace_Znth i_2 (Znth i_2 la 0 * k_pre) l1_2 ++
+    replace_Znth 0 (Znth i_2 la 0 * k_pre)
+      (Znth i_2 lo 0 :: sublist (i_2 + 1) n_pre lo)) **
+ IntArray.full a_pre n_pre la
+ |-- [|0 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|n_pre = Zlength la|] &&
+     [|n_pre = Zlength lo|] &&
+     [|Zlength (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) = i_2 + 1|] &&
+     [|Zlength (sublist (i_2 + 1) n_pre lo) = n_pre - (i_2 + 1)|] &&
+     [|forall t : Z,
+       0 <= t < i_2 + 1 ->
+       Znth t (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) 0 = Znth t la 0 * k_pre|] &&
+     [|forall t_2 : Z,
+       0 <= t_2 < n_pre - (i_2 + 1) ->
+       Znth t_2 (sublist (i_2 + 1) n_pre lo) 0 = Znth (i_2 + 1 + t_2) lo 0|] &&
+     [|0 <= n_pre|] && [|Zlength la = n_pre|] && [|
+     Zlength lo = n_pre|] &&
+     [|forall i : Z,
+       0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647|] &&
+     IntArray.full a_pre n_pre la **
+     IntArray.full out_pre n_pre
+       ((l1_2 ++ Znth i_2 la 0 * k_pre :: nil) ++ sublist (i_2 + 1) n_pre lo)
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  Hreplace_nth_len :
+    forall (l : list Z) (z : Z), replace_nth (Datatypes.length l) z l = l
+  Hprefix_keep : replace_Znth i_2 (Znth i_2 la 0 * k_pre) l1_2 = l1_2
+  ============================
+  IntArray.full out_pre n_pre
+    (replace_Znth i_2 (Znth i_2 la 0 * k_pre) l1_2 ++
+     replace_Znth 0 (Znth i_2 la 0 * k_pre)
+       (Znth i_2 lo 0 :: sublist (i_2 + 1) n_pre lo)) **
+  IntArray.full a_pre n_pre la
+  |-- [|0 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|n_pre = Zlength la|] &&
+      [|n_pre = Zlength lo|] &&
+      [|Zlength (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) = i_2 + 1|] &&
+      [|Zlength (sublist (i_2 + 1) n_pre lo) = n_pre - (i_2 + 1)|] &&
+      [|forall t : Z,
+        0 <= t < i_2 + 1 ->
+        Znth t (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) 0 = Znth t la 0 * k_pre|] &&
+      [|forall t_2 : Z,
+        0 <= t_2 < n_pre - (i_2 + 1) ->
+        Znth t_2 (sublist (i_2 + 1) n_pre lo) 0 = Znth (i_2 + 1 + t_2) lo 0|] &&
+      [|0 <= n_pre|] && [|Zlength la = n_pre|] && [|
+      Zlength lo = n_pre|] &&
+      [|forall i : Z,
+        0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647|] &&
+      IntArray.full a_pre n_pre la **
+      IntArray.full out_pre n_pre
+        ((l1_2 ++ Znth i_2 la 0 * k_pre :: nil) ++ sublist (i_2 + 1) n_pre lo)
+
+debug_entail2 < debug_entail2 < debug_entail2 < debug_entail2 < debug_entail2 < 2 goals
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  Hreplace_nth_len :
+    forall (l : list Z) (z : Z), replace_nth (Datatypes.length l) z l = l
+  Hprefix_keep : replace_Znth i_2 (Znth i_2 la 0 * k_pre) l1_2 = l1_2
+  ============================
+  replace_Znth 0 (Znth i_2 la 0 * k_pre)
+    (Znth i_2 lo 0 :: sublist (i_2 + 1) n_pre lo) =
+  Znth i_2 la 0 * k_pre :: sublist (i_2 + 1) n_pre lo
+
+goal 2 is:
+ IntArray.full out_pre n_pre
+   (replace_Znth i_2 (Znth i_2 la 0 * k_pre) l1_2 ++
+    replace_Znth 0 (Znth i_2 la 0 * k_pre)
+      (Znth i_2 lo 0 :: sublist (i_2 + 1) n_pre lo)) **
+ IntArray.full a_pre n_pre la
+ |-- [|0 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|n_pre = Zlength la|] &&
+     [|n_pre = Zlength lo|] &&
+     [|Zlength (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) = i_2 + 1|] &&
+     [|Zlength (sublist (i_2 + 1) n_pre lo) = n_pre - (i_2 + 1)|] &&
+     [|forall t : Z,
+       0 <= t < i_2 + 1 ->
+       Znth t (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) 0 = Znth t la 0 * k_pre|] &&
+     [|forall t_2 : Z,
+       0 <= t_2 < n_pre - (i_2 + 1) ->
+       Znth t_2 (sublist (i_2 + 1) n_pre lo) 0 = Znth (i_2 + 1 + t_2) lo 0|] &&
+     [|0 <= n_pre|] && [|Zlength la = n_pre|] && [|
+     Zlength lo = n_pre|] &&
+     [|forall i : Z,
+       0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647|] &&
+     IntArray.full a_pre n_pre la **
+     IntArray.full out_pre n_pre
+       ((l1_2 ++ Znth i_2 la 0 * k_pre :: nil) ++ sublist (i_2 + 1) n_pre lo)
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  Hreplace_nth_len :
+    forall (l : list Z) (z : Z), replace_nth (Datatypes.length l) z l = l
+  Hprefix_keep : replace_Znth i_2 (Znth i_2 la 0 * k_pre) l1_2 = l1_2
+  ============================
+  replace_Znth 0 (Znth i_2 la 0 * k_pre)
+    (Znth i_2 lo 0 :: sublist (i_2 + 1) n_pre lo) =
+  Znth i_2 la 0 * k_pre :: sublist (i_2 + 1) n_pre lo
+
+debug_entail2 < This subproof is complete, but there are some unfocused goals.
+Try unfocusing with "}".
+
+1 goal
+
+goal 1 is:
+ IntArray.full out_pre n_pre
+   (replace_Znth i_2 (Znth i_2 la 0 * k_pre) l1_2 ++
+    replace_Znth 0 (Znth i_2 la 0 * k_pre)
+      (Znth i_2 lo 0 :: sublist (i_2 + 1) n_pre lo)) **
+ IntArray.full a_pre n_pre la
+ |-- [|0 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|n_pre = Zlength la|] &&
+     [|n_pre = Zlength lo|] &&
+     [|Zlength (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) = i_2 + 1|] &&
+     [|Zlength (sublist (i_2 + 1) n_pre lo) = n_pre - (i_2 + 1)|] &&
+     [|forall t : Z,
+       0 <= t < i_2 + 1 ->
+       Znth t (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) 0 = Znth t la 0 * k_pre|] &&
+     [|forall t_2 : Z,
+       0 <= t_2 < n_pre - (i_2 + 1) ->
+       Znth t_2 (sublist (i_2 + 1) n_pre lo) 0 = Znth (i_2 + 1 + t_2) lo 0|] &&
+     [|0 <= n_pre|] && [|Zlength la = n_pre|] && [|
+     Zlength lo = n_pre|] &&
+     [|forall i : Z,
+       0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647|] &&
+     IntArray.full a_pre n_pre la **
+     IntArray.full out_pre n_pre
+       ((l1_2 ++ Znth i_2 la 0 * k_pre :: nil) ++ sublist (i_2 + 1) n_pre lo)
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  Hreplace_nth_len :
+    forall (l : list Z) (z : Z), replace_nth (Datatypes.length l) z l = l
+  Hprefix_keep : replace_Znth i_2 (Znth i_2 la 0 * k_pre) l1_2 = l1_2
+  Hhead_write :
+    replace_Znth 0 (Znth i_2 la 0 * k_pre)
+      (Znth i_2 lo 0 :: sublist (i_2 + 1) n_pre lo) =
+    Znth i_2 la 0 * k_pre :: sublist (i_2 + 1) n_pre lo
+  ============================
+  IntArray.full out_pre n_pre
+    (replace_Znth i_2 (Znth i_2 la 0 * k_pre) l1_2 ++
+     replace_Znth 0 (Znth i_2 la 0 * k_pre)
+       (Znth i_2 lo 0 :: sublist (i_2 + 1) n_pre lo)) **
+  IntArray.full a_pre n_pre la
+  |-- [|0 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|n_pre = Zlength la|] &&
+      [|n_pre = Zlength lo|] &&
+      [|Zlength (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) = i_2 + 1|] &&
+      [|Zlength (sublist (i_2 + 1) n_pre lo) = n_pre - (i_2 + 1)|] &&
+      [|forall t : Z,
+        0 <= t < i_2 + 1 ->
+        Znth t (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) 0 = Znth t la 0 * k_pre|] &&
+      [|forall t_2 : Z,
+        0 <= t_2 < n_pre - (i_2 + 1) ->
+        Znth t_2 (sublist (i_2 + 1) n_pre lo) 0 = Znth (i_2 + 1 + t_2) lo 0|] &&
+      [|0 <= n_pre|] && [|Zlength la = n_pre|] && [|
+      Zlength lo = n_pre|] &&
+      [|forall i : Z,
+        0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647|] &&
+      IntArray.full a_pre n_pre la **
+      IntArray.full out_pre n_pre
+        ((l1_2 ++ Znth i_2 la 0 * k_pre :: nil) ++ sublist (i_2 + 1) n_pre lo)
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  Hreplace_nth_len :
+    forall (l : list Z) (z : Z), replace_nth (Datatypes.length l) z l = l
+  Hprefix_keep : replace_Znth i_2 (Znth i_2 la 0 * k_pre) l1_2 = l1_2
+  Hhead_write :
+    replace_Znth 0 (Znth i_2 la 0 * k_pre)
+      (Znth i_2 lo 0 :: sublist (i_2 + 1) n_pre lo) =
+    Znth i_2 la 0 * k_pre :: sublist (i_2 + 1) n_pre lo
+  ============================
+  IntArray.full out_pre n_pre
+    (replace_Znth i_2 (Znth i_2 la 0 * k_pre) l1_2 ++
+     replace_Znth 0 (Znth i_2 la 0 * k_pre)
+       (Znth i_2 lo 0 :: sublist (i_2 + 1) n_pre lo)) **
+  IntArray.full a_pre n_pre la
+  |-- [|0 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|n_pre = Zlength la|] &&
+      [|n_pre = Zlength lo|] &&
+      [|Zlength (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) = i_2 + 1|] &&
+      [|Zlength (sublist (i_2 + 1) n_pre lo) = n_pre - (i_2 + 1)|] &&
+      [|forall t : Z,
+        0 <= t < i_2 + 1 ->
+        Znth t (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) 0 = Znth t la 0 * k_pre|] &&
+      [|forall t_2 : Z,
+        0 <= t_2 < n_pre - (i_2 + 1) ->
+        Znth t_2 (sublist (i_2 + 1) n_pre lo) 0 = Znth (i_2 + 1 + t_2) lo 0|] &&
+      [|0 <= n_pre|] && [|Zlength la = n_pre|] && [|
+      Zlength lo = n_pre|] &&
+      [|forall i : Z,
+        0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647|] &&
+      IntArray.full a_pre n_pre la **
+      IntArray.full out_pre n_pre
+        ((l1_2 ++ Znth i_2 la 0 * k_pre :: nil) ++ sublist (i_2 + 1) n_pre lo)
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  Hreplace_nth_len :
+    forall (l : list Z) (z : Z), replace_nth (Datatypes.length l) z l = l
+  Hprefix_keep : replace_Znth i_2 (Znth i_2 la 0 * k_pre) l1_2 = l1_2
+  Hhead_write :
+    replace_Znth 0 (Znth i_2 la 0 * k_pre)
+      (Znth i_2 lo 0 :: sublist (i_2 + 1) n_pre lo) =
+    Znth i_2 la 0 * k_pre :: sublist (i_2 + 1) n_pre lo
+  ============================
+  IntArray.full out_pre n_pre
+    (l1_2 ++
+     replace_Znth 0 (Znth i_2 la 0 * k_pre)
+       (Znth i_2 lo 0 :: sublist (i_2 + 1) n_pre lo)) **
+  IntArray.full a_pre n_pre la
+  |-- [|0 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|n_pre = Zlength la|] &&
+      [|n_pre = Zlength lo|] &&
+      [|Zlength (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) = i_2 + 1|] &&
+      [|Zlength (sublist (i_2 + 1) n_pre lo) = n_pre - (i_2 + 1)|] &&
+      [|forall t : Z,
+        0 <= t < i_2 + 1 ->
+        Znth t (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) 0 = Znth t la 0 * k_pre|] &&
+      [|forall t_2 : Z,
+        0 <= t_2 < n_pre - (i_2 + 1) ->
+        Znth t_2 (sublist (i_2 + 1) n_pre lo) 0 = Znth (i_2 + 1 + t_2) lo 0|] &&
+      [|0 <= n_pre|] && [|Zlength la = n_pre|] && [|
+      Zlength lo = n_pre|] &&
+      [|forall i : Z,
+        0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647|] &&
+      IntArray.full a_pre n_pre la **
+      IntArray.full out_pre n_pre
+        ((l1_2 ++ Znth i_2 la 0 * k_pre :: nil) ++ sublist (i_2 + 1) n_pre lo)
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  Hreplace_nth_len :
+    forall (l : list Z) (z : Z), replace_nth (Datatypes.length l) z l = l
+  Hprefix_keep : replace_Znth i_2 (Znth i_2 la 0 * k_pre) l1_2 = l1_2
+  Hhead_write :
+    replace_Znth 0 (Znth i_2 la 0 * k_pre)
+      (Znth i_2 lo 0 :: sublist (i_2 + 1) n_pre lo) =
+    Znth i_2 la 0 * k_pre :: sublist (i_2 + 1) n_pre lo
+  ============================
+  IntArray.full out_pre n_pre
+    (l1_2 ++ Znth i_2 la 0 * k_pre :: sublist (i_2 + 1) n_pre lo) **
+  IntArray.full a_pre n_pre la
+  |-- [|0 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|n_pre = Zlength la|] &&
+      [|n_pre = Zlength lo|] &&
+      [|Zlength (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) = i_2 + 1|] &&
+      [|Zlength (sublist (i_2 + 1) n_pre lo) = n_pre - (i_2 + 1)|] &&
+      [|forall t : Z,
+        0 <= t < i_2 + 1 ->
+        Znth t (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) 0 = Znth t la 0 * k_pre|] &&
+      [|forall t_2 : Z,
+        0 <= t_2 < n_pre - (i_2 + 1) ->
+        Znth t_2 (sublist (i_2 + 1) n_pre lo) 0 = Znth (i_2 + 1 + t_2) lo 0|] &&
+      [|0 <= n_pre|] && [|Zlength la = n_pre|] && [|
+      Zlength lo = n_pre|] &&
+      [|forall i : Z,
+        0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647|] &&
+      IntArray.full a_pre n_pre la **
+      IntArray.full out_pre n_pre
+        ((l1_2 ++ Znth i_2 la 0 * k_pre :: nil) ++ sublist (i_2 + 1) n_pre lo)
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  Hreplace_nth_len :
+    forall (l : list Z) (z : Z), replace_nth (Datatypes.length l) z l = l
+  Hprefix_keep : replace_Znth i_2 (Znth i_2 la 0 * k_pre) l1_2 = l1_2
+  Hhead_write :
+    replace_Znth 0 (Znth i_2 la 0 * k_pre)
+      (Znth i_2 lo 0 :: sublist (i_2 + 1) n_pre lo) =
+    Znth i_2 la 0 * k_pre :: sublist (i_2 + 1) n_pre lo
+  ============================
+  IntArray.full out_pre n_pre
+    (l1_2 ++ Znth i_2 la 0 * k_pre :: sublist (i_2 + 1) n_pre lo) **
+  IntArray.full a_pre n_pre la
+  |-- [|0 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|n_pre = Zlength la|] &&
+      [|n_pre = Zlength lo|] &&
+      [|Zlength (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) = i_2 + 1|] &&
+      [|Zlength (sublist (i_2 + 1) n_pre lo) = n_pre - (i_2 + 1)|] &&
+      [|forall t : Z,
+        0 <= t < i_2 + 1 ->
+        Znth t (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) 0 = Znth t la 0 * k_pre|] &&
+      [|forall t_2 : Z,
+        0 <= t_2 < n_pre - (i_2 + 1) ->
+        Znth t_2 (sublist (i_2 + 1) n_pre lo) 0 = Znth (i_2 + 1 + t_2) lo 0|] &&
+      [|0 <= n_pre|] && [|Zlength la = n_pre|] && [|
+      Zlength lo = n_pre|] &&
+      [|forall i : Z,
+        0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647|] &&
+      IntArray.full a_pre n_pre la **
+      IntArray.full out_pre n_pre
+        (l1_2 ++ (Znth i_2 la 0 * k_pre :: nil) ++ sublist (i_2 + 1) n_pre lo)
+
+debug_entail2 < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  Hreplace_nth_len :
+    forall (l : list Z) (z : Z), replace_nth (Datatypes.length l) z l = l
+  Hprefix_keep : replace_Znth i_2 (Znth i_2 la 0 * k_pre) l1_2 = l1_2
+  Hhead_write :
+    replace_Znth 0 (Znth i_2 la 0 * k_pre)
+      (Znth i_2 lo 0 :: sublist (i_2 + 1) n_pre lo) =
+    Znth i_2 la 0 * k_pre :: sublist (i_2 + 1) n_pre lo
+  ============================
+  IntArray.full out_pre n_pre
+    (l1_2 ++ Znth i_2 la 0 * k_pre :: sublist (i_2 + 1) n_pre lo) **
+  IntArray.full a_pre n_pre la
+  |-- [|0 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|n_pre = Zlength la|] &&
+      [|n_pre = Zlength lo|] &&
+      [|Zlength (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) = i_2 + 1|] &&
+      [|Zlength (sublist (i_2 + 1) n_pre lo) = n_pre - (i_2 + 1)|] &&
+      [|forall t : Z,
+        0 <= t < i_2 + 1 ->
+        Znth t (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) 0 = Znth t la 0 * k_pre|] &&
+      [|forall t_2 : Z,
+        0 <= t_2 < n_pre - (i_2 + 1) ->
+        Znth t_2 (sublist (i_2 + 1) n_pre lo) 0 = Znth (i_2 + 1 + t_2) lo 0|] &&
+      [|0 <= n_pre|] && [|Zlength la = n_pre|] && [|
+      Zlength lo = n_pre|] &&
+      [|forall i : Z,
+        0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647|] &&
+      IntArray.full a_pre n_pre la **
+      IntArray.full out_pre n_pre
+        (l1_2 ++ Znth i_2 la 0 * k_pre :: sublist (i_2 + 1) n_pre lo)
+
+debug_entail2 < 4 goals
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  Hreplace_nth_len :
+    forall (l : list Z) (z : Z), replace_nth (Datatypes.length l) z l = l
+  Hprefix_keep : replace_Znth i_2 (Znth i_2 la 0 * k_pre) l1_2 = l1_2
+  Hhead_write :
+    replace_Znth 0 (Znth i_2 la 0 * k_pre)
+      (Znth i_2 lo 0 :: sublist (i_2 + 1) n_pre lo) =
+    Znth i_2 la 0 * k_pre :: sublist (i_2 + 1) n_pre lo
+  ============================
+  forall t_2 : Z,
+  0 <= t_2 < n_pre - (i_2 + 1) ->
+  Znth t_2 (sublist (i_2 + 1) n_pre lo) 0 = Znth (i_2 + 1 + t_2) lo 0
+
+goal 2 is:
+ forall t : Z,
+ 0 <= t < i_2 + 1 ->
+ Znth t (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) 0 = Znth t la 0 * k_pre
+goal 3 is:
+ Zlength (sublist (i_2 + 1) n_pre lo) = n_pre - (i_2 + 1)
+goal 4 is:
+ Zlength (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) = i_2 + 1
+
+debug_entail2 < 4 goals
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l1_2 : list Z
+  i_2 : Z
+  H : i_2 < n_pre
+  H0 : 0 <= i_2
+  H1 : i_2 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1_2 = i_2
+  H5 : Zlength (sublist i_2 n_pre lo) = n_pre - i_2
+  H6 : forall t : Z, 0 <= t < i_2 -> Znth t l1_2 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_2 ->
+    Znth t_2 (sublist i_2 n_pre lo) 0 = Znth (i_2 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i : Z,
+    0 <= i < n_pre -> -2147483648 <= Znth i la 0 * k_pre <= 2147483647
+  Hreplace_nth_len :
+    forall (l : list Z) (z : Z), replace_nth (Datatypes.length l) z l = l
+  Hprefix_keep : replace_Znth i_2 (Znth i_2 la 0 * k_pre) l1_2 = l1_2
+  Hhead_write :
+    replace_Znth 0 (Znth i_2 la 0 * k_pre)
+      (Znth i_2 lo 0 :: sublist (i_2 + 1) n_pre lo) =
+    Znth i_2 la 0 * k_pre :: sublist (i_2 + 1) n_pre lo
+  ============================
+  forall t_2 : Z,
+  0 <= t_2 < n_pre - (i_2 + 1) ->
+  Znth t_2 (sublist (i_2 + 1) n_pre lo) 0 = Znth (i_2 + 1 + t_2) lo 0
+
+goal 2 is:
+ forall t : Z,
+ 0 <= t < i_2 + 1 ->
+ Znth t (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) 0 = Znth t la 0 * k_pre
+goal 3 is:
+ Zlength (sublist (i_2 + 1) n_pre lo) = n_pre - (i_2 + 1)
+goal 4 is:
+ Zlength (l1_2 ++ Znth i_2 la 0 * k_pre :: nil) = i_2 + 1
+
+debug_entail2 < 
+Coq < 

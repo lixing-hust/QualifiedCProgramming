@@ -1,0 +1,17 @@
+Implemented the contract workflow for `array_scale`.
+
+Created [array_scale.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_scale.c) with:
+
+- `n >= 0`
+- full ownership of input/output arrays
+- length constraints for both logical lists
+- signed 32-bit overflow precondition for each `la[i] * k`
+- postcondition preserving `a` and describing `out[i] == la[i] * k`
+
+Created the required logs:
+
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260419_233122_array_scale/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260419_233122_array_scale/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260419_233122_array_scale/logs/metrics.md)
+
+No `input/array_scale.v` was generated because the specification is expressible directly in the C contract without extra Coq definitions. Verified that `input/array_scale.v` is absent.

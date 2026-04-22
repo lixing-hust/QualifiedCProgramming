@@ -1,0 +1,16 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260418_211226_array_adjacent_diff",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_adjacent_diff.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_211226_array_adjacent_diff/original/array_adjacent_diff.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_211226_array_adjacent_diff.c",
+  "function_name": "array_adjacent_diff",
+  "program_sha256": "79b72373c17aba53bd10a5f2dcf0831781ff8a73ec334d51d9c85e942c9b631d",
+  "semantic_description": "",
+  "keywords": {},
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

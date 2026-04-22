@@ -1,0 +1,15 @@
+Verification succeeded for `max_subarray_sum`.
+
+Updated:
+- [annotated C](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_132710_max_subarray_sum.c)
+- [manual proof](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_132710_max_subarray_sum/coq/generated/max_subarray_sum_proof_manual.v)
+- workspace logs: `workspace_fingerprint.json`, `annotation_reasoning.md`, `proof_reasoning.md`, `issues.md`, `metrics.md`
+
+What passed:
+- `symexec` succeeded on the final annotated file.
+- Full Coq replay succeeded through `max_subarray_sum_goal_check.v`.
+- `max_subarray_sum_proof_manual.v` has no `Admitted.` and no new top-level `Axiom`.
+- Non-`.v` artifacts under `coq/` were cleaned.
+- `logs/metrics.md` ends with `Final Result: Success`.
+
+I did not update shared experience docs; `logs/metrics.md` records `Experience updates: none`.

@@ -1,0 +1,14 @@
+Verification succeeded.
+
+I added the loop invariant in [verify_20260420_151159_array_replace_negative_zero.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_151159_array_replace_negative_zero.c:23), completed the generated manual Coq proof in [array_replace_negative_zero_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_151159_array_replace_negative_zero/coq/generated/array_replace_negative_zero_proof_manual.v:76), and updated the workspace fingerprint to `goal_check_passed` in [workspace_fingerprint.json](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_151159_array_replace_negative_zero/logs/workspace_fingerprint.json:22).
+
+Verified:
+- `symexec_status=0`
+- `coqc array_replace_negative_zero_goal.v`: `0`
+- `coqc array_replace_negative_zero_proof_auto.v`: `0`
+- `coqc array_replace_negative_zero_proof_manual.v`: `0`
+- `coqc array_replace_negative_zero_goal_check.v`: `0`
+- no `Admitted.` or new `Axiom` in the manual proof
+- non-`.v` Coq artifacts cleaned from the workspace
+
+Final result is recorded in [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_151159_array_replace_negative_zero/logs/metrics.md:24): `Final Result: Success`.

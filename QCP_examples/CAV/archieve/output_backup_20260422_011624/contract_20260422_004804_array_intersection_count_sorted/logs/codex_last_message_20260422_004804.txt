@@ -1,0 +1,12 @@
+Implemented the contract workflow for `array_intersection_count_sorted`.
+
+Created:
+- [array_intersection_count_sorted.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_intersection_count_sorted.c)
+- [array_intersection_count_sorted.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_intersection_count_sorted.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260422_004804_array_intersection_count_sorted/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260422_004804_array_intersection_count_sorted/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260422_004804_array_intersection_count_sorted/logs/metrics.md)
+
+The C file contains only the target function plus the full contract, with no Verify-stage `Inv`, `Assert`, bridge assertions, or loop-exit assertions. The `.v` file contains only the topic-specific recursive list spec for multiplicity-aware sorted intersection count.
+
+Verification performed: `coqc -q input/array_intersection_count_sorted.v` passed. Generated Coq build artifacts were removed afterward.

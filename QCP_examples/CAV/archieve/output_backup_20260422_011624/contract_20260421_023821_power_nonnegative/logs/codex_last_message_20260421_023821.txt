@@ -1,0 +1,15 @@
+Completed the contract workflow for `power_nonnegative`.
+
+Generated:
+
+- [input/power_nonnegative.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/power_nonnegative.c)
+- [input/power_nonnegative.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/power_nonnegative.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_023821_power_nonnegative/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_023821_power_nonnegative/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_023821_power_nonnegative/logs/metrics.md)
+
+I also copied the generated C/V files into the workspace input snapshot at:
+
+- `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_023821_power_nonnegative/input/`
+
+Validation: `input/power_nonnegative.v` parses successfully with `coqc` via a temporary copy. No experience docs were updated.

@@ -1,0 +1,11 @@
+Verification completed successfully.
+
+I updated the active annotated file [verify_20260418_172343_array_equal.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_172343_array_equal.c:1) with a loop invariant that tracks prefix equality and an exit assertion for the `return 1` path. I also normalized the active `With` binder syntax in that annotated copy so `symexec` would parse it.
+
+The generated manual proof [array_equal_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_172343_array_equal/coq/generated/array_equal_proof_manual.v:1) now contains completed proofs for both return witnesses, using helper lemmas for the mismatch and full-equality cases. `symexec` succeeded, and the full Coq compile chain passed through `goal_check.v`. There are no `Admitted.` or added `Axiom` lines left, and non-`.v` artifacts under `coq/` were cleaned.
+
+Logs were updated here:
+[annotation_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_172343_array_equal/logs/annotation_reasoning.md:1),
+[proof_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_172343_array_equal/logs/proof_reasoning.md:1),
+[issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_172343_array_equal/logs/issues.md:1),
+[metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_172343_array_equal/logs/metrics.md:1).

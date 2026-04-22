@@ -1,0 +1,12 @@
+Completed the contract workflow for `array_has_adjacent_equal`.
+
+Created:
+
+- [array_has_adjacent_equal.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_has_adjacent_equal.c)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_120947_array_has_adjacent_equal/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_120947_array_has_adjacent_equal/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_120947_array_has_adjacent_equal/logs/metrics.md)
+
+I did not create `input/array_has_adjacent_equal.v`; the adjacent-equality semantics are expressible directly in the C contract using standard quantifiers and `IntArray::full`.
+
+Final checks passed: required logs exist, the C file exists, no optional V file exists, and the generated contract/logs do not contain Verify-stage annotations.

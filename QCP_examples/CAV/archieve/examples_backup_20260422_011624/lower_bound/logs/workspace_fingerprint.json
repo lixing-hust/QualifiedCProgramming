@@ -1,0 +1,39 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260420_233617_lower_bound",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/lower_bound.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_233617_lower_bound/original/lower_bound.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_233617_lower_bound.c",
+  "function_name": "lower_bound",
+  "program_sha256": "556731a5f657c493f36f996ee31d6af52c1f320f06c9491b73d54e0e79e9dbed",
+  "semantic_description": "The function performs lower_bound binary search over a sorted integer array segment a[0..n). It returns an index between 0 and n such that every element before the index is strictly less than target, and either the index is n or the element at the index is at least target. The control structure is a while loop maintaining a shrinking half-open search interval [left, right). The empty array case and exhausted search return 0 or n as appropriate. The function only reads the input array and preserves the IntArray::full ownership unchanged.",
+  "keywords": {
+    "algorithm_family": "search",
+    "control_flow": "while_loop",
+    "data_shape": [
+      "array",
+      "pointer"
+    ],
+    "proof_pattern": [
+      "loop_invariant",
+      "case_split",
+      "termination_by_bound",
+      "range_bound"
+    ],
+    "numeric_properties": [
+      "nonnegative_input",
+      "int_range"
+    ],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": [
+      "goal_check_passed",
+      "proof_check_passed",
+      "auto_proof_contains_admitted"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

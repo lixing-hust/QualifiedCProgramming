@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/contract/SKILL.md
+
+Inputs:
+- Raw markdown: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/raw/remove_duplicates_sorted.md`
+- Target function: `remove_duplicates_sorted`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_140707_remove_duplicates_sorted`
+- Output C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/remove_duplicates_sorted.c`
+- Optional output V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/remove_duplicates_sorted.v`

@@ -1,0 +1,15 @@
+Verification succeeded for `array_all_zero`.
+
+Updated:
+- [annotated/verify_20260420_031341_array_all_zero.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_031341_array_all_zero.c:21): added the loop invariant and loop-exit assertion.
+- [workspace_fingerprint.json](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_031341_array_all_zero/logs/workspace_fingerprint.json:1): filled semantic description and controlled keywords.
+- [annotation_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_031341_array_all_zero/logs/annotation_reasoning.md:1), [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_031341_array_all_zero/logs/issues.md:1), and [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_031341_array_all_zero/logs/metrics.md:1).
+
+Verification checks completed:
+- `symexec` succeeded and generated fresh `goal`, `proof_auto`, `proof_manual`, and `goal_check`.
+- `array_all_zero_goal.v`, `array_all_zero_proof_auto.v`, `array_all_zero_proof_manual.v`, and `array_all_zero_goal_check.v` all compiled successfully.
+- `proof_manual.v` has no `Admitted.` and no top-level `Axiom`.
+- Non-`.v` Coq byproducts were cleaned.
+- `metrics.md` ends with `Final Result: Success`.
+
+No experience documents were updated.

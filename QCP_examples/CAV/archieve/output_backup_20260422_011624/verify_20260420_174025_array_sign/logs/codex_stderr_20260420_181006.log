@@ -1,0 +1,1 @@
+2026-04-20T10:17:03.935363Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to read file to update /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_174025_array_sign/logs/proof_reasoning.md: No such file or directory (os error 2)

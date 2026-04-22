@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/contract/SKILL.md
+
+Inputs:
+- Raw markdown: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/raw/string_to_upper_ascii.md`
+- Target function: `string_to_upper_ascii`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_202443_string_to_upper_ascii`
+- Output C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_to_upper_ascii.c`
+- Optional output V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_to_upper_ascii.v`

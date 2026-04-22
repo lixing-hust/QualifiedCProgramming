@@ -1,0 +1,14 @@
+Verification succeeded in the existing workspace.
+
+I continued from the current blocker instead of restarting. The stale “contract gap” diagnosis was corrected: `array_count_transitions_safety_wit_5` can recover `Int` bounds from stack slots using `sep_apply store_int_range`, then close the overflow proof with a prefix transition-count bound.
+
+Changed:
+- [array_count_transitions_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_122040_array_count_transitions/coq/generated/array_count_transitions_proof_manual.v): replaced the five manual witness admits with helper lemmas and completed proofs.
+- [PROOF.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/doc/experiences/PROOF.md): added reusable proof notes for `store_int_range` and `sac`/list-notation parsing issues.
+- Updated workspace logs: `proof_reasoning.md`, `issues.md`, and `metrics.md`; latest metrics ends with `Final Result: Success`.
+
+Verified:
+- Full compile template passed through `array_count_transitions_goal_check.v`.
+- `array_count_transitions_proof_manual.v` has no `Admitted.` and no local `Axiom`.
+- Non-`.v` Coq artifacts under the workspace `coq/` directory were cleaned.
+- Active annotated C was not changed; existing symexec success remains aligned with the current generated goals.

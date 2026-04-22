@@ -1,0 +1,11 @@
+WARNING: proceeding, even though we could not update PATH: Read-only file system (os error 30)
+2026-04-14T16:23:56.677929Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: IO error: Connection reset by peer (os error 104), url: wss://chatgpt.com/backend-api/codex/responses
+2026-04-14T16:25:34.721558Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: IO error: Connection reset by peer (os error 104), url: wss://chatgpt.com/backend-api/codex/responses
+2026-04-14T16:25:40.150559Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: IO error: Connection reset by peer (os error 104), url: wss://chatgpt.com/backend-api/codex/responses
+2026-04-14T16:25:45.908437Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: IO error: Connection reset by peer (os error 104), url: wss://chatgpt.com/backend-api/codex/responses
+2026-04-14T16:25:52.600650Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: IO error: Connection reset by peer (os error 104), url: wss://chatgpt.com/backend-api/codex/responses
+2026-04-14T16:26:00.971774Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: IO error: Connection reset by peer (os error 104), url: wss://chatgpt.com/backend-api/codex/responses
+2026-04-14T16:32:17.956834Z ERROR codex_core::tools::router: error=write_stdin failed: stdin is closed for this session; rerun exec_command with tty=true to keep stdin open
+2026-04-14T16:35:20.823727Z ERROR codex_core::tools::router: error=write_stdin failed: stdin is closed for this session; rerun exec_command with tty=true to keep stdin open
+2026-04-14T16:37:44.752458Z ERROR codex_core::tools::router: error=write_stdin failed: stdin is closed for this session; rerun exec_command with tty=true to keep stdin open
+2026-04-14T16:48:17.235791Z ERROR codex_core::tools::router: error=write_stdin failed: stdin is closed for this session; rerun exec_command with tty=true to keep stdin open

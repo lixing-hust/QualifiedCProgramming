@@ -1,0 +1,15 @@
+Completed the contract workflow for `binary_search`.
+
+Created [input/binary_search.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/binary_search.c) with:
+- sorted nondecreasing array precondition
+- `IntArray::full(a, n, l)` memory contract
+- success case: returned index is valid and contains `target`
+- failure case: return is `-1` and no valid index contains `target`
+- original implementation semantics preserved
+
+Wrote required logs:
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_231423_binary_search/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_231423_binary_search/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_231423_binary_search/logs/metrics.md)
+
+I did not create `input/binary_search.v`; the spec is expressible directly in the C contract. I also checked that the generated C/logs contain no `Inv`, `Assert`, `which implies`, or loop-exit assertion text. Verification was not run, since this was the Contract-stage workflow.

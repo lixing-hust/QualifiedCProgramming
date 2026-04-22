@@ -1,0 +1,19 @@
+Completed the contract workflow for `string_count_lowercase`.
+
+Created:
+- [input/string_count_lowercase.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_count_lowercase.c)
+- [input/string_count_lowercase.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_count_lowercase.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_154507_string_count_lowercase/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_154507_string_count_lowercase/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_154507_string_count_lowercase/logs/metrics.md)
+
+Also wrote matching workspace snapshots under:
+- [output/contract_20260420_154507_string_count_lowercase/input/string_count_lowercase.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_154507_string_count_lowercase/input/string_count_lowercase.c)
+- [output/contract_20260420_154507_string_count_lowercase/input/string_count_lowercase.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_154507_string_count_lowercase/input/string_count_lowercase.v)
+
+Validation run:
+- `git diff --check` passed.
+- Root input files match the workspace snapshot files.
+- `coqtop` accepted `string_count_lowercase_spec` from the generated `.v`.
+
+No experience documents were updated.

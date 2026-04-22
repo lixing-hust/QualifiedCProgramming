@@ -1,0 +1,14 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/verify/SKILL.md
+
+Inputs:
+- Input C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_all_lowercase.c`
+- Optional input V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_all_lowercase.v`
+- Target function: `string_all_lowercase`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_001037_string_all_lowercase`
+- Active annotated C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260419_001037_string_all_lowercase.c`
+
+Execution rule:
+- Work only inside this existing workspace.
+- Start from the normal verify workflow for this task.
+- Keep iterating in the same workspace until verification succeeds or the external time budget is exhausted.

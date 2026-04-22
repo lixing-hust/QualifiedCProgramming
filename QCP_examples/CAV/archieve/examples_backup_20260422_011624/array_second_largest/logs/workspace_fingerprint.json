@@ -1,0 +1,41 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260419_230803_array_second_largest",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_second_largest.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_second_largest.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_230803_array_second_largest/original/array_second_largest.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_230803_array_second_largest/original/array_second_largest.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260419_230803_array_second_largest.c",
+  "function_name": "array_second_largest",
+  "program_sha256": "e97c094e18225e1161cc4ee193da29dba9a54b77745cde245287ba798e12dd47",
+  "semantic_description": "Scans an integer array of length n >= 2 with pairwise-distinct elements and returns the second-largest element. The implementation initializes the current largest and second-largest from the first two elements, swaps them if needed, then uses a for loop from index 2 to n - 1 to update the two tracked maxima. The input array is read only and must be preserved exactly. The loop may execute zero times when n == 2.",
+  "keywords": {
+    "algorithm_family": "selection",
+    "control_flow": [
+      "if",
+      "for_loop"
+    ],
+    "data_shape": [
+      "array",
+      "pointer"
+    ],
+    "semantic_intent": [
+      "return_max",
+      "preserve_input"
+    ],
+    "proof_pattern": [
+      "loop_invariant",
+      "case_split",
+      "range_bound"
+    ],
+    "numeric_properties": "int_range",
+    "edge_case_behavior": [
+      "branch_on_order",
+      "empty_loop_possible"
+    ],
+    "verification_status": "goal_check_passed"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

@@ -1,0 +1,10 @@
+Completed the contract workflow for `array_prefix_max`.
+
+Generated [array_prefix_max.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_prefix_max.c) with a direct list-based postcondition: the input array stays unchanged, and each `out[i]` equals `max_list_nonempty(sublist(0, i + 1, la))`. I reused the existing `array_max` Coq helper, so [array_prefix_max.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_prefix_max.v) was not created.
+
+Logs are in the requested workspace:
+[reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_205151_array_prefix_max/logs/reasoning.md),
+[issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_205151_array_prefix_max/logs/issues.md),
+[metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_205151_array_prefix_max/logs/metrics.md).
+
+One deliberate contract choice: `a` and `out` are specified as disjoint buffers via separating conjunction. If you want, I can continue with the verify stage next.

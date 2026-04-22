@@ -1,0 +1,18 @@
+Verification succeeded for `partition_nonnegative`.
+
+Updated:
+- Annotated loop invariant in [/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_193642_partition_nonnegative.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_193642_partition_nonnegative.c)
+- Manual Coq proof in [/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_193642_partition_nonnegative/coq/generated/partition_nonnegative_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_193642_partition_nonnegative/coq/generated/partition_nonnegative_proof_manual.v)
+- Required logs: `workspace_fingerprint.json`, `annotation_reasoning.md`, `proof_reasoning.md`, `issues.md`, and `metrics.md`
+
+Verified:
+- `symexec` completed successfully and regenerated current Coq artifacts.
+- Full compile replay passed through:
+  - `partition_nonnegative_goal.v`
+  - `partition_nonnegative_proof_auto.v`
+  - `partition_nonnegative_proof_manual.v`
+  - `partition_nonnegative_goal_check.v`
+- `partition_nonnegative_proof_manual.v` contains no `Admitted.` and no top-level `Axiom`.
+- `coq/` non-`.v` intermediate files were cleaned.
+- `logs/metrics.md` ends with `Final Result: Success`.
+- Experience updates: none.

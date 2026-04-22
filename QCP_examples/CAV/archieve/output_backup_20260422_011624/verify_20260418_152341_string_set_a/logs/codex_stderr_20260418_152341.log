@@ -1,0 +1,19 @@
+2026-04-18T07:28:43.137042Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_152341_string_set_a/coq/generated/string_set_a_proof_manual.v:
+Lemma proof_of_string_set_a_entail_wit_1 : string_set_a_entail_wit_1.
+Proof.
+  pre_process.
+  entailer!.
+  entailer!.
+Qed.
+
+Lemma proof_of_string_set_a_entail_wit_2 : string_set_a_entail_wit_2.
+Proof.
+  pre_process.
+  entailer!.
+Qed.
+
+Lemma proof_of_string_set_a_return_wit_1 : string_set_a_return_wit_1.
+Proof.
+  pre_process.
+  entailer!.
+Qed.

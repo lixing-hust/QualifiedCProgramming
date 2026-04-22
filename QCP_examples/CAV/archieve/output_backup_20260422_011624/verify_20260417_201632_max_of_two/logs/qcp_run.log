@@ -1,0 +1,490 @@
+Start to symbolic execution on program : /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260417_201632_max_of_two.c
+Start to parse strategies file common
+File Path: /home/yangfp/QualifiedCProgramming/QCP_examples/common.strategies
+Start to parse rule 0 in file common
+Type inference result for strategy (common, 0):
+Current type environment:
+x -> A
+
+Current unification variable environment:
+
+Add new strategy scope: core
+Start to parse rule 1 in file common
+Type inference result for strategy (common, 1):
+Current type environment:
+x -> A
+
+Current unification variable environment:
+
+Start to parse rule 3 in file common
+Type inference result for strategy (common, 3):
+Current type environment:
+y -> A
+x -> A
+
+Current unification variable environment:
+
+Start to parse rule 6 in file common
+Type inference result for strategy (common, 6):
+Current type environment:
+y -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+
+Start to parse rule 7 in file common
+Type inference result for strategy (common, 7):
+Current type environment:
+x -> Z
+p -> Z
+
+Current unification variable environment:
+
+Start to parse rule 8 in file common
+Type inference result for strategy (common, 8):
+Current type environment:
+y -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+
+Start to parse rule 9 in file common
+Type inference result for strategy (common, 9):
+Current type environment:
+x -> Z
+p -> Z
+
+Current unification variable environment:
+
+Start to parse rule 10 in file common
+Type inference result for strategy (common, 10):
+Current type environment:
+p -> Z
+
+Current unification variable environment:
+
+Start to parse rule 11 in file common
+Type inference result for strategy (common, 11):
+Current type environment:
+y -> Z
+q -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+?y_type -> Z
+?q_type -> Z
+?x_type -> Z
+?p_type -> Z
+
+Start to parse rule 12 in file common
+Type inference result for strategy (common, 12):
+Current type environment:
+b -> A
+a -> A
+
+Current unification variable environment:
+?b_type -> A
+?a_type -> A
+
+New scope:Tagcancel(0x555f9e366fb0)
+Add new strategy scope: Tagcancel
+Start to parse rule 13 in file common
+Type inference result for strategy (common, 13):
+Current type environment:
+b -> A
+a -> A
+
+Current unification variable environment:
+?b_type -> A
+?a_type -> A
+
+Start to parse rule 14 in file common
+Type inference result for strategy (common, 14):
+Current type environment:
+x -> Z
+p -> Z
+
+Current unification variable environment:
+
+Start to parse rule 15 in file common
+Type inference result for strategy (common, 15):
+Current type environment:
+y -> Z
+x -> Z
+p -> Z
+
+Current unification variable environment:
+
+Start to parse rule 16 in file common
+Type inference result for strategy (common, 16):
+Current type environment:
+x -> Z
+p -> Z
+
+Current unification variable environment:
+
+Start to parse rule 17 in file common
+Type inference result for strategy (common, 17):
+Current type environment:
+p -> Z
+
+Current unification variable environment:
+
+Start to parse rule 18 in file common
+Type inference result for strategy (common, 18):
+Current type environment:
+
+Current unification variable environment:
+
+Start to parse rule 19 in file common
+Type inference result for strategy (common, 19):
+Current type environment:
+x -> Z
+p -> Z
+
+Current unification variable environment:
+
+New scope:local(0x555f9e36d330)
+Add new strategy scope: local
+Start to parse rule 20 in file common
+Type inference result for strategy (common, 20):
+Current type environment:
+x -> Z
+p -> Z
+
+Current unification variable environment:
+
+Start to parse rule 21 in file common
+Type inference result for strategy (common, 21):
+Current type environment:
+x -> Z
+p -> Z
+
+Current unification variable environment:
+
+Start to parse rule 22 in file common
+Type inference result for strategy (common, 22):
+Current type environment:
+x -> Z
+p -> Z
+
+Current unification variable environment:
+
+Start to parse rule 23 in file common
+Type inference result for strategy (common, 23):
+Current type environment:
+n -> Z
+x -> Z
+
+Current unification variable environment:
+?n_type -> Z
+?x_type -> Z
+
+Finish parsing strategies file common
+Symbolic Execution into function max_of_two
+Start to if-condition:
+(ps type 5): if ((a >= b))
+Start to Discard False Branch
+=============================================================================================
+Try to solve entailment with scope: core 
+try to find scope:core
+Get scope :core (0x555f9e35e650)
+---------------------------------------------------------------------------------------------
+Goal:
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Begin@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+ a_60_pre < b_57_pre;
+ INT_MIN <= a_60_pre;
+ a_60_pre <= INT_MAX;
+ INT_MIN <= b_57_pre;
+ b_57_pre <= INT_MAX ]
+LOCAL[
+  Temp a a_61_addr;
+  Temp b b_58_addr ]
+SEP[
+ store ( b_58_addr , b_57_pre , signed int );
+ store ( a_61_addr , a_60_pre , signed int ) ]
+|--
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[]
+LOCAL[]
+SEP[]
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@End@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+After applying strategies:
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Begin!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+ a_60_pre < b_57_pre;
+ INT_MIN <= a_60_pre;
+ a_60_pre <= INT_MAX;
+ INT_MIN <= b_57_pre;
+ b_57_pre <= INT_MAX ]
+LOCAL[
+  Temp a a_61_addr;
+  Temp b b_58_addr ]
+SEP[
+ store ( b_58_addr , b_57_pre , signed int );
+ store ( a_61_addr , a_60_pre , signed int ) ]
+|--
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[]
+LOCAL[]
+SEP[]
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!End!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+left_added:
+exist_mapping:
+-------Assertion begin---------
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+ a_60_pre < b_57_pre;
+ INT_MIN <= a_60_pre;
+ a_60_pre <= INT_MAX;
+ INT_MIN <= b_57_pre;
+ b_57_pre <= INT_MAX ]
+LOCAL[
+  Temp a a_61_addr;
+  Temp b b_58_addr ]
+SEP[
+ store ( b_58_addr , b_57_pre , signed int );
+ store ( a_61_addr , a_60_pre , signed int ) ]
+-------Assertion end ----------
+End to Discard False Branch
+Start to Discard False Branch
+=============================================================================================
+Try to solve entailment with scope: core 
+try to find scope:core
+Get scope :core (0x555f9e35e650)
+---------------------------------------------------------------------------------------------
+Goal:
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Begin@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+ a_60_pre >= b_57_pre;
+ INT_MIN <= a_60_pre;
+ a_60_pre <= INT_MAX;
+ INT_MIN <= b_57_pre;
+ b_57_pre <= INT_MAX ]
+LOCAL[
+  Temp a a_61_addr;
+  Temp b b_58_addr ]
+SEP[
+ store ( b_58_addr , b_57_pre , signed int );
+ store ( a_61_addr , a_60_pre , signed int ) ]
+|--
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[]
+LOCAL[]
+SEP[]
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@End@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+After applying strategies:
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Begin!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+ a_60_pre >= b_57_pre;
+ INT_MIN <= a_60_pre;
+ a_60_pre <= INT_MAX;
+ INT_MIN <= b_57_pre;
+ b_57_pre <= INT_MAX ]
+LOCAL[
+  Temp a a_61_addr;
+  Temp b b_58_addr ]
+SEP[
+ store ( b_58_addr , b_57_pre , signed int );
+ store ( a_61_addr , a_60_pre , signed int ) ]
+|--
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[]
+LOCAL[]
+SEP[]
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!End!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+left_added:
+exist_mapping:
+-------Assertion begin---------
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+ a_60_pre >= b_57_pre;
+ INT_MIN <= a_60_pre;
+ a_60_pre <= INT_MAX;
+ INT_MIN <= b_57_pre;
+ b_57_pre <= INT_MAX ]
+LOCAL[
+  Temp a a_61_addr;
+  Temp b b_58_addr ]
+SEP[
+ store ( b_58_addr , b_57_pre , signed int );
+ store ( a_61_addr , a_60_pre , signed int ) ]
+-------Assertion end ----------
+End to Discard False Branch
+Start to execute return statement:
+(ps type 3): return a;
+Current symbolic state:
+-------Assertion begin---------
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+ a_60_pre >= b_57_pre;
+ INT_MIN <= a_60_pre;
+ a_60_pre <= INT_MAX;
+ INT_MIN <= b_57_pre;
+ b_57_pre <= INT_MAX ]
+LOCAL[
+  Temp a a_61_addr;
+  Temp b b_58_addr ]
+SEP[
+ store ( b_58_addr , b_57_pre , signed int );
+ store ( a_61_addr , a_60_pre , signed int ) ]
+-------Assertion end ----------
+Executing partial stmt:
+(ps type 3): return a;
+pre state:
+-------Assertion begin---------
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+ a_60_pre >= b_57_pre;
+ INT_MIN <= a_60_pre;
+ a_60_pre <= INT_MAX;
+ INT_MIN <= b_57_pre;
+ b_57_pre <= INT_MAX ]
+LOCAL[
+  Temp a a_61_addr;
+  Temp b b_58_addr ]
+SEP[
+ store ( b_58_addr , b_57_pre , signed int );
+ store ( a_61_addr , a_60_pre , signed int ) ]
+-------Assertion end ----------
+Return Value: a_60_pre
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+ a_60_pre >= b_57_pre;
+ INT_MIN <= a_60_pre;
+ a_60_pre <= INT_MAX;
+ INT_MIN <= b_57_pre;
+ b_57_pre <= INT_MAX ]
+LOCAL[
+  Temp a a_61_addr;
+  Temp b b_58_addr ]
+SEP[
+ store ( b_58_addr , b_57_pre , signed int );
+ store ( a_61_addr , a_60_pre , signed int ) ]
+After PSExec: 
+Return Value: a_60_pre
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+ a_60_pre >= b_57_pre;
+ INT_MIN <= a_60_pre;
+ a_60_pre <= INT_MAX;
+ INT_MIN <= b_57_pre;
+ b_57_pre <= INT_MAX ]
+LOCAL[
+  Temp a a_61_addr;
+  Temp b b_58_addr ]
+SEP[
+ store ( b_58_addr , b_57_pre , signed int );
+ store ( a_61_addr , a_60_pre , signed int ) ]
+Start to execute return statement:
+(ps type 3): return b;
+Current symbolic state:
+-------Assertion begin---------
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+ a_60_pre < b_57_pre;
+ INT_MIN <= a_60_pre;
+ a_60_pre <= INT_MAX;
+ INT_MIN <= b_57_pre;
+ b_57_pre <= INT_MAX ]
+LOCAL[
+  Temp a a_61_addr;
+  Temp b b_58_addr ]
+SEP[
+ store ( b_58_addr , b_57_pre , signed int );
+ store ( a_61_addr , a_60_pre , signed int ) ]
+-------Assertion end ----------
+Executing partial stmt:
+(ps type 3): return b;
+pre state:
+-------Assertion begin---------
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+ a_60_pre < b_57_pre;
+ INT_MIN <= a_60_pre;
+ a_60_pre <= INT_MAX;
+ INT_MIN <= b_57_pre;
+ b_57_pre <= INT_MAX ]
+LOCAL[
+  Temp a a_61_addr;
+  Temp b b_58_addr ]
+SEP[
+ store ( b_58_addr , b_57_pre , signed int );
+ store ( a_61_addr , a_60_pre , signed int ) ]
+-------Assertion end ----------
+Return Value: b_57_pre
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+ a_60_pre < b_57_pre;
+ INT_MIN <= a_60_pre;
+ a_60_pre <= INT_MAX;
+ INT_MIN <= b_57_pre;
+ b_57_pre <= INT_MAX ]
+LOCAL[
+  Temp a a_61_addr;
+  Temp b b_58_addr ]
+SEP[
+ store ( b_58_addr , b_57_pre , signed int );
+ store ( a_61_addr , a_60_pre , signed int ) ]
+After PSExec: 
+Return Value: b_57_pre
+branch name : NULL
+next branch name : NULL
+spec name : NULL
+PROP[
+ a_60_pre < b_57_pre;
+ INT_MIN <= a_60_pre;
+ a_60_pre <= INT_MAX;
+ INT_MIN <= b_57_pre;
+ b_57_pre <= INT_MAX ]
+LOCAL[
+  Temp a a_61_addr;
+  Temp b b_58_addr ]
+SEP[
+ store ( b_58_addr , b_57_pre , signed int );
+ store ( a_61_addr , a_60_pre , signed int ) ]
+End of symbolic execution of function max_of_two
+Start to print Coq files for the program /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260417_201632_max_of_two.c
+Successfully finished symbolic execution

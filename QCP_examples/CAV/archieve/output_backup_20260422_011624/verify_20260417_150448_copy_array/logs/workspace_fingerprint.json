@@ -1,0 +1,35 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260417_150448_copy_array",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/copy_array.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260417_150448_copy_array/original/copy_array.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260417_150448_copy_array.c",
+  "function_name": "copy_array",
+  "program_sha256": "cab667e6dd3579b93e9a450939769c52342b4d06679dcd556615c0b3af3a95eb",
+  "semantic_description": "Copy an integer array of length n from src to dst. The function preserves the contents of src and progressively overwrites dst so that on return dst contains exactly the original src elements.",
+  "keywords": {
+    "shape": [
+      "single_loop",
+      "array_read_write",
+      "prefix_copy"
+    ],
+    "memory": [
+      "int_array_full",
+      "src_preserved",
+      "dst_overwritten"
+    ],
+    "proof_features": [
+      "loop_invariant",
+      "missing_i_bridge",
+      "sublist_app"
+    ],
+    "data_structures": [
+      "int_array"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

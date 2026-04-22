@@ -1,0 +1,28 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260422_012900_14_array_find_last_equal",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_find_last_equal.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_012900_14_array_find_last_equal/original/array_find_last_equal.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260422_012900_14_array_find_last_equal.c",
+  "function_name": "array_find_last_equal",
+  "program_sha256": "143b9a81e2e2821d98c8871084661ff6494ba86f4d347b49a7eae65d5f19bded",
+  "semantic_description": "Scans an integer array from left to right, maintaining the last index seen so far whose element equals k. Returns -1 exactly when no element in the full range [0,n) equals k; otherwise returns an index in range whose value equals k and all later elements differ from k. The loop may execute zero times when n is 0. The function only reads the array and preserves IntArray::full(a,n,l).",
+  "keywords": {
+    "algorithm_family": "search",
+    "control_flow": "for_loop",
+    "data_shape": "array",
+    "semantic_intent": "preserve_input",
+    "proof_pattern": [
+      "loop_invariant",
+      "case_split",
+      "range_bound"
+    ],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": "goal_check_passed"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

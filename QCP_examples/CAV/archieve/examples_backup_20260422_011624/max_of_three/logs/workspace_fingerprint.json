@@ -1,0 +1,32 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260421_053814_max_of_three",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/max_of_three.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_053814_max_of_three/original/max_of_three.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_053814_max_of_three.c",
+  "function_name": "max_of_three",
+  "program_sha256": "1f55ebdbe0786ffa2b1a31642e258f207dc410e226c922d9d8a1817733dd85ab",
+  "semantic_description": "Computes the maximum of three scalar integer inputs by initializing a local candidate m to a, conditionally replacing it with b when b is larger, then conditionally replacing it with c when c is larger. The return value must be one of the original inputs and greater than or equal to all three original inputs. The function uses only straight-line code plus two if branches, has no loops, and does not modify heap memory.",
+  "keywords": {
+    "algorithm_family": "selection",
+    "control_flow": [
+      "straight_line",
+      "if"
+    ],
+    "data_shape": "scalar_only",
+    "semantic_intent": "return_max",
+    "proof_pattern": [
+      "pure_arithmetic",
+      "case_split",
+      "range_bound"
+    ],
+    "numeric_properties": "int_range",
+    "edge_case_behavior": "branch_on_order",
+    "verification_status": "goal_check_passed"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

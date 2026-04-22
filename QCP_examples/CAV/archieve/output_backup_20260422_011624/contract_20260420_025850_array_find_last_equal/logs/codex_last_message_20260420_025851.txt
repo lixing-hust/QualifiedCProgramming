@@ -1,0 +1,13 @@
+Completed the contract workflow for `array_find_last_equal`.
+
+The target C contract is in [array_find_last_equal.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_find_last_equal.c:1). It directly specifies the two semantic cases: return `-1` when no element equals `k`, or return a valid index containing `k` with no later matching index. The array is restored unchanged via `IntArray::full(a, n, l)`.
+
+No optional Coq file was created: `input/array_find_last_equal.v` is not needed for this contract.
+
+Required logs were written under the requested workspace:
+
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_025850_array_find_last_equal/logs/reasoning.md:1)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_025850_array_find_last_equal/logs/issues.md:1)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_025850_array_find_last_equal/logs/metrics.md:1)
+
+Final checks confirmed the C output exists, no `.v` output exists, and `metrics.md` records `Experience updates: none`. Git status reports `input/array_find_last_equal.c` as untracked in this repo state.

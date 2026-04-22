@@ -1,0 +1,12 @@
+Verification succeeded for `array_all_less_than_k`.
+
+Updated the active annotated file with the required prefix invariant and loop-exit assertion: [verify_20260420_171937_array_all_less_than_k.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_171937_array_all_less_than_k.c).
+
+Generated and compiled:
+
+- `array_all_less_than_k_goal.v`
+- `array_all_less_than_k_proof_auto.v`
+- `array_all_less_than_k_proof_manual.v`
+- `array_all_less_than_k_goal_check.v`
+
+`goal_check.v` compiled successfully, `proof_manual.v` has no `Admitted.` or new `Axiom`, and non-`.v` Coq artifacts were cleaned from the workspace. Logs were updated under [output/verify_20260420_171937_array_all_less_than_k/logs](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_171937_array_all_less_than_k/logs), with `Final Result: Success` in `metrics.md`.

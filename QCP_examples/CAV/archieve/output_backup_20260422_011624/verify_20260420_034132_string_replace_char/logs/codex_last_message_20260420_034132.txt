@@ -1,0 +1,16 @@
+Verification succeeded for `string_replace_char`.
+
+Updated:
+- [annotated/verify_20260420_034132_string_replace_char.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_034132_string_replace_char.c)
+- [string_replace_char_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_034132_string_replace_char/coq/generated/string_replace_char_proof_manual.v)
+- Workspace logs under [output/verify_20260420_034132_string_replace_char/logs](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_034132_string_replace_char/logs)
+
+Checks completed:
+- `symexec` succeeded and regenerated `goal`, `proof_auto`, `proof_manual`, and `goal_check`.
+- Full Coq replay succeeded for `original/string_replace_char.v`, `goal.v`, `proof_auto.v`, `proof_manual.v`, and `goal_check.v`.
+- `proof_manual.v` has no `Admitted.` and no top-level `Axiom`.
+- Non-`.v` Coq intermediates under this workspace were cleaned.
+- `logs/metrics.md` ends with `Final Result: Success`.
+- `workspace_fingerprint.json` now has a non-empty semantic description and controlled-vocabulary keywords, including `verification_status: goal_check_passed`.
+
+I did not update shared experience docs because the user rule for this task was to work only inside the existing workspace.

@@ -1,0 +1,16 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260418_213619_array_count_increasing_steps",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_count_increasing_steps.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_count_increasing_steps.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_213619_array_count_increasing_steps/original/array_count_increasing_steps.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_213619_array_count_increasing_steps/original/array_count_increasing_steps.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_213619_array_count_increasing_steps.c",
+  "function_name": "array_count_increasing_steps",
+  "program_sha256": "97816a8682de47d47876c125ffaca28fa3837f60b500993d912aac766253285b",
+  "semantic_description": "",
+  "keywords": {},
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

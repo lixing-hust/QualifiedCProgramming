@@ -1,0 +1,93 @@
+Welcome to Coq 8.20.1
+
+Coq < [Loading ML file ring_plugin.cmxs (using legacy method) ... done]
+[Loading ML file zify_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_core_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_plugin.cmxs (using legacy method) ... done]
+[Loading ML file btauto_plugin.cmxs (using legacy method) ... done]
+
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 1 goal
+  
+  ============================
+  array_scale_return_wit_1
+
+debug_return < 
+debug_return < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l2, l1 : list Z
+  i_3 : Z
+  H : i_3 >= n_pre
+  H0 : 0 <= i_3
+  H1 : i_3 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1 = i_3
+  H5 : Zlength l2 = n_pre - i_3
+  H6 : forall t : Z, 0 <= t < i_3 -> Znth t l1 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_3 -> Znth t_2 l2 0 = Znth (i_3 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i_2 : Z,
+    0 <= i_2 < n_pre -> -2147483648 <= Znth i_2 la 0 * k_pre <= 2147483647
+  ============================
+  IntArray.full a_pre n_pre la ** IntArray.full out_pre n_pre (l1 ++ l2)
+  |-- EX lr : list Z,
+      [|Zlength lr = n_pre|] &&
+      [|forall i : Z, 0 <= i < n_pre -> Znth i lr 0 = Znth i la 0 * k_pre|] &&
+      IntArray.full a_pre n_pre la ** IntArray.full out_pre n_pre lr
+
+debug_return < 1 goal
+  
+  out_pre, k_pre, a_pre, n_pre : Z
+  lo, la, l2, l1 : list Z
+  i_3 : Z
+  H : i_3 >= n_pre
+  H0 : 0 <= i_3
+  H1 : i_3 <= n_pre
+  H2 : n_pre = Zlength la
+  H3 : n_pre = Zlength lo
+  H4 : Zlength l1 = i_3
+  H5 : Zlength l2 = n_pre - i_3
+  H6 : forall t : Z, 0 <= t < i_3 -> Znth t l1 0 = Znth t la 0 * k_pre
+  H7 :
+    forall t_2 : Z,
+    0 <= t_2 < n_pre - i_3 -> Znth t_2 l2 0 = Znth (i_3 + t_2) lo 0
+  H8 : 0 <= n_pre
+  H9 : Zlength la = n_pre
+  H10 : Zlength lo = n_pre
+  H11 :
+    forall i_2 : Z,
+    0 <= i_2 < n_pre -> -2147483648 <= Znth i_2 la 0 * k_pre <= 2147483647
+  ============================
+  IntArray.full a_pre n_pre la ** IntArray.full out_pre n_pre (l1 ++ l2)
+  |-- EX lr : list Z,
+      [|Zlength lr = n_pre|] &&
+      [|forall i : Z, 0 <= i < n_pre -> Znth i lr 0 = Znth i la 0 * k_pre|] &&
+      IntArray.full a_pre n_pre la ** IntArray.full out_pre n_pre lr
+
+debug_return < 
+Coq < 

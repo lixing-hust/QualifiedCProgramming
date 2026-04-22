@@ -1,0 +1,6 @@
+2026-04-18T16:56:33.939581Z ERROR codex_core::tools::router: error=write_stdin failed: stdin is closed for this session; rerun exec_command with tty=true to keep stdin open
+2026-04-18T17:06:10.657283Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_003208_string_equal/logs/metrics.md:
+- Codex stdout JSONL: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_003208_string_equal/logs/codex_stdout_20260419_004409.jsonl`
+- Codex stderr log: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_003208_string_equal/logs/codex_stderr_20260419_004409.log`
+- Codex last message: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_003208_string_equal/logs/codex_last_message_20260419_004409.txt`
+Final Result: Fail

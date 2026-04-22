@@ -1,0 +1,25 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260420_154005_array_is_strictly_increasing",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_is_strictly_increasing.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_154005_array_is_strictly_increasing/original/array_is_strictly_increasing.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_154005_array_is_strictly_increasing.c",
+  "function_name": "array_is_strictly_increasing",
+  "program_sha256": "cc500d2a720ca3c855ef77bbb819c58a765d2c922ad50cf754eb9c84f4ecf593",
+  "semantic_description": "Checks whether an input integer array of length n is strictly increasing. The function scans adjacent pairs with a for loop from index 1 to n - 1, returns 0 immediately when it finds l[i - 1] >= l[i], and returns 1 after the loop if every adjacent pair is ordered. The array memory is preserved and no writes are performed. For n <= 1 the loop body is skipped and the function returns 1, making the universal postcondition vacuous.",
+  "keywords": {
+    "algorithm_family": "search",
+    "control_flow": ["for_loop", "if"],
+    "data_shape": ["array", "pointer"],
+    "semantic_intent": "preserve_input",
+    "proof_pattern": ["loop_invariant", "case_split", "termination_by_bound", "heap_reasoning"],
+    "numeric_properties": ["nonnegative_input", "int_range"],
+    "edge_case_behavior": ["branch_on_order", "empty_loop_possible"],
+    "verification_status": "goal_check_passed"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

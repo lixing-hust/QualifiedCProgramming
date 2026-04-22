@@ -1,0 +1,11 @@
+compile_start: 2026-04-21T00:53:54+08:00
+original_exit:0
+goal_exit:0
+proof_auto_exit:0
+proof_manual_exit:0
+File "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/coq/generated/gcd_iterative_goal_check.v", line 7, characters 0-19:
+Error:
+The field proof_of_gcd_iterative_entail_wit_1_1 is missing in SimpleC.EE.CAV.verify_20260420_235246_gcd_iterative.gcd_iterative_goal_check.VC_Correctness.
+
+goal_check_exit:1
+compile_end: 2026-04-21T00:53:57+08:00

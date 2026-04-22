@@ -1,0 +1,12 @@
+Completed the contract workflow for `selection_sort`.
+
+Created:
+- [selection_sort.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/selection_sort.c:1)
+- [selection_sort.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/selection_sort.v:1)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_173127_selection_sort/logs/reasoning.md:1)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_173127_selection_sort/logs/issues.md:1)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_173127_selection_sort/logs/metrics.md:1)
+
+The C contract preserves the original function signature and specifies in-place sorting as `sorted_z(l0)`, `Permutation(l, l0)`, and final `IntArray::full(a, n, l0)`. The `.v` file only adds the task-local `sorted_z` predicate. No experience docs were updated, and `metrics.md` records `Experience updates: none`.
+
+I did not run the Verify phase; this turn only generated the contract inputs and required logs.

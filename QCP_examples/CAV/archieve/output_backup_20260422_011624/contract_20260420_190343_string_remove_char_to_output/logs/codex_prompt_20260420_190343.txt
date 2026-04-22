@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/contract/SKILL.md
+
+Inputs:
+- Raw markdown: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/raw/string_remove_char_to_output.md`
+- Target function: `string_remove_char_to_output`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_190343_string_remove_char_to_output`
+- Output C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_remove_char_to_output.c`
+- Optional output V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_remove_char_to_output.v`

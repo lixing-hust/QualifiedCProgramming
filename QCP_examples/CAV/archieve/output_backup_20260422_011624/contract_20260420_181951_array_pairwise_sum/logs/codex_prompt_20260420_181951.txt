@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/contract/SKILL.md
+
+Inputs:
+- Raw markdown: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/raw/array_pairwise_sum.md`
+- Target function: `array_pairwise_sum`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_181951_array_pairwise_sum`
+- Output C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_pairwise_sum.c`
+- Optional output V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_pairwise_sum.v`

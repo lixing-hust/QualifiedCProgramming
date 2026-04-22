@@ -1,0 +1,27 @@
+Verification did not reach success.
+
+What completed:
+- Updated `logs/workspace_fingerprint.json` with a non-empty semantic description and controlled-vocabulary keywords.
+- Added loop invariant and loop-exit assertion to [annotated C](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_190707_string_remove_char_to_output.c).
+- Reran `symexec` successfully in the existing workspace.
+- Generated fresh Coq files under `coq/generated/`.
+- Added substantial manual proof work in `string_remove_char_to_output_proof_manual.v`.
+- Removed non-`.v` Coq intermediates.
+- Updated:
+  - `logs/annotation_reasoning.md`
+  - `logs/proof_reasoning.md`
+  - `logs/issues.md`
+  - `logs/metrics.md`
+
+Current blocker:
+- `coqc` still fails on `proof_of_string_remove_char_to_output_entail_wit_3`.
+- The current error is:
+  - `Attempt to save an incomplete proof (there are remaining open goals).`
+- `proof_manual.v` currently has no `Admitted.`, no added `Axiom`, and no leftover `Show`, but it does not compile.
+- `goal_check.v` was not reached after the manual proof failure.
+
+Final workspace result recorded in `logs/metrics.md`:
+
+```text
+Final Result: Fail
+```

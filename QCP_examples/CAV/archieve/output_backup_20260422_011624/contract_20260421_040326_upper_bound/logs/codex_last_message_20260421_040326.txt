@@ -1,0 +1,11 @@
+Completed the contract workflow for `upper_bound`.
+
+Created:
+- [input/upper_bound.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/upper_bound.c)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_040326_upper_bound/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_040326_upper_bound/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_040326_upper_bound/logs/metrics.md)
+
+No `input/upper_bound.v` was generated because the upper-bound semantics are expressible directly in the C contract using quantifiers over the logical array list.
+
+I also checked that `input/upper_bound.c` contains only the target function and contract, with no Verify-stage `Inv` / `Assert` annotations.

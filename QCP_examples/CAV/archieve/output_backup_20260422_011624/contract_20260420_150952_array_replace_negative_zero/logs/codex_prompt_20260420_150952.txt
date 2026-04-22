@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/contract/SKILL.md
+
+Inputs:
+- Raw markdown: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/raw/array_replace_negative_zero.md`
+- Target function: `array_replace_negative_zero`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_150952_array_replace_negative_zero`
+- Output C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_replace_negative_zero.c`
+- Optional output V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_replace_negative_zero.v`

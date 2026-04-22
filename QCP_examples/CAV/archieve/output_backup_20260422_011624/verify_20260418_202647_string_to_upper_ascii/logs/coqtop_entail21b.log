@@ -1,0 +1,647 @@
+Welcome to Coq 8.20.1
+
+Coq < [Loading ML file ring_plugin.cmxs (using legacy method) ... done]
+[Loading ML file zify_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_core_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_plugin.cmxs (using legacy method) ... done]
+[Loading ML file btauto_plugin.cmxs (using legacy method) ... done]
+
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < Coq < Coq < 1 goal
+  
+  ============================
+  forall l : list Z, Zlength (string_to_upper_ascii_spec l) = Zlength l
+
+string_to_upper_ascii_spec_length < 
+string_to_upper_ascii_spec_length < 2 goals
+  
+  ============================
+  Zlength (string_to_upper_ascii_spec nil) = Zlength nil
+
+goal 2 is:
+ Zlength (string_to_upper_ascii_spec (a :: l)) = Zlength (a :: l)
+
+string_to_upper_ascii_spec_length < 1 goal
+  
+  ============================
+  Zlength (string_to_upper_ascii_spec nil) = Zlength nil
+
+This subproof is complete, but there are some unfocused goals.
+Focus next goal with bullet -.
+
+1 goal
+
+goal 1 is:
+ Zlength (string_to_upper_ascii_spec (a :: l)) = Zlength (a :: l)
+
+string_to_upper_ascii_spec_length < 1 goal
+  
+  a : Z
+  l : list Z
+  IHl : Zlength (string_to_upper_ascii_spec l) = Zlength l
+  ============================
+  Zlength (string_to_upper_ascii_spec (a :: l)) = Zlength (a :: l)
+
+1 goal
+  
+  a : Z
+  l : list Z
+  IHl : Zlength (string_to_upper_ascii_spec l) = Zlength l
+  ============================
+  Zlength (upper_ascii_char a :: string_to_upper_ascii_spec l) =
+  Zlength (a :: l)
+
+1 goal
+  
+  a : Z
+  l : list Z
+  IHl : Zlength (string_to_upper_ascii_spec l) = Zlength l
+  ============================
+  Z.succ (Zlength (string_to_upper_ascii_spec l)) = Zlength (a :: l)
+
+1 goal
+  
+  a : Z
+  l : list Z
+  IHl : Zlength (string_to_upper_ascii_spec l) = Zlength l
+  ============================
+  Z.succ (Zlength (string_to_upper_ascii_spec l)) = Z.succ (Zlength l)
+
+1 goal
+  
+  a : Z
+  l : list Z
+  IHl : Zlength (string_to_upper_ascii_spec l) = Zlength l
+  ============================
+  Z.succ (Zlength l) = Z.succ (Zlength l)
+
+No more goals.
+
+string_to_upper_ascii_spec_length < 
+Coq < Coq < Coq < Coq < 1 goal
+  
+  ============================
+  forall l1 l2 : list Z,
+  string_to_upper_ascii_spec (l1 ++ l2) =
+  string_to_upper_ascii_spec l1 ++ string_to_upper_ascii_spec l2
+
+string_to_upper_ascii_spec_app < 
+string_to_upper_ascii_spec_app < 2 goals
+  
+  ============================
+  forall l2 : list Z,
+  string_to_upper_ascii_spec (nil ++ l2) =
+  string_to_upper_ascii_spec nil ++ string_to_upper_ascii_spec l2
+
+goal 2 is:
+ forall l2 : list Z,
+ string_to_upper_ascii_spec ((a :: l1) ++ l2) =
+ string_to_upper_ascii_spec (a :: l1) ++ string_to_upper_ascii_spec l2
+
+string_to_upper_ascii_spec_app < 1 goal
+  
+  ============================
+  forall l2 : list Z,
+  string_to_upper_ascii_spec (nil ++ l2) =
+  string_to_upper_ascii_spec nil ++ string_to_upper_ascii_spec l2
+
+This subproof is complete, but there are some unfocused goals.
+Focus next goal with bullet -.
+
+1 goal
+
+goal 1 is:
+ forall l2 : list Z,
+ string_to_upper_ascii_spec ((a :: l1) ++ l2) =
+ string_to_upper_ascii_spec (a :: l1) ++ string_to_upper_ascii_spec l2
+
+string_to_upper_ascii_spec_app < 1 goal
+  
+  a : Z
+  l1 : list Z
+  IHl1 :
+    forall l2 : list Z,
+    string_to_upper_ascii_spec (l1 ++ l2) =
+    string_to_upper_ascii_spec l1 ++ string_to_upper_ascii_spec l2
+  ============================
+  forall l2 : list Z,
+  string_to_upper_ascii_spec ((a :: l1) ++ l2) =
+  string_to_upper_ascii_spec (a :: l1) ++ string_to_upper_ascii_spec l2
+
+1 goal
+  
+  a : Z
+  l1 : list Z
+  IHl1 :
+    forall l2 : list Z,
+    string_to_upper_ascii_spec (l1 ++ l2) =
+    string_to_upper_ascii_spec l1 ++ string_to_upper_ascii_spec l2
+  l2 : list Z
+  ============================
+  string_to_upper_ascii_spec ((a :: l1) ++ l2) =
+  string_to_upper_ascii_spec (a :: l1) ++ string_to_upper_ascii_spec l2
+
+1 goal
+  
+  a : Z
+  l1 : list Z
+  IHl1 :
+    forall l2 : list Z,
+    string_to_upper_ascii_spec (l1 ++ l2) =
+    string_to_upper_ascii_spec l1 ++ string_to_upper_ascii_spec l2
+  l2 : list Z
+  ============================
+  upper_ascii_char a :: string_to_upper_ascii_spec (l1 ++ l2) =
+  upper_ascii_char a
+  :: string_to_upper_ascii_spec l1 ++ string_to_upper_ascii_spec l2
+
+1 goal
+  
+  a : Z
+  l1 : list Z
+  IHl1 :
+    forall l2 : list Z,
+    string_to_upper_ascii_spec (l1 ++ l2) =
+    string_to_upper_ascii_spec l1 ++ string_to_upper_ascii_spec l2
+  l2 : list Z
+  ============================
+  upper_ascii_char a
+  :: string_to_upper_ascii_spec l1 ++ string_to_upper_ascii_spec l2 =
+  upper_ascii_char a
+  :: string_to_upper_ascii_spec l1 ++ string_to_upper_ascii_spec l2
+
+No more goals.
+
+string_to_upper_ascii_spec_app < 
+Coq < 1 goal
+  
+  ============================
+  string_to_upper_ascii_entail_wit_2_1
+
+Unnamed_thm < 
+Unnamed_thm < 1 goal
+  
+  ============================
+  forall (s_pre n : Z) (l l1_2 l2_2 : list Z) (i : Z),
+  [|0 <= n + 1|] &&
+  [|Znth i (string_to_upper_ascii_spec l1_2 ++ l2_2 ++ 0 :: nil) 0 <= 122|] &&
+  [|97 <= Znth i (string_to_upper_ascii_spec l1_2 ++ l2_2 ++ 0 :: nil) 0|] &&
+  [|Znth i (string_to_upper_ascii_spec l1_2 ++ l2_2 ++ 0 :: nil) 0 <> 0|] &&
+  [|0 <= i|] && [|i <= n|] && [|l = l1_2 ++ l2_2|] && [|
+  Zlength l1_2 = i|] && [|0 <= n|] && [|n < 2147483647|] &&
+  [|forall k : Z, 0 <= k < n -> Znth k l 0 <> 0|] &&
+  CharArray.full s_pre (n + 1)
+    (replace_Znth i
+       (Znth i (string_to_upper_ascii_spec l1_2 ++ l2_2 ++ 0 :: nil) 0 - 97 +
+        65) (string_to_upper_ascii_spec l1_2 ++ l2_2 ++ 0 :: nil))
+  |-- EX l1 : list Z,
+      EX l2 : list Z,
+      [|0 <= i + 1|] && [|i + 1 <= n|] && [|l = l1 ++ l2|] &&
+      [|Zlength l1 = i + 1|] && [|0 <= n|] && [|n < 2147483647|] &&
+      [|forall k : Z, 0 <= k < n -> Znth k l 0 <> 0|] &&
+      CharArray.full s_pre (n + 1)
+        (string_to_upper_ascii_spec l1 ++ l2 ++ 0 :: nil)
+
+Unnamed_thm < 1 goal
+  
+  s_pre, n : Z
+  l, l1_2, l2_2 : list Z
+  i : Z
+  H : 0 <= n + 1
+  H0 : Znth i (string_to_upper_ascii_spec l1_2 ++ l2_2 ++ 0 :: nil) 0 <= 122
+  H1 : 97 <= Znth i (string_to_upper_ascii_spec l1_2 ++ l2_2 ++ 0 :: nil) 0
+  H2 : Znth i (string_to_upper_ascii_spec l1_2 ++ l2_2 ++ 0 :: nil) 0 <> 0
+  H3 : 0 <= i
+  H4 : i <= n
+  H5 : l = l1_2 ++ l2_2
+  H6 : Zlength l1_2 = i
+  H7 : 0 <= n
+  H8 : n < 2147483647
+  H9 : forall k : Z, 0 <= k < n -> Znth k l 0 <> 0
+  ============================
+  CharArray.full s_pre (n + 1)
+    (replace_Znth i
+       (Znth i (string_to_upper_ascii_spec l1_2 ++ l2_2 ++ 0 :: nil) 0 - 97 +
+        65) (string_to_upper_ascii_spec l1_2 ++ l2_2 ++ 0 :: nil))
+  |-- EX l1 : list Z,
+      EX l2 : list Z,
+      [|0 <= i + 1|] && [|i + 1 <= n|] && [|l = l1 ++ l2|] &&
+      [|Zlength l1 = i + 1|] && [|0 <= n|] && [|n < 2147483647|] &&
+      [|forall k : Z, 0 <= k < n -> Znth k l 0 <> 0|] &&
+      CharArray.full s_pre (n + 1)
+        (string_to_upper_ascii_spec l1 ++ l2 ++ 0 :: nil)
+
+Unnamed_thm < 2 goals
+  
+  s_pre, n : Z
+  l, l1_2 : list Z
+  i : Z
+  H : 0 <= n + 1
+  H0 : Znth i (string_to_upper_ascii_spec l1_2 ++ nil ++ 0 :: nil) 0 <= 122
+  H1 : 97 <= Znth i (string_to_upper_ascii_spec l1_2 ++ nil ++ 0 :: nil) 0
+  H2 : Znth i (string_to_upper_ascii_spec l1_2 ++ nil ++ 0 :: nil) 0 <> 0
+  H3 : 0 <= i
+  H4 : i <= n
+  H5 : l = l1_2 ++ nil
+  H6 : Zlength l1_2 = i
+  H7 : 0 <= n
+  H8 : n < 2147483647
+  H9 : forall k : Z, 0 <= k < n -> Znth k l 0 <> 0
+  ============================
+  CharArray.full s_pre (n + 1)
+    (replace_Znth i
+       (Znth i (string_to_upper_ascii_spec l1_2 ++ nil ++ 0 :: nil) 0 - 97 +
+        65) (string_to_upper_ascii_spec l1_2 ++ nil ++ 0 :: nil))
+  |-- EX l1 : list Z,
+      EX l2 : list Z,
+      [|0 <= i + 1|] && [|i + 1 <= n|] && [|l = l1 ++ l2|] &&
+      [|Zlength l1 = i + 1|] && [|0 <= n|] && [|n < 2147483647|] &&
+      [|forall k : Z, 0 <= k < n -> Znth k l 0 <> 0|] &&
+      CharArray.full s_pre (n + 1)
+        (string_to_upper_ascii_spec l1 ++ l2 ++ 0 :: nil)
+
+goal 2 is:
+ CharArray.full s_pre (n + 1)
+   (replace_Znth i
+      (Znth i (string_to_upper_ascii_spec l1_2 ++ (z :: l2_2) ++ 0 :: nil) 0 -
+       97 + 65) (string_to_upper_ascii_spec l1_2 ++ (z :: l2_2) ++ 0 :: nil))
+ |-- EX l1 : list Z,
+     EX l2 : list Z,
+     [|0 <= i + 1|] && [|i + 1 <= n|] && [|l = l1 ++ l2|] &&
+     [|Zlength l1 = i + 1|] && [|0 <= n|] && [|n < 2147483647|] &&
+     [|forall k : Z, 0 <= k < n -> Znth k l 0 <> 0|] &&
+     CharArray.full s_pre (n + 1)
+       (string_to_upper_ascii_spec l1 ++ l2 ++ 0 :: nil)
+
+Unnamed_thm < 1 goal
+  
+  s_pre, n : Z
+  l, l1_2 : list Z
+  i : Z
+  H : 0 <= n + 1
+  H0 : Znth i (string_to_upper_ascii_spec l1_2 ++ nil ++ 0 :: nil) 0 <= 122
+  H1 : 97 <= Znth i (string_to_upper_ascii_spec l1_2 ++ nil ++ 0 :: nil) 0
+  H2 : Znth i (string_to_upper_ascii_spec l1_2 ++ nil ++ 0 :: nil) 0 <> 0
+  H3 : 0 <= i
+  H4 : i <= n
+  H5 : l = l1_2 ++ nil
+  H6 : Zlength l1_2 = i
+  H7 : 0 <= n
+  H8 : n < 2147483647
+  H9 : forall k : Z, 0 <= k < n -> Znth k l 0 <> 0
+  ============================
+  CharArray.full s_pre (n + 1)
+    (replace_Znth i
+       (Znth i (string_to_upper_ascii_spec l1_2 ++ nil ++ 0 :: nil) 0 - 97 +
+        65) (string_to_upper_ascii_spec l1_2 ++ nil ++ 0 :: nil))
+  |-- EX l1 : list Z,
+      EX l2 : list Z,
+      [|0 <= i + 1|] && [|i + 1 <= n|] && [|l = l1 ++ l2|] &&
+      [|Zlength l1 = i + 1|] && [|0 <= n|] && [|n < 2147483647|] &&
+      [|forall k : Z, 0 <= k < n -> Znth k l 0 <> 0|] &&
+      CharArray.full s_pre (n + 1)
+        (string_to_upper_ascii_spec l1 ++ l2 ++ 0 :: nil)
+
+1 goal
+  
+  s_pre, n : Z
+  l, l1_2 : list Z
+  i : Z
+  H : 0 <= n + 1
+  H0 : Znth i (string_to_upper_ascii_spec l1_2 ++ nil ++ 0 :: nil) 0 <= 122
+  H1 : 97 <= Znth i (string_to_upper_ascii_spec l1_2 ++ nil ++ 0 :: nil) 0
+  H2 : Znth i (string_to_upper_ascii_spec l1_2 ++ 0 :: nil) 0 <> 0
+  H3 : 0 <= i
+  H4 : i <= n
+  H5 : l = l1_2 ++ nil
+  H6 : Zlength l1_2 = i
+  H7 : 0 <= n
+  H8 : n < 2147483647
+  H9 : forall k : Z, 0 <= k < n -> Znth k l 0 <> 0
+  ============================
+  CharArray.full s_pre (n + 1)
+    (replace_Znth i
+       (Znth i (string_to_upper_ascii_spec l1_2 ++ nil ++ 0 :: nil) 0 - 97 +
+        65) (string_to_upper_ascii_spec l1_2 ++ nil ++ 0 :: nil))
+  |-- EX l1 : list Z,
+      EX l2 : list Z,
+      [|0 <= i + 1|] && [|i + 1 <= n|] && [|l = l1 ++ l2|] &&
+      [|Zlength l1 = i + 1|] && [|0 <= n|] && [|n < 2147483647|] &&
+      [|forall k : Z, 0 <= k < n -> Znth k l 0 <> 0|] &&
+      CharArray.full s_pre (n + 1)
+        (string_to_upper_ascii_spec l1 ++ l2 ++ 0 :: nil)
+
+Unnamed_thm < 1 goal
+  
+  s_pre, n : Z
+  l, l1_2 : list Z
+  i : Z
+  H : 0 <= n + 1
+  H0 : Znth i (string_to_upper_ascii_spec l1_2 ++ nil ++ 0 :: nil) 0 <= 122
+  H1 : 97 <= Znth i (string_to_upper_ascii_spec l1_2 ++ nil ++ 0 :: nil) 0
+  H2 : Znth (i - Zlength (string_to_upper_ascii_spec l1_2)) (0 :: nil) 0 <> 0
+  H3 : 0 <= i
+  H4 : i <= n
+  H5 : l = l1_2 ++ nil
+  H6 : Zlength l1_2 = i
+  H7 : 0 <= n
+  H8 : n < 2147483647
+  H9 : forall k : Z, 0 <= k < n -> Znth k l 0 <> 0
+  ============================
+  CharArray.full s_pre (n + 1)
+    (replace_Znth i
+       (Znth i (string_to_upper_ascii_spec l1_2 ++ nil ++ 0 :: nil) 0 - 97 +
+        65) (string_to_upper_ascii_spec l1_2 ++ nil ++ 0 :: nil))
+  |-- EX l1 : list Z,
+      EX l2 : list Z,
+      [|0 <= i + 1|] && [|i + 1 <= n|] && [|l = l1 ++ l2|] &&
+      [|Zlength l1 = i + 1|] && [|0 <= n|] && [|n < 2147483647|] &&
+      [|forall k : Z, 0 <= k < n -> Znth k l 0 <> 0|] &&
+      CharArray.full s_pre (n + 1)
+        (string_to_upper_ascii_spec l1 ++ l2 ++ 0 :: nil)
+
+Unnamed_thm < Unnamed_thm < 1 goal
+  
+  s_pre, n : Z
+  l, l1_2 : list Z
+  i : Z
+  H : 0 <= n + 1
+  H0 : Znth i (string_to_upper_ascii_spec l1_2 ++ nil ++ 0 :: nil) 0 <= 122
+  H1 : 97 <= Znth i (string_to_upper_ascii_spec l1_2 ++ nil ++ 0 :: nil) 0
+  H2 : Znth 0 (0 :: nil) 0 <> 0
+  H3 : 0 <= i
+  H4 : i <= n
+  H5 : l = l1_2 ++ nil
+  H6 : Zlength l1_2 = i
+  H7 : 0 <= n
+  H8 : n < 2147483647
+  H9 : forall k : Z, 0 <= k < n -> Znth k l 0 <> 0
+  ============================
+  CharArray.full s_pre (n + 1)
+    (replace_Znth i
+       (Znth i (string_to_upper_ascii_spec l1_2 ++ nil ++ 0 :: nil) 0 - 97 +
+        65) (string_to_upper_ascii_spec l1_2 ++ nil ++ 0 :: nil))
+  |-- EX l1 : list Z,
+      EX l2 : list Z,
+      [|0 <= i + 1|] && [|i + 1 <= n|] && [|l = l1 ++ l2|] &&
+      [|Zlength l1 = i + 1|] && [|0 <= n|] && [|n < 2147483647|] &&
+      [|forall k : Z, 0 <= k < n -> Znth k l 0 <> 0|] &&
+      CharArray.full s_pre (n + 1)
+        (string_to_upper_ascii_spec l1 ++ l2 ++ 0 :: nil)
+
+Unnamed_thm < 1 goal
+  
+  s_pre, n : Z
+  l, l1_2 : list Z
+  i : Z
+  H : 0 <= n + 1
+  H0 : Znth i (string_to_upper_ascii_spec l1_2 ++ nil ++ 0 :: nil) 0 <= 122
+  H1 : 97 <= Znth i (string_to_upper_ascii_spec l1_2 ++ nil ++ 0 :: nil) 0
+  H2 : Znth 0 (0 :: nil) 0 <> 0
+  H3 : 0 <= i
+  H4 : i <= n
+  H5 : l = l1_2 ++ nil
+  H6 : Zlength l1_2 = i
+  H7 : 0 <= n
+  H8 : n < 2147483647
+  H9 : forall k : Z, 0 <= k < n -> Znth k l 0 <> 0
+  ============================
+  CharArray.full s_pre (n + 1)
+    (replace_Znth i
+       (Znth i (string_to_upper_ascii_spec l1_2 ++ nil ++ 0 :: nil) 0 - 97 +
+        65) (string_to_upper_ascii_spec l1_2 ++ nil ++ 0 :: nil))
+  |-- EX l1 : list Z,
+      EX l2 : list Z,
+      [|0 <= i + 1|] && [|i + 1 <= n|] && [|l = l1 ++ l2|] &&
+      [|Zlength l1 = i + 1|] && [|0 <= n|] && [|n < 2147483647|] &&
+      [|forall k : Z, 0 <= k < n -> Znth k l 0 <> 0|] &&
+      CharArray.full s_pre (n + 1)
+        (string_to_upper_ascii_spec l1 ++ l2 ++ 0 :: nil)
+
+Unnamed_thm < This subproof is complete, but there are some unfocused goals.
+Focus next goal with bullet -.
+
+1 goal
+
+goal 1 is:
+ CharArray.full s_pre (n + 1)
+   (replace_Znth i
+      (Znth i (string_to_upper_ascii_spec l1_2 ++ (z :: l2_2) ++ 0 :: nil) 0 -
+       97 + 65) (string_to_upper_ascii_spec l1_2 ++ (z :: l2_2) ++ 0 :: nil))
+ |-- EX l1 : list Z,
+     EX l2 : list Z,
+     [|0 <= i + 1|] && [|i + 1 <= n|] && [|l = l1 ++ l2|] &&
+     [|Zlength l1 = i + 1|] && [|0 <= n|] && [|n < 2147483647|] &&
+     [|forall k : Z, 0 <= k < n -> Znth k l 0 <> 0|] &&
+     CharArray.full s_pre (n + 1)
+       (string_to_upper_ascii_spec l1 ++ l2 ++ 0 :: nil)
+
+Unnamed_thm < 1 goal
+  
+  s_pre, n : Z
+  l, l1_2 : list Z
+  z : Z
+  l2_2 : list Z
+  i : Z
+  H : 0 <= n + 1
+  H0 :
+    Znth i (string_to_upper_ascii_spec l1_2 ++ (z :: l2_2) ++ 0 :: nil) 0 <=
+    122
+  H1 :
+    97 <=
+    Znth i (string_to_upper_ascii_spec l1_2 ++ (z :: l2_2) ++ 0 :: nil) 0
+  H2 :
+    Znth i (string_to_upper_ascii_spec l1_2 ++ (z :: l2_2) ++ 0 :: nil) 0 <>
+    0
+  H3 : 0 <= i
+  H4 : i <= n
+  H5 : l = l1_2 ++ z :: l2_2
+  H6 : Zlength l1_2 = i
+  H7 : 0 <= n
+  H8 : n < 2147483647
+  H9 : forall k : Z, 0 <= k < n -> Znth k l 0 <> 0
+  ============================
+  CharArray.full s_pre (n + 1)
+    (replace_Znth i
+       (Znth i (string_to_upper_ascii_spec l1_2 ++ (z :: l2_2) ++ 0 :: nil) 0 -
+        97 + 65) (string_to_upper_ascii_spec l1_2 ++ (z :: l2_2) ++ 0 :: nil))
+  |-- EX l1 : list Z,
+      EX l2 : list Z,
+      [|0 <= i + 1|] && [|i + 1 <= n|] && [|l = l1 ++ l2|] &&
+      [|Zlength l1 = i + 1|] && [|0 <= n|] && [|n < 2147483647|] &&
+      [|forall k : Z, 0 <= k < n -> Znth k l 0 <> 0|] &&
+      CharArray.full s_pre (n + 1)
+        (string_to_upper_ascii_spec l1 ++ l2 ++ 0 :: nil)
+
+1 goal
+  
+  s_pre, n : Z
+  l, l1_2 : list Z
+  z : Z
+  l2_2 : list Z
+  i : Z
+  H : 0 <= n + 1
+  H0 :
+    Znth i (string_to_upper_ascii_spec l1_2 ++ (z :: l2_2) ++ 0 :: nil) 0 <=
+    122
+  H1 :
+    97 <=
+    Znth i (string_to_upper_ascii_spec l1_2 ++ (z :: l2_2) ++ 0 :: nil) 0
+  H2 :
+    Znth i (string_to_upper_ascii_spec l1_2 ++ (z :: l2_2) ++ 0 :: nil) 0 <>
+    0
+  H3 : 0 <= i
+  H4 : i <= n
+  H5 : l = l1_2 ++ z :: l2_2
+  H6 : Zlength l1_2 = i
+  H7 : 0 <= n
+  H8 : n < 2147483647
+  H9 : forall k : Z, 0 <= k < n -> Znth k l 0 <> 0
+  ============================
+  CharArray.full s_pre (n + 1)
+    (replace_Znth i
+       (Znth i (string_to_upper_ascii_spec l1_2 ++ (z :: l2_2) ++ 0 :: nil) 0 -
+        97 + 65) (string_to_upper_ascii_spec l1_2 ++ (z :: l2_2) ++ 0 :: nil))
+  |-- EX l2 : list Z,
+      [|0 <= i + 1|] && [|i + 1 <= n|] && [|l = (l1_2 ++ z :: nil) ++ l2|] &&
+      [|Zlength (l1_2 ++ z :: nil) = i + 1|] && [|
+      0 <= n|] && [|n < 2147483647|] &&
+      [|forall k : Z, 0 <= k < n -> Znth k l 0 <> 0|] &&
+      CharArray.full s_pre (n + 1)
+        (string_to_upper_ascii_spec (l1_2 ++ z :: nil) ++ l2 ++ 0 :: nil)
+
+Unnamed_thm < 1 goal
+  
+  s_pre, n : Z
+  l, l1_2 : list Z
+  z : Z
+  l2_2 : list Z
+  i : Z
+  H : 0 <= n + 1
+  H0 :
+    Znth i (string_to_upper_ascii_spec l1_2 ++ (z :: l2_2) ++ 0 :: nil) 0 <=
+    122
+  H1 :
+    97 <=
+    Znth i (string_to_upper_ascii_spec l1_2 ++ (z :: l2_2) ++ 0 :: nil) 0
+  H2 :
+    Znth i (string_to_upper_ascii_spec l1_2 ++ (z :: l2_2) ++ 0 :: nil) 0 <>
+    0
+  H3 : 0 <= i
+  H4 : i <= n
+  H5 : l = l1_2 ++ z :: l2_2
+  H6 : Zlength l1_2 = i
+  H7 : 0 <= n
+  H8 : n < 2147483647
+  H9 : forall k : Z, 0 <= k < n -> Znth k l 0 <> 0
+  ============================
+  CharArray.full s_pre (n + 1)
+    (replace_Znth i
+       (Znth i (string_to_upper_ascii_spec l1_2 ++ (z :: l2_2) ++ 0 :: nil) 0 -
+        97 + 65) (string_to_upper_ascii_spec l1_2 ++ (z :: l2_2) ++ 0 :: nil))
+  |-- [|0 <= i + 1|] && [|i + 1 <= n|] && [|l = (l1_2 ++ z :: nil) ++ l2_2|] &&
+      [|Zlength (l1_2 ++ z :: nil) = i + 1|] && [|
+      0 <= n|] && [|n < 2147483647|] &&
+      [|forall k : Z, 0 <= k < n -> Znth k l 0 <> 0|] &&
+      CharArray.full s_pre (n + 1)
+        (string_to_upper_ascii_spec (l1_2 ++ z :: nil) ++ l2_2 ++ 0 :: nil)
+
+Unnamed_thm < 4 goals
+  
+  s_pre, n : Z
+  l, l1_2 : list Z
+  z : Z
+  l2_2 : list Z
+  i : Z
+  H : 0 <= n + 1
+  H0 :
+    Znth i (string_to_upper_ascii_spec l1_2 ++ (z :: l2_2) ++ 0 :: nil) 0 <=
+    122
+  H1 :
+    97 <=
+    Znth i (string_to_upper_ascii_spec l1_2 ++ (z :: l2_2) ++ 0 :: nil) 0
+  H2 :
+    Znth i (string_to_upper_ascii_spec l1_2 ++ (z :: l2_2) ++ 0 :: nil) 0 <>
+    0
+  H3 : 0 <= i
+  H4 : i <= n
+  H5 : l = l1_2 ++ z :: l2_2
+  H6 : Zlength l1_2 = i
+  H7 : 0 <= n
+  H8 : n < 2147483647
+  H9 : forall k : Z, 0 <= k < n -> Znth k l 0 <> 0
+  ============================
+  CharArray.full s_pre (n + 1)
+    (replace_Znth i
+       (Znth i (string_to_upper_ascii_spec l1_2 ++ (z :: l2_2) ++ 0 :: nil) 0 -
+        97 + 65) (string_to_upper_ascii_spec l1_2 ++ (z :: l2_2) ++ 0 :: nil))
+  |-- CharArray.full s_pre (n + 1)
+        (string_to_upper_ascii_spec (l1_2 ++ z :: nil) ++ l2_2 ++ 0 :: nil)
+
+goal 2 is:
+ Zlength (l1_2 ++ z :: nil) = i + 1
+goal 3 is:
+ l = (l1_2 ++ z :: nil) ++ l2_2
+goal 4 is:
+ i + 1 <= n
+
+Unnamed_thm < 4 goals
+  
+  s_pre, n : Z
+  l, l1_2 : list Z
+  z : Z
+  l2_2 : list Z
+  i : Z
+  H : 0 <= n + 1
+  H0 :
+    Znth i (string_to_upper_ascii_spec l1_2 ++ (z :: l2_2) ++ 0 :: nil) 0 <=
+    122
+  H1 :
+    97 <=
+    Znth i (string_to_upper_ascii_spec l1_2 ++ (z :: l2_2) ++ 0 :: nil) 0
+  H2 :
+    Znth i (string_to_upper_ascii_spec l1_2 ++ (z :: l2_2) ++ 0 :: nil) 0 <>
+    0
+  H3 : 0 <= i
+  H4 : i <= n
+  H5 : l = l1_2 ++ z :: l2_2
+  H6 : Zlength l1_2 = i
+  H7 : 0 <= n
+  H8 : n < 2147483647
+  H9 : forall k : Z, 0 <= k < n -> Znth k l 0 <> 0
+  ============================
+  CharArray.full s_pre (n + 1)
+    (replace_Znth i
+       (Znth i (string_to_upper_ascii_spec l1_2 ++ (z :: l2_2) ++ 0 :: nil) 0 -
+        97 + 65) (string_to_upper_ascii_spec l1_2 ++ (z :: l2_2) ++ 0 :: nil))
+  |-- CharArray.full s_pre (n + 1)
+        (string_to_upper_ascii_spec (l1_2 ++ z :: nil) ++ l2_2 ++ 0 :: nil)
+
+goal 2 is:
+ Zlength (l1_2 ++ z :: nil) = i + 1
+goal 3 is:
+ l = (l1_2 ++ z :: nil) ++ l2_2
+goal 4 is:
+ i + 1 <= n
+
+Unnamed_thm < 
+Coq < 

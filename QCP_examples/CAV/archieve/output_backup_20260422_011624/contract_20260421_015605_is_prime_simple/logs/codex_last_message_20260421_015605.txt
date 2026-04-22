@@ -1,0 +1,12 @@
+Completed the contract workflow for `is_prime_simple`.
+
+Created:
+
+- [input/is_prime_simple.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/is_prime_simple.c:1)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_015605_is_prime_simple/logs/reasoning.md:1)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_015605_is_prime_simple/logs/issues.md:1)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_015605_is_prime_simple/logs/metrics.md:1)
+
+I did not create `input/is_prime_simple.v`; the prime/non-prime semantics are expressed directly in the C contract with `forall`, `exists`, and `%`, so no task-specific Coq bridge was needed.
+
+Final checks: `input/is_prime_simple.c` contains only the target function plus its contract, `input/is_prime_simple.v` is absent, and the generated C input contains no `Inv`, `Assert`, `which implies`, bridge assertion, or loop-exit assertion.

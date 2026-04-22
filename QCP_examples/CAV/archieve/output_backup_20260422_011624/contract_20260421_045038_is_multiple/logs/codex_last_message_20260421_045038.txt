@@ -1,0 +1,14 @@
+Completed the contract workflow for `is_multiple`.
+
+Created:
+- [input/is_multiple.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/is_multiple.c)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_045038_is_multiple/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_045038_is_multiple/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_045038_is_multiple/logs/metrics.md)
+- Workspace snapshot: [output/input/is_multiple.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_045038_is_multiple/input/is_multiple.c)
+
+No `input/is_multiple.v` was created, because the modulo-based postcondition is expressible directly in the C contract.
+
+Validation done:
+- `gcc -fsyntax-only input/is_multiple.c` passed.
+- Checked no `Inv`, `Assert`, `which implies`, bridge assert, or loop-exit assertion appears in the generated contract.

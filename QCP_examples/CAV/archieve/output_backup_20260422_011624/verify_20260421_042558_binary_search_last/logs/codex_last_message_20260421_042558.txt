@@ -1,0 +1,18 @@
+Verification succeeded for `binary_search_last`.
+
+Changed:
+- Added the loop invariant and bridge assertions in [verify_20260421_042558_binary_search_last.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_042558_binary_search_last.c).
+- Generated and completed the manual Coq proofs in [binary_search_last_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_042558_binary_search_last/coq/generated/binary_search_last_proof_manual.v).
+- Updated required logs:
+  - [workspace_fingerprint.json](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_042558_binary_search_last/logs/workspace_fingerprint.json)
+  - [annotation_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_042558_binary_search_last/logs/annotation_reasoning.md)
+  - [proof_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_042558_binary_search_last/logs/proof_reasoning.md)
+  - [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_042558_binary_search_last/logs/issues.md)
+  - [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_042558_binary_search_last/logs/metrics.md)
+
+Verified:
+- `symexec` succeeded on the latest annotated C.
+- Full Coq replay passed for `goal.v`, `proof_auto.v`, `proof_manual.v`, and `goal_check.v`.
+- `proof_manual.v` contains no `Admitted.` and no `Axiom`.
+- Non-`.v` Coq intermediate files were cleaned.
+- `metrics.md` ends with `Final Result: Success`.

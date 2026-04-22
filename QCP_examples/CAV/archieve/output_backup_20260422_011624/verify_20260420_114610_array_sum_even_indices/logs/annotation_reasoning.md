@@ -1,0 +1,7 @@
+## Loop invariant plan for `array_sum_even_indices`
+
+The current annotated file has a single `for (i = 0; i < n; ++i)` loop with no invariant. That leaves `symexec` without a loop-head state for the processed prefix, the current accumulator, or the preserved array ownership. The relevant program point is immediately before the `for` statement, because this verifier attaches `Inv` to the loop guard state, not to the first statement in the loop body.
+
+At the loop guard, `i` is the next index to inspect and the processed region is `sublist(0, i, l)`. The variable `sum` should equal `array_sum_even_indices_spec(sublist(0, i, l))`, which is exactly the even-index sum of the prefix already scanned. Initialization holds because before the first guard `i == 0`, `sum == 0`, and the spec on the empty sublist is `0`. Preservation follows by splitting on `i % 2 == 0`: the then-branch adds `a[i]`, matching extension of the prefix at an even index, while the else path leaves `sum` unchanged, matching extension at an odd index. The invariant also needs `0 <= i && i <= n`, `a == a@pre`, `n == n@pre`, and `IntArray::full(a, n, l)` so the array read remains justified and the final postcondition can preserve the original array.
+
+After the loop, the negated guard plus `i <= n` should give `i == n`. I will add a loop-exit `Assert` immediately after the loop to fix `i == n`, preserve the unchanged parameters, rewrite the prefix spec to the full-list spec, and keep `IntArray::full(a, n, l)` available for the return.

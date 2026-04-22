@@ -1,0 +1,25 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260420_121132_array_has_adjacent_equal",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_has_adjacent_equal.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_121132_array_has_adjacent_equal/original/array_has_adjacent_equal.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_121132_array_has_adjacent_equal.c",
+  "function_name": "array_has_adjacent_equal",
+  "program_sha256": "9c75fd1eb05763ea2cd8d8b975a0c8a3b6ccae581490d30cc449e2501dcad6e1",
+  "semantic_description": "Scans an integer array from index 1 to n - 1 looking for adjacent equal elements. The function returns 1 as soon as it finds an index i with 1 <= i < n and l[i] == l[i - 1]; otherwise, after the for loop finishes, it returns 0 and establishes that every adjacent pair in the scanned range is unequal. Boundary cases n == 0 and n == 1 execute an empty loop and return 0. The function only reads the input array and preserves IntArray::full(a, n, l).",
+  "keywords": {
+    "algorithm_family": "search",
+    "control_flow": ["for_loop", "if"],
+    "data_shape": ["array", "pointer"],
+    "semantic_intent": "preserve_input",
+    "proof_pattern": ["loop_invariant", "case_split", "range_bound", "heap_reasoning"],
+    "numeric_properties": ["nonnegative_input", "int_range"],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": "goal_check_passed"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

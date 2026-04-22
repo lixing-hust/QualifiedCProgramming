@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/contract/SKILL.md
+
+Inputs:
+- Raw markdown: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/raw/array_remove_value_to_output.md`
+- Target function: `array_remove_value_to_output`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_214704_array_remove_value_to_output`
+- Output C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_remove_value_to_output.c`
+- Optional output V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_remove_value_to_output.v`

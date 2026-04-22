@@ -1,0 +1,10 @@
+Executed the contract skill workflow for `set_zero`.
+
+Generated [set_zero.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/set_zero.c) with a minimal in-place array contract:
+`Require 0 <= n && IntArray::full(a, n, l)`
+`Ensure IntArray::full(a, n, zeros(n))`
+
+Wrote the required logs in the workspace:
+[reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260417_130546_set_zero/logs/reasoning.md), [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260417_130546_set_zero/logs/issues.md), and [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260417_130546_set_zero/logs/metrics.md).
+
+No [set_zero.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/set_zero.v) was created because the existing library term `zeros(n)` is sufficient and no problem-specific Coq bridge is needed.

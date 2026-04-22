@@ -1,0 +1,19 @@
+Completed the contract workflow for `lower_bound`.
+
+Created [input/lower_bound.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/lower_bound.c:1) with:
+
+- Full `Require` / `Ensure` contract
+- Pairwise nondecreasing array precondition
+- `0 <= __return <= n`
+- Prefix exclusion: all indices before the result are `< target`
+- Result condition: either result is `n`, or `a[result] >= target`
+- Preserved `IntArray::full(a, n, l)`
+- No loop annotations or Verify-stage assertions
+
+Also wrote the required logs:
+
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_233407_lower_bound/logs/reasoning.md:1)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_233407_lower_bound/logs/issues.md:1)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_233407_lower_bound/logs/metrics.md:1)
+
+I did not create `input/lower_bound.v`; the contract is expressible directly without task-specific Coq definitions. No Verify run was performed, since this task was Contract-stage only.

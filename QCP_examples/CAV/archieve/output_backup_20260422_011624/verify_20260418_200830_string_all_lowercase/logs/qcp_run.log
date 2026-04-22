@@ -1,0 +1,10 @@
+Start to symbolic execution on program : /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_200830_string_all_lowercase.c
+Start to parse strategies file common
+File Path: /home/yangfp/QualifiedCProgramming/QCP_examples/common.strategies
+Finish parsing strategies file common
+Start to parse strategies file char_array
+File Path: /home/yangfp/QualifiedCProgramming/QCP_examples/char_array.strategies
+Finish parsing strategies file char_array
+Symbolic Execution into function string_all_lowercase
+End of symbolic execution of function string_all_lowercase
+Successfully finished symbolic execution

@@ -1,0 +1,43 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260420_222721_min_cost_two_steps",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/min_cost_two_steps.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/min_cost_two_steps.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_222721_min_cost_two_steps/original/min_cost_two_steps.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_222721_min_cost_two_steps/original/min_cost_two_steps.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_222721_min_cost_two_steps.c",
+  "function_name": "min_cost_two_steps",
+  "program_sha256": "b50b7135065076395a8ded6b9706a54b4e1b8c3056c52e3535162b84d2d9fde0",
+  "semantic_description": "Computes the dynamic-programming minimum cost to reach the end of a nonempty nonnegative integer cost array when each transition can advance one or two positions. The function preserves the input array, returns the Coq specification min_cost_two_steps_z(l), branches specially for n == 1, then uses a for loop from i = 2 to n - 1 maintaining two scalar DP states prev2 and prev1. It does not modify memory.",
+  "keywords": {
+    "algorithm_family": "dynamic_programming",
+    "control_flow": [
+      "if",
+      "for_loop"
+    ],
+    "data_shape": [
+      "array",
+      "scalar_only"
+    ],
+    "semantic_intent": "preserve_input",
+    "proof_pattern": [
+      "loop_invariant",
+      "case_split",
+      "range_bound",
+      "heap_reasoning"
+    ],
+    "numeric_properties": [
+      "nonnegative_input",
+      "overflow_guard",
+      "int_range"
+    ],
+    "edge_case_behavior": [
+      "branch_on_order",
+      "empty_loop_possible"
+    ],
+    "verification_status": "manual_witness_needed"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

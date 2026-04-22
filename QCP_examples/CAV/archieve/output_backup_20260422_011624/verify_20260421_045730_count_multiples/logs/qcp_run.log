@@ -1,0 +1,7 @@
+Start to symbolic execution on program : /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_045730_count_multiples.c
+Start to parse strategies file common
+File Path: /home/yangfp/QualifiedCProgramming/QCP_examples/common.strategies
+Finish parsing strategies file common
+Symbolic Execution into function count_multiples
+End of symbolic execution of function count_multiples
+Successfully finished symbolic execution

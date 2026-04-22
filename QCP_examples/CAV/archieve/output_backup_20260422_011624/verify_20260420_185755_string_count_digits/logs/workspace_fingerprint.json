@@ -1,0 +1,39 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260420_185755_string_count_digits",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_count_digits.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_count_digits.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_185755_string_count_digits/original/string_count_digits.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_185755_string_count_digits/original/string_count_digits.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_185755_string_count_digits.c",
+  "function_name": "string_count_digits",
+  "program_sha256": "3c473160c302a13266d89d89fdbf0668d8fdbe9f0e7ef0a8917454fd5f61af90",
+  "semantic_description": "Scans a null-terminated character array represented by list l followed by terminator 0, counts elements whose integer code is between 48 and 57 inclusive, returns that count, preserves the input string memory unchanged, uses a while (1) loop with an explicit break at the terminator, and handles the empty string by returning 0.",
+  "keywords": {
+    "algorithm_family": "counting",
+    "control_flow": "while_loop",
+    "data_shape": [
+      "string",
+      "array",
+      "pointer"
+    ],
+    "semantic_intent": "preserve_input",
+    "proof_pattern": [
+      "loop_invariant",
+      "case_split",
+      "range_bound"
+    ],
+    "numeric_properties": [
+      "int_range",
+      "monotone_accumulator"
+    ],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": [
+      "goal_check_passed",
+      "proof_check_passed"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

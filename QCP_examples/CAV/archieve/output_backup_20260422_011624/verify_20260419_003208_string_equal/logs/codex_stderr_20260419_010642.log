@@ -1,0 +1,20 @@
+2026-04-18T17:15:54.744421Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_003208_string_equal/coq/generated/string_equal_proof_manual.v:
+  simpl.
+  repeat split; auto; try lia.
+  rewrite (logic_equiv_sepcon_comm
+             (CharArray.full b_pre (nb + 1) (app lb (cons 0 nil)))
+             (CharArray.full a_pre (na + 1) (app la (cons 0 nil)))
+             ).
+  rewrite <- logic_equiv_sepcon_assoc.
+  rewrite (logic_equiv_sepcon_comm
+             (CharArray.full b_pre (nb + 1) (app lb (cons 0 nil)))
+             ((( &( "i" )) # Int |-> na))).
+  rewrite logic_equiv_sepcon_assoc.
+  rewrite (logic_equiv_sepcon_comm
+             (CharArray.full a_pre (na + 1) (app la (cons 0 nil)))
+             ((( &( "i" )) # Int |-> na))).
+  exact H15.
+2026-04-18T17:18:50.802799Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_003208_string_equal/logs/metrics.md:
+- Codex stderr log: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_003208_string_equal/logs/codex_stderr_20260419_005450.log`
+- Codex last message: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_003208_string_equal/logs/codex_last_message_20260419_005450.txt`
+Final Result: Fail

@@ -1,0 +1,10 @@
+Completed the contract workflow for `string_contains_char`.
+
+Generated:
+- [string_contains_char.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_contains_char.c)
+- [string_contains_char.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_contains_char.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_181807_string_contains_char/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_181807_string_contains_char/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_181807_string_contains_char/logs/metrics.md)
+
+The contract uses the standard C-string shape with the no-internal-`0` condition, preserves the original interface, and adds a minimal Coq spec `string_contains_char_spec` for the `0/1` result semantics. I did not run the verify phase.

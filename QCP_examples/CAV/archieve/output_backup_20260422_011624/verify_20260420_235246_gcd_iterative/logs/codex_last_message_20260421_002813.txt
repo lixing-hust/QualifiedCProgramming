@@ -1,0 +1,21 @@
+Verification did not succeed in this retry. I resumed the existing workspace, reread the current logs/generated files/annotated C, confirmed the fingerprint was already populated, and reran `symexec` with the corrected `--input-file` invocation.
+
+Current blocker is unchanged: `symexec` fails before VC generation with:
+
+```text
+Old value at `pre' is not determined
+```
+
+The failure is recorded at [qcp_run.log](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/qcp_run.log:2). The root cause remains the fixed postcondition in [verify_20260420_235246_gcd_iterative.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_235246_gcd_iterative.c:13), which references `a@pre` and `b@pre`, while the function body assigns to both scalar formals at lines 34-35. Existing Verify-permitted repairs have already removed body-level `@pre` terms and tried witness-carrying assertions/invariants; the frontend still aborts before generating any Coq goals.
+
+Workspace state after this retry:
+
+- `symexec` exit code: `1`
+- all generated Coq files remain zero bytes
+- no manual proof target exists
+- `goal_check.v` cannot be compiled
+- `proof_manual.v` has no `Admitted.` or added `Axiom`
+- no non-`.v` Coq intermediates remain
+- updated [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/issues.md:1) and [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/metrics.md:1) with this retry’s evidence
+
+The remaining repair is outside this Verify workflow: the Contract-stage input likely needs to preserve entry values using separate working locals or avoid `@pre` on scalar formals that are reassigned.

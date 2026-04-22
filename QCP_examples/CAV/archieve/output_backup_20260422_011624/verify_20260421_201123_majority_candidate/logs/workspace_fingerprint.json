@@ -1,0 +1,41 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260421_201123_majority_candidate",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/majority_candidate.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/majority_candidate.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_201123_majority_candidate/original/majority_candidate.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_201123_majority_candidate/original/majority_candidate.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_201123_majority_candidate.c",
+  "function_name": "majority_candidate",
+  "program_sha256": "f79a26749c0212576f171f3197465dbe440c44fb169e21c174680b27aeb889a5",
+  "semantic_description": "Verifies majority_candidate, a Boyer-Moore style single-pass scan over an integer array with n >= 1. The function initializes candidate to a[0] and count to 1, then iterates i from 1 to n - 1, updating candidate and count according to majority_candidate_step. It returns the Coq majority_candidate_spec applied to the input list and preserves the IntArray contents unchanged. The loop may be skipped when n == 1, and the function only reads the array.",
+  "keywords": {
+    "algorithm_family": [
+      "selection",
+      "simulation"
+    ],
+    "control_flow": [
+      "for_loop",
+      "if"
+    ],
+    "data_shape": [
+      "array",
+      "pointer"
+    ],
+    "semantic_intent": "preserve_input",
+    "proof_pattern": [
+      "loop_invariant",
+      "case_split",
+      "range_bound"
+    ],
+    "numeric_properties": [
+      "nonnegative_input",
+      "int_range"
+    ],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": "goal_check_passed"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

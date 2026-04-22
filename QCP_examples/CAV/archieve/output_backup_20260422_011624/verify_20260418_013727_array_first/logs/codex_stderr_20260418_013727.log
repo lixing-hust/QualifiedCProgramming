@@ -1,0 +1,2 @@
+2026-04-17T17:39:00.773981Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_013727_array_first/logs/workspace_fingerprint.json:
+{}

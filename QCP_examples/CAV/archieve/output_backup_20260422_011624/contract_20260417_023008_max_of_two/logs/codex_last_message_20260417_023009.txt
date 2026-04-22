@@ -1,0 +1,10 @@
+Completed the contract workflow for `max_of_two` using the requested skill.
+
+The generated C contract is in [max_of_two.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/max_of_two.c:1). It preserves the original implementation and uses a direct relational postcondition: the result is one of the inputs and is at least both inputs. I did not generate `input/max_of_two.v` because this case does not need any extra Coq bridge.
+
+The required logs are in:
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260417_023008_max_of_two/logs/reasoning.md:1)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260417_023008_max_of_two/logs/issues.md:1)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260417_023008_max_of_two/logs/metrics.md:1)
+
+I also verified that `input/max_of_two.v` does not exist, by design.

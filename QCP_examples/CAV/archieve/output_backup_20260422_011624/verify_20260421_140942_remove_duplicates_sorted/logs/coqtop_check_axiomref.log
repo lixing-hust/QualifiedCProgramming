@@ -1,0 +1,16 @@
+Welcome to Coq 8.20.1
+
+Coq < [Loading ML file ring_plugin.cmxs (using legacy method) ... done]
+[Loading ML file zify_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_core_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_plugin.cmxs (using legacy method) ... done]
+[Loading ML file btauto_plugin.cmxs (using legacy method) ... done]
+
+Coq < Toplevel input, characters 6-63:
+> Check VC_Correct.proof_of_remove_duplicates_sorted_entail_wit_1.
+>       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error: The reference
+VC_Correct.proof_of_remove_duplicates_sorted_entail_wit_1 was not found
+in the current environment.
+
+Coq < 

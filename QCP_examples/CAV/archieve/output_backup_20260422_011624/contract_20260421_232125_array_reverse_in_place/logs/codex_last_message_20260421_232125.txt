@@ -1,0 +1,15 @@
+Completed the contract workflow for `array_reverse_in_place`.
+
+Generated/updated:
+- [array_reverse_in_place.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_reverse_in_place.c)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_232125_array_reverse_in_place/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_232125_array_reverse_in_place/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_232125_array_reverse_in_place/logs/metrics.md)
+
+No optional `.v` file was created because the postcondition is directly expressible with existing `rev` and `IntArray::full`.
+
+Verification checks performed:
+- Confirmed the C file contains only the target function plus contract.
+- Confirmed required logs exist.
+- Confirmed `input/array_reverse_in_place.v` is absent.
+- Confirmed `metrics.md` includes `Experience updates: none`.

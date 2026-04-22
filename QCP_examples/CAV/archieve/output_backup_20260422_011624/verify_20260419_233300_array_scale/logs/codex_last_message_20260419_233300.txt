@@ -1,0 +1,17 @@
+Verification succeeded for `array_scale`.
+
+I updated the active annotated C at [verify_20260419_233300_array_scale.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260419_233300_array_scale.c) with the loop invariant, fixed the parser-only binder syntax in that annotated copy, and completed the manual Coq proofs in [array_scale_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_233300_array_scale/coq/generated/array_scale_proof_manual.v).
+
+Validation completed:
+- `symexec` succeeded on the latest annotated file.
+- `array_scale_goal.v`, `array_scale_proof_auto.v`, `array_scale_proof_manual.v`, and `array_scale_goal_check.v` compiled successfully.
+- `array_scale_proof_manual.v` has no `Admitted.` and no new `Axiom`.
+- Non-`.v` Coq intermediate files were cleaned.
+- `logs/metrics.md` ends with `Final Result: Success`.
+
+I also updated the required workspace logs:
+- [workspace_fingerprint.json](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_233300_array_scale/logs/workspace_fingerprint.json)
+- [annotation_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_233300_array_scale/logs/annotation_reasoning.md)
+- [proof_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_233300_array_scale/logs/proof_reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_233300_array_scale/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_233300_array_scale/logs/metrics.md)

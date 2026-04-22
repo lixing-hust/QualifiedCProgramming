@@ -1,0 +1,13 @@
+Verification succeeded for `array_first_peak`.
+
+Updated:
+- [annotated/verify_20260422_010902_array_first_peak.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260422_010902_array_first_peak.c): added the scan invariant, exit assertion, and explicit `i + 1 <= INT_MAX` loop safety fact.
+- [array_first_peak_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_010902_array_first_peak/coq/generated/array_first_peak_proof_manual.v): completed `proof_of_array_first_peak_entail_wit_3`.
+- Workspace logs under [logs](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_010902_array_first_peak/logs): fingerprint, annotation reasoning, proof reasoning, issues, and metrics are filled.
+
+Checks completed:
+- `symexec` succeeded on the latest annotated file.
+- `array_first_peak_goal.v`, `array_first_peak_proof_auto.v`, `array_first_peak_proof_manual.v`, and `array_first_peak_goal_check.v` all compiled.
+- `proof_manual.v` has no `Admitted.` and no local `Axiom`.
+- Non-`.v` Coq artifacts were cleaned from the workspace.
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_010902_array_first_peak/logs/metrics.md) ends with `Final Result: Success`.

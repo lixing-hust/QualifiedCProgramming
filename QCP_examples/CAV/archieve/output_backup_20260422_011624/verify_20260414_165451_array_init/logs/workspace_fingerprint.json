@@ -1,0 +1,39 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260414_165451_array_init",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/input/array_init.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/output/verify_20260414_165451_array_init/original/array_init.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/output/verify_20260414_165451_array_init/annotated/array_init.c",
+  "function_name": "array_init",
+  "program_sha256": "d8fe9075a895d52d3dfdbb78a6a5eddb75590ad3f6613d53368c6d0fcdbcf1bf",
+  "semantic_description": "Initialize the first n cells of integer array a to 0 by scanning from left to right. The contract is trusted from annotate; verification only needs a prefix-processed loop invariant showing that indices [0, i) have become zeros while [i, n) still match the original logical list l.",
+  "keywords": {
+    "domain": [
+      "int array",
+      "in-place update",
+      "prefix loop"
+    ],
+    "spec": [
+      "IntArray::full",
+      "IntArray::missing_i",
+      "zeros",
+      "sublist",
+      "app"
+    ],
+    "proof_shape": [
+      "for-loop invariant",
+      "single-cell write",
+      "bridge assertion",
+      "loop exit normalization"
+    ],
+    "target_effect": [
+      "set each element to zero",
+      "preserve array ownership"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "annotate_input_c"
+}

@@ -1,0 +1,35 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260419_233300_array_scale",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_scale.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_233300_array_scale/original/array_scale.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260419_233300_array_scale.c",
+  "function_name": "array_scale",
+  "program_sha256": "6dfdc376a8ec250ff145961e2a08f819ef6273b3a330a54c7849e11d9a7f955c",
+  "semantic_description": "array_scale iterates from 0 to n - 1 over an integer array a and writes each scaled value a[i] * k into the corresponding out[i]. The contract requires n >= 0, both input lists have length n, and every product is within signed 32-bit integer bounds. The loop may execute zero times when n = 0. Memory for a is preserved and memory for out is updated to a result list whose elements equal the input elements multiplied by k.",
+  "keywords": {
+    "algorithm_family": "simulation",
+    "control_flow": "for_loop",
+    "data_shape": [
+      "array",
+      "pointer"
+    ],
+    "semantic_intent": "in_place_update",
+    "proof_pattern": [
+      "loop_invariant",
+      "heap_reasoning",
+      "range_bound"
+    ],
+    "numeric_properties": [
+      "overflow_guard",
+      "int_range"
+    ],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": "goal_check_passed"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

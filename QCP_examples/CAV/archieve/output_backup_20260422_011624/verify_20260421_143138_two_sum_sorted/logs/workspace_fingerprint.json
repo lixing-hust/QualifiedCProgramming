@@ -1,0 +1,48 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260421_143138_two_sum_sorted",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/two_sum_sorted.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_143138_two_sum_sorted/original/two_sum_sorted.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_143138_two_sum_sorted.c",
+  "function_name": "two_sum_sorted",
+  "program_sha256": "e91c086d69f317afd6def1502a60c85b0369c04addca57fac58cda4579579240",
+  "semantic_description": "Verifies two_sum_sorted over a sorted integer array. The function uses two pointers, left and right, to search for two distinct indices whose values sum to target; it returns 1 exactly when such a pair exists and returns 0 when no valid pair exists. The loop discards a lower index when the current pair sum is less than target and discards an upper index otherwise, relying on sortedness and pair-sum integer range assumptions. The n == 0 and n == 1 cases skip the loop and return 0. The function reads but does not modify the IntArray::full heap segment.",
+  "keywords": {
+    "algorithm_family": [
+      "search",
+      "two_pointers"
+    ],
+    "control_flow": [
+      "while_loop",
+      "if"
+    ],
+    "data_shape": [
+      "array",
+      "pointer"
+    ],
+    "semantic_intent": "preserve_input",
+    "proof_pattern": [
+      "loop_invariant",
+      "case_split",
+      "termination_by_bound",
+      "monotonicity",
+      "range_bound",
+      "heap_reasoning"
+    ],
+    "numeric_properties": [
+      "nonnegative_input",
+      "overflow_guard",
+      "int_range"
+    ],
+    "edge_case_behavior": [
+      "branch_on_order",
+      "empty_loop_possible"
+    ],
+    "verification_status": "goal_check_passed"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

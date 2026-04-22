@@ -1,0 +1,24 @@
+Verification succeeded in the existing retry workspace.
+
+I repaired the current blocker in [string_remove_char_to_output_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_190707_string_remove_char_to_output/coq/generated/string_remove_char_to_output_proof_manual.v):
+
+- `entail_wit_3`: rewrote `Hi_eq_n : Zlength l1 = n` into the stack cell so `&( "i") # Int |-> Zlength l1` matches `&( "i") # Int |-> n`.
+- `return_wit_1`: changed the final `replace_Znth` proof to use the generated nested append shape `((spec ++ x :: nil) ++ t)`.
+
+I then reran the ordered Coq compile chain successfully:
+
+- `original/string_remove_char_to_output.v`
+- `string_remove_char_to_output_goal.v`
+- `string_remove_char_to_output_proof_auto.v`
+- `string_remove_char_to_output_proof_manual.v`
+- `string_remove_char_to_output_goal_check.v`
+
+Final checks completed:
+
+- No `Admitted.`, no new `Axiom`, no `Show` in `proof_manual.v`.
+- No non-`.v` intermediates remain under the workspace `coq/` directory.
+- `logs/workspace_fingerprint.json` now has `verification_status: "goal_check_passed"`.
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_190707_string_remove_char_to_output/logs/issues.md), [proof_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_190707_string_remove_char_to_output/logs/proof_reasoning.md), and [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_190707_string_remove_char_to_output/logs/metrics.md) were updated.
+- `metrics.md` ends with `Final Result: Success`.
+
+I did not change the active annotated C in this retry; the existing symexec output was already current and successful.

@@ -1,0 +1,29 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260420_030021_array_find_last_equal",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_find_last_equal.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_030021_array_find_last_equal/original/array_find_last_equal.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_030021_array_find_last_equal.c",
+  "function_name": "array_find_last_equal",
+  "program_sha256": "143b9a81e2e2821d98c8871084661ff6494ba86f4d347b49a7eae65d5f19bded",
+  "semantic_description": "Verifies array_find_last_equal, a read-only scan over an integer array a[0..n). The function initializes ans to -1, iterates i from 0 to n-1, and updates ans to i whenever a[i] equals k. It returns -1 exactly when no array element equals k; otherwise it returns an index in range whose value equals k and all later positions are not equal to k. The array memory is preserved. The empty-array case is allowed because n may be 0 and the loop body may not execute.",
+  "keywords": {
+    "algorithm_family": "search",
+    "control_flow": "for_loop",
+    "data_shape": "array",
+    "semantic_intent": "preserve_input",
+    "proof_pattern": [
+      "loop_invariant",
+      "case_split",
+      "range_bound"
+    ],
+    "numeric_properties": "int_range",
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": "goal_check_passed"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

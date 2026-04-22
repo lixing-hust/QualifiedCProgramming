@@ -1,0 +1,15 @@
+File "/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/output/verify_20260415_001635_climb_stairs/coq/generated/climb_stairs_proof_manual.v", line 90, characters 12-24:
+Error:
+In environment
+n_pre, i : Z
+H : i <= n_pre
+H0 : 2 <= i
+H1 : i <= n_pre + 1
+H5 : n_pre > 1
+H6 : 0 <= n_pre
+H7 : n_pre <= 45
+Unable to unify
+ "(?M5946 <= ?M5947 -> (Z.to_nat ?M5946 <= Z.to_nat ?M5947)%nat) /\
+  ((Z.to_nat ?M5946 <= Z.to_nat ?M5947)%nat -> ?M5946 <= ?M5947)" with
+ "(Z.to_nat (i - 1) <= 44)%nat".
+

@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/contract/SKILL.md
+
+Inputs:
+- Raw markdown: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/raw/partition_nonnegative.md`
+- Target function: `partition_nonnegative`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_193440_partition_nonnegative`
+- Output C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/partition_nonnegative.c`
+- Optional output V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/partition_nonnegative.v`

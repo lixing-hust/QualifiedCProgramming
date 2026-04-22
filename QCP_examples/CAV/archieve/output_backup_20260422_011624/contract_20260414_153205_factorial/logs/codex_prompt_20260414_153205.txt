@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/skills/annotate/SKILL.md
+
+Inputs:
+- Raw markdown: `/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/raw/factorial.md`
+- Target function: `fac`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/output/annotate_20260414_153205_factorial`
+- Output C: `/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/input/factorial.c`
+- Optional output V: `/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/input/factorial.v`

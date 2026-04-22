@@ -1,0 +1,15 @@
+Verification succeeded in the existing workspace.
+
+Changed/created:
+- [annotated C](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_032842_string_count_not_char.c): added the loop invariant and exit assertion for the string scan.
+- [manual proof](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_032842_string_count_not_char/coq/generated/string_count_not_char_proof_manual.v): replaced all manual `Admitted.` lemmas with completed proofs.
+- Workspace logs under [logs](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_032842_string_count_not_char/logs/metrics.md): fingerprint, annotation/proof reasoning, issues, and metrics are complete.
+
+Verification checks completed:
+- `symexec` succeeded and generated fresh `goal`, `proof_auto`, `proof_manual`, and `goal_check`.
+- Full ordered `coqc` chain passed through `string_count_not_char_goal_check.v`.
+- `proof_manual.v` has no `Admitted.` and no new `Axiom`.
+- Non-`.v` Coq intermediate artifacts were cleaned.
+- `logs/metrics.md` ends with `Final Result: Success`.
+
+I did not update repository-level experience docs because the execution rule required all work to stay inside the existing workspace; this is recorded in `metrics.md`.

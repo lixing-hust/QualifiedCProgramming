@@ -1,0 +1,24 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260420_122040_array_count_transitions",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_count_transitions.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_count_transitions.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_122040_array_count_transitions/original/array_count_transitions.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_122040_array_count_transitions/original/array_count_transitions.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_122040_array_count_transitions.c",
+  "function_name": "array_count_transitions",
+  "program_sha256": "94bea0831084b94c417e2cc3d94668a19efb23e78a84d10198913c8445812c85",
+  "semantic_description": "array_count_transitions scans an input integer array a of length n, starting at index 1, and returns the number of adjacent positions where a[i] differs from a[i-1]. For n = 0 or n = 1 the loop body is skipped and the result is 0. The function preserves the input array memory and only updates scalar locals i and cnt.",
+  "keywords": {
+    "algorithm_family": "counting",
+    "control_flow": "for_loop",
+    "data_shape": "array",
+    "semantic_intent": "preserve_input",
+    "proof_pattern": ["loop_invariant", "case_split", "range_bound"],
+    "numeric_properties": ["nonnegative_input", "int_range", "monotone_accumulator"],
+    "edge_case_behavior": "empty_loop_possible"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

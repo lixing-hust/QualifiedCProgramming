@@ -1,0 +1,14 @@
+Completed the Contract workflow for `max_subarray_sum`.
+
+Created:
+- [input/max_subarray_sum.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/max_subarray_sum.c)
+- [input/max_subarray_sum.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/max_subarray_sum.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_132423_max_subarray_sum/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_132423_max_subarray_sum/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_132423_max_subarray_sum/logs/metrics.md)
+
+The C input keeps the original Kadane implementation and adds a full function contract with read-only `IntArray::full` ownership, `n >= 1`, list length binding, and a semantic overflow precondition for every non-empty contiguous subarray sum. The Coq file defines the task-specific `max_subarray_sum_spec`.
+
+Verification performed:
+- `coqtop -quiet < input/max_subarray_sum.v` succeeded.
+- Checked that `input/max_subarray_sum.c` / `.v` contain no `Inv`, `Assert`, `which implies`, bridge assertion, or loop-exit assertion.

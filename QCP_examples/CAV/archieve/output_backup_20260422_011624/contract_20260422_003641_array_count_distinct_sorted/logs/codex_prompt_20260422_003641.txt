@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/contract/SKILL.md
+
+Inputs:
+- Raw markdown: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/raw/array_count_distinct_sorted.md`
+- Target function: `array_count_distinct_sorted`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260422_003641_array_count_distinct_sorted`
+- Output C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_count_distinct_sorted.c`
+- Optional output V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_count_distinct_sorted.v`

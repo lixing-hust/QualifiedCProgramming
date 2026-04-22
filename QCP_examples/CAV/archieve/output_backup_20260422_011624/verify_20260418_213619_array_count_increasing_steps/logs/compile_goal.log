@@ -1,0 +1,6 @@
+File "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_213619_array_count_increasing_steps/coq/generated/array_count_increasing_steps_goal.v", line 18, characters 0-44:
+Error:
+The file /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_213619_array_count_increasing_steps/coq/deps/array_count_increasing_steps.vo contains library
+array_count_increasing_steps and not library
+SimpleC.EE.array_count_increasing_steps.
+

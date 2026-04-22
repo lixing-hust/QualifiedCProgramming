@@ -1,0 +1,4 @@
+File "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_213619_array_count_increasing_steps/coq/generated/array_count_increasing_steps_proof_manual.v", line 12, characters 87-120:
+Error: Cannot find a physical path bound to logical path
+array_count_increasing_steps_goal with prefix SimpleC.EE.CAV.verify_20260418_213619_array_count_increasing_steps.
+

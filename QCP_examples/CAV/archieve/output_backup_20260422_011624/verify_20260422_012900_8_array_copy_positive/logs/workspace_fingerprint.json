@@ -1,0 +1,45 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260422_012900_8_array_copy_positive",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_copy_positive.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_012900_8_array_copy_positive/original/array_copy_positive.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260422_012900_8_array_copy_positive.c",
+  "function_name": "array_copy_positive",
+  "program_sha256": "5cd2df2fc6f7a97a6fe2ea82b992e78b44c5bfda224f7413165d8e8cc72df26d",
+  "semantic_description": "array_copy_positive iterates over indices 0 <= i < n of input array a and output array out. For each element it preserves a unchanged and writes out[i] = a[i] when a[i] is positive, otherwise writes out[i] = 0. The only control structure is a for loop containing an if/else branch. The loop can execute zero times when n == 0, and the function modifies only the output array.",
+  "keywords": {
+    "algorithm_family": "selection",
+    "control_flow": [
+      "for_loop",
+      "if"
+    ],
+    "data_shape": [
+      "array",
+      "pointer"
+    ],
+    "semantic_intent": [
+      "preserve_input",
+      "in_place_update"
+    ],
+    "proof_pattern": [
+      "loop_invariant",
+      "case_split",
+      "heap_reasoning",
+      "range_bound"
+    ],
+    "numeric_properties": [
+      "nonnegative_input",
+      "int_range"
+    ],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": [
+      "goal_check_passed",
+      "proof_check_passed"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

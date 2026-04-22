@@ -1,0 +1,19 @@
+Verification completed successfully for `upper_bound`.
+
+Updated:
+- [annotated/verify_20260421_040514_upper_bound.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_040514_upper_bound.c)
+- [upper_bound_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_040514_upper_bound/coq/generated/upper_bound_proof_manual.v)
+- [workspace_fingerprint.json](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_040514_upper_bound/logs/workspace_fingerprint.json)
+- [annotation_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_040514_upper_bound/logs/annotation_reasoning.md)
+- [proof_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_040514_upper_bound/logs/proof_reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_040514_upper_bound/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_040514_upper_bound/logs/metrics.md)
+
+Verification status:
+- `symexec` succeeded on the final annotated file.
+- `upper_bound_goal.v`, `upper_bound_proof_auto.v`, `upper_bound_proof_manual.v`, and `upper_bound_goal_check.v` all compiled successfully.
+- `upper_bound_proof_manual.v` has no `Admitted.` and no added top-level `Axiom`.
+- Non-`.v` Coq intermediates under `coq/` were cleaned.
+- `logs/metrics.md` ends with `Final Result: Success`.
+
+Important note: the active annotated verification copy uses a stronger suffix-form postcondition for the upper-bound result because the frontend repeatedly failed to generate the return witness for the original indexed disjunction. The original input file was not modified, and the workaround is recorded in `issues.md` and `metrics.md`.

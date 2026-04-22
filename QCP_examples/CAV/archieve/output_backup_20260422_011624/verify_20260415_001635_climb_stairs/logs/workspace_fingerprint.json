@@ -1,0 +1,21 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260415_001635_climb_stairs",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/input/climb_stairs.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/input/climb_stairs.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/output/verify_20260415_001635_climb_stairs/original/climb_stairs.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/output/verify_20260415_001635_climb_stairs/original/climb_stairs.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/output/verify_20260415_001635_climb_stairs/annotated/climb_stairs.c",
+  "function_name": "climbStairs",
+  "program_sha256": "3e4c26d54f169861728b8a3c17fa3f269675f6e078139ff6683abed35c8b5c39",
+  "semantic_description": "Iterative Fibonacci-style dynamic programming for climb-stairs counting: returns f(n) with base f(0)=1,f(1)=1 and recurrence f(n)=f(n-1)+f(n-2), under 0<=n<=45.",
+  "keywords": {
+    "category": ["dynamic_programming", "fibonacci", "loop_invariant"],
+    "data": ["int", "scalar_variables"],
+    "control_flow": ["if", "for_loop"],
+    "spec": ["pure_arithmetic", "emp"]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "annotate_input_c"
+}

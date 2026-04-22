@@ -1,0 +1,126 @@
+Welcome to Coq 8.20.1
+
+Coq < [Loading ML file ring_plugin.cmxs (using legacy method) ... done]
+[Loading ML file zify_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_core_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_plugin.cmxs (using legacy method) ... done]
+[Loading ML file btauto_plugin.cmxs (using legacy method) ... done]
+
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 1 goal
+  
+  ============================
+  array_intersection_count_sorted_return_wit_1
+
+probe < 
+probe < 1 goal
+  
+  b_pre, m_pre, a_pre, n_pre : Z
+  lb, la : list Z
+  count, j_3, i_3 : Z
+  H : j_3 >= m_pre
+  H0 : i_3 < n_pre
+  H1 : 0 <= i_3
+  H2 : i_3 <= n_pre
+  H3 : 0 <= j_3
+  H4 : j_3 <= m_pre
+  H5 : 0 <= count
+  H6 : count <= i_3
+  H7 : count <= j_3
+  H8 : n_pre <= 2147483647
+  H9 : m_pre <= 2147483647
+  H10 : Zlength la = n_pre
+  H11 : Zlength lb = m_pre
+  H12 :
+    forall ai aj : Z,
+    0 <= ai <= aj /\ aj < n_pre -> Znth ai la 0 <= Znth aj la 0
+  H13 :
+    forall bi bj : Z,
+    0 <= bi <= bj /\ bj < m_pre -> Znth bi lb 0 <= Znth bj lb 0
+  H14 :
+    count +
+    array_intersection_count_sorted_spec (sublist i_3 n_pre la)
+      (sublist j_3 m_pre lb) = array_intersection_count_sorted_spec la lb
+  H15 : 0 <= n_pre
+  H16 : n_pre <= 2147483647
+  H17 : 0 <= m_pre
+  H18 : m_pre <= 2147483647
+  H19 : Zlength la = n_pre
+  H20 : Zlength lb = m_pre
+  H21 :
+    forall ai aj : Z,
+    0 <= ai <= aj /\ aj < n_pre -> Znth ai la 0 <= Znth aj la 0
+  H22 :
+    forall bi bj : Z,
+    0 <= bi <= bj /\ bj < m_pre -> Znth bi lb 0 <= Znth bj lb 0
+  ============================
+  IntArray.full a_pre n_pre la ** IntArray.full b_pre m_pre lb
+  |-- [|count = array_intersection_count_sorted_spec la lb|] &&
+      IntArray.full a_pre n_pre la ** IntArray.full b_pre m_pre lb
+
+probe < 1 goal
+  
+  b_pre, m_pre, a_pre, n_pre : Z
+  lb, la : list Z
+  count, j_3, i_3 : Z
+  H : j_3 >= m_pre
+  H0 : i_3 < n_pre
+  H1 : 0 <= i_3
+  H2 : i_3 <= n_pre
+  H3 : 0 <= j_3
+  H4 : j_3 <= m_pre
+  H5 : 0 <= count
+  H6 : count <= i_3
+  H7 : count <= j_3
+  H8 : n_pre <= 2147483647
+  H9 : m_pre <= 2147483647
+  H10 : Zlength la = n_pre
+  H11 : Zlength lb = m_pre
+  H12 :
+    forall ai aj : Z,
+    0 <= ai <= aj /\ aj < n_pre -> Znth ai la 0 <= Znth aj la 0
+  H13 :
+    forall bi bj : Z,
+    0 <= bi <= bj /\ bj < m_pre -> Znth bi lb 0 <= Znth bj lb 0
+  H14 :
+    count +
+    array_intersection_count_sorted_spec (sublist i_3 n_pre la)
+      (sublist j_3 m_pre lb) = array_intersection_count_sorted_spec la lb
+  H15 : 0 <= n_pre
+  H16 : n_pre <= 2147483647
+  H17 : 0 <= m_pre
+  H18 : m_pre <= 2147483647
+  H19 : Zlength la = n_pre
+  H20 : Zlength lb = m_pre
+  H21 :
+    forall ai aj : Z,
+    0 <= ai <= aj /\ aj < n_pre -> Znth ai la 0 <= Znth aj la 0
+  H22 :
+    forall bi bj : Z,
+    0 <= bi <= bj /\ bj < m_pre -> Znth bi lb 0 <= Znth bj lb 0
+  ============================
+  IntArray.full a_pre n_pre la ** IntArray.full b_pre m_pre lb
+  |-- [|count = array_intersection_count_sorted_spec la lb|] &&
+      IntArray.full a_pre n_pre la ** IntArray.full b_pre m_pre lb
+
+probe < 
+Coq < 

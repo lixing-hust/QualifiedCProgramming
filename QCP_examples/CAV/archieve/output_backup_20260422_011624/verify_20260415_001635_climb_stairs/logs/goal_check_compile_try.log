@@ -1,0 +1,4 @@
+File "/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/output/verify_20260415_001635_climb_stairs/coq/generated/climb_stairs_goal_check.v", line 7, characters 0-19:
+Error:
+The field proof_of_climbStairs_entail_wit_1 is missing in SimpleC.EE.leetcode.verify_20260415_001635_climb_stairs.climb_stairs_goal_check.VC_Correctness.
+

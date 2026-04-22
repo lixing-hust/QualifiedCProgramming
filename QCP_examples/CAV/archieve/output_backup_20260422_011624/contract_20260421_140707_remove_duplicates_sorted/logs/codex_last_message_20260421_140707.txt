@@ -1,0 +1,16 @@
+Implemented the contract workflow for `remove_duplicates_sorted`.
+
+Created:
+- [remove_duplicates_sorted.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/remove_duplicates_sorted.c)
+- [remove_duplicates_sorted.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/remove_duplicates_sorted.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_140707_remove_duplicates_sorted/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_140707_remove_duplicates_sorted/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_140707_remove_duplicates_sorted/logs/metrics.md)
+
+The C implementation is unchanged from the raw solution. The contract requires a nondecreasing input array and specifies the final array as `remove_duplicates_sorted_spec(l)` followed by an unconstrained suffix. The `.v` file contains only the task-specific recursive list spec.
+
+Verification checks run:
+- `coqc input/remove_duplicates_sorted.v`: passed
+- Confirmed no `Inv`, `Assert`, `which implies`, bridge assert, or loop-exit assertion markers in the generated contract.
+
+Experience updates: none.

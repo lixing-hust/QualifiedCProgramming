@@ -1,0 +1,33 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260420_183012_string_starts_with_char",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_starts_with_char.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_183012_string_starts_with_char/original/string_starts_with_char.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_183012_string_starts_with_char.c",
+  "function_name": "string_starts_with_char",
+  "program_sha256": "68521ba3d137b2ea753e68a3a812537261bcbd2ea6292844f4570e39c36d6fc4",
+  "semantic_description": "The function reads the first character of a null-terminated character array. It returns 0 for the empty string, returns 1 when the first non-null character equals the input character c, and returns 0 otherwise. The control flow is two straight-line conditionals with immediate returns. It preserves the input character array and does not modify memory.",
+  "keywords": {
+    "algorithm_family": "selection",
+    "control_flow": "if",
+    "data_shape": [
+      "string",
+      "pointer"
+    ],
+    "semantic_intent": "preserve_input",
+    "proof_pattern": [
+      "case_split",
+      "heap_reasoning"
+    ],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": [
+      "goal_check_passed",
+      "proof_check_passed"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

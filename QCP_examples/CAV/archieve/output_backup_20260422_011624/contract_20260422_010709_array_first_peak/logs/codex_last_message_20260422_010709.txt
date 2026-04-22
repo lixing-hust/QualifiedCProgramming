@@ -1,0 +1,9 @@
+Implemented the contract workflow for `array_first_peak`.
+
+Generated:
+- [input/array_first_peak.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_first_peak.c)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260422_010709_array_first_peak/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260422_010709_array_first_peak/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260422_010709_array_first_peak/logs/metrics.md)
+
+No `input/array_first_peak.v` was generated because the peak/first-peak semantics are expressible directly in the C contract. I also checked the deliverables for accidental `Inv`, `Assert`, or `which implies` annotations; none were present.

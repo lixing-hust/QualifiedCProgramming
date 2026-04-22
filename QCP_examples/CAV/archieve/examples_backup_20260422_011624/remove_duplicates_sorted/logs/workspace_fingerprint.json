@@ -1,0 +1,42 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260421_140942_remove_duplicates_sorted",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/remove_duplicates_sorted.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/remove_duplicates_sorted.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_140942_remove_duplicates_sorted/original/remove_duplicates_sorted.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_140942_remove_duplicates_sorted/original/remove_duplicates_sorted.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_140942_remove_duplicates_sorted.c",
+  "function_name": "remove_duplicates_sorted",
+  "program_sha256": "b7f51e22fe8383a0e0dedb6c19bdb6ac4d83d6333257baea87e7a93038d879b4",
+  "semantic_description": "Verifies an in-place two-pointer compaction over a sorted integer array. For n == 0 the function returns 0 and leaves the empty array unchanged. For n > 0 it scans i from 1 to n - 1, keeps j as the length of the duplicate-free prefix already written into a, copies a[i] to a[j] only when it differs from the previous kept value, and returns the length of remove_duplicates_sorted_spec(l). The function mutates the input array buffer so that its prefix is the duplicate-free sorted result while the remaining suffix is existentially unconstrained by the postcondition.",
+  "keywords": {
+    "algorithm_family": "two_pointers",
+    "control_flow": [
+      "if",
+      "for_loop"
+    ],
+    "data_shape": [
+      "array",
+      "pointer"
+    ],
+    "semantic_intent": "in_place_update",
+    "proof_pattern": [
+      "loop_invariant",
+      "case_split",
+      "range_bound",
+      "heap_reasoning"
+    ],
+    "numeric_properties": [
+      "nonnegative_input",
+      "int_range"
+    ],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": [
+      "goal_check_passed",
+      "proof_check_passed"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

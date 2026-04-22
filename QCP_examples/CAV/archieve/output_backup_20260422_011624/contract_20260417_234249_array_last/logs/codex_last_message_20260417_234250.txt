@@ -1,0 +1,12 @@
+Completed the contract workflow for `array_last`.
+
+Generated [array_last.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_last.c) with a direct contract:
+- `Require`: `1 <= n`, `Zlength(l) == n`, `IntArray::full(a, n, l)`
+- `Ensure`: `__return == l[n - 1]` and array ownership preserved
+
+Wrote the required logs in [output/contract_20260417_234249_array_last/logs](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260417_234249_array_last/logs):
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260417_234249_array_last/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260417_234249_array_last/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260417_234249_array_last/logs/metrics.md)
+
+`input/array_last.v` was not created because the semantics are expressible directly in the C contract.

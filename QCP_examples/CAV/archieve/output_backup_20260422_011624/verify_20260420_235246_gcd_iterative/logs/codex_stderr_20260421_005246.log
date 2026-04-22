@@ -1,0 +1,18 @@
+2026-04-20T16:56:04.403458Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_235246_gcd_iterative.c:
+          0 <= x &&
+          0 <= y &&
+          (x != 0 || y != 0) &&
+          a == a@pre &&
+          b == b@pre &&
+          gcd_iterative_spec(a, b, g) &&
+          gcd_iterative_spec(x, y, g) &&
+          emp
+2026-04-20T16:57:18.197327Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_235246_gcd_iterative.c:
+        y = r;
+    }
+
+    /*@ Assert
+          gcd_iterative_spec(a, b, x) && emp
+    */
+    return x;
+}

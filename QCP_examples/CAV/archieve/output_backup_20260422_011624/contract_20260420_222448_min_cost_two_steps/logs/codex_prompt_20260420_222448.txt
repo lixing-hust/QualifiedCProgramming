@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/contract/SKILL.md
+
+Inputs:
+- Raw markdown: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/raw/min_cost_two_steps.md`
+- Target function: `min_cost_two_steps`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_222448_min_cost_two_steps`
+- Output C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/min_cost_two_steps.c`
+- Optional output V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/min_cost_two_steps.v`

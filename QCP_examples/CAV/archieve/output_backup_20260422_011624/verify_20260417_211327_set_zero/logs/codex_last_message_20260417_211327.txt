@@ -1,0 +1,5 @@
+Verification completed for `set_zero`.
+
+I added the loop invariant and bridge assertions in [verify_20260417_211327_set_zero.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260417_211327_set_zero.c:15), implemented the four required manual witness lemmas in [set_zero_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260417_211327_set_zero/coq/generated/set_zero_proof_manual.v:21), and wrote the required verify logs under [logs/](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260417_211327_set_zero/logs/metrics.md:1).
+
+I ran `symexec`, then compiled `goal`, `proof_auto`, `proof_manual`, and `goal_check` successfully. `proof_manual.v` has no `Admitted.` or added `Axiom`, and non-`.v` artifacts under `coq/` were cleaned.

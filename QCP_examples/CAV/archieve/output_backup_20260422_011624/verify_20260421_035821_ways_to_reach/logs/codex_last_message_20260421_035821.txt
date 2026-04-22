@@ -1,0 +1,12 @@
+Verification succeeded for `ways_to_reach`.
+
+I added the loop invariant in [verify_20260421_035821_ways_to_reach.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_035821_ways_to_reach.c:22), regenerated the VC files with `symexec`, and completed the manual Coq proofs in [ways_to_reach_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_035821_ways_to_reach/coq/generated/ways_to_reach_proof_manual.v:22).
+
+Checks completed:
+
+- `symexec` exited `0` and generated fresh `goal`, `proof_auto`, `proof_manual`, and `goal_check`.
+- `coqc` compiled `original/ways_to_reach.v`, `ways_to_reach_goal.v`, `ways_to_reach_proof_auto.v`, `ways_to_reach_proof_manual.v`, and `ways_to_reach_goal_check.v`.
+- `ways_to_reach_proof_manual.v` has no `Admitted.` and no top-level `Axiom`.
+- Non-`.v` Coq intermediate files under `coq/` were cleaned.
+- Logs were completed, with `Final Result: Success` in [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_035821_ways_to_reach/logs/metrics.md:1).
+- Experience updates: none.

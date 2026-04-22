@@ -1,0 +1,12 @@
+Completed the contract workflow for `longest_increasing_run`.
+
+Created:
+- [longest_increasing_run.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/longest_increasing_run.c)
+- [longest_increasing_run.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/longest_increasing_run.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_202002_longest_increasing_run/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_202002_longest_increasing_run/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_202002_longest_increasing_run/logs/metrics.md)
+
+The C file preserves the original implementation and adds a full contract over `IntArray::full(a, n, l)`. The `.v` file defines `longest_increasing_run_spec` as a small problem-specific scan over the list.
+
+Verification check run: `coqc input/longest_increasing_run.v` passed. I removed the temporary Coq build artifacts afterward, leaving only the requested `.c` and `.v` outputs.

@@ -1,0 +1,9 @@
+Completed the contract workflow for `string_starts_with_char`.
+
+Created:
+- [input/string_starts_with_char.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_starts_with_char.c:1)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_182838_string_starts_with_char/logs/reasoning.md:1)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_182838_string_starts_with_char/logs/issues.md:1)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_182838_string_starts_with_char/logs/metrics.md:1)
+
+No `input/string_starts_with_char.v` was generated because the behavior is expressible directly in the C postcondition. The contract preserves the raw behavior, including returning `0` for the empty string even when `c == 0`.

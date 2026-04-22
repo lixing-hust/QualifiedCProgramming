@@ -1,0 +1,5 @@
+Verification succeeded in the existing workspace.
+
+I kept the annotated C unchanged and repaired the manual Coq proof in [string_equal_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_003208_string_equal/coq/generated/string_equal_proof_manual.v). The main fixes were in the return witnesses: removing invalid entailment-level `symmetry.` uses, restoring the needed `CharArray.full_length` bridges where `Zlength` facts were required, and closing one inconsistent branch by contradiction.
+
+The full compile chain now passes for `original`, `goal`, `proof_auto`, `proof_manual`, and `goal_check`. I also cleaned non-`.v` Coq byproducts and updated [proof_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_003208_string_equal/logs/proof_reasoning.md), [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_003208_string_equal/logs/issues.md), and [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_003208_string_equal/logs/metrics.md) with `Final Result: Success`.

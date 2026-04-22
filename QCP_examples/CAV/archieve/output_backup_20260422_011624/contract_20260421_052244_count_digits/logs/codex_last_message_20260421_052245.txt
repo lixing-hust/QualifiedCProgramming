@@ -1,0 +1,12 @@
+Implemented the contract workflow for `count_digits`.
+
+Created:
+- [count_digits.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/count_digits.c)
+- [count_digits.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/count_digits.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_052244_count_digits/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_052244_count_digits/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_052244_count_digits/logs/metrics.md)
+
+The C contract uses `count_digits_z(n@pre)` with `0 <= n && n <= INT_MAX && emp`. The optional Coq file was needed because there was no existing reusable `count_digits` semantic function in the workspace.
+
+Verification performed: `coqc input/count_digits.v` completed successfully. I removed the temporary Coq build artifacts afterward.

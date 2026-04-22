@@ -1,0 +1,32 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260419_003208_string_equal",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_equal.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_equal.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_003208_string_equal/original/string_equal.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_003208_string_equal/original/string_equal.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260419_003208_string_equal.c",
+  "function_name": "string_equal",
+  "program_sha256": "0782000f7426e69d20747122410f23f95cfe59084f8ef2c97f15a636bb8d3d48",
+  "semantic_description": "Compares two null-terminated input strings character by character using a single while loop with early exit on terminator or mismatch. Returns 1 exactly when both strings have the same length and identical characters at every position, otherwise returns 0. The function does not modify either input buffer and only reads within the owned char arrays including the terminating zero.",
+  "keywords": {
+    "algorithm_family": "search",
+    "control_flow": [
+      "while_loop",
+      "if"
+    ],
+    "data_shape": [
+      "string",
+      "pointer"
+    ],
+    "semantic_intent": "preserve_input",
+    "proof_pattern": [
+      "loop_invariant",
+      "case_split",
+      "heap_reasoning"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

@@ -1,0 +1,32 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260420_171225_array_count_greater_than_k",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_count_greater_than_k.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_count_greater_than_k.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_171225_array_count_greater_than_k/original/array_count_greater_than_k.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_171225_array_count_greater_than_k/original/array_count_greater_than_k.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_171225_array_count_greater_than_k.c",
+  "function_name": "array_count_greater_than_k",
+  "program_sha256": "80476e60565c8c8fbdad6cec77d44bcf10df4970338f93bf50e92dbe8a1b1e36",
+  "semantic_description": "Scans an integer array from left to right and returns the number of elements strictly greater than k. The loop counter i ranges from 0 to n, cnt is the count for the already processed prefix, n may be 0 so the loop can be skipped, and the function preserves the input array without modifying memory.",
+  "keywords": {
+    "algorithm_family": "counting",
+    "control_flow": "for_loop",
+    "data_shape": "array",
+    "semantic_intent": "count_iterations",
+    "proof_pattern": [
+      "loop_invariant",
+      "range_bound",
+      "heap_reasoning"
+    ],
+    "numeric_properties": [
+      "nonnegative_input",
+      "monotone_accumulator"
+    ],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": "goal_check_passed"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

@@ -1,0 +1,5 @@
+Verification completed for `array_last`.
+
+`symexec` succeeded on the existing annotated file without any added `Inv`/`Assert`, `proof_manual.v` had no manual obligations, and the full Coq compile pass for `goal`, `proof_auto`, `proof_manual`, and `goal_check` passed. I also cleaned the non-`.v` Coq intermediates and wrote the required logs.
+
+Key outputs are [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_014052_array_last/logs/issues.md), [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_014052_array_last/logs/metrics.md), [qcp_run.log](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_014052_array_last/logs/qcp_run.log), and [array_last_goal_check.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_014052_array_last/coq/generated/array_last_goal_check.v). The active annotated C file remained unchanged at [verify_20260418_014052_array_last.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_014052_array_last.c).

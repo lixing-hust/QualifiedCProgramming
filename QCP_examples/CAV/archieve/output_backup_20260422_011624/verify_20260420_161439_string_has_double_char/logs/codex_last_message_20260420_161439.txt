@@ -1,0 +1,19 @@
+Verification succeeded for `string_has_double_char`.
+
+What changed:
+- Added the required loop invariant and a local bridge assertion in [annotated/verify_20260420_161439_string_has_double_char.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_161439_string_has_double_char.c).
+- Regenerated Coq artifacts in the existing workspace.
+- Completed all manual proofs in [string_has_double_char_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_161439_string_has_double_char/coq/generated/string_has_double_char_proof_manual.v).
+- Updated `workspace_fingerprint.json`, `annotation_reasoning.md`, `proof_reasoning.md`, `issues.md`, and `metrics.md`.
+
+Verification checks:
+- `symexec`: passed.
+- `string_has_double_char_goal.v`: compiled.
+- `string_has_double_char_proof_auto.v`: compiled.
+- `string_has_double_char_proof_manual.v`: compiled.
+- `string_has_double_char_goal_check.v`: compiled.
+- `proof_manual.v`: no `Admitted.` and no added `Axiom`.
+- `coq/`: cleaned of non-`.v` intermediate artifacts.
+- `metrics.md`: ends with `Final Result: Success`.
+
+I did not update shared experience docs; `metrics.md` records `Experience updates: none`.

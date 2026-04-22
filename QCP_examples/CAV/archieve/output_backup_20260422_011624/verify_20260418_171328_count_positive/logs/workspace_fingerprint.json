@@ -1,0 +1,16 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260418_171328_count_positive",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/count_positive.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/count_positive.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_171328_count_positive/original/count_positive.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_171328_count_positive/original/count_positive.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_171328_count_positive.c",
+  "function_name": "count_positive",
+  "program_sha256": "d65930f834166a47c259c7c65f89ccdc4518108c2726765217127446d81fd75d",
+  "semantic_description": "",
+  "keywords": {},
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

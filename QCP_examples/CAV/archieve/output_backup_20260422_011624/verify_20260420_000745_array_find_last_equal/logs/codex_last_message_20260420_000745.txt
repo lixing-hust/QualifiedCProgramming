@@ -1,0 +1,12 @@
+Verification succeeded for `array_find_last_equal`.
+
+I updated the active annotated file with a loop invariant and exit assertion in [verify_20260420_000745_array_find_last_equal.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_000745_array_find_last_equal.c). The initial disjunctive invariant tripped `symexec`, so I rewrote it as implication-style facts over `ans`, which allowed symbolic execution to complete.
+
+I completed the manual Coq witnesses in [array_find_last_equal_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_000745_array_find_last_equal/coq/generated/array_find_last_equal_proof_manual.v). The full compile sequence passed for:
+
+- `array_find_last_equal_goal.v`
+- `array_find_last_equal_proof_auto.v`
+- `array_find_last_equal_proof_manual.v`
+- `array_find_last_equal_goal_check.v`
+
+Final hygiene is done: `proof_manual.v` has no `Admitted.` or `Axiom`, non-`.v` Coq artifacts under the workspace `coq/` directory were removed, and logs were updated. [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_000745_array_find_last_equal/logs/metrics.md) ends with `Final Result: Success`.

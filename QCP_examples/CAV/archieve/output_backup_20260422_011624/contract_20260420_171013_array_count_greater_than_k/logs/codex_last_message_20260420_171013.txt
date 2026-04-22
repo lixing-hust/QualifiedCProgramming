@@ -1,0 +1,21 @@
+Completed the contract workflow for `array_count_greater_than_k`.
+
+Created:
+
+- [array_count_greater_than_k.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_count_greater_than_k.c)
+- [array_count_greater_than_k.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_count_greater_than_k.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_171013_array_count_greater_than_k/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_171013_array_count_greater_than_k/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_171013_array_count_greater_than_k/logs/metrics.md)
+
+The C contract follows the existing array-count pattern and imports a task-specific Coq fixpoint:
+
+```coq
+array_count_greater_than_k_spec : list Z -> Z -> Z
+```
+
+Verification done:
+
+- `coqc input/array_count_greater_than_k.v` succeeded.
+- Checked that the generated C/V/log files do not contain premature Verify-stage annotations.
+- Removed Coq compiled side artifacts after the syntax check.

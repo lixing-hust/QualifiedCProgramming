@@ -1,0 +1,17 @@
+Verification did not succeed in this retry.
+
+I resumed the existing workspace, read the current logs/generated Coq/annotated file/fingerprint, confirmed the fingerprint was already populated, replayed `symexec`, and recorded the fresh failure. The current blocker is unchanged:
+
+```text
+fatal error: Old value at `pre' is not determined in .../annotated/verify_20260420_235246_gcd_iterative.c:15:1
+```
+
+The remaining issue is the fixed postcondition in [verify_20260420_235246_gcd_iterative.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_235246_gcd_iterative.c:13), which uses `gcd_iterative_spec(a@pre, b@pre, __return)`, while the body assigns to both scalar formals `a` and `b` at lines 34-35. Prior legal Verify-layer attempts already removed body-level `@pre` references and tried logical witnesses in `Assert`/`Inv`; the frontend still aborts before generating any VC.
+
+Updated evidence:
+
+- Fresh failure recorded in [qcp_run.log](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/qcp_run.log:1).
+- Retry diagnosis appended to [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/issues.md).
+- Metrics updated in [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/metrics.md), ending with `Final Result: Fail`.
+
+Final checks: all four generated Coq files are still zero bytes because VC generation aborted; `proof_manual.v` has no `Admitted.` or added `Axiom`; no non-`.v` Coq intermediates remain. The next real repair would require a Contract-stage/executable-shape change, such as preserving original inputs in unmodified variables or changing the official contract shape, which is outside this Verify workflow’s allowed edits.

@@ -1,0 +1,5 @@
+Completed the annotate workflow for `array_init`.
+
+The formal output C is [array_init.c](/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/input/array_init.c), with the same snapshot in [workspace input](/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/output/annotate_20260414_164240_array_init/input/array_init.c). The required logs are [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/output/annotate_20260414_164240_array_init/logs/reasoning.md), [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/output/annotate_20260414_164240_array_init/logs/issues.md), and [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/output/annotate_20260414_164240_array_init/logs/metrics.md). No [array_init.v](/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/input/array_init.v) was created because the contract is expressible directly with `IntArray::full(..., l)` and `zeros(n)`.
+
+I did not run Verify or Coq; this turn only produced the annotate artifacts required by the skill.

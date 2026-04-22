@@ -1,0 +1,24 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260421_202216_longest_increasing_run",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/longest_increasing_run.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/longest_increasing_run.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_202216_longest_increasing_run/original/longest_increasing_run.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_202216_longest_increasing_run/original/longest_increasing_run.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_202216_longest_increasing_run.c",
+  "function_name": "longest_increasing_run",
+  "program_sha256": "fdfcf0c50b9f6da4b7792f94b111cc1963ffd4bc043f8477fd3e652d5be717b8",
+  "semantic_description": "Verifies longest_increasing_run, which scans an integer array of length n without modifying memory and returns 0 for the empty array, otherwise the maximum length of a contiguous strictly increasing run. The implementation initializes cur and best to 1 for nonempty arrays, then uses a single for loop from i = 1 to i < n, comparing adjacent elements a[i-1] and a[i] to either extend the current run or reset it to 1, and updates best as the maximum run length seen so far.",
+  "keywords": {
+    "algorithm_family": ["search", "accumulation"],
+    "control_flow": ["if", "for_loop"],
+    "data_shape": "array",
+    "semantic_intent": ["return_max", "preserve_input"],
+    "proof_pattern": ["loop_invariant", "case_split", "range_bound"],
+    "numeric_properties": ["nonnegative_input", "int_range", "monotone_accumulator"],
+    "edge_case_behavior": "empty_loop_possible"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

@@ -1,0 +1,11 @@
+Completed the contract workflow for `array_all_less_than_k`.
+
+Created [array_all_less_than_k.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_all_less_than_k.c) with a direct quantified contract over `IntArray::full`. The postcondition captures both cases: return `1` iff all elements are `< k`, and return `0` iff some element is `>= k`, while preserving the input array.
+
+Also wrote the required contract logs:
+
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_171737_array_all_less_than_k/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_171737_array_all_less_than_k/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_171737_array_all_less_than_k/logs/metrics.md)
+
+No `input/array_all_less_than_k.v` was created because the spec does not need task-specific Coq definitions. I verified the expected files exist and the optional `.v` file is absent.

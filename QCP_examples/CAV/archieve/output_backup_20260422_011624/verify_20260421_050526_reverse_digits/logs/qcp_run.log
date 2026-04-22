@@ -1,0 +1,10 @@
+symexec_start=2026-04-21 05:08:43 +0800
+Start to symbolic execution on program : annotated/verify_20260421_050526_reverse_digits.c
+Start to parse strategies file common
+File Path: /home/yangfp/QualifiedCProgramming/QCP_examples/common.strategies
+Finish parsing strategies file common
+Symbolic Execution into function reverse_digits
+End of symbolic execution of function reverse_digits
+Successfully finished symbolic execution
+symexec_end=2026-04-21 05:08:43 +0800
+symexec_elapsed=0

@@ -1,0 +1,39 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260420_032842_string_count_not_char",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_count_not_char.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_count_not_char.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_032842_string_count_not_char/original/string_count_not_char.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_032842_string_count_not_char/original/string_count_not_char.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_032842_string_count_not_char.c",
+  "function_name": "string_count_not_char",
+  "program_sha256": "920d0ed7e2a6a078dff85febb26c32d2b5a5ba56dd5ea43dceef9e984f831e4f",
+  "semantic_description": "Verifies a read-only string scanning function that iterates from index 0 until the terminating zero byte, counts exactly the elements of the input list whose value is not equal to the character argument c, returns that count, and preserves the full character array including the terminator. The loop may be empty when n is zero; the function does not modify memory.",
+  "keywords": {
+    "algorithm_family": "counting",
+    "control_flow": "while_loop",
+    "data_shape": [
+      "string",
+      "pointer"
+    ],
+    "semantic_intent": "preserve_input",
+    "proof_pattern": [
+      "loop_invariant",
+      "case_split",
+      "range_bound",
+      "heap_reasoning"
+    ],
+    "numeric_properties": [
+      "int_range",
+      "monotone_accumulator"
+    ],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": [
+      "goal_check_passed",
+      "proof_check_passed"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

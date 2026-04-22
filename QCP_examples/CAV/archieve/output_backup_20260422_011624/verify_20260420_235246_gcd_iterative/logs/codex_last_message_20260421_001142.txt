@@ -1,0 +1,17 @@
+Verification did not succeed in this retry.
+
+I resumed the existing workspace, reread the active annotation, logs, generated Coq placeholders, latest `qcp_run.log`, input C/V, and verify docs/examples. I replayed `symexec` in the same workspace at `2026-04-21T00:12:52+08:00`; it failed with the same frontend blocker:
+
+```text
+fatal error: Old value at `pre' is not determined in .../annotated/verify_20260420_235246_gcd_iterative.c:15:1
+```
+
+The remaining blocker is the fixed `Ensure` clause using `gcd_iterative_spec(a@pre, b@pre, __return)` at [verify_20260420_235246_gcd_iterative.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_235246_gcd_iterative.c:13), while the executable body assigns to both `a` and `b` at lines 34-35. The active annotations already removed body-level `a@pre` / `b@pre` references, and the docs/examples only support `@pre` preservation for unchanged parameters. The remaining repair requires changing the executable shape or the official contract, which is outside this Verify workflow’s permitted edits.
+
+Updated evidence:
+
+- Fresh failure in [qcp_run.log](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/qcp_run.log:1).
+- Retry diagnosis appended to [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/issues.md).
+- Retry metrics appended to [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/metrics.md), ending with `Final Result: Fail`.
+
+Final checks: all four generated Coq files are still zero bytes; `proof_manual.v` has no `Admitted.` or `Axiom`; no non-`.v` Coq intermediates remain.

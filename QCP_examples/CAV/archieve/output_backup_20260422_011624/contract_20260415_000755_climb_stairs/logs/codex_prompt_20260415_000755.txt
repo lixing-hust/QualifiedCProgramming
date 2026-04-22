@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/skills/annotate/SKILL.md
+
+Inputs:
+- Raw markdown: `/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/raw/climb_stairs.md`
+- Target function: `climbStairs`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/output/annotate_20260415_000755_climb_stairs`
+- Output C: `/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/input/climb_stairs.c`
+- Optional output V: `/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/input/climb_stairs.v`

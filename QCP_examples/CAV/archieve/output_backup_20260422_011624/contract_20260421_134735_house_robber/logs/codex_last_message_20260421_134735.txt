@@ -1,0 +1,12 @@
+Completed the contract workflow for `house_robber`.
+
+Created:
+- [house_robber.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/house_robber.c)
+- [house_robber.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/house_robber.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_134735_house_robber/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_134735_house_robber/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_134735_house_robber/logs/metrics.md)
+
+The C contract preserves the original implementation, adds the array footprint, nonnegative input constraint, and `sum(l) <= INT_MAX` overflow bound. The `.v` file defines the problem-specific rolling DP semantics as `house_robber_spec`.
+
+Verification performed: `coqc input/house_robber.v` succeeded. Generated Coq build artifacts were cleaned up, leaving only the requested `.c` and `.v` files.

@@ -1,0 +1,36 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260422_012900_2_array_adjacent_diff",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_adjacent_diff.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_012900_2_array_adjacent_diff/original/array_adjacent_diff.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260422_012900_2_array_adjacent_diff.c",
+  "function_name": "array_adjacent_diff",
+  "program_sha256": "fe16ce0aa34448ef5ef85ad5f63ed7e147c7a9149f5b75a9a06d6212f7431e9e",
+  "semantic_description": "Computes adjacent differences of an integer array into an output array using one forward loop and preserves the input array.",
+  "keywords": {
+    "algorithm_family": [
+      "simulation"
+    ],
+    "control_flow": [
+      "for_loop"
+    ],
+    "data_shape": [
+      "array"
+    ],
+    "semantic_intent": [
+      "preserve_input"
+    ],
+    "proof_pattern": [
+      "loop_invariant",
+      "heap_reasoning"
+    ],
+    "verification_status": [
+      "goal_check_passed"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

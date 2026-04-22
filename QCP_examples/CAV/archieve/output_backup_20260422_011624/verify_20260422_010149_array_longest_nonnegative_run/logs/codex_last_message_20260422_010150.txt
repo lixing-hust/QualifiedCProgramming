@@ -1,0 +1,16 @@
+Verification succeeded for `array_longest_nonnegative_run`.
+
+What changed:
+- Added the loop invariant and accumulator extern in [annotated C](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260422_010149_array_longest_nonnegative_run.c).
+- Filled the retrieval fingerprint with non-empty controlled-vocabulary metadata in [workspace_fingerprint.json](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_010149_array_longest_nonnegative_run/logs/workspace_fingerprint.json).
+- Completed all five manual Coq witnesses in [array_longest_nonnegative_run_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_010149_array_longest_nonnegative_run/coq/generated/array_longest_nonnegative_run_proof_manual.v).
+- Wrote final reasoning, issues, and metrics logs under the workspace.
+
+Verification checks:
+- `symexec_status: 0`
+- Full compile replay passed through `array_longest_nonnegative_run_goal_check.v`
+- `proof_manual.v` has no `Admitted.` and no new `Axiom`
+- Non-`.v` intermediates under workspace `coq/` were cleaned
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_010149_array_longest_nonnegative_run/logs/metrics.md) ends with `Final Result: Success`
+
+Experience updates: none.

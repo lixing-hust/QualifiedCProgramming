@@ -1,0 +1,12 @@
+Verification succeeded for `majority_candidate`.
+
+Updated:
+- [annotated C](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_201123_majority_candidate.c): added the loop invariant tying `(candidate,count)` to `majority_candidate_acc` over the remaining suffix.
+- [manual proof](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_201123_majority_candidate/coq/generated/majority_candidate_proof_manual.v): replaced all manual `Admitted.` proofs with completed Coq proofs and local helper lemmas.
+- Workspace logs: filled fingerprint, annotation/proof reasoning, issues, and metrics. `logs/metrics.md` ends with `Final Result: Success`.
+
+Verified:
+- `symexec` succeeded.
+- Full Coq compile template passed through `majority_candidate_goal_check.v`.
+- `majority_candidate_proof_manual.v` contains no `Admitted.` and no `Axiom`.
+- Non-`.v` Coq build artifacts under the workspace `coq/` directory were cleaned.

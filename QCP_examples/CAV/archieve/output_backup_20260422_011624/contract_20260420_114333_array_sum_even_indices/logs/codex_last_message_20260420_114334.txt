@@ -1,0 +1,14 @@
+Implemented the contract workflow for `array_sum_even_indices`.
+
+Created:
+- [array_sum_even_indices.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_sum_even_indices.c)
+- [array_sum_even_indices.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_sum_even_indices.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_114333_array_sum_even_indices/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_114333_array_sum_even_indices/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_114333_array_sum_even_indices/logs/metrics.md)
+
+The C contract uses a task-specific Coq semantic function for summing even indices and includes signed-int prefix-sum bounds for accumulator safety. The `.v` file contains only `array_sum_even_indices_spec`.
+
+Validation run:
+- `coqtop -quiet < input/array_sum_even_indices.v` passed.
+- Scanned generated contract/logs for disallowed Verify-stage annotation terms; none remain.

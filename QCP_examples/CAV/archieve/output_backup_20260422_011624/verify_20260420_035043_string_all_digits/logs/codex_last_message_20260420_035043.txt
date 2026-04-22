@@ -1,0 +1,13 @@
+Verification succeeded for `string_all_digits`.
+
+Updated:
+- [annotated C](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_035043_string_all_digits.c): added the loop invariant.
+- [manual proof](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_035043_string_all_digits/coq/generated/string_all_digits_proof_manual.v): completed all five manual obligations.
+- Workspace logs: fingerprint, annotation/proof reasoning, issues, and metrics updated under `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_035043_string_all_digits/logs/`.
+
+Verified:
+- `symexec` completed successfully.
+- `original/string_all_digits.v`, `goal.v`, `proof_auto.v`, `proof_manual.v`, and `goal_check.v` all compiled successfully.
+- `proof_manual.v` has no `Admitted.` and no new top-level `Axiom`.
+- Non-`.v` Coq build artifacts under `coq/` were cleaned.
+- `logs/metrics.md` ends with `Final Result: Success`.

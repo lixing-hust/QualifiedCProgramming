@@ -1,0 +1,14 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/verify/SKILL.md
+
+Inputs:
+- Input C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_count_increasing_steps.c`
+- Optional input V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_count_increasing_steps.v`
+- Target function: `array_count_increasing_steps`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_213619_array_count_increasing_steps`
+- Active annotated C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_213619_array_count_increasing_steps.c`
+
+Execution rule:
+- Work only inside this existing workspace.
+- Start from the normal verify workflow for this task.
+- Keep iterating in the same workspace until verification succeeds or the external time budget is exhausted.

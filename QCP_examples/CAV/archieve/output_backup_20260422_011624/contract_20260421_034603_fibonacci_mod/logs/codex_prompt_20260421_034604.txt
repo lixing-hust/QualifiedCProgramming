@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/contract/SKILL.md
+
+Inputs:
+- Raw markdown: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/raw/fibonacci_mod.md`
+- Target function: `fibonacci_mod`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_034603_fibonacci_mod`
+- Output C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/fibonacci_mod.c`
+- Optional output V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/fibonacci_mod.v`

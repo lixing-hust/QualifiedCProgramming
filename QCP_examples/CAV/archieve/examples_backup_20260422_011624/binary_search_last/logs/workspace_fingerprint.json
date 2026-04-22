@@ -1,0 +1,25 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260421_042558_binary_search_last",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/binary_search_last.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_042558_binary_search_last/original/binary_search_last.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_042558_binary_search_last.c",
+  "function_name": "binary_search_last",
+  "program_sha256": "1dc0f6b90d12cf35d65bf74b594e245610155197ff5c5c881c02567c899606c8",
+  "semantic_description": "Verifies binary_search_last over a sorted integer array. The function performs a while-loop binary search for the first index whose value is greater than target, then returns the previous index when it contains target, otherwise returns -1. The result must be the last occurrence of target when present, or indicate absence when target is not in the array. The input array memory is read-only and preserved through IntArray::full; edge cases include n == 0, no loop iterations after convergence, and left == 0 before the final left - 1 access.",
+  "keywords": {
+    "algorithm_family": "search",
+    "control_flow": ["while_loop", "if"],
+    "data_shape": ["array", "pointer"],
+    "semantic_intent": "preserve_input",
+    "proof_pattern": ["loop_invariant", "monotonicity", "range_bound", "case_split", "heap_reasoning"],
+    "numeric_properties": ["nonnegative_input", "overflow_guard", "int_range"],
+    "edge_case_behavior": ["empty_loop_possible", "branch_on_order"],
+    "verification_status": ["goal_check_passed", "proof_check_passed", "auto_proof_contains_admitted", "generated_goal_contains_axioms"]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

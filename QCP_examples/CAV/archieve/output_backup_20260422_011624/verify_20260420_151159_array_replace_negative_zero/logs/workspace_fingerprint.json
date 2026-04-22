@@ -1,0 +1,25 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260420_151159_array_replace_negative_zero",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_replace_negative_zero.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_151159_array_replace_negative_zero/original/array_replace_negative_zero.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_151159_array_replace_negative_zero.c",
+  "function_name": "array_replace_negative_zero",
+  "program_sha256": "f9e8765153930f2d0fd5bd9fe0877382634207853a18522dbee848bb8b664ed7",
+  "semantic_description": "The function scans an integer array a of length n with a single for loop. It updates memory in place: every element whose original value is negative is replaced by 0, while every original nonnegative element is preserved. The loop may execute zero times when n is 0, and the contract requires n to be nonnegative with a full IntArray segment.",
+  "keywords": {
+    "algorithm_family": "selection",
+    "control_flow": ["for_loop", "if"],
+    "data_shape": ["array", "pointer"],
+    "semantic_intent": "in_place_update",
+    "proof_pattern": ["loop_invariant", "case_split", "heap_reasoning"],
+    "numeric_properties": ["nonnegative_input", "int_range"],
+    "edge_case_behavior": "empty_loop_possible"
+  },
+  "verification_status": "goal_check_passed",
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

@@ -1,0 +1,13 @@
+Verification succeeded for `digit_sum`.
+
+Updated:
+- [annotated/verify_20260421_022514_digit_sum.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_022514_digit_sum.c): added the loop invariant and loop-exit assertion.
+- [digit_sum_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_022514_digit_sum/coq/generated/digit_sum_proof_manual.v): completed all 3 manual obligations.
+- Workspace logs under [logs](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_022514_digit_sum/logs): fingerprint, annotation/proof reasoning, issues, and metrics.
+
+Verified:
+- `symexec` completed successfully and regenerated `goal`, `proof_auto`, `proof_manual`, and `goal_check`.
+- Full ordered Coq compile passed through `digit_sum_goal_check.v`.
+- `digit_sum_proof_manual.v` contains no `Admitted.` and no added `Axiom`.
+- Non-`.v` Coq byproducts were cleaned.
+- `logs/metrics.md` ends with `Final Result: Success`.

@@ -1,0 +1,35 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260421_043521_lcm_simple",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/lcm_simple.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/lcm_simple.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_043521_lcm_simple/original/lcm_simple.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_043521_lcm_simple/original/lcm_simple.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_043521_lcm_simple.c",
+  "function_name": "lcm_simple",
+  "program_sha256": "0ac5c3a609adbc07a96df5ed59017bc444852d3f6279351389b7bfd008a88462",
+  "semantic_description": "Verifies lcm_simple, a scalar-only arithmetic function that starts x at positive input a and repeatedly adds a in a while loop until x is divisible by positive input b. The result should equal the Coq-defined lcm_simple_value a b, with the contract assuming the mathematical lcm fits in INT_MAX. The function does not modify heap memory; the main verification obligation is a loop invariant connecting the accumulator x to the least common multiple specification and preserving integer-range safety.",
+  "keywords": {
+    "algorithm_family": "accumulation",
+    "control_flow": "while_loop",
+    "data_shape": "scalar_only",
+    "proof_pattern": [
+      "pure_arithmetic",
+      "loop_invariant",
+      "termination_by_bound",
+      "monotonicity",
+      "range_bound"
+    ],
+    "numeric_properties": [
+      "nonnegative_input",
+      "overflow_guard",
+      "monotone_accumulator",
+      "int_range"
+    ],
+    "edge_case_behavior": "defined_for_nonnegative_only",
+    "verification_status": "goal_check_passed"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

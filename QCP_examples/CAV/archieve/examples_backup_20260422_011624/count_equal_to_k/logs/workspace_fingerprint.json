@@ -1,0 +1,37 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260418_021719_count_equal_to_k",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/count_equal_to_k.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_021719_count_equal_to_k/original/count_equal_to_k.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_021719_count_equal_to_k.c",
+  "function_name": "count_equal_to_k",
+  "program_sha256": "60ca0d564f24ad10bf97cf4fe28bb7906c7c0db43203dbbcbca5ee9d99a4eeb4",
+  "semantic_description": "Counts how many elements of an integer array are equal to a target value using a single forward loop.",
+  "keywords": {
+    "algorithm_family": [
+      "counting"
+    ],
+    "control_flow": [
+      "for_loop",
+      "if"
+    ],
+    "data_shape": [
+      "array"
+    ],
+    "semantic_intent": [
+      "count_iterations"
+    ],
+    "proof_pattern": [
+      "loop_invariant",
+      "heap_reasoning"
+    ],
+    "verification_status": [
+      "goal_check_passed"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

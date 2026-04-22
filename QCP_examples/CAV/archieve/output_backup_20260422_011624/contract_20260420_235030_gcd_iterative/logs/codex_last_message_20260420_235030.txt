@@ -1,0 +1,12 @@
+Completed the contract workflow for `gcd_iterative`.
+
+Created:
+- [input/gcd_iterative.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/gcd_iterative.c)
+- [input/gcd_iterative.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/gcd_iterative.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_235030_gcd_iterative/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_235030_gcd_iterative/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_235030_gcd_iterative/logs/metrics.md)
+
+The C contract keeps the original implementation and specifies nonnegative inputs, excludes the `(0, 0)` case, and postconditions the result through `gcd_iterative_spec`. I added the optional `.v` because there was no existing local gcd wrapper; it minimally defines `gcd_iterative_spec` as equality with `Z.gcd`.
+
+Sanity checks passed: all artifacts are present, and no Verify-stage annotation terms were found in the generated contract/log files. I did not run the full Verify pipeline.

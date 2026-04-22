@@ -1,0 +1,32 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260422_012900_26_array_move_zeroes_to_end",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_move_zeroes_to_end.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_move_zeroes_to_end.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_012900_26_array_move_zeroes_to_end/original/array_move_zeroes_to_end.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_012900_26_array_move_zeroes_to_end/original/array_move_zeroes_to_end.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260422_012900_26_array_move_zeroes_to_end.c",
+  "function_name": "array_move_zeroes_to_end",
+  "program_sha256": "d1a8ea7ee09572a3350f41028147ca6903a773746527ca48e250017b4bbdef05",
+  "semantic_description": "The function mutates an input integer array in place. It scans the original array with index i and writes each nonzero element into the earliest available prefix position tracked by write, preserving their original relative order. After the scan, it fills the remaining suffix positions from write up to n with zero. For n = 0 both loops may be skipped. The required final array is move_zeroes_to_end_spec(l), namely the original nonzero elements followed by the original zero elements, with unchanged length n.",
+  "keywords": {
+    "algorithm_family": "two_pointers",
+    "control_flow": "while_loop",
+    "data_shape": "array",
+    "semantic_intent": "in_place_update",
+    "proof_pattern": [
+      "loop_invariant",
+      "heap_reasoning",
+      "range_bound"
+    ],
+    "numeric_properties": "int_range",
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": [
+      "goal_check_passed",
+      "proof_check_passed"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

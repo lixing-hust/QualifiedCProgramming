@@ -1,0 +1,5 @@
+Verification completed for `copy_array`.
+
+I updated the annotated file at [verify_20260417_150448_copy_array.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260417_150448_copy_array.c), added the required logs in [output/verify_20260417_150448_copy_array/logs](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260417_150448_copy_array/logs), and finished the manual Coq proof in [copy_array_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260417_150448_copy_array/coq/generated/copy_array_proof_manual.v).
+
+`goal.v`, `proof_auto.v`, `proof_manual.v`, and `goal_check.v` all compile successfully. `proof_manual.v` has no `Admitted.` and no added `Axiom`, and the workspace `coq/` tree has been cleaned so only `.v` files remain.

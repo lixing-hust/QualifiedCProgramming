@@ -1,0 +1,12 @@
+Implemented the contract workflow for `string_count_digits`.
+
+Created:
+- [input/string_count_digits.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_count_digits.c)
+- [input/string_count_digits.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_count_digits.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_185613_string_count_digits/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_185613_string_count_digits/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_185613_string_count_digits/logs/metrics.md)
+
+The C implementation keeps the original semantics, rewritten into the repo’s verification-stable string-scan form using `while (1)` plus `s[i] == 0` break. The contract uses `CharArray::full`, a no-internal-zero prefix condition, and returns `string_count_digits_spec(l)`.
+
+Verification-stage annotations were not added. I also checked the generated contract files for forbidden `Inv`, `Assert`, `which implies`, and loop-exit assertion text; none were present.

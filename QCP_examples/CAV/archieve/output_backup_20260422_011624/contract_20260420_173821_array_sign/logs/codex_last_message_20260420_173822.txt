@@ -1,0 +1,10 @@
+Completed the contract workflow for `array_sign`.
+
+Created:
+- [array_sign.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_sign.c)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_173821_array_sign/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_173821_array_sign/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_173821_array_sign/logs/metrics.md)
+- Workspace snapshot: [array_sign.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_173821_array_sign/input/array_sign.c)
+
+No `input/array_sign.v` was created because the spec is expressible directly in the C contract. I also checked that the produced C file contains no Verify-stage annotations like `Inv` or `Assert`, and the workspace snapshot matches the main input C file.

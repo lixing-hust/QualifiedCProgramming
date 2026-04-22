@@ -1,0 +1,9 @@
+Wrote the contract workflow outputs for `abs_value`.
+
+[abs_value.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/abs_value.c) now contains the target function plus a direct contract:
+- precondition: `x != INT_MIN`
+- postcondition: result is nonnegative and equals either `x@pre` or `-x@pre`
+
+I also wrote the required logs in [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260417_031802_abs_value/logs/reasoning.md), [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260417_031802_abs_value/logs/issues.md), and [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260417_031802_abs_value/logs/metrics.md). [abs_value.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/abs_value.v) was not created because this spec does not require any custom Coq bridge or helper definition.
+
+I did a file sanity check only; I did not run the downstream Verify phase.

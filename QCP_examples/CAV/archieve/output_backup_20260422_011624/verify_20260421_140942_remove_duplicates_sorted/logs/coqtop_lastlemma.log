@@ -1,0 +1,330 @@
+Welcome to Coq 8.20.1
+
+Coq < [Loading ML file ring_plugin.cmxs (using legacy method) ... done]
+[Loading ML file zify_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_core_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_plugin.cmxs (using legacy method) ... done]
+[Loading ML file btauto_plugin.cmxs (using legacy method) ... done]
+
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < rds_last is defined
+rds_last is recursively defined (guarded on 2nd argument)
+
+Coq < 1 goal
+  
+  ============================
+  forall (prev : Z) (xs : list Z),
+  Znth (Zlength (prev :: remove_duplicates_sorted_from prev xs) - 1)
+    (prev :: remove_duplicates_sorted_from prev xs) 0 = 
+  rds_last prev xs
+
+probe < 
+probe < 1 goal
+  
+  prev : Z
+  xs : list Z
+  ============================
+  Znth (Zlength (prev :: remove_duplicates_sorted_from prev xs) - 1)
+    (prev :: remove_duplicates_sorted_from prev xs) 0 = 
+  rds_last prev xs
+
+1 goal
+  
+  xs : list Z
+  ============================
+  forall prev : Z,
+  Znth (Zlength (prev :: remove_duplicates_sorted_from prev xs) - 1)
+    (prev :: remove_duplicates_sorted_from prev xs) 0 = 
+  rds_last prev xs
+
+2 goals
+  
+  prev : Z
+  ============================
+  Znth 0 [prev] 0 = prev
+
+goal 2 is:
+ Znth
+   (Zlength
+      (prev
+       :: (if Z.eq_dec a prev
+           then remove_duplicates_sorted_from prev xs
+           else a :: remove_duplicates_sorted_from a xs)) - 1)
+   (prev
+    :: (if Z.eq_dec a prev
+        then remove_duplicates_sorted_from prev xs
+        else a :: remove_duplicates_sorted_from a xs)) 0 =
+ (if Z.eq_dec a prev then rds_last prev xs else rds_last a xs)
+
+probe < 1 goal
+  
+  prev : Z
+  ============================
+  Znth 0 [prev] 0 = prev
+
+This subproof is complete, but there are some unfocused goals.
+Focus next goal with bullet -.
+
+1 goal
+
+goal 1 is:
+ Znth
+   (Zlength
+      (prev
+       :: (if Z.eq_dec a prev
+           then remove_duplicates_sorted_from prev xs
+           else a :: remove_duplicates_sorted_from a xs)) - 1)
+   (prev
+    :: (if Z.eq_dec a prev
+        then remove_duplicates_sorted_from prev xs
+        else a :: remove_duplicates_sorted_from a xs)) 0 =
+ (if Z.eq_dec a prev then rds_last prev xs else rds_last a xs)
+
+probe < 1 goal
+  
+  a : Z
+  xs : list Z
+  IHxs :
+    forall prev : Z,
+    Znth (Zlength (prev :: remove_duplicates_sorted_from prev xs) - 1)
+      (prev :: remove_duplicates_sorted_from prev xs) 0 = 
+    rds_last prev xs
+  prev : Z
+  ============================
+  Znth
+    (Zlength
+       (prev
+        :: (if Z.eq_dec a prev
+            then remove_duplicates_sorted_from prev xs
+            else a :: remove_duplicates_sorted_from a xs)) - 1)
+    (prev
+     :: (if Z.eq_dec a prev
+         then remove_duplicates_sorted_from prev xs
+         else a :: remove_duplicates_sorted_from a xs)) 0 =
+  (if Z.eq_dec a prev then rds_last prev xs else rds_last a xs)
+
+2 goals
+  
+  a : Z
+  xs : list Z
+  IHxs :
+    forall prev : Z,
+    Znth (Zlength (prev :: remove_duplicates_sorted_from prev xs) - 1)
+      (prev :: remove_duplicates_sorted_from prev xs) 0 = 
+    rds_last prev xs
+  prev : Z
+  e : a = prev
+  ============================
+  Znth (Zlength (prev :: remove_duplicates_sorted_from prev xs) - 1)
+    (prev :: remove_duplicates_sorted_from prev xs) 0 = 
+  rds_last prev xs
+
+goal 2 is:
+ Znth (Zlength (prev :: a :: remove_duplicates_sorted_from a xs) - 1)
+   (prev :: a :: remove_duplicates_sorted_from a xs) 0 = 
+ rds_last a xs
+
+probe < 1 goal
+  
+  a : Z
+  xs : list Z
+  IHxs :
+    forall prev : Z,
+    Znth (Zlength (prev :: remove_duplicates_sorted_from prev xs) - 1)
+      (prev :: remove_duplicates_sorted_from prev xs) 0 = 
+    rds_last prev xs
+  prev : Z
+  e : a = prev
+  ============================
+  Znth (Zlength (prev :: remove_duplicates_sorted_from prev xs) - 1)
+    (prev :: remove_duplicates_sorted_from prev xs) 0 = 
+  rds_last prev xs
+
+1 goal
+  
+  a : Z
+  xs : list Z
+  prev : Z
+  IHxs :
+    Znth (Zlength (prev :: remove_duplicates_sorted_from prev xs) - 1)
+      (prev :: remove_duplicates_sorted_from prev xs) 0 = 
+    rds_last prev xs
+  e : a = prev
+  ============================
+  Znth (Zlength (prev :: remove_duplicates_sorted_from prev xs) - 1)
+    (prev :: remove_duplicates_sorted_from prev xs) 0 = 
+  rds_last prev xs
+
+This subproof is complete, but there are some unfocused goals.
+Focus next goal with bullet +.
+
+1 goal
+
+goal 1 is:
+ Znth (Zlength (prev :: a :: remove_duplicates_sorted_from a xs) - 1)
+   (prev :: a :: remove_duplicates_sorted_from a xs) 0 = 
+ rds_last a xs
+
+probe < 1 goal
+  
+  a : Z
+  xs : list Z
+  IHxs :
+    forall prev : Z,
+    Znth (Zlength (prev :: remove_duplicates_sorted_from prev xs) - 1)
+      (prev :: remove_duplicates_sorted_from prev xs) 0 = 
+    rds_last prev xs
+  prev : Z
+  n : a <> prev
+  ============================
+  Znth (Zlength (prev :: a :: remove_duplicates_sorted_from a xs) - 1)
+    (prev :: a :: remove_duplicates_sorted_from a xs) 0 = 
+  rds_last a xs
+
+1 goal
+  
+  a : Z
+  xs : list Z
+  IHxs :
+    forall prev : Z,
+    Znth (Zlength (prev :: remove_duplicates_sorted_from prev xs) - 1)
+      (prev :: remove_duplicates_sorted_from prev xs) 0 = 
+    rds_last prev xs
+  prev : Z
+  n : a <> prev
+  ============================
+  Znth (Zlength (prev :: a :: remove_duplicates_sorted_from a xs) - 1)
+    (prev :: a :: remove_duplicates_sorted_from a xs) 0 = 
+  rds_last a xs
+
+1 goal
+  
+  a : Z
+  xs : list Z
+  IHxs :
+    Znth (Zlength (a :: remove_duplicates_sorted_from a xs) - 1)
+      (a :: remove_duplicates_sorted_from a xs) 0 = 
+    rds_last a xs
+  prev : Z
+  n : a <> prev
+  ============================
+  Znth (Zlength (prev :: a :: remove_duplicates_sorted_from a xs) - 1)
+    (prev :: a :: remove_duplicates_sorted_from a xs) 0 = 
+  rds_last a xs
+
+2 goals
+  
+  a : Z
+  xs : list Z
+  Ht : remove_duplicates_sorted_from a xs = []
+  IHxs : Znth (Zlength [a] - 1) [a] 0 = rds_last a xs
+  prev : Z
+  n : a <> prev
+  ============================
+  Znth (Zlength [prev; a] - 1) [prev; a] 0 = rds_last a xs
+
+goal 2 is:
+ Znth (Zlength (prev :: a :: z :: l) - 1) (prev :: a :: z :: l) 0 =
+ rds_last a xs
+
+probe < 1 goal
+  
+  a : Z
+  xs : list Z
+  Ht : remove_duplicates_sorted_from a xs = []
+  IHxs : Znth (Zlength [a] - 1) [a] 0 = rds_last a xs
+  prev : Z
+  n : a <> prev
+  ============================
+  Znth (Zlength [prev; a] - 1) [prev; a] 0 = rds_last a xs
+
+1 goal
+  
+  a : Z
+  xs : list Z
+  Ht : remove_duplicates_sorted_from a xs = []
+  IHxs : Znth 0 [a] 0 = rds_last a xs
+  prev : Z
+  n : a <> prev
+  ============================
+  Znth (Zlength [prev; a] - 1) [prev; a] 0 = rds_last a xs
+
+This subproof is complete, but there are some unfocused goals.
+Focus next goal with bullet *.
+
+1 goal
+
+goal 1 is:
+ Znth (Zlength (prev :: a :: z :: l) - 1) (prev :: a :: z :: l) 0 =
+ rds_last a xs
+
+probe < 1 goal
+  
+  a : Z
+  xs : list Z
+  z : Z
+  l : list Z
+  Ht : remove_duplicates_sorted_from a xs = z :: l
+  IHxs : Znth (Zlength (a :: z :: l) - 1) (a :: z :: l) 0 = rds_last a xs
+  prev : Z
+  n : a <> prev
+  ============================
+  Znth (Zlength (prev :: a :: z :: l) - 1) (prev :: a :: z :: l) 0 =
+  rds_last a xs
+
+1 goal
+  
+  a : Z
+  xs : list Z
+  z : Z
+  l : list Z
+  Ht : remove_duplicates_sorted_from a xs = z :: l
+  IHxs : Znth (Zlength (a :: z :: l) - 1) (a :: z :: l) 0 = rds_last a xs
+  prev : Z
+  n : a <> prev
+  ============================
+  Znth (Zlength (prev :: a :: z :: l) - 1) (prev :: a :: z :: l) 0 =
+  rds_last a xs
+
+1 goal
+  
+  a : Z
+  xs : list Z
+  z : Z
+  l : list Z
+  Ht : remove_duplicates_sorted_from a xs = z :: l
+  IHxs :
+    Znth (Z.succ (Z.succ (Zlength l)) - 1) (a :: z :: l) 0 = rds_last a xs
+  prev : Z
+  n : a <> prev
+  ============================
+  Znth (Z.succ (Z.succ (Z.succ (Zlength l))) - 1) (prev :: a :: z :: l) 0 =
+  rds_last a xs
+
+Toplevel input, characters 104-107:
+>       * simpl in IHxs. rewrite !Zlength_cons in *. rewrite Znth_cons by (pose proof (Zlength_nonneg l); lia).
+>                                                                                                         ^^^
+Error: The reference lia was not found in the current environment.
+
+probe < 1 goal
+  
+  a : Z
+  xs : list Z
+  z : Z
+  l : list Z
+  Ht : remove_duplicates_sorted_from a xs = z :: l
+  IHxs :
+    Znth (Z.succ (Z.succ (Zlength l)) - 1) (a :: z :: l) 0 = rds_last a xs
+  prev : Z
+  n : a <> prev
+  ============================
+  Znth (Z.succ (Z.succ (Z.succ (Zlength l))) - 1) (prev :: a :: z :: l) 0 =
+  rds_last a xs
+
+probe < 
+Coq < 

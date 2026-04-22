@@ -1,0 +1,19 @@
+2026-04-20T05:22:43.964953Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_122040_array_count_transitions/coq/generated/array_count_transitions_proof_manual.v:
+  pose proof (array_count_transitions_spec_bounds (sublist 0 i l)) as Hspec.
+  rewrite Zlength_sublist in Hspec by lia.
+  replace (Z.max 0 (i - 0 - 1)) with (i - 1) in Hspec by lia.
+  lia.
+Qed.
+2026-04-20T05:23:42.725417Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_122040_array_count_transitions/coq/generated/array_count_transitions_proof_manual.v:
+  intros l.
+  destruct l.
+  - simpl. reflexivity.
+  - rewrite (sublist_single 0 (z :: l) 0) by (rewrite Zlength_correct; simpl; lia).
+    simpl. reflexivity.
+Qed.
+2026-04-20T05:24:48.365664Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_122040_array_count_transitions/coq/generated/array_count_transitions_proof_manual.v:
+  pre_process.
+  entailer!.
+  rewrite sublist_0_over_length by lia.
+  reflexivity.
+Qed.

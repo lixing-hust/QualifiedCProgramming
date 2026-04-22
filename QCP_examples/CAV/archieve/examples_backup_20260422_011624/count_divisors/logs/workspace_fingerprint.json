@@ -1,0 +1,34 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260421_020437_count_divisors",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/count_divisors.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/count_divisors.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_020437_count_divisors/original/count_divisors.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_020437_count_divisors/original/count_divisors.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_020437_count_divisors.c",
+  "function_name": "count_divisors",
+  "program_sha256": "3160d09154fbfcb3217d871ec44ada334af22ce998e6dd3ffba61bbaca384912",
+  "semantic_description": "The function counts how many positive integers d in the inclusive range 1..n divide the scalar input n. It initializes cnt to zero, iterates d upward with a for loop, increments cnt exactly when n % d == 0, returns the final count, and does not read or modify heap memory. The contract restricts n to 1 <= n < INT_MAX, so the loop always executes at least once and the result is specified by the imported Coq recursive count_divisors_spec.",
+  "keywords": {
+    "algorithm_family": "counting",
+    "control_flow": "for_loop",
+    "data_shape": "scalar_only",
+    "semantic_intent": "count_iterations",
+    "proof_pattern": [
+      "loop_invariant",
+      "pure_arithmetic",
+      "case_split",
+      "range_bound"
+    ],
+    "numeric_properties": [
+      "nonnegative_input",
+      "int_range",
+      "monotone_accumulator"
+    ],
+    "edge_case_behavior": "defined_for_nonnegative_only",
+    "verification_status": "goal_check_passed"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

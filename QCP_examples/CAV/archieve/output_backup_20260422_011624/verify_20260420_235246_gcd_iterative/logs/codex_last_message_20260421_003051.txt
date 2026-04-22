@@ -1,0 +1,17 @@
+Verification still does not succeed in this retry.
+
+I resumed the same workspace, reread the current logs/generated files/active annotation, confirmed the fingerprint is already populated, then cleared and replayed `symexec` against the active annotated file. The fresh run failed at the same frontend blocker:
+
+```text
+fatal error: Old value at `pre' is not determined in .../annotated/verify_20260420_235246_gcd_iterative.c:15:1
+```
+
+The blocker is unchanged: [verify_20260420_235246_gcd_iterative.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_235246_gcd_iterative.c:13) still has the fixed official postcondition `gcd_iterative_spec(a@pre, b@pre, __return)`, while the implementation assigns to both scalar parameters at lines 34-35. The active body annotations no longer contain `a@pre` or `b@pre`, and prior legal Verify-layer attempts already tried witnesses/invariants. The remaining repair would require changing executable C shape or the contract, which is outside this Verify workflow’s permitted edits.
+
+Updated evidence:
+
+- Fresh failure recorded in [qcp_run.log](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/qcp_run.log:1).
+- Retry diagnosis appended to [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/issues.md).
+- Retry metrics appended to [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/metrics.md), ending with `Final Result: Fail`.
+
+Final checks: all generated Coq files are still zero bytes, `proof_manual.v` has no `Admitted.` or `Axiom`, and there are no non-`.v` Coq intermediates left under the workspace `coq/` directory.

@@ -1,0 +1,9 @@
+Completed the contract workflow for `max_of_three`.
+
+Created:
+- [input/max_of_three.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/max_of_three.c)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_053711_max_of_three/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_053711_max_of_three/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_053711_max_of_three/logs/metrics.md)
+
+I did not create `input/max_of_three.v` because the specification is expressible directly in the C contract: return one of `a@pre`, `b@pre`, `c@pre`, and be greater than or equal to all three. `metrics.md` records `Experience updates: none`.

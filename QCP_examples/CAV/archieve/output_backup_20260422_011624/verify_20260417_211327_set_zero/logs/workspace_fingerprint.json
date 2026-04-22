@@ -1,0 +1,20 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260417_211327_set_zero",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/set_zero.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260417_211327_set_zero/original/set_zero.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260417_211327_set_zero.c",
+  "function_name": "set_zero",
+  "program_sha256": "4417eaf0aac18ad4b1693784828938c71c65d924482636532f73096d9040ec8e",
+  "semantic_description": "Overwrite each element of the input integer array with 0.",
+  "keywords": {
+    "shape": "int array",
+    "effect": "in-place zero fill",
+    "loop": "single forward for-loop"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

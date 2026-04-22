@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/contract/SKILL.md
+
+Inputs:
+- Raw markdown: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/raw/array_is_strictly_increasing.md`
+- Target function: `array_is_strictly_increasing`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_153805_array_is_strictly_increasing`
+- Output C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_is_strictly_increasing.c`
+- Optional output V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_is_strictly_increasing.v`

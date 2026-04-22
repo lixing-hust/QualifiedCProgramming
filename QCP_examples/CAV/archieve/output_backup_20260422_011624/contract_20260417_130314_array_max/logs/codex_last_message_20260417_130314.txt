@@ -1,0 +1,12 @@
+Completed the contract workflow for `array_max`.
+
+Generated:
+- [input/array_max.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_max.c)
+- [input/array_max.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_max.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260417_130314_array_max/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260417_130314_array_max/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260417_130314_array_max/logs/metrics.md)
+
+The C contract keeps the original implementation and specifies that the return value equals a Coq `max_list_nonempty(l)` over the logical array contents while preserving `IntArray::full(a, n, l)`. A dedicated `.v` file was needed because the repo did not already expose a reusable list-maximum definition.
+
+I did not run the Verify stage or Coq compilation here.

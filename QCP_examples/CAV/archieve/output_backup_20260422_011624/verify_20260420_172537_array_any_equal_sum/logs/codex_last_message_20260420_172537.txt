@@ -1,0 +1,12 @@
+Verification succeeded for `array_any_equal_sum`.
+
+Updated [annotated/verify_20260420_172537_array_any_equal_sum.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_172537_array_any_equal_sum.c) with the required loop invariant and loop-exit assertion. The workspace fingerprint, annotation reasoning, issues, and metrics logs were completed under [output/verify_20260420_172537_array_any_equal_sum](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_172537_array_any_equal_sum).
+
+Verification checks completed:
+- `symexec` succeeded and regenerated `goal`, `proof_auto`, `proof_manual`, and `goal_check`.
+- `coqc` compiled `array_any_equal_sum_goal.v`, `array_any_equal_sum_proof_auto.v`, `array_any_equal_sum_proof_manual.v`, and `array_any_equal_sum_goal_check.v`.
+- `proof_manual.v` has no `Admitted.` proof body and no top-level `Axiom`.
+- `coq/` intermediate files were cleaned; only `.v` files remain.
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_172537_array_any_equal_sum/logs/metrics.md) ends with `Final Result: Success`.
+
+No shared experience docs were changed; this matched the existing array-search verification pattern.

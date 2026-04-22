@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/skills/annotate/SKILL.md
+
+Inputs:
+- Raw markdown: `/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/raw/array_sum.md`
+- Target function: `array_sum`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/output/annotate_20260414_222623_array_sum`
+- Output C: `/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/input/array_sum.c`
+- Optional output V: `/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/input/array_sum.v`

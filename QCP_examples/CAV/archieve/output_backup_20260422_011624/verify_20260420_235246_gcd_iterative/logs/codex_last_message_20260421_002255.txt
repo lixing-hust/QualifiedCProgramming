@@ -1,0 +1,20 @@
+Verification did not succeed in this retry. I resumed the existing workspace, reread the current logs/generated files/active annotation/fingerprint, confirmed the fingerprint is already populated, and replayed `symexec` with the correct absolute binary.
+
+Fresh result in [qcp_run.log](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/qcp_run.log:1):
+
+```text
+fatal error: Old value at `pre' is not determined in .../annotated/verify_20260420_235246_gcd_iterative.c:15:1
+symexec_exit_code: 1
+```
+
+The blocker is unchanged: the fixed postcondition in [verify_20260420_235246_gcd_iterative.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_235246_gcd_iterative.c:13) still uses `gcd_iterative_spec(a@pre, b@pre, __return)`, while the executable body assigns to both scalar formals at lines 34-35. Prior legal Verify-layer attempts already removed body-level `@pre` uses and tried logical witnesses in `Assert`/`Inv`; the frontend still aborts before VC generation.
+
+Updated workspace records:
+
+- Appended the fresh retry and invocation note to [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/issues.md).
+- Appended final retry metrics to [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/metrics.md), ending with `Final Result: Fail`.
+- All generated Coq files remain zero bytes.
+- `proof_manual.v` has no `Admitted.` or added `Axiom`.
+- No non-`.v` Coq intermediates remain.
+
+The remaining plausible repair requires a Contract-stage change, such as preserving original inputs in non-mutated executable locals or changing the contract shape to avoid `@pre` on assigned scalar parameters.

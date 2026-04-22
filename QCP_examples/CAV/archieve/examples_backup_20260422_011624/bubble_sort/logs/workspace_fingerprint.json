@@ -1,0 +1,38 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260417_202657_bubble_sort",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/bubble_sort.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/bubble_sort.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260417_202657_bubble_sort/original/bubble_sort.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260417_202657_bubble_sort/original/bubble_sort.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260417_202657_bubble_sort.c",
+  "function_name": "bubble_sort",
+  "program_sha256": "7a53da9fee31cc4245fe4953729c33432c17baf24f31195ede3d7a5d6a9c5f85",
+  "semantic_description": "Sorts an integer array in place with nested bubble-sort passes, swapping adjacent out-of-order elements until the array is in nondecreasing order.",
+  "keywords": {
+    "algorithm_family": [
+      "simulation"
+    ],
+    "control_flow": [
+      "nested_loop",
+      "if"
+    ],
+    "data_shape": [
+      "array"
+    ],
+    "semantic_intent": [
+      "in_place_update"
+    ],
+    "proof_pattern": [
+      "loop_invariant",
+      "heap_reasoning",
+      "case_split"
+    ],
+    "verification_status": [
+      "goal_check_passed"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

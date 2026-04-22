@@ -1,0 +1,24 @@
+2026-04-21T05:41:21.587890Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_132710_max_subarray_sum/coq/generated/max_subarray_sum_proof_manual.v:
+  - rewrite <- sum_sublist_snoc by lia.
+    rewrite sublist_nil by lia.
+    simpl.
+    lia.
+2026-04-21T05:41:30.779052Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_132710_max_subarray_sum/coq/generated/max_subarray_sum_proof_manual.v:
+  - rewrite <- sum_sublist_snoc by lia.
+    rewrite sublist_nil by lia.
+    simpl.
+    lia.
+2026-04-21T05:42:30.202129Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_132710_max_subarray_sum/coq/generated/max_subarray_sum_proof_manual.v:
+  intros.
+  Exists start_2.
+  entailer!.
+  - rewrite <- sum_sublist_snoc by lia.
+    subst cur.
+    reflexivity.
+  - apply suffix_bound_extend with (start := start_2); try lia; assumption.
+  - rewrite <- H8.
+    rewrite max_subarray_sum_acc_sublist_step by lia.
+    unfold max_subarray_sum_step.
+    replace (Z.max (Znth i l 0) (cur + Znth i l 0)) with (cur + Znth i l 0) by lia.
+    replace (Z.max best (cur + Znth i l 0)) with best by lia.
+    reflexivity.

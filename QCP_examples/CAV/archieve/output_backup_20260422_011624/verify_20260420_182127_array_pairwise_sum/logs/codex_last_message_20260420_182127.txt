@@ -1,0 +1,21 @@
+Verification succeeded for `array_pairwise_sum`.
+
+What changed:
+- Updated the workspace fingerprint with a non-empty semantic description and controlled-vocabulary keywords.
+- Added the required loop invariant and bridge assertions to [verify_20260420_182127_array_pairwise_sum.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_182127_array_pairwise_sum.c).
+- Normalized the annotated-only `With la, lb, lo` header to `With la lb lo` to satisfy the verifier parser.
+- Generated fresh Coq files under `coq/generated/`.
+- Completed all six manual proof obligations in [array_pairwise_sum_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_182127_array_pairwise_sum/coq/generated/array_pairwise_sum_proof_manual.v).
+- Updated `annotation_reasoning.md`, `proof_reasoning.md`, `issues.md`, and `metrics.md`.
+
+Verification checks:
+- `symexec`: success
+- `array_pairwise_sum_goal.v`: compiled
+- `array_pairwise_sum_proof_auto.v`: compiled
+- `array_pairwise_sum_proof_manual.v`: compiled
+- `array_pairwise_sum_goal_check.v`: compiled
+- `proof_manual.v`: no `Admitted.` and no top-level `Axiom`
+- `coq/`: non-`.v` intermediate files cleaned
+- `logs/metrics.md`: ends with `Final Result: Success`
+
+I did not update shared experience docs because the user rule for this run was to work only inside the existing workspace.

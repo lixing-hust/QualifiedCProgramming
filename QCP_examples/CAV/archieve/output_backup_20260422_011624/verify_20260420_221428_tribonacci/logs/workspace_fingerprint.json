@@ -1,0 +1,40 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260420_221428_tribonacci",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/tribonacci.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/tribonacci.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_221428_tribonacci/original/tribonacci.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_221428_tribonacci/original/tribonacci.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_221428_tribonacci.c",
+  "function_name": "tribonacci",
+  "program_sha256": "26c517ae82ab402073907f058796e1c925ce7422a2070a5b9d21c37af2e2137b",
+  "semantic_description": "Computes the n-th tribonacci value for scalar integer input n with precondition 0 <= n <= 37. The function handles n = 0 and n = 1 by early return, then uses a for loop from i = 3 through n maintaining three rolling scalar accumulators a, b, and c. The intended loop relation is that before each iteration a, b, c hold consecutive tribonacci values, and after the loop c is returned. The function does not read or modify heap memory.",
+  "keywords": {
+    "algorithm_family": "dynamic_programming",
+    "control_flow": [
+      "if",
+      "for_loop"
+    ],
+    "data_shape": "scalar_only",
+    "proof_pattern": [
+      "loop_invariant",
+      "case_split",
+      "pure_arithmetic",
+      "range_bound"
+    ],
+    "numeric_properties": [
+      "nonnegative_input",
+      "overflow_guard",
+      "int_range",
+      "monotone_accumulator"
+    ],
+    "edge_case_behavior": "defined_for_nonnegative_only",
+    "verification_status": [
+      "goal_check_passed",
+      "proof_check_passed"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

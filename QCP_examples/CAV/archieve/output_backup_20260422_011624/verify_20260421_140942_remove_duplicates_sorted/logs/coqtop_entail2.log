@@ -1,0 +1,205 @@
+Welcome to Coq 8.20.1
+
+Coq < [Loading ML file ring_plugin.cmxs (using legacy method) ... done]
+[Loading ML file zify_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_core_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_plugin.cmxs (using legacy method) ... done]
+[Loading ML file btauto_plugin.cmxs (using legacy method) ... done]
+
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 1 goal
+  
+  ============================
+  remove_duplicates_sorted_entail_wit_2_1
+
+probe < 
+probe < 1 goal
+  
+  a_pre, n_pre : Z
+  l, lc_2 : list Z
+  j, i_2 : Z
+  H : Znth i_2 lc_2 0 <> Znth (j - 1) lc_2 0
+  H0 : i_2 < n_pre
+  H1 : 1 <= i_2
+  H2 : i_2 <= n_pre
+  H3 : 1 <= j
+  H4 : j <= i_2
+  H5 : Zlength lc_2 = n_pre
+  H6 : j = Zlength (remove_duplicates_sorted_spec (sublist 0 i_2 l))
+  H7 :
+    forall k : Z,
+    0 <= k < j ->
+    Znth k lc_2 0 =
+    Znth k (remove_duplicates_sorted_spec (sublist 0 i_2 l)) 0
+  H8 : forall k_2 : Z, i_2 <= k_2 < n_pre -> Znth k_2 lc_2 0 = Znth k_2 l 0
+  H9 : n_pre <> 0
+  H10 : 0 <= n_pre
+  H11 : n_pre <= 2147483647
+  H12 : Zlength l = n_pre
+  H13 :
+    forall i : Z, 0 <= i /\ i + 1 < n_pre -> Znth i l 0 <= Znth (i + 1) l 0
+  ============================
+  IntArray.full a_pre n_pre (replace_Znth j (Znth i_2 lc_2 0) lc_2)
+  |-- EX lc : list Z,
+      [|1 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|1 <= j + 1|] &&
+      [|j + 1 <= i_2 + 1|] && [|Zlength lc = n_pre|] &&
+      [|j + 1 =
+        Zlength (remove_duplicates_sorted_spec (sublist 0 (i_2 + 1) l))|] &&
+      [|forall k : Z,
+        0 <= k < j + 1 ->
+        Znth k lc 0 =
+        Znth k (remove_duplicates_sorted_spec (sublist 0 (i_2 + 1) l)) 0|] &&
+      [|forall k_2 : Z,
+        i_2 + 1 <= k_2 < n_pre -> Znth k_2 lc 0 = Znth k_2 l 0|] &&
+      [|n_pre <> 0|] && [|0 <= n_pre|] && [|n_pre <= 2147483647|] &&
+      [|Zlength l = n_pre|] &&
+      [|forall i : Z,
+        0 <= i /\ i + 1 < n_pre -> Znth i l 0 <= Znth (i + 1) l 0|] &&
+      IntArray.full a_pre n_pre lc
+
+probe < 1 goal
+  
+  a_pre, n_pre : Z
+  l, lc_2 : list Z
+  j, i_2 : Z
+  H : Znth i_2 lc_2 0 <> Znth (j - 1) lc_2 0
+  H0 : i_2 < n_pre
+  H1 : 1 <= i_2
+  H2 : i_2 <= n_pre
+  H3 : 1 <= j
+  H4 : j <= i_2
+  H5 : Zlength lc_2 = n_pre
+  H6 : j = Zlength (remove_duplicates_sorted_spec (sublist 0 i_2 l))
+  H7 :
+    forall k : Z,
+    0 <= k < j ->
+    Znth k lc_2 0 =
+    Znth k (remove_duplicates_sorted_spec (sublist 0 i_2 l)) 0
+  H8 : forall k_2 : Z, i_2 <= k_2 < n_pre -> Znth k_2 lc_2 0 = Znth k_2 l 0
+  H9 : n_pre <> 0
+  H10 : 0 <= n_pre
+  H11 : n_pre <= 2147483647
+  H12 : Zlength l = n_pre
+  H13 :
+    forall i : Z, 0 <= i /\ i + 1 < n_pre -> Znth i l 0 <= Znth (i + 1) l 0
+  ============================
+  IntArray.full a_pre n_pre (replace_Znth j (Znth i_2 lc_2 0) lc_2)
+  |-- [|1 <= i_2 + 1|] && [|i_2 + 1 <= n_pre|] && [|1 <= j + 1|] &&
+      [|j + 1 <= i_2 + 1|] &&
+      [|Zlength (replace_Znth j (Znth i_2 lc_2 0) lc_2) = n_pre|] &&
+      [|j + 1 =
+        Zlength (remove_duplicates_sorted_spec (sublist 0 (i_2 + 1) l))|] &&
+      [|forall k : Z,
+        0 <= k < j + 1 ->
+        Znth k (replace_Znth j (Znth i_2 lc_2 0) lc_2) 0 =
+        Znth k (remove_duplicates_sorted_spec (sublist 0 (i_2 + 1) l)) 0|] &&
+      [|forall k_2 : Z,
+        i_2 + 1 <= k_2 < n_pre ->
+        Znth k_2 (replace_Znth j (Znth i_2 lc_2 0) lc_2) 0 = Znth k_2 l 0|] &&
+      [|n_pre <> 0|] && [|0 <= n_pre|] && [|n_pre <= 2147483647|] &&
+      [|Zlength l = n_pre|] &&
+      [|forall i : Z,
+        0 <= i /\ i + 1 < n_pre -> Znth i l 0 <= Znth (i + 1) l 0|] &&
+      IntArray.full a_pre n_pre (replace_Znth j (Znth i_2 lc_2 0) lc_2)
+
+probe < 4 goals
+  
+  a_pre, n_pre : Z
+  l, lc_2 : list Z
+  j, i_2 : Z
+  H : Znth i_2 lc_2 0 <> Znth (j - 1) lc_2 0
+  H0 : i_2 < n_pre
+  H1 : 1 <= i_2
+  H2 : i_2 <= n_pre
+  H3 : 1 <= j
+  H4 : j <= i_2
+  H5 : Zlength lc_2 = n_pre
+  H6 : j = Zlength (remove_duplicates_sorted_spec (sublist 0 i_2 l))
+  H7 :
+    forall k : Z,
+    0 <= k < j ->
+    Znth k lc_2 0 =
+    Znth k (remove_duplicates_sorted_spec (sublist 0 i_2 l)) 0
+  H8 : forall k_2 : Z, i_2 <= k_2 < n_pre -> Znth k_2 lc_2 0 = Znth k_2 l 0
+  H9 : n_pre <> 0
+  H10 : 0 <= n_pre
+  H11 : n_pre <= 2147483647
+  H12 : Zlength l = n_pre
+  H13 :
+    forall i : Z, 0 <= i /\ i + 1 < n_pre -> Znth i l 0 <= Znth (i + 1) l 0
+  ============================
+  forall k_2 : Z,
+  i_2 + 1 <= k_2 < n_pre ->
+  Znth k_2 (replace_Znth j (Znth i_2 lc_2 0) lc_2) 0 = Znth k_2 l 0
+
+goal 2 is:
+ forall k : Z,
+ 0 <= k < j + 1 ->
+ Znth k (replace_Znth j (Znth i_2 lc_2 0) lc_2) 0 =
+ Znth k (remove_duplicates_sorted_spec (sublist 0 (i_2 + 1) l)) 0
+goal 3 is:
+ j + 1 = Zlength (remove_duplicates_sorted_spec (sublist 0 (i_2 + 1) l))
+goal 4 is:
+ Zlength (replace_Znth j (Znth i_2 lc_2 0) lc_2) = n_pre
+
+probe < 4 goals
+  
+  a_pre, n_pre : Z
+  l, lc_2 : list Z
+  j, i_2 : Z
+  H : Znth i_2 lc_2 0 <> Znth (j - 1) lc_2 0
+  H0 : i_2 < n_pre
+  H1 : 1 <= i_2
+  H2 : i_2 <= n_pre
+  H3 : 1 <= j
+  H4 : j <= i_2
+  H5 : Zlength lc_2 = n_pre
+  H6 : j = Zlength (remove_duplicates_sorted_spec (sublist 0 i_2 l))
+  H7 :
+    forall k : Z,
+    0 <= k < j ->
+    Znth k lc_2 0 =
+    Znth k (remove_duplicates_sorted_spec (sublist 0 i_2 l)) 0
+  H8 : forall k_2 : Z, i_2 <= k_2 < n_pre -> Znth k_2 lc_2 0 = Znth k_2 l 0
+  H9 : n_pre <> 0
+  H10 : 0 <= n_pre
+  H11 : n_pre <= 2147483647
+  H12 : Zlength l = n_pre
+  H13 :
+    forall i : Z, 0 <= i /\ i + 1 < n_pre -> Znth i l 0 <= Znth (i + 1) l 0
+  ============================
+  forall k_2 : Z,
+  i_2 + 1 <= k_2 < n_pre ->
+  Znth k_2 (replace_Znth j (Znth i_2 lc_2 0) lc_2) 0 = Znth k_2 l 0
+
+goal 2 is:
+ forall k : Z,
+ 0 <= k < j + 1 ->
+ Znth k (replace_Znth j (Znth i_2 lc_2 0) lc_2) 0 =
+ Znth k (remove_duplicates_sorted_spec (sublist 0 (i_2 + 1) l)) 0
+goal 3 is:
+ j + 1 = Zlength (remove_duplicates_sorted_spec (sublist 0 (i_2 + 1) l))
+goal 4 is:
+ Zlength (replace_Znth j (Znth i_2 lc_2 0) lc_2) = n_pre
+
+probe < 
+Coq < 

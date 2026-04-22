@@ -1,0 +1,17 @@
+Verification succeeded for `is_multiple`.
+
+What changed:
+- Updated [workspace_fingerprint.json](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_045238_is_multiple/logs/workspace_fingerprint.json) with a non-empty semantic description, controlled-vocabulary keywords, and `verification_status: goal_check_passed`.
+- Generated fresh Coq artifacts under [coq/generated](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_045238_is_multiple/coq/generated).
+- Added required logs:
+  - [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_045238_is_multiple/logs/issues.md)
+  - [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_045238_is_multiple/logs/metrics.md)
+
+Verification results:
+- `symexec` completed with status `0`.
+- `is_multiple_goal.v`, `is_multiple_proof_auto.v`, `is_multiple_proof_manual.v`, and `is_multiple_goal_check.v` all compiled successfully.
+- `is_multiple_proof_manual.v` has no `Admitted.` and no local `Axiom` declaration.
+- Non-`.v` Coq compiler byproducts were cleaned from the workspace.
+- `metrics.md` ends with `Final Result: Success`.
+
+No annotation edits or manual proof edits were needed for this straight-line modulo branch function.

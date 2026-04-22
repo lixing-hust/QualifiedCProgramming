@@ -1,0 +1,24 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260420_161439_string_has_double_char",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_has_double_char.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_161439_string_has_double_char/original/string_has_double_char.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_161439_string_has_double_char.c",
+  "function_name": "string_has_double_char",
+  "program_sha256": "1af407e044bd41171eb3ab0324277d97229c014a31edcea2ba944e7145aa06cf",
+  "semantic_description": "Verifies a read-only scan over a null-terminated character array. The function walks forward with index i, stops when s[i] or s[i+1] is the terminator, returns 1 exactly when some adjacent pair inside the logical string l is equal, and otherwise returns 0 when every adjacent pair differs. The function does not modify memory and must preserve the full CharArray footprint.",
+  "keywords": {
+    "algorithm_family": "search",
+    "control_flow": "while_loop",
+    "data_shape": ["string", "pointer"],
+    "semantic_intent": "preserve_input",
+    "proof_pattern": ["loop_invariant", "case_split", "termination_by_bound", "heap_reasoning"],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": ["goal_check_passed", "proof_check_passed"]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

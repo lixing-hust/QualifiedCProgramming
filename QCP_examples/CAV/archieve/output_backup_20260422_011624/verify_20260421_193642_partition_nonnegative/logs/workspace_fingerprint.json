@@ -1,0 +1,39 @@
+{
+    "fingerprint_version": 2,
+    "workspace": "verify_20260421_193642_partition_nonnegative",
+    "stage": "verify",
+    "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/partition_nonnegative.c",
+    "input_v": "",
+    "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_193642_partition_nonnegative/original/partition_nonnegative.c",
+    "original_v": "",
+    "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_193642_partition_nonnegative.c",
+    "function_name": "partition_nonnegative",
+    "program_sha256": "6ecb1c1cf5ec37c88fef5be1a8d474178db989df2b18951a79c0a5b852a503a1",
+    "semantic_description": "In-place partition of an integer array segment a[0..n) using two pointers i and j. The loop advances i past negative elements and swaps a[i] with a[j] when a[i] is nonnegative, then decrements j. The function returns the split index i; the final array must be a permutation of the input, every index before the return value is negative, and every index from the return value to n is nonnegative. The empty-array case is allowed because n may be 0, producing j = -1 and skipping the while loop.",
+    "keywords": {
+        "algorithm_family": "two_pointers",
+        "control_flow": [
+            "while_loop",
+            "if"
+        ],
+        "data_shape": [
+            "array",
+            "pointer"
+        ],
+        "semantic_intent": "in_place_update",
+        "proof_pattern": [
+            "loop_invariant",
+            "case_split",
+            "range_bound",
+            "heap_reasoning"
+        ],
+        "numeric_properties": [
+            "nonnegative_input",
+            "int_range"
+        ],
+        "edge_case_behavior": "empty_loop_possible",
+        "verification_status": "goal_check_passed"
+    },
+    "assume_contract_is_correct": true,
+    "contract_source": "contract_input_c"
+}

@@ -1,0 +1,31 @@
+Verification did not succeed in this retry.
+
+Current blocker: `symexec` is back to failing before VC generation with:
+
+```text
+Old value at `pre' is not determined
+annotated/verify_20260420_235246_gcd_iterative.c:15:1
+```
+
+The active annotated file currently contains `@pre` terms in the postcondition and invariant again, which is the known frontend blocker for this workspace:
+[annotated/verify_20260420_235246_gcd_iterative.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_235246_gcd_iterative.c:13)
+
+What I tried in this retry:
+
+- Read the existing workspace state, logs, generated Coq files, and active annotated file first.
+- Confirmed `workspace_fingerprint.json` was already populated.
+- Found the active blocker from `logs/qcp_run.log`.
+- Tried preserving formal parameters with local `x`/`y` loop variables.
+- Tried removing the frontend-problematic `@pre` shape from the active copy; that got `symexec` to generate Coq once.
+- The generated return witness was then underconstrained: it needed `gcd_iterative_spec a_pre b_pre x`, but the invariant only related the result to current/local variables, with no generated equality tying them to the official pre-state variables.
+- Rejected `Admitted.` placeholders in `proof_manual.v`; it now contains no `Admitted.` and no added `Axiom`.
+- Cleaned non-`.v` Coq intermediates.
+
+Logs were updated:
+
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/issues.md)
+- [annotation_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/annotation_reasoning.md)
+- [proof_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/proof_reasoning.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/metrics.md)
+
+Final result remains `Fail`. The remaining issue is a Contract/frontend boundary: the verifier needs a legal way to relate the official parameter pre-state variables to the loop invariant’s original-pair witness, but direct `@pre` use in this active annotated shape is rejected before Coq goals are generated.

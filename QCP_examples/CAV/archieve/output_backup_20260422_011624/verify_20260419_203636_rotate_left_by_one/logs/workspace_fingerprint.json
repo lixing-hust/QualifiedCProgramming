@@ -1,0 +1,34 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260419_203636_rotate_left_by_one",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/rotate_left_by_one.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_203636_rotate_left_by_one/original/rotate_left_by_one.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260419_203636_rotate_left_by_one.c",
+  "function_name": "rotate_left_by_one",
+  "program_sha256": "fac44da1b4c4917d38c08e732b98001ca5c5c3f1a78eb8c6aa559d24cffb8932",
+  "semantic_description": "In-place left rotation of an integer array by one position. The function requires n >= 1 and an owned full IntArray a of length n with logical contents l. It saves the first element, shifts elements a[1..n-1] one slot left using a for loop, then writes the saved first element to a[n-1]. The result array has the same length n, its last element equals the original first element, and every earlier index i stores the original element at i+1. The function modifies the input array in place and has no allocation.",
+  "keywords": {
+    "algorithm_family": "simulation",
+    "control_flow": "for_loop",
+    "data_shape": [
+      "array",
+      "pointer"
+    ],
+    "semantic_intent": "in_place_update",
+    "proof_pattern": [
+      "loop_invariant",
+      "range_bound",
+      "heap_reasoning"
+    ],
+    "numeric_properties": "int_range",
+    "verification_status": [
+      "goal_check_passed",
+      "proof_check_passed"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

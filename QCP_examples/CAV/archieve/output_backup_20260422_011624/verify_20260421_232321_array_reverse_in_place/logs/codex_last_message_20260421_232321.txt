@@ -1,0 +1,17 @@
+Verification succeeded for `array_reverse_in_place`.
+
+Changed:
+- Added the loop invariant in [verify_20260421_232321_array_reverse_in_place.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_232321_array_reverse_in_place.c:18).
+- Generated and completed the manual Coq proof in [array_reverse_in_place_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_232321_array_reverse_in_place/coq/generated/array_reverse_in_place_proof_manual.v:1).
+- Updated workspace metadata and logs:
+  - [workspace_fingerprint.json](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_232321_array_reverse_in_place/logs/workspace_fingerprint.json:1)
+  - [proof_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_232321_array_reverse_in_place/logs/proof_reasoning.md:1)
+  - [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_232321_array_reverse_in_place/logs/issues.md:1)
+  - [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_232321_array_reverse_in_place/logs/metrics.md:1)
+
+Verified:
+- Symbolic execution completed successfully.
+- `array_reverse_in_place_goal.v`, `proof_auto.v`, `proof_manual.v`, and `goal_check.v` all compiled successfully with `coqc`.
+- `array_reverse_in_place_proof_manual.v` has no `Admitted.`, no `admit`, and no new `Axiom`.
+- Non-`.v` Coq build artifacts were cleaned from the workspace.
+- `logs/metrics.md` ends with `Final Result: Success`.

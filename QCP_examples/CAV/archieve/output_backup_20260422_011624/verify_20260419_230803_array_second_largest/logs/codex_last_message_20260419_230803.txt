@@ -1,0 +1,20 @@
+Verification succeeded for `array_second_largest`.
+
+Updated:
+- [annotated C](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260419_230803_array_second_largest.c)
+- [manual proof](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_230803_array_second_largest/coq/generated/array_second_largest_proof_manual.v)
+- Workspace logs: `workspace_fingerprint.json`, `annotation_reasoning.md`, `proof_reasoning.md`, `issues.md`, `metrics.md`
+
+Validation completed:
+- `symexec` succeeded on the latest annotated file.
+- Full Coq replay passed:
+  - `original/array_second_largest.v`
+  - `array_second_largest_goal.v`
+  - `array_second_largest_proof_auto.v`
+  - `array_second_largest_proof_manual.v`
+  - `array_second_largest_goal_check.v`
+- `proof_manual.v` has no `Admitted.` and no top-level `Axiom`.
+- Non-`.v` files under `coq/` were cleaned.
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_230803_array_second_largest/logs/metrics.md) ends with `Final Result: Success`.
+
+Experience updates: none.

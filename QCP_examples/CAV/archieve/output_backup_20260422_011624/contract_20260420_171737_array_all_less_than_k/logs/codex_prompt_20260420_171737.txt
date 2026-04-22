@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/contract/SKILL.md
+
+Inputs:
+- Raw markdown: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/raw/array_all_less_than_k.md`
+- Target function: `array_all_less_than_k`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_171737_array_all_less_than_k`
+- Output C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_all_less_than_k.c`
+- Optional output V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_all_less_than_k.v`

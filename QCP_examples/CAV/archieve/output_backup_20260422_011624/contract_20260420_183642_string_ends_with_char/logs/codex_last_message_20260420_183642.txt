@@ -1,0 +1,9 @@
+Completed the contract workflow for `string_ends_with_char`.
+
+Generated:
+- [input/string_ends_with_char.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_ends_with_char.c)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_183642_string_ends_with_char/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_183642_string_ends_with_char/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_183642_string_ends_with_char/logs/metrics.md)
+
+No `input/string_ends_with_char.v` was created because the postcondition is expressible directly with the existing `CharArray::full` and list indexing contract style. The C implementation keeps the original semantics and uses the repo’s verification-friendly string scan form with explicit `0` checks.

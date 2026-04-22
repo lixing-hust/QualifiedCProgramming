@@ -1,0 +1,13 @@
+Verification succeeded for `array_count_distinct_sorted`.
+
+Updated:
+- [annotated C](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260422_003842_array_count_distinct_sorted.c): added the loop invariant tying `count` to `array_count_distinct_sorted_spec(sublist(0, i, l))`.
+- [manual proof](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_003842_array_count_distinct_sorted/coq/generated/array_count_distinct_sorted_proof_manual.v): replaced all five admitted manual witnesses with completed proofs and local helper lemmas.
+- Workspace logs: populated fingerprint, annotation/proof reasoning, issues, and metrics.
+
+Verified:
+- `symexec` succeeded and regenerated `goal`, `proof_auto`, `proof_manual`, and `goal_check`.
+- Full Coq replay passed for `original/array_count_distinct_sorted.v`, generated `goal.v`, `proof_auto.v`, `proof_manual.v`, and `goal_check.v`.
+- `proof_manual.v` contains no `Admitted.` and no `Axiom`.
+- Non-`.v` Coq artifacts under the workspace `coq/` directory were cleaned.
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_003842_array_count_distinct_sorted/logs/metrics.md) ends with `Final Result: Success`.

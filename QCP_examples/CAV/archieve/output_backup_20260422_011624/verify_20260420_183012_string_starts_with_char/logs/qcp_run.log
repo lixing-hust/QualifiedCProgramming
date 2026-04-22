@@ -1,0 +1,13 @@
+symexec_start: 2026-04-20 18:31:26 +0800
+Start to symbolic execution on program : annotated/verify_20260420_183012_string_starts_with_char.c
+Start to parse strategies file common
+File Path: /home/yangfp/QualifiedCProgramming/QCP_examples/common.strategies
+Finish parsing strategies file common
+Start to parse strategies file char_array
+File Path: /home/yangfp/QualifiedCProgramming/QCP_examples/char_array.strategies
+Finish parsing strategies file char_array
+Symbolic Execution into function string_starts_with_char
+End of symbolic execution of function string_starts_with_char
+Successfully finished symbolic execution
+symexec_end: 2026-04-20 18:31:26 +0800
+symexec_exit: 0

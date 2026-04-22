@@ -1,0 +1,20 @@
+Verification succeeded for `tribonacci`.
+
+I updated the active annotated file with the loop invariant:
+[annotated/verify_20260420_221428_tribonacci.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_221428_tribonacci.c)
+
+I generated and completed the Coq proof artifacts in:
+[tribonacci_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_221428_tribonacci/coq/generated/tribonacci_proof_manual.v)
+
+Final checks passed:
+
+- `symexec` completed successfully and regenerated `goal`, `proof_auto`, `proof_manual`, and `goal_check`.
+- `original/tribonacci.v`, `tribonacci_goal.v`, `tribonacci_proof_auto.v`, `tribonacci_proof_manual.v`, and `tribonacci_goal_check.v` compiled successfully.
+- `tribonacci_proof_manual.v` has no `Admitted.` and no top-level `Axiom`.
+- Non-`.v` Coq intermediate files under the workspace `coq/` directory were cleaned.
+- `logs/metrics.md` ends with `Final Result: Success`.
+
+Logs were filled here:
+[issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_221428_tribonacci/logs/issues.md)
+[metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_221428_tribonacci/logs/metrics.md)
+[proof_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_221428_tribonacci/logs/proof_reasoning.md)

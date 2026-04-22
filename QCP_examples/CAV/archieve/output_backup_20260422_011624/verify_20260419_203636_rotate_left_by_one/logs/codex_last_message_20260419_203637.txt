@@ -1,0 +1,19 @@
+Verification succeeded for `rotate_left_by_one`.
+
+I updated the active annotated C with the loop invariant, regenerated the Coq goals with `symexec`, completed the three manual obligations in `rotate_left_by_one_proof_manual.v`, and verified the full Coq sequence:
+
+- `rotate_left_by_one_goal.v`
+- `rotate_left_by_one_proof_auto.v`
+- `rotate_left_by_one_proof_manual.v`
+- `rotate_left_by_one_goal_check.v`
+
+`proof_manual.v` has no `Admitted.` and no added `Axiom`. I also cleaned all non-`.v` Coq intermediate files under the workspace.
+
+Key files updated:
+
+- [annotated C](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260419_203636_rotate_left_by_one.c)
+- [manual proof](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_203636_rotate_left_by_one/coq/generated/rotate_left_by_one_proof_manual.v)
+- [metrics](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_203636_rotate_left_by_one/logs/metrics.md)
+- [issues](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_203636_rotate_left_by_one/logs/issues.md)
+
+Final result recorded in `logs/metrics.md`: `Final Result: Success`.

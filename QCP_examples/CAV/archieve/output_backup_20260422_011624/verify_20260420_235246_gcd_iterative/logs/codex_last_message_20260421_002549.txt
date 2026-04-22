@@ -1,0 +1,20 @@
+Verification did not succeed in this retry. I resumed the existing workspace, reread the current logs/generated files/annotated C, confirmed the fingerprint is already populated, replayed `symexec`, and hit the same current blocker:
+
+`Old value at 'pre' is not determined` at [verify_20260420_235246_gcd_iterative.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_235246_gcd_iterative.c:15)
+
+The fixed `Ensure` still uses `gcd_iterative_spec(a@pre, b@pre, __return)`, while the body assigns to both scalar formals `a` and `b`. Prior legal Verify-layer attempts already removed body-level `@pre` uses and tried witness-based `Assert`/`Inv` annotations, but the frontend aborts before VC generation. Under the requested verify workflow, the remaining plausible repairs require changing executable C shape or the official contract, so I did not make those changes.
+
+Fresh replay evidence:
+- `symexec` start/end: `2026-04-21T00:27:06+08:00`
+- exit code: `1`
+- generated Coq files: all still zero bytes
+- manual proof: not reached
+- `goal_check.v`: not compilable because VC generation aborted
+- `proof_manual.v`: no `Admitted.` or `Axiom`
+- Coq non-`.v` intermediates: none present
+
+I updated:
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/metrics.md)
+
+Final result remains `Fail` for this workspace retry.

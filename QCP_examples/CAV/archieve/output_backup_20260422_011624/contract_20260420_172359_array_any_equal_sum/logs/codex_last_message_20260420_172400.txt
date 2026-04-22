@@ -1,0 +1,18 @@
+Completed the contract workflow for `array_any_equal_sum`.
+
+Created [array_any_equal_sum.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_any_equal_sum.c) with:
+
+- Original function semantics preserved.
+- `IntArray::full(a, n, l)` input/output memory contract.
+- Direct quantified postcondition for return `1` vs `0`.
+- Overflow precondition for `x + y`: `INT_MIN <= x + y && x + y <= INT_MAX`.
+
+Wrote required logs:
+
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_172359_array_any_equal_sum/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_172359_array_any_equal_sum/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_172359_array_any_equal_sum/logs/metrics.md)
+
+No [array_any_equal_sum.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_any_equal_sum.v) was created because the spec does not need task-specific Coq definitions.
+
+Checks performed: confirmed the optional `.v` file is absent, required logs exist, and the C output contains no verify-stage annotations such as `Inv` or `Assert`.

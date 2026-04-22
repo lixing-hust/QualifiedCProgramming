@@ -1,0 +1,12 @@
+Implemented the contract workflow for `array_count_distinct_sorted`.
+
+Created:
+- [array_count_distinct_sorted.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_count_distinct_sorted.c)
+- [array_count_distinct_sorted.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_count_distinct_sorted.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260422_003641_array_count_distinct_sorted/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260422_003641_array_count_distinct_sorted/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260422_003641_array_count_distinct_sorted/logs/metrics.md)
+
+The C contract preserves the raw function interface and semantics, requires nondecreasing input, restores the unchanged `IntArray::full`, and imports a task-specific Coq spec for the distinct count. No verify-stage `Inv` / `Assert` annotations were added.
+
+Verification performed: `coqc input/array_count_distinct_sorted.v` succeeded.

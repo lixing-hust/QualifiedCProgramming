@@ -1,0 +1,15 @@
+Verification succeeded for `reverse_digits`.
+
+Updated the active annotated C at [verify_20260421_050526_reverse_digits.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_050526_reverse_digits.c) with a loop invariant and loop-exit assertion tying `ans` and remaining `n` to `reverse_digits_z(n@pre)`.
+
+Added the workspace-local helper [reverse_digits_verify_aux.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_050526_reverse_digits/coq/deps/reverse_digits_verify_aux.v) to expose a parser-friendly accumulator spec, and completed the manual proofs in [reverse_digits_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_050526_reverse_digits/coq/generated/reverse_digits_proof_manual.v).
+
+Checks completed:
+
+- `symexec` succeeded and regenerated `goal`, `proof_auto`, `proof_manual`, and `goal_check`
+- `reverse_digits_goal.v`, `reverse_digits_proof_auto.v`, `reverse_digits_proof_manual.v`, and `reverse_digits_goal_check.v` compiled successfully
+- `reverse_digits_proof_manual.v` has no `Admitted.` and no locally added `Axiom`
+- non-`.v` Coq intermediate files under `coq/` were cleaned
+- logs were updated, with `Final Result: Success` in [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_050526_reverse_digits/logs/metrics.md)
+
+I did not update shared experience docs because the user instruction was to work only inside the existing workspace.

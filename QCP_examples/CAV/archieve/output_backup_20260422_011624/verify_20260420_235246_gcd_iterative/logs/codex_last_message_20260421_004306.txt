@@ -1,0 +1,24 @@
+Verification did not succeed in this retry.
+
+I continued in the existing workspace and replayed `symexec` against the current active annotated file. The current blocker is unchanged:
+
+```text
+fatal error: Old value at `pre' is not determined in .../annotated/verify_20260420_235246_gcd_iterative.c:15:1
+```
+
+The cause remains the fixed postcondition in [verify_20260420_235246_gcd_iterative.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_235246_gcd_iterative.c:13), which uses `gcd_iterative_spec(a@pre, b@pre, __return)`, while the function body assigns to both scalar parameters `a` and `b`. The active annotations no longer contain body-level `a@pre` or `b@pre`, and prior legal `Assert`/`Inv` attempts did not move the failure. This abort happens before VC generation, so there is no Coq proof target to repair.
+
+I updated the handoff logs:
+
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/metrics.md)
+
+Current state:
+
+- `symexec` exit code: `1`
+- all generated Coq `.v` files are still zero bytes
+- `proof_manual.v` has no `Admitted.` or `Axiom`
+- no non-`.v` Coq intermediates remain
+- `metrics.md` ends with `Final Result: Fail`
+
+The remaining repair is outside this Verify workflow’s allowed edits: either change the executable shape so the formal parameters are not reassigned, or change the official contract shape to avoid `@pre` on assigned scalar formals.

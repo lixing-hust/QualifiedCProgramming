@@ -1,0 +1,16 @@
+2026-04-18T17:39:03.849503Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_003208_string_equal/coq/generated/string_equal_proof_manual.v:
+Lemma proof_of_string_equal_return_wit_2 : string_equal_return_wit_2.
+Proof.
+  pre_process.
+  entailer!.
+  symmetry.
+  eapply string_equal_spec_mismatch.
+  - exact H0.
+  - eapply app_Znth_nonzero_lt; eauto.
+  - eapply app_Znth_nonzero_lt; eauto.
+  - intro Heq.
+    apply H1.
+    rewrite <- H.
+    exact Heq.
+  - exact H4.
+Qed.

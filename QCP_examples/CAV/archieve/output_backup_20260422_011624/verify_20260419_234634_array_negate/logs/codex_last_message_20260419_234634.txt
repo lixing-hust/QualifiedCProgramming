@@ -1,0 +1,18 @@
+Verification succeeded for `array_negate`.
+
+I updated the active annotated copy at [verify_20260419_234634_array_negate.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260419_234634_array_negate.c) with the loop invariant and fixed the annotated-only `With la lo` binder syntax. I also completed the four manual Coq obligations in [array_negate_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_234634_array_negate/coq/generated/array_negate_proof_manual.v).
+
+Checks completed:
+
+- `symexec` succeeded and regenerated `goal`, `proof_auto`, `proof_manual`, and `goal_check`.
+- `coqc` passed for `array_negate_goal.v`, `array_negate_proof_auto.v`, `array_negate_proof_manual.v`, and `array_negate_goal_check.v`.
+- `proof_manual.v` has no remaining `Admitted.` and no newly defined `Axiom`.
+- Non-`.v` Coq intermediates under the workspace `coq/` directory were cleaned.
+- Final logs were written:
+  - [workspace_fingerprint.json](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_234634_array_negate/logs/workspace_fingerprint.json)
+  - [annotation_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_234634_array_negate/logs/annotation_reasoning.md)
+  - [proof_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_234634_array_negate/logs/proof_reasoning.md)
+  - [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_234634_array_negate/logs/issues.md)
+  - [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_234634_array_negate/logs/metrics.md)
+
+`logs/metrics.md` ends with `Final Result: Success`.

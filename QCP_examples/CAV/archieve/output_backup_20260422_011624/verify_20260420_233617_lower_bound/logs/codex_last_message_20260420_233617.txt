@@ -1,0 +1,19 @@
+Verification completed successfully for `lower_bound`.
+
+Updated artifacts:
+- [annotated/verify_20260420_233617_lower_bound.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_233617_lower_bound.c)
+- [lower_bound_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_233617_lower_bound/coq/generated/lower_bound_proof_manual.v)
+- [workspace_fingerprint.json](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_233617_lower_bound/logs/workspace_fingerprint.json)
+- [annotation_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_233617_lower_bound/logs/annotation_reasoning.md)
+- [proof_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_233617_lower_bound/logs/proof_reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_233617_lower_bound/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_233617_lower_bound/logs/metrics.md)
+
+What passed:
+- `symexec` completed successfully on the final annotated file.
+- Full Coq compile replay passed for `lower_bound_goal.v`, `lower_bound_proof_auto.v`, `lower_bound_proof_manual.v`, and `lower_bound_goal_check.v`.
+- `lower_bound_proof_manual.v` has no `Admitted.` and no top-level `Axiom`.
+- Non-`.v` Coq build products were cleaned from the workspace.
+- `logs/metrics.md` ends with `Final Result: Success`.
+
+One important note: the original disjunctive postcondition shape caused `symexec` to truncate return-witness generation with a `Znth` frontend error. The final annotated work copy uses the sorted-array suffix form instead, which is stronger and implies the original lower-bound disjunction under the sortedness precondition. This workaround is documented in `issues.md` and `annotation_reasoning.md`.

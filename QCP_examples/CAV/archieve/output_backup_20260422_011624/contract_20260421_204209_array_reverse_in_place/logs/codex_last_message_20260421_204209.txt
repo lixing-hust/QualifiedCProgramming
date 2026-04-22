@@ -1,0 +1,11 @@
+Completed the contract workflow for `array_reverse_in_place`.
+
+Created:
+- [array_reverse_in_place.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_reverse_in_place.c:1)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_204209_array_reverse_in_place/logs/reasoning.md:1)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_204209_array_reverse_in_place/logs/issues.md:1)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_204209_array_reverse_in_place/logs/metrics.md:1)
+
+The C contract preserves the original signature and specifies the in-place result as `IntArray::full(a, n, rev(l))`. No `.v` file was created because `rev` is already available through the existing list support. `metrics.md` records `Experience updates: none`.
+
+I checked that `input/array_reverse_in_place.v` is absent and that the C input does not contain Verify-stage annotations such as `Inv`, `Assert`, `which implies`, bridge assertions, or loop-exit assertions. I did not run the Verify phase.

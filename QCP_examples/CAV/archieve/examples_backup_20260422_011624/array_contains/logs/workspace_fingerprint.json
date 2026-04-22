@@ -1,0 +1,38 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260418_170027_array_contains",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_contains.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_170027_array_contains/original/array_contains.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260418_170027_array_contains.c",
+  "function_name": "array_contains",
+  "program_sha256": "03ccab7d48506dff2a6f0fb2a9db670bded1ef33732948f1e16fe2b4dd305919",
+  "semantic_description": "Searches an integer array for a target value with a forward loop and returns whether any position contains the target.",
+  "keywords": {
+    "algorithm_family": [
+      "search"
+    ],
+    "control_flow": [
+      "for_loop",
+      "if"
+    ],
+    "data_shape": [
+      "array"
+    ],
+    "proof_pattern": [
+      "loop_invariant",
+      "case_split",
+      "heap_reasoning"
+    ],
+    "edge_case_behavior": [
+      "empty_loop_possible"
+    ],
+    "verification_status": [
+      "goal_check_passed"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

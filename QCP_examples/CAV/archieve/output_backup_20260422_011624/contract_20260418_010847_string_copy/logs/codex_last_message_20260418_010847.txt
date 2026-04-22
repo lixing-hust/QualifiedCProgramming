@@ -1,0 +1,10 @@
+Completed the contract workflow for `string_copy`.
+
+The generated contract is in [string_copy.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_copy.c). It models `src` as a null-terminated string, `dst` as a separate writable buffer of the same size, preserves `src`, and ensures `dst` contains the copied string including the trailing `0`.
+
+Required logs were written to the workspace:
+[reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_010847_string_copy/logs/reasoning.md),
+[issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_010847_string_copy/logs/issues.md),
+[metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_010847_string_copy/logs/metrics.md).
+
+No [string_copy.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_copy.v) was created because the existing `CharArray::full` string model is sufficient. I did not run the Verify phase.

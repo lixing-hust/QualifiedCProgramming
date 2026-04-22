@@ -1,0 +1,18 @@
+Verification succeeded for `is_prime_simple`.
+
+I updated the active annotated file with the needed loop invariant:
+
+[verify_20260421_015753_is_prime_simple.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_015753_is_prime_simple.c)
+
+Key checks completed:
+
+- `symexec` succeeded and regenerated fresh `goal`, `proof_auto`, `proof_manual`, and `goal_check` files.
+- `is_prime_simple_goal.v`, `is_prime_simple_proof_auto.v`, `is_prime_simple_proof_manual.v`, and `is_prime_simple_goal_check.v` all compiled successfully.
+- `proof_manual.v` contains no `Admitted.` and no added `Axiom`.
+- Non-`.v` Coq intermediates under the workspace `coq/` directory were cleaned.
+- `logs/workspace_fingerprint.json`, `logs/annotation_reasoning.md`, `logs/issues.md`, and `logs/metrics.md` were filled.
+- `logs/metrics.md` ends with `Final Result: Success`.
+
+Workspace used:
+
+[verify_20260421_015753_is_prime_simple](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_015753_is_prime_simple)

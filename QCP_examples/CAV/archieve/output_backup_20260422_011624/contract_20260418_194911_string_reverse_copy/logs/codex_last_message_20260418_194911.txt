@@ -1,0 +1,10 @@
+Generated the contract artifacts for `string_reverse_copy` using the requested workflow.
+
+The main output is [string_reverse_copy.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_reverse_copy.c), with `src` specified as a valid length-`n` C string and `dst` ensured to contain `rev(l) ++ [0]`. I did not create [string_reverse_copy.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_reverse_copy.v) because the repo’s existing list primitives and `rev` are enough.
+
+Logs are in:
+[reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_194911_string_reverse_copy/logs/reasoning.md)
+[issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_194911_string_reverse_copy/logs/issues.md)
+[metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_194911_string_reverse_copy/logs/metrics.md)
+
+I did not run Verify or proof generation.

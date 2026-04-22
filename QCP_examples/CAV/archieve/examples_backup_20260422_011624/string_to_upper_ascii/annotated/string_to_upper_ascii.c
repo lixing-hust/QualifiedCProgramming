@@ -1,0 +1,38 @@
+#include "../../verification_stdlib.h"
+#include "../../verification_list.h"
+#include "../../char_array_def.h"
+
+/*@ Extern Coq (string_to_upper_ascii_spec : list Z -> list Z) */
+/*@ Import Coq Require Import string_to_upper_ascii */
+
+void string_to_upper_ascii(char *s)
+/*@ With l n
+    Require
+      0 <= n && n < INT_MAX &&
+      (forall (k: Z), (0 <= k && k < n) => l[k] != 0) &&
+      CharArray::full(s, n + 1, app(l, cons(0, nil)))
+    Ensure
+      CharArray::full(s, n + 1, app(string_to_upper_ascii_spec(l), cons(0, nil)))
+*/
+{
+    int i = 0;
+
+    /*@ Inv exists l1 l2,
+          0 <= i && i <= n &&
+          s == s@pre &&
+          l == app(l1, l2) &&
+          Zlength(l1) == i &&
+          Zlength(l2) == n - i &&
+          (forall (k: Z), (0 <= k && k < n) => l[k] != 0) &&
+          CharArray::full(s, n + 1, app(app(string_to_upper_ascii_spec(l1), l2), cons(0, nil)))
+    */
+    while (1) {
+        if (s[i] == 0) {
+            break;
+        }
+        if (97 <= s[i] && s[i] <= 122) {
+            s[i] = s[i] - 97 + 65;
+        }
+        i++;
+    }
+}

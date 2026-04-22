@@ -1,0 +1,39 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260421_052410_count_digits",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/count_digits.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/count_digits.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_052410_count_digits/original/count_digits.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_052410_count_digits/original/count_digits.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_052410_count_digits.c",
+  "function_name": "count_digits",
+  "program_sha256": "bf667bfc2f64b99a568728a94aced8ca36ccf367d662b110c019946f98bfae65",
+  "semantic_description": "Verifies count_digits for a nonnegative scalar int. The function returns 1 when the original input is 0; otherwise it initializes cnt to 0, repeatedly divides n by 10 while n > 0, increments cnt once per loop iteration, and returns the number of loop iterations. The intended result is related to the imported pure Coq function count_digits_z over the pre-state input. The function uses only scalar locals and does not modify heap memory.",
+  "keywords": {
+    "algorithm_family": "counting",
+    "control_flow": [
+      "if",
+      "while_loop"
+    ],
+    "data_shape": "scalar_only",
+    "semantic_intent": "count_iterations",
+    "proof_pattern": [
+      "loop_invariant",
+      "pure_arithmetic",
+      "termination_by_bound"
+    ],
+    "numeric_properties": [
+      "nonnegative_input",
+      "int_range",
+      "monotone_accumulator"
+    ],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": [
+      "goal_check_passed",
+      "proof_check_passed"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

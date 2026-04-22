@@ -1,0 +1,13 @@
+=== original ===
+=== goal ===
+=== proof_auto ===
+=== proof_manual ===
+File "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_202647_string_to_upper_ascii/coq/generated/string_to_upper_ascii_proof_manual.v", line 85, characters 17-18:
+Error:
+Syntax error: [ltac_use_default] expected after [tactic] (in [tactic_command]).
+
+=== goal_check ===
+File "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_202647_string_to_upper_ascii/coq/generated/string_to_upper_ascii_goal_check.v", line 1, characters 140-174:
+Error: Cannot find a physical path bound to logical path
+string_to_upper_ascii_proof_manual with prefix SimpleC.EE.CAV.verify_20260418_202647_string_to_upper_ascii.
+

@@ -1,0 +1,8 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/skills/verify/SKILL.md
+
+Inputs:
+- Input C: `/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/input/climb_stairs.c`
+- Optional input V: `/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/input/climb_stairs.v`
+- Target function: `climbStairs`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/output/verify_20260415_001635_climb_stairs`

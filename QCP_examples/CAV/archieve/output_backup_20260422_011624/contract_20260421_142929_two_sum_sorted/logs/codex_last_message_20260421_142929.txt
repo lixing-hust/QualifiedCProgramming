@@ -1,0 +1,14 @@
+Completed the contract workflow for `two_sum_sorted`.
+
+Created:
+- [input/two_sum_sorted.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/two_sum_sorted.c)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_142929_two_sum_sorted/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_142929_two_sum_sorted/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_142929_two_sum_sorted/logs/metrics.md)
+
+No `input/two_sum_sorted.v` was generated because the pair-existence and no-pair semantics are expressible directly in the C contract. The contract includes sortedness, array ownership, length constraints, Boolean return semantics, and a valid-pair sum bound to avoid signed integer overflow in `s = a[left] + a[right]`.
+
+Validation done:
+- Confirmed required logs exist.
+- Confirmed optional `.v` is absent.
+- Checked `input/two_sum_sorted.c` has no verify-stage annotations.

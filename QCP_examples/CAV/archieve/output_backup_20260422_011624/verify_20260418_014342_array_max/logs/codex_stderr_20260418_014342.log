@@ -1,0 +1,5 @@
+2026-04-17T17:53:29.993074Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_014342_array_max/coq/generated/array_max_proof_manual.v:
+    + simpl. apply Z.le_max_l.
+    + simpl. apply Z.max_le_compat_l.
+      apply IHl.
+      rewrite !Zlength_cons in Hnz. lia.

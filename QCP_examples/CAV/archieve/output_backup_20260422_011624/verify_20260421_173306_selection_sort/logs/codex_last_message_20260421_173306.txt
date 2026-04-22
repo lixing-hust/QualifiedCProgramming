@@ -1,0 +1,26 @@
+Verification did not reach success.
+
+What completed:
+- Updated the workspace fingerprint with non-empty semantic description and controlled keywords.
+- Added outer and inner loop invariants in [verify_20260421_173306_selection_sort.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_173306_selection_sort.c:26).
+- Reran `symexec` successfully in the same workspace.
+- Fixed the generated Coq import path by rerunning `symexec` with logical `--coq-logic-path=SimpleC.EE.CAV.verify_20260421_173306_selection_sort`.
+- Completed three manual witnesses in [selection_sort_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_173306_selection_sort/coq/generated/selection_sort_proof_manual.v:34):
+  - `proof_of_selection_sort_entail_wit_1`
+  - `proof_of_selection_sort_entail_wit_2`
+  - `proof_of_selection_sort_return_wit_1`
+- Confirmed `goal.v`, `proof_auto.v`, `proof_manual.v`, and `goal_check.v` compile with the current files.
+- Cleaned non-`.v` Coq byproducts under the workspace.
+
+Remaining blocker:
+- [selection_sort_proof_manual.v:52](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_173306_selection_sort/coq/generated/selection_sort_proof_manual.v:52) still has `proof_of_selection_sort_entail_wit_4` as `Admitted.`
+- This witness needs non-adjacent swap helper lemmas for:
+  - permutation preservation,
+  - `Znth` at swapped and untouched indices,
+  - sorted-prefix extension,
+  - prefix-to-suffix ordering after swapping `a[i]` with `a[min_idx]`.
+
+I recorded the failure state and next proof direction in:
+- [proof_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_173306_selection_sort/logs/proof_reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_173306_selection_sort/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_173306_selection_sort/logs/metrics.md), ending with `Final Result: Fail`.

@@ -1,0 +1,38 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260422_014300003_array_all_less_than_k",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_all_less_than_k.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_014300003_array_all_less_than_k/original/array_all_less_than_k.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260422_014300003_array_all_less_than_k.c",
+  "function_name": "array_all_less_than_k",
+  "program_sha256": "5c7e6b4c5c1c799882c136a85e17cba361507f75ff0395c7ecdb5bb2f946af3d",
+  "semantic_description": "Scans an input integer array from left to right and returns 0 immediately when an element greater than or equal to k is found; otherwise returns 1 after the loop. The return value states whether all elements in the unchanged input array are less than k. The main control structure is a for loop over indices 0..n-1, with the n == 0 case taking the empty loop and returning 1. The function only reads the array and preserves its full memory predicate.",
+  "keywords": {
+    "algorithm_family": "search",
+    "control_flow": [
+      "for_loop",
+      "if"
+    ],
+    "data_shape": [
+      "array",
+      "pointer"
+    ],
+    "semantic_intent": "preserve_input",
+    "proof_pattern": [
+      "loop_invariant",
+      "case_split",
+      "termination_by_bound",
+      "heap_reasoning"
+    ],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": [
+      "goal_check_passed",
+      "proof_check_passed"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

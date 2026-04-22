@@ -1,0 +1,10 @@
+Completed the contract workflow for `array_replace_k`.
+
+The main output is [array_replace_k.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_replace_k.c), with a direct in-place update contract over `IntArray::full` and no Verify-stage annotations mixed in. I did not create `array_replace_k.v` because the postcondition is expressible directly using an existential result list plus a pointwise conditional relation.
+
+Logs were written in the required workspace:
+[reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_192842_array_replace_k/logs/reasoning.md),
+[issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_192842_array_replace_k/logs/issues.md),
+[metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_192842_array_replace_k/logs/metrics.md).
+
+I did not run verification.

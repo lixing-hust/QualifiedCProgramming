@@ -1,0 +1,23 @@
+File "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260418_213619_array_count_increasing_steps/original/array_count_increasing_steps.v", line 6, characters 0-225:
+Error:
+Recursive definition of array_count_increasing_steps_spec is ill-formed.
+In environment
+array_count_increasing_steps_spec : list Z -> Z
+l : list Z
+x : Z
+l0 : list Z
+y : Z
+xs : list Z
+Recursive call to array_count_increasing_steps_spec has principal argument
+equal to "y :: xs" instead of one of the following variables: 
+"l0" "xs".
+Recursive definition is:
+"fun l : list Z =>
+ match l with
+ | nil => 0
+ | x :: nil => 0
+ | x :: y :: xs =>
+     (if Z_lt_dec x y then 1 else 0) +
+     array_count_increasing_steps_spec (y :: xs)
+ end".
+

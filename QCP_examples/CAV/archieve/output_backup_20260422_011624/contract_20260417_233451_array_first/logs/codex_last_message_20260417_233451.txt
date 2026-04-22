@@ -1,0 +1,14 @@
+Created the contract artifacts for `array_first` using the specified workflow.
+
+`[input/array_first.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_first.c)` now contains a minimal nonempty-array contract:
+- `Require`: `1 <= n`, `Zlength(l) == n`, `IntArray::full(a, n, l)`
+- `Ensure`: `__return == l[0]` and the array predicate is preserved
+
+Logs were written to:
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260417_233451_array_first/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260417_233451_array_first/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260417_233451_array_first/logs/metrics.md)
+
+`[input/array_first.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_first.v)` was not created because this spec does not need any extra Coq bridge definitions.
+
+I did not run the Verify phase.

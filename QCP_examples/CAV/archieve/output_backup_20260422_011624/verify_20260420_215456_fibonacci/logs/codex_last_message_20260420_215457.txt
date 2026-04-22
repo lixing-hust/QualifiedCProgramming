@@ -1,0 +1,24 @@
+Verification succeeded for `fibonacci`.
+
+Updated:
+- [annotated/verify_20260420_215456_fibonacci.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_215456_fibonacci.c)
+- [fibonacci_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_215456_fibonacci/coq/generated/fibonacci_proof_manual.v)
+- [workspace_fingerprint.json](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_215456_fibonacci/logs/workspace_fingerprint.json)
+- [annotation_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_215456_fibonacci/logs/annotation_reasoning.md)
+- [proof_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_215456_fibonacci/logs/proof_reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_215456_fibonacci/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_215456_fibonacci/logs/metrics.md)
+
+What passed:
+- `symexec` completed successfully and generated fresh Coq files.
+- Full compile replay succeeded for:
+  - `original/fibonacci.v`
+  - `fibonacci_goal.v`
+  - `fibonacci_proof_auto.v`
+  - `fibonacci_proof_manual.v`
+  - `fibonacci_goal_check.v`
+- `fibonacci_proof_manual.v` has no `Admitted.` and no user-added `Axiom`.
+- Non-`.v` Coq intermediate files were cleaned.
+- `logs/metrics.md` ends with `Final Result: Success`.
+
+I did not update shared experience docs because your execution rule said to work only inside the existing workspace; `metrics.md` records `Experience updates: none` for that reason.

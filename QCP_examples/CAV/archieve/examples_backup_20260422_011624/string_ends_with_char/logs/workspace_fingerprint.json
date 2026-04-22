@@ -1,0 +1,38 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260420_183816_string_ends_with_char",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_ends_with_char.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_183816_string_ends_with_char/original/string_ends_with_char.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_183816_string_ends_with_char.c",
+  "function_name": "string_ends_with_char",
+  "program_sha256": "8a4f38cd28da83097e24fa6b61ccc40bdc2d30651b82571e90f4894f005c4582",
+  "semantic_description": "The function scans a null-terminated character array without modifying memory. It returns 0 immediately for the empty string, otherwise advances an index until the next array cell is the terminating 0, so the index points at the last nonzero character. It then returns 1 exactly when that final character equals the input character c, and returns 0 otherwise. The key boundary cases are n == 0 for the empty string and n > 0 for comparing l[n - 1].",
+  "keywords": {
+    "algorithm_family": "search",
+    "control_flow": [
+      "if",
+      "while_loop"
+    ],
+    "data_shape": [
+      "string",
+      "pointer"
+    ],
+    "semantic_intent": "preserve_input",
+    "proof_pattern": [
+      "loop_invariant",
+      "case_split",
+      "range_bound",
+      "heap_reasoning"
+    ],
+    "numeric_properties": [
+      "int_range"
+    ],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": "goal_check_passed"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

@@ -1,0 +1,25 @@
+Verification succeeded for `insertion_sort` in the existing retry workspace.
+
+What changed:
+- Completed the remaining Coq manual proof work in [insertion_sort_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_180807_insertion_sort/coq/generated/insertion_sort_proof_manual.v).
+- Fixed the final witness blocker by explicitly pinning `l_base` / `l_cur` in the final insertion helper lemma calls.
+- Updated workspace logs:
+  - [proof_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_180807_insertion_sort/logs/proof_reasoning.md)
+  - [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_180807_insertion_sort/logs/issues.md)
+  - [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_180807_insertion_sort/logs/metrics.md)
+  - [workspace_fingerprint.json](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_180807_insertion_sort/logs/workspace_fingerprint.json)
+- Added one reusable proof lesson to [PROOF.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/doc/experiences/PROOF.md).
+
+Verification checks completed:
+- Latest `symexec` in `logs/qcp_run.log`: success.
+- Full Coq compile succeeded for:
+  - `original/insertion_sort.v`
+  - `insertion_sort_goal.v`
+  - `insertion_sort_proof_auto.v`
+  - `insertion_sort_proof_manual.v`
+  - `insertion_sort_goal_check.v`
+- `proof_manual.v` contains no `Admitted.` and no local `Axiom`.
+- Cleaned Coq intermediate files; `coq/` now contains only `.v` files.
+- `logs/metrics.md` ends with `Final Result: Success`.
+
+Note: the repo has many pre-existing unrelated dirty/untracked files; I left those alone.

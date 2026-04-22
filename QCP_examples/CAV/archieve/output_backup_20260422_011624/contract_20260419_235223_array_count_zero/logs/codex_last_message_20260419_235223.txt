@@ -1,0 +1,12 @@
+Completed the contract workflow for `array_count_zero`.
+
+Created:
+- [array_count_zero.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_count_zero.c)
+- [array_count_zero.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_count_zero.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260419_235223_array_count_zero/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260419_235223_array_count_zero/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260419_235223_array_count_zero/logs/metrics.md)
+
+The C contract follows the existing count-style pattern: it binds `l`, requires `0 <= n`, `Zlength(l) == n`, and `IntArray::full(a, n, l)`, then ensures the return value equals `array_count_zero_spec(l)` while preserving the input array. The `.v` file contains only the task-specific recursive list count definition.
+
+Sanity check passed: no Verify-stage annotations or proof hints were added. I did not run the Verify stage.

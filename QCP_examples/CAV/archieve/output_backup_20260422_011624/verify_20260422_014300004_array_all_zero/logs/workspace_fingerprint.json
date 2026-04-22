@@ -1,0 +1,38 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260422_014300004_array_all_zero",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_all_zero.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_014300004_array_all_zero/original/array_all_zero.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260422_014300004_array_all_zero.c",
+  "function_name": "array_all_zero",
+  "program_sha256": "06d443ec0d25d5bbfcf87127cb205d7ac3b3f8e2fcb0204f8eba0b76b387c0dc",
+  "semantic_description": "Scans an input integer array a[0..n) without modifying it. The loop checks elements from left to right and returns 0 immediately when it finds an element whose value is not zero; if the loop finishes, it returns 1. The contract requires n >= 0, Zlength(l) == n, and IntArray::full(a, n, l), and ensures the returned value matches either all elements being zero or the existence of a nonzero element. For n == 0 the loop body is skipped and the function returns 1, satisfying the universal all-zero condition over the empty range.",
+  "keywords": {
+    "algorithm_family": "search",
+    "control_flow": [
+      "for_loop",
+      "if"
+    ],
+    "data_shape": [
+      "array",
+      "pointer"
+    ],
+    "semantic_intent": "preserve_input",
+    "proof_pattern": [
+      "loop_invariant",
+      "case_split",
+      "termination_by_bound",
+      "heap_reasoning"
+    ],
+    "numeric_properties": [
+      "nonnegative_input",
+      "int_range"
+    ],
+    "edge_case_behavior": "empty_loop_possible"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

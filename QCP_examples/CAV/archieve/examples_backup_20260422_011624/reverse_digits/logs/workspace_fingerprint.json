@@ -1,0 +1,32 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260421_050526_reverse_digits",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/reverse_digits.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/reverse_digits.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_050526_reverse_digits/original/reverse_digits.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_050526_reverse_digits/original/reverse_digits.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_050526_reverse_digits.c",
+  "function_name": "reverse_digits",
+  "program_sha256": "e6fd3392f231b76755d5ffd6fa8295cb9e020d1c130d088ccd409e9809919d55",
+  "semantic_description": "Verifies a scalar integer digit-reversal function. For a nonnegative input n, the function initializes ans to zero, then repeatedly appends n mod 10 to ans and divides n by 10 while n > 0. The return value must equal the Coq specification reverse_digits_z of the original input. The loop may be empty when n is zero. The function uses only local integer variables and does not modify memory.",
+  "keywords": {
+    "algorithm_family": "accumulation",
+    "control_flow": "while_loop",
+    "data_shape": "scalar_only",
+    "proof_pattern": [
+      "loop_invariant",
+      "pure_arithmetic"
+    ],
+    "numeric_properties": [
+      "nonnegative_input",
+      "overflow_guard",
+      "monotone_accumulator",
+      "int_range"
+    ],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": "goal_check_passed"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

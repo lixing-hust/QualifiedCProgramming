@@ -1,0 +1,6 @@
+compile_start: 2026-04-20T16:24:39+08:00
+compiled: string_has_double_char_goal.v
+compiled: string_has_double_char_proof_auto.v
+compiled: string_has_double_char_proof_manual.v
+compiled: string_has_double_char_goal_check.v
+compile_end: 2026-04-20T16:24:42+08:00

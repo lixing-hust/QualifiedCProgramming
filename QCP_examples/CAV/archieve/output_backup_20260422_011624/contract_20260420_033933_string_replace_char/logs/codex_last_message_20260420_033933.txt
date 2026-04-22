@@ -1,0 +1,17 @@
+Completed the contract workflow for `string_replace_char`.
+
+Created:
+- [string_replace_char.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_replace_char.c)
+- [string_replace_char.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_replace_char.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_033933_string_replace_char/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_033933_string_replace_char/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_033933_string_replace_char/logs/metrics.md)
+
+Key choices:
+- Kept the original function interface.
+- Rewrote the loop into the repo-preferred `while (1)` plus explicit `s[i] == 0` break form.
+- Added the no-interior-zero precondition for the input prefix.
+- Generated a small task-specific Coq spec, since conditional character replacement over a list needs a dedicated semantic function.
+- Did not add verify-stage `Inv`, `Assert`, bridge assertions, or loop-exit assertions.
+
+Sanity check passed for forbidden verify-stage annotations in the generated `.c` / `.v`. I did not run the Verify phase.

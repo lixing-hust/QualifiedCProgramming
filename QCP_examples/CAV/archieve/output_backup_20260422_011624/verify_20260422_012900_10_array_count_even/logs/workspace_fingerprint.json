@@ -1,0 +1,34 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260422_012900_10_array_count_even",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_count_even.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_count_even.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_012900_10_array_count_even/original/array_count_even.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_012900_10_array_count_even/original/array_count_even.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260422_012900_10_array_count_even.c",
+  "function_name": "array_count_even",
+  "program_sha256": "54dea50f9e9c6d4e3f0d0e11896111ddb744347dbf7b4a00f417433bffcaee94",
+  "semantic_description": "array_count_even scans the input integer array from left to right and returns the number of elements whose remainder modulo 2 is zero. The loop counter i ranges from 0 to n, cnt accumulates the count over the processed prefix, the empty array case returns zero because the loop body is skipped, and the function preserves the input array contents.",
+  "keywords": {
+    "algorithm_family": "counting",
+    "control_flow": "for_loop",
+    "data_shape": "array",
+    "semantic_intent": "preserve_input",
+    "proof_pattern": [
+      "loop_invariant",
+      "case_split",
+      "range_bound",
+      "heap_reasoning"
+    ],
+    "numeric_properties": [
+      "nonnegative_input",
+      "monotone_accumulator",
+      "int_range"
+    ],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": "goal_check_passed"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

@@ -1,0 +1,16 @@
+Verification did not succeed within this run.
+
+What was completed:
+- Read and followed the verify skill workflow.
+- Read `doc/retrieval/INDEX.md` early and updated [workspace_fingerprint.json](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_174025_array_sign/logs/workspace_fingerprint.json) with a non-empty semantic description and controlled-vocabulary keywords.
+- Added and iterated annotations in [verify_20260420_174025_array_sign.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_174025_array_sign.c).
+- Recorded the full blocker trail in [annotation_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_174025_array_sign/logs/annotation_reasoning.md) and [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_174025_array_sign/logs/issues.md).
+- Wrote [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_174025_array_sign/logs/metrics.md) with `Final Result: Fail`.
+- Removed zero-byte generated Coq files from failed `symexec` attempts.
+
+Final blocker:
+- `symexec` never produced valid generated Coq files.
+- The inline three-way sign relation caused frontend clause blow-ups and one `symexec` segfault.
+- Rewriting that relation as disjunction was rejected by the frontend with `Multiple cases inside pre- or post-condition`.
+
+No Coq compile or manual proof was attempted because valid `array_sign_goal.v` / `proof_auto.v` / `proof_manual.v` / `goal_check.v` were never generated.

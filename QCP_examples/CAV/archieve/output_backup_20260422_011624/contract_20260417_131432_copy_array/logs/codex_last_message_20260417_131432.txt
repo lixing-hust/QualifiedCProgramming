@@ -1,0 +1,5 @@
+The contract workflow is complete.
+
+I wrote [copy_array.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/copy_array.c) and the required logs in [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260417_131432_copy_array/logs/reasoning.md), [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260417_131432_copy_array/logs/issues.md), and [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260417_131432_copy_array/logs/metrics.md).
+
+The generated contract treats `src` and `dst` as separately owned full arrays, preserves `src`, and ensures `dst` ends with the pre-state contents of `src`. I did not create [copy_array.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/copy_array.v) because the function does not need any extra Coq bridge definitions. I did not run Verify; this turn only produced the contract artifacts.

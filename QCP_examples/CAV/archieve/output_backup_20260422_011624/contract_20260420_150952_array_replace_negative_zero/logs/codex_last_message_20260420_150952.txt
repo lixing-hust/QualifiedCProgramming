@@ -1,0 +1,13 @@
+Completed the contract workflow for `array_replace_negative_zero`.
+
+Created:
+
+- [input/array_replace_negative_zero.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_replace_negative_zero.c)
+- [output/contract_20260420_150952_array_replace_negative_zero/input/array_replace_negative_zero.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_150952_array_replace_negative_zero/input/array_replace_negative_zero.c)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_150952_array_replace_negative_zero/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_150952_array_replace_negative_zero/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_150952_array_replace_negative_zero/logs/metrics.md)
+
+No `array_replace_negative_zero.v` was created, because the postcondition is expressible directly with `IntArray::full`, `Zlength`, and a pointwise quantified rule.
+
+Verification performed: confirmed the top-level C file and workspace snapshot match, confirmed no optional `.v` file exists, and checked the required log files are present. I did not run a full verify/symexec pass because this was the contract-stage workflow only.

@@ -1,0 +1,10 @@
+Completed the contract workflow for `array_any_negative`.
+
+Created:
+- [array_any_negative.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_any_negative.c:1)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_030438_array_any_negative/logs/reasoning.md:1)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_030438_array_any_negative/logs/issues.md:1)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_030438_array_any_negative/logs/metrics.md:1)
+- Workspace snapshot: [array_any_negative.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_030438_array_any_negative/input/array_any_negative.c:1)
+
+I did not create `input/array_any_negative.v`; the contract is expressible directly with quantifiers over the logical array list. The generated C file contains only the target function and its contract, with no verify-stage `Inv` or `Assert` annotations.

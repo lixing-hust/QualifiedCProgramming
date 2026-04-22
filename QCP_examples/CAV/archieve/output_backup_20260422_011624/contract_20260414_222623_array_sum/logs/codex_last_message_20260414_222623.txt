@@ -1,0 +1,10 @@
+Workflow executed from `/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/skills/annotate/SKILL.md` and completed.
+
+Generated files:
+- C output: [array_sum.c](/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/input/array_sum.c)
+- Reasoning log: [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/output/annotate_20260414_222623_array_sum/logs/reasoning.md)
+- Issues log: [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/output/annotate_20260414_222623_array_sum/logs/issues.md)
+- Metrics log: [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/output/annotate_20260414_222623_array_sum/logs/metrics.md)
+
+Optional `.v` was not created because existing shared definitions (`sum`, `IntArray::full`) were sufficient for the contract:
+- `/home/yangfp/QualifiedCProgramming/QCP_examples/leetcode/input/array_sum.v` (not present).

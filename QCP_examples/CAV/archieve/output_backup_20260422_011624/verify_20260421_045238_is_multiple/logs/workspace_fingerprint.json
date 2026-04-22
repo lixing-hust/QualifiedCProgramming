@@ -1,0 +1,28 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260421_045238_is_multiple",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/is_multiple.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_045238_is_multiple/original/is_multiple.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_045238_is_multiple.c",
+  "function_name": "is_multiple",
+  "program_sha256": "41400986efe31c64910760227488a54d5fcea777e9566693b22a22b2ed11dde9",
+  "semantic_description": "Checks whether scalar integer a is divisible by positive scalar integer b using one modulo test and an if branch. Returns 1 exactly when a@pre % b@pre == 0 and returns 0 exactly when a@pre % b@pre != 0. The function has no loops, no heap access, and does not modify memory.",
+  "keywords": {
+    "algorithm_family": "selection",
+    "control_flow": "if",
+    "data_shape": "scalar_only",
+    "semantic_intent": "preserve_input",
+    "proof_pattern": [
+      "pure_arithmetic",
+      "case_split"
+    ],
+    "numeric_properties": "int_range",
+    "edge_case_behavior": "branch_on_order",
+    "verification_status": "goal_check_passed"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

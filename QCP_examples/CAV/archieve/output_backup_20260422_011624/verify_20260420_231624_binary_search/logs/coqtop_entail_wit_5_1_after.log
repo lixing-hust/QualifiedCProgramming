@@ -1,0 +1,293 @@
+Welcome to Coq 8.20.1
+
+Coq < [Loading ML file ring_plugin.cmxs (using legacy method) ... done]
+[Loading ML file zify_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_core_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_plugin.cmxs (using legacy method) ... done]
+[Loading ML file btauto_plugin.cmxs (using legacy method) ... done]
+
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 1 goal
+  
+  ============================
+  binary_search_entail_wit_5_1
+
+debug < 
+debug < 1 goal
+  
+  target_pre, a_pre, n_pre : Z
+  l : list Z
+  mid, left, right : Z
+  H : target_pre < Znth mid l 0
+  H0 : left <= mid
+  H1 : mid <= right
+  H2 : 0 <= mid
+  H3 : mid < n_pre
+  H4 : Zlength l = n_pre
+  H5 :
+    forall i_3 : Z,
+    0 <= i_3 /\ i_3 + 1 < n_pre -> Znth i_3 l 0 <= Znth (i_3 + 1) l 0
+  H6 : forall j_3 : Z, 0 <= j_3 < left -> Znth j_3 l 0 < target_pre
+  H7 : forall j_4 : Z, right < j_4 < n_pre -> target_pre < Znth j_4 l 0
+  ============================
+  &( "mid") # Int |-> mid ** IntArray.full a_pre n_pre l
+  |-- [|0 <= left|] &&
+      ([|left <= n_pre|] &&
+       ([|-1 <= mid - 1|] &&
+        ([|mid - 1 < n_pre|] &&
+         ([|left <= mid - 1 + 1|] &&
+          ([|Zlength l = n_pre|] &&
+           ([|forall i_3 : Z,
+              0 <= i_3 /\ i_3 + 1 < n_pre ->
+              Znth i_3 l 0 <= Znth (i_3 + 1) l 0|] &&
+            ([|forall j_3 : Z, 0 <= j_3 < left -> Znth j_3 l 0 < target_pre|] &&
+             ([|forall j_2 : Z,
+                mid - 1 < j_2 < n_pre -> target_pre < Znth j_2 l 0|] &&
+              ([|0 <= n_pre|] &&
+               ([|Zlength l = n_pre|] &&
+                ([|forall i_3 : Z,
+                   0 <= i_3 /\ i_3 + 1 < n_pre ->
+                   Znth i_3 l 0 <= Znth (i_3 + 1) l 0|] &&
+                 IntArray.full a_pre n_pre l ** &( "mid") # Int |->_)))))))))))
+
+debug < 2 goals
+  
+  target_pre, a_pre, n_pre : Z
+  l : list Z
+  mid, left, right : Z
+  H : target_pre < Znth mid l 0
+  H0 : left <= mid
+  H1 : mid <= right
+  H2 : 0 <= mid
+  H3 : mid < n_pre
+  H4 : Zlength l = n_pre
+  H5 :
+    forall i_3 : Z,
+    0 <= i_3 /\ i_3 + 1 < n_pre -> Znth i_3 l 0 <= Znth (i_3 + 1) l 0
+  H6 : forall j_3 : Z, 0 <= j_3 < left -> Znth j_3 l 0 < target_pre
+  H7 : forall j_4 : Z, right < j_4 < n_pre -> target_pre < Znth j_4 l 0
+  ============================
+  forall j : Z, mid - 1 < j < n_pre -> target_pre < Znth j l 0
+
+goal 2 is:
+ &( "mid") # Int |-> mid ** IntArray.full a_pre n_pre l
+ |-- [|0 <= left|] &&
+     ([|left <= n_pre|] &&
+      ([|-1 <= mid - 1|] &&
+       ([|mid - 1 < n_pre|] &&
+        ([|left <= mid - 1 + 1|] &&
+         ([|Zlength l = n_pre|] &&
+          ([|forall i_3 : Z,
+             0 <= i_3 /\ i_3 + 1 < n_pre ->
+             Znth i_3 l 0 <= Znth (i_3 + 1) l 0|] &&
+           ([|forall j_3 : Z, 0 <= j_3 < left -> Znth j_3 l 0 < target_pre|] &&
+            ([|forall j_2 : Z,
+               mid - 1 < j_2 < n_pre -> target_pre < Znth j_2 l 0|] &&
+             ([|0 <= n_pre|] &&
+              ([|Zlength l = n_pre|] &&
+               ([|forall i_3 : Z,
+                  0 <= i_3 /\ i_3 + 1 < n_pre ->
+                  Znth i_3 l 0 <= Znth (i_3 + 1) l 0|] &&
+                IntArray.full a_pre n_pre l ** &( "mid") # Int |->_)))))))))))
+
+debug < 1 goal
+  
+  target_pre, a_pre, n_pre : Z
+  l : list Z
+  mid, left, right : Z
+  H : target_pre < Znth mid l 0
+  H0 : left <= mid
+  H1 : mid <= right
+  H2 : 0 <= mid
+  H3 : mid < n_pre
+  H4 : Zlength l = n_pre
+  H5 :
+    forall i_3 : Z,
+    0 <= i_3 /\ i_3 + 1 < n_pre -> Znth i_3 l 0 <= Znth (i_3 + 1) l 0
+  H6 : forall j_3 : Z, 0 <= j_3 < left -> Znth j_3 l 0 < target_pre
+  H7 : forall j_4 : Z, right < j_4 < n_pre -> target_pre < Znth j_4 l 0
+  ============================
+  forall j : Z, mid - 1 < j < n_pre -> target_pre < Znth j l 0
+
+1 goal
+  
+  target_pre, a_pre, n_pre : Z
+  l : list Z
+  mid, left, right : Z
+  H : target_pre < Znth mid l 0
+  H0 : left <= mid
+  H1 : mid <= right
+  H2 : 0 <= mid
+  H3 : mid < n_pre
+  H4 : Zlength l = n_pre
+  H5 :
+    forall i_3 : Z,
+    0 <= i_3 /\ i_3 + 1 < n_pre -> Znth i_3 l 0 <= Znth (i_3 + 1) l 0
+  H6 : forall j_3 : Z, 0 <= j_3 < left -> Znth j_3 l 0 < target_pre
+  H7 : forall j_4 : Z, right < j_4 < n_pre -> target_pre < Znth j_4 l 0
+  j : Z
+  Hj : mid - 1 < j < n_pre
+  ============================
+  target_pre < Znth j l 0
+
+This subproof is complete, but there are some unfocused goals.
+Try unfocusing with "}".
+
+1 goal
+
+goal 1 is:
+ &( "mid") # Int |-> mid ** IntArray.full a_pre n_pre l
+ |-- [|0 <= left|] &&
+     ([|left <= n_pre|] &&
+      ([|-1 <= mid - 1|] &&
+       ([|mid - 1 < n_pre|] &&
+        ([|left <= mid - 1 + 1|] &&
+         ([|Zlength l = n_pre|] &&
+          ([|forall i_3 : Z,
+             0 <= i_3 /\ i_3 + 1 < n_pre ->
+             Znth i_3 l 0 <= Znth (i_3 + 1) l 0|] &&
+           ([|forall j_3 : Z, 0 <= j_3 < left -> Znth j_3 l 0 < target_pre|] &&
+            ([|forall j_2 : Z,
+               mid - 1 < j_2 < n_pre -> target_pre < Znth j_2 l 0|] &&
+             ([|0 <= n_pre|] &&
+              ([|Zlength l = n_pre|] &&
+               ([|forall i_3 : Z,
+                  0 <= i_3 /\ i_3 + 1 < n_pre ->
+                  Znth i_3 l 0 <= Znth (i_3 + 1) l 0|] &&
+                IntArray.full a_pre n_pre l ** &( "mid") # Int |->_)))))))))))
+
+1 goal
+  
+  target_pre, a_pre, n_pre : Z
+  l : list Z
+  mid, left, right : Z
+  H : target_pre < Znth mid l 0
+  H0 : left <= mid
+  H1 : mid <= right
+  H2 : 0 <= mid
+  H3 : mid < n_pre
+  H4 : Zlength l = n_pre
+  H5 :
+    forall i_3 : Z,
+    0 <= i_3 /\ i_3 + 1 < n_pre -> Znth i_3 l 0 <= Znth (i_3 + 1) l 0
+  H6 : forall j_3 : Z, 0 <= j_3 < left -> Znth j_3 l 0 < target_pre
+  H7 : forall j_4 : Z, right < j_4 < n_pre -> target_pre < Znth j_4 l 0
+  Hupper_new : forall j : Z, mid - 1 < j < n_pre -> target_pre < Znth j l 0
+  ============================
+  &( "mid") # Int |-> mid ** IntArray.full a_pre n_pre l
+  |-- [|0 <= left|] &&
+      ([|left <= n_pre|] &&
+       ([|-1 <= mid - 1|] &&
+        ([|mid - 1 < n_pre|] &&
+         ([|left <= mid - 1 + 1|] &&
+          ([|Zlength l = n_pre|] &&
+           ([|forall i_3 : Z,
+              0 <= i_3 /\ i_3 + 1 < n_pre ->
+              Znth i_3 l 0 <= Znth (i_3 + 1) l 0|] &&
+            ([|forall j_3 : Z, 0 <= j_3 < left -> Znth j_3 l 0 < target_pre|] &&
+             ([|forall j_2 : Z,
+                mid - 1 < j_2 < n_pre -> target_pre < Znth j_2 l 0|] &&
+              ([|0 <= n_pre|] &&
+               ([|Zlength l = n_pre|] &&
+                ([|forall i_3 : Z,
+                   0 <= i_3 /\ i_3 + 1 < n_pre ->
+                   Znth i_3 l 0 <= Znth (i_3 + 1) l 0|] &&
+                 IntArray.full a_pre n_pre l ** &( "mid") # Int |->_)))))))))))
+
+debug < 1 goal
+  
+  target_pre, a_pre, n_pre : Z
+  l : list Z
+  mid, left, right : Z
+  H : target_pre < Znth mid l 0
+  H0 : left <= mid
+  H1 : mid <= right
+  H2 : 0 <= mid
+  H3 : mid < n_pre
+  H4 : Zlength l = n_pre
+  H5 :
+    forall i_3 : Z,
+    0 <= i_3 /\ i_3 + 1 < n_pre -> Znth i_3 l 0 <= Znth (i_3 + 1) l 0
+  H6 : forall j_3 : Z, 0 <= j_3 < left -> Znth j_3 l 0 < target_pre
+  H7 : forall j_4 : Z, right < j_4 < n_pre -> target_pre < Znth j_4 l 0
+  Hupper_new : forall j : Z, mid - 1 < j < n_pre -> target_pre < Znth j l 0
+  ============================
+  &( "mid") # Int |->_ ** IntArray.full a_pre n_pre l
+  |-- [|0 <= left|] &&
+      ([|left <= n_pre|] &&
+       ([|-1 <= mid - 1|] &&
+        ([|mid - 1 < n_pre|] &&
+         ([|left <= mid - 1 + 1|] &&
+          ([|Zlength l = n_pre|] &&
+           ([|forall i_3 : Z,
+              0 <= i_3 /\ i_3 + 1 < n_pre ->
+              Znth i_3 l 0 <= Znth (i_3 + 1) l 0|] &&
+            ([|forall j_3 : Z, 0 <= j_3 < left -> Znth j_3 l 0 < target_pre|] &&
+             ([|forall j_2 : Z,
+                mid - 1 < j_2 < n_pre -> target_pre < Znth j_2 l 0|] &&
+              ([|0 <= n_pre|] &&
+               ([|Zlength l = n_pre|] &&
+                ([|forall i_3 : Z,
+                   0 <= i_3 /\ i_3 + 1 < n_pre ->
+                   Znth i_3 l 0 <= Znth (i_3 + 1) l 0|] &&
+                 IntArray.full a_pre n_pre l ** &( "mid") # Int |->_)))))))))))
+
+debug < 1 goal
+  
+  target_pre, a_pre, n_pre : Z
+  l : list Z
+  mid, left, right : Z
+  H : target_pre < Znth mid l 0
+  H0 : left <= mid
+  H1 : mid <= right
+  H2 : 0 <= mid
+  H3 : mid < n_pre
+  H4 : Zlength l = n_pre
+  H5 :
+    forall i_3 : Z,
+    0 <= i_3 /\ i_3 + 1 < n_pre -> Znth i_3 l 0 <= Znth (i_3 + 1) l 0
+  H6 : forall j_3 : Z, 0 <= j_3 < left -> Znth j_3 l 0 < target_pre
+  H7 : forall j_4 : Z, right < j_4 < n_pre -> target_pre < Znth j_4 l 0
+  Hupper_new : forall j : Z, mid - 1 < j < n_pre -> target_pre < Znth j l 0
+  ============================
+  0 <= left
+
+debug < 1 goal
+  
+  target_pre, a_pre, n_pre : Z
+  l : list Z
+  mid, left, right : Z
+  H : target_pre < Znth mid l 0
+  H0 : left <= mid
+  H1 : mid <= right
+  H2 : 0 <= mid
+  H3 : mid < n_pre
+  H4 : Zlength l = n_pre
+  H5 :
+    forall i_3 : Z,
+    0 <= i_3 /\ i_3 + 1 < n_pre -> Znth i_3 l 0 <= Znth (i_3 + 1) l 0
+  H6 : forall j_3 : Z, 0 <= j_3 < left -> Znth j_3 l 0 < target_pre
+  H7 : forall j_4 : Z, right < j_4 < n_pre -> target_pre < Znth j_4 l 0
+  Hupper_new : forall j : Z, mid - 1 < j < n_pre -> target_pre < Znth j l 0
+  ============================
+  0 <= left
+
+debug < 

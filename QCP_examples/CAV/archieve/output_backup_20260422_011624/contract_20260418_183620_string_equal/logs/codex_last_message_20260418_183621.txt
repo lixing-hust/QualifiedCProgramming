@@ -1,0 +1,12 @@
+Completed the contract workflow and wrote the required outputs.
+
+Main artifacts:
+- [string_equal.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_equal.c)
+- [string_equal.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_equal.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_183620_string_equal/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_183620_string_equal/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_183620_string_equal/logs/metrics.md)
+
+The C contract models both inputs as valid null-terminated strings with explicit no-internal-zero assumptions, preserves both arrays read-only, and specifies the return value via a dedicated Coq function `string_equal_spec(la, lb)`. I kept the interface unchanged and only normalized the loop into the repository’s preferred `while (1)` scan form.
+
+I did not run the Verify phase here; this turn only completed the contract-generation workflow.

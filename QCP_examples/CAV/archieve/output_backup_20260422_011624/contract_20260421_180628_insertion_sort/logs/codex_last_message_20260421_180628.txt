@@ -1,0 +1,15 @@
+Completed the Contract workflow for `insertion_sort`.
+
+Created:
+- [input/insertion_sort.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/insertion_sort.c)
+- [input/insertion_sort.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/insertion_sort.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_180628_insertion_sort/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_180628_insertion_sort/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_180628_insertion_sort/logs/metrics.md)
+
+The C contract keeps the original `void insertion_sort(int n, int *a)` interface, requires `0 <= n && n <= 2000` plus `IntArray::full(a, n, l)`, and ensures the final array is sorted and a `Permutation` of the original list.
+
+Verification performed:
+- Checked the generated C and required task logs for forbidden Verify-stage annotation terms: no matches.
+- Confirmed required log files are present.
+- `git status` shows the new tracked-scope outputs as untracked: `input/insertion_sort.c` and `input/insertion_sort.v`. The workspace logs appear to be ignored by git.

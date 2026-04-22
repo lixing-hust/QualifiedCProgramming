@@ -1,0 +1,15 @@
+Completed the contract workflow for `reverse_digits`.
+
+Created:
+- [reverse_digits.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/reverse_digits.c)
+- [reverse_digits.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/reverse_digits.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_050332_reverse_digits/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_050332_reverse_digits/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_050332_reverse_digits/logs/metrics.md)
+
+The C contract keeps the original implementation semantics and specifies the result via a task-specific Coq function `reverse_digits_z`. The precondition includes `0 <= n`, `n <= INT_MAX`, and `reverse_digits_z(n) <= INT_MAX` to rule out overflowing reversed results.
+
+Validation run:
+- `coqc input/reverse_digits.v` passed.
+
+No experience docs were updated.

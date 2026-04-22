@@ -1,0 +1,26 @@
+Retry round completed in the same workspace, but verification is still not fully successful.
+
+Current state:
+- Updated [annotated/verify_20260421_144632_merge_sorted_arrays.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_144632_merge_sorted_arrays.c) with the missing two-pointer ordering history:
+  - consumed `b` elements are strictly less than future `a` elements
+  - consumed `a` elements are less-or-equal to future `b` elements
+  - preserved `n == n@pre` and `m == m@pre`
+- Repaired frontend annotation issues by using explicit `Znth(index, list, 0)` instead of bracket notation in quantified invariant facts.
+- Reran `symexec`; it now succeeds and regenerated fresh Coq files.
+- Removed all `Admitted.` placeholders from `merge_sorted_arrays_proof_manual.v`.
+- Replayed Coq compilation; it still fails at `proof_of_merge_sorted_arrays_entail_wit_2_1`.
+- Cleaned all non-`.v` Coq artifacts afterward.
+
+Current blocker:
+- [merge_sorted_arrays_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_144632_merge_sorted_arrays/coq/generated/merge_sorted_arrays_proof_manual.v:28) needs reusable helper lemmas for `merge_sorted_arrays_spec`, especially proving that appending the just-consumed `a[i]` or `b[j]` to the output prefix matches the recursive merge spec under the cross-boundary ordering facts and the tie rule.
+- The first concrete compile error remains:
+  - `proof_of_merge_sorted_arrays_entail_wit_2_1`
+  - `Attempt to save an incomplete proof`
+
+Logs updated:
+- [annotation_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_144632_merge_sorted_arrays/logs/annotation_reasoning.md)
+- [proof_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_144632_merge_sorted_arrays/logs/proof_reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_144632_merge_sorted_arrays/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_144632_merge_sorted_arrays/logs/metrics.md)
+
+Final result for this retry: `Fail`.

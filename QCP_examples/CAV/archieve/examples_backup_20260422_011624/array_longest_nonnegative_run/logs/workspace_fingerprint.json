@@ -1,0 +1,25 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260422_010149_array_longest_nonnegative_run",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_longest_nonnegative_run.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_longest_nonnegative_run.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_010149_array_longest_nonnegative_run/original/array_longest_nonnegative_run.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_010149_array_longest_nonnegative_run/original/array_longest_nonnegative_run.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260422_010149_array_longest_nonnegative_run.c",
+  "function_name": "array_longest_nonnegative_run",
+  "program_sha256": "7bd06b8a350a860256c15d272c88d31f5a021ed1442aeaaff47c6c127ad4dd10",
+  "semantic_description": "Verifies array_longest_nonnegative_run, which scans an int array from left to right without modifying memory, maintains current and best run lengths, resets current to zero on negative elements, and returns the longest contiguous run length of nonnegative elements as defined by array_longest_nonnegative_run_spec over the input list. The loop may be skipped when n is zero, and otherwise reads each array element once while preserving IntArray::full(a, n, l).",
+  "keywords": {
+    "algorithm_family": ["search", "accumulation"],
+    "control_flow": ["while_loop", "if"],
+    "data_shape": ["array", "scalar_only"],
+    "semantic_intent": ["return_max", "preserve_input"],
+    "proof_pattern": ["loop_invariant", "case_split", "range_bound", "heap_reasoning"],
+    "numeric_properties": ["nonnegative_input", "int_range", "monotone_accumulator"],
+    "edge_case_behavior": ["empty_loop_possible"],
+    "verification_status": ["goal_check_passed", "proof_check_passed"]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

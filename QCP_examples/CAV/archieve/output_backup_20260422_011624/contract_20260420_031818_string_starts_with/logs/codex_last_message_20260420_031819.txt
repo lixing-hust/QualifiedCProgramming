@@ -1,0 +1,11 @@
+Completed the contract workflow for `string_starts_with`.
+
+Created:
+- [input/string_starts_with.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_starts_with.c)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_031818_string_starts_with/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_031818_string_starts_with/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_031818_string_starts_with/logs/metrics.md)
+
+No [input/string_starts_with.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_starts_with.v) was created because the spec is expressible directly in the C contract. I also confirmed `metrics.md` records `Experience updates: none`.
+
+I did not run the Verify stage; this was limited to the requested Contract workflow.

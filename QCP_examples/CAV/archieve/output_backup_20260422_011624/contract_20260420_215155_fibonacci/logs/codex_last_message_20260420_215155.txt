@@ -1,0 +1,19 @@
+Completed the contract workflow for `fibonacci`.
+
+Created:
+- [fibonacci.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/fibonacci.c)
+- [fibonacci.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/fibonacci.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_215155_fibonacci/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_215155_fibonacci/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_215155_fibonacci/logs/metrics.md)
+
+Key contract choices:
+- Preserved the original `int fibonacci(int n)` interface.
+- Added `0 <= n && n <= 46` to avoid signed `int` overflow.
+- Used `emp` since the function has no heap or pointer state.
+- Added `input/fibonacci.v` because no reusable Fibonacci Coq definition existed locally.
+- Kept Verify-stage content out of the contract: no `Inv`, `Assert`, bridge assertions, or loop-exit assertions.
+
+Verification performed:
+- `coqc input/fibonacci.v` passed.
+- Temporary Coq build artifacts from that check were removed.

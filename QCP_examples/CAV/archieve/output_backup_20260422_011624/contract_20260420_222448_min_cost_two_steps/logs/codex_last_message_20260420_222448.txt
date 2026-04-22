@@ -1,0 +1,14 @@
+Completed the contract workflow for `min_cost_two_steps`.
+
+Created:
+- [input/min_cost_two_steps.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/min_cost_two_steps.c)
+- [input/min_cost_two_steps.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/min_cost_two_steps.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_222448_min_cost_two_steps/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_222448_min_cost_two_steps/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_222448_min_cost_two_steps/logs/metrics.md)
+
+Also mirrored the generated C/V files into:
+- [workspace input C](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_222448_min_cost_two_steps/input/min_cost_two_steps.c)
+- [workspace input V](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_222448_min_cost_two_steps/input/min_cost_two_steps.v)
+
+Sanity check: `coqc` succeeds on `min_cost_two_steps.v` in a temporary directory. No experience docs were updated.

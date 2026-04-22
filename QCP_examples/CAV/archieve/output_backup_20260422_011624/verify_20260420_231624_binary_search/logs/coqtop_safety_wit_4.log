@@ -1,0 +1,258 @@
+Welcome to Coq 8.20.1
+
+Coq < [Loading ML file ring_plugin.cmxs (using legacy method) ... done]
+[Loading ML file zify_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_core_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_plugin.cmxs (using legacy method) ... done]
+[Loading ML file btauto_plugin.cmxs (using legacy method) ... done]
+
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < Coq < 1 goal
+  
+  ============================
+  forall x : Z, 0 <= x -> 0 <= x ÷ 2 <= x
+
+binary_search_quot2_bounds_tmp < 
+binary_search_quot2_bounds_tmp < 1 goal
+  
+  x : Z
+  Hx : 0 <= x
+  ============================
+  0 <= x ÷ 2 <= x
+
+binary_search_quot2_bounds_tmp < 2 goals
+  
+  x : Z
+  Hx : 0 <= x
+  Hx0 : x = 0
+  ============================
+  0 <= x ÷ 2 <= x
+
+goal 2 is:
+ 0 <= x ÷ 2 <= x
+
+binary_search_quot2_bounds_tmp < 1 goal
+  
+  x : Z
+  Hx : 0 <= x
+  Hx0 : x = 0
+  ============================
+  0 <= x ÷ 2 <= x
+
+1 goal
+  
+  Hx : 0 <= 0
+  ============================
+  0 <= 0 ÷ 2 <= 0
+
+1 goal
+  
+  Hx : 0 <= 0
+  ============================
+  0 <= 0 <= 0
+
+This subproof is complete, but there are some unfocused goals.
+Focus next goal with bullet -.
+
+1 goal
+
+goal 1 is:
+ 0 <= x ÷ 2 <= x
+
+binary_search_quot2_bounds_tmp < 1 goal
+  
+  x : Z
+  Hx : 0 <= x
+  Hx0 : x <> 0
+  ============================
+  0 <= x ÷ 2 <= x
+
+2 goals
+  
+  x : Z
+  Hx : 0 <= x
+  Hx0 : x <> 0
+  ============================
+  0 <= x ÷ 2
+
+goal 2 is:
+ x ÷ 2 <= x
+
+binary_search_quot2_bounds_tmp < 1 goal
+  
+  x : Z
+  Hx : 0 <= x
+  Hx0 : x <> 0
+  ============================
+  0 <= x ÷ 2
+
+This subproof is complete, but there are some unfocused goals.
+Focus next goal with bullet +.
+
+1 goal
+
+goal 1 is:
+ x ÷ 2 <= x
+
+binary_search_quot2_bounds_tmp < 1 goal
+  
+  x : Z
+  Hx : 0 <= x
+  Hx0 : x <> 0
+  ============================
+  x ÷ 2 <= x
+
+1 goal
+  
+  x : Z
+  Hx : 0 <= x
+  Hx0 : x <> 0
+  H : x ÷ 2 < x
+  ============================
+  x ÷ 2 <= x
+
+binary_search_quot2_bounds_tmp < No more goals.
+
+binary_search_quot2_bounds_tmp < 
+Coq < 1 goal
+  
+  ============================
+  binary_search_safety_wit_4
+
+debug < 
+debug < 1 goal
+  
+  target_pre, a_pre, n_pre : Z
+  l : list Z
+  right, left : Z
+  H : left <= right
+  H0 : 0 <= left
+  H1 : left <= n_pre
+  H2 : -1 <= right
+  H3 : right < n_pre
+  H4 : left <= right + 1
+  H5 : Zlength l = n_pre
+  H6 :
+    forall i_2 : Z,
+    0 <= i_2 /\ i_2 + 1 < n_pre -> Znth i_2 l 0 <= Znth (i_2 + 1) l 0
+  H7 : forall j : Z, 0 <= j < left -> Znth j l 0 < target_pre
+  H8 : forall j_2 : Z, right < j_2 < n_pre -> target_pre < Znth j_2 l 0
+  H9 : 0 <= n_pre
+  H10 : Zlength l = n_pre
+  H11 :
+    forall i_2 : Z,
+    0 <= i_2 /\ i_2 + 1 < n_pre -> Znth i_2 l 0 <= Znth (i_2 + 1) l 0
+  ============================
+  &( "left") # Int |-> left **
+  (&( "n") # Int |-> n_pre **
+   (&( "right") # Int |-> right **
+    (&( "a") # Ptr |-> a_pre **
+     (&( "target") # Int |-> target_pre **
+      (IntArray.full a_pre n_pre l ** &( "mid") # Int |->_)))))
+  |-- [|left + (right - left) ÷ 2 <= 2147483647|] &&
+      [|-2147483648 <= left + (right - left) ÷ 2|]
+
+debug < debug < 1 goal
+  
+  target_pre, a_pre, n_pre : Z
+  l : list Z
+  right, left : Z
+  H : left <= right
+  H0 : 0 <= left
+  H1 : left <= n_pre
+  H2 : -1 <= right
+  H3 : right < n_pre
+  H4 : left <= right + 1
+  H5 : Zlength l = n_pre
+  H6 :
+    forall i_2 : Z,
+    0 <= i_2 /\ i_2 + 1 < n_pre -> Znth i_2 l 0 <= Znth (i_2 + 1) l 0
+  H7 : forall j : Z, 0 <= j < left -> Znth j l 0 < target_pre
+  H8 : forall j_2 : Z, right < j_2 < n_pre -> target_pre < Znth j_2 l 0
+  H9 : 0 <= n_pre
+  H10 : Zlength l = n_pre
+  H11 :
+    forall i_2 : Z,
+    0 <= i_2 /\ i_2 + 1 < n_pre -> Znth i_2 l 0 <= Znth (i_2 + 1) l 0
+  Hq : 0 <= (right - left) ÷ 2 <= right - left
+  ============================
+  &( "left") # Int |-> left **
+  (&( "n") # Int |-> n_pre **
+   (&( "right") # Int |-> right **
+    (&( "a") # Ptr |-> a_pre **
+     (&( "target") # Int |-> target_pre **
+      (IntArray.full a_pre n_pre l ** &( "mid") # Int |->_)))))
+  |-- [|left + (right - left) ÷ 2 <= 2147483647|] &&
+      [|-2147483648 <= left + (right - left) ÷ 2|]
+
+debug < 1 goal
+  
+  target_pre, a_pre, n_pre : Z
+  l : list Z
+  right, left : Z
+  H : left <= right
+  H0 : 0 <= left
+  H1 : left <= n_pre
+  H2 : -1 <= right
+  H3 : right < n_pre
+  H4 : left <= right + 1
+  H5 : Zlength l = n_pre
+  H6 :
+    forall i_2 : Z,
+    0 <= i_2 /\ i_2 + 1 < n_pre -> Znth i_2 l 0 <= Znth (i_2 + 1) l 0
+  H7 : forall j : Z, 0 <= j < left -> Znth j l 0 < target_pre
+  H8 : forall j_2 : Z, right < j_2 < n_pre -> target_pre < Znth j_2 l 0
+  H9 : 0 <= n_pre
+  H10 : Zlength l = n_pre
+  H11 :
+    forall i_2 : Z,
+    0 <= i_2 /\ i_2 + 1 < n_pre -> Znth i_2 l 0 <= Znth (i_2 + 1) l 0
+  Hq : 0 <= (right - left) ÷ 2 <= right - left
+  ============================
+  left + (right - left) ÷ 2 <= 2147483647
+
+debug < 1 goal
+  
+  target_pre, a_pre, n_pre : Z
+  l : list Z
+  right, left : Z
+  H : left <= right
+  H0 : 0 <= left
+  H1 : left <= n_pre
+  H2 : -1 <= right
+  H3 : right < n_pre
+  H4 : left <= right + 1
+  H5 : Zlength l = n_pre
+  H6 :
+    forall i_2 : Z,
+    0 <= i_2 /\ i_2 + 1 < n_pre -> Znth i_2 l 0 <= Znth (i_2 + 1) l 0
+  H7 : forall j : Z, 0 <= j < left -> Znth j l 0 < target_pre
+  H8 : forall j_2 : Z, right < j_2 < n_pre -> target_pre < Znth j_2 l 0
+  H9 : 0 <= n_pre
+  H10 : Zlength l = n_pre
+  H11 :
+    forall i_2 : Z,
+    0 <= i_2 /\ i_2 + 1 < n_pre -> Znth i_2 l 0 <= Znth (i_2 + 1) l 0
+  Hq : 0 <= (right - left) ÷ 2 <= right - left
+  ============================
+  left + (right - left) ÷ 2 <= 2147483647
+
+debug < 

@@ -1,0 +1,10 @@
+Start to symbolic execution on program : /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_185755_string_count_digits.c
+Start to parse strategies file common
+File Path: /home/yangfp/QualifiedCProgramming/QCP_examples/common.strategies
+Finish parsing strategies file common
+Start to parse strategies file char_array
+File Path: /home/yangfp/QualifiedCProgramming/QCP_examples/char_array.strategies
+Finish parsing strategies file char_array
+Symbolic Execution into function string_count_digits
+End of symbolic execution of function string_count_digits
+Successfully finished symbolic execution

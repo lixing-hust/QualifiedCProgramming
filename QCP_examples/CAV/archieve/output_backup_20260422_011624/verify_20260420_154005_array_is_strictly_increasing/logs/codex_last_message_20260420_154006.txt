@@ -1,0 +1,17 @@
+Verification succeeded for `array_is_strictly_increasing`.
+
+Updated:
+- [annotated/verify_20260420_154005_array_is_strictly_increasing.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_154005_array_is_strictly_increasing.c): added the loop invariant, early-return assertion, and loop-exit assertion.
+- [array_is_strictly_increasing_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_154005_array_is_strictly_increasing/coq/generated/array_is_strictly_increasing_proof_manual.v): completed the single manual `entail_wit_4` proof.
+- Workspace logs: fingerprint, annotation reasoning, proof reasoning, issues, and metrics are filled in. `metrics.md` ends with `Final Result: Success`.
+
+Verified:
+- `symexec` completed successfully.
+- `array_is_strictly_increasing_goal.v` compiled.
+- `array_is_strictly_increasing_proof_auto.v` compiled.
+- `array_is_strictly_increasing_proof_manual.v` compiled.
+- `array_is_strictly_increasing_goal_check.v` compiled.
+- `proof_manual.v` has no `Admitted.` and no new `Axiom`.
+- Non-`.v` Coq intermediate files under the workspace `coq/` directory were cleaned up.
+
+I did not update shared experience docs because the user instruction constrained the work to this existing workspace.

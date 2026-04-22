@@ -1,0 +1,22 @@
+Verification succeeded in the same workspace.
+
+Updated:
+- [annotated/verify_20260420_174025_array_sign.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_174025_array_sign.c)
+- [array_sign_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_174025_array_sign/coq/generated/array_sign_proof_manual.v)
+- Workspace logs: `annotation_reasoning.md`, `proof_reasoning.md`, `issues.md`, `metrics.md`
+- Experience notes: [ASSERTION.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/doc/experiences/ASSERTION.md), [SYMEXEC.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/doc/experiences/SYMEXEC.md)
+
+What fixed it:
+- The disjunctive sign relation was rejected by `symexec`.
+- The helper-extern approach caused immediate `symexec` segfaults.
+- The working repair was to keep native assertions and split the sign relation into three separate quantified implications.
+
+Verified:
+- `symexec` succeeded and generated fresh Coq files.
+- `array_sign_goal.v` compiled.
+- `array_sign_proof_auto.v` compiled.
+- `array_sign_proof_manual.v` compiled.
+- `array_sign_goal_check.v` compiled.
+- `proof_manual.v` has no `Admitted.` and no added `Axiom`.
+- Non-`.v` Coq intermediates were cleaned.
+- `logs/metrics.md` ends with `Final Result: Success`.

@@ -1,0 +1,10 @@
+Generated the contract artifacts for `find_first_equal` and followed the required workflow order: reasoning log first, then C/V outputs, then issues/metrics.
+
+Outputs:
+- [find_first_equal.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/find_first_equal.c)
+- [find_first_equal.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/find_first_equal.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_013424_find_first_equal/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_013424_find_first_equal/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_013424_find_first_equal/logs/metrics.md)
+
+The contract preserves `IntArray::full(a, n, l)` and uses a small task-specific Coq function `find_first_equal_spec` to express “first matching index, else `-1`” cleanly. I did a local file-level sanity check on the generated contents, but I did not run the Verify stage or Coq compilation in this turn.

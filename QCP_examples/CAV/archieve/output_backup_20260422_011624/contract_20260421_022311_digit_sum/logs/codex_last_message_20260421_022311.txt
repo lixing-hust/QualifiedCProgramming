@@ -1,0 +1,12 @@
+Implemented the contract workflow for `digit_sum`.
+
+Created:
+- [digit_sum.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/digit_sum.c)
+- [digit_sum.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/digit_sum.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_022311_digit_sum/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_022311_digit_sum/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_022311_digit_sum/logs/metrics.md)
+
+The C contract preserves the original interface and implementation, with `Require 0 <= n && n <= INT_MAX && emp` and `Ensure __return == digit_sum_z(n@pre) && emp`.
+
+I added `input/digit_sum.v` because there was no existing reusable Coq digit-sum spec. It contains only the task-local fuelled `digit_sum_z` definition. I also ran `coqc input/digit_sum.v` successfully, then removed the generated Coq build artifacts from `input/`.

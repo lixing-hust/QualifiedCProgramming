@@ -1,0 +1,18 @@
+Verification succeeded for `array_last_positive`.
+
+Updated:
+- [annotated/verify_20260420_120451_array_last_positive.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_120451_array_last_positive.c): added the loop invariant and loop-exit assertion for the last-positive prefix summary.
+- [array_last_positive_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_120451_array_last_positive/coq/generated/array_last_positive_proof_manual.v): completed all 3 manual witnesses.
+- Workspace logs under [logs](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_120451_array_last_positive/logs): filled fingerprint, annotation/proof reasoning, issues, and metrics.
+
+Checks completed:
+- `symexec`: success
+- `coqc` for `goal.v`: success
+- `coqc` for `proof_auto.v`: success
+- `coqc` for `proof_manual.v`: success
+- `coqc` for `goal_check.v`: success
+- `proof_manual.v`: no `Admitted.` and no added `Axiom`
+- `coq/`: non-`.v` intermediate files cleaned
+- `metrics.md` ends with `Final Result: Success`
+
+I kept all writes inside the requested workspace plus the active annotated C file, so no experience docs were modified.

@@ -1,0 +1,39 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260421_040514_upper_bound",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/upper_bound.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_040514_upper_bound/original/upper_bound.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_040514_upper_bound.c",
+  "function_name": "upper_bound",
+  "program_sha256": "a7cf14eb133b6529bc192b426f58ea4c77ad215906f948a0748f0c17ef5840d1",
+  "semantic_description": "Verifies upper_bound implemented as binary search on a nondecreasing integer array. The function returns the first index in [0,n] whose element is greater than target; every earlier element is <= target, and returning n means no greater element exists. The control structure is a while loop that maintains left/right search bounds and reads a[mid] without modifying the array memory.",
+  "keywords": {
+    "algorithm_family": "search",
+    "control_flow": "while_loop",
+    "data_shape": [
+      "array",
+      "pointer"
+    ],
+    "proof_pattern": [
+      "loop_invariant",
+      "case_split",
+      "range_bound",
+      "monotonicity"
+    ],
+    "numeric_properties": [
+      "nonnegative_input",
+      "int_range"
+    ],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": [
+      "goal_check_passed",
+      "proof_check_passed",
+      "auto_proof_contains_admitted"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

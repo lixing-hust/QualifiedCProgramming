@@ -1,0 +1,10 @@
+Start to symbolic execution on program : /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260419_084727_string_to_upper_ascii.c
+Start to parse strategies file common
+File Path: /home/yangfp/QualifiedCProgramming/QCP_examples/common.strategies
+Finish parsing strategies file common
+Start to parse strategies file char_array
+File Path: /home/yangfp/QualifiedCProgramming/QCP_examples/char_array.strategies
+Finish parsing strategies file char_array
+Symbolic Execution into function string_to_upper_ascii
+End of symbolic execution of function string_to_upper_ascii
+Successfully finished symbolic execution

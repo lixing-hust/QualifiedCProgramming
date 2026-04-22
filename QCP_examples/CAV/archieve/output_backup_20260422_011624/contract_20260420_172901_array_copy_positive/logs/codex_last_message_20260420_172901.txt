@@ -1,0 +1,14 @@
+Completed the contract workflow for `array_copy_positive`.
+
+Created [array_copy_positive.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_copy_positive.c:1) with a full contract:
+- requires `n >= 0`
+- models `a` and `out` as length-`n` `IntArray::full` arrays
+- preserves input array `a`
+- specifies `out[i] = a[i]` when `a[i] > 0`, otherwise `out[i] = 0`
+
+Also wrote the required logs:
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_172901_array_copy_positive/logs/reasoning.md:1)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_172901_array_copy_positive/logs/issues.md:1)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_172901_array_copy_positive/logs/metrics.md:1)
+
+No `input/array_copy_positive.v` was created; the spec does not need task-specific Coq definitions. I also checked that the generated C does not contain verify-stage annotations such as `Inv` or `Assert`.

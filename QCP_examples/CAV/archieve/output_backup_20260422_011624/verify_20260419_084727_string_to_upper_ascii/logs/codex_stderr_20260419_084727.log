@@ -1,0 +1,9 @@
+2026-04-19T01:01:59.377957Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260419_084727_string_to_upper_ascii/coq/generated/string_to_upper_ascii_proof_manual.v:
+  pre_process.
+  destruct l2_2 eqn:Hl2.
+  - rewrite Zlength_nil in H5.
+    rewrite app_nil_r in H0.
+    rewrite app_Znth2 in H0 by (rewrite string_to_upper_ascii_spec_zlength; lia).
+    rewrite string_to_upper_ascii_spec_zlength in H0.
+    replace (i - Zlength l1_2) with 0 in H0 by lia.
+    simpl in H0. lia.

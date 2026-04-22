@@ -1,0 +1,10 @@
+Completed the contract workflow for `binary_search_last`.
+
+Generated:
+
+- [binary_search_last.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/binary_search_last.c)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_042406_binary_search_last/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_042406_binary_search_last/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_042406_binary_search_last/logs/metrics.md)
+
+No `input/binary_search_last.v` was created, because the spec only needs existing integer/list/array contract vocabulary. I also checked that the generated C contract contains no `Inv`, `Assert`, bridge assertions, `which implies`, or loop-exit assertions.

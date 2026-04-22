@@ -1,0 +1,7 @@
+Verification succeeded for `array_find_last_equal`.
+
+I updated the active annotated file with the loop invariant and loop-exit assertion in [verify_20260420_030021_array_find_last_equal.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_030021_array_find_last_equal.c). `symexec` completed successfully and regenerated the Coq files in the workspace.
+
+I completed the manual witnesses in [array_find_last_equal_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_030021_array_find_last_equal/coq/generated/array_find_last_equal_proof_manual.v). The full compile sequence passed for `goal`, `proof_auto`, `proof_manual`, and `goal_check`.
+
+Final hygiene is done: `proof_manual.v` has no `Admitted.` or `Axiom`, non-`.v` Coq artifacts under the workspace `coq/` directory were removed, and [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_030021_array_find_last_equal/logs/metrics.md) ends with `Final Result: Success`.

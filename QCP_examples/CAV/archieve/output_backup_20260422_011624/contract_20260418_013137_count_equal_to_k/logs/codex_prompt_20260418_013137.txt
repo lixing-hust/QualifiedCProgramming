@@ -1,0 +1,9 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/contract/SKILL.md
+
+Inputs:
+- Raw markdown: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/raw/count_equal_to_k.md`
+- Target function: `count_equal_to_k`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_013137_count_equal_to_k`
+- Output C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/count_equal_to_k.c`
+- Optional output V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/count_equal_to_k.v`

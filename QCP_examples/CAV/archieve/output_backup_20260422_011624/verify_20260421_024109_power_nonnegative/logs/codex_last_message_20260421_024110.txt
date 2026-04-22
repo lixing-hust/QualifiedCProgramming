@@ -1,0 +1,15 @@
+Verification succeeded for `power_nonnegative`.
+
+Updated:
+- [annotated/verify_20260421_024109_power_nonnegative.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_024109_power_nonnegative.c): added the loop invariant tying `ans` to `power_nonnegative_z(base, i)`.
+- [power_nonnegative_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_024109_power_nonnegative/coq/generated/power_nonnegative_proof_manual.v): proved all manual obligations with a local successor lemma.
+- Workspace logs under [output/verify_20260421_024109_power_nonnegative/logs](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_024109_power_nonnegative/logs): fingerprint, annotation/proof reasoning, issues, and metrics are filled in.
+
+Verified:
+- `symexec` completed successfully and regenerated `goal`, `proof_auto`, `proof_manual`, and `goal_check`.
+- Full Coq compile passed for `original/power_nonnegative.v`, `power_nonnegative_goal.v`, `power_nonnegative_proof_auto.v`, `power_nonnegative_proof_manual.v`, and `power_nonnegative_goal_check.v`.
+- `power_nonnegative_proof_manual.v` has no `Admitted.` and no introduced `Axiom`.
+- `coq/` intermediate non-`.v` files were cleaned.
+- `logs/metrics.md` ends with `Final Result: Success`.
+
+I did not update repository-level experience docs because the user instruction for this run was to work only inside the existing workspace.

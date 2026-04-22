@@ -1,0 +1,36 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260422_012300_array_add",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_add.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_012300_array_add/original/array_add.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260422_012300_array_add.c",
+  "function_name": "array_add",
+  "program_sha256": "6fbb33b76785855bf1cbfa3412300158175a35857a6d3e1dc572b7d938ec1706",
+  "semantic_description": "Adds two integer arrays elementwise into an output array with a single forward loop while preserving the input arrays.",
+  "keywords": {
+    "algorithm_family": [
+      "accumulation"
+    ],
+    "control_flow": [
+      "for_loop"
+    ],
+    "data_shape": [
+      "array"
+    ],
+    "semantic_intent": [
+      "preserve_input"
+    ],
+    "proof_pattern": [
+      "loop_invariant",
+      "heap_reasoning"
+    ],
+    "verification_status": [
+      "goal_check_passed"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

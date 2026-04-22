@@ -1,0 +1,15 @@
+Use this skill as the complete workflow:
+/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/skills/verify/SKILL.md
+
+Inputs:
+- Input C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_count_distinct_sorted.c`
+- Optional input V: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_count_distinct_sorted.v`
+- Target function: `array_count_distinct_sorted`
+- Workspace: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260422_003842_array_count_distinct_sorted`
+- Active annotated C: `/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260422_003842_array_count_distinct_sorted.c`
+
+Execution rule:
+- Work only inside this existing workspace.
+- Start from the normal verify workflow for this task.
+- Early in the task, read `doc/retrieval/INDEX.md`, then update `logs/workspace_fingerprint.json` so `semantic_description` is non-empty and `keywords` use only the controlled vocabulary defined there.
+- Keep iterating in the same workspace until verification succeeds or the external time budget is exhausted.

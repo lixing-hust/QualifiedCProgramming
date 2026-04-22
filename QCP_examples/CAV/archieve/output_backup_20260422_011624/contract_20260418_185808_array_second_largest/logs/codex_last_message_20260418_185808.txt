@@ -1,0 +1,5 @@
+The contract workflow is complete.
+
+I wrote the required reasoning log first at [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_185808_array_second_largest/logs/reasoning.md), then generated [array_second_largest.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_second_largest.c) and [array_second_largest.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_second_largest.v). The C contract preserves the original function, requires `n >= 2`, exact array length, and pairwise-distinct elements, and restores `IntArray::full(a, n, l)` unchanged. The `.v` file defines a scan-style `second_largest_list` to match the implementation.
+
+I also added [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_185808_array_second_largest/logs/issues.md) and [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_185808_array_second_largest/logs/metrics.md). I did not run the Verify stage or Coq compilation here.

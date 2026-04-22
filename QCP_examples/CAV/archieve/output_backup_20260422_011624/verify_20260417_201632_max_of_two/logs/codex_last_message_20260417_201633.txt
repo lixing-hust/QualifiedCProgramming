@@ -1,0 +1,16 @@
+Verification completed for `max_of_two`.
+
+`goal_check.v` compiled successfully in the workspace, `proof_manual.v` contains no `Admitted.` or added `Axiom`, and `coq/` was cleaned so only the generated `.v` files remain. The annotated C stayed unchanged because this function needed no extra `Inv` or `Assert`.
+
+Updated outputs:
+- [workspace_fingerprint.json](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260417_201632_max_of_two/logs/workspace_fingerprint.json)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260417_201632_max_of_two/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260417_201632_max_of_two/logs/metrics.md)
+- [compile.log](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260417_201632_max_of_two/logs/compile.log)
+- [qcp_run.log](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260417_201632_max_of_two/logs/qcp_run.log)
+- [max_of_two_goal.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260417_201632_max_of_two/coq/generated/max_of_two_goal.v)
+- [max_of_two_proof_auto.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260417_201632_max_of_two/coq/generated/max_of_two_proof_auto.v)
+- [max_of_two_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260417_201632_max_of_two/coq/generated/max_of_two_proof_manual.v)
+- [max_of_two_goal_check.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260417_201632_max_of_two/coq/generated/max_of_two_goal_check.v)
+
+`annotation_reasoning.md` and `proof_reasoning.md` were intentionally skipped under the skill rules because there were no added verification annotations and no manual proof obligations.

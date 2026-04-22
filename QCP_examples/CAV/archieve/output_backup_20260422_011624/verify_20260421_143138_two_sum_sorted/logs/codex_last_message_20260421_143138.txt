@@ -1,0 +1,17 @@
+Verification succeeded for `two_sum_sorted`.
+
+Updated the workspace-local artifacts:
+- [annotated C](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_143138_two_sum_sorted.c)
+- [manual proof](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_143138_two_sum_sorted/coq/generated/two_sum_sorted_proof_manual.v)
+- [fingerprint](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_143138_two_sum_sorted/logs/workspace_fingerprint.json)
+- [issues log](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_143138_two_sum_sorted/logs/issues.md)
+- [metrics log](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_143138_two_sum_sorted/logs/metrics.md)
+
+Verification checks completed:
+- `symexec` succeeded and regenerated `goal`, `proof_auto`, `proof_manual`, and `goal_check`.
+- `two_sum_sorted_goal.v`, `two_sum_sorted_proof_auto.v`, `two_sum_sorted_proof_manual.v`, and `two_sum_sorted_goal_check.v` all compiled successfully.
+- `two_sum_sorted_proof_manual.v` has no `Admitted.` and no added `Axiom`.
+- Non-`.v` Coq build artifacts under the workspace `coq/` directory were cleaned.
+- `logs/metrics.md` ends with `Final Result: Success`.
+
+I did not update shared experience docs because your execution rule said to work only inside the existing workspace.

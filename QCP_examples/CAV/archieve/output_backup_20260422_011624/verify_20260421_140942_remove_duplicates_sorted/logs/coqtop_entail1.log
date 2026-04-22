@@ -1,0 +1,124 @@
+Welcome to Coq 8.20.1
+
+Coq < [Loading ML file ring_plugin.cmxs (using legacy method) ... done]
+[Loading ML file zify_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_core_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_plugin.cmxs (using legacy method) ... done]
+[Loading ML file btauto_plugin.cmxs (using legacy method) ... done]
+
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 1 goal
+  
+  ============================
+  remove_duplicates_sorted_entail_wit_1
+
+probe < 
+probe < 1 goal
+  
+  a_pre, n_pre : Z
+  l : list Z
+  H : n_pre <> 0
+  H0 : 0 <= n_pre
+  H1 : n_pre <= 2147483647
+  H2 : Zlength l = n_pre
+  H3 :
+    forall i : Z, 0 <= i /\ i + 1 < n_pre -> Znth i l 0 <= Znth (i + 1) l 0
+  ============================
+  IntArray.full a_pre n_pre l
+  |-- EX lc : list Z,
+      [|1 <= 1|] && [|1 <= n_pre|] && [|1 <= 1|] && [|1 <= 1|] &&
+      [|Zlength lc = n_pre|] &&
+      [|1 = Zlength (remove_duplicates_sorted_spec (sublist 0 1 l))|] &&
+      [|forall k : Z,
+        0 <= k < 1 ->
+        Znth k lc 0 =
+        Znth k (remove_duplicates_sorted_spec (sublist 0 1 l)) 0|] &&
+      [|forall k_2 : Z, 1 <= k_2 < n_pre -> Znth k_2 lc 0 = Znth k_2 l 0|] &&
+      [|n_pre <> 0|] && [|0 <= n_pre|] && [|n_pre <= 2147483647|] &&
+      [|Zlength l = n_pre|] &&
+      [|forall i : Z,
+        0 <= i /\ i + 1 < n_pre -> Znth i l 0 <= Znth (i + 1) l 0|] &&
+      IntArray.full a_pre n_pre lc
+
+probe < 1 goal
+  
+  a_pre, n_pre : Z
+  l : list Z
+  H : n_pre <> 0
+  H0 : 0 <= n_pre
+  H1 : n_pre <= 2147483647
+  H2 : Zlength l = n_pre
+  H3 :
+    forall i : Z, 0 <= i /\ i + 1 < n_pre -> Znth i l 0 <= Znth (i + 1) l 0
+  ============================
+  IntArray.full a_pre n_pre l
+  |-- [|1 <= 1|] && [|1 <= n_pre|] && [|1 <= 1|] && [|1 <= 1|] &&
+      [|Zlength l = n_pre|] &&
+      [|1 = Zlength (remove_duplicates_sorted_spec (sublist 0 1 l))|] &&
+      [|forall k : Z,
+        0 <= k < 1 ->
+        Znth k l 0 = Znth k (remove_duplicates_sorted_spec (sublist 0 1 l)) 0|] &&
+      [|forall k_2 : Z, 1 <= k_2 < n_pre -> Znth k_2 l 0 = Znth k_2 l 0|] &&
+      [|n_pre <> 0|] && [|0 <= n_pre|] && [|n_pre <= 2147483647|] &&
+      [|Zlength l = n_pre|] &&
+      [|forall i : Z,
+        0 <= i /\ i + 1 < n_pre -> Znth i l 0 <= Znth (i + 1) l 0|] &&
+      IntArray.full a_pre n_pre l
+
+probe < 2 goals
+  
+  a_pre, n_pre : Z
+  l : list Z
+  H : n_pre <> 0
+  H0 : 0 <= n_pre
+  H1 : n_pre <= 2147483647
+  H2 : Zlength l = n_pre
+  H3 :
+    forall i : Z, 0 <= i /\ i + 1 < n_pre -> Znth i l 0 <= Znth (i + 1) l 0
+  ============================
+  forall k : Z,
+  0 <= k < 1 ->
+  Znth k l 0 = Znth k (remove_duplicates_sorted_spec (sublist 0 1 l)) 0
+
+goal 2 is:
+ 1 = Zlength (remove_duplicates_sorted_spec (sublist 0 1 l))
+
+probe < 2 goals
+  
+  a_pre, n_pre : Z
+  l : list Z
+  H : n_pre <> 0
+  H0 : 0 <= n_pre
+  H1 : n_pre <= 2147483647
+  H2 : Zlength l = n_pre
+  H3 :
+    forall i : Z, 0 <= i /\ i + 1 < n_pre -> Znth i l 0 <= Znth (i + 1) l 0
+  ============================
+  forall k : Z,
+  0 <= k < 1 ->
+  Znth k l 0 = Znth k (remove_duplicates_sorted_spec (sublist 0 1 l)) 0
+
+goal 2 is:
+ 1 = Zlength (remove_duplicates_sorted_spec (sublist 0 1 l))
+
+probe < 
+Coq < 

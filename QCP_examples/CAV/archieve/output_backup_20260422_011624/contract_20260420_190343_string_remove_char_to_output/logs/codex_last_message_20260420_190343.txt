@@ -1,0 +1,15 @@
+Implemented the contract workflow for `string_remove_char_to_output`.
+
+Created:
+- [string_remove_char_to_output.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_remove_char_to_output.c)
+- [string_remove_char_to_output.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_remove_char_to_output.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_190343_string_remove_char_to_output/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_190343_string_remove_char_to_output/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_190343_string_remove_char_to_output/logs/metrics.md)
+
+Also copied the C/V artifacts into the workspace snapshot under `output/contract_20260420_190343_string_remove_char_to_output/input/`.
+
+Validation:
+- `coqc input/string_remove_char_to_output.v` passed.
+- Checked the generated C/V contract inputs contain no `Inv`, `Assert`, bridge assert, loop-exit assertion, or `which implies`.
+- Removed transient Coq build artifacts after the syntax check.

@@ -1,0 +1,5 @@
+Completed the contract workflow for `string_to_upper_ascii`.
+
+The main outputs are [string_to_upper_ascii.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_to_upper_ascii.c) and [string_to_upper_ascii.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_to_upper_ascii.v). The C contract models the input as a null-terminated `CharArray`, requires no interior `0` in the logical payload, and ensures the buffer is updated in place to `string_to_upper_ascii_spec(l) ++ [0]`. The `.v` file defines the ASCII uppercase character map and lifts it over `list Z`.
+
+The required logs are in [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_202443_string_to_upper_ascii/logs/reasoning.md), [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_202443_string_to_upper_ascii/logs/issues.md), and [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_202443_string_to_upper_ascii/logs/metrics.md). I did a readback sanity check on all generated artifacts; I did not run the Verify stage.

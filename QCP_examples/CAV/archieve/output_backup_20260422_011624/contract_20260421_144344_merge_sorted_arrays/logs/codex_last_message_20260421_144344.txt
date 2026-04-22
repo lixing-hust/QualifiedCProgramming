@@ -1,0 +1,17 @@
+Completed the contract workflow for `merge_sorted_arrays`.
+
+Created:
+
+- [merge_sorted_arrays.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/merge_sorted_arrays.c)
+- [merge_sorted_arrays.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/merge_sorted_arrays.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_144344_merge_sorted_arrays/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_144344_merge_sorted_arrays/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_144344_merge_sorted_arrays/logs/metrics.md)
+
+The C implementation is preserved unchanged and contains only the function plus its contract. I added a small task-specific Coq helper for `merge_sorted_arrays_spec` because there was no existing merge-list spec to reuse.
+
+Validation performed:
+
+- `coqc input/merge_sorted_arrays.v` passed.
+- Scanned `input/merge_sorted_arrays.c` / `.v` for forbidden verify-stage annotations; none found.
+- Removed Coq byproducts after the compile check, leaving only the requested `.c` and `.v` files.

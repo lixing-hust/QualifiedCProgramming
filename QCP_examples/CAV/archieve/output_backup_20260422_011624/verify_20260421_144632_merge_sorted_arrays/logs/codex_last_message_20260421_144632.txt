@@ -1,0 +1,15 @@
+Verification did not succeed before the external time budget was exhausted.
+
+I followed the verify workflow in the existing workspace and updated:
+
+- [workspace_fingerprint.json](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_144632_merge_sorted_arrays/logs/workspace_fingerprint.json)
+- [verify_20260421_144632_merge_sorted_arrays.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_144632_merge_sorted_arrays.c)
+- [annotation_reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_144632_merge_sorted_arrays/logs/annotation_reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_144632_merge_sorted_arrays/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_144632_merge_sorted_arrays/logs/metrics.md)
+
+The first `symexec` failure was the expected missing-loop-invariant error. I then iterated through several invariant shapes. The useful diagnostic was that `n@pre + m@pre` ownership arithmetic made the frontend hang, while current-state `n + m` got to a real entailment failure. That exposed one concrete annotation bug: the second loop invariant was too strong because `j == m` is not guaranteed at the second loop head before the guard is checked.
+
+After weakening that second invariant, the next `symexec` run became CPU-bound again with an empty log and no usable generated Coq files. I stopped the run, removed the zero-byte generated placeholders, and recorded `Final Result: Fail` in [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_144632_merge_sorted_arrays/logs/metrics.md).
+
+No proof stage or Coq compile stage was reached because the latest `symexec` did not complete successfully.

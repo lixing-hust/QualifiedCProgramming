@@ -1,0 +1,24 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260420_034132_string_replace_char",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_replace_char.c",
+  "input_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_replace_char.v",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_034132_string_replace_char/original/string_replace_char.c",
+  "original_v": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_034132_string_replace_char/original/string_replace_char.v",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_034132_string_replace_char.c",
+  "function_name": "string_replace_char",
+  "program_sha256": "6e83d0624c3fb9dfb378dd840ff8dca56efd4b71cce0ab5d364d327392f7ff48",
+  "semantic_description": "The function scans a caller-provided null-terminated character array from index 0 until the first zero terminator. For each nonzero element before the terminator, it updates the element in place to new_c exactly when the original element equals old_c, and otherwise preserves it. The loop may exit immediately when the logical string length is zero. The function does not allocate memory and preserves the final zero terminator while mutating the array contents before it.",
+  "keywords": {
+    "algorithm_family": "search",
+    "control_flow": "while_loop",
+    "data_shape": ["string", "array", "pointer"],
+    "semantic_intent": "in_place_update",
+    "proof_pattern": ["loop_invariant", "heap_reasoning", "case_split"],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": "goal_check_passed"
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}

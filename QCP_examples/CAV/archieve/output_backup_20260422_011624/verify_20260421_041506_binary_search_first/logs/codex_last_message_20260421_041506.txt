@@ -1,0 +1,14 @@
+Verification succeeded for `binary_search_first`.
+
+What changed:
+- Added loop invariant and bridge assertions in [verify_20260421_041506_binary_search_first.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_041506_binary_search_first.c).
+- Generated fresh Coq artifacts under `output/verify_20260421_041506_binary_search_first/coq/generated/`.
+- Completed all 7 manual proof obligations in [binary_search_first_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_041506_binary_search_first/coq/generated/binary_search_first_proof_manual.v).
+- Updated required logs: fingerprint, annotation reasoning, proof reasoning, issues, and metrics.
+
+Verification checks:
+- `symexec`: passed.
+- `goal.v`, `proof_auto.v`, `proof_manual.v`, `goal_check.v`: all compiled successfully.
+- `proof_manual.v`: no `Admitted.` and no added top-level `Axiom`.
+- `coq/` cleanup: only `.v` files remain.
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_041506_binary_search_first/logs/metrics.md) ends with `Final Result: Success`.

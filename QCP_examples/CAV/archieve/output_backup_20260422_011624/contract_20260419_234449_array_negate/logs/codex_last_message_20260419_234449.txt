@@ -1,0 +1,17 @@
+Generated the contract artifacts for `array_negate`.
+
+Created [input/array_negate.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_negate.c) with:
+
+- `IntArray::full` ownership for `a` and `out`
+- `n >= 0` and list length constraints
+- an overflow guard for `-a[i]`, excluding `INT_MIN`
+- postcondition stating each output element is `-la[i]`
+- no `Inv`, `Assert`, bridge assertions, or verify-stage annotations
+
+Created the required logs:
+
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260419_234449_array_negate/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260419_234449_array_negate/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260419_234449_array_negate/logs/metrics.md)
+
+No `input/array_negate.v` was created because the spec does not need task-specific Coq definitions. I also checked that `input/array_negate.c` contains no verify-stage annotations.

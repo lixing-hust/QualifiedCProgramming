@@ -1,0 +1,13 @@
+Verification succeeded for `binary_search` in the requested workspace.
+
+Changed:
+- [annotated/verify_20260420_231624_binary_search.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_231624_binary_search.c): added loop invariant and bridge assertions for midpoint bounds, excluded search regions, failed equality, and right-branch strictness.
+- [binary_search_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_231624_binary_search/coq/generated/binary_search_proof_manual.v): completed all manual proofs with local quotient-bound and sorted-array monotonicity lemmas.
+- Updated workspace logs: fingerprint, annotation reasoning, proof reasoning, issues, and metrics.
+
+Verified:
+- `symexec` completed successfully on the latest annotated C.
+- `binary_search_goal.v`, `binary_search_proof_auto.v`, `binary_search_proof_manual.v`, and `binary_search_goal_check.v` all compiled successfully.
+- `binary_search_proof_manual.v` has no `Admitted.` and no top-level `Axiom`.
+- Non-`.v` Coq intermediate files under the workspace `coq/` directory were cleaned.
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_231624_binary_search/logs/metrics.md) ends with `Final Result: Success`.

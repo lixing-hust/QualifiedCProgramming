@@ -1,0 +1,11 @@
+Completed the contract workflow for `string_has_double_char`.
+
+Created [input/string_has_double_char.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_has_double_char.c) with a full read-only string contract. I used a direct first-order postcondition over adjacent list elements, so [input/string_has_double_char.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/string_has_double_char.v) was not created.
+
+Also wrote the required logs:
+
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_161238_string_has_double_char/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_161238_string_has_double_char/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260420_161238_string_has_double_char/logs/metrics.md)
+
+Notable contract decision: the raw implementation reads `s[1]` before checking for an empty string, so the generated C uses a verification-friendly scan that handles empty and one-character valid C strings safely while preserving the intended adjacent-character semantics. I also checked that no `Inv`, `Assert`, or `which implies` verify-stage annotations were introduced.

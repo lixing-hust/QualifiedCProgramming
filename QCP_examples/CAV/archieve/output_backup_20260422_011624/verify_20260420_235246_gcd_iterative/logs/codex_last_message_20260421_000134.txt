@@ -1,0 +1,17 @@
+Verification did not succeed in this retry. I resumed the existing workspace, inspected the current logs/generated Coq/current annotated file, confirmed the fingerprint was already populated, and reran `symexec` against [verify_20260420_235246_gcd_iterative.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_235246_gcd_iterative.c:1).
+
+The blocker is unchanged:
+
+```text
+fatal error: Old value at `pre' is not determined in .../annotated/verify_20260420_235246_gcd_iterative.c:15:1
+```
+
+The remaining `@pre` use is in the fixed `Ensure` clause at [line 13](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_235246_gcd_iterative.c:13), while the function mutates `a` and `b` at [line 34](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_235246_gcd_iterative.c:34) and [line 35](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_235246_gcd_iterative.c:35). Under the verify workflow’s write boundary, the remaining plausible repairs would require changing the contract or executable C shape, so I did not make that change.
+
+Updated workspace evidence:
+
+- [qcp_run.log](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/qcp_run.log:1) records the fresh `2026-04-21T00:03:01+08:00` failed run.
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/issues.md:75) now documents this retry and blocker.
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_235246_gcd_iterative/logs/metrics.md:87) now ends with `Final Result: Fail`.
+
+Final checks: generated Coq files are still zero bytes because VC generation aborted; `proof_manual.v` has no `Admitted.` or `Axiom`; no non-`.v` Coq intermediates remain; fingerprint JSON validates with `python3`.

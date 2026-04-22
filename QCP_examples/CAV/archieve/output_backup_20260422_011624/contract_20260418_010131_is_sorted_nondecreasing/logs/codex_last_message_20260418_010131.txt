@@ -1,0 +1,5 @@
+The contract workflow is complete.
+
+I wrote the reasoning and log files in [output/contract_20260418_010131_is_sorted_nondecreasing/logs/reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_010131_is_sorted_nondecreasing/logs/reasoning.md), [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_010131_is_sorted_nondecreasing/logs/issues.md), and [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260418_010131_is_sorted_nondecreasing/logs/metrics.md). The generated contract C file is [input/is_sorted_nondecreasing.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/is_sorted_nondecreasing.c).
+
+I did not create `input/is_sorted_nondecreasing.v`. The spec is expressed directly in C using `IntArray::full` plus quantified adjacent-order conditions: return `1` iff every adjacent pair is nondecreasing, otherwise return `0` with an inversion witness, while preserving the input array logically unchanged. I did not run the verify stage.

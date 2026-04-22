@@ -1,0 +1,14 @@
+Verification succeeded for `remove_duplicates_sorted`.
+
+Updated the active annotated file with the loop invariant:
+[verify_20260421_140942_remove_duplicates_sorted.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260421_140942_remove_duplicates_sorted.c)
+
+Completed the manual Coq proof with no `Admitted.` and no local `Axiom`:
+[remove_duplicates_sorted_proof_manual.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_140942_remove_duplicates_sorted/coq/generated/remove_duplicates_sorted_proof_manual.v)
+
+Validation completed:
+- `symexec` succeeded and generated fresh Coq files.
+- Full Coq compile succeeded for `original`, `goal`, `proof_auto`, `proof_manual`, and `goal_check`.
+- `goal_check.v` compiled successfully.
+- Non-`.v` Coq intermediate files under the workspace were cleaned.
+- Logs and fingerprint were updated, with `Final Result: Success` in [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260421_140942_remove_duplicates_sorted/logs/metrics.md).

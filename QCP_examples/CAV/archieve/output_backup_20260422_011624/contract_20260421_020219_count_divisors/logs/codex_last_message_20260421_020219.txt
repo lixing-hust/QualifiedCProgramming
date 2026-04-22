@@ -1,0 +1,12 @@
+Completed the contract workflow for `count_divisors`.
+
+Created:
+- [count_divisors.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/count_divisors.c)
+- [count_divisors.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/count_divisors.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_020219_count_divisors/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_020219_count_divisors/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260421_020219_count_divisors/logs/metrics.md)
+
+Key contract choice: kept the original function interface and added `1 <= n && n < INT_MAX` to cover both the problem domain and the final `d++` loop update. The exact divisor-count semantics are in `count_divisors_spec`.
+
+Validation: `coqc input/count_divisors.v` passed, and the generated C contains no `Inv`, `Assert`, or verify-stage bridge annotations.

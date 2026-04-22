@@ -1,0 +1,15 @@
+Completed the contract workflow for `array_longest_nonnegative_run`.
+
+Created:
+- [array_longest_nonnegative_run.c](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_longest_nonnegative_run.c)
+- [array_longest_nonnegative_run.v](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_longest_nonnegative_run.v)
+- [reasoning.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260422_005943_array_longest_nonnegative_run/logs/reasoning.md)
+- [issues.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260422_005943_array_longest_nonnegative_run/logs/issues.md)
+- [metrics.md](/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/contract_20260422_005943_array_longest_nonnegative_run/logs/metrics.md)
+
+The C contract preserves the raw implementation and specifies the result via `array_longest_nonnegative_run_spec(l)`, with `IntArray::full(a, n, l)` preserved because the function only reads the array. The `.v` file contains only the task-local list specification.
+
+Verification checks performed:
+- Confirmed the C file contains no `Inv`, `Assert`, bridge assertion, or loop-exit assertion.
+- Ran `coqc -q -output-directory <tmp> input/array_longest_nonnegative_run.v`; it passed.
+- `metrics.md` records `Experience updates: none`.

@@ -1,0 +1,38 @@
+{
+  "fingerprint_version": 2,
+  "workspace": "verify_20260420_182127_array_pairwise_sum",
+  "stage": "verify",
+  "input_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/input/array_pairwise_sum.c",
+  "input_v": "",
+  "original_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/output/verify_20260420_182127_array_pairwise_sum/original/array_pairwise_sum.c",
+  "original_v": "",
+  "annotated_c": "/home/yangfp/QualifiedCProgramming/QCP_examples/CAV/annotated/verify_20260420_182127_array_pairwise_sum.c",
+  "function_name": "array_pairwise_sum",
+  "program_sha256": "3904dd538e93407e1b9b9139d84b02b2a4b4ca302bc6e5633b9f7afbcb78e07c",
+  "semantic_description": "array_pairwise_sum iterates from 0 to n-1 over three length-n integer arrays, reads a[i] and b[i], and writes out[i] = a[i] + b[i]. The input arrays a and b are preserved, out is updated in place to contain the pairwise sums, the loop may be empty when n is 0, and the contract supplies an overflow guard for every elementwise sum.",
+  "keywords": {
+    "algorithm_family": "accumulation",
+    "control_flow": "for_loop",
+    "data_shape": "array",
+    "semantic_intent": [
+      "in_place_update",
+      "preserve_input"
+    ],
+    "proof_pattern": [
+      "loop_invariant",
+      "heap_reasoning",
+      "range_bound"
+    ],
+    "numeric_properties": [
+      "overflow_guard",
+      "int_range"
+    ],
+    "edge_case_behavior": "empty_loop_possible",
+    "verification_status": [
+      "goal_check_passed",
+      "proof_check_passed"
+    ]
+  },
+  "assume_contract_is_correct": true,
+  "contract_source": "contract_input_c"
+}
