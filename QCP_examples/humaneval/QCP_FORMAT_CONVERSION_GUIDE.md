@@ -295,6 +295,25 @@ for (...) { write output }
 
 只有在用户明确允许重构，或 QCP 前端确实不支持某种 C 结构时，才做结构调整，并且要说明原因。
 
+循环变量声明要使用现有样例里的保守写法，先在循环外声明，再在 `for` 中赋值：
+
+```c
+int i;
+for (i = 0; i < numbers_size; i++) {
+    ...
+}
+```
+
+避免保留 C99 风格的循环内声明：
+
+```c
+for (int i = 0; i < numbers_size; i++) {
+    ...
+}
+```
+
+这类写法在普通 C 编译器里没问题，但可能不适配 QCP 前端或现有 annotation 风格。格式转换阶段遇到 `for (int i = ...)` 时，应顺手把 `int i;` 提到循环前。
+
 ## 11. 注释风格
 
 优先短注释：
@@ -336,8 +355,17 @@ for (...) { write output }
 
 ```bash
 eval "$(opam env --switch=coq8201 --set-switch)"
-coqc ... coins_XX.v
+cd QCP_examples/humaneval/IntArrayClaude
+COQINCLUDES="$(tr '\n' ' ' < ../IntClaude/_CoqProject)"
+coqc $COQINCLUDES coins_XX.v
 ```
+
+注意：
+
+- 不要在仓库根目录直接执行 `coqc QCP_examples/humaneval/IntArrayClaude/coins_XX.v`。很多 bridge 文件使用 `Load "../spec/XX".`，`Load` 的相对路径会按当前工作目录解析，从仓库根目录运行会找不到 `../spec/XX.v`。
+- `IntArrayClaude` 目录本身没有 `_CoqProject`。直接在该目录执行 `coqc coins_XX.v` 又会缺少 `AUXLib`、`SimpleC.SL` 等逻辑路径映射，报类似 `Cannot find a physical path bound to logical path ListLib with prefix AUXLib`。
+- 因此验证 `coins_XX.v` 时，推荐在 `IntArrayClaude` 目录下复用 `../IntClaude/_CoqProject` 生成 `COQINCLUDES`。
+- `coqc` 成功后可能生成 `coins_XX.vo`、`coins_XX.glob`、`coins_XX.vos`、`coins_XX.vok`。这些是本地构建产物，格式转换提交里不要保留。
 
 如果尝试运行 `symexec`，它可能因为缺少 loop invariant 而停在循环处；这不代表格式转换失败。完整 `symexec` 通过应属于后续验证阶段目标。
 
@@ -352,4 +380,3 @@ coqc ... coins_XX.v
 - `numbers0/numbers_size0/a0/n0/x0` 这类 ghost snapshot 可读性差；参数不修改时直接用参数名。
 - `Zlength(input_l) == numbers_size` 通常可以不写，数组谓词已经承载长度关系。
 - 真正的循环语义如 `remove_duplicates_first_loop`、`remove_duplicates_second_loop` 应放在验证阶段的 invariant 中，而不是格式转换阶段默认生成。
-
