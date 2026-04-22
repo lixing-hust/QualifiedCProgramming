@@ -31,34 +31,94 @@ Constraints:
     * 1 <= nodes.length <= 10000
     * 0 <= node.value
 */
-#include<stdio.h>
-#include<stdlib.h>
+#include "verification_stdlib.h"
+#include "verification_list.h"
+#include "int_array_def.h"
+
+/*@ Extern Coq (problem_68_pre_z: list Z -> Prop)
+               (problem_68_spec_z: list Z -> list Z -> Prop)
+               (list_nonnegative: list Z -> Prop)
+               (pluck_loop_state: list Z -> Z -> list Z -> Prop) */
+/*@ Import Coq Require Import coins_68 */
 
 typedef struct {
     int* data;
     int size;
 } IntArray;
 
-IntArray pluck(const int* arr, int arr_size){
-    IntArray out;
-    out.data = NULL;
-    out.size = 0;
+IntArray *malloc_int_array_struct()
+/*@ Require emp
+    Ensure __return != 0 &&
+           undef_data_at(&(__return -> data)) *
+           undef_data_at(&(__return -> size))
+*/;
 
-    for (int i=0;i<arr_size;i++) {
-        if (arr[i]%2==0 && (out.size==0 || arr[i]<out.data[0])) {
-            if (out.size == 0) {
-                out.data = (int*)malloc(2 * sizeof(int));
-                if (out.data == NULL) {
-                    out.size = 0;
-                    return out;
-                }
-                out.size = 2;
-            }
-            out.data[0] = arr[i];
-            out.data[1] = i;
+int *malloc_int_array(int size)
+/*@ Require size >= 0 && size < INT_MAX
+    Ensure __return != 0 && IntArray::undef_full(__return, size)
+*/;
+
+IntArray *pluck(int *arr, int arr_size)
+/*@ With input_l
+    Require
+        0 <= arr_size && arr_size < INT_MAX &&
+        arr_size == Zlength(input_l) &&
+        problem_68_pre_z(input_l) &&
+        list_nonnegative(input_l) &&
+        IntArray::full(arr, arr_size, input_l)
+    Ensure
+        exists data output_l output_size,
+        __return != 0 &&
+        0 <= output_size && output_size <= 2 &&
+        (output_size == 0 || output_size == 2) &&
+        output_size == Zlength(output_l) &&
+        problem_68_spec_z(input_l, output_l) &&
+        data_at(&(__return -> data), data) *
+        data_at(&(__return -> size), output_size) *
+        IntArray::full(arr, arr_size, input_l) *
+        IntArray::seg(data, 0, output_size, output_l) *
+        IntArray::undef_seg(data, output_size, 2)
+*/
+{
+    IntArray *out = malloc_int_array_struct();
+    out->data = malloc_int_array(2);
+    out->size = 0;
+    int *data = out->data;
+    int i;
+
+    /*@ Inv Assert
+        exists output_l output_size,
+        arr == arr@pre &&
+        arr_size == arr_size@pre &&
+        out != 0 &&
+        data != 0 &&
+        0 <= arr_size && arr_size < INT_MAX &&
+        arr_size == Zlength(input_l) &&
+        0 <= i && i <= arr_size &&
+        0 <= output_size && output_size <= 2 &&
+        (output_size == 0 || output_size == 2) &&
+        output_size == Zlength(output_l) &&
+        list_nonnegative(input_l) &&
+        pluck_loop_state(input_l, i, output_l) &&
+        data_at(&(out -> data), data) *
+        IntArray::full(arr, arr_size, input_l) *
+        ((output_size == 0 &&
+          output_l == nil &&
+          data_at(&(out -> size), 0) *
+          IntArray::undef_full(data, 2)) ||
+         (exists value index,
+          output_size == 2 &&
+          output_l == cons(value, cons(index, nil)) &&
+          data_at(&(out -> size), 2) *
+          IntArray::full(data, 2, output_l)))
+    */
+    for (i = 0; i < arr_size; i++) {
+        if (arr[i] % 2 == 0 && (out->size == 0 || arr[i] < data[0])) {
+            data[0] = arr[i];
+            data[1] = i;
+            out->size = 2;
         }
     }
 
     return out;
 }
-

@@ -1340,6 +1340,209 @@ grep -nE "Admitted\.|Axiom[[:space:]]" coins_63.v C_63_proof_manual.v
 
 - `C_63_proof_auto.v` 是 symexec 生成文件，未手动补 proof；本次只检查并保证 `coins_63.v` 与 `C_63_proof_manual.v` 无 `Admitted.` / `Axiom`。
 
+## C_68 验证记录
+
+### 结论
+
+`C_68` 已完成完整验证。
+
+已通过的验收链：
+
+```bash
+eval "$(opam env --switch=coq8201 --set-switch)"
+cd QCP_examples/humaneval/IntArrayClaude
+COQINCLUDES="$(tr '\n' ' ' < ../IntClaude/_CoqProject)"
+coqc $COQINCLUDES coins_68.v
+coqc $COQINCLUDES C_68_goal.v
+coqc $COQINCLUDES C_68_proof_auto.v
+coqc $COQINCLUDES C_68_proof_manual.v
+coqc $COQINCLUDES C_68_goal_check.v
+```
+
+扫描结果：
+
+```bash
+grep -nE "Admitted\.|Axiom[[:space:]]" coins_68.v C_68_proof_manual.v
+```
+
+无输出。
+
+本题编译产物已清理，包括 `.aux`、`.glob`、`.vo`、`.vos`、`.vok` 和 `C_68_proof_manual_backup*.v`。
+
+### 文件变更
+
+- `C_68.c`
+  - 已转换为 QCP 可验证格式，使用 `verification_stdlib.h`、`verification_list.h`、`int_array_def.h`。
+  - 函数接口改为 `IntArray *pluck(int *arr, int arr_size)`，返回结构体和内部 `data` 数组均在函数内分配。
+  - 前置条件补充 `arr_size == Zlength(input_l)`，用于数组访问边界和最终 `sublist` 证明。
+  - 循环 invariant 使用 `pluck_loop_state(input_l, i, output_l)` 描述扫描前缀后的候选结果。
+  - 返回数组资源在 invariant 中拆成两种形状：
+    - `output_size == 0` 时：`data_at(size, 0) * IntArray::undef_full(data, 2)`。
+    - `output_size == 2` 时：`data_at(size, 2) * IntArray::full(data, 2, output_l)`。
+- `coins_68.v`
+  - 加载 `spec/68.v`，并保留 `problem_68_pre_z` 对原始 `problem_68_pre` 的桥接。
+  - 新增 `pluck_update`、`pluck_scan_from`、`pluck_prefix_result`，在 Z 层描述 pluck 的扫描语义。
+  - `problem_68_spec_z` 定义为输出等于完整扫描结果。
+  - `pluck_loop_state` 定义为输出等于扫描前缀 `[0, i)` 的结果。
+  - 新增 step/return 辅助引理：
+    - `pluck_prefix_result_0`
+    - `pluck_prefix_result_step`
+    - `replace_Znth_two`
+    - `pluck_loop_state_update_empty`
+    - `pluck_loop_state_update_less`
+    - `pluck_loop_state_skip_odd`
+    - `pluck_loop_state_skip_ge`
+    - `pluck_loop_state_full_spec`
+- `C_68_proof_manual.v`
+  - 完成 8 个 manual VC：
+    - 循环初始化 `entail_wit_1`
+    - 5 个循环分支推进 `entail_wit_2_1` 到 `entail_wit_2_5`
+    - 2 个 return 分支 `return_wit_1` / `return_wit_2`
+  - 更新写入两个元素的分支中，用 `IntArray.seg_single` 和 `IntArray.seg_merge_to_full` 把两个单点写资源合成为 `IntArray.full(data, 2, [value; index])`。
+
+### 遇到的问题
+
+1. `coins_68.v` 编译路径容易跑错。
+
+   表现：
+
+   - 在仓库根目录直接执行 `coqc QCP_examples/humaneval/IntArrayClaude/coins_68.v` 会报找不到 `../spec/68.v`。
+   - 在 `IntArrayClaude` 目录直接裸跑 `coqc coins_68.v` 会报找不到 `AUXLib` / `SimpleC.SL` 等逻辑路径。
+
+   处理：
+
+   ```bash
+   cd QCP_examples/humaneval/IntArrayClaude
+   COQINCLUDES="$(tr '\n' ' ' < ../IntClaude/_CoqProject)"
+   coqc $COQINCLUDES coins_68.v
+   ```
+
+   这个经验已同步写入 `QCP_examples/humaneval/SKILL.md` 和 `QCP_FORMAT_CONVERSION_GUIDE.md`。
+
+2. `symexec` include path 一开始不完整。
+
+   表现：
+
+   ```text
+   No such file int_array_def.h in search path
+   ```
+
+   处理：`symexec` 命令必须加：
+
+   ```bash
+   -IQCP_examples/LLM_friendly_cases
+   ```
+
+   因为 `verification_stdlib.h` 和 `int_array_def.h` 实际位于 `QCP_examples/LLM_friendly_cases/`。
+
+3. `symexec` 生成的 Coq import 路径一开始写错。
+
+   表现：使用 `--coq-logic-path=SimpleC.EE.humaneval.IntArrayClaude` 生成后，编译 `C_68_proof_auto.v` 报：
+
+   ```text
+   Cannot find a physical path bound to logical path
+   C_68_goal with prefix SimpleC.EE.humaneval.IntArrayClaude
+   ```
+
+   处理：`IntArrayClaude` 与现有 `_CoqProject` 兼容的生成方式是：
+
+   ```bash
+   --coq-logic-path=SimpleC.EE
+   -slp QCP_examples/humaneval/IntArrayClaude SimpleC.EE
+   ```
+
+   这样生成文件使用 `From SimpleC.EE Require Import C_68_goal.`。
+
+4. 初始格式转换后的 `for` 循环缺少 invariant。
+
+   表现：
+
+   ```text
+   Error: Lack of assertions in some paths for the loop!
+   ```
+
+   处理：补充完整 `Inv Assert`，同时包含：
+
+   - 输入数组资源 `IntArray::full(arr, arr_size, input_l)`。
+   - 循环下标边界 `0 <= i && i <= arr_size`。
+   - 输出结果形状 `output_size == 0 || output_size == 2`。
+   - 语义状态 `pluck_loop_state(input_l, i, output_l)`。
+   - 返回结构体字段和内部数组资源。
+
+5. 返回数组如果只写成 `seg(data, 0, output_size, output_l) * undef_seg(data, output_size, 2)`，在更新两个固定位置时不够好用。
+
+   表现：`symexec` 在写 `data[0] = arr[i]` / `data[1] = i` 分支处出现 `Assign Exec fail`。
+
+   处理：在 invariant 中按 `output_size` 拆资源：
+
+   - 空结果时保留 `IntArray::undef_full(data, 2)`。
+   - 非空结果时保留 `IntArray::full(data, 2, output_l)`。
+
+   这样工具能直接处理固定下标写入和后续读取 `data[0]`。
+
+6. `pluck` 的原始 spec 是 `list nat -> option (nat * nat)`，直接拿来做循环 step 会让证明很笨重。
+
+   处理：在 `coins_68.v` 中建立 Z 层扫描函数：
+
+   ```coq
+   pluck_update
+   pluck_scan_from
+   pluck_prefix_result
+   ```
+
+   C 层规格和循环状态只证明“输出等于扫描结果”，循环推进用 `pluck_loop_state_update_*` 和 `pluck_loop_state_skip_*` 引理处理。
+
+7. `replace_Znth` 双写结果需要单独化简。
+
+   表现：更新已有最优结果时，内存内容是：
+
+   ```coq
+   replace_Znth 1 i (replace_Znth 0 (Znth i input_l 0) output_l_2)
+   ```
+
+   但循环 invariant 期望 `[Znth i input_l 0; i]`。
+
+   处理：在 `coins_68.v` 中补充：
+
+   ```coq
+   replace_Znth_two
+   ```
+
+   用 `output_size_2 == Zlength output_l_2` 和 `output_size_2 == 2` 化简两次更新后的列表。
+
+8. manual 证明中选择析取分支不能直接依赖 `Left` / `Right`。
+
+   表现：某些目标经过 `pre_process` 后是 separation logic 层面的 `||`，直接 `Right. Left.` 报找不到普通 Coq 析取。
+
+   处理：使用已有证明风格：
+
+   ```coq
+   rewrite <- derivable1_orp_intros1.
+   rewrite <- derivable1_orp_intros2.
+   ```
+
+   逐层选择目标分支。
+
+9. return 分支需要把数组资源整理成后置条件形状。
+
+   处理：
+
+   - 空结果分支：`IntArray.undef_full_to_undef_seg` + `IntArray.seg_empty`。
+   - 长度为 2 的结果分支：`IntArray.full_to_seg` + `IntArray.undef_seg_empty`。
+
+### 后续注意
+
+- 对“返回数组容量固定但逻辑长度可能为 0 或 2”的题，循环 invariant 可以优先按长度拆资源，而不是统一使用 `seg + undef_seg`。
+- 对固定位置连续写 `data[0]`、`data[1]`，manual 中常用：
+
+  ```coq
+  sep_apply (IntArray.seg_single data 1 v1).
+  sep_apply (IntArray.seg_single data 0 v0).
+  sep_apply (IntArray.seg_merge_to_full data 0 1 2 (v0 :: nil) (v1 :: nil)); [ | lia].
+  ```
+
+- 对 `nat`/`option` 规格，不一定要在 C invariant 中直接暴露原始 spec；可以在 `coins_XX.v` 中建立 C 侧 Z 层函数，再用小引理连接循环 step 和最终规格。
+
 ## 后续记录模板
 
 复制下面模板记录下一题。
