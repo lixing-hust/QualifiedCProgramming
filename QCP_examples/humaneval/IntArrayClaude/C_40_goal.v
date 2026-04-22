@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -15,766 +15,512 @@ Local Open Scope sets.
 Local Open Scope string.
 Local Open Scope list.
 Import naive_C_Rules.
+Require Import coins_40.
 Local Open Scope sac.
-From SimpleC.EE Require Import common_strategy_goal.
-From SimpleC.EE Require Import common_strategy_proof.
-From SimpleC.EE Require Import int_array_strategy_goal.
-From SimpleC.EE Require Import int_array_strategy_proof.
-From SimpleC.EE Require Import uint_array_strategy_goal.
-From SimpleC.EE Require Import uint_array_strategy_proof.
-From SimpleC.EE Require Import undef_uint_array_strategy_goal.
-From SimpleC.EE Require Import undef_uint_array_strategy_proof.
-From SimpleC.EE Require Import array_shape_strategy_goal.
-From SimpleC.EE Require Import array_shape_strategy_proof.
+Require Import int_array_strategy_goal.
+Require Import int_array_strategy_proof.
+Require Import uint_array_strategy_goal.
+Require Import uint_array_strategy_proof.
+Require Import undef_uint_array_strategy_goal.
+Require Import undef_uint_array_strategy_proof.
+Require Import array_shape_strategy_goal.
+Require Import array_shape_strategy_proof.
 
 (*----- Function triples_sum_to_zero -----*)
 
 Definition triples_sum_to_zero_safety_wit_1 := 
-forall (l_size_pre: Z) (l_pre: Z) (lv: (@list Z)) ,
+forall (l_size_pre: Z) (l_pre: Z) (input_l: (@list Z)) ,
   [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
+  &&  [| (l_size_pre < INT_MAX) |] 
+  &&  [| (problem_40_pre input_l ) |] 
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |]
   &&  ((( &( "k" ) )) # Int  |->_)
   **  ((( &( "j" ) )) # Int  |->_)
   **  ((( &( "i" ) )) # Int  |->_)
   **  ((( &( "l_size" ) )) # Int  |-> l_size_pre)
   **  ((( &( "l" ) )) # Ptr  |-> l_pre)
-  **  (IntArray.full l_pre l_size_pre lv )
+  **  (IntArray.full l_pre l_size_pre input_l )
 |--
   [| (0 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 0) |]
 .
 
 Definition triples_sum_to_zero_safety_wit_2 := 
-forall (l_size_pre: Z) (lv: (@list Z)) (l: Z) (i: Z) ,
+forall (l_size_pre: Z) (l_pre: Z) (input_l: (@list Z)) (i: Z) ,
   [| (i < l_size_pre) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= l_size_pre) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , ((((((0 <= p) /\ (p < i)) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
-  &&  ((( &( "i" ) )) # Int  |-> i)
-  **  ((( &( "l" ) )) # Ptr  |-> l)
-  **  (IntArray.full l l_size_pre lv )
-  **  ((( &( "k" ) )) # Int  |->_)
-  **  ((( &( "j" ) )) # Int  |->_)
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_i input_l l_size_pre i ) |]
+  &&  ((( &( "l" ) )) # Ptr  |-> l_pre)
   **  ((( &( "l_size" ) )) # Int  |-> l_size_pre)
+  **  ((( &( "i" ) )) # Int  |-> i)
+  **  ((( &( "j" ) )) # Int  |->_)
+  **  ((( &( "k" ) )) # Int  |->_)
+  **  (IntArray.full l_pre l_size_pre input_l )
 |--
   [| ((i + 1 ) <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= (i + 1 )) |]
 .
 
 Definition triples_sum_to_zero_safety_wit_3 := 
-forall (l_size_pre: Z) (lv: (@list Z)) (l: Z) (i: Z) ,
+forall (l_size_pre: Z) (l_pre: Z) (input_l: (@list Z)) (i: Z) ,
   [| (i < l_size_pre) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= l_size_pre) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , ((((((0 <= p) /\ (p < i)) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
-  &&  ((( &( "i" ) )) # Int  |-> i)
-  **  ((( &( "l" ) )) # Ptr  |-> l)
-  **  (IntArray.full l l_size_pre lv )
-  **  ((( &( "k" ) )) # Int  |->_)
-  **  ((( &( "j" ) )) # Int  |->_)
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_i input_l l_size_pre i ) |]
+  &&  ((( &( "l" ) )) # Ptr  |-> l_pre)
   **  ((( &( "l_size" ) )) # Int  |-> l_size_pre)
+  **  ((( &( "i" ) )) # Int  |-> i)
+  **  ((( &( "j" ) )) # Int  |->_)
+  **  ((( &( "k" ) )) # Int  |->_)
+  **  (IntArray.full l_pre l_size_pre input_l )
 |--
   [| (1 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 1) |]
 .
 
 Definition triples_sum_to_zero_safety_wit_4 := 
-forall (l_size_pre: Z) (lv: (@list Z)) (i: Z) (l: Z) (j: Z) (i_2: Z) ,
+forall (l_size_pre: Z) (l_pre: Z) (input_l: (@list Z)) (j: Z) (i: Z) ,
   [| (j < l_size_pre) |] 
-  &&  [| (0 <= i_2) |] 
-  &&  [| (i_2 < l_size_pre) |] 
-  &&  [| ((i_2 + 1 ) <= j) |] 
-  &&  [| (j <= l_size_pre) |] 
-  &&  [| forall (q_2: Z) , forall (r_2: Z) , ((((((i_2 + 1 ) <= q_2) /\ (q_2 < j)) /\ (q_2 < r_2)) /\ (r_2 < l_size_pre)) -> ((((Znth (i_2) (lv) (0)) + (Znth (q_2) (lv) (0)) ) + (Znth (r_2) (lv) (0)) ) <> 0)) |] 
-  &&  [| (i < l_size_pre) |] 
   &&  [| (0 <= i) |] 
-  &&  [| (i <= l_size_pre) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , ((((((0 <= p) /\ (p < i)) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
-  &&  ((( &( "i" ) )) # Int  |-> i_2)
-  **  ((( &( "j" ) )) # Int  |-> j)
-  **  ((( &( "l" ) )) # Ptr  |-> l)
-  **  (IntArray.full l l_size_pre lv )
-  **  ((( &( "k" ) )) # Int  |->_)
+  &&  [| (i < l_size_pre) |] 
+  &&  [| ((i + 1 ) <= j) |] 
+  &&  [| (j <= l_size_pre) |] 
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_j input_l l_size_pre i j ) |]
+  &&  ((( &( "l" ) )) # Ptr  |-> l_pre)
   **  ((( &( "l_size" ) )) # Int  |-> l_size_pre)
+  **  ((( &( "i" ) )) # Int  |-> i)
+  **  ((( &( "j" ) )) # Int  |-> j)
+  **  ((( &( "k" ) )) # Int  |->_)
+  **  (IntArray.full l_pre l_size_pre input_l )
 |--
   [| ((j + 1 ) <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= (j + 1 )) |]
 .
 
 Definition triples_sum_to_zero_safety_wit_5 := 
-forall (l_size_pre: Z) (lv: (@list Z)) (i: Z) (l: Z) (j: Z) (i_2: Z) ,
+forall (l_size_pre: Z) (l_pre: Z) (input_l: (@list Z)) (j: Z) (i: Z) ,
   [| (j < l_size_pre) |] 
-  &&  [| (0 <= i_2) |] 
-  &&  [| (i_2 < l_size_pre) |] 
-  &&  [| ((i_2 + 1 ) <= j) |] 
-  &&  [| (j <= l_size_pre) |] 
-  &&  [| forall (q_2: Z) , forall (r_2: Z) , ((((((i_2 + 1 ) <= q_2) /\ (q_2 < j)) /\ (q_2 < r_2)) /\ (r_2 < l_size_pre)) -> ((((Znth (i_2) (lv) (0)) + (Znth (q_2) (lv) (0)) ) + (Znth (r_2) (lv) (0)) ) <> 0)) |] 
-  &&  [| (i < l_size_pre) |] 
   &&  [| (0 <= i) |] 
-  &&  [| (i <= l_size_pre) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , ((((((0 <= p) /\ (p < i)) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
-  &&  ((( &( "i" ) )) # Int  |-> i_2)
-  **  ((( &( "j" ) )) # Int  |-> j)
-  **  ((( &( "l" ) )) # Ptr  |-> l)
-  **  (IntArray.full l l_size_pre lv )
-  **  ((( &( "k" ) )) # Int  |->_)
+  &&  [| (i < l_size_pre) |] 
+  &&  [| ((i + 1 ) <= j) |] 
+  &&  [| (j <= l_size_pre) |] 
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_j input_l l_size_pre i j ) |]
+  &&  ((( &( "l" ) )) # Ptr  |-> l_pre)
   **  ((( &( "l_size" ) )) # Int  |-> l_size_pre)
+  **  ((( &( "i" ) )) # Int  |-> i)
+  **  ((( &( "j" ) )) # Int  |-> j)
+  **  ((( &( "k" ) )) # Int  |->_)
+  **  (IntArray.full l_pre l_size_pre input_l )
 |--
   [| (1 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 1) |]
 .
 
 Definition triples_sum_to_zero_safety_wit_6 := 
-forall (l_size_pre: Z) (lv: (@list Z)) (i_2: Z) (j_2: Z) (i_3: Z) (l: Z) (k: Z) (j: Z) (i: Z) ,
+forall (l_size_pre: Z) (l_pre: Z) (input_l: (@list Z)) (k: Z) (j: Z) (i: Z) ,
   [| (k < l_size_pre) |] 
   &&  [| (0 <= i) |] 
-  &&  [| (i < l_size_pre) |] 
-  &&  [| (0 <= j) |] 
+  &&  [| (i < j) |] 
   &&  [| (j < l_size_pre) |] 
   &&  [| ((j + 1 ) <= k) |] 
   &&  [| (k <= l_size_pre) |] 
-  &&  [| forall (r_3: Z) , ((((j + 1 ) <= r_3) /\ (r_3 < k)) -> ((((Znth (i) (lv) (0)) + (Znth (j) (lv) (0)) ) + (Znth (r_3) (lv) (0)) ) <> 0)) |] 
-  &&  [| (j_2 < l_size_pre) |] 
-  &&  [| (0 <= i_3) |] 
-  &&  [| (i_3 < l_size_pre) |] 
-  &&  [| ((i_3 + 1 ) <= j_2) |] 
-  &&  [| (j_2 <= l_size_pre) |] 
-  &&  [| forall (q_2: Z) , forall (r_2: Z) , ((((((i_3 + 1 ) <= q_2) /\ (q_2 < j_2)) /\ (q_2 < r_2)) /\ (r_2 < l_size_pre)) -> ((((Znth (i_3) (lv) (0)) + (Znth (q_2) (lv) (0)) ) + (Znth (r_2) (lv) (0)) ) <> 0)) |] 
-  &&  [| (i_2 < l_size_pre) |] 
-  &&  [| (0 <= i_2) |] 
-  &&  [| (i_2 <= l_size_pre) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , ((((((0 <= p) /\ (p < i_2)) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
-  &&  (IntArray.full l l_size_pre lv )
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_k input_l l_size_pre i j k ) |]
+  &&  (IntArray.full l_pre l_size_pre input_l )
+  **  ((( &( "l" ) )) # Ptr  |-> l_pre)
+  **  ((( &( "l_size" ) )) # Int  |-> l_size_pre)
   **  ((( &( "i" ) )) # Int  |-> i)
   **  ((( &( "j" ) )) # Int  |-> j)
   **  ((( &( "k" ) )) # Int  |-> k)
-  **  ((( &( "l" ) )) # Ptr  |-> l)
-  **  ((( &( "l_size" ) )) # Int  |-> l_size_pre)
 |--
-  [| ((((Znth i lv 0) + (Znth j lv 0) ) + (Znth k lv 0) ) <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= (((Znth i lv 0) + (Znth j lv 0) ) + (Znth k lv 0) )) |]
+  [| ((((Znth i input_l 0) + (Znth j input_l 0) ) + (Znth k input_l 0) ) <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= (((Znth i input_l 0) + (Znth j input_l 0) ) + (Znth k input_l 0) )) |]
 .
 
 Definition triples_sum_to_zero_safety_wit_7 := 
-forall (l_size_pre: Z) (lv: (@list Z)) (i_2: Z) (j_2: Z) (i_3: Z) (l: Z) (k: Z) (j: Z) (i: Z) ,
+forall (l_size_pre: Z) (l_pre: Z) (input_l: (@list Z)) (k: Z) (j: Z) (i: Z) ,
   [| (k < l_size_pre) |] 
   &&  [| (0 <= i) |] 
-  &&  [| (i < l_size_pre) |] 
-  &&  [| (0 <= j) |] 
+  &&  [| (i < j) |] 
   &&  [| (j < l_size_pre) |] 
   &&  [| ((j + 1 ) <= k) |] 
   &&  [| (k <= l_size_pre) |] 
-  &&  [| forall (r_3: Z) , ((((j + 1 ) <= r_3) /\ (r_3 < k)) -> ((((Znth (i) (lv) (0)) + (Znth (j) (lv) (0)) ) + (Znth (r_3) (lv) (0)) ) <> 0)) |] 
-  &&  [| (j_2 < l_size_pre) |] 
-  &&  [| (0 <= i_3) |] 
-  &&  [| (i_3 < l_size_pre) |] 
-  &&  [| ((i_3 + 1 ) <= j_2) |] 
-  &&  [| (j_2 <= l_size_pre) |] 
-  &&  [| forall (q_2: Z) , forall (r_2: Z) , ((((((i_3 + 1 ) <= q_2) /\ (q_2 < j_2)) /\ (q_2 < r_2)) /\ (r_2 < l_size_pre)) -> ((((Znth (i_3) (lv) (0)) + (Znth (q_2) (lv) (0)) ) + (Znth (r_2) (lv) (0)) ) <> 0)) |] 
-  &&  [| (i_2 < l_size_pre) |] 
-  &&  [| (0 <= i_2) |] 
-  &&  [| (i_2 <= l_size_pre) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , ((((((0 <= p) /\ (p < i_2)) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
-  &&  (IntArray.full l l_size_pre lv )
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_k input_l l_size_pre i j k ) |]
+  &&  (IntArray.full l_pre l_size_pre input_l )
+  **  ((( &( "l" ) )) # Ptr  |-> l_pre)
+  **  ((( &( "l_size" ) )) # Int  |-> l_size_pre)
   **  ((( &( "i" ) )) # Int  |-> i)
   **  ((( &( "j" ) )) # Int  |-> j)
   **  ((( &( "k" ) )) # Int  |-> k)
-  **  ((( &( "l" ) )) # Ptr  |-> l)
-  **  ((( &( "l_size" ) )) # Int  |-> l_size_pre)
 |--
-  [| (((Znth i lv 0) + (Znth j lv 0) ) <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= ((Znth i lv 0) + (Znth j lv 0) )) |]
+  [| (((Znth i input_l 0) + (Znth j input_l 0) ) <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= ((Znth i input_l 0) + (Znth j input_l 0) )) |]
 .
 
 Definition triples_sum_to_zero_safety_wit_8 := 
-forall (l_size_pre: Z) (lv: (@list Z)) (i: Z) (j: Z) (i_2: Z) (l: Z) (k: Z) (j_2: Z) (i_3: Z) ,
+forall (l_size_pre: Z) (l_pre: Z) (input_l: (@list Z)) (k: Z) (j: Z) (i: Z) ,
   [| (k < l_size_pre) |] 
-  &&  [| (0 <= i_3) |] 
-  &&  [| (i_3 < l_size_pre) |] 
-  &&  [| (0 <= j_2) |] 
-  &&  [| (j_2 < l_size_pre) |] 
-  &&  [| ((j_2 + 1 ) <= k) |] 
-  &&  [| (k <= l_size_pre) |] 
-  &&  [| forall (r_3: Z) , ((((j_2 + 1 ) <= r_3) /\ (r_3 < k)) -> ((((Znth (i_3) (lv) (0)) + (Znth (j_2) (lv) (0)) ) + (Znth (r_3) (lv) (0)) ) <> 0)) |] 
-  &&  [| (j < l_size_pre) |] 
-  &&  [| (0 <= i_2) |] 
-  &&  [| (i_2 < l_size_pre) |] 
-  &&  [| ((i_2 + 1 ) <= j) |] 
-  &&  [| (j <= l_size_pre) |] 
-  &&  [| forall (q_2: Z) , forall (r_2: Z) , ((((((i_2 + 1 ) <= q_2) /\ (q_2 < j)) /\ (q_2 < r_2)) /\ (r_2 < l_size_pre)) -> ((((Znth (i_2) (lv) (0)) + (Znth (q_2) (lv) (0)) ) + (Znth (r_2) (lv) (0)) ) <> 0)) |] 
-  &&  [| (i < l_size_pre) |] 
   &&  [| (0 <= i) |] 
-  &&  [| (i <= l_size_pre) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , ((((((0 <= p) /\ (p < i)) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
-  &&  (IntArray.full l l_size_pre lv )
-  **  ((( &( "i" ) )) # Int  |-> i_3)
-  **  ((( &( "j" ) )) # Int  |-> j_2)
-  **  ((( &( "k" ) )) # Int  |-> k)
-  **  ((( &( "l" ) )) # Ptr  |-> l)
+  &&  [| (i < j) |] 
+  &&  [| (j < l_size_pre) |] 
+  &&  [| ((j + 1 ) <= k) |] 
+  &&  [| (k <= l_size_pre) |] 
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_k input_l l_size_pre i j k ) |]
+  &&  (IntArray.full l_pre l_size_pre input_l )
+  **  ((( &( "l" ) )) # Ptr  |-> l_pre)
   **  ((( &( "l_size" ) )) # Int  |-> l_size_pre)
+  **  ((( &( "i" ) )) # Int  |-> i)
+  **  ((( &( "j" ) )) # Int  |-> j)
+  **  ((( &( "k" ) )) # Int  |-> k)
 |--
   [| (0 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 0) |]
 .
 
 Definition triples_sum_to_zero_safety_wit_9 := 
-forall (l_size_pre: Z) (lv: (@list Z)) (i: Z) (j: Z) (i_2: Z) (l: Z) (k: Z) (j_2: Z) (i_3: Z) ,
-  [| ((((Znth i_3 lv 0) + (Znth j_2 lv 0) ) + (Znth k lv 0) ) = 0) |] 
+forall (l_size_pre: Z) (l_pre: Z) (input_l: (@list Z)) (k: Z) (j: Z) (i: Z) ,
+  [| ((((Znth i input_l 0) + (Znth j input_l 0) ) + (Znth k input_l 0) ) = 0) |] 
   &&  [| (k < l_size_pre) |] 
-  &&  [| (0 <= i_3) |] 
-  &&  [| (i_3 < l_size_pre) |] 
-  &&  [| (0 <= j_2) |] 
-  &&  [| (j_2 < l_size_pre) |] 
-  &&  [| ((j_2 + 1 ) <= k) |] 
-  &&  [| (k <= l_size_pre) |] 
-  &&  [| forall (r_3: Z) , ((((j_2 + 1 ) <= r_3) /\ (r_3 < k)) -> ((((Znth (i_3) (lv) (0)) + (Znth (j_2) (lv) (0)) ) + (Znth (r_3) (lv) (0)) ) <> 0)) |] 
-  &&  [| (j < l_size_pre) |] 
-  &&  [| (0 <= i_2) |] 
-  &&  [| (i_2 < l_size_pre) |] 
-  &&  [| ((i_2 + 1 ) <= j) |] 
-  &&  [| (j <= l_size_pre) |] 
-  &&  [| forall (q_2: Z) , forall (r_2: Z) , ((((((i_2 + 1 ) <= q_2) /\ (q_2 < j)) /\ (q_2 < r_2)) /\ (r_2 < l_size_pre)) -> ((((Znth (i_2) (lv) (0)) + (Znth (q_2) (lv) (0)) ) + (Znth (r_2) (lv) (0)) ) <> 0)) |] 
-  &&  [| (i < l_size_pre) |] 
   &&  [| (0 <= i) |] 
-  &&  [| (i <= l_size_pre) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , ((((((0 <= p) /\ (p < i)) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
-  &&  (IntArray.full l l_size_pre lv )
-  **  ((( &( "i" ) )) # Int  |-> i_3)
-  **  ((( &( "j" ) )) # Int  |-> j_2)
-  **  ((( &( "k" ) )) # Int  |-> k)
-  **  ((( &( "l" ) )) # Ptr  |-> l)
+  &&  [| (i < j) |] 
+  &&  [| (j < l_size_pre) |] 
+  &&  [| ((j + 1 ) <= k) |] 
+  &&  [| (k <= l_size_pre) |] 
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_k input_l l_size_pre i j k ) |]
+  &&  (IntArray.full l_pre l_size_pre input_l )
+  **  ((( &( "l" ) )) # Ptr  |-> l_pre)
   **  ((( &( "l_size" ) )) # Int  |-> l_size_pre)
+  **  ((( &( "i" ) )) # Int  |-> i)
+  **  ((( &( "j" ) )) # Int  |-> j)
+  **  ((( &( "k" ) )) # Int  |-> k)
 |--
   [| (1 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 1) |]
 .
 
 Definition triples_sum_to_zero_safety_wit_10 := 
-forall (l_size_pre: Z) (lv: (@list Z)) (i: Z) (j: Z) (i_2: Z) (l: Z) (k: Z) (j_2: Z) (i_3: Z) ,
-  [| ((((Znth i_3 lv 0) + (Znth j_2 lv 0) ) + (Znth k lv 0) ) <> 0) |] 
-  &&  [| (k < l_size_pre) |] 
-  &&  [| (0 <= i_3) |] 
-  &&  [| (i_3 < l_size_pre) |] 
-  &&  [| (0 <= j_2) |] 
-  &&  [| (j_2 < l_size_pre) |] 
-  &&  [| ((j_2 + 1 ) <= k) |] 
-  &&  [| (k <= l_size_pre) |] 
-  &&  [| forall (r_3: Z) , ((((j_2 + 1 ) <= r_3) /\ (r_3 < k)) -> ((((Znth (i_3) (lv) (0)) + (Znth (j_2) (lv) (0)) ) + (Znth (r_3) (lv) (0)) ) <> 0)) |] 
-  &&  [| (j < l_size_pre) |] 
-  &&  [| (0 <= i_2) |] 
-  &&  [| (i_2 < l_size_pre) |] 
-  &&  [| ((i_2 + 1 ) <= j) |] 
-  &&  [| (j <= l_size_pre) |] 
-  &&  [| forall (q_2: Z) , forall (r_2: Z) , ((((((i_2 + 1 ) <= q_2) /\ (q_2 < j)) /\ (q_2 < r_2)) /\ (r_2 < l_size_pre)) -> ((((Znth (i_2) (lv) (0)) + (Znth (q_2) (lv) (0)) ) + (Znth (r_2) (lv) (0)) ) <> 0)) |] 
-  &&  [| (i < l_size_pre) |] 
-  &&  [| (0 <= i) |] 
-  &&  [| (i <= l_size_pre) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , ((((((0 <= p) /\ (p < i)) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
-  &&  (IntArray.full l l_size_pre lv )
-  **  ((( &( "i" ) )) # Int  |-> i_3)
-  **  ((( &( "j" ) )) # Int  |-> j_2)
-  **  ((( &( "k" ) )) # Int  |-> k)
-  **  ((( &( "l" ) )) # Ptr  |-> l)
-  **  ((( &( "l_size" ) )) # Int  |-> l_size_pre)
-|--
-  [| ((k + 1 ) <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= (k + 1 )) |]
-.
-
-Definition triples_sum_to_zero_safety_wit_11 := 
-forall (l_size_pre: Z) (lv: (@list Z)) (i: Z) (j_2: Z) (i_2: Z) (l: Z) (k: Z) (j: Z) (i_3: Z) ,
+forall (l_size_pre: Z) (l_pre: Z) (input_l: (@list Z)) (k: Z) (j: Z) (i: Z) ,
   [| (k >= l_size_pre) |] 
-  &&  [| (0 <= i_3) |] 
-  &&  [| (i_3 < l_size_pre) |] 
-  &&  [| (0 <= j) |] 
+  &&  [| (0 <= i) |] 
+  &&  [| (i < j) |] 
   &&  [| (j < l_size_pre) |] 
   &&  [| ((j + 1 ) <= k) |] 
   &&  [| (k <= l_size_pre) |] 
-  &&  [| forall (r_3: Z) , ((((j + 1 ) <= r_3) /\ (r_3 < k)) -> ((((Znth (i_3) (lv) (0)) + (Znth (j) (lv) (0)) ) + (Znth (r_3) (lv) (0)) ) <> 0)) |] 
-  &&  [| (j_2 < l_size_pre) |] 
-  &&  [| (0 <= i_2) |] 
-  &&  [| (i_2 < l_size_pre) |] 
-  &&  [| ((i_2 + 1 ) <= j_2) |] 
-  &&  [| (j_2 <= l_size_pre) |] 
-  &&  [| forall (q_2: Z) , forall (r_2: Z) , ((((((i_2 + 1 ) <= q_2) /\ (q_2 < j_2)) /\ (q_2 < r_2)) /\ (r_2 < l_size_pre)) -> ((((Znth (i_2) (lv) (0)) + (Znth (q_2) (lv) (0)) ) + (Znth (r_2) (lv) (0)) ) <> 0)) |] 
-  &&  [| (i < l_size_pre) |] 
-  &&  [| (0 <= i) |] 
-  &&  [| (i <= l_size_pre) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , ((((((0 <= p) /\ (p < i)) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
-  &&  ((( &( "i" ) )) # Int  |-> i_3)
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_k input_l l_size_pre i j k ) |]
+  &&  ((( &( "l" ) )) # Ptr  |-> l_pre)
+  **  ((( &( "l_size" ) )) # Int  |-> l_size_pre)
+  **  ((( &( "i" ) )) # Int  |-> i)
   **  ((( &( "j" ) )) # Int  |-> j)
   **  ((( &( "k" ) )) # Int  |-> k)
-  **  ((( &( "l" ) )) # Ptr  |-> l)
-  **  (IntArray.full l l_size_pre lv )
-  **  ((( &( "l_size" ) )) # Int  |-> l_size_pre)
+  **  (IntArray.full l_pre l_size_pre input_l )
 |--
   [| ((j + 1 ) <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= (j + 1 )) |]
 .
 
+Definition triples_sum_to_zero_safety_wit_11 := 
+forall (l_size_pre: Z) (l_pre: Z) (input_l: (@list Z)) (k: Z) (j: Z) (i: Z) ,
+  [| ((((Znth i input_l 0) + (Znth j input_l 0) ) + (Znth k input_l 0) ) <> 0) |] 
+  &&  [| (k < l_size_pre) |] 
+  &&  [| (0 <= i) |] 
+  &&  [| (i < j) |] 
+  &&  [| (j < l_size_pre) |] 
+  &&  [| ((j + 1 ) <= k) |] 
+  &&  [| (k <= l_size_pre) |] 
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_k input_l l_size_pre i j k ) |]
+  &&  (IntArray.full l_pre l_size_pre input_l )
+  **  ((( &( "l" ) )) # Ptr  |-> l_pre)
+  **  ((( &( "l_size" ) )) # Int  |-> l_size_pre)
+  **  ((( &( "i" ) )) # Int  |-> i)
+  **  ((( &( "j" ) )) # Int  |-> j)
+  **  ((( &( "k" ) )) # Int  |-> k)
+|--
+  [| ((k + 1 ) <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= (k + 1 )) |]
+.
+
 Definition triples_sum_to_zero_safety_wit_12 := 
-forall (l_size_pre: Z) (lv: (@list Z)) (i_2: Z) (l: Z) (j: Z) (i: Z) ,
+forall (l_size_pre: Z) (l_pre: Z) (input_l: (@list Z)) (j: Z) (i: Z) ,
   [| (j >= l_size_pre) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i < l_size_pre) |] 
   &&  [| ((i + 1 ) <= j) |] 
   &&  [| (j <= l_size_pre) |] 
-  &&  [| forall (q_2: Z) , forall (r_2: Z) , ((((((i + 1 ) <= q_2) /\ (q_2 < j)) /\ (q_2 < r_2)) /\ (r_2 < l_size_pre)) -> ((((Znth (i) (lv) (0)) + (Znth (q_2) (lv) (0)) ) + (Znth (r_2) (lv) (0)) ) <> 0)) |] 
-  &&  [| (i_2 < l_size_pre) |] 
-  &&  [| (0 <= i_2) |] 
-  &&  [| (i_2 <= l_size_pre) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , ((((((0 <= p) /\ (p < i_2)) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
-  &&  ((( &( "i" ) )) # Int  |-> i)
-  **  ((( &( "j" ) )) # Int  |-> j)
-  **  ((( &( "l" ) )) # Ptr  |-> l)
-  **  (IntArray.full l l_size_pre lv )
-  **  ((( &( "k" ) )) # Int  |->_)
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_j input_l l_size_pre i j ) |]
+  &&  ((( &( "l" ) )) # Ptr  |-> l_pre)
   **  ((( &( "l_size" ) )) # Int  |-> l_size_pre)
+  **  ((( &( "i" ) )) # Int  |-> i)
+  **  ((( &( "j" ) )) # Int  |-> j)
+  **  ((( &( "k" ) )) # Int  |->_)
+  **  (IntArray.full l_pre l_size_pre input_l )
 |--
   [| ((i + 1 ) <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= (i + 1 )) |]
 .
 
 Definition triples_sum_to_zero_safety_wit_13 := 
-forall (l_size_pre: Z) (lv: (@list Z)) (l: Z) (i: Z) ,
+forall (l_size_pre: Z) (l_pre: Z) (input_l: (@list Z)) (i: Z) ,
   [| (i >= l_size_pre) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= l_size_pre) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , ((((((0 <= p) /\ (p < i)) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
-  &&  ((( &( "i" ) )) # Int  |-> i)
-  **  ((( &( "l" ) )) # Ptr  |-> l)
-  **  (IntArray.full l l_size_pre lv )
-  **  ((( &( "k" ) )) # Int  |->_)
-  **  ((( &( "j" ) )) # Int  |->_)
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_i input_l l_size_pre i ) |]
+  &&  ((( &( "l" ) )) # Ptr  |-> l_pre)
   **  ((( &( "l_size" ) )) # Int  |-> l_size_pre)
+  **  ((( &( "i" ) )) # Int  |-> i)
+  **  ((( &( "j" ) )) # Int  |->_)
+  **  ((( &( "k" ) )) # Int  |->_)
+  **  (IntArray.full l_pre l_size_pre input_l )
 |--
   [| (0 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 0) |]
 .
 
 Definition triples_sum_to_zero_entail_wit_1 := 
-forall (l_size_pre: Z) (l_pre: Z) (lv: (@list Z)) ,
+forall (l_size_pre: Z) (l_pre: Z) (input_l: (@list Z)) ,
   [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
-  &&  (IntArray.full l_pre l_size_pre lv )
+  &&  [| (l_size_pre < INT_MAX) |] 
+  &&  [| (problem_40_pre input_l ) |] 
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |]
+  &&  (IntArray.full l_pre l_size_pre input_l )
 |--
   [| (0 <= 0) |] 
   &&  [| (0 <= l_size_pre) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , ((((((0 <= p) /\ (p < 0)) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
-  &&  (IntArray.full l_pre l_size_pre lv )
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_i input_l l_size_pre 0 ) |]
+  &&  (IntArray.full l_pre l_size_pre input_l )
 .
 
 Definition triples_sum_to_zero_entail_wit_2 := 
-forall (l_size_pre: Z) (lv: (@list Z)) (l: Z) (i: Z) ,
+forall (l_size_pre: Z) (l_pre: Z) (input_l: (@list Z)) (i: Z) ,
   [| (i < l_size_pre) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= l_size_pre) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , ((((((0 <= p) /\ (p < i)) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
-  &&  (IntArray.full l l_size_pre lv )
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_i input_l l_size_pre i ) |]
+  &&  (IntArray.full l_pre l_size_pre input_l )
 |--
   [| (0 <= i) |] 
   &&  [| (i < l_size_pre) |] 
   &&  [| ((i + 1 ) <= (i + 1 )) |] 
   &&  [| ((i + 1 ) <= l_size_pre) |] 
-  &&  [| forall (q_2: Z) , forall (r_2: Z) , ((((((i + 1 ) <= q_2) /\ (q_2 < (i + 1 ))) /\ (q_2 < r_2)) /\ (r_2 < l_size_pre)) -> ((((Znth (i) (lv) (0)) + (Znth (q_2) (lv) (0)) ) + (Znth (r_2) (lv) (0)) ) <> 0)) |] 
-  &&  [| (i < l_size_pre) |] 
-  &&  [| (0 <= i) |] 
-  &&  [| (i <= l_size_pre) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , ((((((0 <= p) /\ (p < i)) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
-  &&  (IntArray.full l l_size_pre lv )
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_j input_l l_size_pre i (i + 1 ) ) |]
+  &&  (IntArray.full l_pre l_size_pre input_l )
 .
 
 Definition triples_sum_to_zero_entail_wit_3 := 
-forall (l_size_pre: Z) (lv: (@list Z)) (i: Z) (l: Z) (j: Z) (i_2: Z) ,
+forall (l_size_pre: Z) (l_pre: Z) (input_l: (@list Z)) (j: Z) (i: Z) ,
   [| (j < l_size_pre) |] 
-  &&  [| (0 <= i_2) |] 
-  &&  [| (i_2 < l_size_pre) |] 
-  &&  [| ((i_2 + 1 ) <= j) |] 
-  &&  [| (j <= l_size_pre) |] 
-  &&  [| forall (q_2: Z) , forall (r_2: Z) , ((((((i_2 + 1 ) <= q_2) /\ (q_2 < j)) /\ (q_2 < r_2)) /\ (r_2 < l_size_pre)) -> ((((Znth (i_2) (lv) (0)) + (Znth (q_2) (lv) (0)) ) + (Znth (r_2) (lv) (0)) ) <> 0)) |] 
-  &&  [| (i < l_size_pre) |] 
   &&  [| (0 <= i) |] 
-  &&  [| (i <= l_size_pre) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , ((((((0 <= p) /\ (p < i)) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
-  &&  (IntArray.full l l_size_pre lv )
+  &&  [| (i < l_size_pre) |] 
+  &&  [| ((i + 1 ) <= j) |] 
+  &&  [| (j <= l_size_pre) |] 
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_j input_l l_size_pre i j ) |]
+  &&  (IntArray.full l_pre l_size_pre input_l )
 |--
-  [| (0 <= i_2) |] 
-  &&  [| (i_2 < l_size_pre) |] 
-  &&  [| (0 <= j) |] 
+  [| (0 <= i) |] 
+  &&  [| (i < j) |] 
   &&  [| (j < l_size_pre) |] 
   &&  [| ((j + 1 ) <= (j + 1 )) |] 
   &&  [| ((j + 1 ) <= l_size_pre) |] 
-  &&  [| forall (r_3: Z) , ((((j + 1 ) <= r_3) /\ (r_3 < (j + 1 ))) -> ((((Znth (i_2) (lv) (0)) + (Znth (j) (lv) (0)) ) + (Znth (r_3) (lv) (0)) ) <> 0)) |] 
-  &&  [| (j < l_size_pre) |] 
-  &&  [| (0 <= i_2) |] 
-  &&  [| (i_2 < l_size_pre) |] 
-  &&  [| ((i_2 + 1 ) <= j) |] 
-  &&  [| (j <= l_size_pre) |] 
-  &&  [| forall (q_2: Z) , forall (r_2: Z) , ((((((i_2 + 1 ) <= q_2) /\ (q_2 < j)) /\ (q_2 < r_2)) /\ (r_2 < l_size_pre)) -> ((((Znth (i_2) (lv) (0)) + (Znth (q_2) (lv) (0)) ) + (Znth (r_2) (lv) (0)) ) <> 0)) |] 
-  &&  [| (i < l_size_pre) |] 
-  &&  [| (0 <= i) |] 
-  &&  [| (i <= l_size_pre) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , ((((((0 <= p) /\ (p < i)) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
-  &&  (IntArray.full l l_size_pre lv )
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_k input_l l_size_pre i j (j + 1 ) ) |]
+  &&  (IntArray.full l_pre l_size_pre input_l )
 .
 
 Definition triples_sum_to_zero_entail_wit_4 := 
-forall (l_size_pre: Z) (lv: (@list Z)) (i: Z) (j: Z) (i_2: Z) (l: Z) (k: Z) (j_2: Z) (i_3: Z) ,
-  [| ((((Znth i_3 lv 0) + (Znth j_2 lv 0) ) + (Znth k lv 0) ) <> 0) |] 
-  &&  [| (k < l_size_pre) |] 
-  &&  [| (0 <= i_3) |] 
-  &&  [| (i_3 < l_size_pre) |] 
-  &&  [| (0 <= j_2) |] 
-  &&  [| (j_2 < l_size_pre) |] 
-  &&  [| ((j_2 + 1 ) <= k) |] 
-  &&  [| (k <= l_size_pre) |] 
-  &&  [| forall (r_3: Z) , ((((j_2 + 1 ) <= r_3) /\ (r_3 < k)) -> ((((Znth (i_3) (lv) (0)) + (Znth (j_2) (lv) (0)) ) + (Znth (r_3) (lv) (0)) ) <> 0)) |] 
-  &&  [| (j < l_size_pre) |] 
-  &&  [| (0 <= i_2) |] 
-  &&  [| (i_2 < l_size_pre) |] 
-  &&  [| ((i_2 + 1 ) <= j) |] 
-  &&  [| (j <= l_size_pre) |] 
-  &&  [| forall (q_2: Z) , forall (r_2: Z) , ((((((i_2 + 1 ) <= q_2) /\ (q_2 < j)) /\ (q_2 < r_2)) /\ (r_2 < l_size_pre)) -> ((((Znth (i_2) (lv) (0)) + (Znth (q_2) (lv) (0)) ) + (Znth (r_2) (lv) (0)) ) <> 0)) |] 
-  &&  [| (i < l_size_pre) |] 
-  &&  [| (0 <= i) |] 
-  &&  [| (i <= l_size_pre) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , ((((((0 <= p) /\ (p < i)) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
-  &&  (IntArray.full l l_size_pre lv )
-|--
-  [| (0 <= i_3) |] 
-  &&  [| (i_3 < l_size_pre) |] 
-  &&  [| (0 <= j_2) |] 
-  &&  [| (j_2 < l_size_pre) |] 
-  &&  [| ((j_2 + 1 ) <= (k + 1 )) |] 
-  &&  [| ((k + 1 ) <= l_size_pre) |] 
-  &&  [| forall (r_3: Z) , ((((j_2 + 1 ) <= r_3) /\ (r_3 < (k + 1 ))) -> ((((Znth (i_3) (lv) (0)) + (Znth (j_2) (lv) (0)) ) + (Znth (r_3) (lv) (0)) ) <> 0)) |] 
-  &&  [| (j < l_size_pre) |] 
-  &&  [| (0 <= i_2) |] 
-  &&  [| (i_2 < l_size_pre) |] 
-  &&  [| ((i_2 + 1 ) <= j) |] 
-  &&  [| (j <= l_size_pre) |] 
-  &&  [| forall (q_2: Z) , forall (r_2: Z) , ((((((i_2 + 1 ) <= q_2) /\ (q_2 < j)) /\ (q_2 < r_2)) /\ (r_2 < l_size_pre)) -> ((((Znth (i_2) (lv) (0)) + (Znth (q_2) (lv) (0)) ) + (Znth (r_2) (lv) (0)) ) <> 0)) |] 
-  &&  [| (i < l_size_pre) |] 
-  &&  [| (0 <= i) |] 
-  &&  [| (i <= l_size_pre) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , ((((((0 <= p) /\ (p < i)) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
-  &&  (IntArray.full l l_size_pre lv )
-.
-
-Definition triples_sum_to_zero_entail_wit_5 := 
-forall (l_size_pre: Z) (lv: (@list Z)) (i: Z) (j_2: Z) (i_3: Z) (l: Z) (k: Z) (j: Z) (i_2: Z) ,
+forall (l_size_pre: Z) (l_pre: Z) (input_l: (@list Z)) (k: Z) (j: Z) (i: Z) ,
   [| (k >= l_size_pre) |] 
-  &&  [| (0 <= i_2) |] 
-  &&  [| (i_2 < l_size_pre) |] 
-  &&  [| (0 <= j) |] 
+  &&  [| (0 <= i) |] 
+  &&  [| (i < j) |] 
   &&  [| (j < l_size_pre) |] 
   &&  [| ((j + 1 ) <= k) |] 
   &&  [| (k <= l_size_pre) |] 
-  &&  [| forall (r_3: Z) , ((((j + 1 ) <= r_3) /\ (r_3 < k)) -> ((((Znth (i_2) (lv) (0)) + (Znth (j) (lv) (0)) ) + (Znth (r_3) (lv) (0)) ) <> 0)) |] 
-  &&  [| (j_2 < l_size_pre) |] 
-  &&  [| (0 <= i_3) |] 
-  &&  [| (i_3 < l_size_pre) |] 
-  &&  [| ((i_3 + 1 ) <= j_2) |] 
-  &&  [| (j_2 <= l_size_pre) |] 
-  &&  [| forall (q_2: Z) , forall (r_2: Z) , ((((((i_3 + 1 ) <= q_2) /\ (q_2 < j_2)) /\ (q_2 < r_2)) /\ (r_2 < l_size_pre)) -> ((((Znth (i_3) (lv) (0)) + (Znth (q_2) (lv) (0)) ) + (Znth (r_2) (lv) (0)) ) <> 0)) |] 
-  &&  [| (i < l_size_pre) |] 
-  &&  [| (0 <= i) |] 
-  &&  [| (i <= l_size_pre) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , ((((((0 <= p) /\ (p < i)) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_k input_l l_size_pre i j k ) |]
   &&  ((( &( "k" ) )) # Int  |-> k)
-  **  (IntArray.full l l_size_pre lv )
+  **  (IntArray.full l_pre l_size_pre input_l )
 |--
-  [| (0 <= i_2) |] 
-  &&  [| (i_2 < l_size_pre) |] 
-  &&  [| ((i_2 + 1 ) <= (j + 1 )) |] 
-  &&  [| ((j + 1 ) <= l_size_pre) |] 
-  &&  [| forall (q_2: Z) , forall (r_2: Z) , ((((((i_2 + 1 ) <= q_2) /\ (q_2 < (j + 1 ))) /\ (q_2 < r_2)) /\ (r_2 < l_size_pre)) -> ((((Znth (i_2) (lv) (0)) + (Znth (q_2) (lv) (0)) ) + (Znth (r_2) (lv) (0)) ) <> 0)) |] 
+  [| (0 <= i) |] 
   &&  [| (i < l_size_pre) |] 
+  &&  [| ((i + 1 ) <= (j + 1 )) |] 
+  &&  [| ((j + 1 ) <= l_size_pre) |] 
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_j input_l l_size_pre i (j + 1 ) ) |]
+  &&  ((( &( "k" ) )) # Int  |->_)
+  **  (IntArray.full l_pre l_size_pre input_l )
+.
+
+Definition triples_sum_to_zero_entail_wit_5 := 
+forall (l_size_pre: Z) (l_pre: Z) (input_l: (@list Z)) (k: Z) (j: Z) (i: Z) ,
+  [| ((((Znth i input_l 0) + (Znth j input_l 0) ) + (Znth k input_l 0) ) <> 0) |] 
+  &&  [| (k < l_size_pre) |] 
   &&  [| (0 <= i) |] 
-  &&  [| (i <= l_size_pre) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , ((((((0 <= p) /\ (p < i)) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
-  &&  (IntArray.full l l_size_pre lv )
-  **  ((( &( "k" ) )) # Int  |->_)
+  &&  [| (i < j) |] 
+  &&  [| (j < l_size_pre) |] 
+  &&  [| ((j + 1 ) <= k) |] 
+  &&  [| (k <= l_size_pre) |] 
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_k input_l l_size_pre i j k ) |]
+  &&  (IntArray.full l_pre l_size_pre input_l )
+|--
+  [| (0 <= i) |] 
+  &&  [| (i < j) |] 
+  &&  [| (j < l_size_pre) |] 
+  &&  [| ((j + 1 ) <= (k + 1 )) |] 
+  &&  [| ((k + 1 ) <= l_size_pre) |] 
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_k input_l l_size_pre i j (k + 1 ) ) |]
+  &&  (IntArray.full l_pre l_size_pre input_l )
 .
 
 Definition triples_sum_to_zero_entail_wit_6 := 
-forall (l_size_pre: Z) (lv: (@list Z)) (i_2: Z) (l: Z) (j: Z) (i: Z) ,
+forall (l_size_pre: Z) (l_pre: Z) (input_l: (@list Z)) (j: Z) (i: Z) ,
   [| (j >= l_size_pre) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i < l_size_pre) |] 
   &&  [| ((i + 1 ) <= j) |] 
   &&  [| (j <= l_size_pre) |] 
-  &&  [| forall (q_2: Z) , forall (r_2: Z) , ((((((i + 1 ) <= q_2) /\ (q_2 < j)) /\ (q_2 < r_2)) /\ (r_2 < l_size_pre)) -> ((((Znth (i) (lv) (0)) + (Znth (q_2) (lv) (0)) ) + (Znth (r_2) (lv) (0)) ) <> 0)) |] 
-  &&  [| (i_2 < l_size_pre) |] 
-  &&  [| (0 <= i_2) |] 
-  &&  [| (i_2 <= l_size_pre) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , ((((((0 <= p) /\ (p < i_2)) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_j input_l l_size_pre i j ) |]
   &&  ((( &( "j" ) )) # Int  |-> j)
-  **  (IntArray.full l l_size_pre lv )
+  **  (IntArray.full l_pre l_size_pre input_l )
 |--
   [| (0 <= (i + 1 )) |] 
   &&  [| ((i + 1 ) <= l_size_pre) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , ((((((0 <= p) /\ (p < (i + 1 ))) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
-  &&  (IntArray.full l l_size_pre lv )
-  **  ((( &( "j" ) )) # Int  |->_)
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_i input_l l_size_pre (i + 1 ) ) |]
+  &&  ((( &( "j" ) )) # Int  |->_)
+  **  (IntArray.full l_pre l_size_pre input_l )
 .
 
 Definition triples_sum_to_zero_return_wit_1 := 
-forall (l_size_pre: Z) (l_pre: Z) (lv: (@list Z)) (i: Z) (j: Z) (i_2: Z) (l: Z) (k: Z) (j_2: Z) (i_3: Z) ,
-  [| ((((Znth i_3 lv 0) + (Znth j_2 lv 0) ) + (Znth k lv 0) ) = 0) |] 
-  &&  [| (k < l_size_pre) |] 
-  &&  [| (0 <= i_3) |] 
-  &&  [| (i_3 < l_size_pre) |] 
-  &&  [| (0 <= j_2) |] 
-  &&  [| (j_2 < l_size_pre) |] 
-  &&  [| ((j_2 + 1 ) <= k) |] 
-  &&  [| (k <= l_size_pre) |] 
-  &&  [| forall (r_5: Z) , ((((j_2 + 1 ) <= r_5) /\ (r_5 < k)) -> ((((Znth (i_3) (lv) (0)) + (Znth (j_2) (lv) (0)) ) + (Znth (r_5) (lv) (0)) ) <> 0)) |] 
-  &&  [| (j < l_size_pre) |] 
-  &&  [| (0 <= i_2) |] 
-  &&  [| (i_2 < l_size_pre) |] 
-  &&  [| ((i_2 + 1 ) <= j) |] 
-  &&  [| (j <= l_size_pre) |] 
-  &&  [| forall (q_4: Z) , forall (r_4: Z) , ((((((i_2 + 1 ) <= q_4) /\ (q_4 < j)) /\ (q_4 < r_4)) /\ (r_4 < l_size_pre)) -> ((((Znth (i_2) (lv) (0)) + (Znth (q_4) (lv) (0)) ) + (Znth (r_4) (lv) (0)) ) <> 0)) |] 
-  &&  [| (i < l_size_pre) |] 
-  &&  [| (0 <= i) |] 
-  &&  [| (i <= l_size_pre) |] 
-  &&  [| forall (p_3: Z) , forall (q_3: Z) , forall (r_3: Z) , ((((((0 <= p_3) /\ (p_3 < i)) /\ (p_3 < q_3)) /\ (q_3 < r_3)) /\ (r_3 < l_size_pre)) -> ((((Znth (p_3) (lv) (0)) + (Znth (q_3) (lv) (0)) ) + (Znth (r_3) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
-  &&  (IntArray.full l l_size_pre lv )
-|--
-  ([| (1 = 0) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , (((((0 <= p) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |]
-  &&  (IntArray.full l_pre l_size_pre lv ))
-  ||
-  (EX (r_2: Z)  (q_2: Z)  (p_2: Z) ,
-  [| (1 <> 0) |] 
-  &&  [| (0 <= p_2) |] 
-  &&  [| (p_2 < q_2) |] 
-  &&  [| (q_2 < r_2) |] 
-  &&  [| (r_2 < l_size_pre) |] 
-  &&  [| ((((Znth (p_2) (lv) (0)) + (Znth (q_2) (lv) (0)) ) + (Znth (r_2) (lv) (0)) ) = 0) |]
-  &&  (IntArray.full l_pre l_size_pre lv ))
-.
-
-Definition triples_sum_to_zero_return_wit_2 := 
-forall (l_size_pre: Z) (l_pre: Z) (lv: (@list Z)) (l: Z) (i: Z) ,
+forall (l_size_pre: Z) (l_pre: Z) (input_l: (@list Z)) (i: Z) ,
   [| (i >= l_size_pre) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= l_size_pre) |] 
-  &&  [| forall (p_3: Z) , forall (q_3: Z) , forall (r_3: Z) , ((((((0 <= p_3) /\ (p_3 < i)) /\ (p_3 < q_3)) /\ (q_3 < r_3)) /\ (r_3 < l_size_pre)) -> ((((Znth (p_3) (lv) (0)) + (Znth (q_3) (lv) (0)) ) + (Znth (r_3) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
-  &&  (IntArray.full l l_size_pre lv )
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_i input_l l_size_pre i ) |]
+  &&  (IntArray.full l_pre l_size_pre input_l )
 |--
   ([| (0 = 0) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , (((((0 <= p) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |]
-  &&  (IntArray.full l_pre l_size_pre lv ))
+  &&  [| (problem_40_spec input_l false ) |]
+  &&  (IntArray.full l_pre l_size_pre input_l ))
   ||
-  (EX (r_2: Z)  (q_2: Z)  (p_2: Z) ,
-  [| (0 <> 0) |] 
-  &&  [| (0 <= p_2) |] 
-  &&  [| (p_2 < q_2) |] 
-  &&  [| (q_2 < r_2) |] 
-  &&  [| (r_2 < l_size_pre) |] 
-  &&  [| ((((Znth (p_2) (lv) (0)) + (Znth (q_2) (lv) (0)) ) + (Znth (r_2) (lv) (0)) ) = 0) |]
-  &&  (IntArray.full l_pre l_size_pre lv ))
+  ([| (0 <> 0) |] 
+  &&  [| (problem_40_spec input_l true ) |]
+  &&  (IntArray.full l_pre l_size_pre input_l ))
+.
+
+Definition triples_sum_to_zero_return_wit_2 := 
+forall (l_size_pre: Z) (l_pre: Z) (input_l: (@list Z)) (k: Z) (j: Z) (i: Z) ,
+  [| ((((Znth i input_l 0) + (Znth j input_l 0) ) + (Znth k input_l 0) ) = 0) |] 
+  &&  [| (k < l_size_pre) |] 
+  &&  [| (0 <= i) |] 
+  &&  [| (i < j) |] 
+  &&  [| (j < l_size_pre) |] 
+  &&  [| ((j + 1 ) <= k) |] 
+  &&  [| (k <= l_size_pre) |] 
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_k input_l l_size_pre i j k ) |]
+  &&  (IntArray.full l_pre l_size_pre input_l )
+|--
+  ([| (1 = 0) |] 
+  &&  [| (problem_40_spec input_l false ) |]
+  &&  (IntArray.full l_pre l_size_pre input_l ))
+  ||
+  ([| (1 <> 0) |] 
+  &&  [| (problem_40_spec input_l true ) |]
+  &&  (IntArray.full l_pre l_size_pre input_l ))
 .
 
 Definition triples_sum_to_zero_partial_solve_wit_1 := 
-forall (l_size_pre: Z) (lv: (@list Z)) (i: Z) (j: Z) (i_2: Z) (l: Z) (k: Z) (j_2: Z) (i_3: Z) ,
+forall (l_size_pre: Z) (l_pre: Z) (input_l: (@list Z)) (k: Z) (j: Z) (i: Z) ,
   [| (k < l_size_pre) |] 
-  &&  [| (0 <= i_3) |] 
-  &&  [| (i_3 < l_size_pre) |] 
-  &&  [| (0 <= j_2) |] 
-  &&  [| (j_2 < l_size_pre) |] 
-  &&  [| ((j_2 + 1 ) <= k) |] 
-  &&  [| (k <= l_size_pre) |] 
-  &&  [| forall (r_3: Z) , ((((j_2 + 1 ) <= r_3) /\ (r_3 < k)) -> ((((Znth (i_3) (lv) (0)) + (Znth (j_2) (lv) (0)) ) + (Znth (r_3) (lv) (0)) ) <> 0)) |] 
-  &&  [| (j < l_size_pre) |] 
-  &&  [| (0 <= i_2) |] 
-  &&  [| (i_2 < l_size_pre) |] 
-  &&  [| ((i_2 + 1 ) <= j) |] 
-  &&  [| (j <= l_size_pre) |] 
-  &&  [| forall (q_2: Z) , forall (r_2: Z) , ((((((i_2 + 1 ) <= q_2) /\ (q_2 < j)) /\ (q_2 < r_2)) /\ (r_2 < l_size_pre)) -> ((((Znth (i_2) (lv) (0)) + (Znth (q_2) (lv) (0)) ) + (Znth (r_2) (lv) (0)) ) <> 0)) |] 
-  &&  [| (i < l_size_pre) |] 
   &&  [| (0 <= i) |] 
-  &&  [| (i <= l_size_pre) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , ((((((0 <= p) /\ (p < i)) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
-  &&  (IntArray.full l l_size_pre lv )
+  &&  [| (i < j) |] 
+  &&  [| (j < l_size_pre) |] 
+  &&  [| ((j + 1 ) <= k) |] 
+  &&  [| (k <= l_size_pre) |] 
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_k input_l l_size_pre i j k ) |]
+  &&  (IntArray.full l_pre l_size_pre input_l )
 |--
   [| (k < l_size_pre) |] 
-  &&  [| (0 <= i_3) |] 
-  &&  [| (i_3 < l_size_pre) |] 
-  &&  [| (0 <= j_2) |] 
-  &&  [| (j_2 < l_size_pre) |] 
-  &&  [| ((j_2 + 1 ) <= k) |] 
-  &&  [| (k <= l_size_pre) |] 
-  &&  [| forall (r_3: Z) , ((((j_2 + 1 ) <= r_3) /\ (r_3 < k)) -> ((((Znth (i_3) (lv) (0)) + (Znth (j_2) (lv) (0)) ) + (Znth (r_3) (lv) (0)) ) <> 0)) |] 
-  &&  [| (j < l_size_pre) |] 
-  &&  [| (0 <= i_2) |] 
-  &&  [| (i_2 < l_size_pre) |] 
-  &&  [| ((i_2 + 1 ) <= j) |] 
-  &&  [| (j <= l_size_pre) |] 
-  &&  [| forall (q_2: Z) , forall (r_2: Z) , ((((((i_2 + 1 ) <= q_2) /\ (q_2 < j)) /\ (q_2 < r_2)) /\ (r_2 < l_size_pre)) -> ((((Znth (i_2) (lv) (0)) + (Znth (q_2) (lv) (0)) ) + (Znth (r_2) (lv) (0)) ) <> 0)) |] 
-  &&  [| (i < l_size_pre) |] 
   &&  [| (0 <= i) |] 
-  &&  [| (i <= l_size_pre) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , ((((((0 <= p) /\ (p < i)) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
-  &&  (((l + (i_3 * sizeof(INT) ) )) # Int  |-> (Znth i_3 lv 0))
-  **  (IntArray.missing_i l i_3 0 l_size_pre lv )
+  &&  [| (i < j) |] 
+  &&  [| (j < l_size_pre) |] 
+  &&  [| ((j + 1 ) <= k) |] 
+  &&  [| (k <= l_size_pre) |] 
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_k input_l l_size_pre i j k ) |]
+  &&  (((l_pre + (i * sizeof(INT) ) )) # Int  |-> (Znth i input_l 0))
+  **  (IntArray.missing_i l_pre i 0 l_size_pre input_l )
 .
 
 Definition triples_sum_to_zero_partial_solve_wit_2 := 
-forall (l_size_pre: Z) (lv: (@list Z)) (i: Z) (j: Z) (i_2: Z) (l: Z) (k: Z) (j_2: Z) (i_3: Z) ,
+forall (l_size_pre: Z) (l_pre: Z) (input_l: (@list Z)) (k: Z) (j: Z) (i: Z) ,
   [| (k < l_size_pre) |] 
-  &&  [| (0 <= i_3) |] 
-  &&  [| (i_3 < l_size_pre) |] 
-  &&  [| (0 <= j_2) |] 
-  &&  [| (j_2 < l_size_pre) |] 
-  &&  [| ((j_2 + 1 ) <= k) |] 
-  &&  [| (k <= l_size_pre) |] 
-  &&  [| forall (r_3: Z) , ((((j_2 + 1 ) <= r_3) /\ (r_3 < k)) -> ((((Znth (i_3) (lv) (0)) + (Znth (j_2) (lv) (0)) ) + (Znth (r_3) (lv) (0)) ) <> 0)) |] 
-  &&  [| (j < l_size_pre) |] 
-  &&  [| (0 <= i_2) |] 
-  &&  [| (i_2 < l_size_pre) |] 
-  &&  [| ((i_2 + 1 ) <= j) |] 
-  &&  [| (j <= l_size_pre) |] 
-  &&  [| forall (q_2: Z) , forall (r_2: Z) , ((((((i_2 + 1 ) <= q_2) /\ (q_2 < j)) /\ (q_2 < r_2)) /\ (r_2 < l_size_pre)) -> ((((Znth (i_2) (lv) (0)) + (Znth (q_2) (lv) (0)) ) + (Znth (r_2) (lv) (0)) ) <> 0)) |] 
-  &&  [| (i < l_size_pre) |] 
   &&  [| (0 <= i) |] 
-  &&  [| (i <= l_size_pre) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , ((((((0 <= p) /\ (p < i)) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
-  &&  (IntArray.full l l_size_pre lv )
+  &&  [| (i < j) |] 
+  &&  [| (j < l_size_pre) |] 
+  &&  [| ((j + 1 ) <= k) |] 
+  &&  [| (k <= l_size_pre) |] 
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_k input_l l_size_pre i j k ) |]
+  &&  (IntArray.full l_pre l_size_pre input_l )
 |--
   [| (k < l_size_pre) |] 
-  &&  [| (0 <= i_3) |] 
-  &&  [| (i_3 < l_size_pre) |] 
-  &&  [| (0 <= j_2) |] 
-  &&  [| (j_2 < l_size_pre) |] 
-  &&  [| ((j_2 + 1 ) <= k) |] 
-  &&  [| (k <= l_size_pre) |] 
-  &&  [| forall (r_3: Z) , ((((j_2 + 1 ) <= r_3) /\ (r_3 < k)) -> ((((Znth (i_3) (lv) (0)) + (Znth (j_2) (lv) (0)) ) + (Znth (r_3) (lv) (0)) ) <> 0)) |] 
-  &&  [| (j < l_size_pre) |] 
-  &&  [| (0 <= i_2) |] 
-  &&  [| (i_2 < l_size_pre) |] 
-  &&  [| ((i_2 + 1 ) <= j) |] 
-  &&  [| (j <= l_size_pre) |] 
-  &&  [| forall (q_2: Z) , forall (r_2: Z) , ((((((i_2 + 1 ) <= q_2) /\ (q_2 < j)) /\ (q_2 < r_2)) /\ (r_2 < l_size_pre)) -> ((((Znth (i_2) (lv) (0)) + (Znth (q_2) (lv) (0)) ) + (Znth (r_2) (lv) (0)) ) <> 0)) |] 
-  &&  [| (i < l_size_pre) |] 
   &&  [| (0 <= i) |] 
-  &&  [| (i <= l_size_pre) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , ((((((0 <= p) /\ (p < i)) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
-  &&  (((l + (j_2 * sizeof(INT) ) )) # Int  |-> (Znth j_2 lv 0))
-  **  (IntArray.missing_i l j_2 0 l_size_pre lv )
+  &&  [| (i < j) |] 
+  &&  [| (j < l_size_pre) |] 
+  &&  [| ((j + 1 ) <= k) |] 
+  &&  [| (k <= l_size_pre) |] 
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_k input_l l_size_pre i j k ) |]
+  &&  (((l_pre + (j * sizeof(INT) ) )) # Int  |-> (Znth j input_l 0))
+  **  (IntArray.missing_i l_pre j 0 l_size_pre input_l )
 .
 
 Definition triples_sum_to_zero_partial_solve_wit_3 := 
-forall (l_size_pre: Z) (lv: (@list Z)) (i: Z) (j: Z) (i_2: Z) (l: Z) (k: Z) (j_2: Z) (i_3: Z) ,
+forall (l_size_pre: Z) (l_pre: Z) (input_l: (@list Z)) (k: Z) (j: Z) (i: Z) ,
   [| (k < l_size_pre) |] 
-  &&  [| (0 <= i_3) |] 
-  &&  [| (i_3 < l_size_pre) |] 
-  &&  [| (0 <= j_2) |] 
-  &&  [| (j_2 < l_size_pre) |] 
-  &&  [| ((j_2 + 1 ) <= k) |] 
-  &&  [| (k <= l_size_pre) |] 
-  &&  [| forall (r_3: Z) , ((((j_2 + 1 ) <= r_3) /\ (r_3 < k)) -> ((((Znth (i_3) (lv) (0)) + (Znth (j_2) (lv) (0)) ) + (Znth (r_3) (lv) (0)) ) <> 0)) |] 
-  &&  [| (j < l_size_pre) |] 
-  &&  [| (0 <= i_2) |] 
-  &&  [| (i_2 < l_size_pre) |] 
-  &&  [| ((i_2 + 1 ) <= j) |] 
-  &&  [| (j <= l_size_pre) |] 
-  &&  [| forall (q_2: Z) , forall (r_2: Z) , ((((((i_2 + 1 ) <= q_2) /\ (q_2 < j)) /\ (q_2 < r_2)) /\ (r_2 < l_size_pre)) -> ((((Znth (i_2) (lv) (0)) + (Znth (q_2) (lv) (0)) ) + (Znth (r_2) (lv) (0)) ) <> 0)) |] 
-  &&  [| (i < l_size_pre) |] 
   &&  [| (0 <= i) |] 
-  &&  [| (i <= l_size_pre) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , ((((((0 <= p) /\ (p < i)) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
-  &&  (IntArray.full l l_size_pre lv )
+  &&  [| (i < j) |] 
+  &&  [| (j < l_size_pre) |] 
+  &&  [| ((j + 1 ) <= k) |] 
+  &&  [| (k <= l_size_pre) |] 
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_k input_l l_size_pre i j k ) |]
+  &&  (IntArray.full l_pre l_size_pre input_l )
 |--
   [| (k < l_size_pre) |] 
-  &&  [| (0 <= i_3) |] 
-  &&  [| (i_3 < l_size_pre) |] 
-  &&  [| (0 <= j_2) |] 
-  &&  [| (j_2 < l_size_pre) |] 
-  &&  [| ((j_2 + 1 ) <= k) |] 
-  &&  [| (k <= l_size_pre) |] 
-  &&  [| forall (r_3: Z) , ((((j_2 + 1 ) <= r_3) /\ (r_3 < k)) -> ((((Znth (i_3) (lv) (0)) + (Znth (j_2) (lv) (0)) ) + (Znth (r_3) (lv) (0)) ) <> 0)) |] 
-  &&  [| (j < l_size_pre) |] 
-  &&  [| (0 <= i_2) |] 
-  &&  [| (i_2 < l_size_pre) |] 
-  &&  [| ((i_2 + 1 ) <= j) |] 
-  &&  [| (j <= l_size_pre) |] 
-  &&  [| forall (q_2: Z) , forall (r_2: Z) , ((((((i_2 + 1 ) <= q_2) /\ (q_2 < j)) /\ (q_2 < r_2)) /\ (r_2 < l_size_pre)) -> ((((Znth (i_2) (lv) (0)) + (Znth (q_2) (lv) (0)) ) + (Znth (r_2) (lv) (0)) ) <> 0)) |] 
-  &&  [| (i < l_size_pre) |] 
   &&  [| (0 <= i) |] 
-  &&  [| (i <= l_size_pre) |] 
-  &&  [| forall (p: Z) , forall (q: Z) , forall (r: Z) , ((((((0 <= p) /\ (p < i)) /\ (p < q)) /\ (q < r)) /\ (r < l_size_pre)) -> ((((Znth (p) (lv) (0)) + (Znth (q) (lv) (0)) ) + (Znth (r) (lv) (0)) ) <> 0)) |] 
-  &&  [| (0 <= l_size_pre) |] 
-  &&  [| (l_size_pre < INT_MAX) |]
-  &&  (((l + (k * sizeof(INT) ) )) # Int  |-> (Znth k lv 0))
-  **  (IntArray.missing_i l k 0 l_size_pre lv )
+  &&  [| (i < j) |] 
+  &&  [| (j < l_size_pre) |] 
+  &&  [| ((j + 1 ) <= k) |] 
+  &&  [| (k <= l_size_pre) |] 
+  &&  [| (triple_sum_int_range input_l l_size_pre ) |] 
+  &&  [| (scanned_k input_l l_size_pre i j k ) |]
+  &&  (((l_pre + (k * sizeof(INT) ) )) # Int  |-> (Znth k input_l 0))
+  **  (IntArray.missing_i l_pre k 0 l_size_pre input_l )
 .
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 Include int_array_Strategy_Correct.
 Include uint_array_Strategy_Correct.
 Include undef_uint_array_Strategy_Correct.
