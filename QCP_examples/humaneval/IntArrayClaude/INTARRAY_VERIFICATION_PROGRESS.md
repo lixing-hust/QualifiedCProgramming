@@ -1,6 +1,6 @@
 # IntArrayClaude 验证进度记录
 
-更新时间：2026-04-22
+更新时间：2026-04-23
 
 这份文档用于记录 `QCP_examples/humaneval/IntArrayClaude` 下各题的验证进度，以及每题验证时遇到的具体问题。
 
@@ -33,9 +33,9 @@
 | `C_52` | 已全链通过 | 单层数组扫描；改为使用 `problem_52_pre/spec`，manual 已无 `Admitted.`。 |
 | `C_55` | 已全链通过 | Fibonacci 滚动变量；已接入 `problem_55_pre/spec`，并用 `fib_step_int_range` 处理加法溢出，manual 已无 `Admitted.`。 |
 | `C_63` | 已全链通过 | FibFib 三变量滚动版本；已接入 `problem_63_pre/spec`，manual 已无 `Admitted.`。 |
-| `C_72` | 已有生成文件 | manual 仍含 `Admitted.`。 |
+| `C_72` | 已全链通过 | 回文数组且总和不超过阈值；已补 `coins_72.v`、前缀和/镜像 invariant 和 6 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_73` | 已有生成文件 | manual 仍含 `Admitted.`。 |
-| `C_85` | 已有生成文件 | manual 仍含 `Admitted.`。 |
+| `C_85` | 已全链通过 | 奇数下标求和；已补 `coins_85.v`、循环前缀和 invariant 和 5 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_100` | 已有生成文件 | manual 仍含 `Admitted.`。 |
 | `C_106` | 已有生成文件 | manual 当前无 `Admitted.`，但本文档尚未重新跑完整验收链。 |
 | `C_109` | 已有生成文件 | manual 仍含 `Admitted.`。 |
@@ -1542,6 +1542,297 @@ grep -nE "Admitted\.|Axiom[[:space:]]" coins_68.v C_68_proof_manual.v
   ```
 
 - 对 `nat`/`option` 规格，不一定要在 C invariant 中直接暴露原始 spec；可以在 `coins_XX.v` 中建立 C 侧 Z 层函数，再用小引理连接循环 step 和最终规格。
+
+## C_72 验证记录
+
+### 结论
+
+`C_72` 已完成完整验证。
+
+已通过的验收链：
+
+```bash
+eval "$(opam env --switch=coq8201 --set-switch)"
+cd QCP_examples/humaneval/IntArrayClaude
+COQINCLUDES="$(tr '\n' ' ' < ../IntClaude/_CoqProject)"
+coqc $COQINCLUDES coins_72.v
+coqc $COQINCLUDES C_72_goal.v
+coqc $COQINCLUDES C_72_proof_auto.v
+coqc $COQINCLUDES C_72_proof_manual.v
+coqc $COQINCLUDES C_72_goal_check.v
+```
+
+扫描结果：
+
+```bash
+grep -nE "Admitted\.|Axiom[[:space:]]" coins_72.v C_72_proof_manual.v
+```
+
+无输出。
+
+本题编译产物已清理，包括 `.aux`、`.glob`、`.vo`、`.vos`、`.vok` 和 `C_72_proof_manual_backup*.v`。
+
+### 文件变更
+
+- `C_72.c`
+
+  已补 QCP function spec 和 loop invariant，未修改 C 执行语句。函数前置条件包含 `q_size == Zlength(lv)`、`problem_72_pre_z(lv, w)`、`will_it_fly_int_range(lv)` 和输入数组资源 `IntArray::full(q, q_size, lv)`。
+
+  后置条件使用 `problem_72_spec_z(lv, w, __return)` 连接 C 的 `0/1` 返回值与题目布尔语义，并保持输入数组资源不变。
+
+  循环 invariant 记录：
+
+  - `q`、`q_size`、`w` 与函数入口一致。
+  - `0 <= i && i <= q_size`。
+  - `s == sum(sublist(0, i, lv))`。
+  - 已检查前缀满足镜像相等：
+    `forall k, 0 <= k && k < i => Znth(k, lv, 0) == Znth(q_size - 1 - k, lv, 0)`。
+  - `will_it_fly_int_range(lv)` 和 `IntArray::full(q, q_size, lv)`。
+
+- `coins_72.v`
+
+  新增 `Load "../spec/72".` 的 Coq 侧桥接文件。定义：
+
+  - `problem_72_pre_z`：包装原始 `problem_72_pre`。
+  - `mirror_all`：用 `Znth` 和 `Zlength` 表示列表回文条件。
+  - `problem_72_spec_z`：用 C 返回整数表达“非 0 当且仅当回文且总和不超过 `w`”。
+  - `will_it_fly_int_range`：要求所有前缀和都在 C `int` 范围内，供 `s += q[i]` 的 safety VC 使用。
+
+  主要引理：
+
+  - `sum_sublist_0`。
+  - `sum_sublist_snoc`。
+  - `mirror_prefix_extend`。
+  - `mirror_prefix_mismatch_spec_false`。
+  - `mirror_prefix_full`。
+  - `problem_72_spec_z_weight_false`。
+  - `problem_72_spec_z_true`。
+
+- `C_72_proof_manual.v`
+
+  已补完 6 个 manual VC：
+
+  - `proof_of_will_it_fly_safety_wit_7`：证明 `s + q[i]` 的安全范围。
+  - `proof_of_will_it_fly_entail_wit_1`：初始化循环 invariant。
+  - `proof_of_will_it_fly_entail_wit_2`：相等分支推进前缀和与镜像 invariant。
+  - `proof_of_will_it_fly_return_wit_1`：循环正常结束且 `s <= w` 时返回 `1`。
+  - `proof_of_will_it_fly_return_wit_2`：循环正常结束但 `s > w` 时返回 `0`。
+  - `proof_of_will_it_fly_return_wit_3`：发现镜像不等时提前返回 `0`。
+
+### 遇到的问题
+
+1. `C_72.c` 当前没有 QCP 注解，但目录里已有旧生成文件。
+
+   表现：`C_72_proof_manual.v` 里 6 个 lemma 全是 `Admitted.`，而旧 goal 只能反映之前的注解状态，不能作为当前证明基础。
+
+   处理：补齐 `Require` / `Ensure` / `Inv Assert` 后，用正确的 IntArrayClaude symexec 命令重新生成：
+
+   ```bash
+   linux-binary/symexec \
+     --goal-file=QCP_examples/humaneval/IntArrayClaude/C_72_goal.v \
+     --proof-auto-file=QCP_examples/humaneval/IntArrayClaude/C_72_proof_auto.v \
+     --proof-manual-file=QCP_examples/humaneval/IntArrayClaude/C_72_proof_manual.v \
+     --coq-logic-path=SimpleC.EE \
+     -slp QCP_examples/humaneval/IntArrayClaude SimpleC.EE \
+     --input-file=QCP_examples/humaneval/IntArrayClaude/C_72.c \
+     -IQCP_examples/LLM_friendly_cases \
+     --gen-and-backup \
+     --no-exec-info
+   ```
+
+2. 原题 spec 使用 Coq `bool`，C 程序返回 `int`。
+
+   表现：直接在 C 后置条件里使用 `problem_72_spec(lv, w, true/false)` 会让 return 分支写成较重的析取；并且 C 的 `0/1` 与 Coq `bool` 需要桥接。
+
+   处理：在 `coins_72.v` 中定义 `problem_72_spec_z(lv, w, out)`，用 `out <> 0 <-> mirror_all lv /\ sum lv <= w` 表示 C 返回值语义。
+
+3. 循环同时承担回文检查和求和，invariant 必须同时记录两条语义线。
+
+   表现：只记录 `s == sum(sublist(0, i, lv))` 不足以证明提前返回 `0`；只记录镜像前缀又无法证明最终 `s <= w` 分支。
+
+   处理：invariant 同时保留前缀和以及 `forall k < i` 的镜像相等事实。正常退出时用 `mirror_prefix_full` 得到 `mirror_all lv`；发现不等时用 `mirror_prefix_mismatch_spec_false` 直接证明 false 规格。
+
+4. `s += q[i]` 需要前缀和范围约束。
+
+   表现：safety VC 需要证明 `INT_MIN <= s + Znth i lv 0 <= INT_MAX`。
+
+   处理：增加 `will_it_fly_int_range(lv)`，要求 `0 <= i <= Zlength lv` 的所有 `sum(sublist 0 i lv)` 都在 C `int` 范围内。manual 中先用 `sum_sublist_snoc` 把 `s + q[i]` 改写成下一前缀和，再从 range 谓词取出结论。
+
+5. return 分支中 `entailer!` 会把部分纯目标化简掉，过晚改写 `sublist_self` 会找不到目标子项。
+
+   表现：`C_72_proof_manual.v` 初版在 return proof 中先 `entailer!` 再 `rewrite sublist_self`，编译报：
+
+   ```text
+   Found no subterm matching "sublist 0 ?M ?L" in the current goal.
+   ```
+
+   处理：在 `entailer!` 前先 assert 出退出事实，例如 `s = sum lv` 或 `sum lv > w_pre`，再进入 separation logic entailment。
+
+### 后续注意
+
+- 对“循环提前返回 false，正常结束后再按累计量判断 true/false”的题，invariant 要同时记录“提前返回条件的反面已经在前缀成立”和累计量。
+- 对 C `int` 返回布尔语义，建议在 `coins_XX.v` 中建一个 `problem_XX_spec_z`，避免在 C 注解里重复展开 `true/false` 析取。
+- 对需要从 `sublist 0 i` 变成整表 `lv` 的 return VC，先在 `entailer!` 前 assert `i = Zlength lv` 后的结论，再交给 `entailer!` 整理资源。
+
+## C_85 验证记录
+
+### 结论
+
+`C_85` 已完成完整验证。
+
+已通过的验收链：
+
+```bash
+eval "$(opam env --switch=coq8201 --set-switch)"
+cd QCP_examples/humaneval/IntArrayClaude
+COQINCLUDES="$(tr '\n' ' ' < ../IntClaude/_CoqProject)"
+coqc $COQINCLUDES coins_85.v
+coqc $COQINCLUDES C_85_goal.v
+coqc $COQINCLUDES C_85_proof_auto.v
+coqc $COQINCLUDES C_85_proof_manual.v
+coqc $COQINCLUDES C_85_goal_check.v
+```
+
+扫描结果：
+
+```bash
+grep -nE "Admitted\.|Axiom[[:space:]]" coins_85.v C_85_proof_manual.v
+```
+
+无输出。
+
+本题编译产物已清理，包括 `.aux`、`.glob`、`.vo`、`.vos`、`.vok` 和 `C_85_proof_manual_backup*.v`。
+
+### 文件变更
+
+- `C_85.c`
+
+  已改成 QCP 可验证格式。增加 `problem_85_pre_z`、`problem_85_spec_z`、`sum_even_at_odd_upto`、`add_int_range` 的 `Extern Coq` 声明，并 `Import Coq Require Import coins_85`。
+
+  函数前置条件包含：
+
+  - `0 <= lst_size && lst_size < INT_MAX`。
+  - `lst_size == Zlength(lv)`。
+  - `problem_85_pre_z(lv)`。
+  - `add_int_range(lv)`。
+  - `IntArray::full(lst, lst_size, lv)`。
+
+  后置条件包含：
+
+  - `problem_85_spec_z(lv, __return)`。
+  - 输入数组资源保持 `IntArray::full(lst, lst_size, lv)`。
+
+  循环 invariant 记录：
+
+  - 指针和长度不变：`lst == lst@pre`、`lst_size == lst_size@pre`。
+  - 下标边界：`0 <= i`、`2 * i <= lst_size`。
+  - 累加语义：`s == sum_even_at_odd_upto(i, lv)`。
+  - 溢出约束：`add_int_range(lv)`。
+  - 输入数组资源：`IntArray::full(lst, lst_size, lv)`。
+
+- `coins_85.v`
+
+  新增 `Load "../spec/85".` 的 Coq 侧桥接文件。定义：
+
+  - `sum_even_at_odd_upto_nat` / `sum_even_at_odd_upto`：按“已处理的奇数下标个数”表示前缀和。
+  - `problem_85_pre_z`：把原始 `problem_85_pre` 包装到 C 侧列表。
+  - `problem_85_spec_z`：使用退出下标存在性描述返回值，避免在 return VC 中直接展开除法或 floor 语义。
+  - `add_int_range`：为每次 `s + lst[2*i+1]` 提供有符号整数范围证明。
+
+  主要引理：
+
+  - `sum_even_at_odd_upto_0`。
+  - `sum_even_at_odd_upto_step_even`。
+  - `sum_even_at_odd_upto_step_odd`。
+  - `problem_85_spec_z_of_exit`。
+
+- `C_85_proof_manual.v`
+
+  已补完 5 个 manual VC：
+
+  - `proof_of_add_safety_wit_14`：证明 `s + lst[2*i+1]` 的安全范围。
+  - `proof_of_add_entail_wit_1`：初始化循环 invariant。
+  - `proof_of_add_entail_wit_2_1`：偶数分支推进 invariant。
+  - `proof_of_add_entail_wit_2_2`：奇数分支推进 invariant。
+  - `proof_of_add_return_wit_1`：退出循环后连接到 `problem_85_spec_z`。
+
+### 遇到的问题
+
+1. 旧生成文件与当前 `C_85.c` 规格不匹配，并且缺少 `coins_85.v`。
+
+   表现：manual 文件仍有 `Admitted.`，且缺少连接 `../spec/85` 与 C 侧整数列表的桥接定义。
+
+   处理：新增 `coins_85.v`，在 `C_85.c` 中导入相关 Coq 定义，然后用正确的 `symexec` 命令重新生成 `goal` / `auto` / `manual` / `goal_check`：
+
+   ```bash
+   linux-binary/symexec \
+     --goal-file=QCP_examples/humaneval/IntArrayClaude/C_85_goal.v \
+     --proof-auto-file=QCP_examples/humaneval/IntArrayClaude/C_85_proof_auto.v \
+     --proof-manual-file=QCP_examples/humaneval/IntArrayClaude/C_85_proof_manual.v \
+     --coq-logic-path=SimpleC.EE \
+     -slp QCP_examples/humaneval/IntArrayClaude SimpleC.EE \
+     --input-file=QCP_examples/humaneval/IntArrayClaude/C_85.c \
+     -IQCP_examples/LLM_friendly_cases \
+     --gen-and-backup \
+     --no-exec-info
+   ```
+
+2. 累加语句需要额外的整数范围前提。
+
+   表现：安全 VC 需要证明 `s + lst[i * 2 + 1]` 落在 `INT_MIN` 到 `INT_MAX` 之间，仅有原始 `problem_85_pre` 不够直接。
+
+   处理：增加 `add_int_range(lv)`，要求每个合法奇数下标累加前后的和都在 C `int` 范围内。manual 中从该前提取出当前下标的范围：
+
+   ```coq
+   destruct (H i ltac:(lia) ltac:(lia)) as [_ Hsum].
+   ```
+
+3. 循环变量 `i` 表示“奇数下标计数”，不是数组下标本身。
+
+   表现：代码访问的是 `lst[i * 2 + 1]`，循环条件是 `i * 2 + 1 < lst_size`。如果 invariant 只写 `i <= lst_size`，无法稳定证明访问合法性和退出语义。
+
+   处理：invariant 使用 `2 * i <= lst_size`，累加值使用 `sum_even_at_odd_upto(i, lv)`。退出时由 `2 * i <= len` 和 `2 * i + 1 >= len` 共同描述已经处理完所有奇数下标。
+
+4. `i * 2 + 1` 与 `2 * i + 1` 的归一化不一致。
+
+   表现：C 生成目标里常出现 `i * 2 + 1`，而 Coq 辅助定义和引理中更自然的是 `2 * i + 1`，直接 `rewrite` 找不到匹配项。
+
+   处理：manual 证明中先标准化：
+
+   ```coq
+   replace (i * 2 + 1) with (2 * i + 1) in * by lia.
+   ```
+
+   然后再使用 `sum_even_at_odd_upto_step_even` 或 `sum_even_at_odd_upto_step_odd`。
+
+5. `Z.to_nat (i + 1)`、`Z.of_nat (Z.to_nat i)` 与 `Z.rem` / `Z.eqb` 的化简需要单独处理。
+
+   表现：前缀和 step 引理证明时，Coq 不会自动把退出后的 `match Z.eqb (Z.rem ...) 0 with ...` 化成期望分支，也不会自动识别所有 `Z.to_nat` / `Z.of_nat` 关系。
+
+   处理：在 `coins_85.v` 中把这类推理集中封装进 step 引理。证明中先用 `Z2Nat.id`、`Nat2Z.id`、`Z2Nat.inj_add` 整理下标，再通过 `destruct (Z.eqb ... ) eqn:?` 和 `Z.eqb_eq` / `Z.eqb_neq` 分情况处理；必要时用 `change` 把目标改写成归一化后的 `2 * i + 1` 形状。
+
+6. 直接把返回规格写成原题公式会让 return VC 太重。
+
+   表现：原题语义是求所有奇数下标元素之和，若直接在后置条件中使用长度除法或复杂列表过滤，退出分支需要额外证明边界、取整和前缀长度关系。
+
+   处理：`problem_85_spec_z` 改为存在退出计数 `i`：
+
+   ```coq
+   exists i,
+     0 <= i /\
+     2 * i <= Zlength lst /\
+     2 * i + 1 >= Zlength lst /\
+     output = sum_even_at_odd_upto i lst.
+   ```
+
+   return VC 只需使用 `problem_85_spec_z_of_exit`，剩余边界交给 `lia`。
+
+### 后续注意
+
+- 遇到访问形如 `arr[2*i+1]` 的循环时，优先把 invariant 里的计数变量建模成“已处理的目标位置个数”，边界写成 `2*i <= len` 和退出条件对应的 `2*i+1 >= len`。
+- 累加类题目如果 C 类型是 `int`，除了原始语义 precondition，通常还要单独增加面向 C 执行安全的 range predicate。
+- manual 证明里涉及 `i*2` / `2*i` 的 rewrite 前，先用 `replace ... by lia` 做算术归一化。
+- 如果原始 spec 带除法、过滤、奇偶筛选等复杂结构，可以在 `coins_XX.v` 中建立 C 侧前缀函数和退出下标规格，再用小引理连接回原始语义。
 
 ## 后续记录模板
 
