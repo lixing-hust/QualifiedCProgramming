@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -15,24 +15,26 @@ Local Open Scope sets.
 Local Open Scope string.
 Local Open Scope list.
 Import naive_C_Rules.
+Require Import coins_73.
 Local Open Scope sac.
-From SimpleC.EE Require Import common_strategy_goal.
-From SimpleC.EE Require Import common_strategy_proof.
-From SimpleC.EE Require Import int_array_strategy_goal.
-From SimpleC.EE Require Import int_array_strategy_proof.
-From SimpleC.EE Require Import uint_array_strategy_goal.
-From SimpleC.EE Require Import uint_array_strategy_proof.
-From SimpleC.EE Require Import undef_uint_array_strategy_goal.
-From SimpleC.EE Require Import undef_uint_array_strategy_proof.
-From SimpleC.EE Require Import array_shape_strategy_goal.
-From SimpleC.EE Require Import array_shape_strategy_proof.
+Require Import int_array_strategy_goal.
+Require Import int_array_strategy_proof.
+Require Import uint_array_strategy_goal.
+Require Import uint_array_strategy_proof.
+Require Import undef_uint_array_strategy_goal.
+Require Import undef_uint_array_strategy_proof.
+Require Import array_shape_strategy_goal.
+Require Import array_shape_strategy_proof.
 
 (*----- Function smallest_change -----*)
 
 Definition smallest_change_safety_wit_1 := 
 forall (arr_size_pre: Z) (arr_pre: Z) (lv: (@list Z)) ,
   [| (0 <= arr_size_pre) |] 
-  &&  [| (arr_size_pre < INT_MAX) |]
+  &&  [| (arr_size_pre < INT_MAX) |] 
+  &&  [| (arr_size_pre = (Zlength (lv))) |] 
+  &&  [| (problem_73_pre_z lv ) |] 
+  &&  [| (smallest_change_int_range lv ) |]
   &&  ((( &( "out" ) )) # Int  |->_)
   **  ((( &( "arr_size" ) )) # Int  |-> arr_size_pre)
   **  ((( &( "arr" ) )) # Ptr  |-> arr_pre)
@@ -45,7 +47,10 @@ forall (arr_size_pre: Z) (arr_pre: Z) (lv: (@list Z)) ,
 Definition smallest_change_safety_wit_2 := 
 forall (arr_size_pre: Z) (arr_pre: Z) (lv: (@list Z)) ,
   [| (0 <= arr_size_pre) |] 
-  &&  [| (arr_size_pre < INT_MAX) |]
+  &&  [| (arr_size_pre < INT_MAX) |] 
+  &&  [| (arr_size_pre = (Zlength (lv))) |] 
+  &&  [| (problem_73_pre_z lv ) |] 
+  &&  [| (smallest_change_int_range lv ) |]
   &&  ((( &( "i" ) )) # Int  |->_)
   **  ((( &( "out" ) )) # Int  |-> 0)
   **  ((( &( "arr_size" ) )) # Int  |-> arr_size_pre)
@@ -57,181 +62,211 @@ forall (arr_size_pre: Z) (arr_pre: Z) (lv: (@list Z)) ,
 .
 
 Definition smallest_change_safety_wit_3 := 
-forall (arr_size_pre: Z) (lv: (@list Z)) (arr: Z) (out: Z) (i: Z) ,
-  [| (0 <= i) |] 
+forall (arr_size_pre: Z) (arr_pre: Z) (lv: (@list Z)) (out: Z) (i: Z) ,
+  [| (0 <= arr_size_pre) |] 
+  &&  [| (arr_size_pre < INT_MAX) |] 
+  &&  [| (arr_size_pre = (Zlength (lv))) |] 
+  &&  [| (problem_73_pre_z lv ) |] 
+  &&  [| (smallest_change_int_range lv ) |] 
+  &&  [| (0 <= i) |] 
   &&  [| ((2 * i ) <= arr_size_pre) |] 
-  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |] 
-  &&  [| (0 <= arr_size_pre) |] 
-  &&  [| (arr_size_pre < INT_MAX) |]
-  &&  ((( &( "i" ) )) # Int  |-> i)
-  **  ((( &( "out" ) )) # Int  |-> out)
-  **  ((( &( "arr" ) )) # Ptr  |-> arr)
-  **  (IntArray.full arr arr_size_pre lv )
+  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |]
+  &&  ((( &( "arr" ) )) # Ptr  |-> arr_pre)
   **  ((( &( "arr_size" ) )) # Int  |-> arr_size_pre)
+  **  ((( &( "i" ) )) # Int  |-> i)
+  **  ((( &( "out" ) )) # Int  |-> out)
+  **  (IntArray.full arr_pre arr_size_pre lv )
 |--
   [| (((arr_size_pre - 1 ) - i ) <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= ((arr_size_pre - 1 ) - i )) |]
 .
 
 Definition smallest_change_safety_wit_4 := 
-forall (arr_size_pre: Z) (lv: (@list Z)) (arr: Z) (out: Z) (i: Z) ,
-  [| (0 <= i) |] 
+forall (arr_size_pre: Z) (arr_pre: Z) (lv: (@list Z)) (out: Z) (i: Z) ,
+  [| (0 <= arr_size_pre) |] 
+  &&  [| (arr_size_pre < INT_MAX) |] 
+  &&  [| (arr_size_pre = (Zlength (lv))) |] 
+  &&  [| (problem_73_pre_z lv ) |] 
+  &&  [| (smallest_change_int_range lv ) |] 
+  &&  [| (0 <= i) |] 
   &&  [| ((2 * i ) <= arr_size_pre) |] 
-  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |] 
-  &&  [| (0 <= arr_size_pre) |] 
-  &&  [| (arr_size_pre < INT_MAX) |]
-  &&  ((( &( "i" ) )) # Int  |-> i)
-  **  ((( &( "out" ) )) # Int  |-> out)
-  **  ((( &( "arr" ) )) # Ptr  |-> arr)
-  **  (IntArray.full arr arr_size_pre lv )
+  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |]
+  &&  ((( &( "arr" ) )) # Ptr  |-> arr_pre)
   **  ((( &( "arr_size" ) )) # Int  |-> arr_size_pre)
+  **  ((( &( "i" ) )) # Int  |-> i)
+  **  ((( &( "out" ) )) # Int  |-> out)
+  **  (IntArray.full arr_pre arr_size_pre lv )
 |--
   [| ((arr_size_pre - 1 ) <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= (arr_size_pre - 1 )) |]
 .
 
 Definition smallest_change_safety_wit_5 := 
-forall (arr_size_pre: Z) (lv: (@list Z)) (arr: Z) (out: Z) (i: Z) ,
-  [| (0 <= i) |] 
+forall (arr_size_pre: Z) (arr_pre: Z) (lv: (@list Z)) (out: Z) (i: Z) ,
+  [| (0 <= arr_size_pre) |] 
+  &&  [| (arr_size_pre < INT_MAX) |] 
+  &&  [| (arr_size_pre = (Zlength (lv))) |] 
+  &&  [| (problem_73_pre_z lv ) |] 
+  &&  [| (smallest_change_int_range lv ) |] 
+  &&  [| (0 <= i) |] 
   &&  [| ((2 * i ) <= arr_size_pre) |] 
-  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |] 
-  &&  [| (0 <= arr_size_pre) |] 
-  &&  [| (arr_size_pre < INT_MAX) |]
-  &&  ((( &( "i" ) )) # Int  |-> i)
-  **  ((( &( "out" ) )) # Int  |-> out)
-  **  ((( &( "arr" ) )) # Ptr  |-> arr)
-  **  (IntArray.full arr arr_size_pre lv )
+  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |]
+  &&  ((( &( "arr" ) )) # Ptr  |-> arr_pre)
   **  ((( &( "arr_size" ) )) # Int  |-> arr_size_pre)
+  **  ((( &( "i" ) )) # Int  |-> i)
+  **  ((( &( "out" ) )) # Int  |-> out)
+  **  (IntArray.full arr_pre arr_size_pre lv )
 |--
   [| (1 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 1) |]
 .
 
 Definition smallest_change_safety_wit_6 := 
-forall (arr_size_pre: Z) (lv: (@list Z)) (arr: Z) (out: Z) (i: Z) ,
+forall (arr_size_pre: Z) (arr_pre: Z) (lv: (@list Z)) (out: Z) (i: Z) ,
   [| (i < ((arr_size_pre - 1 ) - i )) |] 
+  &&  [| (0 <= arr_size_pre) |] 
+  &&  [| (arr_size_pre < INT_MAX) |] 
+  &&  [| (arr_size_pre = (Zlength (lv))) |] 
+  &&  [| (problem_73_pre_z lv ) |] 
+  &&  [| (smallest_change_int_range lv ) |] 
   &&  [| (0 <= i) |] 
   &&  [| ((2 * i ) <= arr_size_pre) |] 
-  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |] 
-  &&  [| (0 <= arr_size_pre) |] 
-  &&  [| (arr_size_pre < INT_MAX) |]
-  &&  (IntArray.full arr arr_size_pre lv )
+  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |]
+  &&  (IntArray.full arr_pre arr_size_pre lv )
+  **  ((( &( "arr" ) )) # Ptr  |-> arr_pre)
+  **  ((( &( "arr_size" ) )) # Int  |-> arr_size_pre)
   **  ((( &( "i" ) )) # Int  |-> i)
   **  ((( &( "out" ) )) # Int  |-> out)
-  **  ((( &( "arr" ) )) # Ptr  |-> arr)
-  **  ((( &( "arr_size" ) )) # Int  |-> arr_size_pre)
 |--
   [| (((arr_size_pre - 1 ) - i ) <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= ((arr_size_pre - 1 ) - i )) |]
 .
 
 Definition smallest_change_safety_wit_7 := 
-forall (arr_size_pre: Z) (lv: (@list Z)) (arr: Z) (out: Z) (i: Z) ,
+forall (arr_size_pre: Z) (arr_pre: Z) (lv: (@list Z)) (out: Z) (i: Z) ,
   [| (i < ((arr_size_pre - 1 ) - i )) |] 
+  &&  [| (0 <= arr_size_pre) |] 
+  &&  [| (arr_size_pre < INT_MAX) |] 
+  &&  [| (arr_size_pre = (Zlength (lv))) |] 
+  &&  [| (problem_73_pre_z lv ) |] 
+  &&  [| (smallest_change_int_range lv ) |] 
   &&  [| (0 <= i) |] 
   &&  [| ((2 * i ) <= arr_size_pre) |] 
-  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |] 
-  &&  [| (0 <= arr_size_pre) |] 
-  &&  [| (arr_size_pre < INT_MAX) |]
-  &&  (IntArray.full arr arr_size_pre lv )
+  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |]
+  &&  (IntArray.full arr_pre arr_size_pre lv )
+  **  ((( &( "arr" ) )) # Ptr  |-> arr_pre)
+  **  ((( &( "arr_size" ) )) # Int  |-> arr_size_pre)
   **  ((( &( "i" ) )) # Int  |-> i)
   **  ((( &( "out" ) )) # Int  |-> out)
-  **  ((( &( "arr" ) )) # Ptr  |-> arr)
-  **  ((( &( "arr_size" ) )) # Int  |-> arr_size_pre)
 |--
   [| ((arr_size_pre - 1 ) <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= (arr_size_pre - 1 )) |]
 .
 
 Definition smallest_change_safety_wit_8 := 
-forall (arr_size_pre: Z) (lv: (@list Z)) (arr: Z) (out: Z) (i: Z) ,
+forall (arr_size_pre: Z) (arr_pre: Z) (lv: (@list Z)) (out: Z) (i: Z) ,
   [| (i < ((arr_size_pre - 1 ) - i )) |] 
+  &&  [| (0 <= arr_size_pre) |] 
+  &&  [| (arr_size_pre < INT_MAX) |] 
+  &&  [| (arr_size_pre = (Zlength (lv))) |] 
+  &&  [| (problem_73_pre_z lv ) |] 
+  &&  [| (smallest_change_int_range lv ) |] 
   &&  [| (0 <= i) |] 
   &&  [| ((2 * i ) <= arr_size_pre) |] 
-  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |] 
-  &&  [| (0 <= arr_size_pre) |] 
-  &&  [| (arr_size_pre < INT_MAX) |]
-  &&  (IntArray.full arr arr_size_pre lv )
+  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |]
+  &&  (IntArray.full arr_pre arr_size_pre lv )
+  **  ((( &( "arr" ) )) # Ptr  |-> arr_pre)
+  **  ((( &( "arr_size" ) )) # Int  |-> arr_size_pre)
   **  ((( &( "i" ) )) # Int  |-> i)
   **  ((( &( "out" ) )) # Int  |-> out)
-  **  ((( &( "arr" ) )) # Ptr  |-> arr)
-  **  ((( &( "arr_size" ) )) # Int  |-> arr_size_pre)
 |--
   [| (1 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 1) |]
 .
 
 Definition smallest_change_safety_wit_9 := 
-forall (arr_size_pre: Z) (lv: (@list Z)) (arr: Z) (out: Z) (i: Z) ,
+forall (arr_size_pre: Z) (arr_pre: Z) (lv: (@list Z)) (out: Z) (i: Z) ,
   [| ((Znth i lv 0) <> (Znth ((arr_size_pre - 1 ) - i ) lv 0)) |] 
   &&  [| (i < ((arr_size_pre - 1 ) - i )) |] 
+  &&  [| (0 <= arr_size_pre) |] 
+  &&  [| (arr_size_pre < INT_MAX) |] 
+  &&  [| (arr_size_pre = (Zlength (lv))) |] 
+  &&  [| (problem_73_pre_z lv ) |] 
+  &&  [| (smallest_change_int_range lv ) |] 
   &&  [| (0 <= i) |] 
   &&  [| ((2 * i ) <= arr_size_pre) |] 
-  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |] 
-  &&  [| (0 <= arr_size_pre) |] 
-  &&  [| (arr_size_pre < INT_MAX) |]
-  &&  (IntArray.full arr arr_size_pre lv )
+  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |]
+  &&  (IntArray.full arr_pre arr_size_pre lv )
+  **  ((( &( "arr" ) )) # Ptr  |-> arr_pre)
+  **  ((( &( "arr_size" ) )) # Int  |-> arr_size_pre)
   **  ((( &( "i" ) )) # Int  |-> i)
   **  ((( &( "out" ) )) # Int  |-> out)
-  **  ((( &( "arr" ) )) # Ptr  |-> arr)
-  **  ((( &( "arr_size" ) )) # Int  |-> arr_size_pre)
 |--
   [| ((out + 1 ) <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= (out + 1 )) |]
 .
 
 Definition smallest_change_safety_wit_10 := 
-forall (arr_size_pre: Z) (lv: (@list Z)) (arr: Z) (out: Z) (i: Z) ,
+forall (arr_size_pre: Z) (arr_pre: Z) (lv: (@list Z)) (out: Z) (i: Z) ,
   [| ((Znth i lv 0) <> (Znth ((arr_size_pre - 1 ) - i ) lv 0)) |] 
   &&  [| (i < ((arr_size_pre - 1 ) - i )) |] 
+  &&  [| (0 <= arr_size_pre) |] 
+  &&  [| (arr_size_pre < INT_MAX) |] 
+  &&  [| (arr_size_pre = (Zlength (lv))) |] 
+  &&  [| (problem_73_pre_z lv ) |] 
+  &&  [| (smallest_change_int_range lv ) |] 
   &&  [| (0 <= i) |] 
   &&  [| ((2 * i ) <= arr_size_pre) |] 
-  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |] 
-  &&  [| (0 <= arr_size_pre) |] 
-  &&  [| (arr_size_pre < INT_MAX) |]
-  &&  (IntArray.full arr arr_size_pre lv )
+  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |]
+  &&  (IntArray.full arr_pre arr_size_pre lv )
+  **  ((( &( "arr" ) )) # Ptr  |-> arr_pre)
+  **  ((( &( "arr_size" ) )) # Int  |-> arr_size_pre)
   **  ((( &( "i" ) )) # Int  |-> i)
   **  ((( &( "out" ) )) # Int  |-> out)
-  **  ((( &( "arr" ) )) # Ptr  |-> arr)
-  **  ((( &( "arr_size" ) )) # Int  |-> arr_size_pre)
 |--
   [| (1 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 1) |]
 .
 
 Definition smallest_change_safety_wit_11 := 
-forall (arr_size_pre: Z) (lv: (@list Z)) (arr: Z) (out: Z) (i: Z) ,
-  [| ((Znth i lv 0) <> (Znth ((arr_size_pre - 1 ) - i ) lv 0)) |] 
+forall (arr_size_pre: Z) (arr_pre: Z) (lv: (@list Z)) (out: Z) (i: Z) ,
+  [| ((Znth i lv 0) = (Znth ((arr_size_pre - 1 ) - i ) lv 0)) |] 
   &&  [| (i < ((arr_size_pre - 1 ) - i )) |] 
+  &&  [| (0 <= arr_size_pre) |] 
+  &&  [| (arr_size_pre < INT_MAX) |] 
+  &&  [| (arr_size_pre = (Zlength (lv))) |] 
+  &&  [| (problem_73_pre_z lv ) |] 
+  &&  [| (smallest_change_int_range lv ) |] 
   &&  [| (0 <= i) |] 
   &&  [| ((2 * i ) <= arr_size_pre) |] 
-  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |] 
-  &&  [| (0 <= arr_size_pre) |] 
-  &&  [| (arr_size_pre < INT_MAX) |]
-  &&  (IntArray.full arr arr_size_pre lv )
-  **  ((( &( "i" ) )) # Int  |-> i)
-  **  ((( &( "out" ) )) # Int  |-> (out + 1 ))
-  **  ((( &( "arr" ) )) # Ptr  |-> arr)
+  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |]
+  &&  (IntArray.full arr_pre arr_size_pre lv )
+  **  ((( &( "arr" ) )) # Ptr  |-> arr_pre)
   **  ((( &( "arr_size" ) )) # Int  |-> arr_size_pre)
+  **  ((( &( "i" ) )) # Int  |-> i)
+  **  ((( &( "out" ) )) # Int  |-> out)
 |--
   [| ((i + 1 ) <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= (i + 1 )) |]
 .
 
 Definition smallest_change_safety_wit_12 := 
-forall (arr_size_pre: Z) (lv: (@list Z)) (arr: Z) (out: Z) (i: Z) ,
-  [| ((Znth i lv 0) = (Znth ((arr_size_pre - 1 ) - i ) lv 0)) |] 
+forall (arr_size_pre: Z) (arr_pre: Z) (lv: (@list Z)) (out: Z) (i: Z) ,
+  [| ((Znth i lv 0) <> (Znth ((arr_size_pre - 1 ) - i ) lv 0)) |] 
   &&  [| (i < ((arr_size_pre - 1 ) - i )) |] 
+  &&  [| (0 <= arr_size_pre) |] 
+  &&  [| (arr_size_pre < INT_MAX) |] 
+  &&  [| (arr_size_pre = (Zlength (lv))) |] 
+  &&  [| (problem_73_pre_z lv ) |] 
+  &&  [| (smallest_change_int_range lv ) |] 
   &&  [| (0 <= i) |] 
   &&  [| ((2 * i ) <= arr_size_pre) |] 
-  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |] 
-  &&  [| (0 <= arr_size_pre) |] 
-  &&  [| (arr_size_pre < INT_MAX) |]
-  &&  (IntArray.full arr arr_size_pre lv )
-  **  ((( &( "i" ) )) # Int  |-> i)
-  **  ((( &( "out" ) )) # Int  |-> out)
-  **  ((( &( "arr" ) )) # Ptr  |-> arr)
+  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |]
+  &&  (IntArray.full arr_pre arr_size_pre lv )
+  **  ((( &( "arr" ) )) # Ptr  |-> arr_pre)
   **  ((( &( "arr_size" ) )) # Int  |-> arr_size_pre)
+  **  ((( &( "i" ) )) # Int  |-> i)
+  **  ((( &( "out" ) )) # Int  |-> (out + 1 ))
 |--
   [| ((i + 1 ) <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= (i + 1 )) |]
@@ -240,112 +275,144 @@ forall (arr_size_pre: Z) (lv: (@list Z)) (arr: Z) (out: Z) (i: Z) ,
 Definition smallest_change_entail_wit_1 := 
 forall (arr_size_pre: Z) (arr_pre: Z) (lv: (@list Z)) ,
   [| (0 <= arr_size_pre) |] 
-  &&  [| (arr_size_pre < INT_MAX) |]
+  &&  [| (arr_size_pre < INT_MAX) |] 
+  &&  [| (arr_size_pre = (Zlength (lv))) |] 
+  &&  [| (problem_73_pre_z lv ) |] 
+  &&  [| (smallest_change_int_range lv ) |]
   &&  (IntArray.full arr_pre arr_size_pre lv )
 |--
-  [| (0 <= 0) |] 
+  [| (0 <= arr_size_pre) |] 
+  &&  [| (arr_size_pre < INT_MAX) |] 
+  &&  [| (arr_size_pre = (Zlength (lv))) |] 
+  &&  [| (problem_73_pre_z lv ) |] 
+  &&  [| (smallest_change_int_range lv ) |] 
+  &&  [| (0 <= 0) |] 
   &&  [| ((2 * 0 ) <= arr_size_pre) |] 
-  &&  [| (0 = (count_half_mismatches_upto (0) (lv))) |] 
-  &&  [| (0 <= arr_size_pre) |] 
-  &&  [| (arr_size_pre < INT_MAX) |]
+  &&  [| (0 = (count_half_mismatches_upto (0) (lv))) |]
   &&  (IntArray.full arr_pre arr_size_pre lv )
 .
 
 Definition smallest_change_entail_wit_2_1 := 
-forall (arr_size_pre: Z) (lv: (@list Z)) (arr: Z) (out: Z) (i: Z) ,
-  [| ((Znth i lv 0) = (Znth ((arr_size_pre - 1 ) - i ) lv 0)) |] 
+forall (arr_size_pre: Z) (arr_pre: Z) (lv: (@list Z)) (out: Z) (i: Z) ,
+  [| ((Znth i lv 0) <> (Znth ((arr_size_pre - 1 ) - i ) lv 0)) |] 
   &&  [| (i < ((arr_size_pre - 1 ) - i )) |] 
+  &&  [| (0 <= arr_size_pre) |] 
+  &&  [| (arr_size_pre < INT_MAX) |] 
+  &&  [| (arr_size_pre = (Zlength (lv))) |] 
+  &&  [| (problem_73_pre_z lv ) |] 
+  &&  [| (smallest_change_int_range lv ) |] 
   &&  [| (0 <= i) |] 
   &&  [| ((2 * i ) <= arr_size_pre) |] 
-  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |] 
-  &&  [| (0 <= arr_size_pre) |] 
-  &&  [| (arr_size_pre < INT_MAX) |]
-  &&  (IntArray.full arr arr_size_pre lv )
+  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |]
+  &&  (IntArray.full arr_pre arr_size_pre lv )
 |--
-  [| (0 <= (i + 1 )) |] 
+  [| (0 <= arr_size_pre) |] 
+  &&  [| (arr_size_pre < INT_MAX) |] 
+  &&  [| (arr_size_pre = (Zlength (lv))) |] 
+  &&  [| (problem_73_pre_z lv ) |] 
+  &&  [| (smallest_change_int_range lv ) |] 
+  &&  [| (0 <= (i + 1 )) |] 
   &&  [| ((2 * (i + 1 ) ) <= arr_size_pre) |] 
-  &&  [| (out = (count_half_mismatches_upto ((i + 1 )) (lv))) |] 
-  &&  [| (0 <= arr_size_pre) |] 
-  &&  [| (arr_size_pre < INT_MAX) |]
-  &&  (IntArray.full arr arr_size_pre lv )
+  &&  [| ((out + 1 ) = (count_half_mismatches_upto ((i + 1 )) (lv))) |]
+  &&  (IntArray.full arr_pre arr_size_pre lv )
 .
 
 Definition smallest_change_entail_wit_2_2 := 
-forall (arr_size_pre: Z) (lv: (@list Z)) (arr: Z) (out: Z) (i: Z) ,
-  [| ((Znth i lv 0) <> (Znth ((arr_size_pre - 1 ) - i ) lv 0)) |] 
+forall (arr_size_pre: Z) (arr_pre: Z) (lv: (@list Z)) (out: Z) (i: Z) ,
+  [| ((Znth i lv 0) = (Znth ((arr_size_pre - 1 ) - i ) lv 0)) |] 
   &&  [| (i < ((arr_size_pre - 1 ) - i )) |] 
+  &&  [| (0 <= arr_size_pre) |] 
+  &&  [| (arr_size_pre < INT_MAX) |] 
+  &&  [| (arr_size_pre = (Zlength (lv))) |] 
+  &&  [| (problem_73_pre_z lv ) |] 
+  &&  [| (smallest_change_int_range lv ) |] 
   &&  [| (0 <= i) |] 
   &&  [| ((2 * i ) <= arr_size_pre) |] 
-  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |] 
-  &&  [| (0 <= arr_size_pre) |] 
-  &&  [| (arr_size_pre < INT_MAX) |]
-  &&  (IntArray.full arr arr_size_pre lv )
+  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |]
+  &&  (IntArray.full arr_pre arr_size_pre lv )
 |--
-  [| (0 <= (i + 1 )) |] 
+  [| (0 <= arr_size_pre) |] 
+  &&  [| (arr_size_pre < INT_MAX) |] 
+  &&  [| (arr_size_pre = (Zlength (lv))) |] 
+  &&  [| (problem_73_pre_z lv ) |] 
+  &&  [| (smallest_change_int_range lv ) |] 
+  &&  [| (0 <= (i + 1 )) |] 
   &&  [| ((2 * (i + 1 ) ) <= arr_size_pre) |] 
-  &&  [| ((out + 1 ) = (count_half_mismatches_upto ((i + 1 )) (lv))) |] 
-  &&  [| (0 <= arr_size_pre) |] 
-  &&  [| (arr_size_pre < INT_MAX) |]
-  &&  (IntArray.full arr arr_size_pre lv )
+  &&  [| (out = (count_half_mismatches_upto ((i + 1 )) (lv))) |]
+  &&  (IntArray.full arr_pre arr_size_pre lv )
 .
 
 Definition smallest_change_return_wit_1 := 
-forall (arr_size_pre: Z) (arr_pre: Z) (lv: (@list Z)) (arr: Z) (out: Z) (i: Z) ,
+forall (arr_size_pre: Z) (arr_pre: Z) (lv: (@list Z)) (out: Z) (i: Z) ,
   [| (i >= ((arr_size_pre - 1 ) - i )) |] 
+  &&  [| (0 <= arr_size_pre) |] 
+  &&  [| (arr_size_pre < INT_MAX) |] 
+  &&  [| (arr_size_pre = (Zlength (lv))) |] 
+  &&  [| (problem_73_pre_z lv ) |] 
+  &&  [| (smallest_change_int_range lv ) |] 
   &&  [| (0 <= i) |] 
   &&  [| ((2 * i ) <= arr_size_pre) |] 
-  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |] 
-  &&  [| (0 <= arr_size_pre) |] 
-  &&  [| (arr_size_pre < INT_MAX) |]
-  &&  (IntArray.full arr arr_size_pre lv )
+  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |]
+  &&  (IntArray.full arr_pre arr_size_pre lv )
 |--
-  [| (out = (count_half_mismatches (lv))) |]
+  [| (problem_73_spec_z lv out ) |]
   &&  (IntArray.full arr_pre arr_size_pre lv )
 .
 
 Definition smallest_change_partial_solve_wit_1 := 
-forall (arr_size_pre: Z) (lv: (@list Z)) (arr: Z) (out: Z) (i: Z) ,
+forall (arr_size_pre: Z) (arr_pre: Z) (lv: (@list Z)) (out: Z) (i: Z) ,
   [| (i < ((arr_size_pre - 1 ) - i )) |] 
+  &&  [| (0 <= arr_size_pre) |] 
+  &&  [| (arr_size_pre < INT_MAX) |] 
+  &&  [| (arr_size_pre = (Zlength (lv))) |] 
+  &&  [| (problem_73_pre_z lv ) |] 
+  &&  [| (smallest_change_int_range lv ) |] 
   &&  [| (0 <= i) |] 
   &&  [| ((2 * i ) <= arr_size_pre) |] 
-  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |] 
-  &&  [| (0 <= arr_size_pre) |] 
-  &&  [| (arr_size_pre < INT_MAX) |]
-  &&  (IntArray.full arr arr_size_pre lv )
+  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |]
+  &&  (IntArray.full arr_pre arr_size_pre lv )
 |--
   [| (i < ((arr_size_pre - 1 ) - i )) |] 
+  &&  [| (0 <= arr_size_pre) |] 
+  &&  [| (arr_size_pre < INT_MAX) |] 
+  &&  [| (arr_size_pre = (Zlength (lv))) |] 
+  &&  [| (problem_73_pre_z lv ) |] 
+  &&  [| (smallest_change_int_range lv ) |] 
   &&  [| (0 <= i) |] 
   &&  [| ((2 * i ) <= arr_size_pre) |] 
-  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |] 
-  &&  [| (0 <= arr_size_pre) |] 
-  &&  [| (arr_size_pre < INT_MAX) |]
-  &&  (((arr + (i * sizeof(INT) ) )) # Int  |-> (Znth i lv 0))
-  **  (IntArray.missing_i arr i 0 arr_size_pre lv )
+  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |]
+  &&  (((arr_pre + (i * sizeof(INT) ) )) # Int  |-> (Znth i lv 0))
+  **  (IntArray.missing_i arr_pre i 0 arr_size_pre lv )
 .
 
 Definition smallest_change_partial_solve_wit_2 := 
-forall (arr_size_pre: Z) (lv: (@list Z)) (arr: Z) (out: Z) (i: Z) ,
+forall (arr_size_pre: Z) (arr_pre: Z) (lv: (@list Z)) (out: Z) (i: Z) ,
   [| (i < ((arr_size_pre - 1 ) - i )) |] 
+  &&  [| (0 <= arr_size_pre) |] 
+  &&  [| (arr_size_pre < INT_MAX) |] 
+  &&  [| (arr_size_pre = (Zlength (lv))) |] 
+  &&  [| (problem_73_pre_z lv ) |] 
+  &&  [| (smallest_change_int_range lv ) |] 
   &&  [| (0 <= i) |] 
   &&  [| ((2 * i ) <= arr_size_pre) |] 
-  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |] 
-  &&  [| (0 <= arr_size_pre) |] 
-  &&  [| (arr_size_pre < INT_MAX) |]
-  &&  (IntArray.full arr arr_size_pre lv )
+  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |]
+  &&  (IntArray.full arr_pre arr_size_pre lv )
 |--
   [| (i < ((arr_size_pre - 1 ) - i )) |] 
+  &&  [| (0 <= arr_size_pre) |] 
+  &&  [| (arr_size_pre < INT_MAX) |] 
+  &&  [| (arr_size_pre = (Zlength (lv))) |] 
+  &&  [| (problem_73_pre_z lv ) |] 
+  &&  [| (smallest_change_int_range lv ) |] 
   &&  [| (0 <= i) |] 
   &&  [| ((2 * i ) <= arr_size_pre) |] 
-  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |] 
-  &&  [| (0 <= arr_size_pre) |] 
-  &&  [| (arr_size_pre < INT_MAX) |]
-  &&  (((arr + (((arr_size_pre - 1 ) - i ) * sizeof(INT) ) )) # Int  |-> (Znth ((arr_size_pre - 1 ) - i ) lv 0))
-  **  (IntArray.missing_i arr ((arr_size_pre - 1 ) - i ) 0 arr_size_pre lv )
+  &&  [| (out = (count_half_mismatches_upto (i) (lv))) |]
+  &&  (((arr_pre + (((arr_size_pre - 1 ) - i ) * sizeof(INT) ) )) # Int  |-> (Znth ((arr_size_pre - 1 ) - i ) lv 0))
+  **  (IntArray.missing_i arr_pre ((arr_size_pre - 1 ) - i ) 0 arr_size_pre lv )
 .
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 Include int_array_Strategy_Correct.
 Include uint_array_Strategy_Correct.
 Include undef_uint_array_Strategy_Correct.

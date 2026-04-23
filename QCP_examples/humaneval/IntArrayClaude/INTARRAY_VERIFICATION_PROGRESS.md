@@ -34,7 +34,7 @@
 | `C_55` | 已全链通过 | Fibonacci 滚动变量；已接入 `problem_55_pre/spec`，并用 `fib_step_int_range` 处理加法溢出，manual 已无 `Admitted.`。 |
 | `C_63` | 已全链通过 | FibFib 三变量滚动版本；已接入 `problem_63_pre/spec`，manual 已无 `Admitted.`。 |
 | `C_72` | 已全链通过 | 回文数组且总和不超过阈值；已补 `coins_72.v`、前缀和/镜像 invariant 和 6 个 manual VC，且无 `Admitted.` / `Axiom`。 |
-| `C_73` | 已有生成文件 | manual 仍含 `Admitted.`。 |
+| `C_73` | 已全链通过 | 统计左右镜像不等对数；已补 `coins_73.v`、镜像对计数 invariant 和 5 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_85` | 已全链通过 | 奇数下标求和；已补 `coins_85.v`、循环前缀和 invariant 和 5 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_100` | 已有生成文件 | manual 仍含 `Admitted.`。 |
 | `C_106` | 已有生成文件 | manual 当前无 `Admitted.`，但本文档尚未重新跑完整验收链。 |
@@ -1673,6 +1673,153 @@ grep -nE "Admitted\.|Axiom[[:space:]]" coins_72.v C_72_proof_manual.v
 - 对“循环提前返回 false，正常结束后再按累计量判断 true/false”的题，invariant 要同时记录“提前返回条件的反面已经在前缀成立”和累计量。
 - 对 C `int` 返回布尔语义，建议在 `coins_XX.v` 中建一个 `problem_XX_spec_z`，避免在 C 注解里重复展开 `true/false` 析取。
 - 对需要从 `sublist 0 i` 变成整表 `lv` 的 return VC，先在 `entailer!` 前 assert `i = Zlength lv` 后的结论，再交给 `entailer!` 整理资源。
+
+## C_73 验证记录
+
+### 结论
+
+`C_73` 已完成完整验证。
+
+已通过的验收链：
+
+```bash
+eval "$(opam env --switch=coq8201 --set-switch)"
+cd QCP_examples/humaneval/IntArrayClaude
+COQINCLUDES="$(tr '\n' ' ' < ../IntClaude/_CoqProject)"
+coqc $COQINCLUDES coins_73.v
+coqc $COQINCLUDES C_73_goal.v
+coqc $COQINCLUDES C_73_proof_auto.v
+coqc $COQINCLUDES C_73_proof_manual.v
+coqc $COQINCLUDES C_73_goal_check.v
+```
+
+扫描结果：
+
+```bash
+grep -nE "Admitted\.|Axiom[[:space:]]" coins_73.v C_73_proof_manual.v
+```
+
+无输出。
+
+本题编译产物已清理，包括 `.aux`、`.glob`、`.vo`、`.vos`、`.vok` 和 `C_73_proof_manual_backup*.v`。
+
+### 文件变更
+
+- `C_73.c`
+
+  已补 QCP function spec 和 loop invariant，未修改 C 执行语句。函数前置条件包含：
+
+  - `0 <= arr_size && arr_size < INT_MAX`。
+  - `arr_size == Zlength(lv)`。
+  - `problem_73_pre_z(lv)`。
+  - `smallest_change_int_range(lv)`。
+  - `IntArray::full(arr, arr_size, lv)`。
+
+  后置条件使用 `problem_73_spec_z(lv, __return)` 连接 C 循环语义和返回值，并保持输入数组资源不变。
+
+  循环 invariant 记录：
+
+  - `arr == arr@pre`、`arr_size == arr_size@pre`。
+  - `0 <= i`、`2 * i <= arr_size`。
+  - `out == count_half_mismatches_upto(i, lv)`。
+  - `smallest_change_int_range(lv)`。
+  - `IntArray::full(arr, arr_size, lv)`。
+
+- `coins_73.v`
+
+  新增 `Load "../spec/73".` 的 Coq 侧桥接文件。定义：
+
+  - `problem_73_pre_z`：包装原始 `problem_73_pre`。
+  - `count_half_mismatches_upto_nat` / `count_half_mismatches_upto`：按“已处理的镜像对数量”统计 mismatch。
+  - `problem_73_spec_z`：使用退出下标存在性描述最终结果。
+  - `smallest_change_int_range`：为 `out += 1` 提供 C `int` 安全范围。
+
+  主要引理：
+
+  - `count_half_mismatches_upto_0`。
+  - `count_half_mismatches_upto_step_eq`。
+  - `count_half_mismatches_upto_step_neq`。
+  - `problem_73_spec_z_of_exit`。
+
+- `C_73_proof_manual.v`
+
+  已补完 5 个 manual VC：
+
+  - `proof_of_smallest_change_safety_wit_9`：证明 mismatch 分支 `out + 1` 的安全范围。
+  - `proof_of_smallest_change_entail_wit_1`：初始化循环 invariant。
+  - `proof_of_smallest_change_entail_wit_2_1`：不等分支推进 mismatch 计数。
+  - `proof_of_smallest_change_entail_wit_2_2`：相等分支推进 invariant，计数不变。
+  - `proof_of_smallest_change_return_wit_1`：循环退出后连接到 `problem_73_spec_z`。
+
+### 遇到的问题
+
+1. `C_73.c` 没有 QCP 注解，但目录中已有旧生成文件。
+
+   表现：旧 `C_73_proof_manual.v` 中 5 个 lemma 全是 `Admitted.`，且没有 `coins_73.v` 承载 `count_half_mismatches_upto` 等定义。
+
+   处理：补齐 `Require` / `Ensure` / `Inv Assert` 和 `coins_73.v` 后，用正确的 IntArrayClaude symexec 命令重新生成：
+
+   ```bash
+   linux-binary/symexec \
+     --goal-file=QCP_examples/humaneval/IntArrayClaude/C_73_goal.v \
+     --proof-auto-file=QCP_examples/humaneval/IntArrayClaude/C_73_proof_auto.v \
+     --proof-manual-file=QCP_examples/humaneval/IntArrayClaude/C_73_proof_manual.v \
+     --coq-logic-path=SimpleC.EE \
+     -slp QCP_examples/humaneval/IntArrayClaude SimpleC.EE \
+     --input-file=QCP_examples/humaneval/IntArrayClaude/C_73.c \
+     -IQCP_examples/LLM_friendly_cases \
+     --gen-and-backup \
+     --no-exec-info
+   ```
+
+2. 原始 spec 使用 `firstn` / `skipn` / `rev` / `count_diff`，直接放进 loop invariant 会很重。
+
+   表现：C 循环的自然状态是下标 `i` 和镜像位置 `arr_size - 1 - i`，与原始 `smallest_change_impl` 的列表切片结构不直接同形。
+
+   处理：在 `coins_73.v` 中建立 C 侧前缀计数函数 `count_half_mismatches_upto`，并把后置条件写成退出下标存在性：
+
+   ```coq
+   exists i,
+     0 <= i /\
+     2 * i <= Zlength arr /\
+     i >= Zlength arr - 1 - i /\
+     out = count_half_mismatches_upto i arr.
+   ```
+
+   这样 return VC 只需使用 `problem_73_spec_z_of_exit`。
+
+3. 循环条件 `i < arr_size - 1 - i` 的可用边界要转成 `2 * (i + 1) <= arr_size`。
+
+   表现：推进 invariant 时需要证明下一轮满足 `2 * (i + 1) <= arr_size`。
+
+   处理：invariant 保留 `2 * i <= arr_size`，循环体分支额外有 `i < arr_size - 1 - i`，目标中的下一轮边界可由 `lia` 解决。
+
+4. `out += 1` 需要单独的 C 整数范围谓词。
+
+   表现：安全 VC 需要证明 `INT_MIN <= out + 1 <= INT_MAX`。
+
+   处理：增加 `smallest_change_int_range(lv)`，在 mismatch 分支从该谓词取出当前 `i` 的 `count_half_mismatches_upto i lv + 1` 范围。
+
+5. step 引理使用 `Zlength lv - 1 - i`，而 VC 分支假设里是 `arr_size_pre - 1 - i`。
+
+   表现：manual 中直接 `rewrite count_half_mismatches_upto_step_neq by lia` 会失败，因为第二个 side condition 是元素不等式，不是纯算术；并且下标表达式还差 `arr_size_pre = Zlength lv` 的替换。
+
+   处理：rewrite 时显式处理 side condition：
+
+   ```coq
+   rewrite count_half_mismatches_upto_step_neq.
+   entailer!.
+   - lia.
+   - rewrite <- H3. exact H.
+   ```
+
+   相等分支同理使用 `count_half_mismatches_upto_step_eq`。
+
+### 后续注意
+
+- 对左右镜像扫描题，优先用“已处理的镜像对数量”建模，loop 边界写成 `2*i <= len`，退出规格写成 `i >= len - 1 - i`。
+- 对原始 spec 里有 `firstn/skipn/rev` 的题，先建立 C 侧 step 函数；如果需要再补桥接到原始切片规格，不要一开始把这些切片表达式塞进 invariant。
+- step 引理的下标最好统一用 `Zlength lv`；manual 中遇到 VC 的 `arr_size_pre` 版本时，先用长度等式改写。
 
 ## C_85 验证记录
 

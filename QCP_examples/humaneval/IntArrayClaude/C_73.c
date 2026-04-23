@@ -12,25 +12,39 @@ smallest_change({1, 2, 3, 2, 1}) == 0
 #include "verification_list.h"
 #include "int_array_def.h"
 
-/*@ Extern Coq (count_half_mismatches_upto: Z -> list Z -> Z)
-               (count_half_mismatches: list Z -> Z) */
+/*@ Extern Coq (problem_73_pre_z: list Z -> Prop)
+               (problem_73_spec_z: list Z -> Z -> Prop)
+               (count_half_mismatches_upto: Z -> list Z -> Z)
+               (smallest_change_int_range: list Z -> Prop) */
+/*@ Import Coq Require Import coins_73 */
 
 int smallest_change(int *arr, int arr_size)
 /*@ With lv
     Require
         0 <= arr_size && arr_size < INT_MAX &&
+        arr_size == Zlength(lv) &&
+        problem_73_pre_z(lv) &&
+        smallest_change_int_range(lv) &&
         IntArray::full(arr, arr_size, lv)
     Ensure
-        __return == count_half_mismatches(lv) &&
+        problem_73_spec_z(lv, __return) &&
         IntArray::full(arr, arr_size, lv)
 */
 {
     int out = 0;
     int i;
-    /*@ Inv
-        0 <= i && 2 * i <= arr_size@pre &&
+
+    /*@ Inv Assert
+        arr == arr@pre &&
+        arr_size == arr_size@pre &&
+        0 <= arr_size && arr_size < INT_MAX &&
+        arr_size == Zlength(lv) &&
+        problem_73_pre_z(lv) &&
+        smallest_change_int_range(lv) &&
+        0 <= i &&
+        2 * i <= arr_size &&
         out == count_half_mismatches_upto(i, lv) &&
-        IntArray::full(arr, arr_size@pre, lv)
+        IntArray::full(arr, arr_size, lv)
     */
     for (i = 0; i < arr_size - 1 - i; i++)
         if (arr[i] != arr[arr_size - 1 - i])
