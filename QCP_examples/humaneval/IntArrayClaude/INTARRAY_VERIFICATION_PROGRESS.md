@@ -1,6 +1,6 @@
 # IntArrayClaude 验证进度记录
 
-更新时间：2026-04-23
+更新时间：2026-04-24
 
 这份文档用于记录 `QCP_examples/humaneval/IntArrayClaude` 下各题的验证进度，以及每题验证时遇到的具体问题。
 
@@ -36,6 +36,7 @@
 | `C_72` | 已全链通过 | 回文数组且总和不超过阈值；已补 `coins_72.v`、前缀和/镜像 invariant 和 6 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_73` | 已全链通过 | 统计左右镜像不等对数；已补 `coins_73.v`、镜像对计数 invariant 和 5 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_85` | 已全链通过 | 奇数下标求和；已补 `coins_85.v`、循环前缀和 invariant 和 5 个 manual VC，且无 `Admitted.` / `Axiom`。 |
+| `C_94` | 已全链通过 | 最大素数的各位和；修复原始 C 将 `1` 误判为素数的问题，已补 `coins_94.v` 和 14 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_100` | 已有生成文件 | manual 仍含 `Admitted.`。 |
 | `C_106` | 已有生成文件 | manual 当前无 `Admitted.`，但本文档尚未重新跑完整验收链。 |
 | `C_109` | 已有生成文件 | manual 仍含 `Admitted.`。 |
@@ -1980,6 +1981,117 @@ grep -nE "Admitted\.|Axiom[[:space:]]" coins_85.v C_85_proof_manual.v
 - 累加类题目如果 C 类型是 `int`，除了原始语义 precondition，通常还要单独增加面向 C 执行安全的 range predicate。
 - manual 证明里涉及 `i*2` / `2*i` 的 rewrite 前，先用 `replace ... by lia` 做算术归一化。
 - 如果原始 spec 带除法、过滤、奇偶筛选等复杂结构，可以在 `coins_XX.v` 中建立 C 侧前缀函数和退出下标规格，再用小引理连接回原始语义。
+
+## C_94 验证记录
+
+### 结论
+
+- 状态：已全链通过。
+- 是否全链通过：是。
+- 是否无 `Admitted.` / `Axiom`：是。
+
+已通过的验收链：
+
+```bash
+coqc coins_94.v
+coqc C_94_goal.v
+coqc C_94_proof_auto.v
+coqc C_94_proof_manual.v
+coqc C_94_goal_check.v
+```
+
+扫描结果：
+
+```bash
+grep -nE "Admitted\.|Axiom[[:space:]]" coins_94.v C_94_proof_manual.v
+```
+
+无输出。
+
+### 文件变更
+
+- `C_94.c`
+
+  仅保留必要修改：
+
+  - 修复原始语义缺陷：外层候选条件增加 `lst[i] > 1`，避免把 `1` 当作素数。
+  - 按 QCP 格式转换把 `bool` 改为 `int`。
+  - 把 `for (int i ...)` / `for (int j ...)` 的循环变量声明提到循环外。
+  - 将 `j * j <= x` 改成等价且避免乘法溢出的 `j <= x / j`。
+
+  未采用额外证明辅助变量，也没有加入 `sum` 截断逻辑；`while` 的语义保持原程序行为。
+
+- `coins_94.v`
+
+  新增 94 题的 Coq bridge 与辅助引理，包括：
+
+  - `problem_94_pre_z` / `problem_94_spec_z`
+  - `largest_prime_prefix`
+  - `prime_scan_state`
+  - `digit_sum_state`
+  - `list_nonneg_int_range` / `digit_sum_int_range`
+  - 外层前缀推进、内层素数扫描推进、数位和循环推进、return 规格连接引理
+
+- `C_94_proof_manual.v`
+
+  已补完 14 个 manual VC，其中关键点包括：
+
+  - `proof_of_skjkasdkd_safety_wit_21`：证明 `sum + largest % 10` 的安全范围
+  - `proof_of_skjkasdkd_entail_wit_2`：初始化素数扫描 invariant
+  - `proof_of_skjkasdkd_entail_wit_3_1` / `3_2`：把内层循环条件里的 `quot/rem` 目标接回 `div/mod` 侧引理
+  - `proof_of_skjkasdkd_entail_wit_4_1` ~ `4_6`：处理 prime / non-prime 两类外层推进
+  - `proof_of_skjkasdkd_entail_wit_5` / `6`：连接数位和 while 循环入口与一步推进
+  - `proof_of_skjkasdkd_return_wit_1`：退出 while 后连接到 `problem_94_spec_z`
+
+### 遇到的问题
+
+1. 原始 C 程序把 `1` 当成了素数。
+
+   表现：当 `lst[i] == 1` 且 `largest == 0` 时，外层分支成立，但内层 `j = 2; j * j <= 1` 初始就为假，导致 `prime` 保持真并把 `largest` 更新为 `1`。
+
+   解决：只做必要语义修复，在候选条件中加入 `lst[i] > 1`。该问题已同步记录到 `ORIGINAL_C_ISSUES_LOG.md`。
+
+2. `while` 循环一开始尝试用额外 C 变量保存初值，但这不符合“非必要不改源程序”的要求。
+
+   表现：如果在 C 里新增 `original_largest`，虽然证明会更直接，但属于不必要的源程序改动。
+
+   解决：回退这类改动，改用存在量化的 invariant 保存进入拆位循环前的原值，只保留真正必要的语义修复和 QCP 格式转换。
+
+3. `symexec` 生成目标里混用了 `quot/rem` 与 `div/mod`。
+
+   表现：C 条件写成 `j <= x / j` 后，manual VC 中有的地方出现 `x ÷ j`、`x % j`，而 `coins_94.v` 中辅助引理自然写成 `x / j`、`x mod j`，直接应用会对不上。
+
+   解决：manual 证明中显式使用：
+
+   - `Z.quot_div_nonneg`
+   - `Z.rem_mod_nonneg`
+
+   把 VC 里的 `quot/rem` 归一化到 `div/mod`，再应用 `prime_scan_state_step_keep`、`prime_scan_state_step_zero` 和数位和相关引理。
+
+4. `largest@pre` 不能直接用于这个 while invariant。
+
+   表现：尝试直接在注解里写 `largest@pre` 时，符号执行阶段报过 “cannot find the program variable ... in assertion” 一类错误。
+
+   解决：不用新增 C 变量，也不依赖 `while@pre` 记号，改为在 invariant 里写 `exists original_largest, ...`，把原值保存在逻辑层。
+
+5. `symexec` 重新生成后，manual 文件会回到全 `Admitted.` 模板。
+
+   表现：如果先手改 `C_94_proof_manual.v`，后面又重新跑 `symexec`，之前写好的 manual proof 会被覆盖掉。
+
+   解决：先稳定 `C_94.c` 与 `coins_94.v`，确认 `symexec` 生成的 VC 形状不再变化后，再补 manual proof。
+
+6. `C_94_goal.v` 中 safety / entailment 里纯算术看起来简单，但直接用假设编号很脆弱。
+
+   表现：`entailer!` 之后假设编号会随着 proof 形状变化而漂移，写死 `H4/H5/H8` 很容易在后续修改后失效。
+
+   解决：对于取数组范围的地方，改成按假设形状匹配 `list_nonneg_int_range lv`；对 while 和 inner-loop 的证明则尽量用已经整理好的桥接引理，减少手工依赖某个固定编号。
+
+### 后续注意
+
+- 像 `j <= x / j` 这种改写已经自带避免乘法溢出的信息，不要再额外往 C 代码里塞多余的 `j < INT_MAX` 条件。
+- 如果 manual VC 中出现 `quot/rem`，优先检查能不能通过 `Z.quot_div_nonneg` 与 `Z.rem_mod_nonneg` 归一化后直接接到已有引理。
+- 遇到 destructive while，优先考虑逻辑层保存入口值，而不是给 C 程序新增“证明辅助变量”。
+- 重新跑 `symexec` 前先确认源文件和 bridge 文件都已经稳定，否则 manual proof 很容易被覆盖重写。
 
 ## 后续记录模板
 
