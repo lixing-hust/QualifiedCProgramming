@@ -1,6 +1,6 @@
 # IntArrayClaude 验证进度记录
 
-更新时间：2026-04-24
+更新时间：2026-04-25
 
 这份文档用于记录 `QCP_examples/humaneval/IntArrayClaude` 下各题的验证进度，以及每题验证时遇到的具体问题。
 
@@ -37,7 +37,7 @@
 | `C_73` | 已全链通过 | 统计左右镜像不等对数；已补 `coins_73.v`、镜像对计数 invariant 和 5 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_85` | 已全链通过 | 奇数下标求和；已补 `coins_85.v`、循环前缀和 invariant 和 5 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_94` | 已全链通过 | 最大素数的各位和；修复原始 C 将 `1` 误判为素数的问题，已补 `coins_94.v` 和 14 个 manual VC，且无 `Admitted.` / `Axiom`。 |
-| `C_100` | 已有生成文件 | manual 仍含 `Admitted.`。 |
+| `C_100` | 已全链通过 | 已改成函数内部 malloc 并返回 `IntArray *`；补 `make_pile` 桥接、前缀写入 invariant 和 5 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_106` | 已有生成文件 | manual 当前无 `Admitted.`，但本文档尚未重新跑完整验收链。 |
 | `C_109` | 已有生成文件 | manual 仍含 `Admitted.`。 |
 | `C_121` | 已有生成文件 | manual 仍含 `Admitted.`。 |
@@ -2092,6 +2092,314 @@ grep -nE "Admitted\.|Axiom[[:space:]]" coins_94.v C_94_proof_manual.v
 - 如果 manual VC 中出现 `quot/rem`，优先检查能不能通过 `Z.quot_div_nonneg` 与 `Z.rem_mod_nonneg` 归一化后直接接到已有引理。
 - 遇到 destructive while，优先考虑逻辑层保存入口值，而不是给 C 程序新增“证明辅助变量”。
 - 重新跑 `symexec` 前先确认源文件和 bridge 文件都已经稳定，否则 manual proof 很容易被覆盖重写。
+
+## C_96 验证记录
+
+### 结论
+
+- 状态：暂停在 `symexec` 阶段，尚未生成可用的 witness / manual VC。
+- 当前判断：卡点不在 Coq proof，而在 QCP 对“读取正在构造中的输出数组前缀”这一源码形状的执行支持上。
+- 已确认 `coins_96.v` 可编译通过。
+
+### 文件变更
+
+- `C_96.c`
+
+  当前保留的修改：
+
+  - 在用户确认后，引入了 `int *data = out->data;`。
+  - 在用户确认后，引入了局部变量 `output_size`，循环中维护输出长度，函数尾再 `out->size = output_size;`。
+  - 在用户进一步确认后，将首个素数 `2` 的写入移到循环外，主循环改为从 `i = 3` 开始。
+  - 将内层试除循环从
+    `for (j=0; j<output_size && data[j] <= i/data[j]; j++)`
+    改为先循环、后在循环体内读取
+    `int current = data[j]; if (current > i/current) break; ...`
+    以避免在 `for` 条件中直接做数组读取。
+  - 增加了若干 `Assert` / `Inv Assert`，尝试在首次写入和内层读取前向 QCP 显式提供数组权限与边界信息。
+
+- `coins_96.v`
+
+  新增 / 保留的 bridge 内容：
+
+  - `problem_96_pre_z`
+  - `problem_96_spec_z`
+  - `count_up_to_state`
+  - `prime_test_state`
+  - `count_up_to_state_init`
+  - `count_up_to_state_after_two`
+  - `problem_96_spec_z_of_state`
+
+### 遇到的问题
+
+1. 原始格式转换版在首次写输出数组时就卡住。
+
+   表现：
+
+   `symexec` 在 `out->data[out->size] = i;` 上报：
+
+   ```text
+   Assign Exec fail
+   ```
+
+   解决尝试：
+
+   - 先引入本地 `data` 指针。
+   - 再引入局部 `output_size`，避免循环内部直接依赖 `out->size`。
+   - 再把首次写入 `2` 从循环内特判改成循环外初始化。
+
+   结果：
+
+   - 前两步仍不足以让 `symexec` 通过首次写入。
+   - 把 `2` 的初始化移到循环外后，`symexec` 终于穿过了“首次写输出数组”这一关。
+
+2. 单靠中间 `Assert` 无法让首次写入分支通过。
+
+   表现：
+
+   按 `tutorial/T3-assertion-and-invariant.md` 的方式，在 `data[0] = i;` 前插入了中间 `Assert`，显式提供：
+
+   - `output_size == 0`
+   - `i == 2`
+   - `data_at(&(out->size), 0)`
+   - `IntArray::undef_full(data, n)` / `IntArray::undef_seg(data, 0, n)`
+
+   但 `symexec` 仍在该赋值上报 `Assign Exec fail`。
+
+   结论：
+
+   - 中间断言是有帮助的，但不能单独解决这个首次写入形状。
+   - 说明执行器对“循环分支中的首次输出数组写入”本身就比较敏感。
+
+3. 当前真正的主卡点是读取正在构造中的输出数组前缀。
+
+   表现：
+
+   在把 `2` 外提后，`symexec` 已能进入内层试除循环，但在读取输出数组元素时卡住：
+
+   - 原先卡在 `for` 条件中的 `data[j]`
+   - 改成循环体读取后，仍卡在
+     `int current = data[j];`
+
+   报错统一表现为：
+
+   ```text
+   Cannot derive the precondition of Memory Read.
+   ```
+
+   解决尝试：
+
+   - 把内层数组资源从 `seg` 改成 `IntArray::full(data, output_size, output_l)`。
+   - 在 `int current = data[j];` 前插入中间 `Assert`，显式提供：
+     - `0 <= j < output_size`
+     - `IntArray::full(data, output_size, output_l)`
+     - `prime_test_state(i, output_l, j, isp)`
+
+   结果：
+
+   - 报错位置推进到了读取语句本身，说明断言确实在起作用。
+   - 但即便把边界和读权限都显式摊开，QCP 仍无法执行这条读取。
+
+4. 仓库里虽然有“条件里读数组”和“数组元素读到局部变量”的例子，但缺少真正等价的已验证模板。
+
+   已验证且相关的例子：
+
+   - `C_26.c`：`int current = numbers[i];`
+   - `C_94.c`：`int x = lst[i];`
+   - `C_68.c`：条件里读固定位置 `data[0]`
+
+   当前未找到的模板：
+
+   - 读取“正在构造中的输出数组前缀”：
+     `int current = data[j];`
+   - 其中 `j < output_size` 且 `output_size` 在循环中动态变化。
+
+   当前判断：
+
+   - “把数组元素读到局部变量”本身不是问题。
+   - 更特殊、更难的是：读取的是输出数组前缀而非输入数组，而且前缀长度还在当前循环中变化。
+
+### 后续注意
+
+- 如果之后继续验证 `C_96`，不要再优先尝试堆更多 `Assert`；这一条路已经验证过只能小幅推进报错位置，无法真正穿透 `data[j]` 的读取。
+- 当前最可信的下一步方向，是把内层素数检测改成 `C_94` 风格的纯整数扫描，不再依赖读取输出数组前缀。
+- 若之后有人给出“QCP 如何读取正在构造中的输出前缀”的专门做法，可直接回到当前 `output_size + data` 版本继续尝试；这版已经跨过了首次写入问题，主要只剩内层 `data[j]` 读取。
+
+## C_100 验证记录
+
+### 结论
+
+- 状态：已完成完整验证。
+- 是否全链通过：是。
+- 是否无 `Admitted.` / `Axiom`：是，`coins_100.v` 与 `C_100_proof_manual.v` 扫描无命中。
+
+已通过的验收链：
+
+```bash
+coqc coins_100.v
+coqc C_100_goal.v
+coqc C_100_proof_auto.v
+coqc C_100_proof_manual.v
+coqc C_100_goal_check.v
+```
+
+### 文件变更
+
+- `C_100.c`
+
+  - 将接口从调用者预分配输出数组：
+
+    ```c
+    void make_a_pile(int n, int *out)
+    ```
+
+    改成函数内部 malloc 并返回结构体指针：
+
+    ```c
+    IntArray *make_a_pile(int n)
+    ```
+
+  - 增加 `IntArray` 结构体定义，以及 `malloc_int_array_struct()` / `malloc_int_array()` wrapper 规格。
+  - 函数后条件描述返回结构体中的 `data`、`size` 字段，以及 `IntArray::full(data, output_size, output_l)`。
+  - 循环 invariant 使用 `Inv Assert`，维护：
+    - `data_at(&(out -> data), data)`
+    - `data_at(&(out -> size), n0)`
+    - 已写前缀 `IntArray::seg(data, 0, i, sublist(0, i, make_pile(n0)))`
+    - 未写后缀 `IntArray::undef_seg(data, i, n0)`
+    - `pile_int_range(n0)` 与 `Zlength(make_pile(n0)) == n0`
+
+- `coins_100.v`
+
+  新增 bridge 内容：
+
+  - `problem_100_pre_z`
+  - `problem_100_spec_z`
+  - `pile_int_range`
+  - `make_pile`
+  - `make_pile_Zlength`
+  - `make_pile_Znth`
+  - `make_pile_sublist_snoc`
+  - `problem_100_spec_z_make_pile`
+
+- `C_100_proof_manual.v`
+
+  补完 5 个 manual VC：
+
+  - `make_a_pile_safety_wit_3`
+  - `make_a_pile_safety_wit_4`
+  - `make_a_pile_entail_wit_1`
+  - `make_a_pile_entail_wit_2`
+  - `make_a_pile_return_wit_1`
+
+### 遇到的问题
+
+1. 问题：原格式是“预分配 out 参数”，不符合本次目标接口。
+
+   处理：
+
+   - 参考 `C_25.c` / `C_68.c`，改成 `IntArray *` 返回。
+   - 使用 `malloc_int_array_struct()` 分配结构体，`malloc_int_array(n)` 分配数据区。
+   - 后条件只暴露最终返回给调用者的结构体字段和完整输出数组资源。
+
+2. 问题：仅有函数前后条件时，循环写数组后的后置条件不可证。
+
+   表现：
+
+   - 需要证明第 `i` 次写入后，输出数组前缀从 `sublist 0 i` 推进到 `sublist 0 (i + 1)`。
+
+   处理：
+
+   - 在 C invariant 中显式拆分已写前缀和未写后缀。
+   - 在 `coins_100.v` 中定义逻辑输出列表 `make_pile n`。
+   - 增加 `make_pile_sublist_snoc`：
+
+     ```coq
+     sublist 0 (i + 1) (make_pile n) =
+       sublist 0 i (make_pile n) ++ (n + 2 * i) :: nil
+     ```
+
+   - 在 `entail_wit_2` 中用 `IntArray.seg_single` 和 `IntArray.seg_merge_to_seg` 合并写入后的单点资源。
+
+3. 问题：写入表达式 `n + 2 * i` 需要独立的 C `int` 范围证明。
+
+   表现：
+
+   - `symexec` 生成了两个 manual safety VC：
+     - `n0 + 2 * i` 在 `INT_MIN/INT_MAX` 内。
+     - `2 * i` 在 `INT_MIN/INT_MAX` 内。
+
+   处理：
+
+   - 在前置条件加入 `pile_int_range(n0)`：
+
+     ```coq
+     forall i, 0 <= i < n -> INT_MIN <= n + 2 * i <= INT_MAX
+     ```
+
+   - safety VC 中从 `pile_int_range n0` 对当前 `i` 实例化，再由线性算术推出目标。
+
+4. 问题：`coins_100.v` 一开始缺少 `INT_MIN` / `INT_MAX` 所在环境。
+
+   表现：
+
+   ```text
+   Error: The reference INT_MIN was not found in the current environment.
+   ```
+
+   处理：
+
+   - 补充：
+
+     ```coq
+     From SimpleC.SL Require Import Mem SeparationLogic.
+     Require Import Logic.LogicGenerator.demo932.Interface.
+     ```
+
+5. 问题：证明 `make_pile` 相关引理时，环境中没有直接可用的 `Znth_map` / `nth_map`。
+
+   表现：
+
+   - `Znth_map` 不存在。
+   - `nth_map` 也不在当前导入环境中。
+
+   处理：
+
+   - 改用标准 `nth_error_map` + `nth_error_nth` / `nth_error_nth'` 证明取值性质。
+   - `make_pile` 定义使用 `Zseq`，并导入 `AUXLib.ListLib`，复用 `Zseq_length` / `Zseq_nth`。
+
+6. 问题：`sublist_split` 的边界条件期望 `Z.of_nat (length l)`，而不是直接写出的 `Zlength l`。
+
+   表现：
+
+   ```text
+   The term "Hsplit_hi" has type
+   "i <= i + 1 <= Zlength (make_pile n)"
+   while it is expected to have type
+   "i <= i + 1 <= Z.of_nat (length (make_pile n))".
+   ```
+
+   处理：
+
+   - 显式用 `Zlength_correct` 在证明中转换。
+   - 对 `sublist_split` 的两个前提分别构造 `Hsplit_lo` 和 `Hsplit_hi`，再带前提重写。
+
+7. 问题：返回 VC 需要把最终 `seg + undef_seg` 还原成完整数组。
+
+   处理：
+
+   - 由循环退出条件和 invariant 推出 `i = n0`。
+   - 使用 `sublist_self` 将前缀列表化简成 `make_pile n0`。
+   - 使用 `IntArray.seg_to_full` 与 `IntArray.undef_seg_empty` 得到 `IntArray::full(data, n0, make_pile n0)`。
+   - 使用 `problem_100_spec_z_make_pile` 接回题目规格。
+
+### 后续注意
+
+- 对“纯构造输出数组”的题，建议一开始就在 `coins_XX.v` 中定义逻辑输出列表，并配套：
+  - `*_Zlength`
+  - `*_Znth`
+  - `*_sublist_snoc`
+  - `problem_XX_spec_z_*`
+- 逐元素写输出数组时，invariant 中优先使用 `IntArray::seg(data, 0, i, sublist(...)) * IntArray::undef_seg(data, i, n)`。
+- 如果输出列表由索引生成，`Zseq` 比 `List.seq` 更贴近 C 层 `Z` 证明，能减少 nat/Z 来回转换。
 
 ## 后续记录模板
 
