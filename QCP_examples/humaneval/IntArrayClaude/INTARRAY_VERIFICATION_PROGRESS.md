@@ -1,6 +1,6 @@
 # IntArrayClaude 验证进度记录
 
-更新时间：2026-04-25
+更新时间：2026-04-26
 
 这份文档用于记录 `QCP_examples/humaneval/IntArrayClaude` 下各题的验证进度，以及每题验证时遇到的具体问题。
 
@@ -38,7 +38,7 @@
 | `C_85` | 已全链通过 | 奇数下标求和；已补 `coins_85.v`、循环前缀和 invariant 和 5 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_94` | 已全链通过 | 最大素数的各位和；修复原始 C 将 `1` 误判为素数的问题，已补 `coins_94.v` 和 14 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_100` | 已全链通过 | 已改成函数内部 malloc 并返回 `IntArray *`；补 `make_pile` 桥接、前缀写入 invariant 和 5 个 manual VC，且无 `Admitted.` / `Axiom`。 |
-| `C_106` | 已有生成文件 | manual 当前无 `Admitted.`，但本文档尚未重新跑完整验收链。 |
+| `C_106` | 已全链通过 | 已改成函数内部 malloc 并返回 `IntArray *`；补三角数/阶乘序列桥接、奇偶分支 invariant 和 6 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_109` | 已有生成文件 | manual 仍含 `Admitted.`。 |
 | `C_121` | 已有生成文件 | manual 仍含 `Admitted.`。 |
 | `C_122` | 已有生成文件 | manual 仍含 `Admitted.`。 |
@@ -2400,6 +2400,240 @@ coqc C_100_goal_check.v
   - `problem_XX_spec_z_*`
 - 逐元素写输出数组时，invariant 中优先使用 `IntArray::seg(data, 0, i, sublist(...)) * IntArray::undef_seg(data, i, n)`。
 - 如果输出列表由索引生成，`Zseq` 比 `List.seq` 更贴近 C 层 `Z` 证明，能减少 nat/Z 来回转换。
+
+## C_106 验证记录
+
+### 结论
+
+- 状态：已完成完整验证。
+- 是否全链通过：是。
+- 是否无 `Admitted.` / `Axiom`：是，`coins_106.v` 与 `C_106_proof_manual.v` 扫描无命中。
+
+已通过的验收链：
+
+```bash
+coqc coins_106.v
+coqc C_106_goal.v
+coqc C_106_proof_auto.v
+coqc C_106_proof_manual.v
+coqc C_106_goal_check.v
+```
+
+### 文件变更
+
+- `C_106.c`
+
+  - 将接口从调用者预分配输出数组：
+
+    ```c
+    void f(int n, int *out)
+    ```
+
+    改成函数内部 malloc 并返回结构体指针：
+
+    ```c
+    IntArray *f(int n)
+    ```
+
+  - 增加 `IntArray` 结构体定义，以及 `malloc_int_array_struct()` / `malloc_int_array()` wrapper 规格。
+  - 函数后条件描述返回结构体中的 `data`、`size` 字段，以及 `IntArray::full(data, output_size, output_l)`。
+  - 循环 invariant 使用 `Inv Assert`，维护：
+    - `s == triangular_z(i)`
+    - `p == factorial_z(i)`
+    - `data_at(&(out -> data), data)`
+    - `data_at(&(out -> size), n0)`
+    - 已写前缀 `IntArray::seg(data, 0, i, sublist(0, i, f_seq(n0)))`
+    - 未写后缀 `IntArray::undef_seg(data, i, n0)`
+    - `f_seq_int_range(n0)` 与 `Zlength(f_seq(n0)) == n0`
+
+- `coins_106.v`
+
+  新增 bridge 内容：
+
+  - `problem_106_pre_z`
+  - `problem_106_spec_z`
+  - `triangular_nat`
+  - `triangular_z`
+  - `factorial_z`
+  - `f_elem`
+  - `f_seq`
+  - `f_seq_int_range`
+  - `triangular_z_0` / `factorial_z_0`
+  - `triangular_z_step` / `factorial_z_step`
+  - `f_seq_Zlength`
+  - `f_seq_Znth`
+  - `f_seq_sublist_snoc`
+  - `f_elem_even_rem` / `f_elem_odd_rem`
+  - `triangular_nat_formula`
+  - `Z_even_of_nat`
+  - `f_elem_of_nat`
+  - `problem_106_spec_z_f_seq`
+
+- `C_106_proof_manual.v`
+
+  补完 6 个 manual VC：
+
+  - `f_safety_wit_4`
+  - `f_safety_wit_7`
+  - `f_entail_wit_1`
+  - `f_entail_wit_2_1`
+  - `f_entail_wit_2_2`
+  - `f_return_wit_1`
+
+### 遇到的问题
+
+1. 问题：原格式是“预分配 out 参数”，不符合本次目标接口。
+
+   处理：
+
+   - 参考 `C_100.c` / `C_42.c` 的返回数组模式，改成 `IntArray *` 返回。
+   - 使用 `malloc_int_array_struct()` 分配结构体，`malloc_int_array(n)` 分配数据区。
+   - 后条件只描述最终返回给调用者的结构体字段和完整输出数组资源。
+
+2. 问题：循环同时维护三角数和阶乘两个滚动量。
+
+   表现：
+
+   - 循环体先更新：
+
+     ```c
+     s += i + 1;
+     p *= i + 1;
+     ```
+
+   - 然后根据 `(i + 1) % 2` 写入 `s` 或 `p`。
+   - 因此 invariant 不能只描述数组前缀，还必须记录更新前的 `s` / `p` 语义。
+
+   处理：
+
+   - 在 invariant 中维护：
+
+     ```c
+     s == triangular_z(i)
+     p == factorial_z(i)
+     ```
+
+   - 在 `coins_106.v` 中补：
+
+     ```coq
+     triangular_z (i + 1) = triangular_z i + (i + 1)
+     factorial_z (i + 1) = factorial_z i * (i + 1)
+     ```
+
+   - manual 中用这两个 step 引理证明更新后的 invariant。
+
+3. 问题：写入前缀需要按奇偶分支把写入值接到 `f_seq`。
+
+   表现：
+
+   - 偶数分支写 `p * (i + 1)`。
+   - 奇数分支写 `s + (i + 1)`。
+   - 两个分支都要证明写入值等于 `f_elem (i + 1)`，并把前缀推进到 `sublist 0 (i + 1)`.
+
+   处理：
+
+   - 在 `coins_106.v` 中补 `f_seq_sublist_snoc`：
+
+     ```coq
+     sublist 0 (i + 1) (f_seq n) =
+       sublist 0 i (f_seq n) ++ f_elem (i + 1) :: nil
+     ```
+
+   - 用 `f_elem_even_rem` / `f_elem_odd_rem` 将 C 侧 `% 2` 条件接到 Coq 的 `f_elem`。
+   - 在 manual 中使用 `IntArray.seg_single` 和 `IntArray.seg_merge_to_seg` 合并写入后的单点资源。
+
+4. 问题：C 侧 `% 2` 条件使用 `Z.rem`，而 `f_elem` 用 `Z.even`。
+
+   表现：
+
+   - goal 中条件形如：
+
+     ```coq
+     (i + 1) % 2 = 0
+     (i + 1) % 2 <> 0
+     ```
+
+   - `f_elem` 展开后需要判断：
+
+     ```coq
+     Z.even (i + 1)
+     ```
+
+   处理：
+
+   - 导入 `Coq.ZArith.Zquot`。
+   - 使用 `Zeven_rem` 建立 `Z.even i = Z.eqb (Z.rem i 2) 0`。
+   - 封装成 `f_elem_even_rem` 和 `f_elem_odd_rem`，manual 中直接复用。
+
+5. 问题：`spec/106.v` 使用 `nat`、`fact`、`Nat.div`，而 C 层使用 `Z` 和 `list Z`。
+
+   表现：
+
+   - 需要证明 `problem_106_spec_z n (f_seq n)`。
+   - `f_seq` 中的 `factorial_z` / `triangular_z` 必须能转回 spec 里的 `fact i` / `(i * (i + 1)) / 2`。
+
+   处理：
+
+   - 定义 `list_Z_to_nat := map Z.to_nat`。
+   - 定义递归版 `triangular_nat`，并证明：
+
+     ```coq
+     triangular_nat n = n * (n + 1) / 2
+     ```
+
+   - 定义：
+
+     ```coq
+     factorial_z i := Z.of_nat (fact (Z.to_nat i))
+     triangular_z i := Z.of_nat (triangular_nat (Z.to_nat i))
+     ```
+
+   - 使用 `problem_106_spec_z_f_seq` 将 `f_seq` 接回原题 `problem_106_spec`。
+
+6. 问题：证明 `Z.even (Z.of_nat n) = Nat.even n` 时，直接 `simpl` 后目标形状不利于改写。
+
+   表现：
+
+   - `simpl` 会展开成 `Pos.of_succ_nat` 相关的 match，难以用 `Z.even_succ` 直接改写。
+
+   处理：
+
+   - 避免先 `simpl` 破坏目标形状。
+   - 先将 `Z.of_nat (S n)` 改写成 `(Z.of_nat n + 1)%Z`，再用：
+
+     ```coq
+     Z.even_add
+     Nat.even_succ
+     Nat.negb_even
+     ```
+
+   - 得到可复用的 `Z_even_of_nat`。
+
+7. 问题：`problem_106_spec_z_f_seq` 中 `nth_error_map` 后存在嵌套 `option_map`，直接改写 `f_elem_of_nat` 不匹配。
+
+   表现：
+
+   - `nth_error_map` 两次后目标中出现：
+
+     ```coq
+     option_map Z.to_nat
+       (option_map (fun i0 => f_elem (i0 + 1)) ...)
+     ```
+
+   - 需要先把 `Some` 里的索引表达式化简成 `Z.of_nat i`。
+
+   处理：
+
+   - 用 `Zseq_nth` 计算索引。
+   - 先 `simpl` 展开 `option_map`。
+   - 再把 `Z.of_nat (i - 1) + 1` 替换为 `Z.of_nat i`。
+   - 最后使用 `f_elem_of_nat` 和 `triangular_nat_formula` 完成 spec 桥接。
+
+### 后续注意
+
+- 这类“一个循环生成输出序列，同时维护多个滚动量”的题，建议在 invariant 中直接记录滚动量的逻辑语义，而不是只记录数组前缀。
+- 若 C 分支条件是 `% 2`，而 Coq 规格用 `even`，建议尽早写一个 `*_rem` 桥接引理，把证明隔离在 `coins_XX.v`。
+- 对 nat 规格中的闭式公式，若 C 循环更适合递推定义，可先定义递推版，再证明递推版等于闭式公式。
 
 ## 后续记录模板
 
