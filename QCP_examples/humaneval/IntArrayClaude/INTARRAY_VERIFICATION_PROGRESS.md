@@ -39,7 +39,7 @@
 | `C_94` | 已全链通过 | 最大素数的各位和；修复原始 C 将 `1` 误判为素数的问题，已补 `coins_94.v` 和 14 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_100` | 已全链通过 | 已改成函数内部 malloc 并返回 `IntArray *`；补 `make_pile` 桥接、前缀写入 invariant 和 5 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_106` | 已全链通过 | 已改成函数内部 malloc 并返回 `IntArray *`；补三角数/阶乘序列桥接、奇偶分支 invariant 和 6 个 manual VC，且无 `Admitted.` / `Axiom`。 |
-| `C_109` | 已有生成文件 | manual 仍含 `Admitted.`。 |
+| `C_109` | 已全链通过 | 非空只读数组；补循环下降数/环形下降数桥接、循环 invariant 和 9 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_121` | 已有生成文件 | manual 仍含 `Admitted.`。 |
 | `C_122` | 已有生成文件 | manual 仍含 `Admitted.`。 |
 
@@ -2634,6 +2634,141 @@ coqc C_106_goal_check.v
 - 这类“一个循环生成输出序列，同时维护多个滚动量”的题，建议在 invariant 中直接记录滚动量的逻辑语义，而不是只记录数组前缀。
 - 若 C 分支条件是 `% 2`，而 Coq 规格用 `even`，建议尽早写一个 `*_rem` 桥接引理，把证明隔离在 `coins_XX.v`。
 - 对 nat 规格中的闭式公式，若 C 循环更适合递推定义，可先定义递推版，再证明递推版等于闭式公式。
+
+## C_109 验证记录
+
+### 结论
+
+- 状态：已完成完整验证。
+- 是否全链通过：是。
+- 是否无 `Admitted.` / `Axiom`：是，`coins_109.v` 与 `C_109_proof_manual.v` 扫描无命中。
+
+已通过的验收链：
+
+```bash
+coqc coins_109.v
+coqc C_109_goal.v
+coqc C_109_proof_auto.v
+coqc C_109_proof_manual.v
+coqc C_109_goal_check.v
+```
+
+### 文件变更
+
+- `C_109.c`
+
+  - 已转换为 QCP 注解格式。
+  - 当前接口保持只读输入数组：
+
+    ```c
+    int move_one_ball(int *arr, int arr_size)
+    ```
+
+  - 前置条件要求 `1 <= arr_size`，因为实现会读取 `arr[arr_size - 1]` 和 `arr[0]`。
+  - 前置条件携带 `descents_int_range(input_l)`，用于证明 `num += 1` 不溢出。
+  - 循环 invariant 维护：
+    - `1 <= i && i <= arr_size`
+    - `num == count_descents_prefix(i, input_l)`
+    - `IntArray::full(arr, arr_size, input_l)`
+    - 输入长度、题目前置条件和范围条件。
+
+- `coins_109.v`
+
+  新增 bridge 内容：
+
+  - `problem_109_pre_z`
+  - `problem_109_spec_z`
+  - `count_descents_prefix_nat`
+  - `count_descents_prefix`
+  - `cyclic_descents`
+  - `descents_int_range`
+  - `count_descents_prefix_1`
+  - `count_descents_prefix_step_lt`
+  - `count_descents_prefix_step_ge`
+  - `cyclic_descents_tail_gt`
+  - `cyclic_descents_tail_le`
+
+- `C_109_proof_manual.v`
+
+  补完 9 个 manual VC：
+
+  - `move_one_ball_safety_wit_5`
+  - `move_one_ball_safety_wit_12`
+  - `move_one_ball_entail_wit_1`
+  - `move_one_ball_entail_wit_2_1`
+  - `move_one_ball_entail_wit_2_2`
+  - `move_one_ball_return_wit_1`
+  - `move_one_ball_return_wit_2`
+  - `move_one_ball_return_wit_3`
+  - `move_one_ball_return_wit_4`
+
+### 遇到的问题
+
+1. 问题：原始 HumanEval 规格允许空数组返回 true，但当前 C 实现会读取首尾元素。
+
+   处理：
+
+   - 在 QCP 前置条件中明确要求 `1 <= arr_size`。
+   - `problem_109_spec_z` 建模为“非空数组的环形下降数小于 2 返回 1，否则返回 0”。
+   - 后续若要严格接回原始 `move_one_ball_impl` 的空数组语义，需要先修改 C 实现或额外拆分空数组分支。
+
+2. 问题：循环里 `num` 统计相邻下降次数，循环后又根据首尾关系补一个环形下降。
+
+   处理：
+
+   - 在 `coins_109.v` 中定义 `count_descents_prefix` 表示已扫描前缀的相邻下降数。
+   - 定义 `cyclic_descents` 表示前缀下降数加上首尾 wrap-around 下降。
+   - 用 `count_descents_prefix_step_lt` / `count_descents_prefix_step_ge` 分别证明 if/else 分支后的 invariant。
+
+3. 问题：`num += 1` 的溢出安全在循环内部和首尾补计数处分别出现。
+
+   处理：
+
+   - 用 `descents_int_range` 的第一部分处理循环内 `count_descents_prefix i + 1` 的范围。
+   - 用 `descents_int_range` 的第二部分结合 `cyclic_descents_tail_gt` 处理首尾补计数处的范围。
+
+4. 问题：`cyclic_descents` 中布尔比较方向是：
+
+   ```coq
+   Znth 0 arr 0 <? Znth (Zlength arr - 1) arr 0
+   ```
+
+   而 C 条件和 VC 中常出现：
+
+   ```coq
+   Znth (arr_size - 1) input_l 0 > Znth 0 input_l 0
+   ```
+
+   直接 `apply Z.ltb_lt in Hgt` 会因方向不匹配失败。
+
+   处理：
+
+   - 在 `cyclic_descents_tail_gt` 中显式构造布尔等式：
+
+     ```coq
+     assert ((Znth 0 arr 0 <? Znth (Zlength arr - 1) arr 0) = true)
+     ```
+
+   - 在 `cyclic_descents_tail_le` 中显式构造 false 分支。
+
+5. 问题：返回 VC 中 `arr_size_pre` 与 `Zlength input_l` 在 `Znth` 下不会被 `lia` 自动改写。
+
+   处理：
+
+   - 在 manual 中先由循环退出条件推出 `i = arr_size_pre`。
+   - 再显式构造：
+
+     ```coq
+     Znth (Zlength input_l - 1) input_l 0 > Znth 0 input_l 0
+     ```
+
+     或对应的 `<=` 版本。
+   - 对最终算术目标显式 `replace (Zlength input_l) with arr_size_pre by lia`。
+
+### 后续注意
+
+- 这题当前验证的是非空数组的“环形下降数”语义，并未额外证明它与原始 `spec/109.v` 中旋转排序实现完全等价。
+- 若后续要求严格复用原始 spec，建议新增一个桥接引理证明 `cyclic_descents arr < 2` 与 `move_one_ball_impl` 结果一致，或改 C 代码增加空数组分支后再接回原 spec。
 
 ## 后续记录模板
 

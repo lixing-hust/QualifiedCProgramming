@@ -10,26 +10,39 @@ move_one_ball({3, 5, 4, 1, 2}) ==> 0
 #include "verification_list.h"
 #include "int_array_def.h"
 
-/*@ Extern Coq (count_descents_prefix: Z -> list Z -> Z)
-               (cyclic_descents: list Z -> Z) */
+/*@ Extern Coq (problem_109_pre_z: list Z -> Prop)
+               (problem_109_spec_z: list Z -> Z -> Prop)
+               (count_descents_prefix: Z -> list Z -> Z)
+               (cyclic_descents: list Z -> Z)
+               (descents_int_range: list Z -> Prop) */
+/*@ Import Coq Require Import coins_109 */
 
 int move_one_ball(int *arr, int arr_size)
-/*@ With lv
+/*@ With input_l
     Require
         1 <= arr_size && arr_size < INT_MAX &&
-        IntArray::full(arr, arr_size, lv)
+        arr_size == Zlength(input_l) &&
+        problem_109_pre_z(input_l) &&
+        descents_int_range(input_l) &&
+        IntArray::full(arr, arr_size, input_l)
     Ensure
-        ((__return != 0) && cyclic_descents(lv) < 2 ||
-         (__return == 0) && cyclic_descents(lv) >= 2) &&
-        IntArray::full(arr, arr_size, lv)
+        problem_109_spec_z(input_l, __return) &&
+        IntArray::full(arr, arr_size, input_l)
 */
 {
     int num = 0;
     int i;
-    /*@ Inv
-        1 <= i && i <= arr_size@pre &&
-        num == count_descents_prefix(i, lv) &&
-        IntArray::full(arr, arr_size@pre, lv)
+
+    /*@ Inv Assert
+        arr == arr@pre &&
+        arr_size == arr_size@pre &&
+        1 <= arr_size && arr_size < INT_MAX &&
+        arr_size == Zlength(input_l) &&
+        problem_109_pre_z(input_l) &&
+        descents_int_range(input_l) &&
+        1 <= i && i <= arr_size &&
+        num == count_descents_prefix(i, input_l) &&
+        IntArray::full(arr, arr_size, input_l)
     */
     for (i = 1; i < arr_size; i++)
         if (arr[i] < arr[i - 1]) num += 1;
