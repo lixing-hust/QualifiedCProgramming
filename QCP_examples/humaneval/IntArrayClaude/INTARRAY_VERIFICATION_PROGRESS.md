@@ -42,7 +42,7 @@
 | `C_109` | 已全链通过 | 非空只读数组；补循环下降数/环形下降数桥接、循环 invariant 和 9 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_114` | 已全链通过 | long long 只读数组；已补 `LongArray` 策略、Kadane 递推规格、循环 invariant 和 7 个 manual VC，且 `coins_114.v` / manual 无 `Admitted.` / `Axiom`。 |
 | `C_121` | 已全链通过 | 偶数下标正奇数求和；补 `coins_121.v`、奇数长度适配 invariant 和 5 个 manual VC，且无 `Admitted.` / `Axiom`。 |
-| `C_122` | 已有生成文件 | manual 仍含 `Admitted.`。 |
+| `C_122` | 已全链通过 | 前 k 个元素中二位数范围求和；补 `coins_122.v`、范围 invariant 和 6 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 
 其它只有 `.c` 的题目暂按 `待建模` 处理。
 
@@ -2946,6 +2946,81 @@ coqc C_121_goal_check.v
 
 - 当前验证的是 C 实现对应的 Z/`Z.rem` 算法规格，尚未证明它与 `spec/121.v` 中基于 `list nat`、`Nat.even` 的原始规格完全等价。
 - 如果后续要严格接回原始 HumanEval 规格，需要额外加入“输入元素非负”约束，并证明 `Z.rem x 2 = 1` 与 `Nat.even (Z.to_nat x) = false` 的桥接。
+
+## C_122 验证记录
+
+### 结论
+
+- 状态：已完成完整验证。
+- 是否全链通过：是。
+- 是否无 `Admitted.` / `Axiom`：是，`coins_122.v` 与 `C_122_proof_manual.v` 扫描无命中。
+
+已通过的验收链：
+
+```bash
+coqc coins_122.v
+coqc C_122_goal.v
+coqc C_122_proof_auto.v
+coqc C_122_proof_manual.v
+coqc C_122_goal_check.v
+```
+
+### 文件变更
+
+- `C_122.c`
+  - 已补 `coins_122` 导入和 QCP 规格桥接。
+  - 前置条件收紧为 `1 <= k && k <= arr_size`，与题目原始约束一致。
+  - 前置条件增加 `arr_size == Zlength(lv)`、`problem_122_pre_z(lv, k)`、`sum_two_digit_int_range(k, lv)`。
+  - 循环 invariant 维护 `0 <= i && i <= k`、`s == sum_two_digit_upto(i, lv)` 和输入数组所有权。
+  - 后置条件改为 `problem_122_spec_z(lv, k, __return)`。
+- `coins_122.v`
+  - 新增 `sum_two_digit_upto` 递推模型。
+  - 新增 `problem_122_pre_z`、`problem_122_spec_z`。
+  - 新增 `sum_two_digit_int_range`，用于证明 `s + arr[i]` 不溢出。
+  - 新增 `sum_two_digit_upto_step_in/hi/lo` 和 return 规格桥接引理。
+- `C_122_proof_manual.v`
+  - 补完 6 个 manual VC：
+    - `add_elements_safety_wit_6`
+    - `add_elements_entail_wit_1`
+    - `add_elements_entail_wit_2_1`
+    - `add_elements_entail_wit_2_2`
+    - `add_elements_entail_wit_2_3`
+    - `add_elements_return_wit_1`
+
+### 遇到的问题
+
+1. 问题：原始 `spec/122.v` 在当前环境下直接 `Load` 会因为 `length arr >= 1` 的 nat/Z 记号冲突编译失败。
+
+   解决：`coins_122.v` 暂时不 `Load "../spec/122"`，而是独立建立 C 侧 Z 规格。这个问题若要彻底解决，需要先修原始 spec 的 nat 比较写法。
+
+2. 问题：旧注解允许 `k == 0`，但题目原始约束要求 `1 <= k <= len(arr)`。
+
+   解决：QCP 前置条件改为 `1 <= k && k <= arr_size`，同时在 `problem_122_pre_z` 中记录 `arr <> [] /\ 1 <= k <= Zlength arr`。
+
+3. 问题：`s += arr[i]` 需要证明加法仍在 `int` 范围内。
+
+   解决：在前置条件和 invariant 中携带 `sum_two_digit_int_range(k, lv)`，manual 中按当前 `i` 取出 `sum_two_digit_upto i lv + Znth i lv 0` 的范围。
+
+4. 问题：循环体有三条语义路径：元素在 `[-99, 99]` 内、元素小于 `-99`、元素大于 `99`。
+
+   解决：在 `coins_122.v` 中分别补：
+
+   ```coq
+   sum_two_digit_upto_step_in
+   sum_two_digit_upto_step_lo
+   sum_two_digit_upto_step_hi
+   ```
+
+   manual 中用对应引理推进 invariant。
+
+5. 问题：重新 symexec 后 `C_122_goal.v` 使用裸 strategy import，编译时会匹配多个同名 `.vo`。
+
+   解决：把 strategy import 修正为 `From SimpleC.EE Require Import ...`。
+
+### 后续注意
+
+- 当前验证的是 C 实现对应的 Z 递推规格，尚未证明它与原始 `spec/122.v` 中 `firstn`、`filter is_at_most_two_digits`、`fold_left Z.add` 的规格等价。
+- 如果后续要接回原始 spec，建议先修 `spec/122.v` 的 nat 比较作用域问题，再证明 `sum_two_digit_upto k arr = fold_left Z.add (filter is_at_most_two_digits (firstn (Z.to_nat k) arr)) 0`。
 
 ## 后续记录模板
 

@@ -10,26 +10,40 @@ Example:
 #include "verification_list.h"
 #include "int_array_def.h"
 
-/*@ Extern Coq (sum_two_digit_upto: Z -> list Z -> Z)
-               (sum_two_digit: Z -> list Z -> Z) */
+/*@ Extern Coq (problem_122_pre_z: list Z -> Z -> Prop)
+               (problem_122_spec_z: list Z -> Z -> Z -> Prop)
+               (sum_two_digit_upto: Z -> list Z -> Z)
+               (sum_two_digit_int_range: Z -> list Z -> Prop) */
+/*@ Import Coq Require Import coins_122 */
 
 int add_elements(int *arr, int arr_size, int k)
 /*@ With lv
     Require
-        0 <= arr_size && arr_size < INT_MAX &&
-        0 <= k && k <= arr_size &&
+        1 <= arr_size && arr_size < INT_MAX &&
+        1 <= k && k <= arr_size &&
+        arr_size == Zlength(lv) &&
+        problem_122_pre_z(lv, k) &&
+        sum_two_digit_int_range(k, lv) &&
         IntArray::full(arr, arr_size, lv)
     Ensure
-        __return == sum_two_digit(k, lv) &&
+        problem_122_spec_z(lv, k, __return) &&
         IntArray::full(arr, arr_size, lv)
 */
 {
     int s = 0;
     int i;
-    /*@ Inv
-        0 <= i && i <= k@pre &&
+    /*@ Inv Assert
+        arr == arr@pre &&
+        arr_size == arr_size@pre &&
+        k == k@pre &&
+        1 <= arr_size && arr_size < INT_MAX &&
+        1 <= k && k <= arr_size &&
+        arr_size == Zlength(lv) &&
+        problem_122_pre_z(lv, k) &&
+        sum_two_digit_int_range(k, lv) &&
+        0 <= i && i <= k &&
         s == sum_two_digit_upto(i, lv) &&
-        IntArray::full(arr, arr_size@pre, lv)
+        IntArray::full(arr, arr_size, lv)
     */
     for (i = 0; i < k; i++)
         if (arr[i] >= -99 && arr[i] <= 99)
