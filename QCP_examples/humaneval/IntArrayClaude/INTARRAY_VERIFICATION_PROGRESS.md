@@ -1,6 +1,6 @@
 # IntArrayClaude 验证进度记录
 
-更新时间：2026-04-27
+更新时间：2026-04-28
 
 这份文档用于记录 `QCP_examples/humaneval/IntArrayClaude` 下各题的验证进度，以及每题验证时遇到的具体问题。
 
@@ -26,6 +26,7 @@
 | `C_9` | 已全链通过 | 已切到 `INT_MIN` 语义并保留 `list_int_range`；`coins/goal/auto/manual/goal_check` 编译通过，且无 `Admitted.` / `Axiom`。 |
 | `C_25` | 已全链通过 | 结构体指针返回版本；强循环不变式记录乘积、有序、素性与无小因子性质，manual 已无 `Admitted.`。 |
 | `C_26` | 已全链通过 | 去重保留只出现一次的元素；使用两轮循环分别收集重复元素和输出非重复元素，manual 已无 `Admitted.`。 |
+| `C_33` | 已全链通过 | 使用外部可信 `sort_int_array` 替代 `qsort`；排序函数支持升序/降序参数，已接入 `spec/33.v` 的 `problem_33_spec`，manual 无 `Admitted.` / `Axiom`。 |
 | `C_40` | 已全链通过 | 三元组求和；三层扫描谓词、溢出安全和 true/false 规格桥接已补完，manual 已无 `Admitted.`。 |
 | `C_42` | 已全链通过 | 已去掉输入 `out`，改为函数内部 malloc 并返回 `IntArray *` 结构体；manual 已无 `Admitted.`。 |
 | `C_43` | 已全链通过 | 二元组求和；复用 `C_40` 的分层扫描谓词模式，manual 已无 `Admitted.`。 |
@@ -3100,6 +3101,155 @@ coqc C_126_goal_check.v
 
 - 当前验证的是 C 实现对应的 Z 侧规格，尚未证明它与原始 `spec/126.v` 等价。
 - 原始 spec 使用严格递增 `Sorted Nat.lt`，与题目示例 `{1, 2, 2, 3, 3, 4} -> true` 不一致；若后续要接回原始 spec，需要先确认应修 spec 还是改 C 行为。
+
+## C_33 验证记录
+
+### 结论
+
+- 状态：已完成完整验证。
+- 是否全链通过：是。
+- 是否无 `Admitted.` / `Axiom`：是，`coins_33.v` 与 `C_33_proof_manual.v` 扫描无命中。
+
+已通过的验收链：
+
+```bash
+coqc coins_33.v
+coqc C_33_goal.v
+coqc C_33_proof_auto.v
+coqc C_33_proof_manual.v
+coqc C_33_goal_check.v
+```
+
+### 文件变更
+
+- `C_33.c`
+  - 已转换为 QCP 适配格式。
+  - 原始实现使用 `qsort`，QCP 不直接建模 C 标准库排序函数；因此改为声明外部可信函数 `sort_int_array`，只写前后条件，不提供实现。
+  - 函数输入输出改为 `IntArray *sort_third(int *l, int l_size)`，在函数内部 `malloc` 一个 `IntArray` 结构体和输出 `data` 数组并返回指针。
+  - 保留输入数组所有权：后置条件同时返回 `IntArray::full(l, l_size, input_l)` 和输出数组所有权。
+  - `sort_int_array` 增加 `ascending` 参数：
+
+    ```c
+    void sort_int_array(int *array, int init_size, int size, int ascending)
+    ```
+
+    其中 `ascending == 0` 表示降序，非 0 表示升序。`C_33` 当前调用 `sort_int_array(third, third_size, l_size, 1)`，即升序。
+
+  - `sort_int_array` 的规格只要求前 `init_size` 个已初始化元素被排序，剩余到 `size` 的区域允许是未初始化段，排序后返回整段 `IntArray::full(array, size, sorted_full_l)`，这样可直接给 `free_int_array(third, l_size)` 使用。
+  - 两个 loop invariant 分别描述：
+    - 已抽取的第三位元素前缀：`third_values_prefix(i, input_l)`。
+    - 已写回的输出前缀：`sort_third_output_prefix(i, input_l, sorted_third_l)`。
+
+- `coins_33.v`
+  - `Load "../spec/33".`，本题已接入原始 `spec/33.v` 的 `problem_33_spec`。
+  - 新增 `third_count`、`third_values_prefix`、`nonthird_values_prefix`、`sort_third_output_prefix`、`sort_third_output`。
+  - 新增 `sorted_ascending`、`sorted_descending`、`sorted_int_list_by`，用于支持 `sort_int_array` 的升序/降序参数。
+  - 注意：C 里的 `/` 和 `%` 在 symexec 目标中对应 `Z.quot` / `Z.rem`，显示为 `÷` / `%`。因此 `third_count` 与相关 lemma 必须使用 `Z.quot/Z.rem`，不能用数学除法 `Z.div/Z.mod`。
+  - 新增 `sort_third_output_problem_33_spec`，证明：
+
+    ```coq
+    Zlength sorted_third = third_count (Zlength input) ->
+    sorted_int_list_by 1 sorted_third ->
+    Permutation (third_values_prefix (third_count (Zlength input)) input) sorted_third ->
+    problem_33_spec_z input (sort_third_output input sorted_third)
+    ```
+
+    这是本题连接外部排序规格和原始 HumanEval spec 的关键桥接。
+
+- `C_33_proof_manual.v`
+  - 补完 7 个 manual VC：
+    - `sort_third_entail_wit_1`
+    - `sort_third_entail_wit_2`
+    - `sort_third_entail_wit_3`
+    - `sort_third_entail_wit_5`
+    - `sort_third_entail_wit_6_1`
+    - `sort_third_entail_wit_6_2`
+    - `sort_third_return_wit_1`
+
+### 遇到的问题
+
+1. 问题：`qsort` 是 C 标准库函数，QCP 不能直接理解其排序行为。
+
+   解决：改为外部可信函数 `sort_int_array`，不实现函数体，只在规格中描述排序效果：
+
+   ```c
+   Ensure
+       exists sorted_l sorted_full_l,
+       init_size == Zlength(sorted_l) &&
+       size == Zlength(sorted_full_l) &&
+       sublist(0, init_size, sorted_full_l) == sorted_l &&
+       sorted_int_list_by(ascending, sorted_l) &&
+       Permutation(l, sorted_l) &&
+       IntArray::full(array, size, sorted_full_l)
+   ```
+
+   后续遇到需要排序的程序，可以复用这一建模方式。
+
+2. 问题：只支持升序会限制后续程序复用。
+
+   解决：把排序函数设计成带 `ascending` 参数，并在 `coins_33.v` 中定义：
+
+   ```coq
+   Definition sorted_int_list_by (ascending : Z) (l : list Z) : Prop :=
+     if Z.eqb ascending 0 then sorted_descending l else sorted_ascending l.
+   ```
+
+   以后升序传 `1`，降序传 `0`。如果后续题目需要其它比较规则，再扩展新的排序谓词或参数。
+
+3. 问题：排序函数只对 `third_size` 个元素排序，但临时数组按 `l_size` 分配，释放时需要完整 `l_size` 的所有权。
+
+   解决：`sort_int_array` 的前置条件使用：
+
+   ```c
+   IntArray::seg(array, 0, init_size, l) *
+   IntArray::undef_seg(array, init_size, size)
+   ```
+
+   后置条件返回：
+
+   ```c
+   IntArray::full(array, size, sorted_full_l)
+   ```
+
+   这样排序只约束前 `init_size` 段，内存资源仍覆盖整段 `size`，可安全调用 `free_int_array(third, l_size)`。
+
+4. 问题：C 除法/取模和 Coq 数学除法/取模不一致。
+
+   表现：VC 中出现 `(l_size_pre + 2) ÷ 3`、`i % 3`，如果 `coins_33.v` 中用 `(n + 2) / 3` 或 `Z.mod`，`reflexivity` 和很多算术证明会卡住。
+
+   解决：`third_count` 与所有分支 lemma 统一使用 `Z.quot` / `Z.rem`：
+
+   ```coq
+   Definition third_count (n : Z) : Z := (n + 2) ÷ 3.
+   ```
+
+   在非负条件下再通过 `Zquot.Zquotrem_Zdiv_eucl_pos` 与 `Z.div/Z.mod` 连接。
+
+5. 问题：最后 `return_wit` 需要证明原始 `spec/33.v` 的 `Permutation input output`，不能只证明第三位子序列排序。
+
+   解决：在 `coins_33.v` 中引入 `nonthird_values_prefix`，用 `count_occ` 分解全列表计数：
+
+   - 输入列表计数 = 第三位元素计数 + 非第三位元素计数。
+   - 输出列表计数 = 排序后第三位元素计数 + 非第三位元素计数。
+   - `Permutation (third_values_prefix ...) sorted_third_l` 保证第三位元素计数一致。
+
+   由此通过 `Permutation_count_occ` 证明全列表 `Permutation`。
+
+6. 问题：原始 spec 使用 nat 下标和 `nth`，而 QCP 侧循环和数组模型主要使用 Z 下标和 `Znth`。
+
+   解决：补 `nat_mod3_to_Zrem`、`nat_not_mod3_to_Zrem`、`nat_mod0_div3_quot` 等桥接 lemma，将 nat 的 `i mod 3` 与 Z 的 `Z.rem (Z.of_nat i) 3`、`Z.quot` 联系起来。
+
+7. 问题：重新 symexec 后不要手改 `C_33_goal.v` 的 import 路径。
+
+   解决：保持 `goal.v` 为 symexec 原样生成；编译时使用 `../IntClaude/_CoqProject`，并确保 `SeparationLogic/examples/LLM_friendly_cases` 下没有重复的 `.vo/.vos/.vok/.glob/.aux` 编译产物干扰裸 strategy import。
+
+### 后续注意
+
+- 后续遇到需要排序的程序，优先参考本题的 `sort_int_array` 外部函数规格。
+- 若只需要排序一个已初始化完整数组，可令 `init_size == size`，前置条件直接是完整数组分段，后置条件仍返回 `IntArray::full`。
+- 若排序一个数组前缀、后缀未初始化，沿用本题的 `seg + undef_seg -> full` 模式，方便后续释放整段内存。
+- 若题目要求降序，调用时传 `ascending = 0`，并在 spec 桥接中使用 `sorted_descending` 分支。
+- 外部排序函数只是可信规格；它不会验证排序算法本身。如果后续需要验证排序实现，应另开一个带函数体的排序程序，并证明其满足同一个 `sort_int_array` 规格。
 
 ## 后续记录模板
 
