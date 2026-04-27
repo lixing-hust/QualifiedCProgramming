@@ -41,7 +41,7 @@
 | `C_106` | 已全链通过 | 已改成函数内部 malloc 并返回 `IntArray *`；补三角数/阶乘序列桥接、奇偶分支 invariant 和 6 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_109` | 已全链通过 | 非空只读数组；补循环下降数/环形下降数桥接、循环 invariant 和 9 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_114` | 已全链通过 | long long 只读数组；已补 `LongArray` 策略、Kadane 递推规格、循环 invariant 和 7 个 manual VC，且 `coins_114.v` / manual 无 `Admitted.` / `Axiom`。 |
-| `C_121` | 已有生成文件 | manual 仍含 `Admitted.`。 |
+| `C_121` | 已全链通过 | 偶数下标正奇数求和；补 `coins_121.v`、奇数长度适配 invariant 和 5 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_122` | 已有生成文件 | manual 仍含 `Admitted.`。 |
 
 其它只有 `.c` 的题目暂按 `待建模` 处理。
@@ -2879,6 +2879,73 @@ coqc C_114_goal_check.v
 
   它能完整验证当前 C 实现，但尚未证明与 `spec/114.v` 中“存在非空子数组且对所有非空子数组最小”的原始规格等价。
 - 如果后续要严格接回原始 HumanEval 规格，建议补一个桥接定理：`min_subarray_prefix (Zlength nums) nums` 满足 `problem_114_spec nums`。
+
+## C_121 验证记录
+
+### 结论
+
+- 状态：已完成完整验证。
+- 是否全链通过：是。
+- 是否无 `Admitted.` / `Axiom`：是，`coins_121.v` 与 `C_121_proof_manual.v` 扫描无命中。
+
+已通过的验收链：
+
+```bash
+coqc coins_121.v
+coqc C_121_goal.v
+coqc C_121_proof_auto.v
+coqc C_121_proof_manual.v
+coqc C_121_goal_check.v
+```
+
+### 文件变更
+
+- `C_121.c`
+  - 已补 `coins_121` 导入和 QCP 规格桥接。
+  - 前置条件增加 `lst_size == Zlength(lv)`、`problem_121_pre_z(lv)`、`sum_odd_at_even_int_range(lv)`。
+  - 循环 invariant 改为 `2 * i <= lst_size + 1`，适配奇数长度数组最后一次扫描偶数下标。
+  - 后置条件改为 `problem_121_spec_z(lv, __return)`。
+- `coins_121.v`
+  - 新增 `sum_odd_at_even_upto` 递推模型。
+  - 新增 `problem_121_pre_z`、`problem_121_spec_z`。
+  - 新增 `sum_odd_at_even_int_range`，用于证明 `s + lst[2*i]` 不溢出。
+  - 新增 step 引理和 return 规格桥接引理。
+- `C_121_proof_manual.v`
+  - 补完 5 个 manual VC：
+    - `solutions_safety_wit_10`
+    - `solutions_entail_wit_1`
+    - `solutions_entail_wit_2_1`
+    - `solutions_entail_wit_2_2`
+    - `solutions_return_wit_1`
+
+### 遇到的问题
+
+1. 问题：原 invariant 写成 `2 * i <= lst_size`，对奇数长度输入不成立。
+
+   解决：改为 `2 * i <= lst_size + 1`。例如长度为 5 时，循环会访问下标 0、2、4，退出时 `i = 3`，此时 `2 * i = 6 = lst_size + 1`。
+
+2. 问题：旧生成的 `C_121_goal.v` 使用裸 `Require Import int_array_strategy_goal`，在当前 load path 下会匹配多个 `.vo`。
+
+   解决：把策略导入修正为：
+
+   ```coq
+   From SimpleC.EE Require Import int_array_strategy_goal.
+   ```
+
+   其它 strategy import 同样加上 `From SimpleC.EE` 前缀。
+
+3. 问题：`s += lst[i * 2]` 需要证明加法仍在 `int` 范围内。
+
+   解决：在前置条件和 invariant 中携带 `sum_odd_at_even_int_range(lv)`，manual 中取出 `sum_odd_at_even_upto i lv + Znth (2 * i) lv 0` 的范围。
+
+4. 问题：C 条件是 `lst[i * 2] % 2 == 1`，使用的是 C/Coq 生成目标中的 `Z.rem`，和原始 `spec/121.v` 的 `nat` 规格不是同一层表达。
+
+   解决：当前 `problem_121_spec_z` 建模为 QCP/C 侧的递推算法规格，使用 `Z.rem x 2 = 1` 判断是否累加。
+
+### 后续注意
+
+- 当前验证的是 C 实现对应的 Z/`Z.rem` 算法规格，尚未证明它与 `spec/121.v` 中基于 `list nat`、`Nat.even` 的原始规格完全等价。
+- 如果后续要严格接回原始 HumanEval 规格，需要额外加入“输入元素非负”约束，并证明 `Z.rem x 2 = 1` 与 `Nat.even (Z.to_nat x) = false` 的桥接。
 
 ## 后续记录模板
 
