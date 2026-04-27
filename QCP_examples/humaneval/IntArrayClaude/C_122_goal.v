@@ -17,14 +17,14 @@ Local Open Scope list.
 Import naive_C_Rules.
 Require Import coins_122.
 Local Open Scope sac.
-From SimpleC.EE Require Import int_array_strategy_goal.
-From SimpleC.EE Require Import int_array_strategy_proof.
-From SimpleC.EE Require Import uint_array_strategy_goal.
-From SimpleC.EE Require Import uint_array_strategy_proof.
-From SimpleC.EE Require Import undef_uint_array_strategy_goal.
-From SimpleC.EE Require Import undef_uint_array_strategy_proof.
-From SimpleC.EE Require Import array_shape_strategy_goal.
-From SimpleC.EE Require Import array_shape_strategy_proof.
+Require Import int_array_strategy_goal.
+Require Import int_array_strategy_proof.
+Require Import uint_array_strategy_goal.
+Require Import uint_array_strategy_proof.
+Require Import undef_uint_array_strategy_goal.
+Require Import undef_uint_array_strategy_proof.
+Require Import array_shape_strategy_goal.
+Require Import array_shape_strategy_proof.
 
 (*----- Function add_elements -----*)
 
