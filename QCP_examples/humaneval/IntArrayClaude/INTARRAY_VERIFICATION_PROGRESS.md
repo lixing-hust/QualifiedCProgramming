@@ -43,6 +43,7 @@
 | `C_114` | 已全链通过 | long long 只读数组；已补 `LongArray` 策略、Kadane 递推规格、循环 invariant 和 7 个 manual VC，且 `coins_114.v` / manual 无 `Admitted.` / `Axiom`。 |
 | `C_121` | 已全链通过 | 偶数下标正奇数求和；补 `coins_121.v`、奇数长度适配 invariant 和 5 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_122` | 已全链通过 | 前 k 个元素中二位数范围求和；补 `coins_122.v`、范围 invariant 和 6 个 manual VC，且无 `Admitted.` / `Axiom`。 |
+| `C_126` | 已全链通过 | 非降序且无连续三重复；将 bool 返回改为 QCP 可解析的 int 返回，补 `coins_126.v` 和 7 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 
 其它只有 `.c` 的题目暂按 `待建模` 处理。
 
@@ -3021,6 +3022,84 @@ coqc C_122_goal_check.v
 
 - 当前验证的是 C 实现对应的 Z 递推规格，尚未证明它与原始 `spec/122.v` 中 `firstn`、`filter is_at_most_two_digits`、`fold_left Z.add` 的规格等价。
 - 如果后续要接回原始 spec，建议先修 `spec/122.v` 的 nat 比较作用域问题，再证明 `sum_two_digit_upto k arr = fold_left Z.add (filter is_at_most_two_digits (firstn (Z.to_nat k) arr)) 0`。
+
+## C_126 验证记录
+
+### 结论
+
+- 状态：已完成完整验证。
+- 是否全链通过：是。
+- 是否无 `Admitted.` / `Axiom`：是，`coins_126.v` 与 `C_126_proof_manual.v` 扫描无命中。
+
+已通过的验收链：
+
+```bash
+coqc coins_126.v
+coqc C_126_goal.v
+coqc C_126_proof_auto.v
+coqc C_126_proof_manual.v
+coqc C_126_goal_check.v
+```
+
+### 文件变更
+
+- `C_126.c`
+  - 已转换为 QCP 注解格式。
+  - 原始 `#include <stdbool.h>` 不能被 QCP 前端解析，因此改为 `int` 返回，并把 `return false/true` 改为 `return 0/1`，语义保持为 0/非 0 布尔。
+  - 前置条件要求 `1 <= lst_size`，因为循环从 `i = 1` 建立前缀 invariant。
+  - 循环 invariant 维护 `sorted_no_triple_prefix(i, lv)`。
+  - 后置条件用 `problem_126_spec_z(lv, true/false)` 分支描述返回值。
+- `coins_126.v`
+  - 新增 `sorted_no_triple_prefix`：前缀非降序，且不存在连续三个相等元素。
+  - 新增 `problem_126_pre_z`、`problem_126_spec_z`。
+  - 新增初始化、循环推进、下降返回 false、三重复返回 false、正常退出返回 true 的桥接引理。
+- `C_126_proof_manual.v`
+  - 补完 7 个 manual VC：
+    - `is_sorted_entail_wit_1`
+    - `is_sorted_entail_wit_2_1`
+    - `is_sorted_entail_wit_2_2`
+    - `is_sorted_entail_wit_2_3`
+    - `is_sorted_return_wit_1`
+    - `is_sorted_return_wit_2`
+    - `is_sorted_return_wit_3`
+
+### 遇到的问题
+
+1. 问题：QCP 前端不接受 `#include <stdbool.h>`，报：
+
+   ```text
+   bison: syntax error, unexpected PT_LESS, expecting PT_STRINGLIT
+   ```
+
+   解决：去掉系统头，改成项目内常见的 `int` 布尔返回风格，用 `0` 表示 false、`1` 表示 true。
+
+2. 问题：原始 `spec/126.v` 只写了 `Sorted Nat.lt l <-> b = true`，但题目示例和 C 实现允许两个连续重复，不允许三个连续重复。
+
+   解决：建立 C 侧规格 `sorted_no_triple_prefix`，描述“非降序且无连续三项相等”。这比直接复用 `Sorted Nat.lt` 更贴合当前 C 实现和示例。
+
+3. 问题：循环存在两个提前返回 false 的原因：`lst[i] < lst[i-1]` 和 `lst[i] == lst[i-1] == lst[i-2]`。
+
+   解决：分别补：
+
+   ```coq
+   problem_126_spec_false_of_desc
+   problem_126_spec_false_of_triple
+   ```
+
+   在对应 return VC 中推出完整列表不满足 `sorted_no_triple_prefix`。
+
+4. 问题：继续循环时，三重复判断由多个 C 短路条件拆成不同 VC 分支。
+
+   解决：用一个通用的 `sorted_no_triple_prefix_step`，manual 中按分支假设构造“当前位置不是连续三重复”的否定条件。
+
+5. 问题：重新 symexec 后 `C_126_goal.v` 使用裸 strategy import，编译时会匹配多个同名 `.vo`。
+
+   解决：把 strategy import 修正为 `From SimpleC.EE Require Import ...`。
+
+### 后续注意
+
+- 当前验证的是 C 实现对应的 Z 侧规格，尚未证明它与原始 `spec/126.v` 等价。
+- 原始 spec 使用严格递增 `Sorted Nat.lt`，与题目示例 `{1, 2, 2, 3, 3, 4} -> true` 不一致；若后续要接回原始 spec，需要先确认应修 spec 还是改 C 行为。
 
 ## 后续记录模板
 
