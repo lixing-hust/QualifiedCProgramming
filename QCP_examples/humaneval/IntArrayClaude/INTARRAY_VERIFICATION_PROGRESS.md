@@ -1,6 +1,6 @@
 # IntArrayClaude 验证进度记录
 
-更新时间：2026-04-26
+更新时间：2026-04-27
 
 这份文档用于记录 `QCP_examples/humaneval/IntArrayClaude` 下各题的验证进度，以及每题验证时遇到的具体问题。
 
@@ -40,6 +40,7 @@
 | `C_100` | 已全链通过 | 已改成函数内部 malloc 并返回 `IntArray *`；补 `make_pile` 桥接、前缀写入 invariant 和 5 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_106` | 已全链通过 | 已改成函数内部 malloc 并返回 `IntArray *`；补三角数/阶乘序列桥接、奇偶分支 invariant 和 6 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_109` | 已全链通过 | 非空只读数组；补循环下降数/环形下降数桥接、循环 invariant 和 9 个 manual VC，且无 `Admitted.` / `Axiom`。 |
+| `C_114` | 已全链通过 | long long 只读数组；已补 `LongArray` 策略、Kadane 递推规格、循环 invariant 和 7 个 manual VC，且 `coins_114.v` / manual 无 `Admitted.` / `Axiom`。 |
 | `C_121` | 已有生成文件 | manual 仍含 `Admitted.`。 |
 | `C_122` | 已有生成文件 | manual 仍含 `Admitted.`。 |
 
@@ -2769,6 +2770,115 @@ coqc C_109_goal_check.v
 
 - 这题当前验证的是非空数组的“环形下降数”语义，并未额外证明它与原始 `spec/109.v` 中旋转排序实现完全等价。
 - 若后续要求严格复用原始 spec，建议新增一个桥接引理证明 `cyclic_descents arr < 2` 与 `move_one_ball_impl` 结果一致，或改 C 代码增加空数组分支后再接回原 spec。
+
+## C_114 验证记录
+
+### 结论
+
+- 状态：已完成完整验证。
+- 是否全链通过：是。
+- 是否无 `Admitted.` / `Axiom`：是，`coins_114.v` 与 `C_114_proof_manual.v` 扫描无命中。
+
+已通过的验收链：
+
+```bash
+coqc SeparationLogic/examples/long_array_strategy_goal.v
+coqc SeparationLogic/examples/long_array_strategy_proof.v
+coqc coins_114.v
+coqc C_114_goal.v
+coqc C_114_proof_auto.v
+coqc C_114_proof_manual.v
+coqc C_114_goal_check.v
+```
+
+### 文件变更
+
+- `LLM_friendly_cases/long_array_def.h`
+  - 新增 `LongArray::full/seg/missing_i/undef_full/undef_seg/undef_missing_i` 谓词声明。
+  - 引入 `long_array.strategies`，供 `long long *` 数组读写自动拆分。
+- `LLM_friendly_cases/long_array.strategies`
+  - 参照 `int_array.strategies` 增加 `long long` 数组策略。
+  - 策略类型使用 `I64`，生成 Coq 侧的 `# Int64` cell。
+- `SeparationLogic/examples/long_array_strategy_goal.v`
+  - 新增 `LongArray` 模块和 12 个策略 goal。
+- `SeparationLogic/examples/long_array_strategy_proof.v`
+  - 新增对应策略 proof 文件，当前风格与项目内其它 strategy proof 文件一致。
+- `C_114.c`
+  - 已转换为 QCP 注解格式。
+  - 当前接口保持只读 `long long *` 输入：
+
+    ```c
+    long long minSubArraySum(long long* nums, int nums_size)
+    ```
+
+  - 前置条件要求 `1 <= nums_size`，因为实现读取 `nums[0]`。
+  - 前置条件携带 `kadane_int64_range(nums_l)`，用于证明 `current + nums[i]` 不越过 `long long` 范围。
+  - 循环 invariant 维护 `current == min_suffix_prefix(i, nums_l)`、`min == min_subarray_prefix(i, nums_l)` 和 `LongArray::full(nums, nums_size, nums_l)`。
+- `coins_114.v`
+  - 新增 `problem_114_pre_z`、`problem_114_spec_z`。
+  - 新增 Kadane 递推模型：`min_suffix_prefix`、`min_subarray_prefix`。
+  - 新增 `kadane_int64_range` 以及初始化、suffix step、minimum step 引理。
+- `C_114_proof_manual.v`
+  - 补完 7 个 manual VC：
+    - `minSubArraySum_safety_wit_5`
+    - `minSubArraySum_entail_wit_1`
+    - `minSubArraySum_entail_wit_2_1`
+    - `minSubArraySum_entail_wit_2_2`
+    - `minSubArraySum_entail_wit_2_3`
+    - `minSubArraySum_entail_wit_2_4`
+    - `minSubArraySum_return_wit_1`
+
+### 遇到的问题
+
+1. 问题：项目原有 `IntArray` 只覆盖 `int *`，不能直接描述 `long long *`。
+
+   解决：
+
+   - 补充 `LongArray` 谓词和 `long_array.strategies`。
+   - 策略中使用 `I64`，并在 Coq 侧生成 `poly_store FET_int64 ...` 形式的数组 cell。
+   - 用探针程序确认 `LongArray::full(a,n,l)` 可以把 `a[i]` 读操作拆成 `Znth i l 0`。
+
+2. 问题：函数契约一开始写在函数体 `{` 之后，symexec 解析失败：
+
+   ```text
+   bison: syntax error, unexpected PT_WITH
+   ```
+
+   解决：把 `/*@ With ... */` 契约移动到函数签名和 `{` 之间。
+
+3. 问题：`current + nums[i]` 是 `long long` 加法，VC 要求证明结果在 `[-9223372036854775808, 9223372036854775807]` 内。
+
+   解决：
+
+   - 在 `coins_114.v` 中定义 `LLONG_MIN` / `LLONG_MAX`。
+   - 在前置条件和 invariant 中携带 `kadane_int64_range(nums_l)`。
+   - manual 中从该谓词取出 `min_suffix_prefix i nums_l + Znth i nums_l 0` 的范围。
+
+4. 问题：Kadane 算法有两个分支：`current < 0` 时累加，否则从当前元素重新开始；随后再更新全局最小值。
+
+   解决：
+
+   - 用 `min_suffix_prefix_step_lt/ge` 对应第一层 if。
+   - 用 `min_subarray_prefix_step_lt/ge` 对应第二层 if。
+   - 在 4 个循环 entail VC 中分别构造下一轮的 suffix/minimum 等式。
+
+5. 问题：`min_subarray_prefix_nat` 的 Coq 证明中，`simpl` 会把内部 `min_suffix_prefix_nat` 展开过头，导致 rewrite 找不到项。
+
+   解决：
+
+   - 在辅助引理中改用 `cbn [min_subarray_prefix_nat]` 限制展开范围。
+   - 对前一轮 minimum 使用局部 `prev` 名称，避免项形状被破坏。
+
+### 后续注意
+
+- 当前 `problem_114_spec_z` 是 Kadane 算法级规格：
+
+  ```coq
+  result = min_subarray_prefix (Zlength nums) nums
+  ```
+
+  它能完整验证当前 C 实现，但尚未证明与 `spec/114.v` 中“存在非空子数组且对所有非空子数组最小”的原始规格等价。
+- 如果后续要严格接回原始 HumanEval 规格，建议补一个桥接定理：`min_subarray_prefix (Zlength nums) nums` 满足 `problem_114_spec nums`。
 
 ## 后续记录模板
 
