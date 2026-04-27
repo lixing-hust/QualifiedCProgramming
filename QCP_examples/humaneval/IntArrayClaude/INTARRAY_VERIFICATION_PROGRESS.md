@@ -27,6 +27,7 @@
 | `C_25` | 已全链通过 | 结构体指针返回版本；强循环不变式记录乘积、有序、素性与无小因子性质，manual 已无 `Admitted.`。 |
 | `C_26` | 已全链通过 | 去重保留只出现一次的元素；使用两轮循环分别收集重复元素和输出非重复元素，manual 已无 `Admitted.`。 |
 | `C_33` | 已全链通过 | 使用外部可信 `sort_int_array` 替代 `qsort`；排序函数支持升序/降序参数，已接入 `spec/33.v` 的 `problem_33_spec`，manual 无 `Admitted.` / `Axiom`。 |
+| `C_34` | 已全链通过 | sorted unique；C 中保留 `contains` 与去重循环，仅将排序建模为外部库函数，已接入 `spec/34.v`，manual 无 `Admitted.` / `Axiom`。 |
 | `C_40` | 已全链通过 | 三元组求和；三层扫描谓词、溢出安全和 true/false 规格桥接已补完，manual 已无 `Admitted.`。 |
 | `C_42` | 已全链通过 | 已去掉输入 `out`，改为函数内部 malloc 并返回 `IntArray *` 结构体；manual 已无 `Admitted.`。 |
 | `C_43` | 已全链通过 | 二元组求和；复用 `C_40` 的分层扫描谓词模式，manual 已无 `Admitted.`。 |
