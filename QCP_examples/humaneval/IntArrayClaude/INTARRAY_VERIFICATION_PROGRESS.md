@@ -3748,6 +3748,8 @@ coqc C_90_goal_check.v
 
    解决：将原循环原样抽成已实现 helper `has_only_odd_digits_int`，循环体仍执行 `num % 2` 和 `num / 10` 的逐位检查；helper 本身单独验证，返回值只通过 `only_odd_digits_z` / `has_even_digit_z` 与逻辑规格连接。
 
+   经验：如果某段内部循环逻辑和外层数组遍历逻辑相互独立，可以把内部循环抽成一个已实现、已验证的 helper 来简化验证。这样不是用未实现函数替代原程序，而是把证明责任拆开：helper 证明数字扫描本身，外层函数只使用 helper 的后置条件维护数组前缀 invariant。直接验证原来的内联嵌套循环也可行，但外层 invariant 和 manual proof 会明显更复杂。
+
 3. 问题：C 中 `/` 和 `%` 在 VC 里分别对应 `Z.quot` 和 `Z.rem`，而逻辑扫描状态自然使用 `Z.div` 和 `Z.mod`。
 
    解决：在 `coins_104.v` 中加入 `odd_scan_even_quot` 和 `odd_scan_odd_quot`，在正数条件下用 `Z.quot_div_nonneg`、`Z.rem_mod_nonneg` 桥接 C 运算和数学运算。
@@ -3764,6 +3766,48 @@ coqc C_90_goal_check.v
 
 - 当前 `problem_104_spec_z` 是 Z 层操作式规格：先用 `unique_digits_prefix` 表达过滤，再用 `sorted_int_list_by 1` 和 `Permutation` 表达排序。后续若需要和 `../spec/104` 中的 nat 规格做等价证明，可在此基础上补桥接引理。
 - 后续涉及 `qsort` 的题目仍应保持 `sort_int_array` 为通用库函数规格，题目语义放在各自的 Coq bridge/spec 中证明。
+
+## C_120 验证记录
+
+### 结论
+
+- 状态：已完成。
+- 是否全链通过：是，`coins_120.v`、`C_120_goal.v`、`C_120_proof_manual.v`、`C_120_proof_auto.v`、`C_120_goal_check.v` 均可编译。
+- 是否无 `Admitted.` / `Axiom`：`coins_120.v` 与 `C_120_proof_manual.v` 中无 `Admitted` / `Axiom`。
+
+### 文件变更
+
+- `C_120.c`：改为 QCP 格式，保留原程序“复制输入到临时数组、排序临时数组、复制排序后最后 `k` 个元素、释放临时数组”的核心逻辑。将原来的 `qsort`、`malloc/free` 调用替换为带通用规格的 `sort_int_array`、`malloc_int_array`、`free_int_array` wrapper。
+- `coins_120.v`：新增 Z 层前置条件、操作式后置条件、复制前缀 `copy_prefix`、输出后缀前缀 `maximum_output_prefix`，以及两个复制循环需要的 snoc/长度引理。
+- `C_120_proof_manual.v`：补完所有 manual VC。
+
+### 遇到的问题
+
+1. 问题：原程序中 `out.data = NULL; out.size = 0;` 是返回空结果和分支初始化的重要状态；第一次 QCP 改写时只写了 `out->size = 0`，导致 `out->data` 仍是未初始化资源，循环 invariant 无法使用 `data_at(&(out -> data), 0)`。
+
+   解决：按原程序语义补回 `out->data = 0; out->size = 0;`，这不是额外算法改动，而是恢复原程序已有初始化逻辑。
+
+2. 问题：`k == 0` 分支返回空数组，但 `malloc_int_array(0)` 只给出 `IntArray::undef_full(data, 0)`，函数后置需要 `IntArray::full(data, 0, [])`。
+
+   解决：在 `coins_120.v` 中证明局部资源引理 `IntArray_undef_full_0_to_full_nil`，利用 `undef_full 0` 和 `full 0 []` 都是空数组资源的事实完成桥接。
+
+3. 问题：两个复制循环分别需要描述“已经复制了多少前缀”：第一个循环复制 `arr[0..i)` 到 `tmp[0..i)`，第二个循环复制排序后后缀 `sorted_l[arr_size-k .. arr_size-k+i)` 到输出。
+
+   解决：分别定义 `copy_prefix input_l i := sublist 0 i input_l` 和 `maximum_output_prefix sorted_l arr_size k i := sublist (arr_size-k) (arr_size-k+i) sorted_l`，并证明 `copy_prefix_snoc`、`maximum_output_prefix_snoc`，让每次写入一个元素后可以自然合并 `seg_single` 和已有 `seg`。
+
+4. 问题：`sort_int_array` 必须保持后续可放入库文件的通用排序函数规格，不能在后置中加入“最大 k 个数”这类 C_120 题目语义。
+
+   解决：`sort_int_array` 仍只给出排序、排列、数组资源和通用尺寸边界。C_120 的题目语义由 `problem_120_spec_z_of_sorted` 在本题的 `coins_120.v` 中从 `sorted_int_list_by`、`Permutation` 和后缀复制关系推出。
+
+5. 问题：排序后 `sort_int_array` 返回的资源是 `sorted_full_l`，而逻辑上更方便使用排序前缀 `sorted_l`；当 `init_size == size == arr_size` 时二者应相同。
+
+   解决：manual proof 中用 `sublist_self` 和长度事实证明 `sorted_full_l = sorted_l`，再把 `IntArray::full(tmp, arr_size, sorted_full_l)` 转成后续循环使用的 `IntArray::full(tmp, arr_size, sorted_l)`。
+
+### 后续注意
+
+- 当前 `problem_120_spec_z` 是 Z 层操作式规格：`k=0` 时输出空数组；`k>0` 时存在一个升序排列且与输入 `Permutation` 的 `sorted_l`，输出等于 `sorted_l` 的最后 `k` 个元素。后续若需要完全对接 `../spec/120.v` 中的 nat 版 `problem_120_spec`，可以在此基础上补“升序列表后缀为 top-k”的 bridge。
+- 本题没有把业务逻辑抽成未实现函数；所有循环仍在 C 程序中实现并验证。
+- 后续类似题目可以复用这个模式：输入复制循环用 `copy_prefix`，排序保持通用库规格，输出切片循环用 `sublist` 前缀关系描述。
 
 ## 后续记录模板
 
