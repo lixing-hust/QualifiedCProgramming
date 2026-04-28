@@ -1,6 +1,6 @@
 # IntArrayClaude 验证进度记录
 
-更新时间：2026-04-28
+更新时间：2026-04-29
 
 这份文档用于记录 `QCP_examples/humaneval/IntArrayClaude` 下各题的验证进度，以及每题验证时遇到的具体问题。
 
@@ -49,6 +49,7 @@
 | `C_114` | 已全链通过 | long long 只读数组；已补 `LongArray` 策略、Kadane 递推规格、循环 invariant 和 7 个 manual VC，且 `coins_114.v` / manual 无 `Admitted.` / `Axiom`。 |
 | `C_121` | 已全链通过 | 偶数下标正奇数求和；补 `coins_121.v`、奇数长度适配 invariant 和 5 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_122` | 已全链通过 | 前 k 个元素中二位数范围求和；补 `coins_122.v`、范围 invariant 和 6 个 manual VC，且无 `Admitted.` / `Axiom`。 |
+| `C_123` | 已全链通过 | Collatz 奇数项收集并排序；保留 Collatz 主循环，固定容量适配原 `realloc`，用已实现 `append_int` 拆分数组追加资源证明，manual 无 `Admitted.` / `Axiom`。 |
 | `C_126` | 已全链通过 | 非降序且无连续三重复；将 bool 返回改为 QCP 可解析的 int 返回，补 `coins_126.v` 和 7 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 
 其它只有 `.c` 的题目暂按 `待建模` 处理。
@@ -3808,6 +3809,56 @@ coqc C_90_goal_check.v
 - 当前 `problem_120_spec_z` 是 Z 层操作式规格：`k=0` 时输出空数组；`k>0` 时存在一个升序排列且与输入 `Permutation` 的 `sorted_l`，输出等于 `sorted_l` 的最后 `k` 个元素。后续若需要完全对接 `../spec/120.v` 中的 nat 版 `problem_120_spec`，可以在此基础上补“升序列表后缀为 top-k”的 bridge。
 - 本题没有把业务逻辑抽成未实现函数；所有循环仍在 C 程序中实现并验证。
 - 后续类似题目可以复用这个模式：输入复制循环用 `copy_prefix`，排序保持通用库规格，输出切片循环用 `sublist` 前缀关系描述。
+
+## C_123 验证记录
+
+### 结论
+
+- 状态：已完成。
+- 是否全链通过：是，`coins_123.v`、`C_123_goal.v`、`C_123_proof_manual.v`、`C_123_proof_auto.v`、`C_123_goal_check.v` 均可编译。
+- 是否无 `Admitted.` / `Axiom`：`coins_123.v` 与 `C_123_proof_manual.v` 中无 `Admitted` / `Axiom`。
+
+### 文件变更
+
+- `C_123.c`：改为 QCP 指针返回格式；保留原程序“初始化输出为 `[1]`，按 Collatz 奇偶规则推进，遇到奇数则加入输出，最后排序”的核心逻辑。原程序的 `malloc/realloc/qsort` 分别适配为 `malloc_int_array_struct`、`malloc_int_array` 和通用 `sort_int_array`。
+- `coins_123.v`：新增 Z 层操作式规格 `problem_123_spec_z`，用 `odd_collatz_prefix` 描述 Collatz 运行过程中已收集的奇数项，再通过 `sorted_int_list_by 1` 和 `Permutation` 描述排序结果。
+- `C_123_proof_manual.v`：补完所有 manual VC。
+
+### 遇到的问题
+
+1. 问题：原 C 程序使用 `realloc` 动态扩容，但当前验证库没有建模 `realloc` 的所有权迁移、旧块释放和失败分支。
+
+   解决：将输出数组容量适配为固定 `1024`，并把“整个 Collatz 运行过程中不会超过容量、每一步不会 int 溢出”的条件放进 `problem_123_pre_z`。这改变的是内存管理策略，不改变 Collatz 奇偶推进和奇数项收集逻辑。
+
+2. 问题：Collatz 停机性不能由程序本身在 QCP 中证明；原题文字依赖 Collatz conjecture。
+
+   解决：`problem_123_pre_z` 使用强前置条件要求存在安全的有界运行轨迹：当前状态保持正数、奇数分支 `3*n+1` 不溢出、偶数分支除二后仍安全、输出长度小于固定容量。后置规格验证的是满足此前置条件的执行结果。
+
+3. 问题：直接在 while 的奇数分支中验证 `data[output_size] = n; output_size = output_size + 1;` 时，数组 `seg/undef_seg` 的局部合并和 Collatz 状态推进交织在一起，符号执行卡在赋值附近。
+
+   解决：加入已实现 helper `append_int`，只负责把一个 `int` 写入当前数组尾部并返回新长度；函数体仍是实际 C 写数组和 `return output_size + 1`，不是未实现函数，也不隐藏 Collatz 业务逻辑。Collatz 的 `n = n * 3 + 1` / `n = n / 2` 仍保留在主循环中验证。
+
+4. 问题：第一次给 `append_int` 写后置时使用 `l ++ cons(value, nil)`，QCP 注解解析/类型推断把它处理得不稳定。
+
+   解决：改用项目示例中更常见的 `app(l, cons(value, nil))` 表达追加单元素列表。
+
+5. 问题：调用 `append_int(data, output_size, cap, n)` 时，虽然纯事实里有 `cap == 1024`，但空间资源 `IntArray::undef_seg(..., 1024)` 和函数前置 `IntArray::undef_seg(..., cap)` 匹配不稳定。
+
+   解决：去掉主函数局部 `cap` 变量，统一使用固定容量字面量 `1024`。这让空间资源参数、函数调用参数和排序容量完全一致，避免依赖空间断言中的纯等式改写。
+
+6. 问题：循环退出后局部变量 `n` 的资源仍存在；若 sort 前后的 `Assert` 不显式保留 `data_at(&n, 1)`，manual VC 会要求丢弃局部变量资源。
+
+   解决：在循环退出后的 sort 前断言和 sort 后断言中保留 `data_at(&n, 1)`，直到后续语句由符号执行正常处理局部变量。
+
+7. 问题：C 的 `%` / `/` 在 VC 中分别对应 `Z.rem` / `Z.quot`，而 Collatz 逻辑关系使用 `Z.mod` / `Z.div` 更自然。
+
+   解决：在 `coins_123.v` 中加入 `Z_rem_2_eq_1_to_mod`、`Z_rem_2_neq_1_to_mod_0`、`odd_collatz_odd_quot_step`、`odd_collatz_even_quot_step`，在正数条件下桥接 C 运算和数学运算。
+
+### 后续注意
+
+- `sort_int_array` 仍保持通用排序函数规格，只描述有序、排列和数组资源；C_123 的题目语义由 `problem_123_spec_z_of_sorted` 在本题 `coins_123.v` 中桥接。
+- 当前 `problem_123_spec_z` 是操作式 Z 层规格，尚未证明与 `../spec/123.v` 中 nat/list 规格完全等价；如果后续需要和原 spec 严格对接，可以在 `odd_collatz_prefix` 基础上补等价 bridge。
+- `append_int` 可以作为“已实现数组尾追加 helper”的验证拆分模式参考，但它目前带有 C_123 的固定容量 `1024`，不应直接当作通用库函数。
 
 ## 后续记录模板
 
