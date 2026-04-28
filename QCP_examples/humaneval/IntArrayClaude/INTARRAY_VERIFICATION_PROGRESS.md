@@ -41,6 +41,7 @@
 | `C_73` | 已全链通过 | 统计左右镜像不等对数；已补 `coins_73.v`、镜像对计数 invariant 和 5 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_85` | 已全链通过 | 奇数下标求和；已补 `coins_85.v`、循环前缀和 invariant 和 5 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_88` | 已全链通过 | 根据首尾和奇偶决定升序/降序；保留 copy、qsort、偶数分支 in-place reverse，只将 qsort 建模为外部排序函数，manual 无 `Admitted.` / `Axiom`。 |
+| `C_90` | 已全链通过 | next smallest；保留排序后的相邻扫描循环，`sort_int_array` 已改为与 `C_33`/`C_34` 一致的通用排序规格，manual 无 `Admitted.` / `Axiom`。 |
 | `C_94` | 已全链通过 | 最大素数的各位和；修复原始 C 将 `1` 误判为素数的问题，已补 `coins_94.v` 和 14 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_100` | 已全链通过 | 已改成函数内部 malloc 并返回 `IntArray *`；补 `make_pile` 桥接、前缀写入 invariant 和 5 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_106` | 已全链通过 | 已改成函数内部 malloc 并返回 `IntArray *`；补三角数/阶乘序列桥接、奇偶分支 invariant 和 6 个 manual VC，且无 `Admitted.` / `Axiom`。 |
@@ -3618,6 +3619,110 @@ coqc C_88_goal_check.v
 - 对原程序有 in-place swap 的题目，优先用 `replace_Znth` 精确建模每次写后的数组，而不是替换成外部 reverse helper。
 - 如果 C 表达式包含输入数组元素之间的加法，前置条件应显式提供对应的 int-range/不溢出条件。
 - `qsort` 仍可作为库边界建模，但排序后的后续数组变换应尽量保留在 C 中验证。
+
+## C_90 验证记录
+
+### 结论
+
+- 状态：已完成完整验证。
+- 是否全链通过：是。
+- 是否无 `Admitted.` / `Axiom`：是，`coins_90.v` 与 `C_90_proof_manual.v` 扫描无命中。
+
+已通过的验收链：
+
+```bash
+coqc coins_90.v
+coqc C_90_goal.v
+coqc C_90_proof_auto.v
+coqc C_90_proof_manual.v
+coqc C_90_goal_check.v
+```
+
+### 文件变更
+
+- `C_90.c`
+  - 转成 QCP 适配格式，函数规格接入 `problem_90_pre_z` / `problem_90_spec_z`。
+  - 保留原程序核心逻辑：排序后从 `i = 1` 开始扫描，遇到第一个 `lst[i] != lst[i - 1]` 即返回 `lst[i]`，否则返回 `-1`。
+  - 仅将原 `qsort` 抽象为外部库函数 `sort_int_array`；没有把扫描逻辑替换成未实现 helper。
+  - `sort_int_array` 规格已对齐 `C_33.c` / `C_34.c`：参数为 `array, init_size, size, ascending`，后置只包含 `sorted_int_list_by`、`Permutation`、前缀关系和数组资源，不包含任何 C_90 题目语义。
+  - 增加 `lst_size <= 1` 的提前返回分支，语义上等价于原程序对长度 0/1 数组排序后循环不进入并返回 `-1`，同时避免无意义排序调用。
+- `coins_90.v`
+  - `Load "../spec/90".`
+  - 新增 `problem_90_spec_z`，处理 C 返回值 `-1` 与题目规格 `None` / `Some res` 的桥接。
+  - 新增 `sorted_int_list_by` 和 `no_distinct_prefix`，用于描述排序结果和扫描到当前位置前都没有相邻不同元素。
+  - 新增 `next_smallest_sorted_bridge`，把“普通升序排序结果中第一个相邻不同元素是第二小元素”的题目相关事实留在本题文件中，而不是放进 `sort_int_array`。
+  - 新增 `next_smallest_sorted_bridge_of_sorted`、`Sorted_Znth_le`、`no_distinct_prefix_eq0`、`no_distinct_prefix_1`、`no_distinct_prefix_step`、`problem_90_spec_z_short` 等辅助引理。
+- `C_90_proof_manual.v`
+  - 补完 6 个 manual VC：
+    - `proof_of_next_smallest_entail_wit_1`
+    - `proof_of_next_smallest_entail_wit_2`
+    - `proof_of_next_smallest_entail_wit_3`
+    - `proof_of_next_smallest_return_wit_1`
+    - `proof_of_next_smallest_return_wit_2`
+    - `proof_of_next_smallest_return_wit_3`
+
+### 遇到的问题
+
+1. 问题：不能把原程序的“排序后扫描第一个相邻不同元素”整体替换成一个未实现函数。
+
+   解决：只把常见库函数 `qsort` 建模为外部 `sort_int_array`；扫描循环仍保留在 C 中，并用 `no_distinct_prefix(i, sorted_l)` 作为循环不变式证明。
+
+2. 问题：原始返回值用 `-1` 表示没有第二小元素，但输入中可能合法出现 `-1`，导致 C 返回值和 HumanEval 的 `None` / `Some -1` 存在哨兵歧义。
+
+   解决：在 `coins_90.v` 中定义 `problem_90_spec_z`：
+
+   ```coq
+   Definition problem_90_spec_z (l : list Z) (res : Z) : Prop :=
+     (res = -1 /\ problem_90_spec l None) \/
+     problem_90_spec l (Some res).
+   ```
+
+   这样既保留 C 的返回约定，也不排除第二小元素实际为 `-1` 的情况。
+
+3. 问题：`sort_int_array` 需要成为后续可放入库文件的通用普通排序函数，不能在后置条件里携带 `problem_90_spec_z` 这类题目相关约束。
+
+   解决：将 `sort_int_array` 改为和 `C_33.c` / `C_34.c` 一致的通用规格：
+
+   ```c
+   void sort_int_array(int *array, int init_size, int size, int ascending)
+   /*@ With l
+       Require
+           array != 0 &&
+           init_size == Zlength(l) &&
+           0 <= init_size && init_size <= size &&
+           0 <= size && size < INT_MAX &&
+           IntArray::seg(array, 0, init_size, l) *
+           IntArray::undef_seg(array, init_size, size)
+       Ensure
+           exists sorted_l sorted_full_l,
+           init_size == Zlength(sorted_l) &&
+           size == Zlength(sorted_full_l) &&
+           sublist(0, init_size, sorted_full_l) == sorted_l &&
+           sorted_int_list_by(ascending, sorted_l) &&
+           Permutation(l, sorted_l) &&
+           IntArray::full(array, size, sorted_full_l)
+   */;
+   ```
+
+   C_90 的题目语义由本题自己的 `next_smallest_sorted_bridge` 和 Coq 引理证明。
+
+4. 问题：参考版 `sort_int_array` 的前置资源是 `IntArray::seg(array, 0, init_size, l) * IntArray::undef_seg(array, init_size, size)`，而 C_90 入口自然持有 `IntArray::full(lst, lst_size, input_l)`。
+
+   解决：在调用前增加 `Assert`，将 `full` 拆成 `seg(lst, 0, lst_size, input_l)` 和空的 `undef_seg(lst, lst_size, lst_size)`；manual 中用 `IntArray.full_to_seg` 和 `IntArray.undef_seg_empty` 证明该资源重排。
+
+5. 问题：通用排序函数仍要求 `array != 0`，但 `IntArray::full` 在当前库中不推出地址非 0。
+
+   解决：在 `next_smallest` 前置条件中加入条件式纯事实：
+
+   ```c
+   lst_size > 1 => lst != 0
+   ```
+
+   因为 C_90 只在 `lst_size > 1` 时调用排序；长度 0/1 分支提前返回，不需要非空指针。
+
+6. 问题：排序函数的后置条件只给出 `Sorted` 和 `Permutation` 时，循环 return 分支还需要证明“第一个相邻不同元素就是第二小元素”。
+
+   解决：在 `coins_90.v` 中证明 `next_smallest_sorted_bridge_of_sorted`：从 `sorted_int_list_by 1 sorted_l` 和 `Permutation input_l sorted_l` 推出本题所需桥接事实。这样题目相关证明留在 C_90，`sort_int_array` 保持通用。
 
 ## 后续记录模板
 
