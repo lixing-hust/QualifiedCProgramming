@@ -40,6 +40,7 @@
 | `C_72` | 已全链通过 | 回文数组且总和不超过阈值；已补 `coins_72.v`、前缀和/镜像 invariant 和 6 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_73` | 已全链通过 | 统计左右镜像不等对数；已补 `coins_73.v`、镜像对计数 invariant 和 5 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_85` | 已全链通过 | 奇数下标求和；已补 `coins_85.v`、循环前缀和 invariant 和 5 个 manual VC，且无 `Admitted.` / `Axiom`。 |
+| `C_88` | 已全链通过 | 根据首尾和奇偶决定升序/降序；保留 copy、qsort、偶数分支 in-place reverse，只将 qsort 建模为外部排序函数，manual 无 `Admitted.` / `Axiom`。 |
 | `C_94` | 已全链通过 | 最大素数的各位和；修复原始 C 将 `1` 误判为素数的问题，已补 `coins_94.v` 和 14 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_100` | 已全链通过 | 已改成函数内部 malloc 并返回 `IntArray *`；补 `make_pile` 桥接、前缀写入 invariant 和 5 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_106` | 已全链通过 | 已改成函数内部 malloc 并返回 `IntArray *`；补三角数/阶乘序列桥接、奇偶分支 invariant 和 6 个 manual VC，且无 `Admitted.` / `Axiom`。 |
@@ -3529,6 +3530,94 @@ coqc C_70_goal_check.v
 - 对“排序后按某种确定索引模式输出”的题目，可以把排序作为库边界，但索引模式最好保留在 C 循环中验证。
 - 单下标循环通常比一次写两个位置的左右指针循环更适合 QCP invariant。
 - 如果排序函数返回完整容量数组，而逻辑只关心有效前缀，优先用 `sublist` 和 `Znth_sublist0` 类引理桥接。
+
+## C_88 验证记录
+
+### 结论
+
+- 状态：已完成完整验证。
+- 是否全链通过：是。
+- 是否无 `Admitted.` / `Axiom`：是，`coins_88.v` 与 `C_88_proof_manual.v` 扫描无命中。
+
+已通过的验收链：
+
+```bash
+coqc coins_88.v
+coqc C_88_goal.v
+coqc C_88_proof_auto.v
+coqc C_88_proof_manual.v
+coqc C_88_goal_check.v
+```
+
+### 文件变更
+
+- `C_88.c`
+  - 转成 QCP 适配格式：`IntArray *sort_array(int *array, int array_size)`，内部 malloc 返回结构体与输出数组。
+  - 尽量保留原程序核心逻辑：先复制输入到输出数组，再调用外部可信 `sort_int_array` 表示 `qsort` 升序排序，最后在首尾和为偶数时保留原来的 in-place reverse swap 循环。
+  - 仅去掉 malloc 失败分支，并把空数组返回改为返回一个长度为 0 的已分配数组资源，方便 QCP 保持统一的 `IntArray::full(data, 0, [])` 后置条件。
+  - 临时变量 `t` 初始化为 `0`，使反转循环 invariant 能把 `t` 作为普通 `data_at` 栈资源携带。
+- `coins_88.v`
+  - `Load "../spec/88".`，并提供 Z 层版本 `problem_88_pre_z` / `problem_88_spec_z`。
+  - 新增 `sort_array_input_range`，记录元素非负、int 范围和首尾求和不溢出。
+  - 新增 `copy_prefix`，描述复制循环。
+  - 新增 `reverse_step` / `reverse_loop`，用两次 `replace_Znth` 精确描述每轮 in-place swap 后的数组内容。
+  - 新增 `reverse_loop_Zlength`、`reverse_loop_snoc`、`replace_Znth_length_local` 等证明辅助引理。
+- `C_88_proof_manual.v`
+  - 补完 8 个 manual VC：
+    - `proof_of_sort_array_safety_wit_6`
+    - `proof_of_sort_array_entail_wit_1`
+    - `proof_of_sort_array_entail_wit_2`
+    - `proof_of_sort_array_entail_wit_3`
+    - `proof_of_sort_array_entail_wit_4`
+    - `proof_of_sort_array_entail_wit_5`
+    - `proof_of_sort_array_return_wit_2`
+    - `proof_of_sort_array_return_wit_3`
+
+### 遇到的问题
+
+1. 问题：用户要求尽量不修改原程序核心逻辑，不能把排序加反转整体换成一个未实现 helper。
+
+   解决：只把 `qsort` 建模为外部可信 `sort_int_array`；复制循环和偶数分支的 in-place reverse swap 循环都保留在 C 中验证。
+
+2. 问题：原始 C 有 malloc 失败分支和空数组返回 `NULL`，这会让返回规格分裂成多种资源形态。
+
+   解决：QCP 版本沿用本目录已验证题目的模式，使用可信 `malloc_int_array`，不保留失败分支；空数组仍返回结构体和长度为 0 的数组资源。算法语义仍是输出空数组。
+
+3. 问题：判断 `(array[0] + array[array_size - 1]) % 2` 需要证明加法不会溢出。
+
+   解决：在前置条件中加入 `sort_array_input_range(input_l)`，其中包括元素非负、元素在 int 范围内，以及非空时首尾和不超过 `INT_MAX`。manual 的 `safety_wit_6` 用该条件证明加法安全。
+
+4. 问题：反转循环读写 `data[i]` 和 `data[array_size - 1 - i]` 时，策略不会自动从 `i < array_size / 2` 推出两个下标都在数组范围内。
+
+   解决：在 reverse loop invariant 中显式加入：
+
+   ```c
+   (i < array_size / 2 => 0 <= i && i < array_size) &&
+   (i < array_size / 2 => 0 <= array_size - 1 - i &&
+                           array_size - 1 - i < array_size)
+   ```
+
+5. 问题：in-place swap 会让数组资源变成两次 `replace_Znth` 的嵌套形式，必须和下一轮 invariant 精确匹配。
+
+   解决：在 `coins_88.v` 中定义：
+
+   ```coq
+   reverse_step size i l :=
+     replace_Znth (size - 1 - i) (Znth i l 0)
+       (replace_Znth i (Znth (size - 1 - i) l 0) l).
+   ```
+
+   再用 `reverse_loop_snoc` 把第 `i` 轮 swap 后的数组改写成 `reverse_loop size (i + 1) sorted_l`。
+
+6. 问题：空数组返回分支中 `IntArray::undef_full(data, 0)` 要转成后置条件需要的 `IntArray::full(data, 0, [])`。
+
+   解决：manual proof 中使用 `IntArray.undef_full_empty` 和 `IntArray.full_empty` 将二者都化成 `emp`，再由 `problem_88_spec_nil` 证明功能规格。
+
+### 后续注意
+
+- 对原程序有 in-place swap 的题目，优先用 `replace_Znth` 精确建模每次写后的数组，而不是替换成外部 reverse helper。
+- 如果 C 表达式包含输入数组元素之间的加法，前置条件应显式提供对应的 int-range/不溢出条件。
+- `qsort` 仍可作为库边界建模，但排序后的后续数组变换应尽量保留在 C 中验证。
 
 ## 后续记录模板
 
