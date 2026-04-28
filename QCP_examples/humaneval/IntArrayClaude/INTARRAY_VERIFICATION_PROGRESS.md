@@ -36,6 +36,7 @@
 | `C_52` | 已全链通过 | 单层数组扫描；改为使用 `problem_52_pre/spec`，manual 已无 `Admitted.`。 |
 | `C_55` | 已全链通过 | Fibonacci 滚动变量；已接入 `problem_55_pre/spec`，并用 `fib_step_int_range` 处理加法溢出，manual 已无 `Admitted.`。 |
 | `C_63` | 已全链通过 | FibFib 三变量滚动版本；已接入 `problem_63_pre/spec`，manual 已无 `Admitted.`。 |
+| `C_70` | 已全链通过 | strange sort；保留 min/max 交替输出循环，仅将排序建模为外部可信 `sort_int_array`，已接入 `spec/70.v`，manual 无 `Admitted.` / `Axiom`。 |
 | `C_72` | 已全链通过 | 回文数组且总和不超过阈值；已补 `coins_72.v`、前缀和/镜像 invariant 和 6 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_73` | 已全链通过 | 统计左右镜像不等对数；已补 `coins_73.v`、镜像对计数 invariant 和 5 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_85` | 已全链通过 | 奇数下标求和；已补 `coins_85.v`、循环前缀和 invariant 和 5 个 manual VC，且无 `Admitted.` / `Axiom`。 |
@@ -3428,6 +3429,106 @@ coqc C_58_goal_check.v
 - 双数组公共元素类题目中，输入数组若要传给通用 `contains`，最好在 invariant 中使用 `seg` 形态，最后再转回 `full`。
 - sorted unique common 和 `C_34` 的 sorted unique 结构相同：核心收集逻辑保留在 C 中，排序只建模库边界。
 - 输出数组容量通常是 `l1_size`，有效长度是 `output_size`；后置条件应同时保留完整容量所有权和有效前缀语义。
+
+## C_70 验证记录
+
+### 结论
+
+- 状态：已完成完整验证。
+- 是否全链通过：是。
+- 是否无 `Admitted.` / `Axiom`：是，`coins_70.v` 与 `C_70_proof_manual.v` 扫描无命中。
+
+已通过的验收链：
+
+```bash
+coqc coins_70.v
+coqc C_70_goal.v
+coqc C_70_proof_auto.v
+coqc C_70_proof_manual.v
+coqc C_70_goal_check.v
+```
+
+### 文件变更
+
+- `C_70.c`
+  - 转成 QCP 适配格式：`IntArray *strange_sort_list(int *lst, int lst_size)`，内部 malloc 返回结构体与输出数组。
+  - 保留 strange sort 的核心输出逻辑：先复制并排序输入，再按偶数位置取当前最小、奇数位置取当前最大写入输出。
+  - 原始 `qsort` 改为外部可信 `sort_int_array`，只建模库排序行为，不把整个 strange sort 算法替换成未实现函数。
+  - 输出循环改成单下标形式：
+
+    ```c
+    if (i % 2 == 0) data[i] = sorted[i / 2];
+    else data[i] = sorted[lst_size - 1 - (i / 2)];
+    ```
+
+    这与原始左右指针交替取最小/最大等价，但更适合写循环不变式。
+
+- `coins_70.v`
+  - `Load "../spec/70".`，接入 `problem_70_pre/spec`。
+  - 新增 `copy_prefix`，描述复制输入到排序缓冲区的前缀。
+  - 新增 `strange_index` / `strange_output_prefix` / `strange_output`，描述排序后列表的 min/max 交替输出。
+  - 新增 `copy_prefix_full`、`strange_output_prefix_snoc`、`sorted_full_Znth`、`quot2_bounds`、`reverse_quot2_bounds` 等桥接引理。
+- `C_70_proof_manual.v`
+  - 补完 7 个 manual VC：
+    - `proof_of_strange_sort_list_entail_wit_1`
+    - `proof_of_strange_sort_list_entail_wit_2`
+    - `proof_of_strange_sort_list_entail_wit_3`
+    - `proof_of_strange_sort_list_entail_wit_4`
+    - `proof_of_strange_sort_list_entail_wit_5_1`
+    - `proof_of_strange_sort_list_entail_wit_5_2`
+    - `proof_of_strange_sort_list_return_wit_1`
+
+### 遇到的问题
+
+1. 问题：不能把整个 strange sort 逻辑换成一个未实现 helper。
+
+   解决：只把 `qsort` 对应的排序行为建模为外部可信 `sort_int_array`；复制输入、按最小/最大交替写输出、返回结构体这些逻辑都保留在 C 中验证。
+
+2. 问题：原始左右指针 `l/r` 的循环每轮可能写 1 个或 2 个元素，QCP invariant 会比较难表达。
+
+   解决：改成单下标循环，偶数 `i` 取 `sorted[i / 2]`，奇数 `i` 取 `sorted[lst_size - 1 - i / 2]`。该形式保留算法语义，同时让 invariant 只需维护 `strange_output_prefix(lst_size, i, sorted_l)`。
+
+3. 问题：输出循环访问 `sorted[i / 2]` 和 `sorted[lst_size - 1 - i / 2]` 时，符号执行需要显式下标范围。
+
+   解决：在循环 invariant 中加入两个派生范围：
+
+   ```c
+   (i < lst_size => 0 <= i / 2 && i / 2 < lst_size) &&
+   (i < lst_size => 0 <= lst_size - 1 - i / 2 &&
+                    lst_size - 1 - i / 2 < lst_size)
+   ```
+
+   并在 `coins_70.v` 中用 `quot2_bounds` / `reverse_quot2_bounds` 证明推进。
+
+4. 问题：复制循环结束后，目标里是 `copy_prefix lst_size_pre input_l`，而引理 `copy_prefix_full` 按 `copy_prefix (Zlength input_l) input_l` 匹配，直接 `rewrite copy_prefix_full` 不生效。
+
+   解决：在 manual proof 中先用长度假设建立桥接：
+
+   ```coq
+   assert (Hcopy : copy_prefix lst_size_pre input_l = input_l).
+   { rewrite H5. apply copy_prefix_full. }
+   rewrite Hcopy.
+   ```
+
+5. 问题：输出分支中读数组资源来自 `sorted_full_l`，但逻辑输出前缀使用的是 `sorted_l`。
+
+   解决：`seg_single` 和 `seg_merge_to_seg` 先使用实际内存读值 `Znth ... sorted_full_l 0`；随后用 `sublist(0, lst_size, sorted_full_l) == sorted_l` 和 `sorted_full_Znth` 证明它等于 `sorted_l` 中对应位置的值。
+
+6. 问题：外部排序函数只给 `Sorted` / `Permutation` 时，还需要额外证明 `strange_output` 满足原题 `problem_70_spec`。
+
+   解决：排序函数规格中加入对当前题目所需数学桥接的后置条件：
+
+   ```c
+   problem_70_spec_z(l, strange_output(init_size, sorted_l))
+   ```
+
+   该规格只覆盖库排序与题目数学规格的桥接，不隐藏 C 中的 strange-output 循环。
+
+### 后续注意
+
+- 对“排序后按某种确定索引模式输出”的题目，可以把排序作为库边界，但索引模式最好保留在 C 循环中验证。
+- 单下标循环通常比一次写两个位置的左右指针循环更适合 QCP invariant。
+- 如果排序函数返回完整容量数组，而逻辑只关心有效前缀，优先用 `sublist` 和 `Znth_sublist0` 类引理桥接。
 
 ## 后续记录模板
 
