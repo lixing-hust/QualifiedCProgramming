@@ -29,6 +29,7 @@
 | `C_33` | 已全链通过 | 使用外部可信 `sort_int_array` 替代 `qsort`；排序函数支持升序/降序参数，已接入 `spec/33.v` 的 `problem_33_spec`，manual 无 `Admitted.` / `Axiom`。 |
 | `C_34` | 已全链通过 | sorted unique；C 中保留 `contains` 与去重循环，仅将排序建模为外部库函数，已接入 `spec/34.v`，manual 无 `Admitted.` / `Axiom`。 |
 | `C_40` | 已全链通过 | 三元组求和；三层扫描谓词、溢出安全和 true/false 规格桥接已补完，manual 已无 `Admitted.`。 |
+| `C_58` | 已全链通过 | sorted unique common；保留双数组 `contains` 与公共元素收集循环，仅将排序建模为外部库函数，已接入 `spec/58.v`，manual 无 `Admitted.` / `Axiom`。 |
 | `C_42` | 已全链通过 | 已去掉输入 `out`，改为函数内部 malloc 并返回 `IntArray *` 结构体；manual 已无 `Admitted.`。 |
 | `C_43` | 已全链通过 | 二元组求和；复用 `C_40` 的分层扫描谓词模式，manual 已无 `Admitted.`。 |
 | `C_46` | 已全链通过 | 已改成 4 个滚动变量，不再使用局部数组；manual 已无 `Admitted.`。 |
@@ -3251,6 +3252,182 @@ coqc C_33_goal_check.v
 - 若排序一个数组前缀、后缀未初始化，沿用本题的 `seg + undef_seg -> full` 模式，方便后续释放整段内存。
 - 若题目要求降序，调用时传 `ascending = 0`，并在 spec 桥接中使用 `sorted_descending` 分支。
 - 外部排序函数只是可信规格；它不会验证排序算法本身。如果后续需要验证排序实现，应另开一个带函数体的排序程序，并证明其满足同一个 `sort_int_array` 规格。
+
+## C_34 验证记录
+
+### 结论
+
+- 状态：已完成完整验证。
+- 是否全链通过：是。
+- 是否无 `Admitted.` / `Axiom`：是，`coins_34.v` 与 `C_34_proof_manual.v` 扫描无命中。
+
+已通过的验收链：
+
+```bash
+coqc coins_34.v
+coqc C_34_goal.v
+coqc C_34_proof_auto.v
+coqc C_34_proof_manual.v
+coqc C_34_goal_check.v
+```
+
+### 文件变更
+
+- `C_34.c`
+  - 原始程序使用 `qsort`，已改为 QCP 可建模的外部可信排序函数 `sort_int_array`。
+  - `contains` 和 sorted unique 的去重循环保留在 C 程序中验证，没有把核心算法整体替换成未实现函数。
+  - 函数返回形式改为 `IntArray *unique(int *l, int l_size)`，内部分配 `IntArray` 结构体和容量为 `l_size` 的输出数组。
+  - 循环 invariant 使用 `unique_first_loop(input_l, i, output_l)` 描述已扫描前缀的首次出现元素。
+  - 返回规格中输出数组资源使用 `IntArray::full(data, l_size, data_l)`，并用 `sublist(0, output_size, data_l) == output_l` 指明结构体 `size` 对应的有效前缀。
+- `coins_34.v`
+  - `Load "../spec/34".`，接入原始 `problem_34_pre/spec`。
+  - 新增 `seen_values` / `unique_first_loop`，描述“保留首次出现元素”的去重语义。
+  - 新增 `seen_values_In_iff`、`seen_values_NoDup`、`unique_first_loop_add/skip`。
+  - 新增 `problem_34_spec_from_sort`，用 `Sorted`、`NoDup` 和 `Permutation` 桥接到原始 `problem_34_spec`。
+- `C_34_proof_manual.v`
+  - 补完 7 个 manual VC：
+    - `contains_entail_wit_2`
+    - `contains_return_wit_1`
+    - `contains_return_wit_2`
+    - `unique_entail_wit_1`
+    - `unique_entail_wit_2_1`
+    - `unique_entail_wit_2_2`
+    - `unique_return_wit_1`
+
+### 遇到的问题
+
+1. 问题：不能把整个 sorted unique 逻辑替换成一个未实现的 helper。
+
+   解决：只把 `qsort` 这一类常见库行为建模为外部可信 `sort_int_array`；`contains` 和“扫描输入、若输出前缀未包含当前元素则追加”的去重循环都保留在 C 中，并用循环不变式验证。
+
+2. 问题：排序后的输出长度小于等于分配容量，不能简单返回 `IntArray::full(data, output_size, output_l)`。
+
+   解决：输出数组实际按 `l_size` 分配，排序函数返回整段 `IntArray::full(data, l_size, sorted_full_l)`；函数后置条件记录：
+
+   ```c
+   output_size == Zlength(output_l) &&
+   l_size == Zlength(data_l) &&
+   sublist(0, output_size, data_l) == output_l &&
+   IntArray::full(data, l_size, data_l)
+   ```
+
+   这样既保留完整内存所有权，又明确 `out->size` 对应的有效前缀。
+
+3. 问题：排序前手写 `Assert` 容易丢掉 return 阶段还需要释放的局部变量栈资源，尤其是循环变量 `i`。
+
+   表现：symexec 在 `return out;` 处报 `Fail to Remove Memory Permission of i`。
+
+   解决：不在排序前后强行插入会重塑当前资源的 `Assert`；让循环退出态直接流入 `sort_int_array` 调用。这样 `i` 的局部变量资源能作为 frame 穿过外部函数调用，并在 return 时正常释放。
+
+4. 问题：尝试给 `sort_int_array` 增加与排序数组无关的 ghost 参数来保留外层纯事实，会生成不可证明的 VC。
+
+   表现：`unique_partial_solve_wit_6_pure/aux` 中出现对任意 `input_l0` 证明 `Zlength(input_l0) == Zlength(input_l)` 的目标。
+
+   解决：不要给库函数加入未被内存资源或实参约束的 ghost 参数。需要保留的事实应尽量从调用点当前上下文和 loop invariant 自然传递，或者放进与资源绑定的谓词中。
+
+5. 问题：最终 `problem_34_spec` 不能只靠排序函数的 `Sorted` 结论；还必须证明输出唯一且元素集合与输入一致。
+
+   解决：在 `coins_34.v` 中证明：
+
+   - `seen_values input` 与 `input` 有相同 `In` 集合。
+   - `seen_values input` 是 `NoDup`。
+   - 排序函数返回的 `Permutation unique_l sorted_l` 保持 `NoDup` 和元素集合。
+
+   最终由 `problem_34_spec_from_sort` 同时给出 `Sorted Z.le sorted_l`、`NoDup sorted_l` 和 `forall z, In z input <-> In z sorted_l`。
+
+### 后续注意
+
+- 后续验证 sorted unique / sort 后去重 / 去重后排序类程序时，核心扫描逻辑应保留在 C 中验证；外部黑盒只适合 `qsort`、`malloc`、释放等库边界。
+- 若外部函数规格需要携带额外 ghost，必须确保 ghost 由实参、资源谓词或纯条件约束住；不要加入“任意 ghost 但要求它满足某性质”的规格。
+- 对容量大于有效长度的输出数组，优先用“完整容量数组 + 有效前缀 sublist”的后置条件，避免丢失剩余内存所有权。
+
+## C_58 验证记录
+
+### 结论
+
+- 状态：已完成完整验证。
+- 是否全链通过：是。
+- 是否无 `Admitted.` / `Axiom`：是，`coins_58.v` 与 `C_58_proof_manual.v` 扫描无命中。
+
+已通过的验收链：
+
+```bash
+coqc coins_58.v
+coqc C_58_goal.v
+coqc C_58_proof_auto.v
+coqc C_58_proof_manual.v
+coqc C_58_goal_check.v
+```
+
+### 文件变更
+
+- `C_58.c`
+  - 转成 QCP 适配格式：`IntArray *common(int *l1, int l1_size, int *l2, int l2_size)`，内部 malloc 返回结构体与输出数组。
+  - 保留核心算法：扫描 `l1`，先用 `contains(data, output_size, current)` 排除已输出元素，再用 `contains(l2, l2_size, current)` 判断是否公共，满足后追加到输出前缀。
+  - 原始 `qsort` 改为外部可信 `sort_int_array`，只建模库排序行为，不隐藏公共元素收集逻辑。
+  - 输出数组仍按 `l1_size` 分配，返回规格使用完整容量数组加有效前缀：
+
+    ```c
+    l1_size == Zlength(data_l) &&
+    sublist(0, output_size, data_l) == output_l &&
+    IntArray::full(data, l1_size, data_l)
+    ```
+
+- `coins_58.v`
+  - `Load "../spec/58".`，接入 `problem_58_pre/spec`。
+  - 新增 `common_values` / `common_first_loop`，描述“`l1` 前缀中首次出现且属于 `l2` 的元素”。
+  - 新增 `common_first_loop_add`、`common_first_loop_skip_seen`、`common_first_loop_skip_not_l2`，对应循环三类分支。
+  - 新增 `common_values_In_iff`、`common_values_NoDup`。
+  - 新增 `problem_58_spec_from_sort`，用 `Permutation`、`Sorted`、`NoDup` 桥接到原始 `problem_58_spec`。
+- `C_58_proof_manual.v`
+  - 补完 8 个 manual VC：
+    - `contains_entail_wit_2`
+    - `contains_return_wit_1`
+    - `contains_return_wit_2`
+    - `common_entail_wit_1`
+    - `common_entail_wit_4_1`
+    - `common_entail_wit_4_2`
+    - `common_entail_wit_4_3`
+    - `common_return_wit_1`
+
+### 遇到的问题
+
+1. 问题：第二次 `contains(l2, l2_size, current)` 需要 `IntArray::seg(l2, 0, l2_size, input_l2)`，但入口资源是 `IntArray::full`。
+
+   解决：循环 invariant 中把 `l2` 资源保持为 `IntArray::seg(l2, 0, l2_size, input_l2)`；初始化 VC 中用 `IntArray.full_to_seg` 从入口 `full` 转成 `seg`，return VC 中再用 `IntArray.seg_to_full` 转回函数后置条件需要的 `full`。
+
+2. 问题：`seg_to_full` 之后目标中出现了地址表达式 `l2_pre + 0 * sizeof(INT)` 和长度 `l2_size_pre - 0`，与后置条件里的 `l2_pre` / `l2_size_pre` 不直接匹配。
+
+   解决：在 manual proof 中显式化简：
+
+   ```coq
+   replace (l2_pre + 0 * sizeof(INT)) with l2_pre by lia.
+   replace (l2_size_pre - 0) with l2_size_pre by lia.
+   ```
+
+3. 问题：最终规格需要的是公共元素集合：
+
+   ```coq
+   forall x, In x output <-> In x l1 /\ In x l2
+   ```
+
+   不能只证明输出来自 `l1` 或只证明无重复。
+
+   解决：`common_values_In_iff` 证明未排序公共前缀与 `l1/l2` 的交集等价；排序后的 `Permutation` 再把该性质转移到最终输出。
+
+4. 问题：追加分支需要同时依赖两个查询结果：未在输出前缀中、且在 `l2` 中。
+
+   解决：循环分支拆成三个 lemma：
+
+   - `common_first_loop_add`：未输出且在 `l2`，输出追加当前元素。
+   - `common_first_loop_skip_not_l2`：未输出但不在 `l2`，输出不变。
+   - `common_first_loop_skip_seen`：已输出过，输出不变。
+
+### 后续注意
+
+- 双数组公共元素类题目中，输入数组若要传给通用 `contains`，最好在 invariant 中使用 `seg` 形态，最后再转回 `full`。
+- sorted unique common 和 `C_34` 的 sorted unique 结构相同：核心收集逻辑保留在 C 中，排序只建模库边界。
+- 输出数组容量通常是 `l1_size`，有效长度是 `output_size`；后置条件应同时保留完整容量所有权和有效前缀语义。
 
 ## 后续记录模板
 
