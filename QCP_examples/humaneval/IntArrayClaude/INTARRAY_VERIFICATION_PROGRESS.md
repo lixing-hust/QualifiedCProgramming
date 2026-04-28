@@ -3724,6 +3724,47 @@ coqc C_90_goal_check.v
 
    解决：在 `coins_90.v` 中证明 `next_smallest_sorted_bridge_of_sorted`：从 `sorted_int_list_by 1 sorted_l` 和 `Permutation input_l sorted_l` 推出本题所需桥接事实。这样题目相关证明留在 C_90，`sort_int_array` 保持通用。
 
+## C_104 验证记录
+
+### 结论
+
+- 状态：已完成。
+- 是否全链通过：是，`coins_104.v`、`C_104_goal.v`、`C_104_proof_manual.v`、`C_104_proof_auto.v`、`C_104_goal_check.v` 均可编译。
+- 是否无 `Admitted.` / `Axiom`：`coins_104.v` 与 `C_104_proof_manual.v` 中无 `Admitted` / `Axiom`。
+
+### 文件变更
+
+- `C_104.c`：改为 QCP 格式；保留原程序“逐个数扫描每一位，遇偶数位则过滤掉，最后排序”的核心逻辑。为了验证，将数字扫描逻辑抽成已实现且带规格的 `has_only_odd_digits_int`，没有把核心逻辑替换成未实现函数。
+- `coins_104.v`：新增 Z 层规格、前缀过滤关系、奇偶数字扫描状态，以及 C 的 `quot/rem` 与数学 `div/mod` 之间的桥接引理。
+- `C_104_proof_manual.v`：补完所有 manual VC。
+
+### 遇到的问题
+
+1. 问题：原 C 程序用 `qsort` 排序，但本轮要求 `sort_int_array` 不能携带题目相关后置条件。
+
+   解决：`sort_int_array` 保持通用排序规格，只描述排序后前缀 `sorted_l` 有序、与输入前缀 `Permutation`、并恢复整段数组资源。后置中仅额外保留通用尺寸边界 `0 <= init_size <= size` 和 `0 <= size < INT_MAX`，不包含 `problem_104_spec_z` 或“只含奇数位”等题目语义。
+
+2. 问题：不能把原程序的数字检查循环替换成未实现函数。
+
+   解决：将原循环原样抽成已实现 helper `has_only_odd_digits_int`，循环体仍执行 `num % 2` 和 `num / 10` 的逐位检查；helper 本身单独验证，返回值只通过 `only_odd_digits_z` / `has_even_digit_z` 与逻辑规格连接。
+
+3. 问题：C 中 `/` 和 `%` 在 VC 里分别对应 `Z.quot` 和 `Z.rem`，而逻辑扫描状态自然使用 `Z.div` 和 `Z.mod`。
+
+   解决：在 `coins_104.v` 中加入 `odd_scan_even_quot` 和 `odd_scan_odd_quot`，在正数条件下用 `Z.quot_div_nonneg`、`Z.rem_mod_nonneg` 桥接 C 运算和数学运算。
+
+4. 问题：循环退出后局部变量 `i` 的资源仍存在，若断言中不显式保留 `data_at(&i, x_size)`，manual VC 会要求丢弃局部变量资源。
+
+   解决：在 sort 前后的 `Assert` 中保留 `data_at(&i, x_size)`，直到函数返回前由符号执行正常处理。
+
+5. 问题：sort 调用前后需要反复使用 `output_size` 的边界；如果只从数组段资源推导，会产生不必要的纯 VC。
+
+   解决：在循环后断言与 sort 后断言中显式保留 `0 <= output_size && output_size <= x_size`；同时在通用 `sort_int_array` 后置中保留调用前已有的通用尺寸边界。
+
+### 后续注意
+
+- 当前 `problem_104_spec_z` 是 Z 层操作式规格：先用 `unique_digits_prefix` 表达过滤，再用 `sorted_int_list_by 1` 和 `Permutation` 表达排序。后续若需要和 `../spec/104` 中的 nat 规格做等价证明，可在此基础上补桥接引理。
+- 后续涉及 `qsort` 的题目仍应保持 `sort_int_array` 为通用库函数规格，题目语义放在各自的 Coq bridge/spec 中证明。
+
 ## 后续记录模板
 
 复制下面模板记录下一题。
