@@ -3897,6 +3897,39 @@ coqc C_90_goal_check.v
 
 - `signed_digit_loop` 使用固定 11 层 fuel，覆盖 C `int` 输入的十进制位数；本题前置条件已经排除 `INT_MIN` 并限制元素在 `int` 范围内。
 
+## C_107 验证记录
+
+### 结论
+
+- 状态：已完成。
+- 是否全链通过：是，`coins_107.v`、`C_107_goal.v`、`C_107_proof_auto.v`、`C_107_proof_manual.v`、`C_107_goal_check.v` 均可编译。
+- 是否无 `Admitted.` / `Axiom`：`coins_107.v`、`C_107_proof_manual.v` 与 `spec/107.v` 扫描无 `Admitted` / `Axiom`。
+
+### 文件变更
+
+- `C_107.c`：适配为 QCP `IntArray *` 返回接口，补充 `is_pal` 和 `even_odd_palindrome` 的规格与循环不变式。保留原 C 的核心逻辑：数字反转判断回文，遍历 `1..n`，分别累计偶数回文和奇数回文，输出 `[even; odd]`。
+- `spec/107.v`：改为 Z/list 操作式规格，使用固定 4 层 fuel 描述 `n <= 1000` 下的十进制反转，规格输出为 `[count_even_pal_upto n; count_odd_pal_upto n]`。
+- `coins_107.v`：新增 C 层 bridge，包括 `is_pal_z`、反转循环状态 `pal_reverse_loop_state`、前缀计数状态 `pal_count_prefix`，以及 C `%`/`/` 到 Coq `mod`/`div` 的推进证明和计数边界引理。
+- `C_107_proof_manual.v`：补完所有 manual VC，包括 `is_pal` 返回语义、主循环四类分支推进、计数自增安全性和最终数组内容资源构造。
+
+### 遇到的问题
+
+1. 问题：`is_pal` 初版规格没有显式保存入口参数，生成的返回 VC 变成对任意 `x0` 证明 `is_pal_z x0`，不可证。
+   解决：给 `is_pal` 加 `With (x0: Z)` 和 `x == x0`，并在循环不变式中保留 `x == x0`。
+
+2. 问题：主函数循环退出后后置条件需要 `out != 0`，但初版 invariant 没保留结构体分配得到的非空事实。
+   解决：在主循环 invariant 中加入 `out != 0`。
+
+3. 问题：计数变量自增安全性需要证明回文计数不会超过已扫描前缀长度。
+   解决：在 `coins_107.v` 中从 `count_even_pal_upto_nat` / `count_odd_pal_upto_nat` 递归定义证明上下界，并桥接到 `pal_count_prefix_bounds`。
+
+4. 问题：C 分支条件中的 `%` 是 `Z.rem`，而规格层偶奇判断使用 `Z.mod`。
+   解决：在正数循环索引条件下使用 `Z.rem_mod_nonneg` 桥接。
+
+### 后续注意
+
+- `spec/107.v` 当前是与 C 程序直接一致的 Z 层操作式规格；如果后续需要和旧 nat/数字列表规格做严格等价，可在该文件上额外补等价定理，而不是削弱 `problem_107_spec_z`。
+
 ## 后续记录模板
 
 复制下面模板记录下一题。
