@@ -1,11 +1,11 @@
 ---
 name: humaneval-c-verification-zh-compact
-description: "中文精简流程：用于 humaneval/IntClaude、IntArrayClaude 与 StringClaude 下 C_XX 验证，覆盖不变式重建、symexec 重生成、manual 证明补全、无 Admitted 或 Axiom、goal_check 编译通过，并补充数组与字符串内存验证要点。"
+description: "中文精简流程：用于 humaneval/IntClaude、IntArrayClaude 与 StringClaude 下 C_XX 端到端验证，覆盖原始 C 程序到 QCP 格式转换、核心逻辑保护、不变式重建、symexec 重生成、manual 证明补全、无 Admitted 或 Axiom、goal_check 编译通过，并补充数组与字符串内存验证要点。"
 ---
 
 # HumanEval C 验证技能（中文精简版）
 
-适用场景：验证 `QCP_examples/humaneval/IntClaude`、`QCP_examples/humaneval/IntArrayClaude` 与 `QCP_examples/humaneval/StringClaude` 下的 `C_XX.c` 任务，完成从注解到 Coq 证明的全流程闭环。
+适用场景：验证 `QCP_examples/humaneval/IntClaude`、`QCP_examples/humaneval/IntArrayClaude` 与 `QCP_examples/humaneval/StringClaude` 下的 `C_XX.c` 任务，完成从原始 C 程序适配 QCP 格式，到注解、符号执行、Coq 证明的全流程闭环。
 
 ## 目标
 
@@ -17,31 +17,67 @@ description: "中文精简流程：用于 humaneval/IntClaude、IntArrayClaude �
 
 ## 强约束
 
-1. 未经用户确认，不修改 C 程序语句，只改注解和证明文件。
-2. 优先复用题目规格文件已有定义，少造新谓词和大引理。
-3. 每次改注解或桥接逻辑后，必须重新 symexec 生成 goal 文件。
-4. 证明失败先回查信息是否不足，避免盲目堆引理。
-5. 数组程序禁止在未说明内存所有权的情况下读取数组元素。
-6. 数组程序若涉及写入，必须在 invariant 中区分“已写前缀/未写后缀”。
-7. 字符串程序禁止把 Coq `string` 规格直接当作 `CharArray` 内存规格，必须明确二者表示桥接。
-8. 字符串输出必须显式证明末尾 `0` 终止符。
+1. 先把原始 C 程序改成 QCP 支持格式，再开始正式验证；格式转换参考 `QCP_examples/humaneval/QCP_FORMAT_CONVERSION_GUIDE.md`。
+2. 格式转换只能做接口与验证环境适配：替换 QCP 头文件、结构体指针返回适配、增加 `malloc/free/sort/qsort` 等通用库函数 wrapper 规格、添加目标函数前后条件骨架和 `coins_XX.v` 桥接定义。
+3. 未经用户确认，不修改原 C 程序的核心业务逻辑。若为了验证需要改变循环结构、分支行为、容量策略、提前返回语义、过滤/排序/计算规则，必须暂停并告诉用户原因、原逻辑、拟改逻辑和影响。
+4. 不允许把原程序核心逻辑替换成未实现函数规格。只有 `malloc/free/qsort/sort` 这类通用库函数可以用未定义 wrapper 规格表示。
+5. 原程序已有 helper 可以保留并补规格；如需新抽 helper，helper 必须有 C 实现并单独验证，且只能拆分局部机械操作或独立子逻辑，不能隐藏题目主逻辑。
+6. `sort_int_array` 必须保持通用排序函数规格，不得在后置条件加入当前题目的语义约束；题目相关结论放在 `coins_XX.v` 的 bridge 引理中证明。
+7. 优先复用题目规格文件已有定义，少造新谓词和大引理。
+8. 每次改注解、C 语句或桥接逻辑后，必须重新 symexec 生成 goal 文件。
+9. 证明失败先回查信息是否不足，避免盲目堆引理。
+10. 数组程序禁止在未说明内存所有权的情况下读取数组元素。
+11. 数组程序若涉及写入，必须在 invariant 中区分“已写前缀/未写后缀”。
+12. 字符串程序禁止把 Coq `string` 规格直接当作 `CharArray` 内存规格，必须明确二者表示桥接。
+13. 字符串输出必须显式证明末尾 `0` 终止符。
 
-## 八步流程
+## 端到端流程
 
-### 1) 约束确认
+### 1) 约束确认与资料读取
 
 - 确认目标文件 `C_XX.c`。
-- 确认允许改动范围：仅注解 / 注解+coins / 允许改 C 语句。
-- 确认用户偏好：是否禁止复用旧不变式，是否要求最小新增引理。
+- 默认允许做 QCP 格式转换和验证注解/证明修改；默认不允许改核心逻辑。
+- 读取 `QCP_FORMAT_CONVERSION_GUIDE.md`、目标文件、对应 `spec/XX.v`、相邻已验证例子和进度文档。
+- 确认用户偏好：是否要求先展示格式转换结果、是否禁止复用旧不变式、是否要求最小新增引理。
 
-### 2) 代码审查
+### 2) 原始代码审查与核心逻辑标记
+
+- 先读原始 C 程序，明确哪些语句属于题目核心逻辑：
+  - 主循环/递归结构
+  - 业务分支条件
+  - 元素过滤、计数、计算、比较、复制规则
+  - 排序前后的题目语义
+  - 提前返回和错误分支行为
+- 明确哪些语句属于通用库/内存管理：
+  - `malloc/calloc/free`
+  - `qsort` 或项目统一 `sort_int_array`
+  - 纯粹的结构体分配 wrapper
+- 如果格式转换会改变核心逻辑或可观察行为，立即暂停询问用户。
+
+### 3) QCP 格式转换
+
+- 替换为 QCP 头文件，按目标目录选择 `verification_stdlib.h`、`verification_list.h`、`int_array_def.h`、字符串相关头文件等。
+- 将裸 `malloc/free/qsort` 改为带规格的通用 wrapper；排序 wrapper 必须保持通用。
+- 返回 `IntArray` 值的程序可参考已验证例子改为 `IntArray *` 加结构体分配 wrapper，但不得借此改变输出内容、顺序或大小语义。
+- 给目标函数补最小前后条件骨架；数组资源必须写清 `full/seg/undef_seg`。
+- 新增或更新 `coins_XX.v`，至少包含 `Load "../spec/XX".` 和 C 层需要的 Z/list bridge 定义。
+- 格式转换阶段不要主动堆复杂 loop invariant，也不要生成正式 `goal/proof` 文件，除非用户明确要求直接进入验证。
+
+格式转换后快速自检：
+
+- 核心循环和业务分支是否仍在 C 程序中。
+- 是否只把通用库函数做成未实现 wrapper。
+- 是否没有把题目语义塞进通用 `sort_int_array`。
+- 临时数组若不返回，是否有释放或后置条件中保留资源。
+
+### 4) 规格与初始注解审查
 
 - 检查 `C_XX.c` 中每个函数是否有明确的 function specification（输入输出说明）。
 - 若缺失，先补充规格注解，再进行后续步骤。
   - 数组程序必须显式写出内存谓词（`IntArray::full/seg/undef_*`）。
   - 字符串程序必须显式写出 `CharArray::full` 与末尾 `0` 终止符。
 
-### 3) 基线阅读
+### 5) 基线阅读
 
 - 读取：`C_XX.c`、`coins_XX.v`、`Coins/spec/human/input/XX.v`、现有 `C_XX_goal.v` 和 `C_XX_proof_manual.v`。
 - 判断问题类型：
@@ -54,7 +90,7 @@ description: "中文精简流程：用于 humaneval/IntClaude、IntArrayClaude �
   - 字符串的 `string/ascii` 规格与 `list Z` 内存模型不一致
   - 输出字符串缺少 `app(out_l, cons(0, nil))` 终止符
 
-### 4) 重建不变式与桥接
+### 6) 重建不变式与桥接
 
 - 在 C 注解里建立最小状态模型，所有 loop invariant 必须以 **`Inv Assert`** 形式给出完整不变式。保证：
   - 安全边界可证
@@ -69,11 +105,11 @@ description: "中文精简流程：用于 humaneval/IntClaude、IntArrayClaude �
   - 输出前缀：`CharArray::full(out, i, out_l)`
   - 未写后缀：`CharArray::undef_seg(out, i, out_n + 1)` 或等价所有权
   - 最终终止符写入后的完整字符串形态
-- 如需修改 C 程序语句（非注解），必须暂停，与用户讨论修改方案并获得确认后再继续。
+- 如需修改 C 程序语句（非注解）且涉及核心逻辑，必须暂停，与用户讨论修改方案并获得确认后再继续。
 
-### 5) 强制重生成
+### 7) 强制重生成
 
-改动后立即重新 symexec，更新：
+进入正式验证后，改动 C 注解、C 语句或 bridge 后立即重新 symexec，更新：
 
 - `C_XX_goal.v`
 - `C_XX_proof_auto.v`
@@ -105,7 +141,7 @@ linux-binary/symexec \
 - `-IQCP_examples/LLM_friendly_cases` 必须带上，否则 `verification_stdlib.h` / `int_array_def.h` 可能找不到。
 - 如果 `--gen-and-backup` 生成了 `C_XX_proof_manual_backup*.v`，补完新 manual 后应清理这些 backup 文件。
 
-### 6) manual 逐项证明
+### 8) manual 逐项证明
 
 - 通过 symexec symbolic 到文件尾来获得完整的 witness 列表。
 - 依次使用 **qcp-mcp 的 `proof`** 打印对应的 witness 到 Rocq，单个 witness 证明结束后再进行下一个。
@@ -119,7 +155,7 @@ linux-binary/symexec \
   - 数组元素访问是否缺 `0 <= i < n` 或 `INT_MIN/INT_MAX` 边界
   - 字符串是否缺 `n + 1` 长度界、字符集约束或 `0` 终止符证明
 
-### 7) 全链编译验收
+### 9) 全链编译验收
 
 依次编译：
 
@@ -131,9 +167,9 @@ linux-binary/symexec \
 
 可接受 load-path remap warning，但必须整体编译通过。
 
-### 8) 清理编译产物
+### 10) 清理编译产物
 
-- 在确认第 7 步全部编译通过后，删除本题编译产生的中间文件，例如：
+- 在确认第 9 步全部编译通过后，删除本题编译产生的中间文件，例如：
   - 隐藏的 Coq `.aux` 文件，例如 `.C_XX_goal.aux`、`.C_XX_proof_auto.aux`、`.C_XX_proof_manual.aux`、`.C_XX_goal_check.aux`、`.coins_XX.aux`
   - `.glob`
   - `.vo`
@@ -149,11 +185,12 @@ linux-binary/symexec \
   - `C_XX_proof_manual.v`
   - `C_XX_goal_check.v`
 
-### 9) 收尾与交付
+### 11) 记录与交付
 
 - 检查无 `Admitted.`/`Axiom`：
   - `grep -nE "Admitted\\.|Axiom[[:space:]]" coins_XX.v C_XX_proof_manual.v || true`
   - 同时用 **rocq-mcp 的 `rocq-verify`** 二次确认无 Axiom 引入。
+- 将本题遇到的问题、解决办法、是否有格式转换中的行为适配，更新到对应 progress 文档。
 - 汇报：改了什么、为什么、编译结果、扫描结果、剩余风险。
 
 ## 标准命令模板
@@ -242,7 +279,35 @@ coqc $COQINCLUDES C_XX_goal_check.v
 - 只读：后置条件必须保留 `IntArray::full(...)`
 - 写入：必须显式描述“前缀已写、后缀未写”或“全数组新列表”
 
-### F. 参考文档
+### F. 近期验证经验
+
+- 排序：
+  - 涉及 `qsort` 的题目统一倾向使用通用 `sort_int_array` wrapper。
+  - wrapper 后置只写 `sorted_int_list_by(ascending, sorted_l)`、`Permutation(l, sorted_l)`、长度和数组资源。
+  - 不把“top-k”“unique”“公共元素”“题目最终 spec”写进排序函数后置。
+- helper：
+  - 可以把局部独立逻辑抽成已实现 helper，例如数字逐位检查、数组尾追加。
+  - helper 必须有 C 函数体并单独通过验证；不能只声明一个规格把原程序核心逻辑吞掉。
+  - 如果 helper 只是机械内存操作，应避免名字和规格暗示题目语义。
+- 数组追加：
+  - 写 `data[output_size] = value; output_size++` 时，常用资源形态是 `seg(data,0,output_size,l) * undef_seg(data,output_size,cap)`。
+  - 单次写入证明通常用 `IntArray.seg_single` 与 `IntArray.seg_merge_to_seg`。
+  - 注解里追加单元素列表优先写 `app(l, cons(value, nil))`，不要混用解析不稳定的 Coq notation。
+- 局部变量资源：
+  - 循环退出后，局部变量如 `i`、`n`、`j` 的 `data_at(&i, ...)` 仍可能在空间资源里。
+  - sort 前后或 return 前的 `Assert` 如果不保留这些资源，manual VC 可能变成“丢弃局部变量资源”而不可证。
+- C 算术：
+  - C 的 `/`、`%` 在 VC 中常对应 `Z.quot`、`Z.rem`；数学规格常用 `Z.div`、`Z.mod`。
+  - 对非负/正数状态，优先在 `coins_XX.v` 中用 `Z.quot_div_nonneg`、`Z.rem_mod_nonneg` 做局部 bridge。
+  - 有加法、乘法、`3*n+1`、前缀和、乘积时，前置条件或 invariant 要明确 int 范围安全。
+- 动态扩容：
+  - `realloc` 属于通用库函数，但它涉及旧块所有权迁移、失败分支和容量变化，当前验证中通常不宜随手改成固定容量。
+  - 如果必须把动态扩容适配为固定容量、强前置条件或其他内存策略，这属于可能影响可观察行为的容量策略变化，必须先暂停询问用户。
+- 操作式 Z 层规格：
+  - 当 `../spec/XX.v` 的 nat/list 规格不方便直接接 C 语义，可以在 `coins_XX.v` 中建立 Z 层操作式规格。
+  - 必须在 progress 中说明它是否已经与原 spec 完全桥接；未桥接时写清剩余风险。
+
+### G. 参考文档
 
 - 数组验证总览：
   - `QCP_examples/humaneval/IntArrayClaude/INTARRAY_VERIFICATION_GUIDE.md`
