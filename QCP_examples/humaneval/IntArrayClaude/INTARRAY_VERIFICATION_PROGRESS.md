@@ -3860,6 +3860,43 @@ coqc C_90_goal_check.v
 - 当前 `problem_123_spec_z` 是操作式 Z 层规格，尚未证明与 `../spec/123.v` 中 nat/list 规格完全等价；如果后续需要和原 spec 严格对接，可以在 `odd_collatz_prefix` 基础上补等价 bridge。
 - `append_int` 可以作为“已实现数组尾追加 helper”的验证拆分模式参考，但它目前带有 C_123 的固定容量 `1024`，不应直接当作通用库函数。
 
+## C_108 验证记录
+
+### 结论
+
+- 状态：已完成。
+- 是否全链通过：是，`coins_108.v`、`C_108_goal.v`、`C_108_proof_auto.v`、`C_108_proof_manual.v`、`C_108_goal_check.v` 均可编译。
+- 是否无 `Admitted.` / `Axiom`：`coins_108.v` 与 `C_108_proof_manual.v` 中无 `Admitted` / `Axiom`。
+
+### 文件变更
+
+- `C_108.c`：替换为 QCP 头文件，加入已实现的 `abs` helper 规格，补充数组只读资源、主循环和内部 digit-scan 循环不变式。保留原程序的核心遍历、正数直接计数、非正数逐位求和再判断的逻辑。
+- `coins_108.v`：新增数组元素安全范围、精确计数前缀状态和 digit-scan 状态，以及对应的初始化、推进和返回桥接引理；`problem_108_spec_z` 直接引用 `spec/108.v` 的 `problem_108_spec`。
+- `C_108_proof_manual.v`：补完所有 manual VC，包括 `abs` 返回、计数增量安全、C `%`/`/` 到 `Z.rem`/`Z.quot` 的非负场景桥接、循环不变式推进和最终返回。
+- `spec/108.v`：将输出类型从 `nat` 改为 `Z`，并把 `sum_digits` 改为与 C 程序一致的 Z 层操作式定义。
+
+### 遇到的问题
+
+1. 问题：原程序使用 `abs(n[i])`，而 C 的 `abs(INT_MIN)` 不安全；仓库已有 `abs` 规格也要求 `INT_MIN < x`。
+
+   解决：在 `count_nums_int_range` 中要求输入数组元素满足 `INT_MIN < Znth i input_l 0 <= INT_MAX`，把原程序实际安全执行域写入前置条件。
+
+2. 问题：内部 `while (w >= 10)` 中 `sum += w % 10; w = w / 10;` 的安全性需要同时证明 `sum` 不溢出和 `w` 非负。
+
+   解决：用 `digit_scan_state original current sum` 维护 `current` 的非负边界和 `sum + current <= INT_MAX`，并在 manual VC 中用 `Z.rem_mod_nonneg`、`Z.quot_div_nonneg` 桥接 C 运算。
+
+3. 问题：原 `../spec/108.v` 的输出是 `nat`，但 C 返回值在 VC 中是 `Z`；如果继续用 `nat`，需要在最终返回处额外桥接 `Z.to_nat`，并且不利于表达返回值的 C 整数范围。
+
+   解决：将 `spec/108.v` 的 `problem_108_spec` 输出类型改为 `Z`，`count_nums_impl` 也返回 `Z`；`problem_108_spec_z` 直接定义为 `problem_108_spec l out`。
+
+4. 问题：原 `nat_sum_digits` / `nat_get_msd` 规格不方便直接对应 C 里的 `while (w >= 10) { sum += w % 10; w /= 10; } sum -= w`。
+
+   解决：在 `spec/108.v` 中用 `signed_digit_loop` 定义 Z 层 digit sum。正数分支按题意总是计数；非正数分支精确刻画 C 的逐位循环。`count_nums_prefix` 已加强为 `num = count_nums_impl (sublist 0 i input_l)`。
+
+### 后续注意
+
+- `signed_digit_loop` 使用固定 11 层 fuel，覆盖 C `int` 输入的十进制位数；本题前置条件已经排除 `INT_MIN` 并限制元素在 `int` 范围内。
+
 ## 后续记录模板
 
 复制下面模板记录下一题。
