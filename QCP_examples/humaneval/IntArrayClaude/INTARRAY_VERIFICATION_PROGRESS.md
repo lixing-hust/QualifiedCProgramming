@@ -2233,6 +2233,16 @@ grep -nE "Admitted\.|Axiom[[:space:]]" coins_94.v C_94_proof_manual.v
 - 当前最可信的下一步方向，是把内层素数检测改成 `C_94` 风格的纯整数扫描，不再依赖读取输出数组前缀。
 - 若之后有人给出“QCP 如何读取正在构造中的输出前缀”的专门做法，可直接回到当前 `output_size + data` 版本继续尝试；这版已经跨过了首次写入问题，主要只剩内层 `data[j]` 读取。
 
+### 2026-04-29 复查补充
+
+- 重新复现当前版本：仍卡在 `int current = data[j];`，报 `Cannot derive the precondition of Memory Read`。
+- 尝试把内层“读取已生成素数前缀试除”的循环抽成已实现 helper。结果：helper 自身可以完成符号执行，说明读取前缀本身在独立函数中可处理；但主函数调用 helper 时无法匹配变量容量下的 `seg/undef_seg` 前置条件，报 `Cannot derive the precondition of function ...`。
+- 尝试切到 `C_94` 风格纯整数试除，避免读取输出前缀。结果：内层试除不再是卡点，但随后动态尾部写 `data[output_size] = i` 报 `Assign Exec fail`。
+- 尝试按 `C_123` 模式抽 `append_int_96` helper。固定容量的 `C_123` 模式可过，但本题变量容量 `n` 版本在调用 helper 时仍无法匹配前置条件。
+- 尝试先初始化整块 `data[0..n)`，把返回资源改成 `IntArray::full(data, n, data_l)` 后再写动态位置。结果：动态写 `data[output_size] = i` 仍报 `Assign Exec fail`。
+
+本轮实验性改动未保留；`C_96.c` 已恢复到本轮开始时的 QCP 改写版本，未生成可用 goal/proof 文件。
+
 ## C_100 验证记录
 
 ### 结论
@@ -3931,6 +3941,38 @@ coqc C_90_goal_check.v
 - `spec/107.v` 当前是与 C 程序直接一致的 Z 层操作式规格；如果后续需要和旧 nat/数字列表规格做严格等价，可在该文件上额外补等价定理，而不是削弱 `problem_107_spec_z`。
 
 ## 后续记录模板
+
+## C_96 验证记录
+
+### 结论
+
+- 状态：已完成。
+- 是否全链通过：是，`coins_96.v`、`C_96_goal.v`、`C_96_proof_auto.v`、`C_96_proof_manual.v`、`C_96_goal_check.v` 均可编译。
+- 是否无 `Admitted.` / `Axiom`：`coins_96.v`、`C_96_proof_manual.v` 扫描无 `Admitted` / `Axiom`。
+
+### 文件变更
+
+- `C_96.c`：恢复接近原程序的核心逻辑：从 `i=2` 扫到 `< n`，保存已找到的素数前缀，用已有素数试除，`isp` 为真时追加 `i`。为避免 C int 乘法溢出，原来的 `data[j] * data[j] <= i` 用等价的正数除法形式 `data[j] <= i / data[j]` 表达。保留 QCP 指针返回适配，并在循环不变式中补充 `n == n@pre`。
+- `coins_96.v`：保留强规格 `problem_96_spec_z`：结果全为素数、都小于 `n`、包含所有小于 `n` 的素数、严格排序且无重复。新增前缀状态、试除状态、`Znth`/排序/素数除子相关引理，证明提前停止试除时 candidate 为素数。
+- `C_96_proof_manual.v`：补完所有 manual VC，包括 C `%`/`/` 与 Coq `mod`/`div` 桥接、数组前缀追加、`isp=0` 的合数分支、`isp!=0` 的素数追加分支和最终返回规格。
+
+### 遇到的问题
+
+1. 问题：最初符号执行卡在 `data[j]` 读取，表面像动态前缀 `IntArray::seg` 问题。
+   解决：构造了最小 probe 后确认动态前缀读取本身可行；真正原因是断言里写了纯条件 `data == out->data`，其中 `out->data` 是内存字段访问，不是 ghost 值。移除该纯条件，保留 `data_at(&(out->data), data)`。
+
+2. 问题：内层循环 invariant 没携带 `2 < n`、`n < INT_MAX` 和函数入口参数关系，导致循环体 Assert 与最终 return VC 信息不足。
+   解决：在外层/内层 invariant 与关键 Assert 中补充 `n == n@pre`，并在内层 invariant 中保留 `2 < n`、`n < INT_MAX`。
+
+3. 问题：进入循环体时的条件 `data[j] <= i / data[j]` 没有传给 `i % data[j] == 0` 分支，无法更新 `prime_test_state`。
+   解决：在循环体 Assert 中加入对应的 `Znth(j, output_l, 0) <= i / Znth(j, output_l, 0)` 纯事实。
+
+4. 问题：原程序的提前停止试除需要证明：若当前素数前缀中第 `j` 个素数已经大于 `i / p_j`，且前面都未整除，则 `i` 是素数。
+   解决：在 `coins_96.v` 中证明复合数存在不超过平方界的素除子，并结合 `count_up_to_state` 的完备性、严格排序和 `prime_test_state` 的已检查前缀推出矛盾。
+
+### 后续注意
+
+- 当前 C 代码与原始核心逻辑的唯一语义等价改写是把平方条件改成正数除法条件，用于避免验证 C `int` 乘法溢出。
 
 复制下面模板记录下一题。
 
