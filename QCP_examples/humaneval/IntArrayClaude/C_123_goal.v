@@ -26,88 +26,6 @@ Require Import undef_uint_array_strategy_proof.
 Require Import array_shape_strategy_goal.
 Require Import array_shape_strategy_proof.
 
-(*----- Function append_int -----*)
-
-Definition append_int_safety_wit_1 := 
-forall (value_pre: Z) (output_size_pre: Z) (data_pre: Z) (l: (@list Z)) ,
-  [| (data_pre <> 0) |] 
-  &&  [| (0 <= output_size_pre) |] 
-  &&  [| (output_size_pre < 1024) |] 
-  &&  [| (INT_MIN <= value_pre) |] 
-  &&  [| (value_pre <= INT_MAX) |] 
-  &&  [| (output_size_pre = (Zlength (l))) |]
-  &&  (((data_pre + (output_size_pre * sizeof(INT) ) )) # Int  |-> value_pre)
-  **  (IntArray.undef_seg data_pre (output_size_pre + 1 ) 1024 )
-  **  ((( &( "value" ) )) # Int  |-> value_pre)
-  **  ((( &( "output_size" ) )) # Int  |-> output_size_pre)
-  **  ((( &( "data" ) )) # Ptr  |-> data_pre)
-  **  (IntArray.seg data_pre 0 output_size_pre l )
-|--
-  [| ((output_size_pre + 1 ) <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= (output_size_pre + 1 )) |]
-.
-
-Definition append_int_safety_wit_2 := 
-forall (value_pre: Z) (output_size_pre: Z) (data_pre: Z) (l: (@list Z)) ,
-  [| (data_pre <> 0) |] 
-  &&  [| (0 <= output_size_pre) |] 
-  &&  [| (output_size_pre < 1024) |] 
-  &&  [| (INT_MIN <= value_pre) |] 
-  &&  [| (value_pre <= INT_MAX) |] 
-  &&  [| (output_size_pre = (Zlength (l))) |]
-  &&  (((data_pre + (output_size_pre * sizeof(INT) ) )) # Int  |-> value_pre)
-  **  (IntArray.undef_seg data_pre (output_size_pre + 1 ) 1024 )
-  **  ((( &( "value" ) )) # Int  |-> value_pre)
-  **  ((( &( "output_size" ) )) # Int  |-> output_size_pre)
-  **  ((( &( "data" ) )) # Ptr  |-> data_pre)
-  **  (IntArray.seg data_pre 0 output_size_pre l )
-|--
-  [| (1 <= INT_MAX) |] 
-  &&  [| ((INT_MIN) <= 1) |]
-.
-
-Definition append_int_return_wit_1 := 
-forall (value_pre: Z) (output_size_pre: Z) (data_pre: Z) (l: (@list Z)) ,
-  [| (data_pre <> 0) |] 
-  &&  [| (0 <= output_size_pre) |] 
-  &&  [| (output_size_pre < 1024) |] 
-  &&  [| (INT_MIN <= value_pre) |] 
-  &&  [| (value_pre <= INT_MAX) |] 
-  &&  [| (output_size_pre = (Zlength (l))) |]
-  &&  (((data_pre + (output_size_pre * sizeof(INT) ) )) # Int  |-> value_pre)
-  **  (IntArray.undef_seg data_pre (output_size_pre + 1 ) 1024 )
-  **  (IntArray.seg data_pre 0 output_size_pre l )
-|--
-  EX (new_l: (@list Z)) ,
-  [| ((output_size_pre + 1 ) = (output_size_pre + 1 )) |] 
-  &&  [| ((output_size_pre + 1 ) = (Zlength (new_l))) |] 
-  &&  [| (new_l = (app (l) ((cons (value_pre) (nil))))) |]
-  &&  (IntArray.seg data_pre 0 (output_size_pre + 1 ) new_l )
-  **  (IntArray.undef_seg data_pre (output_size_pre + 1 ) 1024 )
-.
-
-Definition append_int_partial_solve_wit_1 := 
-forall (value_pre: Z) (output_size_pre: Z) (data_pre: Z) (l: (@list Z)) ,
-  [| (data_pre <> 0) |] 
-  &&  [| (0 <= output_size_pre) |] 
-  &&  [| (output_size_pre < 1024) |] 
-  &&  [| (INT_MIN <= value_pre) |] 
-  &&  [| (value_pre <= INT_MAX) |] 
-  &&  [| (output_size_pre = (Zlength (l))) |]
-  &&  (IntArray.seg data_pre 0 output_size_pre l )
-  **  (IntArray.undef_seg data_pre output_size_pre 1024 )
-|--
-  [| (data_pre <> 0) |] 
-  &&  [| (0 <= output_size_pre) |] 
-  &&  [| (output_size_pre < 1024) |] 
-  &&  [| (INT_MIN <= value_pre) |] 
-  &&  [| (value_pre <= INT_MAX) |] 
-  &&  [| (output_size_pre = (Zlength (l))) |]
-  &&  (((data_pre + (output_size_pre * sizeof(INT) ) )) # Int  |->_)
-  **  (IntArray.undef_seg data_pre (output_size_pre + 1 ) 1024 )
-  **  (IntArray.seg data_pre 0 output_size_pre l )
-.
-
 (*----- Function get_odd_collatz -----*)
 
 Definition get_odd_collatz_safety_wit_1 := 
@@ -324,11 +242,8 @@ forall (n_pre: Z) (output_l: (@list Z)) (n: Z) (out: Z) (data: Z) (output_size: 
 .
 
 Definition get_odd_collatz_safety_wit_11 := 
-forall (n_pre: Z) (output_l: (@list Z)) (n: Z) (out: Z) (data: Z) (output_size: Z) (new_l: (@list Z)) (retval: Z) ,
-  [| (retval = (output_size + 1 )) |] 
-  &&  [| (retval = (Zlength (new_l))) |] 
-  &&  [| (new_l = (app (output_l) ((cons (n) (nil))))) |] 
-  &&  [| (n <> 1) |] 
+forall (n_pre: Z) (output_l: (@list Z)) (n: Z) (out: Z) (data: Z) (output_size: Z) ,
+  [| (n <> 1) |] 
   &&  [| ((n % ( 2 ) ) = 1) |] 
   &&  [| (out <> 0) |] 
   &&  [| (data <> 0) |] 
@@ -342,25 +257,55 @@ forall (n_pre: Z) (output_l: (@list Z)) (n: Z) (out: Z) (data: Z) (output_size: 
   &&  [| (output_size <= 1024) |] 
   &&  [| (output_size = (Zlength (output_l))) |] 
   &&  [| (odd_collatz_prefix n_pre n output_l ) |]
-  &&  (IntArray.seg data 0 retval new_l )
-  **  (IntArray.undef_seg data retval 1024 )
+  &&  (((data + (output_size * sizeof(INT) ) )) # Int  |-> n)
+  **  (IntArray.undef_seg data (output_size + 1 ) 1024 )
   **  ((( &( "n" ) )) # Int  |-> n)
   **  ((( &( "out" ) )) # Ptr  |-> out)
   **  ((( &( "data" ) )) # Ptr  |-> data)
-  **  ((( &( "output_size" ) )) # Int  |-> retval)
+  **  ((( &( "output_size" ) )) # Int  |-> output_size)
   **  ((&((out)  # "<anonymous struct>" ->ₛ "data")) # Ptr  |-> data)
   **  ((&((out)  # "<anonymous struct>" ->ₛ "size")) # Int  |-> 0)
+  **  (IntArray.seg data 0 output_size output_l )
+|--
+  [| ((output_size + 1 ) <= INT_MAX) |] 
+  &&  [| ((INT_MIN) <= (output_size + 1 )) |]
+.
+
+Definition get_odd_collatz_safety_wit_12 := 
+forall (n_pre: Z) (output_l: (@list Z)) (n: Z) (out: Z) (data: Z) (output_size: Z) ,
+  [| (n <> 1) |] 
+  &&  [| ((n % ( 2 ) ) = 1) |] 
+  &&  [| (out <> 0) |] 
+  &&  [| (data <> 0) |] 
+  &&  [| (problem_123_pre_z n_pre ) |] 
+  &&  [| (INT_MIN <= n) |] 
+  &&  [| (0 < n) |] 
+  &&  [| (n <= INT_MAX) |] 
+  &&  [| (n < INT_MAX) |] 
+  &&  [| (0 < (n * 3 )) |] 
+  &&  [| ((n * 3 ) <= INT_MAX) |] 
+  &&  [| (0 < ((n * 3 ) + 1 )) |] 
+  &&  [| (((n * 3 ) + 1 ) < INT_MAX) |] 
+  &&  [| (0 < output_size) |] 
+  &&  [| (output_size <= 1024) |] 
+  &&  [| (output_size = (Zlength (output_l))) |] 
+  &&  [| (odd_collatz_prefix n_pre ((n * 3 ) + 1 ) output_l ) |]
+  &&  ((( &( "n" ) )) # Int  |-> n)
+  **  ((( &( "out" ) )) # Ptr  |-> out)
+  **  ((( &( "data" ) )) # Ptr  |-> data)
+  **  ((( &( "output_size" ) )) # Int  |-> output_size)
+  **  ((&((out)  # "<anonymous struct>" ->ₛ "data")) # Ptr  |-> data)
+  **  ((&((out)  # "<anonymous struct>" ->ₛ "size")) # Int  |-> 0)
+  **  (IntArray.seg data 0 output_size output_l )
+  **  (IntArray.undef_seg data output_size 1024 )
 |--
   [| (((n * 3 ) + 1 ) <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= ((n * 3 ) + 1 )) |]
 .
 
-Definition get_odd_collatz_safety_wit_12 := 
-forall (n_pre: Z) (output_l: (@list Z)) (n: Z) (out: Z) (data: Z) (output_size: Z) (new_l: (@list Z)) (retval: Z) ,
-  [| (retval = (output_size + 1 )) |] 
-  &&  [| (retval = (Zlength (new_l))) |] 
-  &&  [| (new_l = (app (output_l) ((cons (n) (nil))))) |] 
-  &&  [| (n <> 1) |] 
+Definition get_odd_collatz_safety_wit_13 := 
+forall (n_pre: Z) (output_l: (@list Z)) (n: Z) (out: Z) (data: Z) (output_size: Z) ,
+  [| (n <> 1) |] 
   &&  [| ((n % ( 2 ) ) = 1) |] 
   &&  [| (out <> 0) |] 
   &&  [| (data <> 0) |] 
@@ -369,30 +314,30 @@ forall (n_pre: Z) (output_l: (@list Z)) (n: Z) (out: Z) (data: Z) (output_size: 
   &&  [| (0 < n) |] 
   &&  [| (n <= INT_MAX) |] 
   &&  [| (n < INT_MAX) |] 
-  &&  [| (output_size < 1024) |] 
+  &&  [| (0 < (n * 3 )) |] 
+  &&  [| ((n * 3 ) <= INT_MAX) |] 
+  &&  [| (0 < ((n * 3 ) + 1 )) |] 
+  &&  [| (((n * 3 ) + 1 ) < INT_MAX) |] 
   &&  [| (0 < output_size) |] 
   &&  [| (output_size <= 1024) |] 
   &&  [| (output_size = (Zlength (output_l))) |] 
-  &&  [| (odd_collatz_prefix n_pre n output_l ) |]
-  &&  (IntArray.seg data 0 retval new_l )
-  **  (IntArray.undef_seg data retval 1024 )
-  **  ((( &( "n" ) )) # Int  |-> n)
+  &&  [| (odd_collatz_prefix n_pre ((n * 3 ) + 1 ) output_l ) |]
+  &&  ((( &( "n" ) )) # Int  |-> n)
   **  ((( &( "out" ) )) # Ptr  |-> out)
   **  ((( &( "data" ) )) # Ptr  |-> data)
-  **  ((( &( "output_size" ) )) # Int  |-> retval)
+  **  ((( &( "output_size" ) )) # Int  |-> output_size)
   **  ((&((out)  # "<anonymous struct>" ->ₛ "data")) # Ptr  |-> data)
   **  ((&((out)  # "<anonymous struct>" ->ₛ "size")) # Int  |-> 0)
+  **  (IntArray.seg data 0 output_size output_l )
+  **  (IntArray.undef_seg data output_size 1024 )
 |--
   [| ((n * 3 ) <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= (n * 3 )) |]
 .
 
-Definition get_odd_collatz_safety_wit_13 := 
-forall (n_pre: Z) (output_l: (@list Z)) (n: Z) (out: Z) (data: Z) (output_size: Z) (new_l: (@list Z)) (retval: Z) ,
-  [| (retval = (output_size + 1 )) |] 
-  &&  [| (retval = (Zlength (new_l))) |] 
-  &&  [| (new_l = (app (output_l) ((cons (n) (nil))))) |] 
-  &&  [| (n <> 1) |] 
+Definition get_odd_collatz_safety_wit_14 := 
+forall (n_pre: Z) (output_l: (@list Z)) (n: Z) (out: Z) (data: Z) (output_size: Z) ,
+  [| (n <> 1) |] 
   &&  [| ((n % ( 2 ) ) = 1) |] 
   &&  [| (out <> 0) |] 
   &&  [| (data <> 0) |] 
@@ -401,30 +346,30 @@ forall (n_pre: Z) (output_l: (@list Z)) (n: Z) (out: Z) (data: Z) (output_size: 
   &&  [| (0 < n) |] 
   &&  [| (n <= INT_MAX) |] 
   &&  [| (n < INT_MAX) |] 
-  &&  [| (output_size < 1024) |] 
+  &&  [| (0 < (n * 3 )) |] 
+  &&  [| ((n * 3 ) <= INT_MAX) |] 
+  &&  [| (0 < ((n * 3 ) + 1 )) |] 
+  &&  [| (((n * 3 ) + 1 ) < INT_MAX) |] 
   &&  [| (0 < output_size) |] 
   &&  [| (output_size <= 1024) |] 
   &&  [| (output_size = (Zlength (output_l))) |] 
-  &&  [| (odd_collatz_prefix n_pre n output_l ) |]
-  &&  (IntArray.seg data 0 retval new_l )
-  **  (IntArray.undef_seg data retval 1024 )
-  **  ((( &( "n" ) )) # Int  |-> n)
+  &&  [| (odd_collatz_prefix n_pre ((n * 3 ) + 1 ) output_l ) |]
+  &&  ((( &( "n" ) )) # Int  |-> n)
   **  ((( &( "out" ) )) # Ptr  |-> out)
   **  ((( &( "data" ) )) # Ptr  |-> data)
-  **  ((( &( "output_size" ) )) # Int  |-> retval)
+  **  ((( &( "output_size" ) )) # Int  |-> output_size)
   **  ((&((out)  # "<anonymous struct>" ->ₛ "data")) # Ptr  |-> data)
   **  ((&((out)  # "<anonymous struct>" ->ₛ "size")) # Int  |-> 0)
+  **  (IntArray.seg data 0 output_size output_l )
+  **  (IntArray.undef_seg data output_size 1024 )
 |--
   [| (3 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 3) |]
 .
 
-Definition get_odd_collatz_safety_wit_14 := 
-forall (n_pre: Z) (output_l: (@list Z)) (n: Z) (out: Z) (data: Z) (output_size: Z) (new_l: (@list Z)) (retval: Z) ,
-  [| (retval = (output_size + 1 )) |] 
-  &&  [| (retval = (Zlength (new_l))) |] 
-  &&  [| (new_l = (app (output_l) ((cons (n) (nil))))) |] 
-  &&  [| (n <> 1) |] 
+Definition get_odd_collatz_safety_wit_15 := 
+forall (n_pre: Z) (output_l: (@list Z)) (n: Z) (out: Z) (data: Z) (output_size: Z) ,
+  [| (n <> 1) |] 
   &&  [| ((n % ( 2 ) ) = 1) |] 
   &&  [| (out <> 0) |] 
   &&  [| (data <> 0) |] 
@@ -433,25 +378,28 @@ forall (n_pre: Z) (output_l: (@list Z)) (n: Z) (out: Z) (data: Z) (output_size: 
   &&  [| (0 < n) |] 
   &&  [| (n <= INT_MAX) |] 
   &&  [| (n < INT_MAX) |] 
-  &&  [| (output_size < 1024) |] 
+  &&  [| (0 < (n * 3 )) |] 
+  &&  [| ((n * 3 ) <= INT_MAX) |] 
+  &&  [| (0 < ((n * 3 ) + 1 )) |] 
+  &&  [| (((n * 3 ) + 1 ) < INT_MAX) |] 
   &&  [| (0 < output_size) |] 
   &&  [| (output_size <= 1024) |] 
   &&  [| (output_size = (Zlength (output_l))) |] 
-  &&  [| (odd_collatz_prefix n_pre n output_l ) |]
-  &&  (IntArray.seg data 0 retval new_l )
-  **  (IntArray.undef_seg data retval 1024 )
-  **  ((( &( "n" ) )) # Int  |-> n)
+  &&  [| (odd_collatz_prefix n_pre ((n * 3 ) + 1 ) output_l ) |]
+  &&  ((( &( "n" ) )) # Int  |-> n)
   **  ((( &( "out" ) )) # Ptr  |-> out)
   **  ((( &( "data" ) )) # Ptr  |-> data)
-  **  ((( &( "output_size" ) )) # Int  |-> retval)
+  **  ((( &( "output_size" ) )) # Int  |-> output_size)
   **  ((&((out)  # "<anonymous struct>" ->ₛ "data")) # Ptr  |-> data)
   **  ((&((out)  # "<anonymous struct>" ->ₛ "size")) # Int  |-> 0)
+  **  (IntArray.seg data 0 output_size output_l )
+  **  (IntArray.undef_seg data output_size 1024 )
 |--
   [| (1 <= INT_MAX) |] 
   &&  [| ((INT_MIN) <= 1) |]
 .
 
-Definition get_odd_collatz_safety_wit_15 := 
+Definition get_odd_collatz_safety_wit_16 := 
 forall (n_pre: Z) (output_l: (@list Z)) (n: Z) (out: Z) (data: Z) (output_size: Z) ,
   [| ((n % ( 2 ) ) <> 1) |] 
   &&  [| (n <> 1) |] 
@@ -483,7 +431,7 @@ forall (n_pre: Z) (output_l: (@list Z)) (n: Z) (out: Z) (data: Z) (output_size: 
   &&  [| (2 <> 0) |]
 .
 
-Definition get_odd_collatz_safety_wit_16 := 
+Definition get_odd_collatz_safety_wit_17 := 
 forall (n_pre: Z) (output_l: (@list Z)) (n: Z) (out: Z) (data: Z) (output_size: Z) ,
   [| ((n % ( 2 ) ) <> 1) |] 
   &&  [| (n <> 1) |] 
@@ -515,7 +463,7 @@ forall (n_pre: Z) (output_l: (@list Z)) (n: Z) (out: Z) (data: Z) (output_size: 
   &&  [| ((INT_MIN) <= 2) |]
 .
 
-Definition get_odd_collatz_safety_wit_17 := 
+Definition get_odd_collatz_safety_wit_18 := 
 forall (n_pre: Z) (output_l: (@list Z)) (out: Z) (data: Z) (output_size: Z) ,
   [| (out <> 0) |] 
   &&  [| (data <> 0) |] 
@@ -537,7 +485,7 @@ forall (n_pre: Z) (output_l: (@list Z)) (out: Z) (data: Z) (output_size: Z) ,
   &&  [| ((INT_MIN) <= 1024) |]
 .
 
-Definition get_odd_collatz_safety_wit_18 := 
+Definition get_odd_collatz_safety_wit_19 := 
 forall (n_pre: Z) (output_l: (@list Z)) (out: Z) (data: Z) (output_size: Z) ,
   [| (out <> 0) |] 
   &&  [| (data <> 0) |] 
@@ -670,7 +618,53 @@ forall (n_pre: Z) (output_l_2: (@list Z)) (n: Z) (out: Z) (data: Z) (output_size
   **  (IntArray.undef_seg data output_size 1024 )
 .
 
-Definition get_odd_collatz_entail_wit_4_1 := 
+Definition get_odd_collatz_entail_wit_4 := 
+forall (n_pre: Z) (output_l_2: (@list Z)) (n: Z) (out: Z) (data: Z) (output_size: Z) ,
+  [| (n <> 1) |] 
+  &&  [| ((n % ( 2 ) ) = 1) |] 
+  &&  [| (out <> 0) |] 
+  &&  [| (data <> 0) |] 
+  &&  [| (problem_123_pre_z n_pre ) |] 
+  &&  [| (INT_MIN <= n) |] 
+  &&  [| (0 < n) |] 
+  &&  [| (n <= INT_MAX) |] 
+  &&  [| (n < INT_MAX) |] 
+  &&  [| (output_size < 1024) |] 
+  &&  [| (0 < output_size) |] 
+  &&  [| (output_size <= 1024) |] 
+  &&  [| (output_size = (Zlength (output_l_2))) |] 
+  &&  [| (odd_collatz_prefix n_pre n output_l_2 ) |]
+  &&  (((data + (output_size * sizeof(INT) ) )) # Int  |-> n)
+  **  (IntArray.undef_seg data (output_size + 1 ) 1024 )
+  **  ((&((out)  # "<anonymous struct>" ->ₛ "data")) # Ptr  |-> data)
+  **  ((&((out)  # "<anonymous struct>" ->ₛ "size")) # Int  |-> 0)
+  **  (IntArray.seg data 0 output_size output_l_2 )
+|--
+  EX (output_l: (@list Z)) ,
+  [| (n <> 1) |] 
+  &&  [| ((n % ( 2 ) ) = 1) |] 
+  &&  [| (out <> 0) |] 
+  &&  [| (data <> 0) |] 
+  &&  [| (problem_123_pre_z n_pre ) |] 
+  &&  [| (INT_MIN <= n) |] 
+  &&  [| (0 < n) |] 
+  &&  [| (n <= INT_MAX) |] 
+  &&  [| (n < INT_MAX) |] 
+  &&  [| (0 < (n * 3 )) |] 
+  &&  [| ((n * 3 ) <= INT_MAX) |] 
+  &&  [| (0 < ((n * 3 ) + 1 )) |] 
+  &&  [| (((n * 3 ) + 1 ) < INT_MAX) |] 
+  &&  [| (0 < (output_size + 1 )) |] 
+  &&  [| ((output_size + 1 ) <= 1024) |] 
+  &&  [| ((output_size + 1 ) = (Zlength (output_l))) |] 
+  &&  [| (odd_collatz_prefix n_pre ((n * 3 ) + 1 ) output_l ) |]
+  &&  ((&((out)  # "<anonymous struct>" ->ₛ "data")) # Ptr  |-> data)
+  **  ((&((out)  # "<anonymous struct>" ->ₛ "size")) # Int  |-> 0)
+  **  (IntArray.seg data 0 (output_size + 1 ) output_l )
+  **  (IntArray.undef_seg data (output_size + 1 ) 1024 )
+.
+
+Definition get_odd_collatz_entail_wit_5_1 := 
 forall (n_pre: Z) (output_l_2: (@list Z)) (n: Z) (out: Z) (data: Z) (output_size: Z) ,
   [| ((n % ( 2 ) ) <> 1) |] 
   &&  [| (n <> 1) |] 
@@ -710,12 +704,9 @@ forall (n_pre: Z) (output_l_2: (@list Z)) (n: Z) (out: Z) (data: Z) (output_size
   **  (IntArray.undef_seg data output_size 1024 )
 .
 
-Definition get_odd_collatz_entail_wit_4_2 := 
-forall (n_pre: Z) (output_l_2: (@list Z)) (n: Z) (out: Z) (data: Z) (output_size: Z) (new_l: (@list Z)) (retval: Z) ,
-  [| (retval = (output_size + 1 )) |] 
-  &&  [| (retval = (Zlength (new_l))) |] 
-  &&  [| (new_l = (app (output_l_2) ((cons (n) (nil))))) |] 
-  &&  [| (n <> 1) |] 
+Definition get_odd_collatz_entail_wit_5_2 := 
+forall (n_pre: Z) (output_l_2: (@list Z)) (n: Z) (out: Z) (data: Z) (output_size: Z) ,
+  [| (n <> 1) |] 
   &&  [| ((n % ( 2 ) ) = 1) |] 
   &&  [| (out <> 0) |] 
   &&  [| (data <> 0) |] 
@@ -724,15 +715,18 @@ forall (n_pre: Z) (output_l_2: (@list Z)) (n: Z) (out: Z) (data: Z) (output_size
   &&  [| (0 < n) |] 
   &&  [| (n <= INT_MAX) |] 
   &&  [| (n < INT_MAX) |] 
-  &&  [| (output_size < 1024) |] 
+  &&  [| (0 < (n * 3 )) |] 
+  &&  [| ((n * 3 ) <= INT_MAX) |] 
+  &&  [| (0 < ((n * 3 ) + 1 )) |] 
+  &&  [| (((n * 3 ) + 1 ) < INT_MAX) |] 
   &&  [| (0 < output_size) |] 
   &&  [| (output_size <= 1024) |] 
   &&  [| (output_size = (Zlength (output_l_2))) |] 
-  &&  [| (odd_collatz_prefix n_pre n output_l_2 ) |]
-  &&  (IntArray.seg data 0 retval new_l )
-  **  (IntArray.undef_seg data retval 1024 )
-  **  ((&((out)  # "<anonymous struct>" ->ₛ "data")) # Ptr  |-> data)
+  &&  [| (odd_collatz_prefix n_pre ((n * 3 ) + 1 ) output_l_2 ) |]
+  &&  ((&((out)  # "<anonymous struct>" ->ₛ "data")) # Ptr  |-> data)
   **  ((&((out)  # "<anonymous struct>" ->ₛ "size")) # Int  |-> 0)
+  **  (IntArray.seg data 0 output_size output_l_2 )
+  **  (IntArray.undef_seg data output_size 1024 )
 |--
   EX (output_l: (@list Z)) ,
   [| (out <> 0) |] 
@@ -740,17 +734,17 @@ forall (n_pre: Z) (output_l_2: (@list Z)) (n: Z) (out: Z) (data: Z) (output_size
   &&  [| (problem_123_pre_z n_pre ) |] 
   &&  [| (0 < ((n * 3 ) + 1 )) |] 
   &&  [| (((n * 3 ) + 1 ) < INT_MAX) |] 
-  &&  [| (0 < retval) |] 
-  &&  [| (retval <= 1024) |] 
-  &&  [| (retval = (Zlength (output_l))) |] 
+  &&  [| (0 < output_size) |] 
+  &&  [| (output_size <= 1024) |] 
+  &&  [| (output_size = (Zlength (output_l))) |] 
   &&  [| (odd_collatz_prefix n_pre ((n * 3 ) + 1 ) output_l ) |]
   &&  ((&((out)  # "<anonymous struct>" ->ₛ "data")) # Ptr  |-> data)
   **  ((&((out)  # "<anonymous struct>" ->ₛ "size")) # Int  |-> 0)
-  **  (IntArray.seg data 0 retval output_l )
-  **  (IntArray.undef_seg data retval 1024 )
+  **  (IntArray.seg data 0 output_size output_l )
+  **  (IntArray.undef_seg data output_size 1024 )
 .
 
-Definition get_odd_collatz_entail_wit_5 := 
+Definition get_odd_collatz_entail_wit_6 := 
 forall (n_pre: Z) (output_l_2: (@list Z)) (output_size: Z) (n: Z) (data: Z) (out: Z) ,
   [| (n = 1) |] 
   &&  [| (out <> 0) |] 
@@ -783,7 +777,7 @@ forall (n_pre: Z) (output_l_2: (@list Z)) (output_size: Z) (n: Z) (data: Z) (out
   **  (IntArray.undef_seg data output_size 1024 )
 .
 
-Definition get_odd_collatz_entail_wit_6 := 
+Definition get_odd_collatz_entail_wit_7 := 
 forall (n_pre: Z) (output_l_2: (@list Z)) (out: Z) (data: Z) (output_size: Z) (sorted_full_l: (@list Z)) (sorted_l_2: (@list Z)) ,
   [| (output_size = (Zlength (sorted_l_2))) |] 
   &&  [| (1024 = (Zlength (sorted_full_l))) |] 
@@ -914,40 +908,7 @@ forall (n_pre: Z) (retval: Z) (retval_2: Z) ,
   **  ((&((retval)  # "<anonymous struct>" ->ₛ "size")) # Int  |-> 0)
 .
 
-Definition get_odd_collatz_partial_solve_wit_4_pure := 
-forall (n_pre: Z) (output_l: (@list Z)) (n: Z) (out: Z) (data: Z) (output_size: Z) ,
-  [| (n <> 1) |] 
-  &&  [| ((n % ( 2 ) ) = 1) |] 
-  &&  [| (out <> 0) |] 
-  &&  [| (data <> 0) |] 
-  &&  [| (problem_123_pre_z n_pre ) |] 
-  &&  [| (INT_MIN <= n) |] 
-  &&  [| (0 < n) |] 
-  &&  [| (n <= INT_MAX) |] 
-  &&  [| (n < INT_MAX) |] 
-  &&  [| (output_size < 1024) |] 
-  &&  [| (0 < output_size) |] 
-  &&  [| (output_size <= 1024) |] 
-  &&  [| (output_size = (Zlength (output_l))) |] 
-  &&  [| (odd_collatz_prefix n_pre n output_l ) |]
-  &&  ((( &( "n" ) )) # Int  |-> n)
-  **  ((( &( "out" ) )) # Ptr  |-> out)
-  **  ((( &( "data" ) )) # Ptr  |-> data)
-  **  ((( &( "output_size" ) )) # Int  |-> output_size)
-  **  ((&((out)  # "<anonymous struct>" ->ₛ "data")) # Ptr  |-> data)
-  **  ((&((out)  # "<anonymous struct>" ->ₛ "size")) # Int  |-> 0)
-  **  (IntArray.seg data 0 output_size output_l )
-  **  (IntArray.undef_seg data output_size 1024 )
-|--
-  [| (data <> 0) |] 
-  &&  [| (0 <= output_size) |] 
-  &&  [| (output_size < 1024) |] 
-  &&  [| (INT_MIN <= n) |] 
-  &&  [| (n <= INT_MAX) |] 
-  &&  [| (output_size = (Zlength (output_l))) |]
-.
-
-Definition get_odd_collatz_partial_solve_wit_4_aux := 
+Definition get_odd_collatz_partial_solve_wit_4 := 
 forall (n_pre: Z) (output_l: (@list Z)) (n: Z) (out: Z) (data: Z) (output_size: Z) ,
   [| (n <> 1) |] 
   &&  [| ((n % ( 2 ) ) = 1) |] 
@@ -968,13 +929,7 @@ forall (n_pre: Z) (output_l: (@list Z)) (n: Z) (out: Z) (data: Z) (output_size: 
   **  (IntArray.seg data 0 output_size output_l )
   **  (IntArray.undef_seg data output_size 1024 )
 |--
-  [| (data <> 0) |] 
-  &&  [| (0 <= output_size) |] 
-  &&  [| (output_size < 1024) |] 
-  &&  [| (INT_MIN <= n) |] 
-  &&  [| (n <= INT_MAX) |] 
-  &&  [| (output_size = (Zlength (output_l))) |] 
-  &&  [| (n <> 1) |] 
+  [| (n <> 1) |] 
   &&  [| ((n % ( 2 ) ) = 1) |] 
   &&  [| (out <> 0) |] 
   &&  [| (data <> 0) |] 
@@ -988,13 +943,12 @@ forall (n_pre: Z) (output_l: (@list Z)) (n: Z) (out: Z) (data: Z) (output_size: 
   &&  [| (output_size <= 1024) |] 
   &&  [| (output_size = (Zlength (output_l))) |] 
   &&  [| (odd_collatz_prefix n_pre n output_l ) |]
-  &&  (IntArray.seg data 0 output_size output_l )
-  **  (IntArray.undef_seg data output_size 1024 )
+  &&  (((data + (output_size * sizeof(INT) ) )) # Int  |->_)
+  **  (IntArray.undef_seg data (output_size + 1 ) 1024 )
   **  ((&((out)  # "<anonymous struct>" ->ₛ "data")) # Ptr  |-> data)
   **  ((&((out)  # "<anonymous struct>" ->ₛ "size")) # Int  |-> 0)
+  **  (IntArray.seg data 0 output_size output_l )
 .
-
-Definition get_odd_collatz_partial_solve_wit_4 := get_odd_collatz_partial_solve_wit_4_pure -> get_odd_collatz_partial_solve_wit_4_aux.
 
 Definition get_odd_collatz_partial_solve_wit_5_pure := 
 forall (n_pre: Z) (output_l: (@list Z)) (out: Z) (data: Z) (output_size: Z) ,
@@ -1064,10 +1018,6 @@ Include uint_array_Strategy_Correct.
 Include undef_uint_array_Strategy_Correct.
 Include array_shape_Strategy_Correct.
 
-Axiom proof_of_append_int_safety_wit_1 : append_int_safety_wit_1.
-Axiom proof_of_append_int_safety_wit_2 : append_int_safety_wit_2.
-Axiom proof_of_append_int_return_wit_1 : append_int_return_wit_1.
-Axiom proof_of_append_int_partial_solve_wit_1 : append_int_partial_solve_wit_1.
 Axiom proof_of_get_odd_collatz_safety_wit_1 : get_odd_collatz_safety_wit_1.
 Axiom proof_of_get_odd_collatz_safety_wit_2 : get_odd_collatz_safety_wit_2.
 Axiom proof_of_get_odd_collatz_safety_wit_3 : get_odd_collatz_safety_wit_3.
@@ -1086,19 +1036,20 @@ Axiom proof_of_get_odd_collatz_safety_wit_15 : get_odd_collatz_safety_wit_15.
 Axiom proof_of_get_odd_collatz_safety_wit_16 : get_odd_collatz_safety_wit_16.
 Axiom proof_of_get_odd_collatz_safety_wit_17 : get_odd_collatz_safety_wit_17.
 Axiom proof_of_get_odd_collatz_safety_wit_18 : get_odd_collatz_safety_wit_18.
+Axiom proof_of_get_odd_collatz_safety_wit_19 : get_odd_collatz_safety_wit_19.
 Axiom proof_of_get_odd_collatz_entail_wit_1 : get_odd_collatz_entail_wit_1.
 Axiom proof_of_get_odd_collatz_entail_wit_2 : get_odd_collatz_entail_wit_2.
 Axiom proof_of_get_odd_collatz_entail_wit_3 : get_odd_collatz_entail_wit_3.
-Axiom proof_of_get_odd_collatz_entail_wit_4_1 : get_odd_collatz_entail_wit_4_1.
-Axiom proof_of_get_odd_collatz_entail_wit_4_2 : get_odd_collatz_entail_wit_4_2.
-Axiom proof_of_get_odd_collatz_entail_wit_5 : get_odd_collatz_entail_wit_5.
+Axiom proof_of_get_odd_collatz_entail_wit_4 : get_odd_collatz_entail_wit_4.
+Axiom proof_of_get_odd_collatz_entail_wit_5_1 : get_odd_collatz_entail_wit_5_1.
+Axiom proof_of_get_odd_collatz_entail_wit_5_2 : get_odd_collatz_entail_wit_5_2.
 Axiom proof_of_get_odd_collatz_entail_wit_6 : get_odd_collatz_entail_wit_6.
+Axiom proof_of_get_odd_collatz_entail_wit_7 : get_odd_collatz_entail_wit_7.
 Axiom proof_of_get_odd_collatz_return_wit_1 : get_odd_collatz_return_wit_1.
 Axiom proof_of_get_odd_collatz_partial_solve_wit_1 : get_odd_collatz_partial_solve_wit_1.
 Axiom proof_of_get_odd_collatz_partial_solve_wit_2_pure : get_odd_collatz_partial_solve_wit_2_pure.
 Axiom proof_of_get_odd_collatz_partial_solve_wit_2 : get_odd_collatz_partial_solve_wit_2.
 Axiom proof_of_get_odd_collatz_partial_solve_wit_3 : get_odd_collatz_partial_solve_wit_3.
-Axiom proof_of_get_odd_collatz_partial_solve_wit_4_pure : get_odd_collatz_partial_solve_wit_4_pure.
 Axiom proof_of_get_odd_collatz_partial_solve_wit_4 : get_odd_collatz_partial_solve_wit_4.
 Axiom proof_of_get_odd_collatz_partial_solve_wit_5_pure : get_odd_collatz_partial_solve_wit_5_pure.
 Axiom proof_of_get_odd_collatz_partial_solve_wit_5 : get_odd_collatz_partial_solve_wit_5.

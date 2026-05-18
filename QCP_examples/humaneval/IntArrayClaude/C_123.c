@@ -63,28 +63,6 @@ void sort_int_array(int *array, int init_size, int size, int ascending)
         IntArray::full(array, size, sorted_full_l)
 */;
 
-int append_int(int *data, int output_size, int value)
-/*@ With l
-    Require
-        data != 0 &&
-        0 <= output_size && output_size < 1024 &&
-        INT_MIN <= value && value <= INT_MAX &&
-        output_size == Zlength(l) &&
-        IntArray::seg(data, 0, output_size, l) *
-        IntArray::undef_seg(data, output_size, 1024)
-    Ensure
-        exists new_l,
-        __return == output_size + 1 &&
-        __return == Zlength(new_l) &&
-        new_l == app(l, cons(value, nil)) &&
-        IntArray::seg(data, 0, __return, new_l) *
-        IntArray::undef_seg(data, __return, 1024)
-*/
-{
-    data[output_size] = value;
-    return output_size + 1;
-}
-
 IntArray *get_odd_collatz(int n)
 /*@ Require
         problem_123_pre_z(n)
@@ -163,7 +141,26 @@ IntArray *get_odd_collatz(int n)
                 IntArray::seg(data, 0, output_size, output_l) *
                 IntArray::undef_seg(data, output_size, 1024)
             */
-            output_size = append_int(data, output_size, n);
+            data[output_size] = n;
+            output_size++;
+            /*@ Assert
+                exists output_l,
+                n != 1 &&
+                n % 2 == 1 &&
+                out != 0 &&
+                data != 0 &&
+                problem_123_pre_z(n@pre) &&
+                INT_MIN <= n && 0 < n && n <= INT_MAX && n < INT_MAX &&
+                0 < n * 3 && n * 3 <= INT_MAX &&
+                0 < n * 3 + 1 && n * 3 + 1 < INT_MAX &&
+                0 < output_size && output_size <= 1024 &&
+                output_size == Zlength(output_l) &&
+                odd_collatz_prefix(n@pre, n * 3 + 1, output_l) &&
+                data_at(&(out -> data), data) *
+                data_at(&(out -> size), 0) *
+                IntArray::seg(data, 0, output_size, output_l) *
+                IntArray::undef_seg(data, output_size, 1024)
+            */
             n = n * 3 + 1;
         } else {
             n = n / 2;

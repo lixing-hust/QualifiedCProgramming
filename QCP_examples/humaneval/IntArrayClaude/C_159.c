@@ -26,29 +26,60 @@ Constrain:
 
 Have fun :)
 */
-#include<stdio.h>
-#include<stdlib.h>
+#include "verification_stdlib.h"
+#include "verification_list.h"
+#include "int_array_def.h"
+
+/*@ Extern Coq (problem_159_pre_z: Z -> Z -> Z -> Prop)
+               (problem_159_spec_z: Z -> Z -> Z -> list Z -> Prop) */
+/*@ Import Coq Require Import coins_159 */
 
 typedef struct {
     int* data;
     int size;
 } IntArray;
 
-IntArray eat(int number,int need,int remaining){
-    IntArray out;
-    out.data = (int*)malloc(2 * sizeof(int));
-    out.size = 2;
-    if (out.data == NULL) {
-        out.size = 0;
+IntArray *malloc_int_array_struct()
+/*@ Require emp
+    Ensure __return != 0 &&
+           undef_data_at(&(__return -> data)) *
+           undef_data_at(&(__return -> size))
+*/;
+
+int *malloc_int_array(int size)
+/*@ Require size >= 0 && size < INT_MAX
+    Ensure __return != 0 && IntArray::undef_full(__return, size)
+*/;
+
+IntArray *eat(int number,int need,int remaining)
+/*@ Require
+        problem_159_pre_z(number, need, remaining)
+    Ensure
+        exists data output_l output_size,
+        __return != 0 &&
+        data != 0 &&
+        output_size == 2 &&
+        output_size == Zlength(output_l) &&
+        problem_159_spec_z(number, need, remaining, output_l) &&
+        data_at(&(__return -> data), data) *
+        data_at(&(__return -> size), output_size) *
+        IntArray::full(data, output_size, output_l)
+*/
+{
+    IntArray *out = malloc_int_array_struct();
+    out->data = malloc_int_array(2);
+    out->size = 2;
+    int *data = out->data;
+    if (data == 0) {
+        out->size = 0;
         return out;
     }
     if (need>remaining) {
-        out.data[0] = number + remaining;
-        out.data[1] = 0;
+        data[0] = number + remaining;
+        data[1] = 0;
         return out;
     }
-    out.data[0] = number + need;
-    out.data[1] = remaining - need;
+    data[0] = number + need;
+    data[1] = remaining - need;
     return out;
 }
-

@@ -19,31 +19,6 @@ Import naive_C_Rules.
 Require Import coins_123.
 Local Open Scope sac.
 
-Lemma proof_of_append_int_return_wit_1 : append_int_return_wit_1.
-Proof.
-  pre_process.
-  Exists (app l (cons value_pre nil)).
-  sep_apply (IntArray.seg_single data_pre output_size_pre value_pre).
-  sep_apply (IntArray.seg_merge_to_seg data_pre 0 output_size_pre (output_size_pre + 1)); [ | lia].
-  entailer!.
-  rewrite Zlength_app, Zlength_cons, Zlength_nil.
-  lia.
-Qed. 
-
-Lemma proof_of_get_odd_collatz_safety_wit_11 : get_odd_collatz_safety_wit_11.
-Proof.
-  pre_process.
-  pose proof (collatz_step_safe_of_pre n_pre n output_l H6 H15) as [_ [Hnext _]].
-  entailer!.
-Qed. 
-
-Lemma proof_of_get_odd_collatz_safety_wit_12 : get_odd_collatz_safety_wit_12.
-Proof.
-  pre_process.
-  pose proof (collatz_step_safe_of_pre n_pre n output_l H6 H15) as [_ [Hnext _]].
-  entailer!.
-Qed. 
-
 Lemma proof_of_get_odd_collatz_entail_wit_1 : get_odd_collatz_entail_wit_1.
 Proof.
   pre_process.
@@ -56,7 +31,7 @@ Proof.
     lia.
   - apply problem_123_pre_z_initial in H1.
     lia.
-Qed. 
+Qed.
 
 Lemma proof_of_get_odd_collatz_entail_wit_2 : get_odd_collatz_entail_wit_2.
 Proof.
@@ -65,9 +40,22 @@ Proof.
   pose proof (collatz_step_safe_of_pre n_pre n output_l_2 H2 H8) as [_ [Hnext [Hroom _]]].
   entailer!.
   all: try lia.
-Qed. 
+Qed.
 
-Lemma proof_of_get_odd_collatz_entail_wit_4_1 : get_odd_collatz_entail_wit_4_1.
+Lemma proof_of_get_odd_collatz_entail_wit_4 : get_odd_collatz_entail_wit_4.
+Proof.
+  pre_process.
+  Exists (output_l_2 ++ n :: nil).
+  sep_apply (IntArray.seg_single data output_size n).
+  sep_apply (IntArray.seg_merge_to_seg data 0 output_size (output_size + 1)); [ | lia].
+  pose proof (collatz_step_safe_of_pre n_pre n output_l_2 H3 H12) as [_ [Hnext _]].
+  entailer!.
+  - apply odd_collatz_odd_quot_step; try assumption; lia.
+  - rewrite Zlength_app, Zlength_cons, Zlength_nil.
+    lia.
+Qed.
+
+Lemma proof_of_get_odd_collatz_entail_wit_5_1 : get_odd_collatz_entail_wit_5_1.
 Proof.
   pre_process.
   Exists output_l_2.
@@ -76,30 +64,19 @@ Proof.
   assert (Hdiv : n ÷ 2 = n / 2) by (apply Z.quot_div_nonneg; lia).
   entailer!.
   - apply odd_collatz_even_quot_step; assumption.
-Qed. 
+Qed.
 
-Lemma proof_of_get_odd_collatz_entail_wit_4_2 : get_odd_collatz_entail_wit_4_2.
-Proof.
-  pre_process.
-  subst retval.
-  subst new_l.
-  Exists (output_l_2 ++ n :: nil).
-  pose proof (collatz_step_safe_of_pre n_pre n output_l_2 H6 H15) as [_ [Hnext _]].
-  entailer!.
-  - apply odd_collatz_odd_quot_step; try assumption; lia.
-Qed. 
-
-Lemma proof_of_get_odd_collatz_entail_wit_6 : get_odd_collatz_entail_wit_6.
+Lemma proof_of_get_odd_collatz_entail_wit_7 : get_odd_collatz_entail_wit_7.
 Proof.
   pre_process.
   Exists sorted_full_l sorted_l_2 output_l_2.
   entailer!.
   apply problem_123_spec_z_of_sorted with (raw_l := output_l_2); assumption.
-Qed. 
+Qed.
 
 Lemma proof_of_get_odd_collatz_return_wit_1 : get_odd_collatz_return_wit_1.
 Proof.
   pre_process.
   Exists data_l_2 sorted_l output_size_2 data_2.
   entailer!.
-Qed. 
+Qed.

@@ -19,15 +19,6 @@ Import naive_C_Rules.
 Require Import coins_123.
 Local Open Scope sac.
 
-Lemma proof_of_append_int_safety_wit_1 : append_int_safety_wit_1.
-Proof. Admitted. 
-
-Lemma proof_of_append_int_safety_wit_2 : append_int_safety_wit_2.
-Proof. Admitted. 
-
-Lemma proof_of_append_int_partial_solve_wit_1 : append_int_partial_solve_wit_1.
-Proof. Admitted. 
-
 Lemma proof_of_get_odd_collatz_safety_wit_1 : get_odd_collatz_safety_wit_1.
 Proof. Admitted. 
 
@@ -58,6 +49,12 @@ Proof. Admitted.
 Lemma proof_of_get_odd_collatz_safety_wit_10 : get_odd_collatz_safety_wit_10.
 Proof. Admitted. 
 
+Lemma proof_of_get_odd_collatz_safety_wit_11 : get_odd_collatz_safety_wit_11.
+Proof. Admitted. 
+
+Lemma proof_of_get_odd_collatz_safety_wit_12 : get_odd_collatz_safety_wit_12.
+Proof. Admitted. 
+
 Lemma proof_of_get_odd_collatz_safety_wit_13 : get_odd_collatz_safety_wit_13.
 Proof. Admitted. 
 
@@ -76,10 +73,16 @@ Proof. Admitted.
 Lemma proof_of_get_odd_collatz_safety_wit_18 : get_odd_collatz_safety_wit_18.
 Proof. Admitted. 
 
+Lemma proof_of_get_odd_collatz_safety_wit_19 : get_odd_collatz_safety_wit_19.
+Proof. Admitted. 
+
 Lemma proof_of_get_odd_collatz_entail_wit_3 : get_odd_collatz_entail_wit_3.
 Proof. Admitted. 
 
-Lemma proof_of_get_odd_collatz_entail_wit_5 : get_odd_collatz_entail_wit_5.
+Lemma proof_of_get_odd_collatz_entail_wit_5_2 : get_odd_collatz_entail_wit_5_2.
+Proof. Admitted. 
+
+Lemma proof_of_get_odd_collatz_entail_wit_6 : get_odd_collatz_entail_wit_6.
 Proof. Admitted. 
 
 Lemma proof_of_get_odd_collatz_partial_solve_wit_1 : get_odd_collatz_partial_solve_wit_1.
@@ -92,9 +95,6 @@ Lemma proof_of_get_odd_collatz_partial_solve_wit_2 : get_odd_collatz_partial_sol
 Proof. Admitted. 
 
 Lemma proof_of_get_odd_collatz_partial_solve_wit_3 : get_odd_collatz_partial_solve_wit_3.
-Proof. Admitted. 
-
-Lemma proof_of_get_odd_collatz_partial_solve_wit_4_pure : get_odd_collatz_partial_solve_wit_4_pure.
 Proof. Admitted. 
 
 Lemma proof_of_get_odd_collatz_partial_solve_wit_4 : get_odd_collatz_partial_solve_wit_4.

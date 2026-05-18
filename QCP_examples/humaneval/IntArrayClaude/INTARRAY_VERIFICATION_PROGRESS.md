@@ -1,6 +1,6 @@
 # IntArrayClaude 验证进度记录
 
-更新时间：2026-04-29
+更新时间：2026-05-09
 
 这份文档用于记录 `QCP_examples/humaneval/IntArrayClaude` 下各题的验证进度，以及每题验证时遇到的具体问题。
 
@@ -47,12 +47,59 @@
 | `C_106` | 已全链通过 | 已改成函数内部 malloc 并返回 `IntArray *`；补三角数/阶乘序列桥接、奇偶分支 invariant 和 6 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_109` | 已全链通过 | 非空只读数组；补循环下降数/环形下降数桥接、循环 invariant 和 9 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_114` | 已全链通过 | long long 只读数组；已补 `LongArray` 策略、Kadane 递推规格、循环 invariant 和 7 个 manual VC，且 `coins_114.v` / manual 无 `Admitted.` / `Axiom`。 |
+| `C_116` | 已全链通过 | 按二进制 1 的个数和数值排序；保留复制、bit-count 和冒泡排序核心逻辑，仅做 QCP 返回结构体/局部变量作用域适配，manual 无 `Admitted.` / `Axiom`。 |
 | `C_121` | 已全链通过 | 偶数下标正奇数求和；补 `coins_121.v`、奇数长度适配 invariant 和 5 个 manual VC，且无 `Admitted.` / `Axiom`。 |
 | `C_122` | 已全链通过 | 前 k 个元素中二位数范围求和；补 `coins_122.v`、范围 invariant 和 6 个 manual VC，且无 `Admitted.` / `Axiom`。 |
-| `C_123` | 已全链通过 | Collatz 奇数项收集并排序；保留 Collatz 主循环，固定容量适配原 `realloc`，用已实现 `append_int` 拆分数组追加资源证明，manual 无 `Admitted.` / `Axiom`。 |
+| `C_123` | 已全链通过 | Collatz 奇数项收集并排序；保留 Collatz 主循环，固定容量适配原 `realloc`；已去掉 `append_int` helper，改为直接 `data[output_size] = n; output_size++;`，manual 无 `Admitted.` / `Axiom`。 |
 | `C_126` | 已全链通过 | 非降序且无连续三重复；将 bool 返回改为 QCP 可解析的 int 返回，补 `coins_126.v` 和 7 个 manual VC，且无 `Admitted.` / `Axiom`。 |
+| `C_128` | 已全链通过 | prod signs；保留空数组 sentinel、绝对值累加和符号乘积循环逻辑，`abs` 用已实现 wrapper，manual 无 `Admitted.` / `Axiom`。 |
+| `C_130` | 已全链通过 | Tribonacci 序列数组；保留 `0/1` 基础项、偶数公式和奇数前两项递推逻辑，值返回结构体适配为 `IntArray *`，manual 无 `Admitted.` / `Axiom`。 |
+| `C_135` | 已全链通过 | can_arrange；保留原程序扫描 `arr[i] <= i` 并记录最大下标的核心逻辑，`spec/135.v` 已修正为相同语义并完成桥接，manual 无 `Admitted.` / `Axiom`。 |
+| `C_136` | 已全链通过 | largest negative / smallest positive；保留两个 sentinel 变量和双条件更新逻辑，返回结构体值适配为 `IntArray *`，用 `0` 桥接原 spec 的 `None`，manual 无 `Admitted.` / `Axiom`。 |
+| `C_142` | 已全链通过 | index-based square/cube/sum；保留三分支累加逻辑，补 C `%`/nat modulo 桥接和乘法/前缀和溢出范围，manual 无 `Admitted.` / `Axiom`。 |
+| `C_145` | 已全链通过 | order by points；保留原程序的 signed digit score、复制和冒泡排序核心逻辑，强规格接入 `spec/145.v`，`highest_power10_state` 已改为可证明 ghost state，manual 无 `Admitted.` / `Axiom`。 |
+| `C_146` | 已全链通过 | special filter；保留原程序 `nums[i] > 10`、最高位循环、首末位奇数判断和单个计数 if 结构，仅做 QCP 头文件/注解适配，manual 无 `Admitted.` / `Axiom`。 |
+| `C_152` | 已全链通过 | compare scores/guesses；结构体值返回适配为 `IntArray *`，保留最小长度、malloc-null 检查和逐元素 `abs(game[i]-guess[i])` 逻辑，manual 无 `Admitted.` / `Axiom`。 |
+| `C_155` | 已全链通过 | even/odd digit count；修正 0 的 digit 规格为 `[0]`，保留 `%10`/`/10` digit 循环和 `[even; odd]` 输出顺序，manual 无 `Admitted.` / `Axiom`。 |
+| `C_159` | 已全链通过 | eat carrots；结构体值返回适配为 `IntArray *`，保留两个分支填充 `[number+remaining,0]` / `[number+need,remaining-need]`，manual 无 `Admitted.` / `Axiom`。 |
+| `C_163` | 已全链通过 | generate integers；去掉 `append_int` helper，保留原筛选循环，用局部 `output_size` 加直接数组写入 `data[output_size] = i; output_size++;` 适配 QCP，manual 无 `Admitted.` / `Axiom`。 |
 
 其它只有 `.c` 的题目暂按 `待建模` 处理。
+
+## C_116 验证记录
+
+### 结论
+
+- 状态：已完成。
+- 是否全链通过：是，`coins_116.v`、`C_116_goal.v`、`C_116_proof_auto.v`、`C_116_proof_manual.v`、`C_116_goal_check.v` 均可编译。
+- 是否无 `Admitted.` / `Axiom`：`coins_116.v`、`C_116_proof_manual.v` 扫描无 `Admitted` / `Axiom`。
+
+### 文件变更
+
+- `spec/116.v`：把规格侧排序实现改成与 C 程序一致的冒泡 pass 结构，并固定 bit-count fuel 为 31。
+- `C_116.c`：转换为 QCP 格式，结构体值返回适配为 `IntArray *`；保留原来的复制数组、计算每个元素二进制 1 个数、按 `(bit_count, value)` 冒泡排序的核心逻辑。
+- `coins_116.v`：新增 `bit_count_state_at_116`、复制前缀、score 前缀、外层/内层排序状态，以及相应初始化、单步和最终规格桥接引理。
+- `C_116_proof_manual.v`：补完 `abs`、bit-count 循环、score 写入、冒泡 swap/keep 和最终规格相关 manual VC。
+
+### 遇到的问题
+
+1. 问题：排序是本题核心逻辑，不能像 `qsort` 那样替换成通用未定义排序函数。
+   解决：C 中保留原嵌套循环和相邻交换；Coq 侧用 `bubble_pass_116` / `bubble_sort_116` 建模同一控制结构。
+
+2. 问题：`n = abs(out->data[i])` 这类数组读作为函数实参会让符号执行更难处理。
+   解决：拆成 `n = out->data[i]; n = abs(n);`，不改变计算结果，只把数组读和函数调用分开。
+
+3. 问题：`b/n` 作为函数作用域局部变量时，bit-count 循环结束后的局部变量资源需要一路携带到后续排序循环，注解和 VC 都会变重。
+   解决：把 `b/n` 改成每轮 score 循环体内的局部变量；这是作用域适配，值的赋值和使用顺序不变。
+
+4. 问题：QCP 没有稳定保留“进入 while 前 `b == 0`”这个纯事实。
+   解决：在 `n = abs(n);` 后补一个冗余的 `b = 0;`，并加中间断言记录 `n == Zabs(Znth i input_l 0)`；这不改变输出，只帮助建立 bit-count 初始状态。
+
+5. 问题：手写 `data_at(&b, b)` / `data_at(&n, n)` 容易和局部变量权限机制冲突，甚至影响后续 memory read。
+   解决：避免手写这些局部变量资源，改用作用域缩短和必要的纯断言让符号执行自动管理局部变量。
+
+6. 问题：bit-count 循环若写过强不变式，例如 `n > 0 -> b <= 30`，并不总能自然由单步推出。
+   解决：保留足够证明安全和最终规格的弱不变式：`0 <= b <= 31`、`0 <= n < INT_MAX` 和 `bit_count_state_at_116`。
 
 ## C_8 验证记录
 
@@ -69,6 +116,43 @@ coqc C_8_proof_auto.v
 coqc C_8_proof_manual.v
 coqc C_8_goal_check.v
 ```
+
+## C_155 验证记录
+
+### 结论
+
+- 状态：已完成。
+- 是否全链通过：是，`coins_155.v`、`C_155_goal.v`、`C_155_proof_auto.v`、`C_155_proof_manual.v`、`C_155_goal_check.v` 均可编译。
+- 是否无 `Admitted.` / `Axiom`：`coins_155.v`、`C_155_proof_manual.v` 扫描无 `Admitted` / `Axiom`。
+
+### 文件变更
+
+- `spec/155.v`：把非零数字递归拆成 `to_digits_fuel_nonzero`，再用 `to_digits` 特判输入 `0` 为 `[0]`，使规格与 C 程序的 `0 -> (1,0)` 行为一致。
+- `C_155.c`：转换为 QCP 格式，保留原来的 `abs(num)`、按 `%10` 取 digit、奇偶计数、`/10` 推进、最后输出 `[even; odd]` 的核心逻辑。为验证适配，将返回值改为 `IntArray *`，用通用 `malloc` wrapper；把临时变量 `d` 的声明提升到循环前以稳定局部变量权限。
+- `coins_155.v`：新增 C 层 digit/count 状态 `digit_count_state` 以及初始化、单步、最终规格桥接引理；补充 `Z.rem`/`Z.quot` 相关界限和计数器加一不溢出的辅助引理。
+- `C_155_proof_manual.v`：补完所有 manual VC，包括 `abs` 桥接、`0` 输入初始化、奇偶分支状态更新、循环推进和最终数组返回规格。
+
+### 遇到的问题
+
+1. 问题：原 `spec/155.v` 的 digit 递归在 `0` 时返回空列表，导致规格期望 `(0,0)`，但原 C 程序对 `0` 设置 `n2=1`，返回 `(1,0)`。
+   解决：采用 wrapper 规格方案：内部递归仍在遇到 0 时停止，外层 `to_digits` 单独把输入 0 映射为 `[0]`。这样保留非零数递归结构，同时让 0 的规格匹配题意和 C 行为。
+
+2. 问题：`abs(INT_MIN + 1)` 可以等于 `INT_MAX`，所以循环变量 `w` 的不变式写成 `w < INT_MAX` 会错误排除合法边界。
+   解决：把 `w` 的不变式改为 `w <= INT_MAX`，同时在函数前置条件中加入 `Zabs(num) + 1 < INT_MAX`，用于证明计数器加一不会溢出。
+
+3. 问题：`int d` 若声明在 while 体内部，离开循环体时局部栈权限回收和手工断言会产生不必要的 VC。
+   解决：将 `int d=0;` 提升到循环前，循环体内仍执行 `d = w % 10;`。这是临时变量声明位置的验证适配，不改变 digit 计算逻辑。
+
+4. 问题：C 的 `%`/`/` 在 VC 中对应 `Z.rem`/`Z.quot`，而部分 Coq 侧推理更容易落在非负 `mod`/`div` 上。
+   解决：在证明中用 `Z.rem_mod_nonneg`、`Z.quot_div_nonneg`、`Zquot_10_lt_self` 桥接，并在 `coins_155.v` 中把 digit 单步更新写成 `Z.rem`/`Z.quot` 形式。
+
+5. 问题：计数器 `n1 + 1`、`n2 + 1` 的安全性不能只靠 `n1 < INT_MAX` / `n2 < INT_MAX` 反复自动推出。
+   解决：利用 `digit_count_state` 中“已处理计数 + 剩余 digit 长度 <= Zabs(num)+1”的界限，补 `digit_count_state_odd_next_bound` / `digit_count_state_even_next_bound`，结合前置条件证明加一仍小于 `INT_MAX`。
+
+### 后续注意
+
+- 本题对 `d` 的声明提升是验证层面的局部变量权限适配；核心循环计算和输出顺序没有改变。
+- 对类似 digit-count 程序，规格侧应明确输入 0 的 digit 表示，避免递归终止态和题意中的 `[0]` 混淆。
 
 扫描结果：
 
@@ -3830,7 +3914,7 @@ coqc C_90_goal_check.v
 
 ### 文件变更
 
-- `C_123.c`：改为 QCP 指针返回格式；保留原程序“初始化输出为 `[1]`，按 Collatz 奇偶规则推进，遇到奇数则加入输出，最后排序”的核心逻辑。原程序的 `malloc/realloc/qsort` 分别适配为 `malloc_int_array_struct`、`malloc_int_array` 和通用 `sort_int_array`。
+- `C_123.c`：改为 QCP 指针返回格式；保留原程序“初始化输出为 `[1]`，按 Collatz 奇偶规则推进，遇到奇数则加入输出，最后排序”的核心逻辑。原程序的 `malloc/realloc/qsort` 分别适配为 `malloc_int_array_struct`、`malloc_int_array` 和通用 `sort_int_array`。此前用于验证拆分的 `append_int` helper 已移除，奇数分支改回直接数组写入和自增。
 - `coins_123.v`：新增 Z 层操作式规格 `problem_123_spec_z`，用 `odd_collatz_prefix` 描述 Collatz 运行过程中已收集的奇数项，再通过 `sorted_int_list_by 1` 和 `Permutation` 描述排序结果。
 - `C_123_proof_manual.v`：补完所有 manual VC。
 
@@ -3844,17 +3928,17 @@ coqc C_90_goal_check.v
 
    解决：`problem_123_pre_z` 使用强前置条件要求存在安全的有界运行轨迹：当前状态保持正数、奇数分支 `3*n+1` 不溢出、偶数分支除二后仍安全、输出长度小于固定容量。后置规格验证的是满足此前置条件的执行结果。
 
-3. 问题：直接在 while 的奇数分支中验证 `data[output_size] = n; output_size = output_size + 1;` 时，数组 `seg/undef_seg` 的局部合并和 Collatz 状态推进交织在一起，符号执行卡在赋值附近。
+3. 问题：直接在 while 的奇数分支中验证 `data[output_size] = n; output_size = output_size + 1;` 时，数组 `seg/undef_seg` 的局部合并和 Collatz 状态推进交织在一起，早期版本为了拆分证明曾加入已实现 helper `append_int`。
 
-   解决：加入已实现 helper `append_int`，只负责把一个 `int` 写入当前数组尾部并返回新长度；函数体仍是实际 C 写数组和 `return output_size + 1`，不是未实现函数，也不隐藏 Collatz 业务逻辑。Collatz 的 `n = n * 3 + 1` / `n = n / 2` 仍保留在主循环中验证。
+   解决：后续按 C_163 的经验重新尝试 no-wrapper 版本，移除 `append_int`，在奇数分支内直接写 `data[output_size] = n; output_size++;`。写入后的 Assert 直接把 `IntArray::seg(data, 0, output_size, output_l)` 更新为追加了 `n` 的前缀，并把 `odd_collatz_prefix` 推进到 `n * 3 + 1`。manual 中用 `IntArray.seg_single` 和 `IntArray.seg_merge_to_seg` 完成数组段合并，因此不再需要 helper。
 
-4. 问题：第一次给 `append_int` 写后置时使用 `l ++ cons(value, nil)`，QCP 注解解析/类型推断把它处理得不稳定。
+4. 问题：早期给 `append_int` 写后置时使用 `l ++ cons(value, nil)`，QCP 注解解析/类型推断把它处理得不稳定。
 
-   解决：改用项目示例中更常见的 `app(l, cons(value, nil))` 表达追加单元素列表。
+   解决：当前 no-wrapper 版本已经删除 `append_int`，不再需要 helper 后置条件；直接写入后的存在量选择为 `output_l_2 ++ n :: nil`，该表达式只出现在 Coq proof 中，由 `Zlength_app` / `Zlength_cons` 证明长度关系。
 
-5. 问题：调用 `append_int(data, output_size, cap, n)` 时，虽然纯事实里有 `cap == 1024`，但空间资源 `IntArray::undef_seg(..., 1024)` 和函数前置 `IntArray::undef_seg(..., cap)` 匹配不稳定。
+5. 问题：早期调用 `append_int(data, output_size, cap, n)` 时，虽然纯事实里有 `cap == 1024`，但空间资源 `IntArray::undef_seg(..., 1024)` 和函数前置 `IntArray::undef_seg(..., cap)` 匹配不稳定。
 
-   解决：去掉主函数局部 `cap` 变量，统一使用固定容量字面量 `1024`。这让空间资源参数、函数调用参数和排序容量完全一致，避免依赖空间断言中的纯等式改写。
+   解决：当前版本仍去掉主函数局部 `cap` 变量，统一使用固定容量字面量 `1024`。这让空间资源参数和排序容量完全一致，也让直接写入后的 `undef_seg(data, output_size + 1, 1024)` 能稳定匹配。
 
 6. 问题：循环退出后局部变量 `n` 的资源仍存在；若 sort 前后的 `Assert` 不显式保留 `data_at(&n, 1)`，manual VC 会要求丢弃局部变量资源。
 
@@ -3868,7 +3952,182 @@ coqc C_90_goal_check.v
 
 - `sort_int_array` 仍保持通用排序函数规格，只描述有序、排列和数组资源；C_123 的题目语义由 `problem_123_spec_z_of_sorted` 在本题 `coins_123.v` 中桥接。
 - 当前 `problem_123_spec_z` 是操作式 Z 层规格，尚未证明与 `../spec/123.v` 中 nat/list 规格完全等价；如果后续需要和原 spec 严格对接，可以在 `odd_collatz_prefix` 基础上补等价 bridge。
-- `append_int` 可以作为“已实现数组尾追加 helper”的验证拆分模式参考，但它目前带有 C_123 的固定容量 `1024`，不应直接当作通用库函数。
+- C_123 的最新版本说明：简单尾追加不必抽成 helper；只要在写入后用 Assert 明确追加后的前缀列表和数组段，manual proof 可以直接完成。后续遇到类似固定容量尾插入时，优先尝试 no-wrapper 直接写入。
+
+## C_128 验证记录
+
+### 结论
+
+- 状态：已完成。
+- 是否全链通过：是，`coins_128.v`、`C_128_goal.v`、`C_128_proof_auto.v`、`C_128_proof_manual.v`、`C_128_goal_check.v` 均可编译。
+- 是否无 `Admitted.` / `Axiom`：`coins_128.v` 与 `C_128_proof_manual.v` 中无 `Admitted` / `Axiom`。
+
+### 文件变更
+
+- `C_128.c`：改为 QCP 格式，保留原程序“空数组返回 `-32768`，非空数组遍历元素、累加绝对值、遇到 0 将乘积符号置 0、遇到负数翻转符号、最后返回 `sum * prods`”的核心逻辑。原 `abs` 调用改为带规格的已实现 wrapper，循环中引入 `current` / `mag` 只是避免重复数组读取的机械改写。
+- `coins_128.v`：新增 Z 层桥接规格 `problem_128_spec_z`，将空数组映射到 C 程序 sentinel `-32768`，非空数组对接 `../spec/128.v` 的 `problem_128_spec l (Some out)`；新增前缀绝对值和、前缀符号乘积、整数范围条件及分支推进引理。
+- `C_128_proof_manual.v`：补完所有 manual VC，包括 `abs` 返回、循环初始化、三个符号分支推进、加法/乘法安全性和最终返回规格桥接。
+
+### 遇到的问题
+
+1. 问题：原 spec 的输出是 `option Z`，而 C 程序对空数组返回普通整数 sentinel `-32768`。
+   解决：在 `coins_128.v` 中定义 `problem_128_spec_z`：空列表要求 `out = -32768`，非空列表再桥接到原题 `problem_128_spec l (Some out)`。
+
+2. 问题：`abs(arr[i])` 是常见库函数调用，但不能把本题主体逻辑抽成未实现函数。
+   解决：只为 `abs` 写已实现 wrapper，规格为返回 `Zabs(x)`；同时前置条件要求数组元素满足 `INT_MIN < x <= INT_MAX`，避免 C 中 `-INT_MIN` 溢出。
+
+3. 问题：`sum += abs(arr[i])` 和最终 `sum * prods` 都需要 C `int` 安全性。
+   解决：增加 `prod_signs_int_range(input_l)`，记录每个输入元素的 `abs` 安全性，以及任意前缀绝对值和都在 `int` 范围内；manual 中再由 `prod_signs_prefix_prod_bound` 得到 `prods` 只可能为 `-1/0/1`。
+
+4. 问题：空数组分支提前返回后，循环后的 return VC 需要知道当前一定是非空输入。
+   解决：在循环 invariant 中保留 `arr_size != 0`，最终用该事实把 `i == arr_size == Zlength input_l` 桥接到非空规格。
+
+5. 问题：`mag = abs(current)` 后若在 `Assert` 中额外写局部变量的 `data_at` 资源，生成的资源匹配目标会变得不可满足。
+   解决：该处 `Assert` 只保留必要纯事实和数组资源，不手动加入 `current` / `mag` 的局部变量资源。
+
+6. 问题：三个分支分别改变符号乘积：`current == 0` 置零、`current < 0` 翻转、正数保持。
+   解决：在 `coins_128.v` 中分别证明 `prod_signs_prefix_zero`、`prod_signs_prefix_neg`、`prod_signs_prefix_pos`，让 C 分支和 `Z.sgn` 的前缀乘积定义对齐。
+
+### 后续注意
+
+- 本题没有涉及 `qsort`，因此不需要 `sort_int_array`。后续若遇到排序题，仍应保持 `sort_int_array` 是通用排序规格，不在排序函数后置中加入题目专属语义。
+- 引入 `current` / `mag` 这类局部变量可以作为数组读取和库函数调用之间的验证简化手段，但它只能是等价的机械改写，不能改变原程序核心逻辑。
+
+## C_130 验证记录
+
+### 结论
+
+- 状态：已完成。
+- 是否全链通过：是，`coins_130.v`、`C_130_goal.v`、`C_130_proof_auto.v`、`C_130_proof_manual.v`、`C_130_goal_check.v` 均可编译。
+- 是否无 `Admitted.` / `Axiom`：`coins_130.v` 与 `C_130_proof_manual.v` 中无 `Admitted` / `Axiom`。
+
+### 文件变更
+
+- `C_130.c`：改为 QCP 格式，保留原程序“写 `data[0]=1`，`n==0` 直接返回；写 `data[1]=3`；从 `i=2` 到 `n` 按偶数公式或奇数递推写入”的核心逻辑。原来的结构体值返回适配为 `IntArray *` 返回，并用 `malloc_int_array_struct` / `malloc_int_array` 建模分配成功。
+- `coins_130.v`：新增 `tri_z`、`tri_sequence`、Z/list 层 `problem_130_pre_z` / `problem_130_spec_z`，证明它们桥接到 `../spec/130.v` 的 nat 规格；补偶数分支、奇数分支、前缀 snoc、前缀读数组项和整数范围相关引理。
+- `C_130_proof_manual.v`：补完 9 个 manual VC，包括循环初始化、两个分支写入后前缀推进、整数安全性和两个返回分支的完整数组资源构造。
+
+### 遇到的问题
+
+1. 问题：原程序返回结构体值，并包含 `malloc` 失败时返回空结构体的分支；QCP 中直接验证结构体值返回和裸 `malloc` 失败分支不方便。
+   解决：按已有数组返回题模式适配为 `IntArray *`，用 wrapper 规格假设通用内存分配成功。这个适配只改变验证接口和内存建模，不改变 Tribonacci 序列的写入规则。
+
+2. 问题：题目 spec 是 nat/list 规格，而 C VC 中使用 Z、`Z.quot` 和 `Z.rem`。
+   解决：在 `coins_130.v` 中定义 `tri_z i := Z.of_nat (tri (Z.to_nat i))` 和 `tri_sequence n`，再证明 `tri_sequence_spec_z`，把 C 层输出桥接回原 `problem_130_spec`。
+
+3. 问题：偶数分支需要证明 `1 + i / 2` 正好是 `tri_sequence` 第 `i` 项；奇数分支需要证明 `data[i-1] + data[i-2] + 1 + (i+1)/2` 正好是第 `i` 项。
+   解决：分别证明 `tri_z_even_quot` 和 `tri_z_odd_quot`，并用 `tri_sequence_even_snoc` / `tri_sequence_odd_snoc` 直接服务循环 invariant 的前缀推进。
+
+4. 问题：奇数分支读的是当前已写前缀 `sublist 0 i` 中的 `i-1` 和 `i-2`，VC 中出现 `Znth ... (sublist 0 i ...)`，不能直接化到 `tri_z`。
+   解决：补 `tri_sequence_sublist_Znth`，用 `Znth_sublist0` 把前缀读回完整 `tri_sequence` 的对应下标。
+
+5. 问题：奇数分支的 C 加法是逐步求值，manual VC 分别要求 `a+b`、`a+b+1`、`a+b+1+quot` 都在 `int` 范围内。
+   解决：`tri_seq_int_range` 中记录最终写入表达式范围，再利用 `tri_z_nonneg` 和 `Z.quot_pos` 补出两个中间加法安全引理。
+
+6. 问题：return 处已写前缀 `seg` 后面还带一个长度为 0 的 `undef_seg`，不能直接匹配 `IntArray::full`。
+   解决：先用 `IntArray.seg_to_full` 把完整前缀转成 `full`，再用 `IntArray.undef_seg_empty` 消掉空未写后缀。
+
+### 后续注意
+
+- 这类“先写基础项，再从固定下标递推”的数组题，循环 invariant 可以维护 `IntArray::seg(data, 0, i, sublist 0 i seq)`，分支证明则集中在 `seq` 的 snoc 引理中。
+- 如果 C 代码用 `/` 和 `%`，C VC 通常是 `Z.quot` / `Z.rem`；规格若基于 nat 或数学除法，应在 `coins_XX.v` 中集中桥接，不要把这些细节散进 C 注解。
+
+## C_135 验证记录
+
+### 结论
+
+- 状态：已完成。
+- 是否全链通过：是，`coins_135.v`、`C_135_goal.v`、`C_135_proof_auto.v`、`C_135_proof_manual.v`、`C_135_goal_check.v` 均可编译。
+- 是否无 `Admitted.` / `Axiom`：`coins_135.v` 与 `C_135_proof_manual.v` 中无 `Admitted` / `Axiom`。
+
+### 文件变更
+
+- `C_135.c`：改为 QCP 格式，保留原程序“从左到右扫描，若 `arr[i] <= i` 则更新 `max = i`，最后返回最大满足下标或 `-1`”的核心逻辑。
+- `spec/135.v`：修正为与 C 程序一致的规格，描述最大下标 `k` 满足 `arr[k] <= k`，不存在时返回 `-1`。
+- `coins_135.v`：新增 C 层 prefix 谓词 `can_arrange_prefix`，并证明它能推出新版 `problem_135_spec`。
+- `C_135_proof_manual.v`：补完循环初始化、命中分支、未命中分支和最终返回 4 个 manual VC。
+
+### 遇到的问题
+
+1. 问题：`spec/135.v` 原先定义的是相邻下降 `drop_at`，但当前 C 程序判断的是 `arr[i] <= i`；这两者不是同一个性质。
+   解决：不改 C 核心逻辑，将 `spec/135.v` 修正为 `can_arrange_at lst k := lst[k] <= k`，并让 `problem_135_spec` 描述最大满足下标或 `-1`。
+
+2. 问题：循环需要表达“目前为止最大的满足下标”，同时还要覆盖没有任何满足元素时返回 `-1`。
+   解决：`can_arrange_prefix i l max` 同时记录 `-1 <= max < i`、`max=-1 \/ can_arrange_hit l max`，以及任意已扫描命中下标 `j` 都满足 `j <= max`。
+
+3. 问题：命中分支 `arr[i] <= i` 更新 `max=i`，未命中分支保持旧 `max`，两条分支需要分别推进 invariant。
+   解决：分别证明 `can_arrange_prefix_update` 和 `can_arrange_prefix_keep`，再用 `can_arrange_hit_of_cond` / `can_arrange_not_hit_of_cond` 把 C 条件桥到逻辑谓词。
+
+### 后续注意
+
+- 本题是一个很小的只读数组扫描模板：如果状态只是“当前最大/最小满足下标”，推荐把最大性直接写进 prefix 谓词，不需要引入额外列表构造。
+- 本题后续已完成规格统一：`spec/135.v`、`coins_135.v` 和 C 程序均使用 `arr[i] <= i` 的最大下标语义。
+
+## C_136 验证记录
+
+### 结论
+
+- 状态：已完成。
+- 是否全链通过：是，`coins_136.v`、`C_136_goal.v`、`C_136_proof_auto.v`、`C_136_proof_manual.v`、`C_136_goal_check.v` 均可编译。
+- 是否无 `Admitted.` / `Axiom`：`coins_136.v` 与 `C_136_proof_manual.v` 中无 `Admitted` / `Axiom`。
+
+### 文件变更
+
+- `C_136.c`：改为 QCP 格式，保留原程序“扫描输入数组，用 `maxneg=0` 表示当前无负数、用 `minpos=0` 表示当前无正数，分别按条件更新最大负数和最小正数，最后输出 `[maxneg; minpos]`”的核心逻辑。结构体值返回适配为 `IntArray *` 返回，并用 `malloc_int_array_struct` / `malloc_int_array` 建模分配成功。
+- `coins_136.v`：新增 `largest_negative_state`、`smallest_positive_state` 和 `largest_smallest_prefix`，并将 C 的 `0` sentinel 桥接到 `spec/136.v` 中的 `None`。
+- `C_136_proof_manual.v`：补完循环初始化、7 条分支推进和最终返回 9 个 manual VC。
+
+### 遇到的问题
+
+1. 问题：原 spec 使用 `option Z * option Z` 表示不存在负数/正数时返回 `None`，而 C 程序输出数组中用 `0` 作为 sentinel。
+   解决：在 `coins_136.v` 中定义 `neg_option_of_value` / `pos_option_of_value`，把 `0` 映射为 `None`，非零值映射为 `Some`，并证明 prefix 状态可推出原 `problem_136_spec`。
+
+2. 问题：两个更新语句各自有短路条件，符号执行展开后产生 7 条实际路径：更新最小正数两条、更新最大负数两条、零值保持、负数保持、正数保持。
+   解决：分别补 `largest_smallest_prefix_min_zero`、`largest_smallest_prefix_min_smaller`、`largest_smallest_prefix_max_zero`、`largest_smallest_prefix_max_bigger`、`largest_smallest_prefix_keep_zero`、`largest_smallest_prefix_keep_negative`、`largest_smallest_prefix_keep_positive`。
+
+3. 问题：循环推进需要把 `sublist 0 i` 扩展为 `sublist 0 (i+1)`，并把新读到的 `Znth i l 0` 追加到前缀末尾。
+   解决：补 `sublist_snoc_Znth_136`，所有分支推进引理都先把新前缀改写为旧前缀追加当前元素，再分别更新最大负数/最小正数状态。
+
+4. 问题：最终返回时输出数组由两个单点写入组成，需要合并成 `IntArray::full(data, 2, [maxneg; minpos])`。
+   解决：manual 中先用两次 `IntArray.seg_single`，再用 `IntArray.seg_merge_to_seg` 合成长度 2 的 `seg`，最后用 `IntArray.seg_to_full` 得到完整数组资源。
+
+### 后续注意
+
+- 对这种“多个独立累计状态”的扫描题，推荐把每个状态拆成独立 state 谓词，再用一个 prefix 谓词组合；分支引理负责同时推进所有 state。
+- C 的 sentinel 表示和 spec 的 `option` 表示不一致时，不需要改 C 核心逻辑，优先在 `coins_XX.v` 做表示桥接。
+
+## C_142 验证记录
+
+### 结论
+
+- 状态：已完成。
+- 是否全链通过：是，`coins_142.v`、`C_142_goal.v`、`C_142_proof_auto.v`、`C_142_proof_manual.v`、`C_142_goal_check.v` 均可编译。
+- 是否无 `Admitted.` / `Axiom`：`coins_142.v` 与 `C_142_proof_manual.v` 中无 `Admitted` / `Axiom`。
+
+### 文件变更
+
+- `C_142.c`：改为 QCP 格式，保留原程序“若 `i % 3 == 0` 累加平方，否则若 `i % 4 == 0` 累加立方，否则累加原值”的核心逻辑。
+- `coins_142.v`：新增 C 层 `transformed_value`、`transformed_sum_from`、`transformed_prefix_sum`，并桥接到 `spec/142.v` 的 `sum_squares_impl`。
+- `C_142_proof_manual.v`：补完 6 个 safety VC、3 个分支 invariant 推进 VC 和最终返回 VC。
+
+### 遇到的问题
+
+1. 问题：C 的 `%` 在 VC 中是 `Z.rem`，而 `spec/142.v` 使用 `Nat.modulo`。
+   解决：在 `coins_142.v` 中证明 `Nat_mod3_of_Z_nonneg` / `Nat_mod4_of_Z_nonneg` 风格的桥接，并用 `transformed_value_of_nat` 连接 C 层 `transformed_value` 与原 spec 的 `sum_transformed`。
+
+2. 问题：平方分支、立方分支和原值分支都需要分别把 `sum + 当前变换值` 推进为下一前缀和。
+   解决：定义 `transformed_prefix_sum i l := transformed_sum_from (sublist 0 i l) 0`，并证明 `transformed_prefix_sum_snoc`；三个分支再分别用 `transformed_value_square`、`transformed_value_cube`、`transformed_value_plain` 改写。
+
+3. 问题：C 中 `lst[i] * lst[i] * lst[i]` 是逐步乘法，且每次 `sum += ...` 也需要证明不溢出。
+   解决：前置条件加入 `sum_squares_int_range`，同时记录 `x*x`、`x*x*x` 和每个前缀更新后的 `sum` 都在 `int` 范围内。
+
+4. 问题：最终返回需要证明操作式前缀和等于原 `spec/142.v` 的递归定义。
+   解决：证明 `transformed_sum_from_spec` 和 `transformed_prefix_sum_full_spec`，最终由 `problem_142_spec_z_of_prefix_full` 桥接。
+
+### 后续注意
+
+- 这类“按下标取模选择变换”的只读扫描题，建议把变换函数单独定义为 `transformed_value i x`，循环 invariant 只维护前缀和。
+- 若 spec 使用 nat 下标而 C 使用 Z 下标，桥接尽量集中在 `coins_XX.v`，C 注解里只放操作式谓词和范围前置条件。
 
 ## C_108 验证记录
 
@@ -3940,6 +4199,116 @@ coqc C_90_goal_check.v
 
 - `spec/107.v` 当前是与 C 程序直接一致的 Z 层操作式规格；如果后续需要和旧 nat/数字列表规格做严格等价，可在该文件上额外补等价定理，而不是削弱 `problem_107_spec_z`。
 
+## C_146 验证记录
+
+### 结论
+
+- 状态：已完成。
+- 是否全链通过：是，`coins_146.v`、`C_146_goal.v`、`C_146_proof_auto.v`、`C_146_proof_manual.v`、`C_146_goal_check.v` 均可编译。
+- 是否无 `Admitted.` / `Axiom`：`coins_146.v`、`C_146_proof_manual.v` 扫描无 `Admitted` / `Axiom`。
+
+### 文件变更
+
+- `C_146.c`：改成 QCP 格式并补充循环不变式；保留原核心逻辑，不抽 helper，不增加空 `else`，仍按 `nums[i] > 10` 后取末位、循环除以 10 求首位，并只在 `first % 2 == 1 && last % 2 == 1` 时 `num += 1`。
+- `coins_146.v`：接入 `spec/146.v`，新增前缀计数谓词、最高位循环状态、C `rem/quot` 与规格 `mod/div`/奇偶判断的桥接引理。
+- `C_146_proof_manual.v`：补完计数自增安全、内层最高位循环推进、命中特殊数/首位非奇数/末位非奇数/`<=10` 四类路径的前缀计数推进，以及最终返回规格。
+
+### 遇到的问题
+
+1. 问题：最初为了方便证明，把首末位判断拆成 helper，并给 `if (first % 2 == 1 && last % 2 == 1)` 加了空 `else` 路径来放断言；这不符合“尽量不修改原程序核心结构”的要求。
+   解决：撤回 helper 和空 `else`，保留原来的单个计数 if。验证信息改为放在原 if 之后的 Assert 中，由 manual VC 分别证明命中和不命中的前缀计数推进。
+
+2. 问题：`first/last` 如果声明在块内，离开块时 QCP 需要回收局部变量权限；若块尾 Assert 没携带它们的 `data_at`，会出现 `Fail to Remove Memory Permission` 或无法丢弃栈权限的 VC。
+   解决：保持 `first/last` 在 `nums[i] > 10` 块内声明，并在离开该块前的 Assert 中显式保留 `data_at(&first, first) * data_at(&last, last)`，让块结束时由工具正常回收。
+
+3. 问题：规格用 `special_number_b` 的 `msd_fuel`、`last_digit`，C 代码用 `while (first >= 10) first /= 10` 和 `%`。
+   解决：在 `coins_146.v` 中用 `first_digit_state` 记录当前 `first` 与原数最高位的一致性；用正数条件下的 `Z.quot_div_nonneg`、`Z.rem_mod_nonneg` 和 `Zmod_odd` 桥接 C 运算与规格布尔奇偶判断。
+
+### 后续注意
+
+- 对类似“局部变量只在分支块中使用”的题目，优先保留原块结构；若要在块尾加 Assert，记得保留局部变量的栈权限，避免为了证明方便把局部变量提升到函数作用域或加空分支。
+
+## C_152 验证记录
+
+### 结论
+
+- 状态：已完成。
+- 是否全链通过：是，`coins_152.v`、`C_152_goal.v`、`C_152_proof_auto.v`、`C_152_proof_manual.v`、`C_152_goal_check.v` 均可编译。
+- 是否无 `Admitted.` / `Axiom`：`coins_152.v`、`C_152_proof_manual.v` 扫描无 `Admitted` / `Axiom`。
+
+### 文件变更
+
+- `C_152.c`：改成 QCP 格式；原结构体值返回适配为 `IntArray *`；`malloc` 建模为通用 wrapper；`abs` 保留为有实现 helper；主逻辑仍计算 `n = min(game_size, guess_size)`，保留 malloc-null 检查，并逐元素写入 `abs(game[i] - guess[i])`。
+- `coins_152.v`：接入 `spec/152.v`，新增 `compare_list`、前缀输出谓词 `compare_prefix`、差值范围前置条件和前缀推进/最终规格桥接引理。
+- `C_152_proof_manual.v`：补完 `abs` 返回语义、差值安全、输出数组前缀写入、`undef_full` 到 `seg/undef_seg` 初始化、最终 `seg/undef_seg` 合成为 `full` 以及返回规格证明。
+
+### 遇到的问题
+
+1. 问题：原程序声明输入长度相等，但 C 仍写 `n = game_size < guess_size ? game_size : guess_size`。
+   解决：保留原 ternary 逻辑，在函数前置条件中要求 `game_size == guess_size` 并在循环 invariant 中保存 `n == game_size`、`n == guess_size`。因此有效输入下行为与题目规格一致，同时不改原 min 逻辑。
+
+2. 问题：`abs(game[i] - guess[i])` 需要先证明 C int 减法不会溢出，并且 `abs` 不能接收 `INT_MIN`。
+   解决：新增 `compare_int_range`，要求每个有效索引满足 `INT_MIN < game[i] - guess[i] <= INT_MAX`；manual 中用 `compare_int_range_at` 同时证明减法安全和 `abs` 前置条件。
+
+3. 问题：输出数组从 `malloc_int_array` 得到的是 `IntArray::undef_full`，循环 invariant 需要表示已写前缀和未写后缀。
+   解决：初始化时用 `IntArray.undef_full_to_undef_seg`，循环中用 `IntArray.seg_single` 和 `IntArray.seg_merge_to_seg` 把新写元素并入前缀，返回时用 `IntArray.undef_seg_empty` 与 `IntArray.seg_to_full` 合成完整输出数组。
+
+### 后续注意
+
+- 对带 `abs(a-b)` 的题目，除了输入元素本身在 int 范围内，还要单独给差值范围条件；否则减法安全和 `abs(INT_MIN)` 都会卡住。
+
+## C_159 验证记录
+
+### 结论
+
+`C_159` 已完成完整验证，`coins_159.v`、`C_159_goal.v`、`C_159_proof_auto.v`、`C_159_proof_manual.v`、`C_159_goal_check.v` 均可编译通过。
+
+### 遇到的问题
+
+1. 原程序返回结构体值并直接 `malloc`。
+
+解决方式：按 IntArrayClaude 已有模式改为返回 `IntArray *`，使用 `malloc_int_array_struct` / `malloc_int_array` wrapper。业务逻辑的两个分支和写入顺序保持不变。
+
+2. 返回处需要把两个单点写入合成完整输出数组。
+
+解决方式：manual 中使用 `IntArray.seg_single` 与 `IntArray.seg_merge_to_full`，再分别用 `problem_159_spec_need_le_remaining` / `problem_159_spec_need_gt_remaining` 桥接到题目规格。
+
+## C_163 验证记录
+
+### 结论
+
+- 状态：已完成。
+- 是否全链通过：是，`coins_163.v`、`C_163_goal.v`、`C_163_proof_auto.v`、`C_163_proof_manual.v`、`C_163_goal_check.v` 均可编译。
+- 是否无 `Admitted.` / `Axiom`：`coins_163.v` 与 `C_163_proof_manual.v` 中无 `Admitted` / `Axiom`。
+
+### 文件变更
+
+- `C_163.c`：改成 QCP 格式；原结构体值返回适配为 `IntArray *`；`malloc` 建模为通用 wrapper；保留交换 `a/b`、遍历区间、筛选 `i < 10 && i % 2 == 0`、按升序写入输出的核心逻辑。未使用 `append_int` helper。
+- `coins_163.v`：接入 `spec/163.v`，新增 `generate_prefix` / `generate_bounds` / `generate_list` 等 C 层桥接定义，并补前缀推进、跳过、最终规格、`rem/mod` 与偶数判断桥接、输出长度上界等引理。
+- `C_163_proof_manual.v`：补完所有 manual VC，包括数组写入后的 `seg` 合并、分支前缀推进、循环退出与最终返回规格。
+
+### 遇到的问题
+
+1. 原始写法 `out.data[out.size++] = i` 对 QCP 前端不友好；单独构造的 `C_163_postinc_fail.c` 显示数组下标中的 `++` 会触发解析错误。
+
+解决方式：不用 helper，将后置自增拆成两句 `data[output_size] = i; output_size++;`，并在循环结束后写回 `out->size = output_size`。筛选条件、写入值和输出顺序不变，且 no-wrapper 版本已通过 symexec。
+
+2. 动态容量 `b - a + 1` 在数组段资源匹配中比固定容量更难处理。
+
+解决方式：本题最多输出一位偶数 `2,4,6,8`，因此用固定容量 `10` 建模输出缓冲区，并记录这是验证层面的容量适配；输出列表语义不变。
+
+3. 局部变量 `m` 原程序只在 swap 分支赋值，未进入 swap 分支时验证末尾回收局部栈权限会失败。
+
+解决方式：将 `int m;` 初始化为 `int m = 0;`，并在循环断言中携带 `data_at(&m, m)`。该初始化不改变程序可观察输出。
+
+4. C 条件中的 `%` 在 VC 中是 `Z.rem`，而 `Z.even` 和规格侧桥接常使用数学取模 `Z.modulo`。
+
+解决方式：在 manual proof 中利用循环范围推出当前 `i >= 0`，再用 `Z.rem_mod_nonneg` 把 `i % 2` 桥接到 `i mod 2`，从而复用 `mod2_zero_even_true` / `mod2_nonzero_even_false`。
+
+5. 循环退出处需要证明 `output_size <= 10`，单靠 invariant 中 `output_size <= i - a` 不足以推出容量上界。
+
+解决方式：在 `coins_163.v` 中补 `generate_prefix_length_le_4`，说明输出只来自候选列表 `[2;4;6;8]` 的过滤结果，长度最多 4，因此可推出 `output_size <= 10`。
+
 ## 后续记录模板
 
 ## C_96 验证记录
@@ -3973,6 +4342,124 @@ coqc C_90_goal_check.v
 ### 后续注意
 
 - 当前 C 代码与原始核心逻辑的唯一语义等价改写是把平方条件改成正数除法条件，用于避免验证 C `int` 乘法溢出。
+
+## C_145 验证记录
+
+### 结论
+
+- 状态：已完成完整验证。
+- 是否全链通过：是，`symexec --gen-and-backup --no-exec-info` 已通过，且 `coins_145.v`、`C_145_goal.v`、`C_145_proof_auto.v`、`C_145_proof_manual.v`、`C_145_goal_check.v` 均可编译。
+- 是否无 `Admitted.` / `Axiom`：是，`coins_145.v` 与 `C_145_proof_manual.v` 扫描无命中。
+
+### 文件变更
+
+- `C_145.c`：已转成 QCP 格式；按要求删除了此前尝试加入的 `highest_power10` helper，并把最高 10 次幂循环恢复为 `signed_digit_score` 内部的原地循环。目前没有新增未实现 helper，也没有改动排序主体的 C 执行逻辑。为闭合局部变量权限，只在排序结束、`free_int_array(score, nums_size)` 之前的 Assert 中保留 `data_at(&i, nums_size)`；随后直接 `return out`，不再在 free 后手写过强 Assert。
+- `spec/145.v`：把 `order_by_points_impl` 的实现描述改为直接在 `list Z` 上执行稳定相邻交换 bubble sort，而不是另一个 insertion-style `stable_sort`。这与 C 程序维护 `data[]` / `score[]` 并只在 `>` 时交换的结构一致，避免额外证明两种排序算法等价。`sum_digits` 也改为结构上对应 C 程序的定义：固定 8 位 fuel，先取最高位，再用最高 10 次幂去掉最高位，最后累加低位数字；输入验证前置中已有 `abs < 100000000`，8 位 fuel 足够。
+- `coins_145.v`：修正 `problem_145_spec_z`，现在直接使用 `problem_145_spec nums output`，不再使用仅约束 `Zlength` 的弱规格；同时把排序 ghost 从单个弱 `order_sort_state` 拆成 `order_sort_outer_state` 和 `order_sort_inner_state`，分别刻画外层 pass 与内层相邻交换进度。排序相关列表引理和 VC 桥接已补完。`highest_power10_state` 改为记录“从当前 `p` 继续执行最高 10 次幂循环的最终结果”，并证明 `init_nonneg/init_neg/step/final` 四个语义引理。
+- `C_145_proof_manual.v`：当前生成的 manual VC 已回填 abs、首位扫描初始化/推进、多 digit 分支 `p` 循环进入/推进/退出、单 digit 正负分支、最后 digit 累加循环 step、最终 return，以及复制和冒泡排序阶段的全部 manual VC；该文件当前无 `Admitted.`。
+
+### 遇到的问题
+
+1. 问题：最初的 `problem_145_spec_z` 只证明输出长度等于输入长度，没有连接 `spec/145.v` 的 `order_by_points_impl`，规格过弱。
+   解决：将 `problem_145_spec_z` 改为 `problem_145_spec nums output`，并标记当前 `order_sort_state_final_spec` 无法从长度状态推出强规格。
+
+2. 问题：当前 `order_sort_state` 只记录 `output` 和 `scores` 的长度，不能证明 `score[]` 对应 `sum_digits`，也不能证明冒泡排序实现了按分数稳定排序。
+   解决方向：需要重构 ghost 状态，至少记录 `scores` 与 `output` 的逐点对应关系、`scores` 是由 `signed_digit_score` 计算得到，以及每次相邻交换保持一个可最终推出 `order_by_points_impl` 的排序语义。
+
+3. 问题：`signed_digit_score_result` 目前只给出 int 范围，没有证明返回值等于 `spec/145.v` 的 `sum_digits x`。
+   解决方向：需要加强 `signed_digit_score_result`，证明 C 中“负数最高位带符号、其余位相加”的实现与 `sum_digits` 一致；这会涉及 `Z.rem`/`Z.modulo`、`Z.quot`/`Z.div` 和 `sum_digits_pos_fuel`/`msd_fuel` 的桥接。
+
+4. 问题：原地保留最高 10 次幂循环时，QCP 对跨循环局部变量 `msd` / `sum` 的栈权限处理困难，容易产生不可证明的 `emp -> data_at(...)` 形式 VC。
+   解决：已按要求撤回 helper 提取，保留内联循环。当前符号执行可以通过；后续问题转移到强语义 proof，需要加强 ghost invariant，而不是再提取 C helper。
+
+5. 问题：强规格要求证明 `score` 数组中的值确实是 `spec/145.v` 的 `sum_digits`，并证明冒泡排序稳定实现 `order_by_points_impl`。当前 `signed_digit_score_result` 和 `order_sort_state` 还不足以表达这些事实。
+   解决方向：下一步需要只修改注解/Coq ghost：增强 `signed_digit_score_result` 到精确 `sum_digits` 语义，复制阶段记录 `scores = map sum_digits output`，排序阶段记录相邻交换保持按 score 稳定排序，并最终推出 `problem_145_spec`。
+
+6. 进展：已开始增强 Coq ghost，不改 C 执行语句。
+   - `signed_digit_score_result` 已加入 `r = sum_digits x`。
+   - `order_copy_prefix` 已加入 `output = sublist 0 i input` 和 `scores = map sum_digits output`。
+   - `order_sort_outer_state` / `order_sort_inner_state` 已直接连接到 `spec/145.v` 中的 `list Z` bubble-sort 语义，最终态可以推出 `problem_145_spec_z`。
+   - `C_145.c` 的排序循环只改注解：内层循环后新增一个 Assert 说明本轮 bubble pass 完成，没有修改 if/swap 等 C 执行语句。
+   - 重新运行 `symexec --gen-and-backup --no-exec-info` 已通过。
+   - `coins_145.v` 当前可编译，排序 keep/swap/outer-step 三个 ghost 推进引理已不再是占位。
+   后续仍需补：`signed_digit_score` 精确语义的 manual proof，并清掉所有 `Admitted.`。
+
+7. 问题：拆分内外层排序状态后，内层 `for` 的局部变量 `j` 在离开作用域时触发 `Fail to Remove Memory Permission of j`。
+   解决：在内层循环后的 Assert 中加入 `data_at(&j, nums_size)`，让 QCP 在退出 `j` 的作用域时能正常回收栈权限。这是注解层面的权限适配，不改变 C 程序逻辑。
+
+8. 问题：如果继续沿用 `spec/145.v` 中原来的 insertion-style `stable_sort`，还需要额外证明 C 的 bubble sort 与该插入排序实现完全等价，证明负担明显偏离 C 程序本身。
+   解决：把 `spec/145.v` 的 `order_by_points_impl` 改写为稳定相邻交换 bubble sort，并进一步改成直接在 `list Z` 上排序；稳定性由“只在左分数严格大于右分数时交换”体现。这样后续只需证明 C 循环执行了该 spec 中的 pass，而不需要跨算法等价证明，也不需要在 spec 中携带原始下标 pair。
+
+9. 问题：`order_sort_inner_state_step_keep` / `swap` 证明需要把 C 中的 `score[j-1] <= score[j]` 或 `>` 连接到 spec 的一次 `swap_adjacent_points`。
+   解决：在 `coins_145.v` 中新增 `bubble_pass_points_from_next`、`swap_adjacent_points_keep`、`swap_adjacent_points_swap`、`replace_Znth_adjacent_145` 等纯列表引理。keep 分支证明一次 pass 不变；swap 分支证明 spec 的相邻交换与 C 对 `data[]` / `score[]` 的两个 `replace_Znth` 一致。
+
+10. 问题：外层状态推进需要证明 `bubble_sort_points_fuel (S n) l` 等价于对 `bubble_sort_points_fuel n l` 再做一次 pass。
+    解决：补 `bubble_sort_points_fuel_snoc`，并用 `bubble_sort_points_fuel_length` 对齐最后一次 pass 的 fuel 长度。`swap_adjacent_points_length` 已通过 `nth_error` 范围事实、`length_app`、`length_firstn`、`length_skipn` 和 nat 线性算术证明，不再保留占位。
+
+11. 问题：尝试在最高 10 次幂 `p` 循环 invariant 中加入 `data_at(&sum, sum)` 会生成 `emp -> data_at(&sum, ...)` 的不可证 VC；不加入 `sum` 的纯范围又不足以进入最后 digit 累加循环。
+    解决：撤回 `data_at(&sum, sum)`，只在 `p` 循环 invariant 中保留 `INT_MIN + 10 <= sum <= INT_MAX - 10` 这类纯范围信息。这里的经验是：跨循环的局部变量如果没有在循环体内修改，优先先补纯事实；栈权限是否需要显式保留要根据 symexec 生成的空间 VC 形状决定。
+
+12. 问题：最后的 `while (t > 0)` 当前 invariant 只有 `sum <= INT_MAX - 10`，执行 `sum += t % 10` 后无法证明上界保持，因为 `t % 10` 可能为 9；同时该 invariant 也没有表达 `sum` 与 `sum_digits x` 的关系。
+    解决：参考 `C_155` 的 digit-state 思路，新增 `signed_digit_tail_loop` / `signed_digit_tail_state`。最终循环 invariant 现在记录“从当前 `t,sum` 跑完尾部 digit 累加会得到 `sum_digits x`”，并把 `sum` 的显式范围收紧为 `-100 <= sum <= 100`。`signed_digit_tail_state_step` 负责循环推进，`signed_digit_tail_state_final` 负责 return。
+
+13. 问题：单 digit 分支中，原 VC 只有 `t < 10`，但没有说明 `t` 就是 `Zabs(x)` 的最高位，因此无法证明 `signed_digit_tail_state x 0 (sum +/- t)`。
+    解决：新增 `first_digit_value_145` / `first_digit_state_145`，并把它加入第一个 `while (t >= 10)` 的 invariant。现在 `signed_digit_score_entail_wit_5_1` / `5_2` 已能证明，分别用 `sum_digits_small_nonneg_145` / `sum_digits_small_neg_145` 桥接到 `sum_digits`。
+
+14. 问题：多 digit 分支 `t %= p` 后仍缺少 `p` 是最高 10 次幂的语义事实；当前 `p` 循环 invariant 只有 `1 <= p <= t` 和 `p * 10 > t`，不足以证明 `t % p` 正好去掉最高位。
+    解决方向：下一步需要为 `p` 循环增加类似 `highest_power10_state` 的 ghost state，记录 `p` 从 1 开始反复乘 10，且退出时为 `Zabs(x)` 的最高 10 次幂。然后用该状态把 `sum` 的最高位贡献和 `t % p` 的低位 digit 和连接到 `sum_digits x`。
+
+15. 进展：已加入 `highest_power10_state` 并把 C 注解接到 `p` 循环。
+    解决：`highest_power10_state` 不再只保存“存在某个 final_p”，而是保存 `highest_power10_loop_145 fuel t p` 的最终结果以及对应的 `signed_digit_tail_state`。这样 `step` 可以通过 fuel 递减证明，`final` 可以用 `p * 10 > t` 推出循环结果就是当前 `p`。`init_nonneg/init_neg` 通过 `spec/145.v` 中结构化的 `sum_digits` 定义、`first_digit_state_145` 和 8 位 fuel 的最高 10 次幂循环建立初始尾部状态。
+
+16. 问题：第二个外层排序循环结束后的 Assert 如果不保留 `data_at(&i, nums_size)`，`order_by_points_entail_wit_9` 会出现无法丢弃 `&( "i" ) # Int |-> nums_size_pre` 的空间 VC。
+    解决：在 `free_int_array(score, nums_size)` 前的排序完成 Assert 中加入 `data_at(&i, nums_size)`。这是局部变量权限适配，不改变排序逻辑。
+
+17. 问题：尝试在 `free_int_array(score, nums_size)` 后继续手写包含 `&i/&score/&data/&out` 的 Assert，会导致符号执行在 free 调用或 return 栈权限回收处失败；而在 free 前加入 `data_at(&score, score)` 又会干扰 `free_int_array` 的前置条件匹配。
+    解决：参考 `C_120`/`C_33` 的模式，删除 free 后的强 Assert，让 `free_int_array` 后直接 `return out`；free 前只保留排序完成规格和必要的 `data_at(&i, nums_size)`。这样符号执行可以通过，manual VC 中也不再需要处理多余的局部变量资源。
+
+### 后续注意
+
+- 本题最终选择让 `spec/145.v` 中的 `sum_digits` 结构贴近 C 程序，而不是额外证明旧递归 digit-sum 定义与 C 的最高位/低位分解算法等价。后续类似题如果 C 程序本身就是 digit 算法，可以优先让 spec 的 helper 直接表达同一个算法，再用题目前置范围给出固定 fuel。
+
+## C_69 验证记录
+
+### 结论
+
+- 状态：已完成。
+- 是否全链通过：是，`coins_69.v`、`C_69_goal.v`、`C_69_proof_auto.v`、`C_69_proof_manual.v`、`C_69_goal_check.v` 均可编译。
+- 是否无 `Admitted.` / `Axiom`：`coins_69.v`、`C_69_proof_manual.v` 扫描无 `Admitted.` / `Axiom`。
+
+### 文件变更
+
+- `C_69.c`：把 `malloc/free` 改为带规格的 `malloc_int_array/free_int_array`；保留原频率表算法。经用户许可，在命中已有值并更新 `cnts[j]` / `max` 后加入 `break`。
+- `coins_69.v`：加入 `seen_values/counts_for_values` 相关 ghost 定义，以及初始化、计数上界、no-hit 新值插入、hit 已有值计数更新等辅助引理。
+- `C_69_proof_manual.v`：已回填所有 manual VC，包括初始化、内层 miss 推进、hit 分支、no-hit 分支和最终返回规格。
+
+### 遇到的问题
+
+1. 问题：原程序内层循环命中 `current == vals[j]` 后没有 `break`。虽然算法不变量应保证 `vals` 无重复，继续扫描不会改变结果，但验证时需要额外证明后续元素都不会再次命中，证明负担很重。
+   解决：经用户许可，在更新该值的计数和 `max` 后加入 `break`。这保持频率表算法意图不变，并把“找到唯一对应项后退出”的控制流显式化。
+
+2. 问题：加 `break` 后，内层循环头部 invariant 仍写成 `has == 0 || has == 1` 会产生正常循环退出时 `has == 1` 的不可达 VC。
+   解决：将内层循环 invariant 收紧为 `has == 0`。因为一旦 `has` 被置为 1，程序立即 `break`，不会再回到循环头。
+
+3. 问题：内层循环结束后的断言若不保留 `j == j`，生成的 VC 中左侧仍有 `j` 的栈权限，右侧无法匹配，导致空间资源无法 cancel。
+   解决：在内层循环后的相关 Assert 中加入 `j == j`，这是 QCP 局部变量权限跟踪所需的注解，不改变 C 执行逻辑。
+
+4. 问题：核心 VC 是命中已有值后，需要证明更新后的 `max` 等于 `search_impl(prefix ++ [current])`，并把更新后的频率表连接到外层状态。
+   解决：补 `seen_values_snoc_seen_69`、`seen_values_NoDup_69`、`counts_for_values_snoc_hit_replace_69`、`update_first_count_false_69` 等引理，证明追加一个已见元素时 `seen_values` 不变、`counts_for_values` 只在命中下标增加 1；再用 `search_impl_snoc_69` 把 `hit_max_69` 与规格侧 `search_impl(prefix ++ [current])` 对齐。
+
+5. 问题：no-hit 新增分支中，`vals[freq_size] = current` 后、`cnts[freq_size] = 1` 前的断言一度只保留了数组长度和内存形态，丢失了“这是从 `search_inner_to_outer_69 ... has=0` 进入的新值插入分支”的语义信息，导致后续 `search_outer_add_new_69` 无法从纯长度事实推出。
+   解决：新增 `search_after_val_write_69` 作为中间 ghost 谓词，并把它加入 `vals[freq_size] = current` 后的 Assert。该谓词记录写入 `vals` 后的新 `vals_l = base_vals ++ [current]`、`cnts_l = base_cnts`，以及写入前的 `search_inner_to_outer_69 ... 0 max` 状态。对应的 `search_entail_wit_6` 已能证明。
+
+6. 问题：`vals[freq_size] = current` 后的 Assert 如果不保留必要的局部变量权限，会出现左侧多出栈变量资源、右侧无法匹配的空间 VC。
+   解决：在该 Assert 中补充 `has == has`（同前面的 `j == j` 思路）。这是 QCP 局部变量权限适配，不改变 C 程序逻辑。
+
+7. 问题：`search_entail_wit_7_1/7_2/7_3` 需要证明 no-hit 分支真正完成 `cnts[freq_size] = 1; freq_size += 1` 后满足 `search_outer_add_new_69`。
+   解决：补充并证明 `search_impl_snoc_69`，表达 `search_impl(prefix ++ [x])` 如何由 `search_impl(prefix)` 增量更新；补充 `seen_values_snoc_new_69`、`counts_for_values_snoc_new_69`、`has_first_full_false_notin_69`、`positive_prefix_69` 等引理，最终证明 `search_after_val_write_add_count_69`。目前 no-hit 分支的 manual VC 已可编译通过。
+
+8. 问题：`search_hit_to_outer_69` 曾是最后一个临时 `Admitted`，难点在于 `has = 0` 只表示前 `j` 项未命中，而当前 `j` 项刚命中，需要把 `update_first_count` 的前缀扫描状态转换成“原始计数表第 `j` 项加一”。
+   解决：先由 `has_first_69 ... = false` 推出命中前 `cnts = base_cnts`，再用 `replace_Znth` 的命中/非命中下标引理和 `seen_values` 的无重复性证明更新后的计数表等于 `counts_for_values vals (prefix ++ [current])`。最终 `search_hit_to_outer_69` 已正式证明，manual VC 全部通过。
 
 复制下面模板记录下一题。
 
