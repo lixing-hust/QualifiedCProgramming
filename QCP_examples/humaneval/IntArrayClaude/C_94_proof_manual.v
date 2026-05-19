@@ -25,7 +25,7 @@ Proof.
   pre_process.
   pose proof (digit_sum_state_step original_largest largest sum H8 H) as Hstep.
   unfold digit_sum_state in Hstep.
-  destruct Hstep as [_ [fuel [Hcur [Hsum [_ Hbound]]]]].
+  destruct Hstep as [_ [fuel [Hcur [Hsum [_ [Hbound _]]]]]].
   pose proof (sum_digits_fuel_z_nonneg (largest / 10) fuel) as Hnonneg.
   assert (sum + largest mod 10 <= sum + largest mod 10 + sum_digits_fuel_z (largest / 10) fuel) as Hstep_le by lia.
   assert (sum + largest mod 10 <= 100) as Hsum_le.
@@ -70,6 +70,10 @@ Proof.
     + exact H18.
     + rewrite (Z.quot_div_nonneg x j) in H0 by lia.
       exact H0.
+    + assert (x % (j) = x mod j) as Hrem.
+      { apply Z.rem_mod_nonneg; lia. }
+      rewrite <- Hrem.
+      exact H.
   - rewrite (Z.quot_div_nonneg x j) in H0 by lia.
     assert (x / j <= x) by (apply Z.div_le_upper_bound; nia).
     lia.
@@ -84,6 +88,12 @@ Proof.
     + exact H18.
     + rewrite (Z.quot_div_nonneg x j) in H0 by lia.
       exact H0.
+    + assert (x % (j) = x mod j) as Hrem.
+      { apply Z.rem_mod_nonneg; lia. }
+      intro Hmod.
+      apply H.
+      rewrite Hrem.
+      exact Hmod.
   - rewrite (Z.quot_div_nonneg x j) in H0 by lia.
     assert (x / j <= x) by (apply Z.div_le_upper_bound; nia).
     lia.
@@ -111,7 +121,13 @@ Proof.
           apply Hrange_all; lia
       end.
     }
-    eapply largest_prime_prefix_update; eauto; lia.
+    eapply largest_prime_prefix_update.
+    + exact H10.
+    + lia.
+    + exact H7.
+    + exact Hrange.
+    + eapply prime_scan_state_exit_prime_intmax; eauto.
+    + lia.
 Qed.
 
 Lemma proof_of_skjkasdkd_entail_wit_4_2 : skjkasdkd_entail_wit_4_2.
@@ -136,7 +152,15 @@ Proof.
           apply Hrange_all; lia
       end.
     }
-    eapply largest_prime_prefix_update; eauto; lia.
+    eapply largest_prime_prefix_update.
+    + exact H11.
+    + lia.
+    + exact H8.
+    + exact Hrange.
+    + eapply prime_scan_state_exit_prime; eauto.
+      rewrite (Z.quot_div_nonneg x j) in H by lia.
+      exact H.
+    + lia.
 Qed.
 
 Lemma proof_of_skjkasdkd_entail_wit_4_3 : skjkasdkd_entail_wit_4_3.
@@ -144,7 +168,13 @@ Proof.
   unfold skjkasdkd_entail_wit_4_3.
   intros.
   entailer!.
-  apply largest_prime_prefix_skip; auto; lia.
+  apply largest_prime_prefix_skip_not_prime; auto; try lia.
+  match goal with
+  | Hx: x = Znth i lv 0,
+    Hz: prime = 0,
+    Hs: prime_scan_state x j prime |- _ =>
+      subst x; rewrite Hz in Hs; eapply prime_scan_state_zero_not_prime; exact Hs
+  end.
 Qed.
 
 Lemma proof_of_skjkasdkd_entail_wit_4_4 : skjkasdkd_entail_wit_4_4.
@@ -152,7 +182,13 @@ Proof.
   unfold skjkasdkd_entail_wit_4_4.
   intros.
   entailer!.
-  apply largest_prime_prefix_skip; auto; lia.
+  apply largest_prime_prefix_skip_not_prime; auto; try lia.
+  match goal with
+  | Hx: x = Znth i lv 0,
+    Hz: prime = 0,
+    Hs: prime_scan_state x j prime |- _ =>
+      subst x; rewrite Hz in Hs; eapply prime_scan_state_zero_not_prime; exact Hs
+  end.
 Qed.
 
 Lemma proof_of_skjkasdkd_entail_wit_4_5 : skjkasdkd_entail_wit_4_5.
@@ -160,7 +196,7 @@ Proof.
   unfold skjkasdkd_entail_wit_4_5.
   intros.
   entailer!.
-  apply largest_prime_prefix_skip; auto; lia.
+  apply largest_prime_prefix_skip_le; auto; lia.
 Qed.
 
 Lemma proof_of_skjkasdkd_entail_wit_4_6 : skjkasdkd_entail_wit_4_6.
@@ -168,7 +204,10 @@ Proof.
   unfold skjkasdkd_entail_wit_4_6.
   intros.
   entailer!.
-  apply largest_prime_prefix_skip; auto; lia.
+  apply largest_prime_prefix_skip_not_prime; auto; try lia.
+  intro Hprime.
+  pose proof (prime_gt_1_94 _ Hprime).
+  lia.
 Qed.
 
 Lemma proof_of_skjkasdkd_entail_wit_5 : skjkasdkd_entail_wit_5.
@@ -206,6 +245,7 @@ Proof.
   subst largest.
   entailer!.
   eapply problem_94_spec_z_of_digit_state.
+  - exact H4.
   - rewrite H2 in H6. exact H6.
   - exact H7.
   - exact H8.

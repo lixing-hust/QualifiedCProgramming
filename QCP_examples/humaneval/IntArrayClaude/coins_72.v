@@ -18,7 +18,8 @@ Definition mirror_all (q : list Z) : Prop :=
     Znth k q 0 = Znth (Zlength q - 1 - k) q 0.
 
 Definition problem_72_spec_z (q : list Z) (w out : Z) : Prop :=
-  (out <> 0 <-> mirror_all q /\ sum q <= w).
+  (out = 0 \/ out = 1) /\
+  problem_72_spec q w (Z.eqb out 1).
 
 Definition will_it_fly_int_range (q : list Z) : Prop :=
   forall i,
@@ -37,6 +38,58 @@ Lemma fold_left_Zadd_0_sum : forall l,
   fold_left Z.add l 0 = sum l.
 Proof.
   intros. rewrite fold_left_Zadd_sum. lia.
+Qed.
+
+Lemma mirror_all_rev : forall q,
+  mirror_all q ->
+  q = rev q.
+Proof.
+  intros q Hmirror.
+  apply nth_ext with (d := 0) (d' := 0).
+  - rewrite length_rev. reflexivity.
+  - intros n Hn.
+    rewrite rev_nth by lia.
+    specialize (Hmirror (Z.of_nat n)).
+    unfold Znth in Hmirror.
+    rewrite Nat2Z.id in Hmirror.
+    replace (Z.to_nat (Zlength q - 1 - Z.of_nat n))
+      with (length q - S n)%nat in Hmirror.
+    + apply Hmirror. rewrite Zlength_correct. lia.
+    + rewrite Zlength_correct. lia.
+Qed.
+
+Lemma rev_mirror_all : forall q,
+  q = rev q ->
+  mirror_all q.
+Proof.
+  intros q Hrev k Hk.
+  unfold Znth.
+  assert (Hk_nat : (Z.to_nat k < length q)%nat).
+  { rewrite Zlength_correct in Hk. lia. }
+  rewrite Hrev at 1.
+  rewrite rev_nth by exact Hk_nat.
+  replace (length q - S (Z.to_nat k))%nat
+    with (Z.to_nat (Zlength q - 1 - k)).
+  - reflexivity.
+  - rewrite Zlength_correct.
+    apply Nat2Z.inj.
+    rewrite Z2Nat.id by lia.
+    rewrite Nat2Z.inj_sub by lia.
+    rewrite Nat2Z.inj_succ.
+    rewrite Z2Nat.id by lia.
+    lia.
+Qed.
+
+Lemma problem_72_spec_z_false : forall q w,
+  ~ (q = rev q /\ fold_left (fun acc x => acc + x) q 0 <= w) ->
+  problem_72_spec_z q w 0.
+Proof.
+  intros q w Hfalse.
+  unfold problem_72_spec_z, problem_72_spec.
+  split.
+  - left. reflexivity.
+  - simpl.
+    split; intro H; [discriminate | contradiction].
 Qed.
 
 Lemma sum_sublist_0 : forall l,
@@ -77,14 +130,12 @@ Lemma mirror_prefix_mismatch_spec_false : forall q w n i,
   problem_72_spec_z q w 0.
 Proof.
   intros q w n i Hn Hi _ Hneq.
-  unfold problem_72_spec_z, mirror_all.
-  split; intro H.
-  - lia.
-  - destruct H as [Hmirror _].
-    specialize (Hmirror i).
-    rewrite <- Hn in Hmirror.
-    exfalso.
-    apply Hneq. apply Hmirror. lia.
+  apply problem_72_spec_z_false.
+  intros [Hrev _].
+  pose proof (rev_mirror_all q Hrev) as Hmirror.
+  specialize (Hmirror i).
+  rewrite <- Hn in Hmirror.
+  apply Hneq. apply Hmirror. lia.
 Qed.
 
 Lemma mirror_prefix_full : forall q n i,
@@ -106,10 +157,9 @@ Lemma problem_72_spec_z_weight_false : forall q w,
   problem_72_spec_z q w 0.
 Proof.
   intros q w Hmirror Hgt.
-  unfold problem_72_spec_z.
-  split; intro H.
-  - lia.
-  - destruct H as [_ Hsum]. lia.
+  apply problem_72_spec_z_false.
+  rewrite fold_left_Zadd_0_sum.
+  intros [_ Hsum]. lia.
 Qed.
 
 Lemma problem_72_spec_z_true : forall q w,
@@ -118,8 +168,15 @@ Lemma problem_72_spec_z_true : forall q w,
   problem_72_spec_z q w 1.
 Proof.
   intros q w Hmirror Hsum.
-  unfold problem_72_spec_z.
-  split; intro H.
-  - split; auto.
-  - lia.
+  unfold problem_72_spec_z, problem_72_spec.
+  split.
+  - right. reflexivity.
+  - simpl.
+    split.
+    * intros _.
+      split.
+      -- apply mirror_all_rev. exact Hmirror.
+      -- rewrite fold_left_Zadd_0_sum. exact Hsum.
+    * intros _.
+      reflexivity.
 Qed.

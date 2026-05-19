@@ -26,17 +26,7 @@ Definition sorted_int_list_by (ascending : Z) (l : list Z) : Prop :=
   if Z.eqb ascending 0 then Sorted Z.ge l else Sorted Z.le l.
 
 Definition problem_88_spec_z (input output : list Z) : Prop :=
-  Permutation input output /\
-  match input with
-  | [] => output = []
-  | [x] => output = [x]
-  | h :: _ =>
-      let last_elem := last input h in
-      if Z.eqb ((h + last_elem) mod 2) 1 then
-        Sorted Z.le output
-      else
-        Sorted Z.ge output
-  end.
+  problem_88_spec (map Z.to_nat input) (map Z.to_nat output).
 
 Fixpoint copy_prefix_nat (n : nat) (input : list Z) : list Z :=
   match n with

@@ -173,5 +173,5 @@ Proof.
   pre_process.
   Exists output_l_2 10 output_size_2 data_2.
   entailer!.
-  apply generate_prefix_full_spec with (lo := a) (hi := b); assumption.
+  apply generate_prefix_full_spec with (lo := a) (hi := b); try assumption; lia.
 Qed.

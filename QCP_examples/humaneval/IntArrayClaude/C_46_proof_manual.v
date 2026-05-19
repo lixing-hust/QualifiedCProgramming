@@ -87,12 +87,10 @@ Lemma proof_of_fib4_return_wit_1 : fib4_return_wit_1.
 Proof.
   pre_process.
   subst d.
-  unfold problem_46_spec_z.
   andp_cancel; auto; try lia.
-  split.
-  - lia.
-  - replace (i - 1) with n_pre by lia.
-    reflexivity.
+  replace n_pre with (i - 1) by lia.
+  apply fib4_z_original_spec.
+  lia.
 Qed.
 
 Lemma proof_of_fib4_return_wit_2 : fib4_return_wit_2.

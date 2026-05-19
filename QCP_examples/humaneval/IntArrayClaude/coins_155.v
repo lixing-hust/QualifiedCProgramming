@@ -52,8 +52,104 @@ Definition problem_155_pre_z (num : Z) : Prop :=
 
 Definition problem_155_spec_z (num : Z) (output : list Z) : Prop :=
   exists even odd,
-    output = [even; odd] /\
-    count_result_c num = (even, odd).
+    output = [Z.of_nat even; Z.of_nat odd] /\
+    problem_155_spec num (even, odd).
+
+Lemma c_digits_fuel_to_digits_fuel_nonzero : forall fuel n,
+  0 <= n ->
+  c_digits_fuel fuel n = to_digits_fuel_nonzero fuel n.
+Proof.
+  induction fuel as [|fuel IH]; intros n Hn; simpl; [reflexivity|].
+  rewrite Z.abs_eq by lia.
+  destruct (n =? 0) eqn:Hzero; [reflexivity|].
+  rewrite Z.rem_mod_nonneg by lia.
+  rewrite Z.quot_div_nonneg by lia.
+  rewrite IH by (apply Z.div_pos; lia).
+  reflexivity.
+Qed.
+
+Lemma to_digits_fuel_nonzero_abs : forall fuel n,
+  to_digits_fuel_nonzero fuel (Z.abs n) = to_digits_fuel_nonzero fuel n.
+Proof.
+  destruct fuel as [|fuel]; intros n; simpl; [reflexivity|].
+  rewrite Z.abs_eq by apply Z.abs_nonneg.
+  reflexivity.
+Qed.
+
+Lemma c_digits_to_digits : forall n,
+  c_digits n = to_digits n.
+Proof.
+  intros n.
+  unfold c_digits, to_digits.
+  destruct (Z.abs n =? 0) eqn:Habs; [reflexivity|].
+  rewrite c_digits_fuel_to_digits_fuel_nonzero by apply Z.abs_nonneg.
+  apply to_digits_fuel_nonzero_abs.
+Qed.
+
+Lemma count_digits_c_to_count_digits_acc : forall digits even odd,
+  (forall d, In d digits -> 0 <= d) ->
+  count_digits_c digits (Z.of_nat even) (Z.of_nat odd) =
+  let '(even', odd') := count_digits_acc digits (even, odd) in
+  (Z.of_nat even', Z.of_nat odd').
+Proof.
+  induction digits as [|d rest IH]; intros even odd Hnonneg; simpl.
+  - reflexivity.
+  - assert (Hd_nonneg : 0 <= d) by (apply Hnonneg; simpl; auto).
+    rewrite Z.rem_mod_nonneg by lia.
+    rewrite Zmod_odd.
+    rewrite <- Z.negb_even.
+    destruct (Z.even d) eqn:Heven.
+    + simpl.
+      replace (Z.of_nat even + 1) with (Z.of_nat (S even)) by lia.
+      apply IH.
+      intros x Hx. apply Hnonneg. simpl. auto.
+    + simpl.
+      replace (Z.of_nat odd + 1) with (Z.of_nat (S odd)) by lia.
+      apply IH.
+      intros x Hx. apply Hnonneg. simpl. auto.
+Qed.
+
+Lemma c_digits_fuel_nonnegative : forall fuel n d,
+  0 <= n ->
+  In d (c_digits_fuel fuel n) ->
+  0 <= d.
+Proof.
+  induction fuel as [|fuel IH]; intros n d Hn Hin; simpl in Hin; [contradiction|].
+  rewrite Z.abs_eq in Hin by lia.
+  destruct (n =? 0) eqn:Hzero; [contradiction|].
+  simpl in Hin.
+  destruct Hin as [Hd | Hin].
+  - subst d. apply Z.rem_bound_pos; lia.
+  - apply IH in Hin.
+    + exact Hin.
+    + rewrite Z.quot_div_nonneg by lia.
+      apply Z.div_pos; lia.
+Qed.
+
+Lemma c_digits_nonnegative : forall n d,
+  In d (c_digits n) ->
+  0 <= d.
+Proof.
+  intros n d Hin.
+  unfold c_digits in Hin.
+  destruct (Z.abs n =? 0) eqn:Habs.
+  - simpl in Hin. destruct Hin as [-> | []]. lia.
+  - eapply c_digits_fuel_nonnegative; eauto.
+    apply Z.abs_nonneg.
+Qed.
+
+Lemma count_result_c_to_even_odd_count_impl : forall num,
+  count_result_c num =
+  let '(even, odd) := even_odd_count_impl num in
+  (Z.of_nat even, Z.of_nat odd).
+Proof.
+  intros num.
+  unfold count_result_c, even_odd_count_impl.
+  rewrite <- c_digits_to_digits.
+  change 0 with (Z.of_nat O).
+  apply count_digits_c_to_count_digits_acc.
+  apply c_digits_nonnegative.
+Qed.
 
 Lemma c_digits_fuel_length_bound : forall fuel n,
   Zlength (c_digits_fuel fuel n) <= Z.of_nat fuel.
@@ -244,9 +340,29 @@ Lemma digit_count_state_final_spec : forall num even odd,
 Proof.
   intros num even odd Hstate.
   unfold digit_count_state in Hstate.
-  destruct Hstate as [_ [_ [_ [fuel [_ [Hrun _]]]]]].
+  destruct Hstate as [_ [Heven_nonneg [Hodd_nonneg [fuel [_ [Hrun _]]]]]].
   unfold problem_155_spec_z.
-  exists even, odd.
-  split; [reflexivity|].
-  destruct fuel; simpl in Hrun; symmetry; exact Hrun.
+  exists (Z.to_nat even), (Z.to_nat odd).
+  split.
+  - rewrite Z2Nat.id by lia.
+    rewrite Z2Nat.id by lia.
+    reflexivity.
+  - unfold problem_155_spec.
+    pose proof (count_result_c_to_even_odd_count_impl num) as Horig.
+    destruct (even_odd_count_impl num) as [even_nat odd_nat] eqn:Himpl.
+    destruct fuel; simpl in Hrun; symmetry in Hrun.
+    + rewrite Hrun in Horig.
+      injection Horig as He Ho.
+      apply f_equal with (f := Z.to_nat) in He.
+      apply f_equal with (f := Z.to_nat) in Ho.
+      rewrite Nat2Z.id in He, Ho.
+      rewrite He, Ho.
+      reflexivity.
+    + rewrite Hrun in Horig.
+      injection Horig as He Ho.
+      apply f_equal with (f := Z.to_nat) in He.
+      apply f_equal with (f := Z.to_nat) in Ho.
+      rewrite Nat2Z.id in He, Ho.
+      rewrite He, Ho.
+      reflexivity.
 Qed.

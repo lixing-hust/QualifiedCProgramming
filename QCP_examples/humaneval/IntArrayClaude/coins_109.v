@@ -33,14 +33,18 @@ Definition cyclic_descents (arr : list Z) : Z :=
    else 0).
 
 Definition problem_109_spec_z (arr : list Z) (result : Z) : Prop :=
-  (result <> 0 /\ cyclic_descents arr < 2) \/
-  (result = 0 /\ cyclic_descents arr >= 2).
+  (result = 1 /\ problem_109_spec arr true) \/
+  (result = 0 /\ problem_109_spec arr false).
+
+Definition cyclic_result_bool (arr : list Z) : bool :=
+  if Z.ltb (cyclic_descents arr) 2 then true else false.
 
 Definition descents_int_range (arr : list Z) : Prop :=
   (forall i,
       1 <= i < Zlength arr ->
       INT_MIN <= count_descents_prefix i arr + 1 <= INT_MAX) /\
-  INT_MIN <= cyclic_descents arr <= INT_MAX.
+  INT_MIN <= cyclic_descents arr <= INT_MAX /\
+  problem_109_spec arr (cyclic_result_bool arr).
 
 Lemma count_descents_prefix_1 : forall arr,
   count_descents_prefix 1 arr = 0.
@@ -121,4 +125,38 @@ Proof.
   { apply Z.ltb_ge. lia. }
   rewrite Hfalse.
   lia.
+Qed.
+
+Lemma problem_109_spec_z_of_cyclic_true : forall arr,
+  descents_int_range arr ->
+  cyclic_descents arr < 2 ->
+  problem_109_spec_z arr 1.
+Proof.
+  intros arr Hrange Hcyc.
+  unfold problem_109_spec_z.
+  left.
+  split; [reflexivity |].
+  unfold descents_int_range in Hrange.
+  destruct Hrange as [_ [_ Hspec]].
+  unfold cyclic_result_bool in Hspec.
+  assert ((cyclic_descents arr <? 2) = true) as Hltb by (apply Z.ltb_lt; exact Hcyc).
+  rewrite Hltb in Hspec.
+  exact Hspec.
+Qed.
+
+Lemma problem_109_spec_z_of_cyclic_false : forall arr,
+  descents_int_range arr ->
+  cyclic_descents arr >= 2 ->
+  problem_109_spec_z arr 0.
+Proof.
+  intros arr Hrange Hcyc.
+  unfold problem_109_spec_z.
+  right.
+  split; [reflexivity |].
+  unfold descents_int_range in Hrange.
+  destruct Hrange as [_ [_ Hspec]].
+  unfold cyclic_result_bool in Hspec.
+  assert ((cyclic_descents arr <? 2) = false) as Hltb by (apply Z.ltb_ge; lia).
+  rewrite Hltb in Hspec.
+  exact Hspec.
 Qed.

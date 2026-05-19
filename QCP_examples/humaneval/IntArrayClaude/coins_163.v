@@ -60,7 +60,153 @@ Definition problem_163_pre_z (a b : Z) : Prop :=
   problem_163_pre (Z.to_nat a) (Z.to_nat b).
 
 Definition problem_163_spec_z (a b : Z) (output : list Z) : Prop :=
-  output = generate_list (Z.min a b) (Z.max a b).
+  problem_163_spec (Z.to_nat a) (Z.to_nat b) (map Z.to_nat output).
+
+Lemma generate_prefix_list_in_163 : forall lo hi z,
+  In z (generate_list lo hi) <->
+  In z digit_candidates /\ lo <= z <= hi.
+Proof.
+  intros lo hi z.
+  unfold generate_list, generate_prefix_list, digit_candidates.
+  repeat rewrite filter_In.
+  simpl.
+  split.
+  - intros [Hin Hfilter].
+    apply andb_prop in Hfilter as [Hlo Hhi].
+    apply Z.leb_le in Hlo.
+    apply Z.ltb_lt in Hhi.
+    split; [exact Hin|lia].
+  - intros [Hin [Hlo Hhi]].
+    split; [exact Hin|].
+    apply andb_true_intro.
+    split.
+    + apply Z.leb_le. lia.
+    + apply Z.ltb_lt. lia.
+Qed.
+
+Lemma even_digit_nat_cases_163 : forall d,
+  (1 <= d)%nat ->
+  (d < 10)%nat ->
+  Nat.Even d ->
+  d = 2%nat \/ d = 4%nat \/ d = 6%nat \/ d = 8%nat.
+Proof.
+  intros d Hd_pos Hd_lt Heven.
+  destruct Heven as [k Hk].
+  lia.
+Qed.
+
+Lemma digit_candidates_sorted_nat_163 :
+  Sorted le (map Z.to_nat digit_candidates).
+Proof.
+  unfold digit_candidates.
+  simpl.
+  repeat constructor; simpl; lia.
+Qed.
+
+Lemma digit_candidates_nodup_nat_163 :
+  NoDup (map Z.to_nat digit_candidates).
+Proof.
+  unfold digit_candidates.
+  simpl.
+  repeat constructor; simpl; lia.
+Qed.
+
+Lemma nat_bounds_to_z_digit_163 : forall a b z,
+  0 < a ->
+  0 < b ->
+  0 <= z ->
+  (Nat.min (Z.to_nat a) (Z.to_nat b) <= Z.to_nat z)%nat ->
+  (Z.to_nat z <= Nat.max (Z.to_nat a) (Z.to_nat b))%nat ->
+  Z.min a b <= z <= Z.max a b.
+Proof.
+  intros a b z Ha Hb Hz Hlo Hhi.
+  rewrite <- Z2Nat.inj_min in Hlo.
+  rewrite <- Z2Nat.inj_max in Hhi.
+  split.
+  - apply (proj2 (Z2Nat.inj_le (Z.min a b) z ltac:(lia) Hz)).
+    exact Hlo.
+  - apply (proj2 (Z2Nat.inj_le z (Z.max a b) Hz ltac:(lia))).
+    exact Hhi.
+Qed.
+
+Lemma generate_list_original_spec_163 : forall a b,
+  0 < a ->
+  0 < b ->
+  problem_163_spec_z a b (generate_list (Z.min a b) (Z.max a b)).
+Proof.
+  intros a b Ha Hb.
+  unfold problem_163_spec_z, problem_163_spec.
+  split.
+  - intros d.
+    split.
+    + intros Hin.
+      apply in_map_iff in Hin.
+      destruct Hin as [z [Hd Hz_in]].
+      apply generate_prefix_list_in_163 in Hz_in.
+      destruct Hz_in as [Hz_candidate [Hz_lo Hz_hi]].
+      assert (Hz_nonneg : 0 <= z).
+      { destruct Hz_candidate as [Hz | [Hz | [Hz | [Hz | []]]]]; subst z; lia. }
+      assert (Hlo_nat : (Nat.min (Z.to_nat a) (Z.to_nat b) <= Z.to_nat z)%nat).
+      {
+        rewrite <- Z2Nat.inj_min.
+        apply (proj1 (Z2Nat.inj_le (Z.min a b) z ltac:(lia) Hz_nonneg)); lia.
+      }
+      assert (Hhi_nat : (Z.to_nat z <= Nat.max (Z.to_nat a) (Z.to_nat b))%nat).
+      {
+        rewrite <- Z2Nat.inj_max.
+        apply (proj1 (Z2Nat.inj_le z (Z.max a b) Hz_nonneg ltac:(lia))); lia.
+      }
+      subst d.
+      destruct Hz_candidate as [Hz | [Hz | [Hz | [Hz | []]]]]; subst z;
+      repeat split; simpl; try exact Hlo_nat; try exact Hhi_nat; try lia.
+      * unfold Nat.Even. exists 1%nat. lia.
+      * unfold Nat.Even. exists 2%nat. lia.
+      * unfold Nat.Even. exists 3%nat. lia.
+      * unfold Nat.Even. exists 4%nat. lia.
+    + intros [Hd_lo [Hd_hi [Hd_lt Heven]]].
+      assert (Hd_pos : (1 <= d)%nat).
+      {
+        assert (Hmin_pos : (1 <= Z.to_nat (Z.min a b))%nat).
+        {
+          apply (proj1 (Z2Nat.inj_le 1 (Z.min a b) ltac:(lia) ltac:(lia))); lia.
+        }
+        rewrite Z2Nat.inj_min in Hmin_pos.
+        lia.
+      }
+      pose proof (even_digit_nat_cases_163 d Hd_pos Hd_lt Heven) as Hcases.
+      destruct Hcases as [Hd | [Hd | [Hd | Hd]]]; subst d; apply in_map_iff.
+      * exists 2. split; [reflexivity|].
+        apply generate_prefix_list_in_163.
+        split; [simpl; tauto|].
+        apply nat_bounds_to_z_digit_163; simpl; try lia; assumption.
+      * exists 4. split; [reflexivity|].
+        apply generate_prefix_list_in_163.
+        split; [simpl; tauto|].
+        apply nat_bounds_to_z_digit_163; simpl; try lia; assumption.
+      * exists 6. split; [reflexivity|].
+        apply generate_prefix_list_in_163.
+        split; [simpl; tauto|].
+        apply nat_bounds_to_z_digit_163; simpl; try lia; assumption.
+      * exists 8. split; [reflexivity|].
+        apply generate_prefix_list_in_163.
+        split; [simpl; tauto|].
+        apply nat_bounds_to_z_digit_163; simpl; try lia; assumption.
+  - split.
+    + unfold generate_list, generate_prefix_list, digit_candidates.
+      simpl.
+      repeat match goal with
+      | |- context [Z.leb ?x ?y] => destruct (Z.leb x y) eqn:?; simpl
+      | |- context [Z.ltb ?x ?y] => destruct (Z.ltb x y) eqn:?; simpl
+      end;
+      repeat constructor; simpl; lia.
+    + unfold generate_list, generate_prefix_list, digit_candidates.
+      simpl.
+      repeat match goal with
+      | |- context [Z.leb ?x ?y] => destruct (Z.leb x y) eqn:?; simpl
+      | |- context [Z.ltb ?x ?y] => destruct (Z.ltb x y) eqn:?; simpl
+      end;
+      repeat constructor; simpl; lia.
+Qed.
 
 Lemma generate_prefix_init : forall lo hi,
   0 < lo ->
@@ -135,14 +281,15 @@ Proof.
 Qed.
 
 Lemma generate_prefix_full_spec : forall a0 b0 lo hi output,
+  0 < a0 ->
+  0 < b0 ->
   generate_bounds a0 b0 lo hi ->
   generate_prefix lo (hi + 1) hi output ->
   problem_163_spec_z a0 b0 output.
 Proof.
-  intros a0 b0 lo hi output [Hlo Hhi] [_ Hout].
+  intros a0 b0 lo hi output Ha0 Hb0 [Hlo Hhi] [_ Hout].
   subst lo hi output.
-  unfold problem_163_spec_z, generate_list.
-  reflexivity.
+  apply generate_list_original_spec_163; assumption.
 Qed.
 
 Lemma mod2_zero_even_true : forall i,

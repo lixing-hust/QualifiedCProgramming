@@ -16,11 +16,7 @@ Definition problem_96_pre_z (n : Z) : Prop :=
   problem_96_pre (Z.to_nat n).
 
 Definition problem_96_spec_z (n : Z) (result : list Z) : Prop :=
-  (forall p, In p result -> prime p) /\
-  (forall p, In p result -> p < n) /\
-  (forall p, 2 <= p < n -> prime p -> In p result) /\
-  Sorted Z.lt result /\
-  NoDup result.
+  problem_96_spec (Z.to_nat n) (map Z.to_nat result).
 
 Definition count_up_to_state (i : Z) (result : list Z) : Prop :=
   2 <= i /\
@@ -43,6 +39,70 @@ Definition prime_test_state (candidate : Z) (result : list Z) (j isp : Z) : Prop
      0 <= k < j /\
      Znth k result 0 <= candidate / Znth k result 0 /\
      candidate mod Znth k result 0 = 0).
+
+Lemma HdRel_map_Z_to_nat_96 : forall x l,
+  0 <= x ->
+  (forall y, In y l -> 0 <= y) ->
+  HdRel Z.lt x l ->
+  HdRel lt (Z.to_nat x) (map Z.to_nat l).
+Proof.
+  intros x l Hx Hnonneg Hhd.
+  induction Hhd.
+  - constructor.
+  - simpl.
+    constructor.
+    + apply Z2Nat.inj_lt.
+      * exact Hx.
+      * apply Hnonneg. left. reflexivity.
+      * assumption.
+Qed.
+
+Lemma Sorted_map_Z_to_nat_96 : forall l,
+  (forall x, In x l -> 0 <= x) ->
+  Sorted Z.lt l ->
+  Sorted lt (map Z.to_nat l).
+Proof.
+  intros l Hnonneg Hsorted.
+  induction Hsorted.
+  - constructor.
+  - simpl.
+    constructor.
+    + apply IHHsorted.
+      intros z Hz.
+      apply Hnonneg. right. exact Hz.
+    + apply HdRel_map_Z_to_nat_96.
+      * apply Hnonneg. left. reflexivity.
+      * intros z Hz. apply Hnonneg. right. exact Hz.
+      * exact H.
+Qed.
+
+Lemma NoDup_map_Z_to_nat_96 : forall l,
+  (forall x, In x l -> 0 <= x) ->
+  NoDup l ->
+  NoDup (map Z.to_nat l).
+Proof.
+  intros l Hnonneg Hnodup.
+  induction Hnodup.
+  - constructor.
+  - simpl.
+    constructor.
+    + intro Hin_map.
+      apply in_map_iff in Hin_map.
+      destruct Hin_map as [z [Hz_eq Hz_in]].
+      apply H.
+      assert (z = x).
+      {
+        eapply Z2Nat.inj.
+        - apply Hnonneg. right. exact Hz_in.
+        - apply Hnonneg. left. reflexivity.
+        - exact Hz_eq.
+      }
+      subst z.
+      exact Hz_in.
+    + apply IHHnodup.
+      intros z Hz.
+      apply Hnonneg. right. exact Hz.
+Qed.
 
 Lemma count_up_to_state_init :
   count_up_to_state 2 [].
@@ -92,16 +152,45 @@ Lemma problem_96_spec_z_of_state :
     problem_96_spec_z n result.
 Proof.
   intros n result Hstate.
-  destruct Hstate as [_ [_ [Hprime [Hcomplete [Hsorted Hnodup]]]]].
+  unfold problem_96_spec_z, problem_96_spec.
+  destruct Hstate as [Hn [_ [Hprime [Hcomplete [Hsorted Hnodup]]]]].
+  assert (Hnonneg : forall z, In z result -> 0 <= z).
+  {
+    intros z Hz.
+    destruct (Hprime z Hz) as [[Hz_ge _] _].
+    lia.
+  }
   split.
-  - intros q Hq.
-    destruct (Hprime q Hq) as [_ Hqprime].
-    exact Hqprime.
+  - intros p Hp.
+    apply in_map_iff in Hp.
+    destruct Hp as [z [Hp Hz]].
+    subst p.
+    destruct (Hprime z Hz) as [_ Hzprime].
+    rewrite Z2Nat.id by (apply Hnonneg; exact Hz).
+    exact Hzprime.
   - split.
-    + intros q Hq.
-      destruct (Hprime q Hq) as [[_ Hq_lt] _].
-      exact Hq_lt.
-    + split; [exact Hcomplete | split; assumption].
+    + intros p Hp.
+      apply in_map_iff in Hp.
+      destruct Hp as [z [Hp Hz]].
+      subst p.
+      destruct (Hprime z Hz) as [[_ Hz_lt] _].
+      apply Nat2Z.inj_lt.
+      rewrite !Z2Nat.id; try lia.
+      apply Hnonneg; exact Hz.
+    + split.
+      * intros p Hpprime Hp_lt.
+        replace p with (Z.to_nat (Z.of_nat p)) by lia.
+        apply in_map.
+        apply Hcomplete.
+        -- split.
+           ++ inversion Hpprime; lia.
+           ++ apply Nat2Z.inj_lt in Hp_lt.
+              rewrite Z2Nat.id in Hp_lt by lia.
+              exact Hp_lt.
+        -- exact Hpprime.
+      * split.
+        -- apply Sorted_map_Z_to_nat_96; assumption.
+        -- apply NoDup_map_Z_to_nat_96; assumption.
 Qed.
 
 Lemma Znth_In_range_96 : forall (l : list Z) i d,
@@ -210,7 +299,11 @@ Proof.
   - split.
     + intros q Hq. contradiction.
     + split.
-      * intros q Hq _. lia.
+      * intros q Hq Hq_lt.
+        inversion Hq.
+        apply Nat2Z.inj_lt in Hq_lt.
+        rewrite Z2Nat.id in Hq_lt by lia.
+        lia.
       * split; constructor.
 Qed.
 

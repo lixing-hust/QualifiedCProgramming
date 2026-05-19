@@ -82,7 +82,7 @@ Definition problem_116_pre_z (input : list Z) : Prop :=
   problem_116_pre (map Z.to_nat input).
 
 Definition problem_116_spec_z (input output : list Z) : Prop :=
-  output = bubble_sort_116 input.
+  problem_116_spec (map Z.to_nat input) (map Z.to_nat output).
 
 Definition sort_copy_prefix_116
   (i : Z) (input output : list Z) : Prop :=
@@ -783,17 +783,330 @@ Proof.
   - assumption.
 Qed.
 
+Lemma Z_ltb_of_nat_116 : forall a b,
+  (Z.of_nat a <? Z.of_nat b) = (a <? b)%nat.
+Proof.
+  intros a b.
+  destruct (Z.of_nat a <? Z.of_nat b) eqn:Hz;
+    destruct (a <? b)%nat eqn:Hn; try reflexivity.
+  - apply Z.ltb_lt in Hz. apply Nat.ltb_ge in Hn. lia.
+  - apply Z.ltb_ge in Hz. apply Nat.ltb_lt in Hn. lia.
+Qed.
+
+Lemma Z_ltb_to_nat_nonneg_116 : forall a b,
+  0 <= a ->
+  0 <= b ->
+  (a <? b) = (Z.to_nat a <? Z.to_nat b)%nat.
+Proof.
+  intros a b Ha Hb.
+  destruct (a <? b) eqn:Hz; destruct (Z.to_nat a <? Z.to_nat b)%nat eqn:Hn;
+    try reflexivity.
+  - apply Z.ltb_lt in Hz. apply Nat.ltb_ge in Hn. lia.
+  - apply Z.ltb_ge in Hz. apply Nat.ltb_lt in Hn.
+    assert ((Z.to_nat b <= Z.to_nat a)%nat) by (apply Z2Nat.inj_le; lia).
+    lia.
+Qed.
+
+Lemma Z_eqb_of_nat_116 : forall a b,
+  (Z.of_nat a =? Z.of_nat b) = (a =? b)%nat.
+Proof.
+  intros a b.
+  destruct (Z.of_nat a =? Z.of_nat b) eqn:Hz;
+    destruct (a =? b)%nat eqn:Hn; try reflexivity.
+  - apply Z.eqb_eq in Hz. apply Nat.eqb_neq in Hn. lia.
+  - apply Z.eqb_neq in Hz. apply Nat.eqb_eq in Hn. lia.
+Qed.
+
+Lemma bit_count_loop_116_to_nat : forall fuel n acc,
+  0 <= n ->
+  0 <= acc ->
+  Z.to_nat (bit_count_loop_116 fuel n acc) =
+  (Z.to_nat acc + count_ones_helper (Z.to_nat n) fuel)%nat.
+Proof.
+  induction fuel as [|fuel IH]; intros n acc Hn Hacc.
+  - simpl. lia.
+  - simpl.
+    destruct (n <=? 0) eqn:Hle.
+    + apply Z.leb_le in Hle.
+      assert (n = 0) by lia.
+      subst n.
+      simpl. lia.
+    + apply Z.leb_gt in Hle.
+      assert (Hrem: 0 <= Z.rem n 2).
+      { rewrite Z.rem_mod_nonneg by lia.
+        pose proof (Z.mod_pos_bound n 2 ltac:(lia)); lia. }
+      assert (Hquot: 0 <= n ÷ 2).
+      { rewrite Z.quot_div_nonneg by lia. apply Z.div_pos; lia. }
+      rewrite IH by lia.
+      rewrite Z2Nat.inj_add by lia.
+      rewrite Z.quot_div_nonneg by lia.
+      rewrite Z.rem_mod_nonneg by lia.
+      rewrite Z2Nat.inj_div by lia.
+      rewrite Z2Nat.inj_mod by lia.
+      change (Z.to_nat 2) with 2%nat.
+      destruct (Z.to_nat n) as [|n'] eqn:Hnat; [lia|].
+      simpl.
+      lia.
+Qed.
+
+Lemma bit_count_116_to_nat : forall x,
+  0 <= x ->
+  Z.to_nat (bit_count_116 x) = count_ones (Z.to_nat x).
+Proof.
+  intros x Hx.
+  pose proof (bit_count_loop_116_to_nat bit_fuel_116 x 0 Hx ltac:(lia)) as H.
+  unfold bit_count_116, count_ones, bit_fuel_116.
+  unfold bit_fuel_116 in H.
+  change (Z.to_nat (bit_count_loop_116 31 x 0) =
+          count_ones_helper (Z.to_nat x) 31).
+  rewrite H.
+  reflexivity.
+Qed.
+
+Lemma bit_count_116_of_nat : forall x,
+  0 <= x ->
+  bit_count_116 x = Z.of_nat (count_ones (Z.to_nat x)).
+Proof.
+  intros x Hx.
+  pose proof (bit_count_116_to_nat x Hx) as Hto.
+  apply (f_equal Z.of_nat) in Hto.
+  rewrite Z2Nat.id in Hto.
+  - exact Hto.
+  - unfold bit_count_116.
+    apply bit_count_loop_116_nonneg; lia.
+Qed.
+
+Lemma should_swap_116_to_nat : forall a b,
+  0 <= a ->
+  0 <= b ->
+  should_swap_116 a b =
+  should_swap_custom_bool (Z.to_nat a) (Z.to_nat b).
+Proof.
+  intros a b Ha Hb.
+  unfold should_swap_116, should_swap_custom_bool.
+  rewrite (bit_count_116_of_nat a Ha).
+  rewrite (bit_count_116_of_nat b Hb).
+  repeat rewrite Z_ltb_of_nat_116.
+  repeat rewrite Z_eqb_of_nat_116.
+  rewrite Z_ltb_to_nat_nonneg_116 by lia.
+  reflexivity.
+Qed.
+
+Lemma map_firstn_116 : forall {A B : Type} (f : A -> B) n l,
+  map f (firstn n l) = firstn n (map f l).
+Proof.
+  induction n as [|n IH]; intros [|x xs]; simpl; try reflexivity.
+  rewrite IH. reflexivity.
+Qed.
+
+Lemma map_skipn_116 : forall {A B : Type} (f : A -> B) n l,
+  map f (skipn n l) = skipn n (map f l).
+Proof.
+  induction n as [|n IH]; intros [|x xs]; simpl; try reflexivity.
+  apply IH.
+Qed.
+
+Lemma in_firstn_116 : forall {A : Type} (x : A) n l,
+  In x (firstn n l) -> In x l.
+Proof.
+  induction n as [|n IH]; intros [|y ys] Hin; simpl in *; try contradiction.
+  destruct Hin as [Hin | Hin].
+  - left. assumption.
+  - right. eapply IH; eauto.
+Qed.
+
+Lemma in_skipn_116 : forall {A : Type} (x : A) n l,
+  In x (skipn n l) -> In x l.
+Proof.
+  induction n as [|n IH]; intros [|y ys] Hin; simpl in *; try assumption.
+  right. eapply IH; eauto.
+Qed.
+
+Lemma Forall_firstn_116 : forall {A : Type} (P : A -> Prop) n l,
+  Forall P l -> Forall P (firstn n l).
+Proof.
+  intros A P n l Hforall.
+  rewrite Forall_forall in *.
+  intros x Hin.
+  apply Hforall.
+  eapply in_firstn_116; eauto.
+Qed.
+
+Lemma Forall_skipn_116 : forall {A : Type} (P : A -> Prop) n l,
+  Forall P l -> Forall P (skipn n l).
+Proof.
+  intros A P n l Hforall.
+  rewrite Forall_forall in *.
+  intros x Hin.
+  apply Hforall.
+  eapply in_skipn_116; eauto.
+Qed.
+
+Lemma Forall_nth_error_nonneg_116 : forall l n x,
+  Forall (fun z => 0 <= z) l ->
+  nth_error l n = Some x ->
+  0 <= x.
+Proof.
+  intros l n x Hforall Hnth.
+  rewrite Forall_forall in Hforall.
+  apply Hforall.
+  eapply nth_error_In; eauto.
+Qed.
+
+Lemma swap_adjacent_116_Forall_nonneg : forall j l,
+  Forall (fun z => 0 <= z) l ->
+  Forall (fun z => 0 <= z) (swap_adjacent_116 j l).
+Proof.
+  intros j l Hforall.
+  unfold swap_adjacent_116.
+  destruct (nth_error l j) as [a|] eqn:Ha;
+    destruct (nth_error l (S j)) as [b|] eqn:Hb; try assumption.
+  destruct (should_swap_116 a b); try assumption.
+  apply Forall_app.
+  split.
+  - apply Forall_firstn_116. assumption.
+  - constructor.
+    + eapply Forall_nth_error_nonneg_116; eauto.
+    + constructor.
+      * eapply Forall_nth_error_nonneg_116; eauto.
+      * apply Forall_skipn_116. assumption.
+Qed.
+
+Lemma swap_adjacent_116_map : forall j l,
+  Forall (fun z => 0 <= z) l ->
+  map Z.to_nat (swap_adjacent_116 j l) =
+  swap_adjacent_custom j (map Z.to_nat l).
+Proof.
+  intros j l Hforall.
+  unfold swap_adjacent_116.
+  destruct (nth_error l j) as [a|] eqn:Ha;
+    destruct (nth_error l (S j)) as [b|] eqn:Hb.
+  - unfold swap_adjacent_custom.
+    rewrite (@nth_error_map Z nat Z.to_nat j l), Ha.
+    rewrite (@nth_error_map Z nat Z.to_nat (S j) l), Hb.
+    simpl.
+    assert (Ha_nonneg : 0 <= a) by
+      (eapply Forall_nth_error_nonneg_116; eauto).
+    assert (Hb_nonneg : 0 <= b) by
+      (eapply Forall_nth_error_nonneg_116; eauto).
+    rewrite should_swap_116_to_nat by lia.
+    destruct (should_swap_custom_bool (Z.to_nat a) (Z.to_nat b)).
+    + rewrite map_app, map_firstn_116.
+      simpl.
+      try rewrite map_skipn_116.
+      change (map Z.to_nat
+        match l with
+        | _ :: _ :: l0 => skipn j l0
+        | _ => []
+        end) with (map Z.to_nat (skipn (S (S j)) l)).
+      rewrite map_skipn_116.
+      reflexivity.
+    + reflexivity.
+  - unfold swap_adjacent_custom.
+    rewrite (@nth_error_map Z nat Z.to_nat j l), Ha.
+    rewrite (@nth_error_map Z nat Z.to_nat (S j) l), Hb.
+    reflexivity.
+  - unfold swap_adjacent_custom.
+    rewrite (@nth_error_map Z nat Z.to_nat j l), Ha.
+    reflexivity.
+  - unfold swap_adjacent_custom.
+    rewrite (@nth_error_map Z nat Z.to_nat j l), Ha.
+    reflexivity.
+Qed.
+
+Lemma bubble_pass_116_from_map : forall fuel j l,
+  Forall (fun z => 0 <= z) l ->
+  map Z.to_nat (bubble_pass_116_from fuel j l) =
+    bubble_pass_custom_from fuel j (map Z.to_nat l) /\
+  Forall (fun z => 0 <= z) (bubble_pass_116_from fuel j l).
+Proof.
+  induction fuel as [|fuel IH]; intros j l Hforall.
+  - simpl. split; reflexivity || assumption.
+  - simpl.
+    pose proof (swap_adjacent_116_map j l Hforall) as Hmap.
+    pose proof (swap_adjacent_116_Forall_nonneg j l Hforall) as Hforall_swap.
+    specialize (IH (S j) (swap_adjacent_116 j l) Hforall_swap) as [IHmap IHforall].
+    rewrite IHmap.
+    rewrite Hmap.
+    split; reflexivity || exact IHforall.
+Qed.
+
+Lemma bubble_pass_116_map : forall l,
+  Forall (fun z => 0 <= z) l ->
+  map Z.to_nat (bubble_pass_116 l) =
+  bubble_pass_custom (map Z.to_nat l) /\
+  Forall (fun z => 0 <= z) (bubble_pass_116 l).
+Proof.
+  intros l Hforall.
+  unfold bubble_pass_116, bubble_pass_custom.
+  rewrite map_length.
+  apply bubble_pass_116_from_map.
+  assumption.
+Qed.
+
+Lemma bubble_sort_116_fuel_map : forall fuel l,
+  Forall (fun z => 0 <= z) l ->
+  map Z.to_nat (bubble_sort_116_fuel fuel l) =
+    bubble_sort_custom_fuel fuel (map Z.to_nat l) /\
+  Forall (fun z => 0 <= z) (bubble_sort_116_fuel fuel l).
+Proof.
+  induction fuel as [|fuel IH]; intros l Hforall.
+  - simpl. split; reflexivity || assumption.
+  - simpl.
+    pose proof (bubble_pass_116_map l Hforall) as [Hpass_map Hpass_forall].
+    specialize (IH (bubble_pass_116 l) Hpass_forall) as [IHmap IHforall].
+    rewrite IHmap.
+    rewrite Hpass_map.
+    split; reflexivity || exact IHforall.
+Qed.
+
+Lemma bubble_sort_116_map_sort_array_impl : forall input,
+  Forall (fun z => 0 <= z) input ->
+  map Z.to_nat (bubble_sort_116 input) =
+  sort_array_impl (map Z.to_nat input).
+Proof.
+  intros input Hforall.
+  unfold bubble_sort_116, sort_array_impl.
+  rewrite map_length.
+  apply bubble_sort_116_fuel_map.
+  assumption.
+Qed.
+
+Lemma sort_array_116_int_range_Forall_nonneg : forall input,
+  sort_array_116_int_range input ->
+  Forall (fun z => 0 <= z) input.
+Proof.
+  intros input Hrange.
+  rewrite Forall_forall.
+  intros x Hin.
+  destruct (In_nth_error input x Hin) as [n Hnth].
+  assert (Hsome : (n < length input)%nat).
+  { apply (proj1 (nth_error_Some input n)).
+    rewrite Hnth. discriminate. }
+  specialize (Hrange (Z.of_nat n)).
+  rewrite Zlength_correct in Hrange.
+  assert (0 <= Z.of_nat n < Z.of_nat (length input)) by lia.
+  specialize (Hrange H).
+  unfold Znth in Hrange.
+  rewrite Nat2Z.id in Hrange.
+  rewrite (nth_error_nth input n 0 Hnth) in Hrange.
+  lia.
+Qed.
+
 Lemma sort_outer_state_116_final_spec : forall input output scores,
+  sort_array_116_int_range input ->
   sort_outer_state_116 (Zlength input) input output scores ->
   problem_116_spec_z input output.
 Proof.
-  intros input output scores Hstate.
+  intros input output scores Hrange Hstate.
   unfold sort_outer_state_116 in Hstate.
   destruct Hstate as [_ [_ [_ [Houtput _]]]].
-  unfold problem_116_spec_z, bubble_sort_116.
+  unfold problem_116_spec_z, problem_116_spec.
   rewrite Houtput.
   unfold bubble_outer_prefix_116.
   rewrite Zlength_correct.
   rewrite Nat2Z.id.
-  reflexivity.
+  apply bubble_sort_116_map_sort_array_impl.
+  apply sort_array_116_int_range_Forall_nonneg.
+  assumption.
 Qed.

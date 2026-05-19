@@ -74,16 +74,13 @@ Proof.
   assert (Hi : i = arr_size_pre) by lia.
   subst i num.
   entailer!.
-  unfold problem_109_spec_z.
-  right.
-  split.
-  - lia.
-  - 
   assert (Hle : Znth (Zlength input_l - 1) input_l 0 <= Znth 0 input_l 0).
   { replace (Zlength input_l) with arr_size_pre by lia; lia. }
-  rewrite cyclic_descents_tail_le by lia.
-  replace (Zlength input_l) with arr_size_pre by lia.
-  lia.
+  apply problem_109_spec_z_of_cyclic_false.
+  - exact H6.
+  - rewrite cyclic_descents_tail_le by lia.
+    replace (Zlength input_l) with arr_size_pre by lia.
+    lia.
 Qed. 
 
 Lemma proof_of_move_one_ball_return_wit_2 : move_one_ball_return_wit_2.
@@ -92,16 +89,13 @@ Proof.
   assert (Hi : i = arr_size_pre) by lia.
   subst i num.
   entailer!.
-  unfold problem_109_spec_z.
-  right.
-  split.
-  - lia.
-  - 
   assert (Hgt : Znth (Zlength input_l - 1) input_l 0 > Znth 0 input_l 0).
   { replace (Zlength input_l) with arr_size_pre by lia; lia. }
-  rewrite cyclic_descents_tail_gt by lia.
-  replace (Zlength input_l) with arr_size_pre by lia.
-  lia.
+  apply problem_109_spec_z_of_cyclic_false.
+  - exact H6.
+  - rewrite cyclic_descents_tail_gt by lia.
+    replace (Zlength input_l) with arr_size_pre by lia.
+    lia.
 Qed. 
 
 Lemma proof_of_move_one_ball_return_wit_3 : move_one_ball_return_wit_3.
@@ -110,16 +104,13 @@ Proof.
   assert (Hi : i = arr_size_pre) by lia.
   subst i num.
   entailer!.
-  unfold problem_109_spec_z.
-  left.
-  split.
-  - lia.
-  - 
   assert (Hle : Znth (Zlength input_l - 1) input_l 0 <= Znth 0 input_l 0).
   { replace (Zlength input_l) with arr_size_pre by lia; lia. }
-  rewrite cyclic_descents_tail_le by lia.
-  replace (Zlength input_l) with arr_size_pre by lia.
-  lia.
+  apply problem_109_spec_z_of_cyclic_true.
+  - exact H6.
+  - rewrite cyclic_descents_tail_le by lia.
+    replace (Zlength input_l) with arr_size_pre by lia.
+    lia.
 Qed. 
 
 Lemma proof_of_move_one_ball_return_wit_4 : move_one_ball_return_wit_4.
@@ -128,14 +119,11 @@ Proof.
   assert (Hi : i = arr_size_pre) by lia.
   subst i num.
   entailer!.
-  unfold problem_109_spec_z.
-  left.
-  split.
-  - lia.
-  - 
   assert (Hgt : Znth (Zlength input_l - 1) input_l 0 > Znth 0 input_l 0).
   { replace (Zlength input_l) with arr_size_pre by lia; lia. }
-  rewrite cyclic_descents_tail_gt by lia.
-  replace (Zlength input_l) with arr_size_pre by lia.
-  lia.
+  apply problem_109_spec_z_of_cyclic_true.
+  - exact H6.
+  - rewrite cyclic_descents_tail_gt by lia.
+    replace (Zlength input_l) with arr_size_pre by lia.
+    lia.
 Qed. 

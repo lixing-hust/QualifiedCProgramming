@@ -64,5 +64,5 @@ Proof.
   pre_process.
   assert (Hi : i = k_pre) by lia.
   asrt_simpl_pure; sepcon_assoc_change; andp_cancel; simpl_entail.
-  apply problem_122_spec_z_of_exit with (i := i); auto.
+  apply problem_122_spec_z_of_exit with (i := i); auto; lia.
 Qed. 

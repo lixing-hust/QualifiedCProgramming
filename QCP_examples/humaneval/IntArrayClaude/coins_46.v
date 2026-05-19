@@ -14,7 +14,20 @@ Definition problem_46_pre_z (n : Z) : Prop :=
   0 <= n /\ problem_46_pre (Z.to_nat n).
 
 Definition problem_46_spec_z (n output : Z) : Prop :=
-  0 <= n /\ output = fib4_z n.
+  0 <= n /\ 0 <= output /\
+  problem_46_spec (Z.to_nat n) (Z.to_nat output).
+
+Lemma fib4_z_original_spec : forall n,
+  0 <= n ->
+  problem_46_spec_z n (fib4_z n).
+Proof.
+  intros n Hn.
+  unfold problem_46_spec_z, problem_46_spec, fib4_z.
+  split; [lia|].
+  split; [lia|].
+  rewrite Nat2Z.id.
+  reflexivity.
+Qed.
 
 Lemma fib4_z_0 :
   fib4_z 0 = 0.
@@ -80,7 +93,8 @@ Lemma problem_46_spec_z_base_0 :
   problem_46_spec_z 0 0.
 Proof.
   unfold problem_46_spec_z.
-  rewrite fib4_z_0.
+  unfold problem_46_spec.
+  simpl.
   lia.
 Qed.
 
@@ -88,7 +102,8 @@ Lemma problem_46_spec_z_base_1 :
   problem_46_spec_z 1 0.
 Proof.
   unfold problem_46_spec_z.
-  rewrite fib4_z_1.
+  unfold problem_46_spec.
+  simpl.
   lia.
 Qed.
 
@@ -96,7 +111,8 @@ Lemma problem_46_spec_z_base_2 :
   problem_46_spec_z 2 2.
 Proof.
   unfold problem_46_spec_z.
-  rewrite fib4_z_2.
+  unfold problem_46_spec.
+  simpl.
   lia.
 Qed.
 
@@ -104,6 +120,7 @@ Lemma problem_46_spec_z_base_3 :
   problem_46_spec_z 3 0.
 Proof.
   unfold problem_46_spec_z.
-  rewrite fib4_z_3.
+  unfold problem_46_spec.
+  simpl.
   lia.
 Qed.

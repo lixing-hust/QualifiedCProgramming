@@ -107,7 +107,8 @@ Proof.
   assert (Hi : i = nums_size_pre) by lia.
   subst i min.
   entailer!.
-  unfold problem_114_spec_z.
-  replace nums_size_pre with (Zlength nums_l) by lia.
-  reflexivity.
+  apply problem_114_spec_z_of_min_subarray_prefix.
+  - exact H.
+  - replace nums_size_pre with (Zlength nums_l) by lia.
+    reflexivity.
 Qed. 

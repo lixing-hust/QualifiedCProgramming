@@ -99,7 +99,11 @@ Proof.
   sep_apply IntArray.undef_full_to_undef_seg.
   rewrite IntArray.seg_empty.
   entailer!.
-  constructor.
+  unfold unique_digits_prefix.
+  split.
+  - lia.
+  - rewrite sublist_nil by lia.
+    reflexivity.
 Qed. 
 
 Lemma proof_of_unique_digits_entail_wit_4_1 : unique_digits_entail_wit_4_1.
