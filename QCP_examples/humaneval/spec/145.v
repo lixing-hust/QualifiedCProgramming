@@ -31,12 +31,36 @@ Fixpoint msd_fuel (fuel : nat) (n : Z) : Z :=
   | S f => if Z_lt_le_dec n 10 then n else msd_fuel f (n / 10)
   end.
 
+Definition digit_fuel_145 : nat := 8%nat.
+
+Fixpoint highest_power10_loop_145 (fuel : nat) (t p : Z) : Z :=
+  match fuel with
+  | O => p
+  | S fuel' =>
+      if Z.leb (p * 10) t
+      then highest_power10_loop_145 fuel' t (p * 10)
+      else p
+  end.
+
+Fixpoint digit_tail_loop_145 (fuel : nat) (t sum : Z) : Z :=
+  match fuel with
+  | O => sum
+  | S fuel' =>
+      if Z.leb t 0
+      then sum
+      else digit_tail_loop_145 fuel' (t / 10) (sum + t mod 10)
+  end.
+
 Definition sum_digits (n : Z) : Z :=
-  if Z_ge_dec n 0 then sum_digits_pos_fuel (Z.to_nat n + 1) n
-  else let npos := - n in
-       let tot := sum_digits_pos_fuel (Z.to_nat npos + 1) npos in
-       let fd := msd_fuel (Z.to_nat npos + 1) npos in
-       tot - 2 * fd.
+  let t := Z.abs n in
+  let msd := msd_fuel digit_fuel_145 t in
+  let sum := if Z_ge_dec n 0 then msd else - msd in
+  if Z.leb 10 t
+  then digit_tail_loop_145
+         digit_fuel_145
+         (t mod highest_power10_loop_145 digit_fuel_145 t 1)
+         sum
+  else sum.
 
 Definition le_stable (p1 p2 : Z * nat) : Prop :=
   let (z1, i1) := p1 in
@@ -44,6 +68,33 @@ Definition le_stable (p1 p2 : Z * nat) : Prop :=
   let s1 := sum_digits z1 in
   let s2 := sum_digits z2 in
   s1 < s2 \/ (s1 = s2 /\ (i1 <= i2)%nat).
+
+Definition swap_adjacent_points (j : nat) (l : list Z) : list Z :=
+  match nth_error l j, nth_error l (S j) with
+  | Some a, Some b =>
+      if Z.gtb (sum_digits a) (sum_digits b)
+      then firstn j l ++ b :: a :: skipn (S (S j)) l
+      else l
+  | _, _ => l
+  end.
+
+Fixpoint bubble_pass_points_from (fuel j : nat) (l : list Z) : list Z :=
+  match fuel with
+  | O => l
+  | S fuel' => bubble_pass_points_from fuel' (S j) (swap_adjacent_points j l)
+  end.
+
+Definition bubble_pass_points (l : list Z) : list Z :=
+  bubble_pass_points_from (length l - 1)%nat 0 l.
+
+Fixpoint bubble_sort_points_fuel (fuel : nat) (l : list Z) : list Z :=
+  match fuel with
+  | O => l
+  | S fuel' => bubble_sort_points_fuel fuel' (bubble_pass_points l)
+  end.
+
+Definition bubble_sort_points (l : list Z) : list Z :=
+  bubble_sort_points_fuel (length l) l.
 
 Fixpoint insert_sorted (x : Z * nat) (l : list (Z * nat)) : list (Z * nat) :=
   match l with
@@ -59,9 +110,7 @@ Fixpoint stable_sort (l : list (Z * nat)) : list (Z * nat) :=
   match l with [] => [] | h :: t => insert_sorted h (stable_sort t) end.
 
 Definition order_by_points_impl (l_in : list Z) : list Z :=
-  let indexed := combine l_in (seq 0 (length l_in)) in
-  let sorted := stable_sort indexed in
-  map fst sorted.
+  bubble_sort_points l_in.
 
 (* 任意整数列表输入均可 *)
 Definition problem_145_pre (l_in : list Z) : Prop := True.

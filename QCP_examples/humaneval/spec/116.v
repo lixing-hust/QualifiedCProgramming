@@ -33,7 +33,7 @@ Fixpoint count_ones_helper (n fuel : nat) : nat :=
   对于任何 n，其二进制表示的位数都小于 n 本身，所以 n 是足够多的“燃料”。
 *)
 Definition count_ones (n : nat) : nat :=
-  count_ones_helper n n.
+  count_ones_helper n 31.
 
 (*
   定义两个自然数的比较逻辑:
@@ -59,22 +59,37 @@ Definition lt_custom_bool (a b : nat) : bool :=
   它描述了输入列表(input)和输出列表(output)之间的关系
 *)
 
-(* 实现排序函数 *)
-Fixpoint insert_sorted (x : nat) (l : list nat) : list nat :=
-  match l with
-  | [] => [x]
-  | h :: t =>
-      if lt_custom_bool x h then
-        x :: l
-      else
-        h :: insert_sorted x t
+Definition should_swap_custom_bool (a b : nat) : bool :=
+  if count_ones b <? count_ones a then true
+  else if count_ones b =? count_ones a then b <? a
+  else false.
+
+Definition swap_adjacent_custom (j : nat) (l : list nat) : list nat :=
+  match nth_error l j, nth_error l (S j) with
+  | Some a, Some b =>
+      if should_swap_custom_bool a b
+      then firstn j l ++ b :: a :: skipn (S (S j)) l
+      else l
+  | _, _ => l
   end.
 
-Fixpoint sort_array_impl (input : list nat) : list nat :=
-  match input with
-  | [] => []
-  | h :: t => insert_sorted h (sort_array_impl t)
+Fixpoint bubble_pass_custom_from (fuel j : nat) (l : list nat) : list nat :=
+  match fuel with
+  | O => l
+  | S fuel' => bubble_pass_custom_from fuel' (S j) (swap_adjacent_custom j l)
   end.
+
+Definition bubble_pass_custom (l : list nat) : list nat :=
+  bubble_pass_custom_from (length l - 1)%nat 0 l.
+
+Fixpoint bubble_sort_custom_fuel (fuel : nat) (l : list nat) : list nat :=
+  match fuel with
+  | O => l
+  | S fuel' => bubble_sort_custom_fuel fuel' (bubble_pass_custom l)
+  end.
+
+Definition sort_array_impl (input : list nat) : list nat :=
+  bubble_sort_custom_fuel (length input) input.
 
 (* 输入为非负整数列表（nat 已保证） *)
 Definition problem_116_pre (input : list nat) : Prop := True.

@@ -25,7 +25,8 @@ Definition is_at_most_two_digits (n : Z) : bool :=
 
 (* 1 <= length arr <= 100 且 1 <= k <= length arr *)
 Definition problem_122_pre (arr : list Z) (k : nat) : Prop :=
-  length arr >= 1 /\ length arr <= 100 /\ 1 <= k /\ k <= length arr.
+  (length arr >= 1)%nat /\ (length arr <= 100)%nat /\
+  (1 <= k)%nat /\ (k <= length arr)%nat.
 
 (* 定义程序规约 Spec *)
 Definition problem_122_spec (arr : list Z) (k : nat) (result : Z) : Prop :=

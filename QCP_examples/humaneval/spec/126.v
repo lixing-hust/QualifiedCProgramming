@@ -14,7 +14,6 @@ is_sorted([1, 2, 2, 2, 3, 4]) ➞ False *)
 
 Require Import Coq.Lists.List.
 Require Import Coq.Arith.Arith.
-Require Import Sorting.Sorted.
 Import ListNotations.
 
 
@@ -22,6 +21,13 @@ Import ListNotations.
 (* 仅非负整数（nat 已满足），无额外约束 *)
 Definition problem_126_pre (l : list nat) : Prop := True.
 
+Definition sorted_no_triple_nat (l : list nat) : Prop :=
+  (forall j, (1 <= j < length l)%nat ->
+    nth (j - 1) l 0 <= nth j l 0) /\
+  (forall j, (2 <= j < length l)%nat ->
+    ~ (nth j l 0 = nth (j - 1) l 0 /\
+       nth j l 0 = nth (j - 2) l 0)).
+
 (* 程序规约 (Spec) *)
 Definition problem_126_spec (l : list nat) (b : bool) : Prop :=
-  Sorted Nat.lt l <-> b = true.
+  sorted_no_triple_nat l <-> b = true.
