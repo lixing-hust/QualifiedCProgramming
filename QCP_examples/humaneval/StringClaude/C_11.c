@@ -9,7 +9,8 @@ Perform binary XOR on these inputs && return result also as a string.
 #include "char_array_def.h"
 
 /*@ Extern Coq (problem_11_pre_z: list Z -> list Z -> Prop)
-               (problem_11_spec_z: list Z -> list Z -> list Z -> Prop) */
+               (problem_11_spec_z: list Z -> list Z -> list Z -> Prop)
+               (ascii_range_z: list Z -> Prop) */
 /*@ Import Coq Require Import coins_11 */
 
 char *malloc_char_array(int n)
@@ -35,6 +36,8 @@ char *string_xor(char *a, char *b)
         Zlength(l2) == nb &&
         na == nb &&
         problem_11_pre_z(l1, l2) &&
+        ascii_range_z(l1) &&
+        ascii_range_z(l2) &&
         CharArray::full(a, na + 1, app(l1, cons(0, nil))) *
         CharArray::full(b, nb + 1, app(l2, cons(0, nil)))
     Ensure exists out_l n,
@@ -71,6 +74,8 @@ char *string_xor(char *a, char *b)
         Zlength(l2) == nb &&
         na == nb &&
         problem_11_pre_z(l1, l2) &&
+        ascii_range_z(l1) &&
+        ascii_range_z(l2) &&
         ((na <= nb && n == na) || (nb < na && n == nb)) &&
         0 <= i && i <= n &&
         n <= n1 && n <= n2 &&

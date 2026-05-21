@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -17,10 +17,8 @@ Local Open Scope list.
 Import naive_C_Rules.
 Require Import coins_11.
 Local Open Scope sac.
-From SimpleC.EE Require Import common_strategy_goal.
-From SimpleC.EE Require Import common_strategy_proof.
-From SimpleC.EE Require Import char_array_strategy_goal.
-From SimpleC.EE Require Import char_array_strategy_proof.
+Require Import char_array_strategy_goal.
+Require Import char_array_strategy_proof.
 
 (*----- Function string_xor -----*)
 
@@ -38,7 +36,9 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (re
   &&  [| ((Zlength (l1)) = na) |] 
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
-  &&  [| (problem_11_pre_z l1 l2 ) |]
+  &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |]
   &&  ((( &( "output" ) )) # Ptr  |->_)
   **  ((( &( "n" ) )) # Int  |->_)
   **  (CharArray.full b_pre (nb + 1 ) (app (l2) ((cons (0) (nil)))) )
@@ -69,7 +69,9 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (re
   &&  [| ((Zlength (l1)) = na) |] 
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
-  &&  [| (problem_11_pre_z l1 l2 ) |]
+  &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |]
   &&  ((( &( "n" ) )) # Int  |-> retval)
   **  ((( &( "n1" ) )) # Int  |-> retval_2)
   **  ((( &( "n2" ) )) # Int  |-> retval)
@@ -101,7 +103,9 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (re
   &&  [| ((Zlength (l1)) = na) |] 
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
-  &&  [| (problem_11_pre_z l1 l2 ) |]
+  &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |]
   &&  ((( &( "n" ) )) # Int  |-> retval_2)
   **  ((( &( "n1" ) )) # Int  |-> retval)
   **  ((( &( "n2" ) )) # Int  |-> retval_2)
@@ -134,7 +138,9 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (re
   &&  [| ((Zlength (l1)) = na) |] 
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
-  &&  [| (problem_11_pre_z l1 l2 ) |]
+  &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |]
   &&  (CharArray.undef_full retval_3 (retval_2 + 1 ) )
   **  ((( &( "n" ) )) # Int  |-> retval_2)
   **  ((( &( "n1" ) )) # Int  |-> retval)
@@ -157,6 +163,8 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (ou
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
   &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |] 
   &&  [| (nb < na) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= nb) |] 
@@ -186,6 +194,8 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (ou
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
   &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |] 
   &&  [| (nb < na) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= nb) |] 
@@ -218,6 +228,8 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (ou
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
   &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |] 
   &&  [| (na <= nb) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= na) |] 
@@ -251,6 +263,8 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (ou
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
   &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |] 
   &&  [| (na <= nb) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= na) |] 
@@ -284,6 +298,8 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (ou
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
   &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |] 
   &&  [| (na <= nb) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= na) |] 
@@ -317,6 +333,8 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (ou
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
   &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |] 
   &&  [| (na <= nb) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= na) |] 
@@ -347,6 +365,8 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (ou
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
   &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |] 
   &&  [| (na <= nb) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= na) |] 
@@ -384,7 +404,9 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (re
   &&  [| ((Zlength (l1)) = na) |] 
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
-  &&  [| (problem_11_pre_z l1 l2 ) |]
+  &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |]
   &&  (CharArray.full b_pre (nb + 1 ) (app (l2) ((cons (0) (nil)))) )
   **  (CharArray.full a_pre (na + 1 ) (app (l1) ((cons (0) (nil)))) )
 |--
@@ -403,7 +425,9 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (re
   &&  [| ((Zlength (l1)) = na) |] 
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
-  &&  [| (problem_11_pre_z l1 l2 ) |]
+  &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |]
   &&  (CharArray.full b_pre (nb + 1 ) (app (l2) ((cons (0) (nil)))) )
   **  (CharArray.full a_pre (na + 1 ) (app (l1) ((cons (0) (nil)))) )
 .
@@ -426,7 +450,9 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (re
   &&  [| ((Zlength (l1)) = na) |] 
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
-  &&  [| (problem_11_pre_z l1 l2 ) |]
+  &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |]
   &&  (CharArray.undef_full retval (retval_3 + 1 ) )
   **  ((( &( "n" ) )) # Int  |-> retval_3)
   **  ((( &( "n1" ) )) # Int  |-> retval_2)
@@ -439,6 +465,8 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (re
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
   &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |] 
   &&  [| (nb < na) |] 
   &&  [| (0 <= 0) |] 
   &&  [| (0 <= nb) |] 
@@ -459,6 +487,8 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (re
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
   &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |] 
   &&  [| (na <= nb) |] 
   &&  [| (0 <= 0) |] 
   &&  [| (0 <= na) |] 
@@ -485,6 +515,8 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (ou
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
   &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |] 
   &&  [| (na <= nb) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= na) |] 
@@ -503,6 +535,8 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (ou
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
   &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |] 
   &&  [| (nb < na) |] 
   &&  [| (0 <= (i + 1 )) |] 
   &&  [| ((i + 1 ) <= nb) |] 
@@ -521,6 +555,8 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (ou
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
   &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |] 
   &&  [| (na <= nb) |] 
   &&  [| (0 <= (i + 1 )) |] 
   &&  [| ((i + 1 ) <= na) |] 
@@ -545,6 +581,8 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (ou
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
   &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |] 
   &&  [| (na <= nb) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= na) |] 
@@ -563,6 +601,8 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (ou
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
   &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |] 
   &&  [| (nb < na) |] 
   &&  [| (0 <= (i + 1 )) |] 
   &&  [| ((i + 1 ) <= nb) |] 
@@ -581,6 +621,8 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (ou
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
   &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |] 
   &&  [| (na <= nb) |] 
   &&  [| (0 <= (i + 1 )) |] 
   &&  [| ((i + 1 ) <= na) |] 
@@ -604,6 +646,8 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (ou
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
   &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |] 
   &&  [| (na <= nb) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= na) |] 
@@ -644,7 +688,9 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) ,
   &&  [| ((Zlength (l1)) = na) |] 
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
-  &&  [| (problem_11_pre_z l1 l2 ) |]
+  &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |]
   &&  (CharArray.full a_pre (na + 1 ) (app (l1) ((cons (0) (nil)))) )
   **  (CharArray.full b_pre (nb + 1 ) (app (l2) ((cons (0) (nil)))) )
 |--
@@ -656,7 +702,9 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) ,
   &&  [| ((Zlength (l1)) = na) |] 
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
-  &&  [| (problem_11_pre_z l1 l2 ) |]
+  &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |]
   &&  (CharArray.full a_pre (na + 1 ) (app (l1) ((cons (0) (nil)))) )
   **  (CharArray.full b_pre (nb + 1 ) (app (l2) ((cons (0) (nil)))) )
 .
@@ -672,7 +720,9 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (re
   &&  [| ((Zlength (l1)) = na) |] 
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
-  &&  [| (problem_11_pre_z l1 l2 ) |]
+  &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |]
   &&  (CharArray.full a_pre (na + 1 ) (app (l1) ((cons (0) (nil)))) )
   **  (CharArray.full b_pre (nb + 1 ) (app (l2) ((cons (0) (nil)))) )
 |--
@@ -686,7 +736,9 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (re
   &&  [| ((Zlength (l1)) = na) |] 
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
-  &&  [| (problem_11_pre_z l1 l2 ) |]
+  &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |]
   &&  (CharArray.full b_pre (nb + 1 ) (app (l2) ((cons (0) (nil)))) )
   **  (CharArray.full a_pre (na + 1 ) (app (l1) ((cons (0) (nil)))) )
 .
@@ -708,7 +760,9 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (re
   &&  [| ((Zlength (l1)) = na) |] 
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
-  &&  [| (problem_11_pre_z l1 l2 ) |]
+  &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |]
   &&  ((( &( "n" ) )) # Int  |-> retval)
   **  ((( &( "n1" ) )) # Int  |-> retval_2)
   **  ((( &( "n2" ) )) # Int  |-> retval)
@@ -739,7 +793,9 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (re
   &&  [| ((Zlength (l1)) = na) |] 
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
-  &&  [| (problem_11_pre_z l1 l2 ) |]
+  &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |]
   &&  (CharArray.full b_pre (nb + 1 ) (app (l2) ((cons (0) (nil)))) )
   **  (CharArray.full a_pre (na + 1 ) (app (l1) ((cons (0) (nil)))) )
 |--
@@ -759,7 +815,9 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (re
   &&  [| ((Zlength (l1)) = na) |] 
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
-  &&  [| (problem_11_pre_z l1 l2 ) |]
+  &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |]
   &&  (CharArray.full b_pre (nb + 1 ) (app (l2) ((cons (0) (nil)))) )
   **  (CharArray.full a_pre (na + 1 ) (app (l1) ((cons (0) (nil)))) )
 .
@@ -773,6 +831,8 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (ou
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
   &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |] 
   &&  [| (na <= nb) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= na) |] 
@@ -791,6 +851,8 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (ou
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
   &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |] 
   &&  [| (na <= nb) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= na) |] 
@@ -813,6 +875,8 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (ou
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
   &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |] 
   &&  [| (na <= nb) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= na) |] 
@@ -832,6 +896,8 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (ou
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
   &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |] 
   &&  [| (na <= nb) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= na) |] 
@@ -856,6 +922,8 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (ou
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
   &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |] 
   &&  [| (na <= nb) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= na) |] 
@@ -876,6 +944,8 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (ou
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
   &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |] 
   &&  [| (na <= nb) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= na) |] 
@@ -900,6 +970,8 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (ou
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
   &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |] 
   &&  [| (na <= nb) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= na) |] 
@@ -920,6 +992,8 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (ou
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
   &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |] 
   &&  [| (na <= nb) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= na) |] 
@@ -941,6 +1015,8 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (ou
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
   &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |] 
   &&  [| (na <= nb) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= na) |] 
@@ -960,6 +1036,8 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (ou
   &&  [| ((Zlength (l2)) = nb) |] 
   &&  [| (na = nb) |] 
   &&  [| (problem_11_pre_z l1 l2 ) |] 
+  &&  [| (ascii_range_z l1 ) |] 
+  &&  [| (ascii_range_z l2 ) |] 
   &&  [| (na <= nb) |] 
   &&  [| (0 <= i) |] 
   &&  [| (i <= na) |] 
@@ -976,7 +1054,6 @@ forall (b_pre: Z) (a_pre: Z) (nb: Z) (na: Z) (l2: (@list Z)) (l1: (@list Z)) (ou
 
 Module Type VC_Correct.
 
-Include common_Strategy_Correct.
 Include char_array_Strategy_Correct.
 
 Axiom proof_of_string_xor_safety_wit_1 : string_xor_safety_wit_1.

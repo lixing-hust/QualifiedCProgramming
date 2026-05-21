@@ -6,7 +6,7 @@ Require Import Coq.Classes.RelationClasses.
 Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
-From AUXLib Require Import int_auto Axioms Feq Idents List_lemma VMap.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass. Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 From SimpleC.EE Require Import C_11_goal.
@@ -51,7 +51,7 @@ Proof.
   intros k Hk.
   destruct (Z_lt_ge_dec k i).
   - rewrite app_Znth1 by lia.
-    apply H13. lia.
+    apply H15. lia.
   - assert (k = i) by lia. subst k.
     rewrite app_Znth2 by lia.
     replace (i - Zlength out_l_2) with 0 by lia.
@@ -73,7 +73,7 @@ Proof.
   intros k Hk.
   destruct (Z_lt_ge_dec k i).
   - rewrite app_Znth1 by lia.
-    apply H13. lia.
+    apply H15. lia.
   - assert (k = i) by lia. subst k.
     rewrite app_Znth2 by lia.
     replace (i - Zlength out_l_2) with 0 by lia.
@@ -96,7 +96,7 @@ Proof.
   rewrite Hout_len.
   rewrite (CharArray.undef_seg_empty output (na + 1)).
   entailer!.
-  apply problem_11_spec_z_intro with (n := na); try lia.
+  apply problem_11_spec_z_intro with (n := na); try lia; try assumption.
   intros k Hk.
-  apply H12. lia.
+  apply H14. lia.
 Qed.

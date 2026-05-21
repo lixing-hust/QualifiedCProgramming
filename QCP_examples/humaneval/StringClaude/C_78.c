@@ -16,13 +16,57 @@ For num = "ABED1A33" the output should be 4.
 For num = "123456789ABCDEF0" the output should be 6.
 For num = "2020" the output should be 2.
 */
-#include<stdio.h>
-#include<string.h>
-int hex_key(const char* num){
-    const char* key="2357BD";
-    int out=0;
-    for (size_t i=0;i<strlen(num);i++)
-    if (strchr(key,num[i])!=NULL) out+=1;
+#include "verification_stdlib.h"
+#include "verification_list.h"
+#include "char_array_def.h"
+
+/*@ Extern Coq (problem_78_pre_z: list Z -> Prop)
+               (problem_78_spec_z: list Z -> Z -> Prop)
+               (ascii_range_z: list Z -> Prop)
+               (count_prime_hex_upto: Z -> list Z -> Z) */
+/*@ Import Coq Require Import coins_78 */
+
+int strlen(char *s)
+/*@ With l n
+    Require CharArray::full(s, n + 1, app(l, cons(0, nil)))
+    Ensure __return == n &&
+           CharArray::full(s, n + 1, app(l, cons(0, nil)))
+*/
+;
+
+int hex_key(char *num)
+/*@ With l len
+    Require
+        0 <= len && len < INT_MAX &&
+        Zlength(l) == len &&
+        problem_78_pre_z(l) &&
+        ascii_range_z(l) &&
+        CharArray::full(num, len + 1, app(l, cons(0, nil)))
+    Ensure
+        problem_78_spec_z(l, __return) &&
+        CharArray::full(num, len + 1, app(l, cons(0, nil)))
+*/
+{
+    int out = 0;
+    int n = strlen(num) /*@ where l = l, n = len */;
+    int i;
+    /*@ Inv Assert
+        num == num@pre &&
+        n == len &&
+        0 <= n && n < INT_MAX &&
+        Zlength(l) == n &&
+        problem_78_pre_z(l) &&
+        ascii_range_z(l) &&
+        0 <= i && i <= n &&
+        0 <= out && out <= i &&
+        out == count_prime_hex_upto(i, l) &&
+        CharArray::full(num, n + 1, app(l, cons(0, nil)))
+    */
+    for (i = 0; i < n; i++) {
+        if (num[i] == 50 || num[i] == 51 || num[i] == 53 ||
+            num[i] == 55 || num[i] == 66 || num[i] == 68) {
+            out = out + 1;
+        }
+    }
     return out;
 }
-
