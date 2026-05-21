@@ -21,55 +21,19 @@ Definition is_sentence_delimiter (c : ascii) : bool :=
   | _ => false
   end.
 
-Fixpoint split_aux (p : ascii -> bool) (s : string) (current : string) : list string :=
-  match s with
-  | "" => [current]
+Fixpoint is_bored_aux (S : string) (isstart isi : bool) : nat :=
+  match S with
+  | "" => 0
   | String c rest =>
-    if p c then
-      current :: split_aux p rest ""
-    else
-      split_aux p rest (current ++ String c "")
+    let add := if andb (Ascii.eqb c " "%char) isi then 1 else 0 in
+    let isi' := if andb (Ascii.eqb c "I"%char) isstart then true else false in
+    let isstart_after_char := if Ascii.eqb c " "%char then isstart else false in
+    let isstart' := if is_sentence_delimiter c then true else isstart_after_char in
+    add + is_bored_aux rest isstart' isi'
   end.
-Definition split (p : ascii -> bool) (s : string) : list string :=
-  split_aux p s "".
-
-Definition is_whitespace (c : ascii) : bool :=
-  match c with
-  | " "%char => true
-  | _ => false
-  end.
-
-Fixpoint trim_leading_whitespace (s : string) : string :=
-  match s with
-  | String c rest =>
-    if is_whitespace c then
-      trim_leading_whitespace rest
-    else
-      s
-  | "" => ""
-  end.
-
-Definition prefix (p s : string) : bool :=
-  let fix pre p s :=
-    match p, s with
-    | EmptyString, _ => true
-    | String c1 p', String c2 s' =>
-      if Ascii.eqb c1 c2 then
-        pre p' s'
-      else
-        false
-    | _, _ => false
-    end
-  in pre p s.
-
-Definition is_boredom_sentence_new (s : string) : bool :=
-  prefix "I" s.
 
 Definition is_bored_impl (S : string) : nat :=
-  let initial := split is_sentence_delimiter S in
-  let cleaned := map trim_leading_whitespace initial in
-  let boredoms := filter is_boredom_sentence_new cleaned in
-  length boredoms.
+  is_bored_aux S true false.
 
 (* 输入字符串可为任意内容，无额外约束 *)
 Definition problem_91_pre (S : string) : Prop := True.

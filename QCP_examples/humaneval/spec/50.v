@@ -22,8 +22,18 @@ Definition decode_char (c : ascii) : ascii :=
   let a := nat_of_ascii "a"%char in
   ascii_of_nat (a + (n - a + 21) mod 26).
 
-(* Pre: no special constraints for `decode_shift` *)
-Definition problem_50_pre (l' : string) : Prop := True.
+Definition is_lowercase_ascii (c : ascii) : Prop :=
+  let n := nat_of_ascii c in
+  (nat_of_ascii "a"%char <= n <= nat_of_ascii "z"%char)%nat.
+
+Fixpoint all_lowercase_ascii (s : string) : Prop :=
+  match s with
+  | EmptyString => True
+  | String c rest => is_lowercase_ascii c /\ all_lowercase_ascii rest
+  end.
+
+(* Pre: `decode_shift` is specified for lowercase alphabetic strings. *)
+Definition problem_50_pre (l' : string) : Prop := all_lowercase_ascii l'.
 
 (* decode_shift 程序的规约 *)
 Definition problem_50_spec (l' l : string) : Prop :=

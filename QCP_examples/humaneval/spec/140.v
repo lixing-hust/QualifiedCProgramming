@@ -18,55 +18,32 @@ Definition space : ascii := " ".
 Definition underscore : ascii := "_".
 Definition dash : ascii := "-".
 
-(*
-  辅助函数: `skip_spaces input`
-  移除输入列表的所有前导空格。
-*)
-Fixpoint skip_spaces (l : list ascii) : list ascii :=
-  match l with
-  | [] => []
-  | c :: tl =>
-      if Ascii.ascii_dec c space then
-        skip_spaces tl
-      else
-        l
+Definition flush_spaces (n : nat) : list ascii :=
+  match n with
+  | 0 => []
+  | 1 => [underscore]
+  | 2 => [underscore; underscore]
+  | _ => [dash]
   end.
 
 (*
   核心函数: `fix_spaces_func input`
-  使用 Fixpoint 实现 fix_spaces 逻辑。
-  由于需要处理连续空格并跳过它们，简单的结构递归可能不够直接。
-  这里使用 fuel (gas) 来保证终止性，或者使用更复杂的递归结构。
-  鉴于 Coq 的结构递归限制，我们使用 fuel。
+  pending 记录当前尚未输出的连续空格段长度。
+  遇到非空格时先输出 pending 空格段，再输出当前字符。
 *)
-Fixpoint fix_spaces_func (fuel : nat) (l : list ascii) : list ascii :=
-  match fuel with
-  | 0 => [] (* Should not happen if fuel is large enough *)
-  | S n =>
-      match l with
-      | [] => []
-      | c :: tl =>
-          if Ascii.ascii_dec c space then
-            match tl with
-            | [] => [underscore] (* Single space at end *)
-            | c2 :: tl2 =>
-                if Ascii.ascii_dec c2 space then
-                  (* More than 2 consecutive spaces (current space + next space) *)
-                  (* Replace all consecutive spaces with - *)
-                  dash :: fix_spaces_func n (skip_spaces tl2)
-                else
-                  (* Single space followed by non-space *)
-                  underscore :: fix_spaces_func n tl
-            end
-          else
-            c :: fix_spaces_func n tl
-      end
+Fixpoint fix_spaces_scan (l : list ascii) (pending : nat) : list ascii :=
+  match l with
+  | [] => flush_spaces pending
+  | c :: tl =>
+      if Ascii.ascii_dec c space then
+        fix_spaces_scan tl (S pending)
+      else
+        flush_spaces pending ++ c :: fix_spaces_scan tl 0
   end.
 
-(* 包装函数，提供足够的 fuel *)
 Definition fix_spaces (s : string) : string :=
   let l := list_ascii_of_string s in
-  string_of_list_ascii (fix_spaces_func (length l + 1) l).
+  string_of_list_ascii (fix_spaces_scan l 0).
 
 (* 输入文本任意 *)
 Definition problem_140_pre (s : string) : Prop := True.
@@ -76,4 +53,3 @@ Definition problem_140_pre (s : string) : Prop := True.
 *)
 Definition problem_140_spec (s : string) (output : string) : Prop :=
   output = fix_spaces s.
-

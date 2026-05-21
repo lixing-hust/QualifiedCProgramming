@@ -32,7 +32,17 @@ Definition char_relation (c_in c_out : ascii) : Prop :=
   | _ => c_out = c_in
   end.
 
-Definition problem_89_pre (s : string) : Prop := True.
+Definition is_lowercase_ascii (c : ascii) : Prop :=
+  let n := nat_of_ascii c in
+  (nat_of_ascii "a"%char <= n <= nat_of_ascii "z"%char)%nat.
+
+Fixpoint all_lowercase_ascii (s : string) : Prop :=
+  match s with
+  | EmptyString => True
+  | String c rest => is_lowercase_ascii c /\ all_lowercase_ascii rest
+  end.
+
+Definition problem_89_pre (s : string) : Prop := all_lowercase_ascii s.
 
 (*
   encrypt_spec (程序规约)
