@@ -30,6 +30,32 @@ description: "中文精简流程：用于 humaneval/IntClaude、IntArrayClaude �
 11. 数组程序若涉及写入，必须在 invariant 中区分“已写前缀/未写后缀”。
 12. 字符串程序禁止把 Coq `string` 规格直接当作 `CharArray` 内存规格，必须明确二者表示桥接。
 13. 字符串输出必须显式证明末尾 `0` 终止符。
+14. **验证时必须使用原始规格文件中的 pre 和 spec，这是硬验收标准。**
+   - 目标题目的函数规格必须以 `QCP_examples/humaneval/spec/XX.v` 中已有的 `problem_XX_pre` / `problem_XX_spec` 为题意来源。
+   - 在 `coins_XX.v` 中可以定义 `problem_XX_pre_z` / `problem_XX_spec_z` 作为 C 层 `list Z`、`Z`、数组内存表示到原始规格的桥接 wrapper，但 wrapper 的定义体必须直接调用原始 `problem_XX_pre` / `problem_XX_spec`。
+   - wrapper 必须是“纯原规格桥接”：除必要的格式转换、类型转换、`bool_of_z` / `Z.to_nat` / `string_of_list_z` 等表示转换外，不得额外加入题目语义条件、C 层操作式条件或加强后的结果性质。
+   - 允许额外补充的内容只有：
+     - `CharArray` / `IntArray` / 指针资源条件；
+     - `Z` 与 `nat`、`list Z` 与 Coq `string/ascii`、C 数组与原始 list 表示之间的表示转换关系；
+     - C signed int 溢出安全前提、长度非负、分配大小安全等运行安全条件。
+     这些条件应写在 C annotation 的 `Require`、循环 invariant 或内部 bridge lemma 前提中，不写进最终 `problem_XX_pre_z` / `problem_XX_spec_z` wrapper。
+   - 禁止把题目语义重新写成一个独立的操作式 `_z` 规格后直接用于 C 后置条件。例如禁止只写：
+     ```coq
+     Definition problem_XX_spec_z (...) : Prop := (* 自己重写算法语义 *)
+     ```
+     然后让 C 的 `Ensure` 只证明这个新规格。
+   - 合格写法必须能在 `coins_XX.v` 中直接看到原始规格调用，例如字符串题应类似：
+     ```coq
+     Definition problem_XX_pre_z (l : list Z) : Prop :=
+       problem_XX_pre (string_of_list_z l).
+
+     Definition problem_XX_spec_z (input output : list Z) : Prop :=
+       problem_XX_spec (string_of_list_z input) (string_of_list_z output).
+     ```
+     如果需要保证 `string_of_list_z` 对底层 `Z` 字符码的单射性，应在 C annotation 中加入 `ascii_range_z(l)`，再在内部引理中由 `problem_XX_pre_z l /\ ascii_range_z l` 推出 C 层需要的范围事实。不要把 `ascii_range_z` 或逐点 C 语义塞进 wrapper。
+     数组题也必须类似地通过表示关系调用原始 `problem_XX_pre` / `problem_XX_spec`。
+   - 如果原始 `spec/XX.v` 与文件开头题意注释或原 C 可观察行为不一致，必须暂停验证并询问用户；未经用户许可不得修改原 spec，也不得绕过原 spec 自建 `_z` 规格继续标记为“已验证”。
+   - 如果因工具限制临时证明了一个 C 层操作式规格，状态只能记为“C 层规格通过，未完成原始 spec 桥接”，不得记为“已全链通过”。
 
 ## 端到端流程
 
@@ -60,7 +86,7 @@ description: "中文精简流程：用于 humaneval/IntClaude、IntArrayClaude �
 - 将裸 `malloc/free/qsort` 改为带规格的通用 wrapper；排序 wrapper 必须保持通用。
 - 返回 `IntArray` 值的程序可参考已验证例子改为 `IntArray *` 加结构体分配 wrapper，但不得借此改变输出内容、顺序或大小语义。
 - 给目标函数补最小前后条件骨架；数组资源必须写清 `full/seg/undef_seg`。
-- 新增或更新 `coins_XX.v`，至少包含 `Load "../spec/XX".` 和 C 层需要的 Z/list bridge 定义。
+- 新增或更新 `coins_XX.v`，至少包含 `Load "../spec/XX".` 和 C 层需要的 Z/list bridge 定义；最终 `problem_XX_pre_z` / `problem_XX_spec_z` 必须直接调用原始 `problem_XX_pre` / `problem_XX_spec`，不能只重新定义题意。
 - 格式转换阶段不要主动堆复杂 loop invariant，也不要生成正式 `goal/proof` 文件，除非用户明确要求直接进入验证。
 
 格式转换后快速自检：
@@ -69,6 +95,7 @@ description: "中文精简流程：用于 humaneval/IntClaude、IntArrayClaude �
 - 是否只把通用库函数做成未实现 wrapper。
 - 是否没有把题目语义塞进通用 `sort_int_array`。
 - 临时数组若不返回，是否有释放或后置条件中保留资源。
+- `coins_XX.v` 中最终用于 C 前后条件的 wrapper 是否能直接看到原始 `problem_XX_pre` / `problem_XX_spec` 调用；只有 `Load "../spec/XX".` 不算使用原 spec。
 
 ### 4) 规格与初始注解审查
 
@@ -89,6 +116,7 @@ description: "中文精简流程：用于 humaneval/IntClaude、IntArrayClaude �
   - 访问元素缺边界/溢出安全条件
   - 字符串的 `string/ascii` 规格与 `list Z` 内存模型不一致
   - 输出字符串缺少 `app(out_l, cons(0, nil))` 终止符
+  - `coins_XX.v` 只加载了 `spec/XX.v`，但最终后置条件没有直接调用原始 `problem_XX_spec`
 
 ### 6) 重建不变式与桥接
 
@@ -97,6 +125,7 @@ description: "中文精简流程：用于 humaneval/IntClaude、IntArrayClaude �
   - 循环状态能映射到规格
   - 关键蕴含关系明确（如 `has==0 -> prod==1`）
 - 在 `coins_XX.v` 只补必要桥接引理（局部、可解释、可维护）。
+- 可以定义操作式辅助函数来帮助证明循环不变式，但最终暴露给 C 前后条件的 `problem_XX_pre_z` / `problem_XX_spec_z` 必须是原始 `problem_XX_pre` / `problem_XX_spec` 的表示桥接 wrapper；否则不能标记为完整验证。
 - 数组程序 invariant 必须同时包含：
   - 语义线：前缀/累计量与 `list` 语义的关系
   - 内存线：数组所有权与已写/未写区间的分割
@@ -157,6 +186,13 @@ linux-binary/symexec \
 
 ### 9) 全链编译验收
 
+先做原始 spec 直连验收：
+
+- 打开 `coins_XX.v`，检查最终用于 C `Require` / `Ensure` 的 `problem_XX_pre_z` / `problem_XX_spec_z`。
+- 必须确认它们直接调用 `spec/XX.v` 中的原始 `problem_XX_pre` / `problem_XX_spec`。
+- 仅出现 `Load "../spec/XX".` 不合格；仅有同名 `_z` 操作式定义也不合格。
+- 若存在操作式中间规格，必须同时有无 `Admitted` 的桥接定理，并在最终 wrapper 或最终证明路径中连接到原始 spec。
+
 依次编译：
 
 1. `coins_XX.v`
@@ -191,6 +227,10 @@ linux-binary/symexec \
   - `grep -nE "Admitted\\.|Axiom[[:space:]]" coins_XX.v C_XX_proof_manual.v || true`
   - 同时用 **rocq-mcp 的 `rocq-verify`** 二次确认无 Axiom 引入。
 - 将本题遇到的问题、解决办法、是否有格式转换中的行为适配，更新到对应 progress 文档。
+- progress 中必须明确写清：
+  - “已直接桥接原始 `spec/XX.v` pre/spec”；或
+  - “仅 C 层规格通过，尚未完成原始 spec 桥接”。
+  不能把后者写成“已全链通过”。
 - 汇报：改了什么、为什么、编译结果、扫描结果、剩余风险。
 
 ## 标准命令模板
@@ -303,9 +343,10 @@ coqc $COQINCLUDES C_XX_goal_check.v
 - 动态扩容：
   - `realloc` 属于通用库函数，但它涉及旧块所有权迁移、失败分支和容量变化，当前验证中通常不宜随手改成固定容量。
   - 如果必须把动态扩容适配为固定容量、强前置条件或其他内存策略，这属于可能影响可观察行为的容量策略变化，必须先暂停询问用户。
-- 操作式 Z 层规格：
-  - 当 `../spec/XX.v` 的 nat/list 规格不方便直接接 C 语义，可以在 `coins_XX.v` 中建立 Z 层操作式规格。
-  - 必须在 progress 中说明它是否已经与原 spec 完全桥接；未桥接时写清剩余风险。
+- 操作式 Z 层辅助定义：
+  - 当 `../spec/XX.v` 的 nat/list/string 规格不方便直接用于循环 invariant，可以在 `coins_XX.v` 中建立 Z 层操作式辅助函数或中间谓词。
+  - 这些辅助定义只能服务于证明过程，不能替代最终题意规格。
+  - 最终 `problem_XX_pre_z` / `problem_XX_spec_z` 必须直接桥接到原始 `problem_XX_pre` / `problem_XX_spec`；未桥接时写清剩余风险，并且不得标记为“已全链通过”。
 
 ### G. 参考文档
 
@@ -344,7 +385,9 @@ coqc $COQINCLUDES C_XX_goal_check.v
   - `41`: `')'`
   - `48`: `'0'`
   - `49`: `'1'`
-- 若 `spec/*.v` 使用 Coq `string/ascii`，必须在 `coins_XX.v` 中建立桥接，或先定义等价的 `list Z` 版本规格。
+- 若 `spec/*.v` 使用 Coq `string/ascii`，必须在 `coins_XX.v` 中建立从 `list Z` 到原始 `string/ascii` 的表示桥接。
+- 禁止只定义“等价的 `list Z` 版本规格”后直接作为最终规格；最终 wrapper 必须调用原始 `problem_XX_pre` / `problem_XX_spec`。
+- `problem_XX_pre_z` / `problem_XX_spec_z` 必须保持纯原规格 wrapper。`ascii_range_z`、底层小写范围、二进制字符码 `48/49`、C 层逐点变换、membership、palindrome 等操作式条件只能写在 C annotation 或内部 bridge lemma 前提中。
 
 ### D. 字符串 invariant 模板
 
@@ -364,8 +407,9 @@ coqc $COQINCLUDES C_XX_goal_check.v
   - 输出长度表达式不溢出，如 `2 * n + 1`、`n + add + 1`
   - 循环访问满足 `0 <= i && i < n`
 - 针对题目字符集补前提：
-  - 二进制字符串：每个字符是 `48` 或 `49`
-  - 括号字符串：每个字符是 `40`、`41` 或 `32`
+  - 如果原 pre 已经在 Coq `string` 层限制字符集，C annotation 通常只补 `ascii_range_z(l)`，再由原 pre 加 `ascii_range_z` 推出底层 `Z` 字符码范围。
+  - 如果原 pre 没有提供足够字符集信息，暂停询问用户是否修改原 pre；不要私自在 wrapper 中加题目语义条件。
+  - 二进制字符串的底层 `48/49`、小写字母的底层 `97..122` 等事实应作为内部引理结论使用，不作为最终 wrapper 的额外 conjunct。
 
 ### F. 参考依据
 

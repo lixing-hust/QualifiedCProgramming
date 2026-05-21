@@ -128,7 +128,7 @@ Common codes:
 - `48` means `'0'`
 - `49` means `'1'`
 
-When writing specs for `StringClaude`, prefer using these numeric codes in C annotations and `coins_XX.v` helper predicates, unless a clean bridge from Coq `ascii/string` has already been built.
+When writing C annotations and loop invariants for `StringClaude`, numeric codes are often the most convenient C-layer model. However, the final `problem_XX_pre_z` / `problem_XX_spec_z` wrappers in `coins_XX.v` must still call the original `spec/XX.v` pre/spec; numeric-code predicates are internal bridge facts, not the final problem specification.
 
 ## 5. Strategy Support
 
@@ -274,49 +274,105 @@ So there is a representation gap:
 - Coq spec: `string` / `ascii`
 - QCP memory: `list Z` of character codes
 
-There are two practical approaches.
+The accepted workflow is to build a bridge to the original spec. A standalone `list Z` spec may be useful as an internal invariant, but it is not an acceptable final specification.
 
-### Approach A: Build a Bridge
+### Required Approach: Pure Original-Spec Wrappers
 
-Define helper functions in `coins_XX.v`:
-
-```coq
-ascii_to_Z : ascii -> Z
-Z_to_ascii : Z -> ascii
-string_to_Zlist : string -> list Z
-Zlist_to_string : list Z -> string
-```
-
-Then relate:
+Use the shared bridge functions from `string_bridge.v`:
 
 ```coq
-problem_XX_spec input_string output_string
+string_of_list_z : list Z -> string
+bool_of_z : Z -> bool
 ```
 
-to:
+Then define wrappers that only perform representation conversion and directly call the original pre/spec:
 
 ```coq
-CharArray::full(input_ptr, n + 1, app(input_l, cons(0, nil)))
+Definition problem_XX_pre_z (input : list Z) : Prop :=
+  problem_XX_pre (string_of_list_z input).
+
+Definition problem_XX_spec_z (input output : list Z) : Prop :=
+  problem_XX_spec (string_of_list_z input) (string_of_list_z output).
 ```
 
-This is more faithful to the existing `spec/*.v`, but it can add proof overhead.
-
-### Approach B: Use a `list Z` Version of the Spec
-
-For first-pass verification, define a local `list Z` version of the spec in `coins_XX.v`, and prove or record later that it corresponds to the original `string` spec.
-
-This is often easier for `StringClaude`, because the program itself reads and writes numeric character codes.
-
-Example for binary string XOR:
+For boolean-returning functions:
 
 ```coq
-forall k,
-  0 <= k < n ->
-  ((Znth k a 0 = Znth k b 0 /\ Znth k out 0 = 48) \/
-   (Znth k a 0 <> Znth k b 0 /\ Znth k out 0 = 49)).
+Definition problem_XX_spec_z (input : list Z) (output : Z) : Prop :=
+  problem_XX_spec (string_of_list_z input) (bool_of_z output).
 ```
 
-This matches the C code directly.
+For length/count-returning functions, use only the necessary type conversion:
+
+```coq
+Definition problem_XX_spec_z (input : list Z) (output : Z) : Prop :=
+  problem_XX_spec (string_of_list_z input) (Z.to_nat output).
+```
+
+Do not add extra semantic conjuncts to these wrappers. For example, avoid:
+
+```coq
+Definition problem_XX_spec_z input output :=
+  c_layer_pointwise_spec input output /\
+  problem_XX_spec (string_of_list_z input) (string_of_list_z output).
+```
+
+Instead, put the C-layer condition in an internal bridge lemma:
+
+```coq
+Lemma problem_XX_spec_z_intro :
+  forall input output,
+    c_layer_pointwise_spec input output ->
+    problem_XX_spec_z input output.
+```
+
+### Representation Conditions Belong in C Annotations
+
+`string_of_list_z` maps each `Z` through `ascii_of_z`, so it is not injective unless we know the underlying values are in a byte range. For example, different `Z` values can map to the same `ascii` character.
+
+Therefore, if a proof needs to move from Coq `ascii` equality back to C-level integer equality, put a representation condition in the C annotation:
+
+```c
+Require
+    problem_XX_pre_z(l) &&
+    ascii_range_z(l) &&
+    CharArray::full(s, n + 1, app(l, cons(0, nil)))
+```
+
+and keep it in the loop invariant when later bridge lemmas need it:
+
+```c
+problem_XX_pre_z(l) &&
+ascii_range_z(l) &&
+...
+```
+
+Then prove helper lemmas in `coins_XX.v`, for example:
+
+```coq
+problem_11_pre_z a b ->
+ascii_range_z a ->
+0 <= k < Zlength a ->
+Znth k a 0 = 48 \/ Znth k a 0 = 49.
+```
+
+This pattern keeps the final wrapper pure while giving the C proof enough representation information.
+
+### What To Do If The Original Pre/Spec Is Too Weak
+
+If the original `problem_XX_pre/spec` cannot imply the semantic fact needed for the C program, stop and ask before changing `spec/XX.v`.
+
+Allowed without asking:
+
+- Add representation conditions such as `ascii_range_z` to C `Require` / invariant.
+- Add internal C-layer helper predicates such as pointwise transforms, membership prefixes, palindrome predicates, or state-machine prefixes.
+- Prove bridge lemmas from those internal facts to the pure original wrapper.
+
+Not allowed without asking:
+
+- Add extra semantic conjuncts to `problem_XX_pre_z/spec_z`.
+- Replace the final postcondition with an independently redefined `list Z` spec.
+- Modify `spec/XX.v`.
 
 ## 8. Common String Function Templates
 
@@ -528,13 +584,14 @@ Use it to understand which memory transformations are automatic:
 ## 12. Recommended Workflow for StringClaude
 
 1. Replace raw libc style with QCP style headers and external specs.
-2. Decide the internal representation of the string spec:
-   - bridge to Coq `string`, or
-   - use a `list Z` spec in `coins_XX.v`
+2. Define pure original-spec wrappers in `coins_XX.v`:
+   - `problem_XX_pre_z` must directly call original `problem_XX_pre`
+   - `problem_XX_spec_z` or the task-specific final wrapper must directly call original `problem_XX_spec`
+   - use `string_of_list_z`, `bool_of_z`, `Z.to_nat`, or similar conversion only
 3. Write preconditions with:
    - string memory `CharArray::full(..., app(l, cons(0,nil)))`
    - length bounds
-   - character-range constraints
+   - representation constraints such as `ascii_range_z(l)` when bridge lemmas need injectivity
    - output-size safety bounds
 4. Write invariants with:
    - loop index bounds
@@ -560,4 +617,3 @@ Use it to understand which memory transformations are automatic:
 - Are all length expressions within `INT_MAX`?
 
 If any answer is unclear, fix the specification or C shape first before attempting proof.
-
