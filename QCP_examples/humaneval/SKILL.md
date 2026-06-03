@@ -25,12 +25,17 @@ description: "中文精简流程：用于 humaneval/IntClaude、IntArrayClaude �
 6. `sort_int_array` 必须保持通用排序函数规格，不得在后置条件加入当前题目的语义约束；题目相关结论放在 `coins_XX.v` 的 bridge 引理中证明。
 7. 优先复用题目规格文件已有定义，少造新谓词和大引理。
 8. 每次改注解、C 语句或桥接逻辑后，必须重新 symexec 生成 goal 文件。
-9. 证明失败先回查信息是否不足，避免盲目堆引理。
-10. 数组程序禁止在未说明内存所有权的情况下读取数组元素。
-11. 数组程序若涉及写入，必须在 invariant 中区分“已写前缀/未写后缀”。
-12. 字符串程序禁止把 Coq `string` 规格直接当作 `CharArray` 内存规格，必须明确二者表示桥接。
-13. 字符串输出必须显式证明末尾 `0` 终止符。
-14. **验证时必须使用原始规格文件中的 pre 和 spec，这是硬验收标准。**
+9. **严禁手动修改 `C_XX_goal.v`、`C_XX_proof_auto.v`、`C_XX_goal_check.v`。**
+   - 这三个文件必须始终保持 `symexec` 原样生成状态，只能通过重新运行 `symexec` 更新。
+   - 可以阅读它们来定位 VC，但不能手工补 scope、改 import、改定义、改 proof、删改生成内容。
+   - 如果这三个生成文件编译失败，必须回到源头修正 `C_XX.c` annotation、`coins_XX.v`、原始 `spec/XX.v`（需用户许可时先询问）或 symexec 调用参数，然后重新生成；不得直接 patch 生成文件。
+   - 只有 `C_XX_proof_manual.v` 是允许手写/回填证明的生成配套文件。
+10. 证明失败先回查信息是否不足，避免盲目堆引理。
+11. 数组程序禁止在未说明内存所有权的情况下读取数组元素。
+12. 数组程序若涉及写入，必须在 invariant 中区分“已写前缀/未写后缀”。
+13. 字符串程序禁止把 Coq `string` 规格直接当作 `CharArray` 内存规格，必须明确二者表示桥接。
+14. 字符串输出必须显式证明末尾 `0` 终止符。
+15. **验证时必须使用原始规格文件中的 pre 和 spec，这是硬验收标准。**
    - 目标题目的函数规格必须以 `QCP_examples/humaneval/spec/XX.v` 中已有的 `problem_XX_pre` / `problem_XX_spec` 为题意来源。
    - 在 `coins_XX.v` 中可以定义 `problem_XX_pre_z` / `problem_XX_spec_z` 作为 C 层 `list Z`、`Z`、数组内存表示到原始规格的桥接 wrapper，但 wrapper 的定义体必须直接调用原始 `problem_XX_pre` / `problem_XX_spec`。
    - wrapper 必须是“纯原规格桥接”：除必要的格式转换、类型转换、`bool_of_z` / `Z.to_nat` / `string_of_list_z` 等表示转换外，不得额外加入题目语义条件、C 层操作式条件或加强后的结果性质。
@@ -146,6 +151,8 @@ description: "中文精简流程：用于 humaneval/IntClaude、IntArrayClaude �
 - `C_XX_goal_check.v`
 
 禁止在旧 goal 上继续证明。**每次修改注解或 coins 文件后文件行数会变化，必须重新 symexec 到文件尾获取最新完整 witness 列表。**
+
+其中 `C_XX_goal.v`、`C_XX_proof_auto.v`、`C_XX_goal_check.v` 只能由 `symexec` 生成，严禁手工编辑；如果它们有 import、scope、VC 形状或编译问题，必须修源文件/规格/桥接/命令参数后重新生成。`C_XX_proof_manual.v` 可以回填手写证明。
 
 HumanEval 目录下生成文件命名以当前仓库为准：`IntArrayClaude` 已有样例使用 `C_XX_proof_auto.v` / `C_XX_proof_manual.v`，不要误写成旧的 `C_XX_auto.v` / `C_XX_manual.v`。
 
