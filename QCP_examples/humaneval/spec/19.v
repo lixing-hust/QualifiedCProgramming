@@ -76,14 +76,12 @@ Fixpoint SplitOnSpaces_aux (current_group : list ascii) (S : string) : list stri
 Definition SplitOnSpaces (S : string) : list string :=
   SplitOnSpaces_aux [] S.
 
-Definition problem_19_pre (input : string) : Prop := True.
+Definition problem_19_pre (input : string) : Prop :=
+  Forall is_valid_word (SplitOnSpaces input).
 
 Definition problem_19_spec (input output : string) : Prop :=
     let input_list := SplitOnSpaces input in
     let output_list := SplitOnSpaces output in
-    (*  输入列表中的所有单词都是有效的数字单词 *)
-    Forall is_valid_word input_list /\
-
     (*  输出列表是输入列表的一个排列 *)
     Permutation input_list output_list /\
 

@@ -2,6 +2,7 @@
                (PtrArray::full : Z -> Z -> list Z -> Assertion)
                (PtrArray::missing_i: Z -> Z -> Z -> Z -> list Z -> Assertion)
                (PtrArray::seg: Z -> Z -> Z -> list Z -> Assertion)
+               (PtrArray::mixed_full : Z -> Z -> list (option Z) -> Assertion)
                (PtrArray::seg_shape: Z -> Z -> Z -> Assertion)
                (PtrArray::full_shape: Z -> Z -> Assertion)
                (PtrArray::missing_i_shape : Z -> Z -> Z -> Z -> Assertion)
