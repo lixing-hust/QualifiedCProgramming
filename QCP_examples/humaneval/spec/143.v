@@ -70,13 +70,13 @@ Fixpoint join_words (ws : list (list ascii)) : list ascii :=
 
 Definition words_in_sentence_impl (sentence : string) : string :=
   let words := split_words (list_ascii_of_string sentence) in
-  let sel := List.filter (fun w => is_prime_bool (length w)) words in
+  let sel := List.filter (fun w => is_prime_bool (List.length w)) words in
   string_of_list_ascii (join_words sel).
 
 (* 约束：1 <= 长度 <= 100；内容为英文字母或空格 *)
 Definition problem_143_pre (sentence : string) : Prop :=
   let l := list_ascii_of_string sentence in
-  1 <= length l /\ length l <= 100 /\
+  1 <= List.length l /\ List.length l <= 100 /\
   Forall (fun c =>
     let n := nat_of_ascii c in c = " "%char \/ (65 <= n /\ n <= 90) \/ (97 <= n /\ n <= 122)) l.
 

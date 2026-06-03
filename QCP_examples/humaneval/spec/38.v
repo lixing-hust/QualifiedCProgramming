@@ -36,35 +36,14 @@ Definition get_char (s : string) (n : nat) : ascii :=
 (* Pre: no additional constraints for `encode/decode_cyclic` by default *)
 Definition problem_38_pre (input : string) : Prop := True.
 
+Definition decode_cyclic_source_index (len i : nat) : nat :=
+  let full_len := ((len / 3) * 3)%nat in
+  if (i <? full_len)%nat then
+    if ((i + 1) mod 3 =? 1)%nat then i + 2 else i - 1
+  else i.
+
 Definition problem_38_spec (input output : string) : Prop :=
-  (* 1. 基础约束：长度相等 *)
   String.length input = String.length output /\
-  (
-    (* 2. 定义常量 *)
-    let n := ((String.length input / 3) * 3 - 1)%nat in
-    let L := String.length input in
-
-    (* 3. 对于所有索引 i，必须满足以下由逻辑连接词构成的断言 *)
-    forall i, (i < L)%nat ->
-      let out_char := get_char output i in
-      (
-        (* 情况一: i <= n *)
-        ( (i <= n)%nat ->
-          (
-            (* 子情况 1: (i+1)%3 = 1 *)
-            ( ((i + 1) mod 3 = 1%nat) /\ (out_char = get_char input (i + 2)) ) \/
-
-            (* 子情况 2: (i+1)%3 = 2 或 0 *)
-            ( (((i + 1) mod 3 = 2%nat) \/ ((i + 1) mod 3 = 0%nat)) /\ (out_char = get_char input (i - 1)) )
-          )
-        ) /\
-
-        (* 情况二: i > n (等价于 not (i <= n)) *)
-        ( (~(i <= n)%nat) ->
-          (
-            out_char = get_char input i
-          )
-        )
-      )
-  ).
-
+  forall i, (i < String.length input)%nat ->
+    get_char output i =
+    get_char input (decode_cyclic_source_index (String.length input) i).

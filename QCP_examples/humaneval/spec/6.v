@@ -93,8 +93,29 @@ Definition IsBalanced (l : string) : Prop :=
   IsBalanced_aux l 0.
   
 
+Fixpoint parse_nested_parens_scan_aux
+  (input : string) (out : list nat) (in_group : bool)
+  (current_depth max_seen : nat) : list nat :=
+  match input with
+  | EmptyString =>
+    if in_group then out ++ [max_seen] else out
+  | String h t =>
+    if ascii_dec h space then
+      if in_group then
+        parse_nested_parens_scan_aux t (out ++ [max_seen]) false 0 0
+      else
+        parse_nested_parens_scan_aux t out false current_depth max_seen
+    else if ascii_dec h lparen then
+      let new_depth := S current_depth in
+      parse_nested_parens_scan_aux t out true new_depth (Nat.max max_seen new_depth)
+    else if ascii_dec h rparen then
+      parse_nested_parens_scan_aux t out true (Nat.pred current_depth) max_seen
+    else
+      parse_nested_parens_scan_aux t out in_group current_depth max_seen
+  end.
+
 Definition parse_nested_parens_impl (input : string) : list nat :=
-  List.map MaxDepth (SplitOnSpaces input).
+  parse_nested_parens_scan_aux input [] false 0 0.
 
 (*
   辅助函数: 检查字符串中的所有字符是否满足属性 P

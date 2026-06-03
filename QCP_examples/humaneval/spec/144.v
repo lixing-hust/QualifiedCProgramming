@@ -33,6 +33,12 @@ Fixpoint list_ascii_to_nat_aux (l : list ascii) (acc : nat) : nat :=
 Definition list_ascii_to_nat (l : list ascii) : nat :=
   list_ascii_to_nat_aux l 0.
 
+Definition is_digit_ascii (c : ascii) : Prop :=
+  nat_of_ascii ("0"%char) <= nat_of_ascii c <= nat_of_ascii ("9"%char).
+
+Definition all_digits (l : list ascii) : Prop :=
+  Forall is_digit_ascii l.
+
 (*
  * 规约：Parse_Fraction
  * 描述：将一个由ASCII字符组成的列表解析为一个由分子和分母组成的自然数对。
@@ -60,7 +66,15 @@ Definition Parse_Fraction (s : list ascii) (num den : nat) : Prop :=
  *)
  (* 约束：x 与 n 均为有效分数串，且分子/分母为正整数 *)
 Definition problem_144_pre (x n : string) : Prop :=
-  exists nx dx ny dy,
+  exists nx dx ny dy nx_s dx_s ny_s dy_s,
+    list_ascii_of_string x = nx_s ++ ["/"%char] ++ dx_s /\
+    list_ascii_of_string n = ny_s ++ ["/"%char] ++ dy_s /\
+    all_digits nx_s /\ all_digits dx_s /\
+    all_digits ny_s /\ all_digits dy_s /\
+    nx = list_ascii_to_nat nx_s /\
+    dx = list_ascii_to_nat dx_s /\
+    ny = list_ascii_to_nat ny_s /\
+    dy = list_ascii_to_nat dy_s /\
     Parse_Fraction (list_ascii_of_string x) nx dx /\
     Parse_Fraction (list_ascii_of_string n) ny dy /\
     nx > 0 /\ dx > 0 /\ ny > 0 /\ dy > 0.

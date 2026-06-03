@@ -63,5 +63,5 @@ Definition problem_141_spec (file_name_str : string) (result : string) : Prop :=
        suffix = ("d"::"l"::"l"::[])%char))
   in
   (* 规约的核心：如果文件名有效，则结果为 "Yes"，否则为 "No" *)
-  (is_valid /\ result = "Yes") \/
-  (~is_valid /\ result = "No").
+  (is_valid /\ result = "Yes"%string) \/
+  (~is_valid /\ result = "No"%string).

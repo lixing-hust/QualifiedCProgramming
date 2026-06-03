@@ -30,11 +30,12 @@ Import ListNotations.
 Open Scope Z_scope.
 Open Scope nat_scope.
 Open Scope string_scope.
+Open Scope Z_scope.
 
 (* 区间为闭区间，且满足 start <= end *)
 Definition problem_127_pre (i1 i2 : Z * Z) : Prop :=
   let '(s1,e1) := i1 in
-  let '(s2,e2) := i2 in s1 <= e1 /\ s2 <= e2.
+  let '(s2,e2) := i2 in (s1 <= e1)%Z /\ (s2 <= e2)%Z.
 
 Definition problem_127_spec (i1 i2 : Z * Z) (output : string) : Prop :=
   let (s1, e1) := i1 in
