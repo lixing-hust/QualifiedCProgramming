@@ -1,6 +1,6 @@
 # StringClaude 验证进度记录
 
-更新时间：2026-05-21
+更新时间：2026-06-01
 
 这份文档用于记录 `QCP_examples/humaneval/StringClaude` 下各题的验证进度，以及每题验证时遇到的问题、采用的建模方式和后续继续时需要注意的事项。
 
@@ -14,35 +14,62 @@
 
 - `已全链通过`：已经完成 `symexec`、`manual` 证明、`goal_check` 编译，且 `coins_XX.v` / `C_XX_proof_manual.v` 无 `Admitted.` / `Axiom`。
 - `已有生成文件`：目录中已有 `C_XX_goal.v` / `C_XX_proof_auto.v` / `C_XX_proof_manual.v` / `C_XX_goal_check.v`，但本文档尚未确认完整验收。
+- `验证中`：已建立 QCP 建模或通过部分工具链检查，但尚未达到全链验收标准。
+- `待确认`：原 C、题面注释或原始 `spec/XX.v` 之间存在可验证前必须先确认的语义冲突；未经用户确认不得修改原 spec 或核心 C 逻辑。
 - `待建模`：尚未建立完整 QCP 规格和验证文件，通常需要先将 C 程序改写成 QCP 可接受的格式。
 
 ## 当前总览
 
 | 题目 | 当前状态 | 备注 |
 | --- | --- | --- |
+| `C_6` | 已全链通过 | parse nested parentheses；已按用户确认修复原 C 的错误分组输出，改为按空格/字符串末尾输出每个非空 token 的最大深度，并记录到 `ORIGINAL_C_ISSUES_LOG.md`。`problem_6_pre_z/spec_z` 直接 wrapper 原始 `spec/6.v`；`spec/6.v` 的实现定义改成等价单趟扫描形式，便于和 C 循环 bridge。已完成 `symexec`、manual 证明和 `goal_check` 编译，`coins/manual` 无 `Admitted`/`Axiom`。 |
+| `C_10` | 已全链通过 | make palindrome；已完成 QCP 格式转换，将 `is_palindrome(str+i)`/`memcpy` 改为显式 suffix 检查和输出写入循环；`problem_10_pre_z/spec_z` 直接 wrapper 原始 spec，`coins_10.v` 已补 `first_pal_suffix_z`、`make_pal_output_z` 与原始最短回文 spec 的 bridge；`symexec` 重新生成后，`coins_10.v`、`C_10_goal.v`、`C_10_proof_auto.v`、`C_10_proof_manual.v`、`C_10_goal_check.v` 均已通过，`coins/manual` 无 `Admitted`/`Axiom`。 |
 | `C_11` | 已全链通过 | 二进制字符串 XOR；`problem_11_pre_z/spec_z` 为纯原 wrapper，`ascii_range_z` 作为 C annotation 表示条件。 |
+| `C_15` | 已全链通过 | string sequence；已改成 QCP 支持的显式写缓冲区版本，复用 `coins_44` 的十进制 digit 状态，补充 `sequence_output_z` 到原 `string_sequence_impl` 的纯 bridge；`symexec`、goal/auto/manual/goal_check 均已通过。 |
+| `C_16` | 已全链通过 | 忽略大小写后的不同字符个数；已将 `tolower + seen[256]` 改为显式双层循环，`problem_16_pre_z/spec_z` 为纯原 wrapper，C 层 `lower_seen_state_z/count_distinct_lower_upto` 只作为 invariant 和内部 bridge 使用。 |
+| `C_17` | 已全链通过 | parse music；已改为 QCP 支持的 `IntArray *` 返回形式，C 层显式状态机扫描音符 token，`coins_17.v` 已桥接到原 `SplitOnSpaces` / `parse_note` 语义。 |
+| `C_18` | 已全链通过 | substring 重叠出现次数；已将 `memcmp` 改为显式双层循环，`problem_18_pre_z/spec_z` 为纯原 wrapper，C 层 `count_matches_upto/match_progress_z` 只作为 invariant 和内部 bridge 使用。 |
+| `C_19` | 已全链通过 | sort number words；按用户要求保留真实 `words[10]` 指针数组和本地 `w0..w9` 字符数组，不使用 `strcmp_number_word`、`words_get` 或按数字词语义建模的自定义 wrapper；`strlen` / `malloc_char_array` / `free_char_array` / `strcmp` / `strcat` 均为普通库函数 wrapper。`number_word_z` 仅作为 annotation/Coq 中的数字词内容描述。为避免把程序改成显式 `tlen == 0` 分支，新增 C 层 bridge `token_empty_start_z`，记录空 token 时扫描起点与当前位置对齐，并在普通非空字符扩展处用 `token_unsat_end_extend_z` 桥接。已重新 `symexec --gen-and-backup`，并通过 `coins_19.v`、`C_19_goal.v`、`C_19_proof_auto.v`、`C_19_proof_manual.v`、`C_19_goal_check.v` 编译；`coins/manual` 无 `Admitted`/`Axiom`。`problem_19_pre_z/spec_z` 已直接桥接原始 `spec/19.v` pre/spec。 |
 | `C_23` | 已全链通过 | `strlen` 薄包装；已直接桥接原始 `spec/23.v` 的 `problem_23_pre/spec`。 |
 | `C_27` | 已全链通过 | 大小写翻转；已直接桥接原始 `spec/27.v` 的 `problem_27_pre/spec`。 |
+| `C_38` | 已全链通过 | 只验证 `decode_cyclic`；已按用户确认修正原 `spec/38.v` 的短尾段语义，`problem_38_pre_z/spec_z` 为纯原 wrapper。 |
+| `C_44` | 已全链通过 | 基数转换；`problem_44_pre_z/spec_z` 为纯原 wrapper，输出缓冲区先全初始化再反向填充，避免生成未导出的 `CharArray.mixed_full`，`symexec`、manual 证明和 `goal_check` 均已通过。 |
 | `C_48` | 已全链通过 | 回文判断；`problem_48_pre_z/spec_z` 为纯原 wrapper，`ascii_range_z` 作为 C annotation 表示条件。 |
 | `C_51` | 已全链通过 | 删除元音；`problem_51_pre_z/spec_z` 为纯原 wrapper，`char_range_z` 作为 C annotation 表示条件。 |
 | `C_54` | 已全链通过 | same characters；`problem_54_pre_z/spec_z` 为纯原 wrapper，`ascii_range_z` 作为 C annotation 表示条件。 |
 | `C_56` | 已全链通过 | 尖括号匹配；`problem_56_pre_z/spec_z` 为纯原 wrapper，`ascii_range_z` 作为 C annotation 表示条件。 |
 | `C_61` | 已全链通过 | 圆括号匹配；`problem_61_pre_z/spec_z` 为纯原 wrapper，`ascii_range_z` 作为 C annotation 表示条件。 |
 | `C_64` | 已全链通过 | 元音计数；`problem_64_pre_z/spec_z` 为纯原 wrapper，`ascii_range_z` 作为 C annotation 表示条件。 |
+| `C_65` | 已全链通过 | circular shift digits；已移除 `sprintf_decimal`/`sprintf` 依赖，改为 C 循环统计十进制位数并反向填充数字；`circular_shift_output_z` 与原 `spec/65.v` 对齐，`problem_65_pre_z/spec_z` 直接 wrapper 原始 spec；已重新 `symexec --gen-and-backup` 并通过 `coins_65.v`、`C_65_goal.v`、`C_65_proof_auto.v`、`C_65_proof_manual.v`、`C_65_goal_check.v` 编译，`coins/manual` 无 `Admitted`/`Axiom`。 |
 | `C_66` | 已全链通过 | 大写字母 ASCII 求和；`problem_66_pre_z/spec_z` 为纯原 wrapper，`ascii_range_z` 作为 C annotation 表示条件。 |
 | `C_67` | 已全链通过 | 已按用户确认收紧原 `problem_67_pre`；`problem_67_pre_z/spec_z` 为纯原 wrapper，安全条件作为 C annotation 表示条件。 |
 | `C_78` | 已全链通过 | 十六进制 prime digit 计数；`problem_78_pre_z/spec_z` 为纯原 wrapper，`ascii_range_z` 作为 C annotation 表示条件。 |
+| `C_79` | 已全链通过 | decimal to binary；`coins_79.v` 使用原 `problem_79_pre/spec` wrapper，并建立 `nat_to_binary_string`、二进制填充状态与最终 decorated string 的桥接；`symexec`、`C_79_goal.v`、`C_79_proof_auto.v`、`C_79_proof_manual.v`、`C_79_goal_check.v` 均已通过。 |
 | `C_80` | 已全链通过 | 经用户许可修复原 C 的第一组三字符漏检；`problem_80_pre_z/spec_z` 为纯原 wrapper，`ascii_range_z` 作为 C annotation 表示条件。 |
 | `C_82` | 已全链通过 | 字符串长度素数判断；已直接桥接原始 `spec/82.v` 的 `problem_82_pre/spec`。 |
+| `C_84` | 已全链通过 | 十进制各位数字之和再转二进制；`problem_84_pre_z/spec_z` 为纯原 wrapper，十进制位和状态和二进制填充状态只作为 C annotation/invariant 使用。 |
+| `C_86` | 已全链通过 | anti shuffle；已改成 QCP 支持的显式扫描版本，用通用 `sort_char_array` / `copy_char_array` wrapper 表示排序和拷贝；`problem_86_pre_z/spec_z` 直接 wrapper 原始 spec，`coins_86.v` 已证明排序/前缀状态输出 `anti_shuffle_output_z` 与原 `anti_shuffle_impl` 对齐；`symexec`、`coins_86.v`、`C_86_goal.v`、`C_86_proof_auto.v`、`C_86_proof_manual.v`、`C_86_goal_check.v` 均已通过，`coins/manual` 无 `Admitted`/`Axiom`。 |
 | `C_91` | 已全链通过 | boredom 计数；`problem_91_pre_z/spec_z` 为纯原 wrapper，`ascii_range_z` 作为 C annotation 表示条件。 |
 | `C_93` | 已全链通过 | encode；`problem_93_pre_z/spec_z` 为纯原 wrapper，`ascii_range_z` 作为 C annotation 表示条件。 |
 | `C_98` | 已全链通过 | 偶数下标大写元音计数；`problem_98_pre_z/spec_z` 为纯原 wrapper，`ascii_range_z` 作为 C annotation 表示条件。 |
+| `C_103` | 已全链通过 | rounded average；按文件开头注释语义返回 `"-1"` 或 floor average 的二进制字符串，`problem_103_pre_z/spec_z` 为纯原 wrapper，二进制计数和反向填充只作为 C annotation/invariant 使用。 |
+| `C_110` | 已全链通过 | exchange；返回 `"YES"`/`"NO"` 由 `1/0` 桥接，`problem_110_pre_z/spec_z` 为纯原 wrapper，非负 list-Z 到 nat 转换条件放在 C annotation。 |
+| `C_118` | 已全链通过 | closest vowel；`problem_118_pre_z/spec_z` 为纯原 wrapper，`ascii_range_z`/`alpha_range_z` 作为 C annotation 表示条件。 |
+| `C_119` | 已全链通过 | 两字符串括号拼接匹配；返回 `"Yes"`/`"No"` 由 `1/0` 桥接，`problem_119_pre_z/spec_z` 为纯原 wrapper，`ascii_range_z` 作为 C annotation 表示条件。 |
 | `C_124` | 已全链通过 | 固定格式日期校验；`problem_124_pre_z/spec_z` 为纯原 wrapper，`ascii_range_z` 作为 C annotation 表示条件。 |
+| `C_127` | 已全链通过 | 闭区间交集长度素数判断；返回 `"YES"`/`"NO"` 由 `1/0` 桥接，`problem_127_pre_z/spec_z` 为纯原 wrapper，区间长度和整数范围作为 C annotation 条件。 |
 | `C_132` | 已全链通过 | 经用户许可修复原 C 为 `[[]]` 子序列四状态自动机；`problem_132_pre_z/spec_z` 为纯原 wrapper，`ascii_range_z` 作为 C annotation 表示条件。 |
 | `C_134` | 已全链通过 | 最后字符是否为空格分隔的单字母词；`problem_134_pre_z/spec_z` 为纯原 wrapper，`ascii_range_z` 作为 C annotation 表示条件。 |
 | `C_50` | 已全链通过 | 仅 `decode_shift` 作为原 spec 目标；`problem_50_pre_z/decode_spec_z` 为纯原 wrapper，`ascii_range_z` 放在 C annotation。 |
 | `C_89` | 已全链通过 | encrypt；`problem_89_pre_z/spec_z` 为纯原 wrapper，`ascii_range_z` 作为 C annotation 表示条件。 |
 | `C_140` | 已全链通过 | 已按用户确认修正原 spec 的连续空格规则；`problem_140_pre_z/spec_z` 为纯原 wrapper，`ascii_range_z` 作为 C annotation 表示条件。 |
+| `C_141` | 已全链通过 | 文件名合法性检查；`problem_141_pre_z/spec_z` 为纯原 wrapper，`ascii_range_z` 作为 C annotation 表示条件；已完成后缀 `.txt/.exe/.dll` 与原始 `exists prefix suffix` spec 的双向桥接。 |
+| `C_143` | 已全链通过 | words in sentence；`problem_143_pre_z/spec_z` 为纯原 wrapper；C 层使用显式扫描、素数长度 helper 和逐字符输出拷贝，`coins_143.v` 已补 Z-list `split_words/join_words` 与原始 `spec/143.v` 的桥接；`coins_143.v`、`C_143_goal.v`、`C_143_proof_auto.v`、`C_143_proof_manual.v`、`C_143_goal_check.v` 均已编译通过，`coins/manual` 无 `Admitted`/`Axiom`。 |
+| `C_144` | 已全链通过 | simplify fraction product；已按用户确认收紧原 `problem_144_pre` 的数字字符约束，`sscanf` 改为循环解析；`problem_144_pre_z/spec_z` 为纯原 wrapper。 |
+| `C_154` | 已全链通过 | cyclic pattern substring；用户已允许修正空串分支，C 层在 `b = ""` 时返回 true，以匹配原 spec。已改为显式 shift/position 双层搜索，`problem_154_pre_z/spec_z` 直接 wrapper 原始 `spec/154.v`；`coins_154.v` 已补 `rotation_any_search_z`、旋转/子串双向桥接和 `ascii_range_z` 注入证明；`coins_154.v`、`C_154_goal.v`、`C_154_proof_auto.v`、`C_154_proof_manual.v`、`C_154_goal_check.v` 均已编译通过，`coins/manual` 无 `Admitted`/`Axiom`。 |
+| `C_156` | 已全链通过 | int to mini Roman；`problem_156_pre_z/spec_z` 为纯原 wrapper，Roman 千位/百位/十位/个位拼接状态只作为 C annotation 和内部 bridge 使用；`sprintf`/字符串库逻辑改为显式写缓冲区。 |
+| `C_161` | 已全链通过 | 大小写翻转；无字母时反转字符串。`problem_161_pre_z/spec_z` 为纯原 wrapper，`ascii_range_z` 作为 C annotation 表示条件。 |
+| `C_162` | 跳过 | MD5；用户要求暂且跳过，不验证本题。原 `spec/162.v` 用抽象 `Parameter md5_hash`，原 C 又在 OpenSSL MD5 与 fallback hash 间按环境切换；除非后续确认信任外部 oracle 或改写为可证明规格，否则不继续。 |
 
 其它只有 `.c` 的题目暂按 `待建模` 处理。
 
@@ -60,8 +87,13 @@
 已完成原 spec 直连返工：
 
 - `C_11`：`problem_11_pre_z/spec_z` 已改为纯原 spec wrapper；`ascii_range_z(l1/l2)` 放在 `C_11.c` 的函数 `Require` 和循环 invariant 中，并完成重新 symexec 与全链编译。
+- `C_16`：已将原 `tolower + seen[256]` 实现改为 QCP 友好的显式双层循环：外层枚举字符，内层扫描此前前缀判断当前小写字符是否已出现。`problem_16_pre_z/spec_z` 为纯原 spec wrapper，`ascii_range_z(l)` 放在 C annotation 中；`coins_16.v` 建立 `lower_z`、`lower_seen_state_z`、`count_distinct_lower_upto`、前缀 seen/new 计数推进，并将最终 distinct list-Z witness 桥接到原始 `problem_16_spec` 的 `list ascii` witness。已完成 symexec 与全链编译。
+- `C_17`：`problem_17_pre_z/spec_z` 已建为纯原 spec wrapper，直接调用原始 `problem_17_pre/spec (string_of_list_z input)`，输出用 `map Z.to_nat` 桥接。为适配 QCP，将原 parse music 实现改为显式状态机，扫描 `"o"`、`"o|"`、`".|"` 和空格分隔 token，返回 `IntArray *`；`ascii_range_z(l)` 放在 C annotation 中。`coins_17.v` 建立状态机输出与原 `SplitOnSpaces` / `parse_note` 的桥接，并完成 `symexec`、`coins_17.v`、`C_17_goal.v`、`C_17_proof_auto.v`、`C_17_proof_manual.v`、`C_17_goal_check.v` 全链编译。
+- `C_18`：`problem_18_pre_z/spec_z` 已建为纯原 spec wrapper，直接调用原始 `problem_18_pre/spec (string_of_list_z input) (string_of_list_z substring)`，输出用 `Z.to_nat` 桥接。为适配 QCP，将原 `memcmp(str+i, substring, m)` 改为显式双层循环，外层 invariant 记录 `out = count_matches_upto i l sub`，内层 invariant 用 `match_progress_z` 记录当前候选位置的匹配/失配前缀。已补全 `count_matches_upto` 到原始 existential `indices` spec 的桥接，并完成 symexec 与全链编译。
+- `C_19`：`problem_19_pre_z/spec_z` 已建为纯原 spec wrapper，直接调用原始 `problem_19_pre/spec (string_of_list_z input) (string_of_list_z output)`。按用户要求保留真实 `words[10]` 指针数组和本地 `w0..w9` 字符数组，普通库函数只用带前后条件的 `strlen` / `malloc_char_array` / `free_char_array` / `strcmp` / `strcat` wrapper；C 层 token 扫描状态、计数和输出前缀只作为 annotation / 内部 bridge 使用。已完成重新 symexec 与全链编译。
 - `C_23`：`problem_23_pre_z/spec_z` 均为纯原 spec wrapper；`problem_23_spec_z` 只调用原始 `problem_23_spec (string_of_list_z input) (Z.to_nat output)`，并完成全链编译。
 - `C_27`：`problem_27_pre_z/spec_z` 均为纯原 spec wrapper；C 层点态 `flip_char_z` 只在内部 intro 引理中用于推出原始 `problem_27_spec`，并完成全链编译。
+- `C_38`：只验证 `decode_cyclic`，不验证 `encode_cyclic`。按用户确认修正原 `spec/38.v`，将 `problem_38_spec` 改为 `decode_cyclic_source_index` 点态规格；完整三字符组按 decode 方向取源字符，不足三字符尾段保持原样。`problem_38_pre_z/spec_z` 为纯原 spec wrapper；C 层 `full_decode_len_z/decode_source_index_z/decode_char_z` 只作为内部 bridge lemma 和 invariant 使用。为适配 QCP，将原三字符块循环改为逐下标写入，返回语义保持一致，并完成 symexec 与全链编译。
 - `C_48`：`problem_48_pre_z/spec_z` 已改为纯原 spec wrapper；`ascii_range_z(l)` 放在 `C_48.c` 的函数 `Require` 和循环 invariant 中，并完成重新 symexec 与全链编译。
 - `C_50`：只验证 `decode_shift`；`problem_50_pre_z/decode_spec_z` 已改为纯原 spec wrapper。`ascii_range_z(l)` 放在 `C_50.c` 的函数 `Require` 和循环 invariant 中，结合原 pre 推出底层小写 `Z` 范围；`encode_shift` 只保留 C 层辅助规格，不作为本题原 spec 验证目标。
 - `C_51`：`problem_51_pre_z/spec_z` 已改为纯原 spec wrapper；`char_range_z(l)` 放在 `C_51.c` 的函数 `Require` 和循环 invariant 中，C 层 `remove_vowels_prefix_z` 只作为内部 bridge lemma 前提使用，并完成重新 symexec 与全链编译。
@@ -74,16 +106,328 @@
 - `C_78`：`problem_78_pre_z/spec_z` 已改为纯原 spec wrapper；`ascii_range_z(l)` 放在 `C_78.c` 的函数 `Require` 和循环 invariant 中，C 层 `count_prime_hex_upto` 只作为内部 bridge lemma 前提使用，并完成重新 symexec 与全链编译。
 - `C_80`：经用户许可修复原 C，长度至少为 3 时先检查 `s[0] != s[1]`，循环中继续检查当前字符和前两个字符都不同；`problem_80_pre_z/spec_z` 已改为纯原 spec wrapper。`ascii_range_z(l)` 放在 `C_80.c` 的函数 `Require` 和循环 invariant 中，C 层 `happy_prefix_z/happy_adjacent_z` 只作为内部 bridge lemma 前提使用，并完成重新 symexec 与全链编译。
 - `C_82`：`problem_82_spec_z` 已改为纯原 spec wrapper，只调用原始 `problem_82_spec (string_of_list_z s) (bool_of_z output)`；C 层 `prime_len_z` 只作为内部证明引理使用，并完成全链编译。
+- `C_84`：`problem_84_pre_z/spec_z` 已建为纯原 spec wrapper，输入整数用 `Z.to_nat` 桥接到原始 `problem_84_pre/spec`。为适配 QCP，将 `sprintf`/helper 返回改为显式循环：先维护 `decimal_sum_state_z` 计算十进制位和，再复用 `binary_count_state_z` / `binary_fill_full_state_z` 构造二进制字符串；这些状态只作为 C annotation 和内部 bridge 使用。已完成 symexec 与全链编译。
+- `C_86`：`problem_86_pre_z/spec_z` 已建为纯原 spec wrapper，直接调用原始 `problem_86_pre/spec (string_of_list_z l)`。为适配 QCP，将原 `qsort`/`memcpy`/指针偏移实现改为显式扫描当前 word，并通过 `sort_char_array`、`copy_char_array` wrapper 表示排序和拷贝；`anti_out_prefix_z` / `anti_cur_prefix_z` 只作为循环 invariant 状态。`coins_86.v` 已证明最终 `anti_shuffle_output_z` 等于原 `anti_shuffle_impl`，并完成 symexec 与全链编译。
 - `C_89`：`problem_89_pre_z/spec_z` 已改为纯原 spec wrapper；`ascii_range_z(l)` 放在 `C_89.c` 的函数 `Require` 和循环 invariant 中，结合原 pre 推出底层小写 `Z` 范围，并完成重新 symexec 与全链编译。
 - `C_91`：`problem_91_pre_z/spec_z` 已改为纯原 spec wrapper；`ascii_range_z(l)` 放在 `C_91.c` 的函数 `Require` 和循环 invariant 中，C 层三状态前缀模型只作为内部 bridge lemma 前提使用，并完成重新 symexec 与全链编译。
 - `C_93`：`problem_93_pre_z/spec_z` 已改为纯原 spec wrapper；`ascii_range_z(l)` 放在 `C_93.c` 的函数 `Require` 和循环 invariant 中，结合原 pre 推出底层字母/空格 `Z` 范围；C 层 `encode_char_z` 只作为内部 bridge lemma 前提使用，并完成重新 symexec 与全链编译。
 - `C_98`：`problem_98_pre_z/spec_z` 已改为纯原 spec wrapper；`ascii_range_z(l)` 放在 `C_98.c` 的函数 `Require` 和循环 invariant 中，C 层 `count_upper_even_upto` 只作为内部 bridge lemma 前提使用，并完成重新 symexec 与全链编译。
+- `C_110`：`problem_110_pre_z/spec_z` 已建为纯原 spec wrapper，输入数组通过 `map Z.to_nat` 转为原始 `list nat`，`nonnegative_list_z` 作为表示转换前提放在 `C_110.c` 的函数 `Require` 和循环 invariant 中，不写进 wrapper。为适配 QCP，将原 C 返回 `"YES"` / `"NO"` 改为返回 `1` / `0`，由 `yesno_of_z_110` 桥接；原核心算法保持为统计 `lst1` 和 `lst2` 中的偶数总数，并与 `lst1_size` 比较。循环 invariant 使用 `count_even_upto` 记录前缀偶数计数，并完成 symexec 与全链编译。
+- `C_118`：`problem_118_pre_z/spec_z` 已建为纯原 spec wrapper，直接调用原始 `problem_118_pre/spec (string_of_list_z ...)`。`ascii_range_z(l)` 和 `alpha_range_z(l)` 放在 C annotation 中；C 层用 `closest_vowel_candidate_z` 和 `no_candidate_after_z` 表示从右向左扫描时“右侧没有更近候选”的循环状态，并由 bridge lemma 连接到原 spec。已完成 symexec 与全链编译。
+- `C_119`：`problem_119_pre_z/spec_z` 已建为纯原 spec wrapper，直接调用原始 `problem_119_pre/spec [string_of_list_z l1; string_of_list_z l2]`，返回 `"Yes"` / `"No"` 用 `1` / `0` 桥接。`ascii_range_z(l1/l2)` 放在 C annotation 中；C 层使用 `paren_level_upto` 和 `paren_good_prefix_flag` 分别记录当前括号深度和前缀非负性。反向扫描前需要把第一种拼接的“总 level 为 0、prefix flag 为 0”作为 `Assert` 带入后续 invariant，否则最终反向返回 VC 缺少两种拼接之间的桥接事实。已完成 symexec 与全链编译。
 - `C_124`：`problem_124_pre_z/spec_z` 已改为纯原 spec wrapper；`ascii_range_z(l)` 放在 `C_124.c` 的函数 `Require` 和循环 invariant 中，C 层 `valid_date_z` 只作为内部 bridge lemma 前提使用，并完成重新 symexec 与全链编译。
+- `C_127`：`problem_127_pre_z/spec_z` 已建为纯原 spec wrapper，输入区间用 `interval_pair_z` 从长度为 2 的 `list Z` 转成原始 `Z * Z`，返回 `"YES"` / `"NO"` 用 `1` / `0` 桥接。`interval_int_range` 和循环中的 `prime_prefix_z` 只作为 C annotation / 内部证明条件使用；已完成 `coins_127.v`、`C_127_goal.v`、`C_127_proof_auto.v`、`C_127_proof_manual.v`、`C_127_goal_check.v` 全链编译。
 - `C_132`：经用户许可修复原 C，将 `count/maxcount` 深度下降判定改为四状态子序列自动机；`problem_132_pre_z/spec_z` 已改为纯原 spec wrapper，`ascii_range_z(l)` 放在 `C_132.c` 的函数 `Require` 和循环 invariant 中，C 层 `subseq_state_prefix_z` 只作为内部 bridge lemma 前提使用，并完成重新 symexec 与全链编译。
 - `C_134`：`problem_134_pre_z/spec_z` 已改为纯原 spec wrapper；`ascii_range_z(l)` 放在 `C_134.c` 的函数 `Require` 和中间 `Assert` 中，C 层 `ends_with_single_letter_z` 只作为内部 bridge lemma 前提使用，并完成重新 symexec 与全链编译。
 - `C_140`：按用户确认修复原 `spec/140.v`，使连续空格段长度 1/2/>2 分别输出 `_`、`__`、`-`；`problem_140_pre_z/spec_z` 已改为纯原 spec wrapper。`ascii_range_z(l)` 放在 `C_140.c` 的函数 `Require` 和循环 invariant 中，C 层 `fix_spaces_prefix_z/fix_spaces_pending_z` 只作为内部 bridge lemma 前提使用，并完成 symexec 与全链编译。
+- `C_141`：已修复原 `spec/141.v` 中 `"Yes"` / `"No"` 的 string scope 编译问题，并建立 `problem_141_pre_z/spec_z` 纯原 spec wrapper。`ascii_range_z(l)` 放在 C annotation 中；C 层使用 `file_name_checks_z` 记录长度、首字符、后缀、digit 计数和 dot 计数条件。已补全后缀 `.txt/.exe/.dll` 与原始 `exists prefix suffix` spec 的双向桥接，并完成 `coins_141.v`、`C_141_goal.v`、`C_141_proof_auto.v`、`C_141_proof_manual.v`、`C_141_goal_check.v` 全链编译。
+- `C_144`：按用户确认收紧原 `spec/144.v` 的 `problem_144_pre`，要求两个分数字符串的分子/分母字符均为十进制数字。为适配 QCP，将原 C 中 `sscanf("%d/%d")` 按 `CPP_144.cpp` 的思路改写为四段循环解析，返回语义保持一致。`problem_144_pre_z/spec_z` 为纯原 spec wrapper；`fraction_parts_z`、`fraction_values_safe_z`、各前缀解析上界只作为 C annotation / safety proof 条件使用，并完成 symexec 与全链编译。
+- `C_156`：`problem_156_pre_z/spec_z` 已建为纯原 spec wrapper，输入整数用 `Z.to_nat` 桥接到原始 `problem_156_pre/spec`，输出用 `string_of_list_z` 桥接。为适配 QCP，将 Roman numeral 构造改成显式写入 64 字节输出缓冲区，并用已实现 helper `append_roman_digit` 分别处理百位、十位、个位；`roman_digit_z`、`roman_prefix*_z`、`roman_output_z` 只作为 C annotation / 内部 bridge 使用。已完成 symexec 与全链编译。
+- `C_161`：`problem_161_pre_z/spec_z` 已建为纯原 spec wrapper；`ascii_range_z(l)` 放在 `C_161.c` 的函数 `Require` 和循环 invariant 中，C 层 `contains_letter_prefix_z/contains_letter_z/flip_char_z` 只作为内部 bridge lemma 前提使用。为适配 QCP，将原程序的“先构造翻转大小写结果、无字母时另分配反转结果”改为“先扫描是否含字母，再一次性构造最终返回结果”，返回语义保持一致，并完成 symexec 与全链编译。
 
 已按规则跳过：
+
+- `C_162`：用户要求暂且跳过，不验证本题。当前原始 `spec/162.v` 用 `Parameter md5_hash : string -> string` 抽象 MD5，原 C 又根据编译环境在 OpenSSL MD5 与 fallback hash 之间切换；除非后续确认将 `md5_hash` 作为可信外部 oracle，或改写原 spec/C 使哈希语义可在当前 Coq/QCP 环境中证明，否则不继续。
+
+## C_19 sort number words 验证记录
+
+### 当前状态
+
+`C_19` 已全链通过。
+
+已完成：
+
+```bash
+linux-binary/symexec \
+  --goal-file=QCP_examples/humaneval/StringClaude/C_19_goal.v \
+  --proof-auto-file=QCP_examples/humaneval/StringClaude/C_19_proof_auto.v \
+  --proof-manual-file=QCP_examples/humaneval/StringClaude/C_19_proof_manual.v \
+  --coq-logic-path=SimpleC.EE \
+  -slp QCP_examples/humaneval/StringClaude SimpleC.EE \
+  --input-file=QCP_examples/humaneval/StringClaude/C_19.c \
+  -IQCP_examples/LLM_friendly_cases \
+  --gen-and-backup \
+  --no-exec-info
+```
+
+并通过：
+
+```bash
+coqc coins_19.v
+coqc C_19_goal.v
+coqc C_19_proof_auto.v
+coqc C_19_proof_manual.v
+coqc C_19_goal_check.v
+```
+
+扫描结果：
+
+```bash
+grep -nE "Admitted\.|Axiom[[:space:]]" coins_19.v C_19_proof_manual.v
+```
+
+无输出。
+
+### 语义与建模约束
+
+1. 保留真实 `words[10]` 数组。
+
+用户明确要求不要把 `number_word` 改成脱离 C 程序的数据模型，也不要用 `words_get` 之类的语义 wrapper。最终版本保留本地 `w0..w9` 字符数组和真实 `char *words[10]` 指针数组：
+
+```c
+char w0[5]; ... char w9[5];
+char *words[10];
+words[0] = w0; ... words[9] = w9;
+```
+
+`number_word_z` 只描述这些真实字符数组的内容，用于 annotation 和 Coq bridge，不替代 C 里的真实数组。
+
+2. 常见库函数只用普通 wrapper。
+
+最终没有使用 `strcmp_number_word`、`words_get` 或按数字词语义定制的 wrapper。`strcmp` / `strcat` / `strlen` 都按普通库函数规格写前后条件：
+
+```c
+strcmp(token, word)
+strcat(out, word)
+strlen(word)
+```
+
+验证时通过 `PtrArray.full words 10 [w0..w9]`、`number_words_missing/full` 和 `CharArray.full wk ...` 证明当前 `word` 指向的真实字符串内容，而不是让 wrapper 偷带数字词语义。
+
+3. `free_char_array` 不需要按对象拆多个 wrapper。
+
+早期曾把不同释放场景拆成多个 wrapper，后来回退为一个通用 wrapper：
+
+```c
+void free_char_array(char *p, int used, int cap)
+```
+
+用 `CharArray.full(p, used, l) * CharArray.undef_seg(p, used, cap)` 表示已用前缀和剩余容量，`token` 和 `space_word` 都复用同一个规格。
+
+### 主要失败经验
+
+1. 自定义语义 wrapper 会让验证变快，但偏离原程序。
+
+最早尝试过 `strcmp_number_word`、`words_get`、或者直接用数字词语义描述 `word = number_word(d)`。这些方式能绕开 `PtrArray` 和 `CharArray` 资源拆合，但实际等于把普通 `strcmp(token, word)` 建模成题目专用 oracle，不符合“常见库函数用普通 wrapper”的要求，因此全部回退。
+
+2. 真实 `words[10]` 的资源拆合是第一个大坑。
+
+`word = words[d]` 后，`strcmp` 需要：
+
+```coq
+CharArray.full word (number_word_len_z d + 1) (number_word_z d ++ [0])
+```
+
+但原资源是：
+
+```coq
+PtrArray.full words 10 [w0; ...; w9]
+number_words_chars_full_z w0 ... w9
+```
+
+工具不能自动从变量下标 `d` 抽出对应 `wk` 的字符数组。最终做法是使用 `number_words_missing` 表示“指针数组缺当前下标，同时字符数组缺当前 word”，在 manual 中用 `number_words_missing_merge_vc` 按 `d = 0..9` 分支合回 `number_words_full`。这比展开 10 条 C 分支稳定，且保留真实数组。
+
+3. 展开 10 个数字分支会造成路径和 proof 爆炸。
+
+中途尝试过在 C annotation 或 C 结构里显式展开 10 个分支来帮助 `strcmp` 前置条件。单分支资源匹配会变容易，但 `symexec` 路径数量和后续 `manual` obligation 明显膨胀，最终撤回。经验是：真实数组问题应放在 separation bridge lemma 中处理，而不是把 C 控制流改成 proof 辅助结构。
+
+4. `tlen = 0` 不能改成 C 程序里的显式分支。
+
+扫描循环中，原程序只有：
+
+```c
+if (ch == 32) {
+    if (tlen > 0) { ...; tlen = 0; }
+} else if (tlen < 31) {
+    token[tlen] = ch;
+    tlen = tlen + 1;
+}
+```
+
+没有额外的 `tlen == 0` 程序分支。证明里曾临时用 `assert (tlen = 0) by lia` 处理空 token 路径，但这只是局部 arithmetic，不足以说明下一轮 token 起点。不能为了证明方便把 C 程序改成新分支，否则会改变控制流结构，也偏离用户要求。
+
+5. 真正缺的是“空 token 起点”的 bridge。
+
+旧 invariant 只有：
+
+```coq
+token_unsat_end_z i tlen l :=
+  tlen = 0 \/ scan_word_start_z i l + tlen = i
+```
+
+当 `tlen = 0` 时，这个性质太弱，只说明 token 是空的，不能推出 `scan_word_start_z i l = i`。因此读到非空字符后，无法证明新 token 满足：
+
+```coq
+scan_word_start_z (i + 1) l + (tlen + 1) = i + 1
+```
+
+最终补的最小 bridge 是：
+
+```coq
+Definition token_empty_start_z (i tlen : Z) (input : list Z) : Prop :=
+  tlen = 0 -> scan_word_start_z i input = i.
+```
+
+并在读入非空字符时用：
+
+```coq
+token_unsat_end_extend_z
+```
+
+把 `token_empty_start_z i tlen l`、旧的 `token_unsat_end_z i tlen l` 和 `scan_char_z i l <> 32` 桥接到下一轮。
+
+6. `ch == 32` 要带进内层 `d` 循环 invariant。
+
+进入 `if (ch == 32)` 后，内层 `for (d = 0; d < 10; d++)` 仍需要知道当前路径确实是空格分隔符，否则内层循环结束、`tlen = 0`、外层扫描推进时缺少路径事实。最终在内层 invariant 中把无信息的 `ch == ch` 改成 `ch == 32`。这不改变程序语义，只是保留已知路径条件。
+
+7. 备份文件多的直接原因。
+
+本题一共生成到 `C_19_proof_manual_backup87.v`，主要不是因为单个 Coq 引理复杂，而是反复在以下几类方案之间回退：
+
+- 题目专用 `strcmp_number_word` / `words_get` wrapper，后因不符合建模约束撤回。
+- 将数字词建模成数组外的抽象 getter，后因用户要求保留真实 `words` 数组撤回。
+- 多个 `free` wrapper，后统一为普通 `free_char_array`。
+- 显式展开 10 个数字词分支，后因路径爆炸撤回。
+- 在 proof 中直接 `assert (tlen = 0)`，后发现缺少 `scan_word_start` 语义，改为 `token_empty_start_z` bridge。
+- 每次修改 C annotation 或 bridge 后按 `SKILL.md` 重新 `symexec --gen-and-backup`，因此 backup 数量快速增长。
+
+### 最终可复用做法
+
+1. 对真实指针数组，优先写 `full/missing/merge` 型 separation bridge。
+
+`number_words_full` 表示完整资源，`number_words_missing` 表示读取 `words[d]` 后暂时拿出当前 `word` 对应的字符数组。`strcmp` / `strlen` / `strcat` 调用后再用 merge lemma 合回完整资源。
+
+2. 对 token 扫描状态，分别记录“内容”和“扫描起点”。
+
+`token_prefix_z` 描述当前 token 内容，`token_unsat_end_z` 描述非饱和 token 的右端对齐，`token_empty_start_z` 单独补足空 token 时的左端信息。空 token 情况不能只靠 `tlen = 0 \/ ...`。
+
+3. 不要为了证明方便改普通库函数语义。
+
+本题最终通过的关键不是更强 wrapper，而是在 C annotation 和 Coq bridge 中补足资源拆合与 token 扫描事实。后续类似题应优先保留 `strcmp` / `strcat` 这类库函数的通用规格。
+
+4. 生成文件路径注意。
+
+`C_19_goal.v` 直接 `Require Import char_array_strategy_goal`，本目录编译时应避免同时把 `SeparationLogic/examples` 和 `SeparationLogic/examples/LLM_friendly_cases` 都作为无前缀路径加入，否则会出现同名 `.vo` 二义性。可用本次通过的形式：
+
+```bash
+COQINCLUDES="-R ../../../SeparationLogic/SeparationLogic SimpleC.SL \
+-R ../../../SeparationLogic/unifysl Logic \
+-R ../../../SeparationLogic/sets SetsClass \
+-R ../../../SeparationLogic/compcert_lib compcert.lib \
+-R ../../../SeparationLogic/auxlibs AUXLib \
+-R ../../../SeparationLogic/StrategyLib SimpleC.StrategyLib \
+-R ../../../SeparationLogic/Common SimpleC.Common \
+-R ../../../SeparationLogic/fixedpoints FP \
+-R ../../../SeparationLogic/MonadLib MonadLib \
+-R ../../../SeparationLogic/listlib ListLib \
+-R . SimpleC.EE \
+-R ../../../SeparationLogic/examples/LLM_friendly_cases \"\""
+```
+
+## C_143 words in sentence 验证记录
+
+### 当前状态
+
+`C_143` 已全链通过。
+
+已完成：
+
+```bash
+coqtop -quiet -l ../spec/143.v
+coqc string_bridge.v
+coqc coins_143.v
+symexec --gen-and-backup C_143.c
+coqc coins_143.v
+coqc C_143_goal.v
+coqc C_143_proof_auto.v
+coqc C_143_proof_manual.v
+coqc C_143_goal_check.v
+```
+
+其中 `coins_143.v` 的最终 wrapper 直接桥接原始 `spec/143.v`：
+
+```coq
+Definition problem_143_pre_z (sentence : list Z) : Prop :=
+  problem_143_pre (string_of_list_z sentence).
+
+Definition problem_143_spec_z (sentence output : list Z) : Prop :=
+  problem_143_spec (string_of_list_z sentence) (string_of_list_z output).
+```
+
+`C_143.c` 已去掉 `memcpy` / `bool` / 裸 `malloc`，改为：
+
+- `malloc_char_array` 规格化输出缓冲区；
+- `is_prime_len` 显式循环判断词长是否为素数；
+- 主函数先跳过空格，再扫描一个单词，若词长为素数则逐字符复制到输出。
+
+### 证明要点
+
+`symexec` 已能完整生成：
+
+```bash
+C_143_goal.v
+C_143_proof_auto.v
+C_143_proof_manual.v
+C_143_goal_check.v
+```
+
+已完成的关键桥接：
+
+- `is_prime_len_entail_wit_1/2_1/2_2` 和 `is_prime_len_return_wit_1/2/3` 已证明；当前实现改为枚举 `2 <= j < len`，避免平方根因子配对证明。
+- `coins_143.v` 已补 `has_divisor_from_true_iff`、`prime_loop_state_z_flag_0/1`，把 C 层除数枚举状态接到原始 `is_prime_bool`。
+- `words_in_sentence_entail_wit_1/3/4/5/6_1/6_2/6_3/6_4/7/8_2/8_3/8_4`、`words_in_sentence_return_wit_1` 已证明。
+- 输出缓冲区分配和 annotation 改为 `len + 2` 容量；copy loop 容量 invariant 使用 `out_len + word_len - k <= len + 2`，final NUL 仍由外层 `out_len <= i + 1` 约束。
+- 已新增 `scan_ready_z` / `word_start_z` / `word_chars_z` / `word_copy_prefix_z`，其中 `scan_ready_z` 记录外层扫描是否位于开头、末尾、空格或空格之后，`word_start_z` 排除从单词中间开始的伪状态。
+- `coins_143.v` 中使用 Z-list 操作式 `selected_words_z` / `join_words_z` 证明循环 step，再通过 `split_words_z_ascii`、`filter_prime_ascii_z`、`join_words_z_ascii` 桥接回原始 `spec/143.v` 的 `words_in_sentence_impl`。
+- 已证明跳过空格、非素数单词不改变输出、素数单词 copy 后等于 spec prefix 三类 step lemma。
+
+验收检查：`coins_143.v` 和 `C_143_proof_manual.v` 均无 `Admitted.` / `Axiom`，`C_143_goal_check.v` 编译通过。
+
+## C_144 fraction simplify 验证记录
+
+### 结论
+
+`C_144` 已完成完整验证。验证版不再使用 `sscanf`，而是参考 `CPP_144.cpp` 将 `x` 和 `n` 分别用循环解析成 `a/b`、`c/d`，再判断 `(a * c) % (b * d) == 0`。
+
+已通过的验收链：
+
+```bash
+opam exec --switch=coq8201 -- coqtop -quiet -l ../spec/144.v
+coqc string_bridge.v
+coqc coins_144.v
+coqc C_144_goal.v
+coqc C_144_proof_auto.v
+coqc C_144_proof_manual.v
+coqc C_144_goal_check.v
+```
+
+扫描结果：
+
+```bash
+grep -nE "Admitted\.|^[[:space:]]*Axiom[[:space:]]" coins_144.v C_144_proof_manual.v
+```
+
+无输出。
+
+### 语义与适配
+
+1. 原 `problem_144_pre` 已按用户确认收紧。
+
+问题记录在 `../ORIGINAL_SPEC_ISSUES_LOG.md` 的 `SPEC-C_144-001`。修复后原 pre 要求两个输入的分子/分母字符列表均只包含 `'0'..'9'`，同时保留原来的 `Parse_Fraction` 和正整数约束。
+
+2. `coins_144.v` 使用纯原 pre/spec wrapper。
+
+```coq
+Definition problem_144_pre_z (x n : list Z) : Prop :=
+  problem_144_pre (string_of_list_z x) (string_of_list_z n).
+
+Definition problem_144_spec_z (x n : list Z) (output : Z) : Prop :=
+  problem_144_spec (string_of_list_z x) (string_of_list_z n) (bool_of_z output).
+```
+
+3. C 层额外条件只用于解析和溢出安全。
+
+`fraction_parts_z` 描述 slash 位置、两侧数字、解析出的分子分母和所有前缀解析上界；`fraction_values_safe_z` 将四个正整数限制在 `1..46340`，用于证明 `a * c`、`b * d` 不溢出 `int`。这些条件没有写进最终 wrapper。
 
 ## C_50 encode/decode_shift 验证记录
 
@@ -1834,3 +2178,96 @@ Definition problem_140_spec_z (input output : list Z) : Prop :=
 3. C 层 invariant 用“已输出前缀 + pending 空格段”。
 
 循环处理到位置 `i` 时，`out_l = fix_spaces_prefix_z i l`，`spacelen = fix_spaces_pending_z i l`，并维护 `k + spacelen <= i`，用于证明输出写入不越界。
+
+## C_127 intersection 验证记录
+
+状态：已完成原 spec 修复后的直连端到端验证。
+
+已通过的验收链：
+
+```bash
+coqtop -quiet -l QCP_examples/humaneval/spec/127.v
+coqc coins_127.v
+coqc C_127_goal.v
+coqc C_127_proof_auto.v
+coqc C_127_proof_manual.v
+coqc C_127_goal_check.v
+```
+
+扫描结果：
+
+```bash
+grep -nE "Admitted\.|^[[:space:]]*Axiom[[:space:]]" coins_127.v C_127_proof_manual.v
+```
+
+无输出。
+
+### 语义与适配
+
+1. `../spec/127.v` 已修复解析问题。
+
+原 spec 语义正确，但 `problem_127_pre` 中的 `s1 <= e1 /\ s2 <= e2` 会受后续 `nat_scope` 影响。已将这两个比较显式标成 `%Z`，并在 `ORIGINAL_SPEC_ISSUES_LOG.md` 中记录。
+
+2. `coins_127.v` 使用纯原 pre/spec wrapper。
+
+```coq
+Definition problem_127_pre_z (i1 i2 : list Z) : Prop :=
+  problem_127_pre (interval_pair_z i1) (interval_pair_z i2).
+
+Definition problem_127_spec_z (i1 i2 : list Z) (output : Z) : Prop :=
+  problem_127_spec (interval_pair_z i1) (interval_pair_z i2) (yesno_of_z output).
+```
+
+`interval_int_range`、`prime_prefix_z`、`prime_len_z` 只用于 C 层安全性、循环不变式和 proof bridge，不写进最终 wrapper。
+
+3. QCP 适配未改变核心业务语义。
+
+原函数返回 `"YES"` / `"NO"`，验证版返回 `1` / `0`，由 `yesno_of_z` 桥接到原始 string 输出规格。原 `max_int` / `min_int` helper 被展开成显式 `if`，避免未标注函数调用；交集长度和素数判断逻辑保持一致。
+
+### 证明经验
+
+1. 固定长度 int 数组要把入口指针和入口 size 带过早返回和循环。
+
+本例后置条件需要归还入口数组资源：
+
+```c
+IntArray::full(interval1, interval1_size, i1) *
+IntArray::full(interval2, interval2_size, i2)
+```
+
+因此中间 `Assert` 和循环 `Inv Assert` 里必须保留：
+
+```c
+interval1 == interval1@pre &&
+interval2 == interval2@pre &&
+interval1_size == interval1_size@pre &&
+interval2_size == interval2_size@pre
+```
+
+否则 return VC 中左侧资源是当前 size，右侧资源是入口 size，无法匹配。
+
+2. primality 循环沿用 `C_82` 的前缀不变式。
+
+循环不变式维护：
+
+```c
+2 <= i && i <= 46340 &&
+prime_prefix_z(i, l)
+```
+
+进入循环时用 `prime_prefix_z_2`，未整除分支用 `prime_prefix_z_step` 推进，正常退出用 `prime_len_z_true_from_prefix`，整除早返回用 `prime_len_z_false_divisor`，`l < 2` 分支用 `prime_len_z_false_small`。
+
+3. int 安全性需要单独限制 interval 端点范围。
+
+`interval_int_range` 在 C annotation 中要求两个端点都在 `[-1000000000, 1000000000]`，从而证明 `inter2 - inter1` 落在 `[-2000000000, 2000000000]`，不会溢出 `int`。素数循环中的 `i * i` 通过 `i <= 46340` 保证安全。
+
+4. 生成文件不能手动改；scope 问题应在源 spec/wrapper 侧解决。
+
+本例一开始发现 `C_127_goal.v` 中裸数字 `2` 被按 `nat` 解析，根因不是生成文件本身，而是 `spec/127.v` 中最后打开了 `nat_scope`，通过 `Load "../spec/127"` 影响后续 scope。正确处理方式是修正 `spec/127.v` 的 scope 顺序，让 `Z_scope` 最后打开，然后重新运行 `symexec`。最终保留的 `C_127_goal.v`、`C_127_proof_auto.v`、`C_127_goal_check.v` 均为 `symexec` 原样生成状态，没有手动补丁。
+
+```coq
+Open Scope Z_scope.
+Open Scope nat_scope.
+Open Scope string_scope.
+Open Scope Z_scope.
+```
