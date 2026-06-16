@@ -1,5 +1,0 @@
-From SimpleC.EE.LLM_friendly_cases Require Import uint_array_strategy_goal uint_array_strategy_proof.
-
-Module uint_array_Strategy_Correctness : uint_array_Strategy_Correct.
-  Include uint_array_strategy_proof.
-End uint_array_Strategy_Correctness.

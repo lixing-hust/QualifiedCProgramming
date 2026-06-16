@@ -1,13 +1,21 @@
 # QCP: A Practical Separation Logic-based C Program Verification Tool
 
 ## File Structure
-- `linux-binary/`, `win-binary/`, `mac-x86-64-binary`, `mac-arm64-binary`: Precompiled QCP binaries
-- `QCP_examples/`: Annotated C programs, split into `Applications/`, `QCP_democases/`, and `LLM_friendly_cases/`
-- `SeparationLogic/`: Rocq scripts to check QCP-generated VCs
-- `tutorial/`: Step-by-step QCP usage guide
-- `run-example-linux.sh`, `run-example-windows.sh`: Scripts to run QCP examples
-- `mcp/`: QCP-mcp and Rocq-mcp files
-- `qide.vsix` : QCP VSCode Extension
+- `linux-binary/`, `win-binary/`, `mac-x86-64-binary/`, `mac-arm64-binary/`: Precompiled QCP binaries, including `symexec`, `StrategyCheck`, `lsp`, and `mcp`.
+- `QCP_examples/`: Annotated C programs used as QCP inputs. Current subtrees are `Applications_human/`, `QCP_demos_human/`, `QCP_demos_LLM/`, and `LLM_bench/`.
+- `SeparationLogic/`: Rocq libraries and generated verification artifacts used to check QCP-generated VCs. Its `examples/` subtree mirrors the main `QCP_examples/` layout.
+- `mcp/`: MCP server integrations. `mcp/qcp-mcp/` provides the QCP MCP server, and `mcp/rocq-mcp/` is a submodule for Rocq interaction.
+- `.agents/`: Agent-facing verification workflow assets. It contains local skills for orchestration, annotation, VC checking, VC proving, and final consistency checks.
+- `AGENTS.md`, `AGENTS_WIN.md`: Repository-level contracts for agent-driven verification workflows. Linux/macOS use `AGENTS.md`; Windows uses `AGENTS_WIN.md`.
+- `README_LINUX.md`, `README_WINDOWS.md`, `README_MACOS.md`: Platform-specific setup guides.
+- `.codex/`, `.vscode/`, `.devcontainer/`: Local agent/editor/container configuration.
+- `scripts/`: Utility scripts for repository-level analysis.
+- `tutorial/`: Step-by-step QCP usage guide.
+- `run-example-linux.sh`, `run-example-windows.sh`: Scripts that run QCP examples and refresh generated Rocq files.
+- `categories.json`, `categories.md`: Case categorization metadata.
+- `qide.vsix`: QCP VS Code extension.
+- `vscoq-2.2.3.vsix`: Windows-tested VsCoq extension package for Coq 8.20 proof interaction.
+
 
 ## Environment Setup
 
@@ -27,44 +35,13 @@ Optional (only if you use MCP locally):
 - `uv` (for `qcp-mcp` / `rocq-mcp` Python environment)
 - `opam` + `coq-lsp` (for `rocq-mcp` interactive tools)
 
-#### Configure Setup
+#### Platform-Specific Local Setup
 
-To compile generated Rocq files in `SeparationLogic/`, create `CONFIGURE` (no extension) in both:
+Choose the guide for your platform:
 
-- `SeparationLogic/CONFIGURE`
-- `SeparationLogic/unifysl/CONFIGURE`
-
-Example `CONFIGURE` content:
-
-```ini
-COQBIN = /absolute/path/to/coq/bin/
-```
-
-For windows user, you must explicitly set `SUF = .exe` in the `CONFIGURE` file:
-
-```ini
-COQBIN = /absolute/path/to/coq/bin/
-SUF = .exe
-```
-
-If you use wsl, we recommend installing Rocq 8.20.1 via opam. 
-
-1. Install Opam (if not already):
-```bash
-sudo apt update && sudo apt install opam
-opam init
-eval $(opam env)
-```
-2. Install Rocq 8.20.1:
-```bash
-opam install coq.8.20.1
-```
-
-With this approach:
-
-- No CONFIGURE file is needed.
-
-- You can use the vsrocq extension in VS Code directly.
+- [Linux local setup](README_LINUX.md#local-environment-setup)
+- [Windows local setup](README_WINDOWS.md#local-environment-setup)
+- [macOS local setup](README_MACOS.md#local-environment-setup)
 
 #### Rocq Files Build
 
@@ -77,7 +54,7 @@ cd ..
 make depend && make
 ```
 
-If you only want part of the generated files under SeparationLogic/examples, the build targets are now split by the same three folders:
+If you only want part of the generated files under `SeparationLogic/examples`, the build targets are split by the current example groups:
 
 ```bash
 cd SeparationLogic
@@ -92,6 +69,7 @@ make depend-examples && make examples
 make depend-examples-applications && make examples-applications
 make depend-examples-qcp-democases && make examples-qcp-democases
 make depend-examples-llm-friendly-cases && make examples-llm-friendly-cases
+make depend-examples-llm-bench && make examples-llm-bench
 
 # Clean outputs without removing everything
 make clean-core
@@ -99,10 +77,11 @@ make clean-examples
 make clean-examples-applications
 make clean-examples-qcp-democases
 make clean-examples-llm-friendly-cases
+make clean-examples-llm-bench
 make clean-deps
 ```
 
-This is useful because SeparationLogic/examples is organized into Applications, QCP_democases, and LLM_friendly_cases, and you no longer need to regenerate dependencies for all example folders every time.
+This is useful because `SeparationLogic/examples` is organized into `Applications_human`, `QCP_demos_human`, `QCP_demos_LLM`, and `LLM_bench`, and you no longer need to regenerate dependencies for all example folders every time.
 The clean targets follow the same split, so you can remove only core outputs, all example outputs, one example subtree, or just the generated dependency files.
 
 ### Docker Environment Setup
@@ -143,8 +122,14 @@ The QIDE extension for VS Code should be automatically installed and configured 
   - Select "Extensions: Install from VSIX..."
   - Choose the VSIX file `qide.vsix` from the project root.
 - QIDE extension settings: open `File > Preferences > Settings`, search for `qide`, and set:
-  - `qide.lspBinPath` to the path of the QCP binary (e.g., `linux-binary/lsp`)
-  - `qide.lspArg` is the excution options for QCP. You can leave it empty refer to `Options to run QCP`.
+  - `qide.lspBinPath` to the platform-specific `lsp` binary path
+  - `qide.lspArg` is the execution options for QCP. You can leave it empty refer to `Options to run QCP`.
+
+Platform-specific QIDE notes:
+
+- [Linux QIDE setup](README_LINUX.md#qide-extension)
+- [Windows QIDE setup](README_WINDOWS.md#qide-extension)
+- [macOS QIDE setup](README_MACOS.md#qide-extension)
 
 ### Usage
 
@@ -157,11 +142,19 @@ The QIDE extension for VS Code should be automatically installed and configured 
 
 The `run-example-linux.sh` and `run-example-windows.sh` scripts in the root directory give examples of how to run QCP command-line tool. You can directly execute them if you have the required environment set up.
 
+Platform-specific command-line notes:
+
+- [Linux command-line usage](README_LINUX.md#qcp-command-line-tool)
+- [Windows command-line usage](README_WINDOWS.md#qcp-command-line-tool)
+- [macOS command-line usage](README_MACOS.md#qcp-command-line-tool)
+
+For VS Code Rocq/Coq proof interaction on Windows with Coq 8.20, use the repository-local [Windows proof extension setup](README_WINDOWS.md#vs-code-coq-proof-extension).
+
 Below is a summary of the main command-line options of QCP. We also recommend following the tutorials in the `tutorial/` folder for a comprehensive guide.
 
 **Usage:**
-```
-linux_binary/symexec [options]
+```text
+linux-binary/symexec [options]
 ```
 
 **Required options:**
@@ -201,168 +194,61 @@ git submodule update --init --recursive
 
 After updating submodules, verify `mcp/rocq-mcp/README.md` exists.
 
-If you do not install uv, you can use the following command to install : 
-```bash
-# On macOS and Linux.
-curl -LsSf https://astral.sh/uv/install.sh | sh
+Platform-specific MCP setup:
 
-# On Windows.
-powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
-```
-
-### 1) Configure `qcp-mcp`
-
-```bash
-cd mcp/qcp-mcp
-uv venv .venv
-uv sync
-```
-
-Set `mcp/qcp-mcp/CONFIGURE`:
-
-```ini
-QCP_MCP_BIN=/absolute/path/to/qcp/mcp/binary
-```
-
-eg : 
-```ini
-QCP_MCP_BIN=/mnt/d/coq/qcp-binary-democases/linux-binary/mcp
-```
-
-### 2) Configure `rocq-mcp`
-
-Install and prepare in submodule:
-
-
-```bash
-cd mcp/rocq-mcp
-uv tool install ".[interactive]"
-```
-
-`rocq-mcp` interactive tools rely on `pet` from `coq-lsp`. We recommend installing `coq-lsp` via `opam`.
-
-Linux (Ubuntu/Debian example):
-
-```bash
-sudo apt update
-sudo apt install -y opam bubblewrap
-opam init -y
-eval $(opam env)
-opam repo add coq-released https://coq.inria.fr/opam/released
-opam install -y coq-lsp
-pet --version
-```
-
-macOS (Homebrew example):
-
-```bash
-brew install opam
-opam init -y
-eval $(opam env)
-opam repo add coq-released https://coq.inria.fr/opam/released
-opam install -y coq-lsp
-pet --version
-```
-
-Windows:
-
-- Recommended: use WSL2 (Ubuntu), then run the Linux commands above.
-- Native Windows opam setup is possible but less stable for this workflow.
-
-### 3) IDE Setup
-
-**VSCode Copilot**
-
-Create or edit `.vscode/mcp.json` in the project root.
-
-Linux/macOS example:
-
-```json
-{
-  "servers": {
-    "qcp": {
-      "type": "stdio",
-      "command": "/absolute/path/to/qcp-binary-democases/mcp/qcp-mcp/.venv/bin/python",
-      "args": [
-          "-m",
-          "qcp_mcp.server"
-      ],
-      "env" : {
-          "PYTHONPATH": "/absolute/path/to/qcp-binary-democases/mcp/qcp-mcp/src",
-          "QCP_MCP_CONFIG": "/absolute/path/to/qcp-binary-democases/mcp/qcp-mcp/CONFIGURE"
-      }
-    },
-    "rocq-mcp": {
-      "type": "stdio",
-      "command": "rocq-mcp",
-      "env": {
-        "ROCQ_WORKSPACE": "${workspaceFolder}"
-      }
-    }
-  }
-}
-```
-
-eg : 
-```json
-"servers": {
-      "qcp": {
-        "type": "stdio",
-        "command": "/mnt/d/coq/qcp-binary-democases/mcp/qcp-mcp/.venv/bin/python",
-        "args": [
-          "-m",
-          "qcp_mcp.server"
-        ],
-        "env" : {
-          "PYTHONPATH": "/mnt/d/coq/qcp-binary-democases/mcp/qcp-mcp/src",
-          "QCP_MCP_CONFIG": "/mnt/d/coq/qcp-binary-democases/mcp/qcp-mcp/CONFIGURE"
-        }
-      },
-      "rocq-mcp": {
-        "command": "rocq-mcp",
-        "env": {
-          "ROCQ_WORKSPACE": "${workspaceFolder}"
-        }
-      }
-    }
-```
-
-After editing `mcp.json`, enable/start the servers from VS Code MCP server list.
-
-
-**Claude Code**
-
-Add servers in terminal:
-
-```bash
-claude mcp add -s project qcp -- /absolute/path/to/qcp-binary-democases/mcp/qcp-mcp/.venv/bin/python /absolute/path/to/qcp-binary-democases/mcp/qcp-mcp/server.py
-claude mcp add -s project rocq-mcp -- rocq-mcp
-```
-
-Platform-specific config file locations (if you prefer manual JSON editing):
-
-- Linux: `~/.config/claude/`
-- macOS: `~/Library/Application Support/Claude/`
-
-**Codex**
-Add servers in terminal:
-
-```bash
-codex mcp add qcp --env PYTHONPATH=/absolute/path/to/qcp-binary-democases/mcp/qcp-mcp/src --env QCP_MCP_CONFIG=/absolute/path/to/qcp-binary-democases/mcp/qcp-mcp/CONFIGURE -- /absolute/path/to/qcp-binary-democases/mcp/qcp-mcp/.venv/bin/python -m qcp_mcp.server
-codex mcp add rocq-mcp -- rocq-mcp
-```
-Platform-specific config file locations (if you prefer manual JSON editing):
-
-- Linux: `"~/.codex/config.toml"`
+- [Linux MCP setup](README_LINUX.md#mcp-setup)
+- [Windows MCP setup](README_WINDOWS.md#mcp-setup)
+- [macOS MCP setup](README_MACOS.md#mcp-setup)
 
 For more details, refer to:
 - `mcp/qcp-mcp/README.md`
 - `mcp/rocq-mcp/README.md`
 
+## Agent Verification Workflow
+
+The repository includes agent-specific instructions for running a complete verification case, not just isolated edits. Choose the platform-specific entry point first, then use the detailed phase contracts under `.agents/skills/`.
+
+Platform-specific agent entry points:
+
+- Linux: `AGENTS.md`
+- macOS: `AGENTS.md`
+- Windows: `AGENTS_WIN.md`
+
+All three platforms share the same skill set under `.agents/skills/`. Windows-specific execution differences are documented in `AGENTS_WIN.md`; there is no separate Windows-only skill tree.
+
+The supported verification modes are:
+
+- `direct proof`: annotate a C program, run symbolic execution, prove generated Rocq VCs, and perform final checks.
+- `refinement proof`: relate a C program to an abstract monadic program, prove the refinement obligations, and finish the same Rocq/final-check workflow.
+
+The phase state machine is:
+
+```text
+intake -> annotation -> goal-frozen -> vc-checking -> vc-proving -> final-check -> done
+```
+
+Downstream phases may return to `annotation` or `vc-proving` when they expose stale inputs, annotation bugs, or proof obligations that require earlier fixes.
+
+### Agent Roles
+
+- Main agent: owns phase transitions, official file writes, symbolic execution, Rocq compilation, final checks, and case status records.
+- `annotation-subagent`: works only in annotation scratch files, uses `annotation-filling`, and runs `annotation-checking` before anything is integrated into official files.
+- `vc-checking-subagent`: uses `vc-checking` to classify manual VCs and produce proof grouping hints.
+- `vc-proving-subagent`: uses `vc-proving` to prove manual VCs in proving scratch files, normally through the scripted concurrent worker pipeline.
+
+### Agent Skills
+
+- `.agents/skills/verification-orchestrator/`: phase ownership, state machine, scratch lifecycle, formal file boundaries, artifact templates, and stale-input rules.
+- `.agents/skills/annotation-filling/`: spec-first and predicate-first C annotation work using isolated annotation C scratch plus `annotation_scratch_lib`.
+- `.agents/skills/annotation-checking/`: quality gate for mathematical specs, function contracts, assertions, and loop invariants before official integration.
+- `.agents/skills/vc-checking/`: semantic triage of generated VCs and proof group planning.
+- `.agents/skills/vc-proving/`: scripted proof splitting, worker preparation, concurrent proving, validation, helper migration, and manual proof verification.
+- `.agents/skills/final-check/`: final structure audit, symexec freshness check, Rocq compilation, `Admitted`/extra `Axiom` review, and cleanup checks.
+- `.agents/skills/annotation-and-symbolic-execution/`: legacy annotation workflow kept for compatibility; new cases should use `annotation-filling` plus `annotation-checking`.
 
 ## Evaluation
 
 Our evaluation consists of two parts: the Tool component and the VSCode Extension component. 
-- The Tool component allows you to check files in the ``QCP_examples`` tree by running ``sh ./run-example-linux.sh``, and it generates the corresponding Coq files in the ``SeparationLogic/examples/`` directory, grouped under ``Applications/``, ``QCP_democases/``, and ``LLM_friendly_cases/``. 
-- The Rocq build in ``SeparationLogic/`` mirrors this layout with folder-specific targets: ``examples-applications``, ``examples-qcp-democases``, and ``examples-llm-friendly-cases``, together with matching ``depend-examples-*`` targets.
+- The Tool component allows you to check files in the ``QCP_examples`` tree by running ``sh ./run-example-linux.sh``, and it generates the corresponding Coq files in the ``SeparationLogic/examples/`` directory, grouped under ``Applications_human/``, ``QCP_demos_human/``, ``QCP_demos_LLM/``, and ``LLM_bench/``.
+- The Rocq build in ``SeparationLogic/`` mirrors this layout with folder-specific targets: ``examples-applications``, ``examples-qcp-democases``, ``examples-llm-friendly-cases``, and ``examples-llm-bench``, together with matching ``depend-examples-*`` targets.
 - The VSCode Extension component is designed to support real-time verification interaction. You can open any annotated C file to view the current assertion state, which facilitates the continued writing of annotations for proofs.

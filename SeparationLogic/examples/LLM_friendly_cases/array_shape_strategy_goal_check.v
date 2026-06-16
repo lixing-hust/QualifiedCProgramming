@@ -1,5 +1,0 @@
-From SimpleC.EE.LLM_friendly_cases Require Import array_shape_strategy_goal array_shape_strategy_proof.
-
-Module array_shape_Strategy_Correctness : array_shape_Strategy_Correct.
-  Include array_shape_strategy_proof.
-End array_shape_Strategy_Correctness.

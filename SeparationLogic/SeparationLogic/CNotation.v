@@ -51,7 +51,7 @@ Axiom sizeof_uint: sizeof_front_end_type FET_uint = 4.
 Axiom sizeof_uchar: sizeof_front_end_type FET_uchar = 1.
 Axiom sizeof_uint64: sizeof_front_end_type FET_uint64 = 8.
 Axiom sizeof_ushort: sizeof_front_end_type FET_ushort = 2.
-Axiom sizeof_ptr: sizeof_front_end_type FET_ptr = 8.
+Axiom sizeof_ptr: sizeof_front_end_type FET_ptr = 4.
 Declare Custom Entry addr_expr_entry.
 Declare Custom Entry lvalue_expr_entry.
 Declare Custom Entry rvalue_expr_entry.

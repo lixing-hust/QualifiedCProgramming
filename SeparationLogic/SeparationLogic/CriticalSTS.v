@@ -87,7 +87,7 @@ Definition InsideCritical (s: @critical_STS_state C.c_sts): expr :=
 
 Definition OutsideCritical (s: @critical_STS_state C.c_sts): expr :=
   EX s',
-    [| critical_STS_transition s s' |] &&
+    “ critical_STS_transition s s' ” &&
     at_states (fun cs => exists s'',
                  cs = outside_state s'' /\
                  critical_STS_transition s' s'').

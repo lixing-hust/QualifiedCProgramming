@@ -1022,7 +1022,7 @@ Proof.
     + inversion H5; lia.
 Qed.
 
-Theorem increasing_interval_list_range : forall l pace lo hi, pace > 0 ->
+Theorem increasing_interval_list_range : forall l pace lo hi, pace >= 0 ->
 lo <= hi ->
 interval_list pace lo hi l -> increasing l ->
 lo + Zlength l * (pace + 1) <= hi + pace + 1.
@@ -1059,7 +1059,7 @@ Proof.
         lia.
 Qed.
 
-Theorem interval_list_range : forall l pace lo hi, pace > 0 ->
+Theorem interval_list_range : forall l pace lo hi, pace >= 0 ->
 lo <= hi ->
 interval_list pace lo hi l ->
 lo + Zlength l * (pace + 1) <= hi + pace + 1.

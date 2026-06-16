@@ -35,6 +35,9 @@ Module Type ELEMENT_STORE.
     storeA (x + n * sizeA) lo a --||-- storeA x (lo + n) a.
   Axiom undefstoreA_shift : forall x n lo,
     undefstoreA (x + n * sizeA) lo --||-- undefstoreA x (lo + n).
+  Axiom store_to_align : forall x lo a, storeA x lo a |-- store_align_n sizeA.
+  Axiom undefstore_to_align : forall x lo, undefstoreA x lo |-- store_align_n sizeA.
+  Axiom sizeA_valid : 0 < sizeA < Int.max_unsigned.
 End ELEMENT_STORE.
 
 Section GeneralArrayLib.
@@ -42,7 +45,7 @@ Section GeneralArrayLib.
   Variable (storeA : addr -> Z -> A -> Assertion).
 
   Lemma store_array_rec_length: forall x lo hi (l : list A),
-  store_array_rec storeA x lo hi l |-- [| Z.of_nat (length l) = hi - lo |].
+  store_array_rec storeA x lo hi l |-- “ Z.of_nat (length l) = hi - lo ”.
   Proof.
     intros.
     revert lo; induction l; simpl store_array_rec ; intros.
@@ -52,7 +55,7 @@ Section GeneralArrayLib.
   Qed.
 
   Lemma store_array_rec_Zlength: forall x lo hi (l : list A),
-    store_array_rec storeA x lo hi l |-- [| Zlength l = hi - lo |].
+    store_array_rec storeA x lo hi l |-- “ Zlength l = hi - lo ”.
   Proof.
     intros.
     prop_apply store_array_rec_length.
@@ -62,7 +65,7 @@ Section GeneralArrayLib.
   Qed.
 
   Lemma store_array_rec_nil : forall x lo (l : list A),
-    store_array_rec storeA x lo lo l |-- [| l = nil |] && emp.
+    store_array_rec storeA x lo lo l |-- “ l = nil ” && emp.
   Proof.
     intros.
     prop_apply (store_array_rec_length x lo lo l).
@@ -70,8 +73,16 @@ Section GeneralArrayLib.
     destruct l ; simpl in * ; try entailer!.
   Qed.
 
+  Lemma store_array_rec_valid: forall x lo hi (l : list A),
+    store_array_rec storeA x lo hi l |-- “ lo <= hi ”.
+  Proof.
+    intros.
+    prop_apply store_array_rec_length.
+    entailer!.
+  Qed.
+
   Lemma store_array_length: forall x n (l : list A),
-    store_array storeA x n l |-- [| Z.of_nat (length l) = n |].
+    store_array storeA x n l |-- “ Z.of_nat (length l) = n ”.
   Proof.
     intros.
     unfold store_array.
@@ -80,14 +91,22 @@ Section GeneralArrayLib.
   Qed.
 
   Lemma store_array_Zlength: forall x n (l : list A),
-    store_array storeA x n l |-- [| Zlength l = n |].
+    store_array storeA x n l |-- “ Zlength l = n ”.
   Proof.
     intros. rewrite Zlength_correct.
     apply store_array_length.
   Qed.
 
+  Lemma store_array_valid: forall x n (l : list A),
+    store_array storeA x n l |-- “ 0 <= n ”.
+  Proof.
+    intros.
+    prop_apply store_array_length.
+    entailer!.
+  Qed.
+
   Lemma store_array_missing_i_rec_length: forall x i lo hi (l : list A),
-    store_array_missing_i_rec storeA x i lo hi l |-- [| Z.of_nat (length l) = hi - lo |].
+    store_array_missing_i_rec storeA x i lo hi l |-- “ Z.of_nat (length l) = hi - lo ”.
   Proof.
     intros.
     revert i lo hi; induction l; simpl; intros.
@@ -101,12 +120,28 @@ Section GeneralArrayLib.
   Qed.
 
   Lemma store_array_missing_i_rec_Zlength: forall x i lo hi (l : list A),
-    store_array_missing_i_rec storeA x i lo hi l |-- [| Zlength l = hi - lo |].
+    store_array_missing_i_rec storeA x i lo hi l |-- “ Zlength l = hi - lo ”.
   Proof.
     intros.
     prop_apply store_array_missing_i_rec_length.
     Intros.
     rewrite Zlength_correct.
+    entailer!.
+  Qed.
+
+  Lemma store_array_missing_i_rec_valid: forall x i lo hi (l : list A),
+    store_array_missing_i_rec storeA x i lo hi l |-- “ lo <= hi ”.
+  Proof.
+    intros.
+    prop_apply store_array_missing_i_rec_length.
+    entailer!.
+  Qed.
+
+  Lemma store_array_missing_i_valid: forall x i n (l : list A),
+    store_array_missing_i_rec storeA x i 0 n l |-- “ 0 <= n ”.
+  Proof.
+    intros.
+    prop_apply store_array_missing_i_rec_length.
     entailer!.
   Qed.
 
@@ -242,7 +277,7 @@ Qed.
 (** length Lemmas *)
 
 Lemma seg_length: forall x lo hi (l : list A),
-  seg x lo hi l |-- [| Z.of_nat (length l) = hi - lo |].
+  seg x lo hi l |-- “ Z.of_nat (length l) = hi - lo ”.
 Proof.
   intros.
   revert lo; induction l; unfold seg ; simpl ; intros.
@@ -252,7 +287,7 @@ Proof.
 Qed.
 
 Lemma seg_Zlength: forall x lo hi (l : list A),
-  seg x lo hi l |-- [| Zlength l = hi - lo |].
+  seg x lo hi l |-- “ Zlength l = hi - lo ”.
 Proof.
   intros.
   prop_apply seg_length.
@@ -262,7 +297,7 @@ Proof.
 Qed.
 
 Lemma seg_nil : forall x lo (l : list A),
-  seg x lo lo l |-- [| l = nil |] && emp.
+  seg x lo lo l |-- “ l = nil ” && emp.
 Proof.
   intros.
   prop_apply seg_length.
@@ -310,7 +345,7 @@ Proof.
 Qed.
 
 Lemma full_length: forall x n (l : list A),
-  full x n l |-- [| Z.of_nat (length l) = n |].
+  full x n l |-- “ Z.of_nat (length l) = n ”.
 Proof.
   intros.
   unfold full.
@@ -319,14 +354,14 @@ Proof.
 Qed.
 
 Lemma full_Zlength: forall x n (l : list A),
-  full x n l |-- [| Zlength l = n |].
+  full x n l |-- “ Zlength l = n ”.
 Proof.
   intros. rewrite Zlength_correct.
   apply full_length.
 Qed.
 
 Lemma mixed_seg_length: forall x lo hi (l : list (option A)),
-  mixed_seg x lo hi l |-- [| Z.of_nat (length l) = hi - lo |].
+  mixed_seg x lo hi l |-- “ Z.of_nat (length l) = hi - lo ”.
 Proof.
   intros.
   unfold mixed_seg.
@@ -334,7 +369,7 @@ Proof.
 Qed.
 
 Lemma mixed_seg_Zlength: forall x lo hi (l : list (option A)),
-  mixed_seg x lo hi l |-- [| Zlength l = hi - lo |].
+  mixed_seg x lo hi l |-- “ Zlength l = hi - lo ”.
 Proof.
   intros.
   unfold mixed_seg.
@@ -342,7 +377,7 @@ Proof.
 Qed.
 
 Lemma mixed_seg_nil : forall x lo (l : list (option A)),
-  mixed_seg x lo lo l |-- [| l = nil |] && emp.
+  mixed_seg x lo lo l |-- “ l = nil ” && emp.
 Proof.
   intros.
   unfold mixed_seg.
@@ -350,7 +385,7 @@ Proof.
 Qed.
 
 Lemma mixed_full_length: forall x n (l : list (option A)),
-  mixed_full x n l |-- [| Z.of_nat (length l) = n |].
+  mixed_full x n l |-- “ Z.of_nat (length l) = n ”.
 Proof.
   intros.
   unfold mixed_full.
@@ -358,14 +393,14 @@ Proof.
 Qed.
 
 Lemma mixed_full_Zlength: forall x n (l : list (option A)),
-  mixed_full x n l |-- [| Zlength l = n |].
+  mixed_full x n l |-- “ Zlength l = n ”.
 Proof.
   intros. rewrite Zlength_correct.
   apply mixed_full_length.
 Qed.
 
 Lemma mixed_missing_i_length: forall x i lo hi (l : list (option A)),
-  mixed_missing_i x i lo hi l |-- [| Z.of_nat (length l) = hi - lo |].
+  mixed_missing_i x i lo hi l |-- “ Z.of_nat (length l) = hi - lo ”.
 Proof.
   intros.
   unfold mixed_missing_i.
@@ -373,7 +408,7 @@ Proof.
 Qed.
 
 Lemma mixed_missing_i_Zlength: forall x i lo hi (l : list (option A)),
-  mixed_missing_i x i lo hi l |-- [| Zlength l = hi - lo |].
+  mixed_missing_i x i lo hi l |-- “ Zlength l = hi - lo ”.
 Proof.
   intros.
   unfold mixed_missing_i.
@@ -381,7 +416,7 @@ Proof.
 Qed.
 
 Lemma missing_i_length: forall x i lo hi (l : list A),
-  missing_i x i lo hi l |-- [| Z.of_nat (length l) = hi - lo |].
+  missing_i x i lo hi l |-- “ Z.of_nat (length l) = hi - lo ”.
 Proof.
   intros.
   unfold missing_i.
@@ -389,7 +424,7 @@ Proof.
 Qed.
 
 Lemma missing_i_Zlength: forall x i lo hi (l : list A),
-  missing_i x i lo hi l |-- [| Zlength l = hi - lo |].
+  missing_i x i lo hi l |-- “ Zlength l = hi - lo ”.
 Proof.
   intros.
   unfold missing_i.
@@ -399,7 +434,7 @@ Qed.
 (* Basic Properties *)
 
 Lemma seg_valid : forall x lo hi l,
-  seg x lo hi l |-- [| lo <= hi |].
+  seg x lo hi l |-- “ lo <= hi ”.
 Proof.
   intros.
   unfold seg.
@@ -408,7 +443,7 @@ Proof.
 Qed.
 
 Lemma mixed_seg_valid : forall x lo hi l,
-  mixed_seg x lo hi l |-- [| lo <= hi |].
+  mixed_seg x lo hi l |-- “ lo <= hi ”.
 Proof.
   intros.
   prop_apply mixed_seg_length.
@@ -416,7 +451,7 @@ Proof.
 Qed.
 
 Lemma undef_seg_valid : forall x lo hi,
-  undef_seg x lo hi |-- [| lo <= hi |].
+  undef_seg x lo hi |-- “ lo <= hi ”.
 Proof.
   intros.
   unfold undef_seg.
@@ -428,7 +463,7 @@ Proof.
 Qed.
 
 Lemma seg_shape_valid : forall x lo hi,
-  seg_shape x lo hi |-- [| lo <= hi |].
+  seg_shape x lo hi |-- “ lo <= hi ”.
 Proof.
   intros.
   unfold seg_shape.
@@ -440,7 +475,7 @@ Proof.
 Qed.
 
 Lemma seg_empty : forall x lo hi,
-  seg x lo hi nil --||-- [| hi = lo |] && emp.
+  seg x lo hi nil --||-- “ hi = lo ” && emp.
 Proof.
   intros.
   unfold seg.
@@ -449,7 +484,7 @@ Proof.
 Qed.
 
 Lemma mixed_seg_empty : forall x lo hi,
-  mixed_seg x lo hi nil --||-- [| hi = lo |] && emp.
+  mixed_seg x lo hi nil --||-- “ hi = lo ” && emp.
 Proof.
   intros.
   unfold mixed_seg.
@@ -519,7 +554,7 @@ Proof.
 Qed.
 
 Lemma missing_i_empty : forall x i lo hi,
-  missing_i x i lo hi nil --||-- [| False |] .
+  missing_i x i lo hi nil --||-- “ False ” .
 Proof.
   intros.
   unfold missing_i.
@@ -528,7 +563,7 @@ Proof.
 Qed.
 
 Lemma mixed_missing_i_empty : forall x i lo hi,
-  mixed_missing_i x i lo hi nil --||-- [| False |].
+  mixed_missing_i x i lo hi nil --||-- “ False ”.
 Proof.
   intros.
   unfold mixed_missing_i.
@@ -537,7 +572,7 @@ Proof.
 Qed.
 
 Lemma undef_missing_i_empty : forall x i lo,
-  undef_missing_i x i lo lo |-- [| False |] .
+  undef_missing_i x i lo lo |-- “ False ” .
 Proof.
   intros.
   unfold undef_missing_i.
@@ -547,7 +582,7 @@ Proof.
 Qed.
 
 Lemma missing_i_shape_empty : forall x i lo,
-  missing_i_shape x i lo lo --||-- [| False |] .
+  missing_i_shape x i lo lo --||-- “ False ” .
 Proof.
   intros.
   unfold missing_i_shape.
@@ -558,8 +593,8 @@ Qed.
 
 Lemma missing_i_unfold : forall x i lo hi (l : list A) a,
   missing_i x i lo hi (a :: l) --||--
-   [|i = lo|] && seg x (lo + 1) hi l || 
-   [|i > lo|] && storeA x lo a ** missing_i x i (lo + 1) hi l.
+   “ i = lo ” && seg x (lo + 1) hi l || 
+   “ i > lo ” && storeA x lo a ** missing_i x i (lo + 1) hi l.
 Proof.
   intros.
   unfold missing_i.
@@ -569,8 +604,8 @@ Qed.
 
 Lemma mixed_missing_i_unfold : forall x i lo hi (l : list (option A)) a,
   mixed_missing_i x i lo hi (a :: l) --||--
-   [| i = lo |] && mixed_seg x (lo + 1) hi l ||
-   [| i > lo |] && mixedstoreA x lo a ** mixed_missing_i x i (lo + 1) hi l.
+   “ i = lo ” && mixed_seg x (lo + 1) hi l ||
+   “ i > lo ” && mixedstoreA x lo a ** mixed_missing_i x i (lo + 1) hi l.
 Proof.
   intros.
   unfold mixed_missing_i.
@@ -581,8 +616,8 @@ Qed.
 Lemma undef_missing_i_unfold : forall x i lo hi,
   lo < hi ->
   undef_missing_i x i lo hi --||--
-   [|i = lo|] && undef_seg x (lo + 1) hi || 
-   [|i > lo|] && undefstoreA x lo ** undef_missing_i x i (lo + 1) hi.
+   “ i = lo ” && undef_seg x (lo + 1) hi || 
+   “ i > lo ” && undefstoreA x lo ** undef_missing_i x i (lo + 1) hi.
 Proof.
   intros.
   unfold undef_missing_i.
@@ -594,8 +629,8 @@ Qed.
 Lemma missing_i_shape_unfold : forall x i lo hi,
   lo < hi ->
   missing_i_shape x i lo hi --||--
-   [|i = lo|] && seg_shape x (lo + 1) hi || 
-   [|i > lo|] && (EX a, storeA x lo a) ** missing_i_shape x i (lo + 1) hi.
+   “ i = lo ” && seg_shape x (lo + 1) hi || 
+   “ i > lo ” && (EX a, storeA x lo a) ** missing_i_shape x i (lo + 1) hi.
 Proof.
   intros.
   unfold missing_i_shape.
@@ -605,7 +640,7 @@ Proof.
 Qed.
 
 Lemma full_empty : forall x n,
-  full x n nil --||-- [| n = 0 |] && emp.
+  full x n nil --||-- “ n = 0 ” && emp.
 Proof.
   intros.
   unfold full, store_array.
@@ -614,7 +649,7 @@ Proof.
 Qed.
 
 Lemma mixed_full_empty : forall x n,
-  mixed_full x n nil --||-- [| n = 0 |] && emp.
+  mixed_full x n nil --||-- “ n = 0 ” && emp.
 Proof.
   intros.
   unfold mixed_full, store_array.
@@ -1181,11 +1216,11 @@ Proof.
 Qed.
 
 Lemma missing_i_to_seg_tail : forall x lo hi a (l : list A),
-  missing_i x hi lo hi (l ++ a :: nil) |-- seg x lo (hi - 1) l.
+  missing_i x (hi - 1) lo hi (l ++ a :: nil) |-- seg x lo (hi - 1) l.
 Proof.
   intros.
   revert lo hi.
-  induction l ; simpl ; intros ; ArraySimplify ; Split ; try entailer!.
+  induction l ; simpl ; intros; ArraySimplify; Split ; try entailer!.
   prop_apply seg_length. 
   Intros.
   rewrite length_app in H0. simpl in H0. 
@@ -1193,7 +1228,7 @@ Proof.
 Qed.
 
 Lemma mixed_missing_i_to_mixed_seg_tail : forall x lo hi a (l : list (option A)),
-  mixed_missing_i x hi lo hi (l ++ a :: nil) |-- mixed_seg x lo (hi - 1) l.
+  mixed_missing_i x (hi - 1) lo hi (l ++ a :: nil) |-- mixed_seg x lo (hi - 1) l.
 Proof.
   intros.
   revert lo hi.
@@ -1206,7 +1241,7 @@ Qed.
 
 Lemma undef_missing_i_to_undef_seg_tail : forall x lo hi,
   lo < hi -> 
-  undef_missing_i x hi lo hi |-- undef_seg x lo (hi - 1).
+  undef_missing_i x (hi - 1) lo hi |-- undef_seg x lo (hi - 1).
 Proof.
   intros.
   unfold undef_missing_i, undef_seg.
@@ -1214,37 +1249,46 @@ Proof.
   replace (hi - 1 - lo) with (hi - (lo + 1)) by lia.
   simpl. 
   Split ; try entailer!.
-  set (len := Z.to_nat (hi - (lo + 1))).
-  assert (len = Z.to_nat (hi - (lo + 1))) by lia.
-  clearbody len.
-  generalize dependent lo. revert hi.
-  induction len ; simpl ; intros ; ArraySimplify.
-  - entailer!. 
-  - Split ; try entailer!.
-    sep_apply IHlen ; try lia.
-    entailer!. 
+  + replace (hi - (lo + 1)) with 0 by lia.
+    simpl. entailer!.
+  + set (len := Z.to_nat (hi - (lo + 1))).
+    assert (len = Z.to_nat (hi - (lo + 1))) by lia.
+    clearbody len.
+    generalize dependent lo. revert hi.
+    induction len ; simpl ; intros ; ArraySimplify.
+    - entailer!. 
+    - Split ; try entailer!.
+      * replace len with O by lia. 
+        simpl. entailer!.
+      * sep_apply IHlen ; try lia.
+        entailer!. 
 Qed.
 
 Lemma missing_i_shape_to_seg_shape_tail : forall x lo hi,
   lo < hi -> 
-  missing_i_shape x hi lo hi |-- seg_shape x lo (hi - 1).
+  missing_i_shape x (hi - 1) lo hi |-- seg_shape x lo (hi - 1).
 Proof.
   intros.
   unfold missing_i_shape, seg_shape.
   replace (Z.to_nat (hi - lo)) with (S (Z.to_nat (hi - (lo + 1)))) by lia.
   replace (hi - 1 - lo) with (hi - (lo + 1)) by lia.
   simpl.  
-  Split ; try entailer!. Intros x0.
-  set (len := Z.to_nat (hi - (lo + 1))).
-  assert (len = Z.to_nat (hi - (lo + 1))) by lia.
-  clearbody len.
-  generalize dependent lo. revert hi x0.
-  induction len ; simpl ; intros ; ArraySimplify.
-  - entailer!.
-  - Split ; try entailer!. Intros x1.
-    Exists x0.
-    sep_apply IHlen ; try lia.
-    entailer!.
+  Split ; try entailer!.
+  + replace (hi - (lo + 1)) with 0 by lia.
+    simpl. entailer!.
+  + Intros x0.
+    set (len := Z.to_nat (hi - (lo + 1))).
+    assert (len = Z.to_nat (hi - (lo + 1))) by lia.
+    clearbody len.
+    generalize dependent lo. revert hi x0.
+    induction len ; simpl ; intros ; ArraySimplify.
+    - entailer!.
+    - Split ; try entailer! ; Exists x0. 
+      * replace len with O by lia.
+        simpl. entailer!.
+      * Intros x1.
+        sep_apply IHlen ; try lia.
+        entailer!.
 Qed.
 
 (* Missing-i transitions: pure, mixed, then shape/undef forgetful variants. *)
@@ -2191,6 +2235,209 @@ Proof.
   sep_apply undef_seg_to_undef_full.
   replace (x + 0 * sizeA) with x by lia.
   replace (n - 0) with n by lia.
+  entailer!.
+Qed.
+
+(** Predicate to align *)
+
+Lemma undef_seg_to_align : forall x lo hi,
+  undef_seg x lo hi |-- store_align_n ((hi - lo) * sizeA).
+Proof.
+  intros.
+  unfold undef_seg.
+  set (n := Z.to_nat (hi - lo)).
+  assert (n = Z.to_nat (hi - lo)) by lia.
+  clearbody n.
+  generalize dependent lo. revert hi.
+  induction n; intros; simpl; try entailer!.
+  - replace ((hi - lo) * sizeA) with 0 by lia.
+    unfold store_align_n. Exists nil.
+    simpl. entailer!. constructor.
+  - sep_apply IHn ; try lia.
+    sep_apply undefstore_to_align.
+    sep_apply (store_align_merge sizeA ((hi - (lo + 1)) * sizeA)).
+    replace (sizeA + (hi - (lo + 1)) * sizeA) with ((hi - lo) * sizeA) by lia.
+    entailer!.
+Qed.
+
+Lemma seg_to_align : forall x lo hi (l : list A),
+  seg x lo hi l |-- store_align_n ((hi - lo) * sizeA) .
+Proof.
+  intros.
+  sep_apply seg_to_undef_seg.
+  sep_apply undef_seg_to_align.
+  entailer!.
+Qed.
+
+Lemma mixed_seg_to_align : forall x lo hi (l : list (option A)),
+  mixed_seg x lo hi l |-- store_align_n ((hi - lo) * sizeA).
+Proof.
+  intros.
+  sep_apply mixed_seg_to_undef_seg.
+  sep_apply undef_seg_to_align.
+  entailer!.
+Qed.
+
+Lemma seg_shape_to_align : forall x lo hi,
+  seg_shape x lo hi |-- store_align_n ((hi - lo) * sizeA).
+Proof.
+  intros.
+  sep_apply seg_shape_to_undef_seg.
+  sep_apply undef_seg_to_align.
+  entailer!.
+Qed.
+
+Lemma full_to_align : forall x n (l : list A),
+  full x n l |-- store_align_n (n * sizeA).
+Proof.
+  intros.
+  sep_apply full_to_seg.
+  sep_apply seg_to_align.
+  replace (n - 0) with n by lia.
+  entailer!.
+Qed.
+
+Lemma mixed_full_to_align : forall x n (l : list (option A)),
+  mixed_full x n l |-- store_align_n (n * sizeA).
+Proof.
+  intros.
+  sep_apply mixed_full_to_mixed_seg.
+  sep_apply mixed_seg_to_align.
+  replace (n - 0) with n by lia.
+  entailer!.
+Qed.
+
+Lemma undef_full_to_align : forall x n,
+  undef_full x n |-- store_align_n (n * sizeA).
+Proof.
+  intros.
+  sep_apply undef_full_to_undef_seg.
+  sep_apply undef_seg_to_align.
+  replace (n - 0) with n by lia.
+  entailer!.
+Qed.
+
+Lemma full_shape_to_align : forall x n,
+  full_shape x n |-- store_align_n (n * sizeA).
+Proof.
+  intros.
+  sep_apply full_shape_to_seg_shape.
+  sep_apply seg_shape_to_align.
+  replace (n - 0) with n by lia.
+  entailer!.
+Qed.
+
+Lemma undef_full_valid : forall x n,
+  undef_full x n |-- “ 0 <= n ”.
+Proof.
+  intros.
+  unfold undef_full, store_undef_array.
+  destruct (Z_le_gt_dec 0 n) as [H | H].
+  - entailer!.
+  - replace (Z.to_nat n) with 0%nat by lia.
+    simpl.
+    entailer!.
+Qed.
+
+Lemma full_shape_valid : forall x n,
+  full_shape x n |-- “ 0 <= n ”.
+Proof.
+  intros.
+  unfold full_shape, store_undef_array.
+  destruct (Z_le_gt_dec 0 n) as [H | H].
+  - entailer!.
+  - replace (Z.to_nat n) with 0%nat by lia.
+    simpl.
+    entailer!.
+Qed.
+
+(** Predicate byte-length range with the address-space-sized upper bound *)
+
+Lemma seg_length_range : forall x lo hi (l : list A),
+  seg x lo hi l |-- “ 0 <= (hi - lo) * sizeA <= Int.max_unsigned + 1 ”.
+Proof.
+  intros.
+  prop_apply seg_valid. Intros.
+  sep_apply seg_to_align.
+  prop_apply store_align_n_valid. Intros.
+  pose proof sizeA_valid.
+  entailer!.
+Qed.
+
+Lemma mixed_seg_length_range : forall x lo hi (l : list (option A)),
+  mixed_seg x lo hi l |-- “ 0 <= (hi - lo) * sizeA <= Int.max_unsigned + 1 ”.
+Proof.
+  intros.
+  prop_apply mixed_seg_valid. Intros.
+  sep_apply mixed_seg_to_align.
+  prop_apply store_align_n_valid. Intros.
+  pose proof sizeA_valid.
+  entailer!.
+Qed.
+
+Lemma undef_seg_length_range : forall x lo hi,
+  undef_seg x lo hi |-- “ 0 <= (hi - lo) * sizeA <= Int.max_unsigned + 1 ”.
+Proof.
+  intros.
+  prop_apply undef_seg_valid. Intros.
+  sep_apply undef_seg_to_align.
+  prop_apply store_align_n_valid. Intros.
+  pose proof sizeA_valid.
+  entailer!.
+Qed.
+
+Lemma seg_shape_length_range : forall x lo hi,
+  seg_shape x lo hi |-- “ 0 <= (hi - lo) * sizeA <= Int.max_unsigned + 1 ”.
+Proof.
+  intros.
+  prop_apply seg_shape_valid. Intros.
+  sep_apply seg_shape_to_align.
+  prop_apply store_align_n_valid. Intros.
+  pose proof sizeA_valid.
+  entailer!.
+Qed.
+
+Lemma full_length_range : forall x n (l : list A),
+  full x n l |-- “ 0 <= n * sizeA <= Int.max_unsigned + 1 ”.
+Proof.
+  intros.
+  prop_apply full_length. Intros.
+  sep_apply full_to_align.
+  prop_apply store_align_n_valid. Intros.
+  pose proof sizeA_valid.
+  entailer!.
+Qed.
+
+Lemma mixed_full_length_range : forall x n (l : list (option A)),
+  mixed_full x n l |-- “ 0 <= n * sizeA <= Int.max_unsigned + 1 ”.
+Proof.
+  intros.
+  prop_apply mixed_full_length. Intros.
+  sep_apply mixed_full_to_align.
+  prop_apply store_align_n_valid. Intros.
+  pose proof sizeA_valid.
+  entailer!.
+Qed.
+
+Lemma undef_full_length_range : forall x n,
+  undef_full x n |-- “ 0 <= n * sizeA <= Int.max_unsigned + 1 ”.
+Proof.
+  intros.
+  prop_apply undef_full_valid. Intros.
+  sep_apply undef_full_to_align.
+  prop_apply store_align_n_valid. Intros.
+  pose proof sizeA_valid.
+  entailer!.
+Qed.
+
+Lemma full_shape_length_range : forall x n,
+  full_shape x n |-- “ 0 <= n * sizeA <= Int.max_unsigned + 1 ”.
+Proof.
+  intros.
+  prop_apply full_shape_valid. Intros.
+  sep_apply full_shape_to_align.
+  prop_apply store_align_n_valid. Intros.
+  pose proof sizeA_valid.
   entailer!.
 Qed.
 

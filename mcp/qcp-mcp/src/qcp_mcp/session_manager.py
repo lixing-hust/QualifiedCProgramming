@@ -1,4 +1,5 @@
 import subprocess
+import sys
 import threading
 import os
 import shlex
@@ -66,18 +67,39 @@ class SessionManager:
         script_bin = shutil.which("script") if os.name == "posix" else None
         if script_bin:
             # Run mcp behind a PTY so the lexer behaves interactively on stdin.
-            cmd_str = " ".join(shlex.quote(part) for part in cmd)
-            cmd = [script_bin, "-qf", "-E", "never", "-c", cmd_str, "/dev/null"]
+            if sys.platform == "darwin":
+                cmd = [script_bin, "-q", "/dev/null"] + cmd 
+            else:
+                cmd_str = " ".join(shlex.quote(part) for part in cmd)
+                cmd = [script_bin, "-qf", "-E", "never", "-c", cmd_str, "/dev/null"]
         logger.info("spawning qcp process: %s", cmd)
         try:
-            proc = subprocess.Popen(
-                cmd,
-                stdin=subprocess.PIPE,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT,
-                text=True,
-                bufsize=1,
-            )
+            if os.name == "nt":
+                try:
+                    from winpty import PtyProcess
+                except ImportError:
+                    PtyProcess = None
+
+                if PtyProcess is not None:
+                    proc = PtyProcess.spawn(subprocess.list2cmdline(cmd))
+                else:
+                    proc = subprocess.Popen(
+                        cmd,
+                        stdin=subprocess.PIPE,
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.STDOUT,
+                        text=True,
+                        bufsize=1,
+                    )
+            else:
+                proc = subprocess.Popen(
+                    cmd,
+                    stdin=subprocess.PIPE,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
+                    text=True,
+                    bufsize=1,
+                )
         except Exception:
             logger.exception("failed to spawn qcp process")
             raise
@@ -88,8 +110,15 @@ class SessionManager:
             target=self._reader, args=(sess,), daemon=True
         ).start()
         logger.debug("reader thread started for pid=%s", proc.pid)
-        sess.initial_output = sess._collect(timeout=300)
-        self._state = proc.poll() is None
+        if hasattr(proc, "stdout") and proc.stdout is not None:
+            sess.initial_output = sess._collect(timeout=300)
+        else:
+            # On Windows PTY-backed processes, the startup banner is often
+            # buffered until the first real command is sent. Avoid blocking
+            # initialize() forever waiting for a prompt that only appears
+            # together with the first response.
+            sess.initial_output = ""
+        self._state = sess.is_alive()
         logger.debug("session startup state pid=%s alive=%s", proc.pid, self._state)
         logger.debug("captured initial output pid=%s chars=%d", proc.pid, len(sess.initial_output))
         logger.debug("initial collect finished for pid=%s", proc.pid)
@@ -97,10 +126,20 @@ class SessionManager:
 
     def _reader(self, sess: Session):
         logger.debug("reader loop entered pid=%s", sess.proc.pid)
-        for line in sess.proc.stdout:
-            logger.debug("reader line pid=%s: %r", sess.proc.pid, line.rstrip("\n"))
-            sess.output_q.put(line)
-        logger.debug("reader loop finished pid=%s", sess.proc.pid)
-        sess.output_q.put(None)
+        try:
+            if hasattr(sess.proc, "stdout") and sess.proc.stdout is not None:
+                for line in sess.proc.stdout:
+                    logger.debug("reader line pid=%s: %r", sess.proc.pid, line.rstrip("\n"))
+                    sess.output_q.put(line)
+            else:
+                while sess.is_alive():
+                    chunk = sess.proc.read(4096)
+                    if not chunk:
+                        break
+                    logger.debug("reader chunk pid=%s len=%d", sess.proc.pid, len(chunk))
+                    sess.output_q.put(chunk)
+        finally:
+            logger.debug("reader loop finished pid=%s", sess.proc.pid)
+            sess.output_q.put(None)
 
 manager = SessionManager()

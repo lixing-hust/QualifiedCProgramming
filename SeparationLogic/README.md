@@ -44,7 +44,7 @@ Note that in the proof conclusion `P |-- Q`, we refer to $P$ as the precondition
 
 `sep_apply H`: Try to apply $H$ to transform the conclusion, typically in the form `P * Q |-- R`. It replaces $P * Q$ in the precondition with $R$.
 
-`prop_apply H`: Try to apply $H$ to transform the conclusion, typically in the form `P * Q |-- [| R |]`. It adds the pure proposition `[| R |]` to the precondition.
+`prop_apply H`: Try to apply $H$ to transform the conclusion, typically in the form `P * Q |-- “ R ”`. It adds the pure proposition `“ R ”` to the precondition.
 
 `Left`: Transform `P |-- Q || R` into `P |-- Q`.
 

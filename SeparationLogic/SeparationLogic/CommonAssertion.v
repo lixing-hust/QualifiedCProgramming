@@ -268,7 +268,7 @@ Notation "x --> y" := (CRules.impp x y) : sac_scope.
 Notation "x || y" := (CRules.orp x y) : sac_scope.
 Notation "x && y" := (CRules.andp x y) : sac_scope.
 Notation "x ** y" := (CRules.sepcon x y) (at level 31, left associativity) : sac_scope.
-Notation " [| P |] " := (CRules.coq_prop P) (at level 29, no associativity) :sac_scope.
+Notation " “ P ” " := (CRules.coq_prop P) (at level 29, no associativity) :sac_scope.
 Notation " 'TT' " := (CRules.truep) (at level 34, no associativity) : sac_scope.
 Notation "'EX' x , p " :=
   (CRules.exp (fun x => p))
@@ -290,86 +290,86 @@ Notation "'ALL' x .. y , p" :=
     (at level 45, x binder, right associativity) : sac_scope.
 
 Definition store_char (x : addr) (v : Z) :=
-  [| isvalidptr_char x /\ v <= Byte.max_signed /\ v >= Byte.min_signed |] && store_byte x v.
+  “ isvalidptr_char x /\ v <= Byte.max_signed /\ v >= Byte.min_signed ” && store_byte x v.
 
 Definition undef_store_char (x : addr) :=
-  [| isvalidptr_char x |] && store_byte_noninit x.
+  “ isvalidptr_char x ” && store_byte_noninit x.
 
 Definition store_uchar (x : addr) (v : Z) :=
-  [| isvalidptr_char x /\ v >= 0 /\ v <= Byte.max_unsigned |] && 
+  “ isvalidptr_char x /\ v >= 0 /\ v <= Byte.max_unsigned ” && 
   store_byte x v.
 
 Definition undef_store_uchar (x : addr) :=
-  [| isvalidptr_char x |] && store_byte_noninit x.
+  “ isvalidptr_char x ” && store_byte_noninit x.
 
 Definition store_short (x : addr) (v : Z) :=
-  [| isvalidptr_short x /\ v <= 32767 /\ v >= -32768 |] && store_2byte x v.
+  “ isvalidptr_short x /\ v <= 32767 /\ v >= -32768 ” && store_2byte x v.
 
 Definition undef_store_short (x : addr) :=
-  [| isvalidptr_short x |] && store_2byte_noninit x.
+  “ isvalidptr_short x ” && store_2byte_noninit x.
 
 Definition store_ushort (x : addr) (v : Z) :=
-  [| isvalidptr_short x /\ v >= 0 /\ v <= 65535 |] &&
+  “ isvalidptr_short x /\ v >= 0 /\ v <= 65535 ” &&
   store_2byte x v.
 
 Definition undef_store_ushort (x : addr) :=
-  [| isvalidptr_short x |] && store_2byte_noninit x.
+  “ isvalidptr_short x ” && store_2byte_noninit x.
 
 Definition store_int (x : addr) (v : Z) :=
-  [| isvalidptr_int x /\ v <= Int.max_signed /\ v >= Int.min_signed |] && store_4byte x v.
+  “ isvalidptr_int x /\ v <= Int.max_signed /\ v >= Int.min_signed ” && store_4byte x v.
 
 Definition undef_store_int (x : addr) :=
-  ([| isvalidptr_int x |] && store_4byte_noninit x).
+  (“ isvalidptr_int x ” && store_4byte_noninit x).
 
 Definition store_uint (x : addr) (v : Z) :=
-  [| isvalidptr_int x /\ v >= 0 /\ v <= Int.max_unsigned |] && 
+  “ isvalidptr_int x /\ v >= 0 /\ v <= Int.max_unsigned ” && 
   store_4byte x v.
 
 Definition undef_store_uint (x : addr) :=
-  [| isvalidptr_int x |] && store_4byte_noninit x.
+  “ isvalidptr_int x ” && store_4byte_noninit x.
 
 Definition store_int64 (x : addr) (v : Z) :=
-  [| isvalidptr_int64 x /\ v <= Int64.max_signed /\ v >= Int64.min_signed |] && store_8byte x v.
+  “ isvalidptr_int64 x /\ v <= Int64.max_signed /\ v >= Int64.min_signed ” && store_8byte x v.
 
 Definition undef_store_int64 (x : addr) :=
-  [| isvalidptr_int64 x |] && store_8byte_noninit x.
+  “ isvalidptr_int64 x ” && store_8byte_noninit x.
 
 Definition store_uint64 (x : addr) (v : Z) :=
-  [| isvalidptr_int64 x /\ v >= 0 /\ v <= Int64.max_unsigned |] && 
+  “ isvalidptr_int64 x /\ v >= 0 /\ v <= Int64.max_unsigned ” && 
   store_8byte x v.
 
 Definition undef_store_uint64 (x : addr) :=
-  [| isvalidptr_int64 x |] && store_8byte_noninit x.
+  “ isvalidptr_int64 x ” && store_8byte_noninit x.
 
 Definition store_ptr (x : addr) (v : Z) := 
-  [| isvalidptr x /\ v >= 0 /\ v <= Int.max_unsigned |] && 
+  “ isvalidptr x /\ v >= 0 /\ v <= Int.max_unsigned ” && 
   store_4byte x v.
 
 Definition undef_store_ptr (x : addr) :=
-  [| isvalidptr x |] && store_4byte_noninit x.
+  “ isvalidptr x ” && store_4byte_noninit x.
 
 Definition Invalid_store (x : addr) (v : Z) :=
-  [| False |].
+  “ False ”.
 
 Definition Invalid_undef_store (x : addr) :=
-  [| False |].
+  “ False ”.
 
 Definition dup_data_at_error (x : addr) := 
-  [| False |].
+  “ False ”.
 
 Definition dup_data_at_error_prop : Prop := True.
 
 Fixpoint store_array_rec {A : Type} (storeA : addr -> Z -> A -> CRules.expr) (x: addr) (lo hi: Z) (l: list A): CRules.expr :=
   match l with
-  | nil     => [| lo = hi |] && [| l = nil |] && emp
+  | nil     => “ lo = hi ” && “ l = nil ” && emp
   | a :: l0 => storeA x lo a ** store_array_rec storeA x (lo + 1) hi l0
   end.
 
 Fixpoint store_array_missing_i_rec {A : Type} (storeA : addr -> Z -> A -> CRules.expr) (x: addr) (i lo hi: Z) (l: list A): CRules.expr :=
   match l with
-  | nil     => [| False |]
-  | a :: l0 => [| i = lo |] && store_array_rec storeA x (lo + 1) hi l0 ||
-               [| i > lo |] && storeA x lo a ** store_array_missing_i_rec storeA x i (lo + 1) hi l0
+  | nil     => “ False ”
+  | a :: l0 => “ i = lo ” && store_array_rec storeA x (lo + 1) hi l0 ||
+               “ i > lo ” && storeA x lo a ** store_array_missing_i_rec storeA x i (lo + 1) hi l0
   end.
 
 Definition store_array {A : Type} (storeA : addr -> Z -> A -> CRules.expr) (x: addr) (n: Z) (l: list A): CRules.expr :=
@@ -377,15 +377,15 @@ Definition store_array {A : Type} (storeA : addr -> Z -> A -> CRules.expr) (x: a
 
 Fixpoint store_undef_array_rec (storeA : addr -> Z -> CRules.expr) (x: addr) (lo hi: Z) (n: nat): CRules.expr :=
   match n with 
-    | O => [| lo = hi |] && emp 
+    | O => “ lo = hi ” && emp 
     | S n' => storeA x lo ** store_undef_array_rec storeA x (lo + 1) hi n'
   end.
 
 Fixpoint store_undef_array_missing_i_rec (storeA : addr -> Z -> CRules.expr) (x: addr) (i lo hi: Z) (n: nat): CRules.expr :=
   match n with 
-    | O => [| False |]
-    | S n' => [| i = lo |] && store_undef_array_rec storeA x (lo + 1) hi n' ||
-               [| i > lo |] && storeA x lo ** store_undef_array_missing_i_rec storeA x i (lo + 1) hi n'
+    | O => “ False ”
+    | S n' => “ i = lo ” && store_undef_array_rec storeA x (lo + 1) hi n' ||
+               “ i > lo ” && storeA x lo ** store_undef_array_missing_i_rec storeA x i (lo + 1) hi n'
   end.
 
 Definition store_undef_array (storeA : addr -> Z -> CRules.expr) (x: addr) (n: Z): CRules.expr :=
@@ -394,11 +394,20 @@ Definition store_undef_array (storeA : addr -> Z -> CRules.expr) (x: addr) (n: Z
 Fixpoint store_align4_list (l : list Z) := 
   match l with 
     | nil => emp
-    | x :: l' => [| isvalidptr x |] && store_4byte_noninit x ** store_align4_list l'
+    | x :: l' => “ isvalidptr x ” && store_4byte_noninit x ** store_align4_list l'
   end.
 
 Definition store_align4_n (n : Z) :=
-  EX l, [| Zlength l = n /\ interval_list 3 0 Int.max_unsigned l |] && store_align4_list l.
+  EX l, “ Zlength l = n /\ interval_list 3 0 Int.max_unsigned l ” && store_align4_list l.
+
+Fixpoint store_align_list (l : list Z) := 
+  match l with 
+    | nil => emp
+    | x :: l' => “ isvalidptr_char x ” && store_byte_noninit x ** store_align_list l'
+  end.
+
+Definition store_align_n (n : Z) :=
+  EX l, “ Zlength l = n /\ interval_list 0 0 Int.max_unsigned l ” && store_align_list l.
 
 Notation "x # 'Char' |-> v" := (store_char x v) (at level 25, no associativity) : sac_scope.
 Notation "x # 'UChar' |-> v" := (store_uchar x v ) (at level 25, no associativity):sac_scope.
@@ -469,24 +478,24 @@ Arguments derivable1s_allp_r {A} _ _ _ .
 Arguments derivable1s_exp_r {A} _ _ _ .
 Arguments derivable1s_allp_l {A} _ _ _ .
 
-Lemma coq_prop_andp_left : forall (P : Prop) (Q R : expr), (P -> Q |-- R) -> [| P |] && Q |-- R.
+Lemma coq_prop_andp_left : forall (P : Prop) (Q R : expr), (P -> Q |-- R) -> “ P ” && Q |-- R.
 Proof.
   unfold andp, coq_prop, derivable1 ; intros. apply H ; tauto.
 Qed.
 
-Lemma coq_prop_andp_right : forall (P : Prop) (Q R : expr), R |-- Q -> P -> R |-- [| P |] && Q.
+Lemma coq_prop_andp_right : forall (P : Prop) (Q R : expr), R |-- Q -> P -> R |-- “ P ” && Q.
 Proof.
   unfold andp, coq_prop, derivable1 ; intros.
   specialize (H m). tauto.
 Qed.
 
-Lemma coq_prop_imply : forall (P Q : Prop), (P -> Q) -> [| P |] |-- [| Q |].
+Lemma coq_prop_imply : forall (P Q : Prop), (P -> Q) -> “ P ” |-- “ Q ”.
 Proof.
   intros.
   unfold coq_prop, derivable1 ; intros ; tauto.
 Qed.
 
-Lemma coq_prop_False_left : forall (P : Prop) Q, (P -> False) -> [| P |] |-- Q.
+Lemma coq_prop_False_left : forall (P : Prop) Q, (P -> False) -> “ P ” |-- Q.
 Proof.
   intros.
   unfold coq_prop, derivable1 ; intros ; tauto.
@@ -588,7 +597,7 @@ Proof.
   - do 2 eexists. split;eauto.
 Qed.
 
-Lemma prop_add_left : forall P Q, P |-- [| Q |] -> P --||-- [| Q |] && P.
+Lemma prop_add_left : forall P Q, P |-- “ Q ” -> P --||-- “ Q ” && P.
 Proof.
   unfold coq_prop, logic_equiv, derivable1, andp ; intros.
   split ; try tauto ; split ; auto.
@@ -635,7 +644,7 @@ Qed.
 
 Lemma sepcon_prop_equiv : 
 forall P Q,
-P ** ([| Q |]) --||-- [| Q |] && P ** TT.
+P ** (“ Q ”) --||-- “ Q ” && P ** TT.
 Proof.
   unfold logic_equiv, sepcon, andp, truep, coq_prop, derivable1;
   split;intros.
@@ -776,7 +785,7 @@ Ltac Rename_rec l Tac :=
   | ?x :: ?l' => 
     let a := fresh "v" in
     match x with 
-      | norm_asrt ([| ?B |]) => pose (a := B) ; change B with a
+      | norm_asrt (“ ?B ”) => pose (a := B) ; change B with a
       | norm_asrt ?v => pose (a := v) ; change v with a
       | dependent_asrt _ ?B => pose (a := B) ; change B with a
     end; Rename_rec l' Tac ; subst a
@@ -803,7 +812,7 @@ Ltac pure_Rename_rec l :=
   | ?x :: ?l' => 
     let a := fresh "v" in
     match x with 
-      | norm_asrt ([| ?B |]) => pose (a := B) ; change B with a
+      | norm_asrt (“ ?B ”) => pose (a := B) ; change B with a
       | norm_asrt ?v => pose (a := v) ; change v with a
       | dependent_asrt _ ?B => pose (a := B) ; change B with a
     end; pure_Rename_rec l'
@@ -938,9 +947,9 @@ Ltac sepcon_assoc_change :=
 
 Ltac coq_prop_lift :=
   repeat progress match goal with 
-  | |- context [ ([| ?P |] && ?Q) ** ?R ] => rewrite (logic_equiv_coq_prop_andp_sepcon P Q R)
-  | |- context [ ?P ** ([| ?Q |] && ?R) ] => rewrite (logic_equiv_sepcon_coq_prop_andp P Q R)
-  | |- context [ ?P ** [| ?Q |] ] => rewrite (sepcon_prop_equiv P Q)
+  | |- context [ (“ ?P ” && ?Q) ** ?R ] => rewrite (logic_equiv_coq_prop_andp_sepcon P Q R)
+  | |- context [ ?P ** (“ ?Q ” && ?R) ] => rewrite (logic_equiv_sepcon_coq_prop_andp P Q R)
+  | |- context [ ?P ** “ ?Q ” ] => rewrite (sepcon_prop_equiv P Q)
   end.
 
 Ltac asrt_easysimpl := TT_simpl; andp_assoc_change; coq_prop_lift.
@@ -974,17 +983,17 @@ Ltac asrt_complex_simpl :=
     | |- context [ (_ ** _ ) && ?P ] => andp_lift P
     | |- context [ ?P ** emp ] => rewrite (sepcon_emp_equiv P)
     | |- context [ emp ** ?P ] => rewrite (logic_equiv_sepcon_comm emp P); rewrite (sepcon_emp_equiv P)
-    | |- context [( [| ?B |] && ?Q) && ?R] => rewrite (logic_equiv_andp_assoc ([| B |]) Q R )
-    | |- context [( [| ?B |] && ?Q) ** ?R] => rewrite (logic_equiv_coq_prop_andp_sepcon B Q R )
-    | |- context [( ?P && [| ?B |]) && ?R] => 
-      rewrite (logic_equiv_andp_comm P ([| B |])) ;
-      rewrite (logic_equiv_andp_assoc ([| B |]) P R)
-    | |- context [( ?P && [| ?B |]) ** ?R] =>
-      rewrite (logic_equiv_andp_comm P ([| B |])) ; 
+    | |- context [( “ ?B ” && ?Q) && ?R] => rewrite (logic_equiv_andp_assoc (“ B ”) Q R )
+    | |- context [( “ ?B ” && ?Q) ** ?R] => rewrite (logic_equiv_coq_prop_andp_sepcon B Q R )
+    | |- context [( ?P && “ ?B ”) && ?R] => 
+      rewrite (logic_equiv_andp_comm P (“ B ”)) ;
+      rewrite (logic_equiv_andp_assoc (“ B ”) P R)
+    | |- context [( ?P && “ ?B ”) ** ?R] =>
+      rewrite (logic_equiv_andp_comm P (“ B ”)) ; 
       rewrite (logic_equiv_coq_prop_andp_sepcon B P R )
-    | |- context [?P ** ([| ?B |] && ?R)] => rewrite (logic_equiv_sepcon_coq_prop_andp P B R)
-    | |- context [?P ** ([| ?B |]) ] => rewrite (sepcon_prop_equiv P B)
-    | |- context [([| ?B |]) ** ?P ] => rewrite (logic_equiv_sepcon_comm ([| B |]) P)
+    | |- context [?P ** (“ ?B ” && ?R)] => rewrite (logic_equiv_sepcon_coq_prop_andp P B R)
+    | |- context [?P ** (“ ?B ”) ] => rewrite (sepcon_prop_equiv P B)
+    | |- context [(“ ?B ”) ** ?P ] => rewrite (logic_equiv_sepcon_comm (“ B ”) P)
     | |- context [ (@exp ?t ?P) && ?Q ] => rewrite (ex_logic_equiv_andp _ Q)
     | |- context [ (@exp ?t ?P) ** ?Q ] => rewrite (ex_logic_equiv_sepcon _ Q)
     | |- context [ @exp ?t ?P ] => try andp_lift (@exp t P) ; try sepcon_lift (@exp t P)
@@ -1019,15 +1028,15 @@ Ltac andp_cancel := asrt_simpl_pure;
    | |- ?P |-- ?Q || ?R => idtac 
    | |- ?P || ?Q |-- ?R => idtac
    | |- ?P |-- ?Q =>  match P with 
-                      | context [ [| ?B |]] => try andp_lift ( [| B |]); eapply coq_prop_andp_left; intros; andp_cancel
+                      | context [ “ ?B ”] => try andp_lift ( “ B ”); eapply coq_prop_andp_left; intros; andp_cancel
                       end
    | |- ?P |-- ?Q  => match Q with 
-                      | context [ [| ?B |]] => try andp_lift ( [| B |]); simple eapply (coq_prop_andp_right);[  andp_cancel | solve_auto B ]
+                      | context [ “ ?B ”] => try andp_lift ( “ B ”); simple eapply (coq_prop_andp_right);[  andp_cancel | solve_auto B ]
                       end
-   | |- [| False |] |-- ?Q => apply derivables_false_coq_prop ; auto
-   | |- [| ?P |] |-- [| ?Q |] => apply coq_prop_imply ; solve_auto Q
-   | |- _ |-- [| ?Q |] => apply (derivable1s_coq_prop_r Q); solve_auto Q
-   | |- [| ?P |] |-- ?Q => eapply derivable1s_coq_prop_l; intros; andp_cancel
+   | |- “ False ” |-- ?Q => apply derivables_false_coq_prop ; auto
+   | |- “ ?P ” |-- “ ?Q ” => apply coq_prop_imply ; solve_auto Q
+   | |- _ |-- “ ?Q ” => apply (derivable1s_coq_prop_r Q); solve_auto Q
+   | |- “ ?P ” |-- ?Q => eapply derivable1s_coq_prop_l; intros; andp_cancel
    | |- _ |-- TT => apply derivable1_truep_intros ; auto
    | |- _ => andp_cancel''
     end.
@@ -1035,7 +1044,7 @@ Ltac andp_cancel := asrt_simpl_pure;
 Ltac pureIntros_without_rename := asrt_simpl_pure;
 repeat progress (match goal with 
 | |- ?P |-- ?Q => (match P with 
-                    | context [ [| ?B |]] => apply (coq_prop_andp_left B); intros
+                    | context [ “ ?B ”] => apply (coq_prop_andp_left B); intros
                   end)
 end) ; sepcon_assoc_change .
 
@@ -1092,35 +1101,98 @@ Ltac entailer_pure := asrt_simpl_pure; sepcon_assoc_change; andp_cancel.
 
 Tactic Notation "cancel" := set_String_name ; Rename sepcon_cancel ; subst_all_strings.
 Tactic Notation "entailer!"  := set_String_name ; try poly_store_unfold ; Rename entailer_pure; simpl_entail ; subst_all_strings.
-Tactic Notation "Intros" := set_String_name ; pureIntros ; subst_all_strings. 
+Tactic Notation "Intros" := set_String_name ; pureIntros ; subst_all_strings.
+Tactic Notation "Intros" simple_intropattern(x0) := set_String_name ; pureIntros ; left_intro x0; pureIntros ; subst_all_strings.
+Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) := set_String_name ; pureIntros ; left_intro x0; left_intro x1; pureIntros ; subst_all_strings.
+Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) := set_String_name ; pureIntros ; left_intro x0; left_intro x1; left_intro x2; pureIntros ; subst_all_strings.
+Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) := set_String_name ; pureIntros ; left_intro x0; left_intro x1; left_intro x2; left_intro x3; pureIntros ; subst_all_strings.
+Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) := set_String_name ; pureIntros ; left_intro x0; left_intro x1; left_intro x2; left_intro x3; left_intro x4; pureIntros ; subst_all_strings.
+Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) := set_String_name ; pureIntros ; left_intro x0; left_intro x1; left_intro x2; left_intro x3; left_intro x4; left_intro x5; pureIntros ; subst_all_strings.
+Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) simple_intropattern(x6) := set_String_name ; pureIntros ; left_intro x0; left_intro x1; left_intro x2; left_intro x3; left_intro x4; left_intro x5; left_intro x6; pureIntros ; subst_all_strings.
+Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) simple_intropattern(x6) simple_intropattern(x7) := set_String_name ; pureIntros ; left_intro x0; left_intro x1; left_intro x2; left_intro x3; left_intro x4; left_intro x5; left_intro x6; left_intro x7; pureIntros ; subst_all_strings.
+Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) simple_intropattern(x6) simple_intropattern(x7) simple_intropattern(x8) := set_String_name ; pureIntros ; left_intro x0; left_intro x1; left_intro x2; left_intro x3; left_intro x4; left_intro x5; left_intro x6; left_intro x7; left_intro x8; pureIntros ; subst_all_strings.
+Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) simple_intropattern(x6) simple_intropattern(x7) simple_intropattern(x8) simple_intropattern(x9) := set_String_name ; pureIntros ; left_intro x0; left_intro x1; left_intro x2; left_intro x3; left_intro x4; left_intro x5; left_intro x6; left_intro x7; left_intro x8; left_intro x9; pureIntros ; subst_all_strings.
+Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) simple_intropattern(x6) simple_intropattern(x7) simple_intropattern(x8) simple_intropattern(x9) simple_intropattern(x10) := set_String_name ; pureIntros ; left_intro x0; left_intro x1; left_intro x2; left_intro x3; left_intro x4; left_intro x5; left_intro x6; left_intro x7; left_intro x8; left_intro x9; left_intro x10; pureIntros ; subst_all_strings.
+Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) simple_intropattern(x6) simple_intropattern(x7) simple_intropattern(x8) simple_intropattern(x9) simple_intropattern(x10) simple_intropattern(x11) := set_String_name ; pureIntros ; left_intro x0; left_intro x1; left_intro x2; left_intro x3; left_intro x4; left_intro x5; left_intro x6; left_intro x7; left_intro x8; left_intro x9; left_intro x10; left_intro x11; pureIntros ; subst_all_strings.
+Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) simple_intropattern(x6) simple_intropattern(x7) simple_intropattern(x8) simple_intropattern(x9) simple_intropattern(x10) simple_intropattern(x11) simple_intropattern(x12) := set_String_name ; pureIntros ; left_intro x0; left_intro x1; left_intro x2; left_intro x3; left_intro x4; left_intro x5; left_intro x6; left_intro x7; left_intro x8; left_intro x9; left_intro x10; left_intro x11; left_intro x12; pureIntros ; subst_all_strings.
+Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) simple_intropattern(x6) simple_intropattern(x7) simple_intropattern(x8) simple_intropattern(x9) simple_intropattern(x10) simple_intropattern(x11) simple_intropattern(x12) simple_intropattern(x13) := set_String_name ; pureIntros ; left_intro x0; left_intro x1; left_intro x2; left_intro x3; left_intro x4; left_intro x5; left_intro x6; left_intro x7; left_intro x8; left_intro x9; left_intro x10; left_intro x11; left_intro x12; left_intro x13; pureIntros ; subst_all_strings.
+Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) simple_intropattern(x6) simple_intropattern(x7) simple_intropattern(x8) simple_intropattern(x9) simple_intropattern(x10) simple_intropattern(x11) simple_intropattern(x12) simple_intropattern(x13) simple_intropattern(x14) := set_String_name ; pureIntros ; left_intro x0; left_intro x1; left_intro x2; left_intro x3; left_intro x4; left_intro x5; left_intro x6; left_intro x7; left_intro x8; left_intro x9; left_intro x10; left_intro x11; left_intro x12; left_intro x13; left_intro x14; pureIntros ; subst_all_strings.
+Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) simple_intropattern(x6) simple_intropattern(x7) simple_intropattern(x8) simple_intropattern(x9) simple_intropattern(x10) simple_intropattern(x11) simple_intropattern(x12) simple_intropattern(x13) simple_intropattern(x14) simple_intropattern(x15) := set_String_name ; pureIntros ; left_intro x0; left_intro x1; left_intro x2; left_intro x3; left_intro x4; left_intro x5; left_intro x6; left_intro x7; left_intro x8; left_intro x9; left_intro x10; left_intro x11; left_intro x12; left_intro x13; left_intro x14; left_intro x15; pureIntros ; subst_all_strings.
+Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) simple_intropattern(x6) simple_intropattern(x7) simple_intropattern(x8) simple_intropattern(x9) simple_intropattern(x10) simple_intropattern(x11) simple_intropattern(x12) simple_intropattern(x13) simple_intropattern(x14) simple_intropattern(x15) simple_intropattern(x16) := set_String_name ; pureIntros ; left_intro x0; left_intro x1; left_intro x2; left_intro x3; left_intro x4; left_intro x5; left_intro x6; left_intro x7; left_intro x8; left_intro x9; left_intro x10; left_intro x11; left_intro x12; left_intro x13; left_intro x14; left_intro x15; left_intro x16; pureIntros ; subst_all_strings.
+Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) simple_intropattern(x6) simple_intropattern(x7) simple_intropattern(x8) simple_intropattern(x9) simple_intropattern(x10) simple_intropattern(x11) simple_intropattern(x12) simple_intropattern(x13) simple_intropattern(x14) simple_intropattern(x15) simple_intropattern(x16) simple_intropattern(x17) := set_String_name ; pureIntros ; left_intro x0; left_intro x1; left_intro x2; left_intro x3; left_intro x4; left_intro x5; left_intro x6; left_intro x7; left_intro x8; left_intro x9; left_intro x10; left_intro x11; left_intro x12; left_intro x13; left_intro x14; left_intro x15; left_intro x16; left_intro x17; pureIntros ; subst_all_strings.
+Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) simple_intropattern(x6) simple_intropattern(x7) simple_intropattern(x8) simple_intropattern(x9) simple_intropattern(x10) simple_intropattern(x11) simple_intropattern(x12) simple_intropattern(x13) simple_intropattern(x14) simple_intropattern(x15) simple_intropattern(x16) simple_intropattern(x17) simple_intropattern(x18) := set_String_name ; pureIntros ; left_intro x0; left_intro x1; left_intro x2; left_intro x3; left_intro x4; left_intro x5; left_intro x6; left_intro x7; left_intro x8; left_intro x9; left_intro x10; left_intro x11; left_intro x12; left_intro x13; left_intro x14; left_intro x15; left_intro x16; left_intro x17; left_intro x18; pureIntros ; subst_all_strings.
+Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) simple_intropattern(x6) simple_intropattern(x7) simple_intropattern(x8) simple_intropattern(x9) simple_intropattern(x10) simple_intropattern(x11) simple_intropattern(x12) simple_intropattern(x13) simple_intropattern(x14) simple_intropattern(x15) simple_intropattern(x16) simple_intropattern(x17) simple_intropattern(x18) simple_intropattern(x19) := set_String_name ; pureIntros ; left_intro x0; left_intro x1; left_intro x2; left_intro x3; left_intro x4; left_intro x5; left_intro x6; left_intro x7; left_intro x8; left_intro x9; left_intro x10; left_intro x11; left_intro x12; left_intro x13; left_intro x14; left_intro x15; left_intro x16; left_intro x17; left_intro x18; left_intro x19; pureIntros ; subst_all_strings.
+Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) simple_intropattern(x6) simple_intropattern(x7) simple_intropattern(x8) simple_intropattern(x9) simple_intropattern(x10) simple_intropattern(x11) simple_intropattern(x12) simple_intropattern(x13) simple_intropattern(x14) simple_intropattern(x15) simple_intropattern(x16) simple_intropattern(x17) simple_intropattern(x18) simple_intropattern(x19) simple_intropattern(x20) simple_intropattern_list(xs) := fail 0 "Intros: supports at most 20 arguments".
 Tactic Notation "Intro_any" := set_String_name ; pureIntros ; left_intro_any ; pureIntros ; subst_all_strings.
-Tactic Notation "Intros" simple_intropattern(x0):= set_String_name ; pureIntros ;  left_intro x0;pureIntros ; subst_all_strings.
-Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) := set_String_name ; pureIntros ; left_intro x0; left_intro x1;pureIntros; subst_all_strings.
-Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) := set_String_name ; pureIntros ; left_intro x0; left_intro x1; left_intro x2;pureIntros; subst_all_strings.
-Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) := set_String_name ; pureIntros ; left_intro x0; left_intro x1; left_intro x2; left_intro x3;pureIntros; subst_all_strings.
-Tactic Notation "Intros" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) := set_String_name ; pureIntros ; left_intro x0; left_intro x1; left_intro x2; left_intro x3; left_intro x4;pureIntros; subst_all_strings.
+Tactic Notation "Intros_r" := set_String_name ; pureIntros ; subst_all_strings.
+Tactic Notation "Intros_r" simple_intropattern(x0) := set_String_name ; right_intro x0; pureIntros ; subst_all_strings.
+Tactic Notation "Intros_r" simple_intropattern(x0) simple_intropattern(x1) := set_String_name ; right_intro x0; right_intro x1; pureIntros ; subst_all_strings.
+Tactic Notation "Intros_r" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) := set_String_name ; right_intro x0; right_intro x1; right_intro x2; pureIntros ; subst_all_strings.
+Tactic Notation "Intros_r" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) := set_String_name ; right_intro x0; right_intro x1; right_intro x2; right_intro x3; pureIntros ; subst_all_strings.
+Tactic Notation "Intros_r" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) := set_String_name ; right_intro x0; right_intro x1; right_intro x2; right_intro x3; right_intro x4; pureIntros ; subst_all_strings.
+Tactic Notation "Intros_r" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) := set_String_name ; right_intro x0; right_intro x1; right_intro x2; right_intro x3; right_intro x4; right_intro x5; pureIntros ; subst_all_strings.
+Tactic Notation "Intros_r" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) simple_intropattern(x6) := set_String_name ; right_intro x0; right_intro x1; right_intro x2; right_intro x3; right_intro x4; right_intro x5; right_intro x6; pureIntros ; subst_all_strings.
+Tactic Notation "Intros_r" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) simple_intropattern(x6) simple_intropattern(x7) := set_String_name ; right_intro x0; right_intro x1; right_intro x2; right_intro x3; right_intro x4; right_intro x5; right_intro x6; right_intro x7; pureIntros ; subst_all_strings.
+Tactic Notation "Intros_r" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) simple_intropattern(x6) simple_intropattern(x7) simple_intropattern(x8) := set_String_name ; right_intro x0; right_intro x1; right_intro x2; right_intro x3; right_intro x4; right_intro x5; right_intro x6; right_intro x7; right_intro x8; pureIntros ; subst_all_strings.
+Tactic Notation "Intros_r" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) simple_intropattern(x6) simple_intropattern(x7) simple_intropattern(x8) simple_intropattern(x9) := set_String_name ; right_intro x0; right_intro x1; right_intro x2; right_intro x3; right_intro x4; right_intro x5; right_intro x6; right_intro x7; right_intro x8; right_intro x9; pureIntros ; subst_all_strings.
+Tactic Notation "Intros_r" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) simple_intropattern(x6) simple_intropattern(x7) simple_intropattern(x8) simple_intropattern(x9) simple_intropattern(x10) := set_String_name ; right_intro x0; right_intro x1; right_intro x2; right_intro x3; right_intro x4; right_intro x5; right_intro x6; right_intro x7; right_intro x8; right_intro x9; right_intro x10; pureIntros ; subst_all_strings.
+Tactic Notation "Intros_r" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) simple_intropattern(x6) simple_intropattern(x7) simple_intropattern(x8) simple_intropattern(x9) simple_intropattern(x10) simple_intropattern(x11) := set_String_name ; right_intro x0; right_intro x1; right_intro x2; right_intro x3; right_intro x4; right_intro x5; right_intro x6; right_intro x7; right_intro x8; right_intro x9; right_intro x10; right_intro x11; pureIntros ; subst_all_strings.
+Tactic Notation "Intros_r" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) simple_intropattern(x6) simple_intropattern(x7) simple_intropattern(x8) simple_intropattern(x9) simple_intropattern(x10) simple_intropattern(x11) simple_intropattern(x12) := set_String_name ; right_intro x0; right_intro x1; right_intro x2; right_intro x3; right_intro x4; right_intro x5; right_intro x6; right_intro x7; right_intro x8; right_intro x9; right_intro x10; right_intro x11; right_intro x12; pureIntros ; subst_all_strings.
+Tactic Notation "Intros_r" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) simple_intropattern(x6) simple_intropattern(x7) simple_intropattern(x8) simple_intropattern(x9) simple_intropattern(x10) simple_intropattern(x11) simple_intropattern(x12) simple_intropattern(x13) := set_String_name ; right_intro x0; right_intro x1; right_intro x2; right_intro x3; right_intro x4; right_intro x5; right_intro x6; right_intro x7; right_intro x8; right_intro x9; right_intro x10; right_intro x11; right_intro x12; right_intro x13; pureIntros ; subst_all_strings.
+Tactic Notation "Intros_r" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) simple_intropattern(x6) simple_intropattern(x7) simple_intropattern(x8) simple_intropattern(x9) simple_intropattern(x10) simple_intropattern(x11) simple_intropattern(x12) simple_intropattern(x13) simple_intropattern(x14) := set_String_name ; right_intro x0; right_intro x1; right_intro x2; right_intro x3; right_intro x4; right_intro x5; right_intro x6; right_intro x7; right_intro x8; right_intro x9; right_intro x10; right_intro x11; right_intro x12; right_intro x13; right_intro x14; pureIntros ; subst_all_strings.
+Tactic Notation "Intros_r" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) simple_intropattern(x6) simple_intropattern(x7) simple_intropattern(x8) simple_intropattern(x9) simple_intropattern(x10) simple_intropattern(x11) simple_intropattern(x12) simple_intropattern(x13) simple_intropattern(x14) simple_intropattern(x15) := set_String_name ; right_intro x0; right_intro x1; right_intro x2; right_intro x3; right_intro x4; right_intro x5; right_intro x6; right_intro x7; right_intro x8; right_intro x9; right_intro x10; right_intro x11; right_intro x12; right_intro x13; right_intro x14; right_intro x15; pureIntros ; subst_all_strings.
+Tactic Notation "Intros_r" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) simple_intropattern(x6) simple_intropattern(x7) simple_intropattern(x8) simple_intropattern(x9) simple_intropattern(x10) simple_intropattern(x11) simple_intropattern(x12) simple_intropattern(x13) simple_intropattern(x14) simple_intropattern(x15) simple_intropattern(x16) := set_String_name ; right_intro x0; right_intro x1; right_intro x2; right_intro x3; right_intro x4; right_intro x5; right_intro x6; right_intro x7; right_intro x8; right_intro x9; right_intro x10; right_intro x11; right_intro x12; right_intro x13; right_intro x14; right_intro x15; right_intro x16; pureIntros ; subst_all_strings.
+Tactic Notation "Intros_r" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) simple_intropattern(x6) simple_intropattern(x7) simple_intropattern(x8) simple_intropattern(x9) simple_intropattern(x10) simple_intropattern(x11) simple_intropattern(x12) simple_intropattern(x13) simple_intropattern(x14) simple_intropattern(x15) simple_intropattern(x16) simple_intropattern(x17) := set_String_name ; right_intro x0; right_intro x1; right_intro x2; right_intro x3; right_intro x4; right_intro x5; right_intro x6; right_intro x7; right_intro x8; right_intro x9; right_intro x10; right_intro x11; right_intro x12; right_intro x13; right_intro x14; right_intro x15; right_intro x16; right_intro x17; pureIntros ; subst_all_strings.
+Tactic Notation "Intros_r" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) simple_intropattern(x6) simple_intropattern(x7) simple_intropattern(x8) simple_intropattern(x9) simple_intropattern(x10) simple_intropattern(x11) simple_intropattern(x12) simple_intropattern(x13) simple_intropattern(x14) simple_intropattern(x15) simple_intropattern(x16) simple_intropattern(x17) simple_intropattern(x18) := set_String_name ; right_intro x0; right_intro x1; right_intro x2; right_intro x3; right_intro x4; right_intro x5; right_intro x6; right_intro x7; right_intro x8; right_intro x9; right_intro x10; right_intro x11; right_intro x12; right_intro x13; right_intro x14; right_intro x15; right_intro x16; right_intro x17; right_intro x18; pureIntros ; subst_all_strings.
+Tactic Notation "Intros_r" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) simple_intropattern(x6) simple_intropattern(x7) simple_intropattern(x8) simple_intropattern(x9) simple_intropattern(x10) simple_intropattern(x11) simple_intropattern(x12) simple_intropattern(x13) simple_intropattern(x14) simple_intropattern(x15) simple_intropattern(x16) simple_intropattern(x17) simple_intropattern(x18) simple_intropattern(x19) := set_String_name ; right_intro x0; right_intro x1; right_intro x2; right_intro x3; right_intro x4; right_intro x5; right_intro x6; right_intro x7; right_intro x8; right_intro x9; right_intro x10; right_intro x11; right_intro x12; right_intro x13; right_intro x14; right_intro x15; right_intro x16; right_intro x17; right_intro x18; right_intro x19; pureIntros ; subst_all_strings.
+Tactic Notation "Intros_r" simple_intropattern(x0) simple_intropattern(x1) simple_intropattern(x2) simple_intropattern(x3) simple_intropattern(x4) simple_intropattern(x5) simple_intropattern(x6) simple_intropattern(x7) simple_intropattern(x8) simple_intropattern(x9) simple_intropattern(x10) simple_intropattern(x11) simple_intropattern(x12) simple_intropattern(x13) simple_intropattern(x14) simple_intropattern(x15) simple_intropattern(x16) simple_intropattern(x17) simple_intropattern(x18) simple_intropattern(x19) simple_intropattern(x20) simple_intropattern_list(xs) := fail 0 "Intros_r: supports at most 20 arguments".
 Tactic Notation "Intros_r_any" := set_String_name ; right_intro_any; pureIntros; subst_all_strings.
-Tactic Notation "Intros_r" simple_intropattern(x0):= set_String_name ; right_intro x0;pureIntros; subst_all_strings.
-Tactic Notation "Intros_r" simple_intropattern(x0) simple_intropattern(x1) := set_String_name ; right_intro x0; right_intro x1;pureIntros; subst_all_strings.
-Tactic Notation "Intros_r" simple_intropattern(x0) simple_intropattern(x1)
-                          simple_intropattern(x2) simple_intropattern(x3)
-                          simple_intropattern(x4) simple_intropattern(x5)
-                          simple_intropattern(x6) simple_intropattern(x7)
-                          simple_intropattern(x8) := 
-  set_String_name ; right_intro x0; right_intro x1;right_intro x2; right_intro x3;right_intro x4; right_intro x5;
-  right_intro x6; right_intro x7;right_intro x8; pureIntros ; subst_all_strings.
 
-Tactic Notation "eExists" := set_String_name ; asrt_simpl; reexists ; eexists ; subst_all_strings.  
-Tactic Notation "Exists" uconstr(x0) := set_String_name ; asrt_simpl;rexists x0; subst_all_strings.
-Tactic Notation "Exists" uconstr(x0) uconstr(x1) := set_String_name ; asrt_simpl;rexists x0;asrt_simpl;rexists x1; subst_all_strings.
-Tactic Notation "Exists" uconstr(x0) uconstr(x1) uconstr(x2) := set_String_name ; asrt_simpl;rexists x0;asrt_simpl;rexists x1;asrt_simpl;rexists x2; subst_all_strings.
-Tactic Notation "Exists" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) := set_String_name ; asrt_simpl;rexists x0;asrt_simpl;rexists x1;asrt_simpl;rexists x2;asrt_simpl;rexists x3; subst_all_strings.
-Tactic Notation "Exists" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) := set_String_name ; asrt_simpl;rexists x0;asrt_simpl;rexists x1;asrt_simpl;rexists x2;asrt_simpl;rexists x3;asrt_simpl;rexists x4; subst_all_strings.
-Tactic Notation "Exists_l" uconstr(x0) := set_String_name ; asrt_simpl;lexists x0; subst_all_strings.
-Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) := set_String_name ; asrt_simpl;lexists x0;asrt_simpl;lexists x1; subst_all_strings.
-Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) uconstr(x2) := set_String_name ; asrt_simpl;lexists x0;asrt_simpl;lexists x1;asrt_simpl;lexists x2; subst_all_strings.
-Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) := set_String_name ; asrt_simpl;lexists x0;asrt_simpl;lexists x1;asrt_simpl;lexists x2;asrt_simpl;lexists x3; subst_all_strings.
-Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) := set_String_name ; asrt_simpl;lexists x0;asrt_simpl;lexists x1;asrt_simpl;lexists x2;asrt_simpl;lexists x3;asrt_simpl;lexists x4; subst_all_strings.
+Tactic Notation "eExists" := set_String_name ; asrt_simpl; reexists ; eexists ; subst_all_strings.
+Tactic Notation "Exists" := set_String_name ; asrt_simpl ; subst_all_strings.
+Tactic Notation "Exists" uconstr(x0) := set_String_name ; asrt_simpl; rexists x0 ; subst_all_strings.
+Tactic Notation "Exists" uconstr(x0) uconstr(x1) := set_String_name ; asrt_simpl; rexists x0; asrt_simpl; rexists x1 ; subst_all_strings.
+Tactic Notation "Exists" uconstr(x0) uconstr(x1) uconstr(x2) := set_String_name ; asrt_simpl; rexists x0; asrt_simpl; rexists x1; asrt_simpl; rexists x2 ; subst_all_strings.
+Tactic Notation "Exists" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) := set_String_name ; asrt_simpl; rexists x0; asrt_simpl; rexists x1; asrt_simpl; rexists x2; asrt_simpl; rexists x3 ; subst_all_strings.
+Tactic Notation "Exists" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) := set_String_name ; asrt_simpl; rexists x0; asrt_simpl; rexists x1; asrt_simpl; rexists x2; asrt_simpl; rexists x3; asrt_simpl; rexists x4 ; subst_all_strings.
+Tactic Notation "Exists" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) := set_String_name ; asrt_simpl; rexists x0; asrt_simpl; rexists x1; asrt_simpl; rexists x2; asrt_simpl; rexists x3; asrt_simpl; rexists x4; asrt_simpl; rexists x5 ; subst_all_strings.
+Tactic Notation "Exists" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) uconstr(x6) := set_String_name ; asrt_simpl; rexists x0; asrt_simpl; rexists x1; asrt_simpl; rexists x2; asrt_simpl; rexists x3; asrt_simpl; rexists x4; asrt_simpl; rexists x5; asrt_simpl; rexists x6 ; subst_all_strings.
+Tactic Notation "Exists" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) uconstr(x6) uconstr(x7) := set_String_name ; asrt_simpl; rexists x0; asrt_simpl; rexists x1; asrt_simpl; rexists x2; asrt_simpl; rexists x3; asrt_simpl; rexists x4; asrt_simpl; rexists x5; asrt_simpl; rexists x6; asrt_simpl; rexists x7 ; subst_all_strings.
+Tactic Notation "Exists" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) uconstr(x6) uconstr(x7) uconstr(x8) := set_String_name ; asrt_simpl; rexists x0; asrt_simpl; rexists x1; asrt_simpl; rexists x2; asrt_simpl; rexists x3; asrt_simpl; rexists x4; asrt_simpl; rexists x5; asrt_simpl; rexists x6; asrt_simpl; rexists x7; asrt_simpl; rexists x8 ; subst_all_strings.
+Tactic Notation "Exists" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) uconstr(x6) uconstr(x7) uconstr(x8) uconstr(x9) := set_String_name ; asrt_simpl; rexists x0; asrt_simpl; rexists x1; asrt_simpl; rexists x2; asrt_simpl; rexists x3; asrt_simpl; rexists x4; asrt_simpl; rexists x5; asrt_simpl; rexists x6; asrt_simpl; rexists x7; asrt_simpl; rexists x8; asrt_simpl; rexists x9 ; subst_all_strings.
+Tactic Notation "Exists" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) uconstr(x6) uconstr(x7) uconstr(x8) uconstr(x9) uconstr(x10) := set_String_name ; asrt_simpl; rexists x0; asrt_simpl; rexists x1; asrt_simpl; rexists x2; asrt_simpl; rexists x3; asrt_simpl; rexists x4; asrt_simpl; rexists x5; asrt_simpl; rexists x6; asrt_simpl; rexists x7; asrt_simpl; rexists x8; asrt_simpl; rexists x9; asrt_simpl; rexists x10 ; subst_all_strings.
+Tactic Notation "Exists" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) uconstr(x6) uconstr(x7) uconstr(x8) uconstr(x9) uconstr(x10) uconstr(x11) := set_String_name ; asrt_simpl; rexists x0; asrt_simpl; rexists x1; asrt_simpl; rexists x2; asrt_simpl; rexists x3; asrt_simpl; rexists x4; asrt_simpl; rexists x5; asrt_simpl; rexists x6; asrt_simpl; rexists x7; asrt_simpl; rexists x8; asrt_simpl; rexists x9; asrt_simpl; rexists x10; asrt_simpl; rexists x11 ; subst_all_strings.
+Tactic Notation "Exists" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) uconstr(x6) uconstr(x7) uconstr(x8) uconstr(x9) uconstr(x10) uconstr(x11) uconstr(x12) := set_String_name ; asrt_simpl; rexists x0; asrt_simpl; rexists x1; asrt_simpl; rexists x2; asrt_simpl; rexists x3; asrt_simpl; rexists x4; asrt_simpl; rexists x5; asrt_simpl; rexists x6; asrt_simpl; rexists x7; asrt_simpl; rexists x8; asrt_simpl; rexists x9; asrt_simpl; rexists x10; asrt_simpl; rexists x11; asrt_simpl; rexists x12 ; subst_all_strings.
+Tactic Notation "Exists" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) uconstr(x6) uconstr(x7) uconstr(x8) uconstr(x9) uconstr(x10) uconstr(x11) uconstr(x12) uconstr(x13) := set_String_name ; asrt_simpl; rexists x0; asrt_simpl; rexists x1; asrt_simpl; rexists x2; asrt_simpl; rexists x3; asrt_simpl; rexists x4; asrt_simpl; rexists x5; asrt_simpl; rexists x6; asrt_simpl; rexists x7; asrt_simpl; rexists x8; asrt_simpl; rexists x9; asrt_simpl; rexists x10; asrt_simpl; rexists x11; asrt_simpl; rexists x12; asrt_simpl; rexists x13 ; subst_all_strings.
+Tactic Notation "Exists" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) uconstr(x6) uconstr(x7) uconstr(x8) uconstr(x9) uconstr(x10) uconstr(x11) uconstr(x12) uconstr(x13) uconstr(x14) := set_String_name ; asrt_simpl; rexists x0; asrt_simpl; rexists x1; asrt_simpl; rexists x2; asrt_simpl; rexists x3; asrt_simpl; rexists x4; asrt_simpl; rexists x5; asrt_simpl; rexists x6; asrt_simpl; rexists x7; asrt_simpl; rexists x8; asrt_simpl; rexists x9; asrt_simpl; rexists x10; asrt_simpl; rexists x11; asrt_simpl; rexists x12; asrt_simpl; rexists x13; asrt_simpl; rexists x14 ; subst_all_strings.
+Tactic Notation "Exists" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) uconstr(x6) uconstr(x7) uconstr(x8) uconstr(x9) uconstr(x10) uconstr(x11) uconstr(x12) uconstr(x13) uconstr(x14) uconstr(x15) := set_String_name ; asrt_simpl; rexists x0; asrt_simpl; rexists x1; asrt_simpl; rexists x2; asrt_simpl; rexists x3; asrt_simpl; rexists x4; asrt_simpl; rexists x5; asrt_simpl; rexists x6; asrt_simpl; rexists x7; asrt_simpl; rexists x8; asrt_simpl; rexists x9; asrt_simpl; rexists x10; asrt_simpl; rexists x11; asrt_simpl; rexists x12; asrt_simpl; rexists x13; asrt_simpl; rexists x14; asrt_simpl; rexists x15 ; subst_all_strings.
+Tactic Notation "Exists" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) uconstr(x6) uconstr(x7) uconstr(x8) uconstr(x9) uconstr(x10) uconstr(x11) uconstr(x12) uconstr(x13) uconstr(x14) uconstr(x15) uconstr(x16) := set_String_name ; asrt_simpl; rexists x0; asrt_simpl; rexists x1; asrt_simpl; rexists x2; asrt_simpl; rexists x3; asrt_simpl; rexists x4; asrt_simpl; rexists x5; asrt_simpl; rexists x6; asrt_simpl; rexists x7; asrt_simpl; rexists x8; asrt_simpl; rexists x9; asrt_simpl; rexists x10; asrt_simpl; rexists x11; asrt_simpl; rexists x12; asrt_simpl; rexists x13; asrt_simpl; rexists x14; asrt_simpl; rexists x15; asrt_simpl; rexists x16 ; subst_all_strings.
+Tactic Notation "Exists" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) uconstr(x6) uconstr(x7) uconstr(x8) uconstr(x9) uconstr(x10) uconstr(x11) uconstr(x12) uconstr(x13) uconstr(x14) uconstr(x15) uconstr(x16) uconstr(x17) := set_String_name ; asrt_simpl; rexists x0; asrt_simpl; rexists x1; asrt_simpl; rexists x2; asrt_simpl; rexists x3; asrt_simpl; rexists x4; asrt_simpl; rexists x5; asrt_simpl; rexists x6; asrt_simpl; rexists x7; asrt_simpl; rexists x8; asrt_simpl; rexists x9; asrt_simpl; rexists x10; asrt_simpl; rexists x11; asrt_simpl; rexists x12; asrt_simpl; rexists x13; asrt_simpl; rexists x14; asrt_simpl; rexists x15; asrt_simpl; rexists x16; asrt_simpl; rexists x17 ; subst_all_strings.
+Tactic Notation "Exists" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) uconstr(x6) uconstr(x7) uconstr(x8) uconstr(x9) uconstr(x10) uconstr(x11) uconstr(x12) uconstr(x13) uconstr(x14) uconstr(x15) uconstr(x16) uconstr(x17) uconstr(x18) := set_String_name ; asrt_simpl; rexists x0; asrt_simpl; rexists x1; asrt_simpl; rexists x2; asrt_simpl; rexists x3; asrt_simpl; rexists x4; asrt_simpl; rexists x5; asrt_simpl; rexists x6; asrt_simpl; rexists x7; asrt_simpl; rexists x8; asrt_simpl; rexists x9; asrt_simpl; rexists x10; asrt_simpl; rexists x11; asrt_simpl; rexists x12; asrt_simpl; rexists x13; asrt_simpl; rexists x14; asrt_simpl; rexists x15; asrt_simpl; rexists x16; asrt_simpl; rexists x17; asrt_simpl; rexists x18 ; subst_all_strings.
+Tactic Notation "Exists" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) uconstr(x6) uconstr(x7) uconstr(x8) uconstr(x9) uconstr(x10) uconstr(x11) uconstr(x12) uconstr(x13) uconstr(x14) uconstr(x15) uconstr(x16) uconstr(x17) uconstr(x18) uconstr(x19) := set_String_name ; asrt_simpl; rexists x0; asrt_simpl; rexists x1; asrt_simpl; rexists x2; asrt_simpl; rexists x3; asrt_simpl; rexists x4; asrt_simpl; rexists x5; asrt_simpl; rexists x6; asrt_simpl; rexists x7; asrt_simpl; rexists x8; asrt_simpl; rexists x9; asrt_simpl; rexists x10; asrt_simpl; rexists x11; asrt_simpl; rexists x12; asrt_simpl; rexists x13; asrt_simpl; rexists x14; asrt_simpl; rexists x15; asrt_simpl; rexists x16; asrt_simpl; rexists x17; asrt_simpl; rexists x18; asrt_simpl; rexists x19 ; subst_all_strings.
+Tactic Notation "Exists" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) uconstr(x6) uconstr(x7) uconstr(x8) uconstr(x9) uconstr(x10) uconstr(x11) uconstr(x12) uconstr(x13) uconstr(x14) uconstr(x15) uconstr(x16) uconstr(x17) uconstr(x18) uconstr(x19) uconstr(x20) uconstr_list(xs) := fail 0 "Exists: supports at most 20 arguments".
+Tactic Notation "Exists_l" := set_String_name ; asrt_simpl ; subst_all_strings.
+Tactic Notation "Exists_l" uconstr(x0) := set_String_name ; asrt_simpl; lexists x0 ; subst_all_strings.
+Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) := set_String_name ; asrt_simpl; lexists x0; asrt_simpl; lexists x1 ; subst_all_strings.
+Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) uconstr(x2) := set_String_name ; asrt_simpl; lexists x0; asrt_simpl; lexists x1; asrt_simpl; lexists x2 ; subst_all_strings.
+Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) := set_String_name ; asrt_simpl; lexists x0; asrt_simpl; lexists x1; asrt_simpl; lexists x2; asrt_simpl; lexists x3 ; subst_all_strings.
+Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) := set_String_name ; asrt_simpl; lexists x0; asrt_simpl; lexists x1; asrt_simpl; lexists x2; asrt_simpl; lexists x3; asrt_simpl; lexists x4 ; subst_all_strings.
+Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) := set_String_name ; asrt_simpl; lexists x0; asrt_simpl; lexists x1; asrt_simpl; lexists x2; asrt_simpl; lexists x3; asrt_simpl; lexists x4; asrt_simpl; lexists x5 ; subst_all_strings.
+Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) uconstr(x6) := set_String_name ; asrt_simpl; lexists x0; asrt_simpl; lexists x1; asrt_simpl; lexists x2; asrt_simpl; lexists x3; asrt_simpl; lexists x4; asrt_simpl; lexists x5; asrt_simpl; lexists x6 ; subst_all_strings.
+Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) uconstr(x6) uconstr(x7) := set_String_name ; asrt_simpl; lexists x0; asrt_simpl; lexists x1; asrt_simpl; lexists x2; asrt_simpl; lexists x3; asrt_simpl; lexists x4; asrt_simpl; lexists x5; asrt_simpl; lexists x6; asrt_simpl; lexists x7 ; subst_all_strings.
+Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) uconstr(x6) uconstr(x7) uconstr(x8) := set_String_name ; asrt_simpl; lexists x0; asrt_simpl; lexists x1; asrt_simpl; lexists x2; asrt_simpl; lexists x3; asrt_simpl; lexists x4; asrt_simpl; lexists x5; asrt_simpl; lexists x6; asrt_simpl; lexists x7; asrt_simpl; lexists x8 ; subst_all_strings.
+Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) uconstr(x6) uconstr(x7) uconstr(x8) uconstr(x9) := set_String_name ; asrt_simpl; lexists x0; asrt_simpl; lexists x1; asrt_simpl; lexists x2; asrt_simpl; lexists x3; asrt_simpl; lexists x4; asrt_simpl; lexists x5; asrt_simpl; lexists x6; asrt_simpl; lexists x7; asrt_simpl; lexists x8; asrt_simpl; lexists x9 ; subst_all_strings.
+Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) uconstr(x6) uconstr(x7) uconstr(x8) uconstr(x9) uconstr(x10) := set_String_name ; asrt_simpl; lexists x0; asrt_simpl; lexists x1; asrt_simpl; lexists x2; asrt_simpl; lexists x3; asrt_simpl; lexists x4; asrt_simpl; lexists x5; asrt_simpl; lexists x6; asrt_simpl; lexists x7; asrt_simpl; lexists x8; asrt_simpl; lexists x9; asrt_simpl; lexists x10 ; subst_all_strings.
+Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) uconstr(x6) uconstr(x7) uconstr(x8) uconstr(x9) uconstr(x10) uconstr(x11) := set_String_name ; asrt_simpl; lexists x0; asrt_simpl; lexists x1; asrt_simpl; lexists x2; asrt_simpl; lexists x3; asrt_simpl; lexists x4; asrt_simpl; lexists x5; asrt_simpl; lexists x6; asrt_simpl; lexists x7; asrt_simpl; lexists x8; asrt_simpl; lexists x9; asrt_simpl; lexists x10; asrt_simpl; lexists x11 ; subst_all_strings.
+Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) uconstr(x6) uconstr(x7) uconstr(x8) uconstr(x9) uconstr(x10) uconstr(x11) uconstr(x12) := set_String_name ; asrt_simpl; lexists x0; asrt_simpl; lexists x1; asrt_simpl; lexists x2; asrt_simpl; lexists x3; asrt_simpl; lexists x4; asrt_simpl; lexists x5; asrt_simpl; lexists x6; asrt_simpl; lexists x7; asrt_simpl; lexists x8; asrt_simpl; lexists x9; asrt_simpl; lexists x10; asrt_simpl; lexists x11; asrt_simpl; lexists x12 ; subst_all_strings.
+Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) uconstr(x6) uconstr(x7) uconstr(x8) uconstr(x9) uconstr(x10) uconstr(x11) uconstr(x12) uconstr(x13) := set_String_name ; asrt_simpl; lexists x0; asrt_simpl; lexists x1; asrt_simpl; lexists x2; asrt_simpl; lexists x3; asrt_simpl; lexists x4; asrt_simpl; lexists x5; asrt_simpl; lexists x6; asrt_simpl; lexists x7; asrt_simpl; lexists x8; asrt_simpl; lexists x9; asrt_simpl; lexists x10; asrt_simpl; lexists x11; asrt_simpl; lexists x12; asrt_simpl; lexists x13 ; subst_all_strings.
+Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) uconstr(x6) uconstr(x7) uconstr(x8) uconstr(x9) uconstr(x10) uconstr(x11) uconstr(x12) uconstr(x13) uconstr(x14) := set_String_name ; asrt_simpl; lexists x0; asrt_simpl; lexists x1; asrt_simpl; lexists x2; asrt_simpl; lexists x3; asrt_simpl; lexists x4; asrt_simpl; lexists x5; asrt_simpl; lexists x6; asrt_simpl; lexists x7; asrt_simpl; lexists x8; asrt_simpl; lexists x9; asrt_simpl; lexists x10; asrt_simpl; lexists x11; asrt_simpl; lexists x12; asrt_simpl; lexists x13; asrt_simpl; lexists x14 ; subst_all_strings.
+Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) uconstr(x6) uconstr(x7) uconstr(x8) uconstr(x9) uconstr(x10) uconstr(x11) uconstr(x12) uconstr(x13) uconstr(x14) uconstr(x15) := set_String_name ; asrt_simpl; lexists x0; asrt_simpl; lexists x1; asrt_simpl; lexists x2; asrt_simpl; lexists x3; asrt_simpl; lexists x4; asrt_simpl; lexists x5; asrt_simpl; lexists x6; asrt_simpl; lexists x7; asrt_simpl; lexists x8; asrt_simpl; lexists x9; asrt_simpl; lexists x10; asrt_simpl; lexists x11; asrt_simpl; lexists x12; asrt_simpl; lexists x13; asrt_simpl; lexists x14; asrt_simpl; lexists x15 ; subst_all_strings.
+Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) uconstr(x6) uconstr(x7) uconstr(x8) uconstr(x9) uconstr(x10) uconstr(x11) uconstr(x12) uconstr(x13) uconstr(x14) uconstr(x15) uconstr(x16) := set_String_name ; asrt_simpl; lexists x0; asrt_simpl; lexists x1; asrt_simpl; lexists x2; asrt_simpl; lexists x3; asrt_simpl; lexists x4; asrt_simpl; lexists x5; asrt_simpl; lexists x6; asrt_simpl; lexists x7; asrt_simpl; lexists x8; asrt_simpl; lexists x9; asrt_simpl; lexists x10; asrt_simpl; lexists x11; asrt_simpl; lexists x12; asrt_simpl; lexists x13; asrt_simpl; lexists x14; asrt_simpl; lexists x15; asrt_simpl; lexists x16 ; subst_all_strings.
+Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) uconstr(x6) uconstr(x7) uconstr(x8) uconstr(x9) uconstr(x10) uconstr(x11) uconstr(x12) uconstr(x13) uconstr(x14) uconstr(x15) uconstr(x16) uconstr(x17) := set_String_name ; asrt_simpl; lexists x0; asrt_simpl; lexists x1; asrt_simpl; lexists x2; asrt_simpl; lexists x3; asrt_simpl; lexists x4; asrt_simpl; lexists x5; asrt_simpl; lexists x6; asrt_simpl; lexists x7; asrt_simpl; lexists x8; asrt_simpl; lexists x9; asrt_simpl; lexists x10; asrt_simpl; lexists x11; asrt_simpl; lexists x12; asrt_simpl; lexists x13; asrt_simpl; lexists x14; asrt_simpl; lexists x15; asrt_simpl; lexists x16; asrt_simpl; lexists x17 ; subst_all_strings.
+Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) uconstr(x6) uconstr(x7) uconstr(x8) uconstr(x9) uconstr(x10) uconstr(x11) uconstr(x12) uconstr(x13) uconstr(x14) uconstr(x15) uconstr(x16) uconstr(x17) uconstr(x18) := set_String_name ; asrt_simpl; lexists x0; asrt_simpl; lexists x1; asrt_simpl; lexists x2; asrt_simpl; lexists x3; asrt_simpl; lexists x4; asrt_simpl; lexists x5; asrt_simpl; lexists x6; asrt_simpl; lexists x7; asrt_simpl; lexists x8; asrt_simpl; lexists x9; asrt_simpl; lexists x10; asrt_simpl; lexists x11; asrt_simpl; lexists x12; asrt_simpl; lexists x13; asrt_simpl; lexists x14; asrt_simpl; lexists x15; asrt_simpl; lexists x16; asrt_simpl; lexists x17; asrt_simpl; lexists x18 ; subst_all_strings.
+Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) uconstr(x6) uconstr(x7) uconstr(x8) uconstr(x9) uconstr(x10) uconstr(x11) uconstr(x12) uconstr(x13) uconstr(x14) uconstr(x15) uconstr(x16) uconstr(x17) uconstr(x18) uconstr(x19) := set_String_name ; asrt_simpl; lexists x0; asrt_simpl; lexists x1; asrt_simpl; lexists x2; asrt_simpl; lexists x3; asrt_simpl; lexists x4; asrt_simpl; lexists x5; asrt_simpl; lexists x6; asrt_simpl; lexists x7; asrt_simpl; lexists x8; asrt_simpl; lexists x9; asrt_simpl; lexists x10; asrt_simpl; lexists x11; asrt_simpl; lexists x12; asrt_simpl; lexists x13; asrt_simpl; lexists x14; asrt_simpl; lexists x15; asrt_simpl; lexists x16; asrt_simpl; lexists x17; asrt_simpl; lexists x18; asrt_simpl; lexists x19 ; subst_all_strings.
+Tactic Notation "Exists_l" uconstr(x0) uconstr(x1) uconstr(x2) uconstr(x3) uconstr(x4) uconstr(x5) uconstr(x6) uconstr(x7) uconstr(x8) uconstr(x9) uconstr(x10) uconstr(x11) uconstr(x12) uconstr(x13) uconstr(x14) uconstr(x15) uconstr(x16) uconstr(x17) uconstr(x18) uconstr(x19) uconstr(x20) uconstr_list(xs) := fail 0 "Exists_l: supports at most 20 arguments".
 Tactic Notation "normalize"  := set_String_name ; asrt_simpl ; subst_all_strings.
 
 Tactic Notation "Left" := set_String_name ; rewrite <- derivable1_orp_intros1 ; subst_all_strings.
@@ -1240,7 +1312,7 @@ Ltac prop_apply H :=
                 | _ => let _x := fresh "_x"  in evar (_x : T); specialize(h _x);subst _x;
                       find_lemmapre_rec h
                 end
-  | ?P |-- [| ?Q |] => unify_prewithgoal P;
+  | ?P |-- “ ?Q ” => unify_prewithgoal P;
                   match type of h with 
                   | ?P |-- _ =>  let L:= (sepconlistasrts P) in prop_apply_L L h;clear  h
                   end
@@ -1300,17 +1372,33 @@ Ltac pre_process_pure :=
 
 Ltac pre_process :=
   try Unfold;
+  match goal with 
+    | |-  _ \/ _ => left 
+    | _ => idtac
+  end;
   intros; poly_store_unfold;
-  Rename pre_process_pure ; 
+  Rename pre_process_pure ;
+  try (solve [entailer!]).
+
+Ltac aggressive_pre_process :=
+  try Unfold;
+  match goal with 
+    | |-  _ \/ _ => right
+    | _ => idtac
+  end;
+  intros; poly_store_unfold;
+  Rename pre_process_pure ;
   try (solve [entailer!]).
 
 Tactic Notation "pre_process_default" := pre_process.
 
 (* ========== LLM-friendly tactics ========== *)
 
+Notation "a '+::' b" := (a ++ (b :: nil)) (at level 19) : list_scope.
+
 (* ----- Goal decomposition and pure export ----- *)
 
-Lemma dump_spatial_left : forall P Q, Q -> P |-- [| Q |].
+Lemma dump_spatial_left : forall P Q, Q -> P |-- “ Q ”.
 Proof.
   intros. easy.
 Qed.
@@ -1326,21 +1414,18 @@ Qed.
 
 Ltac _assert_pure t :=
   lazymatch t with
-  | [| _ |] => idtac
+  | “ _ ” => idtac
   | ?A && ?B => _assert_pure A; _assert_pure B
-  | _ => fail 1 "not pure: RHS contains non-[| _ |] parts"
+  | _ => fail "not pure: RHS contains non-“ _ ” parts"
   end.
 
 Ltac _assert_no_pure t :=
-  first
-  [ lazymatch t with
-    | context [ [| _ |] ] => fail 1 "spatial part contains a pure [| _ |]"
-    | ?A ** ?B => _assert_no_pure A; _assert_no_pure B
-    | ?A && ?B => _assert_no_pure A; _assert_no_pure B
-    | _ => idtac
-    end
-  | fail 1 "spatial part contains a pure [| _ |]"
-  ].
+  lazymatch t with
+  | “ _ ” => fail "spatial part contains a pure “ _ ”"
+  | ?A ** ?B => _assert_no_pure A; _assert_no_pure B
+  | ?A && ?B => _assert_no_pure A; _assert_no_pure B
+  | _ => idtac
+  end.
 
 Ltac split_pure_spatial :=
   normalize;
@@ -1373,6 +1458,23 @@ Ltac split_pures :=
       apply _derivable1_andp_intros
   end.
 
+Ltac split_pure_and_solve :=
+  split_pures;
+  try solve [dump_pre_spatial; auto].
+
+Ltac subst_eqs :=
+  repeat first
+    [ progress subst
+    | match goal with
+      | H : @eq (list _)   (_ :: _) (_ :: _) |- _ => injection H; clear H; intros
+      | H : @eq (list _)   nil      (_ :: _) |- _ => discriminate H
+      | H : @eq (list _)   (_ :: _) nil      |- _ => discriminate H
+      | H : @eq (prod _ _) (_ , _)  (_ , _)  |- _ => injection H; clear H; intros
+      | H : @eq (option _) (Some _) (Some _) |- _ => injection H; clear H; intros
+      | H : @eq (option _) None     (Some _) |- _ => discriminate H
+      | H : @eq (option _) (Some _) None     |- _ => discriminate H
+      end ].
+
 (* ----- Pure facts from the precondition ----- *)
 
 Tactic Notation "Intros_p" simple_intropattern(x) :=
@@ -1380,17 +1482,17 @@ Tactic Notation "Intros_p" simple_intropattern(x) :=
   lazymatch goal with
   | |- ?P |-- ?Q =>
       lazymatch P with
-      | context [ [| ?B |] ] =>
+      | context [ “ ?B ” ] =>
           apply (coq_prop_andp_left B);
           intro x
-      | _ => fail 1 "Intros_p: no pure [| _ |] on the left"
+      | _ => fail 1 "Intros_p: no pure “ _ ” on the left"
       end
   | _ => fail "Intros_p: goal is not an entailment"
   end.
 
 Lemma add_pure_split : forall (P : Prop) (C F : expr) ,
-  C |-- [| P |] ->
-  ([| P |] && C) |-- F ->
+  C |-- “ P ” ->
+  (“ P ” && C) |-- F ->
   C |-- F.
 Proof.
   unfold derivable1, andp, coq_prop; firstorder.
@@ -1578,16 +1680,16 @@ Ltac sep_apply_r_aux H :=
 
 Ltac prop_apply_p H :=
   lazymatch type of H with
-  | ?P0 |-- [| ?Q0 |] =>
+  | ?P0 |-- “ ?Q0 ” =>
       unify_prewithgoal P0;
       let L := (sepconlistasrts P0) in
       prop_apply_L L H; sepcon_assoc_change
-  | ?P0 --||-- [| ?Q0 |] =>
+  | ?P0 --||-- “ ?Q0 ” =>
       unify_prewithgoal P0;
       let L := (sepconlistasrts P0) in
       prop_apply_L L (proj1 H); sepcon_assoc_change
   | _ =>
-      fail 1 "prop_apply_p: Please instantiate parameters and premises until the lemma has the shape P |-- [| Q |] (or P --||-- [| Q |])."
+      fail 1 "prop_apply_p: Please instantiate parameters and premises until the lemma has the shape P |-- “ Q ” (or P --||-- “ Q ”)."
   end.
 
 Ltac _try_sep_apply_r t := sep_apply_r_aux t.
@@ -1642,9 +1744,72 @@ Tactic Notation "sep_apply_r_atomic" uconstr(t) :=
   _consume_props_with_subgoal t ltac:(fun tfin =>
     _try_sep_apply_r tfin).
 
+Ltac sep_apply_left H :=
+  (let h := fresh "Hlemma" in pose proof H as h;
+   set_String_name;
+   let rec find_lemmapre_rec h :=
+     lazymatch type of h with
+     | forall x : ?T, _ =>
+         lazymatch type of T with
+         | Prop =>
+             let H' := fresh "H" in
+             cut T; [ intro H'; specialize (h H'); find_lemmapre_rec h | ]
+         | _ =>
+             let _x := fresh "_x" in
+             evar (_x : T); specialize (h _x); subst _x;
+             find_lemmapre_rec h
+         end
+     | ?T -> _ =>
+         lazymatch type of T with
+         | Prop =>
+             let H' := fresh "H" in
+             cut T; [ intro H'; specialize (h H'); find_lemmapre_rec h | ]
+         | _ =>
+             let _x := fresh "_x" in
+             evar (_x : T); specialize (h _x); subst _x;
+             find_lemmapre_rec h
+         end
+     | ?P |-- ?Q => sep_apply_l_aux h; clear h
+     | ?P --||-- ?Q => find_lemmapre_rec (P |-- Q)
+     end in
+   find_lemmapre_rec h);
+  sepcon_assoc_change;
+  subst_all_strings.
+
+Ltac sep_apply_right H :=
+  (let h := fresh "Hlemma" in pose proof H as h;
+   set_String_name;
+   let rec find_lemmapre_rec h :=
+     lazymatch type of h with
+     | forall x : ?T, _ =>
+         lazymatch type of T with
+         | Prop =>
+             let H' := fresh "H" in
+             cut T; [ intro H'; specialize (h H'); find_lemmapre_rec h | ]
+         | _ =>
+             let _x := fresh "_x" in
+             evar (_x : T); specialize (h _x); subst _x;
+             find_lemmapre_rec h
+         end
+     | ?T -> _ =>
+         lazymatch type of T with
+         | Prop =>
+             let H' := fresh "H" in
+             cut T; [ intro H'; specialize (h H'); find_lemmapre_rec h | ]
+         | _ =>
+             let _x := fresh "_x" in
+             evar (_x : T); specialize (h _x); subst _x;
+             find_lemmapre_rec h
+         end
+     | ?P |-- ?Q => sep_apply_r_aux h; clear h
+     | ?P --||-- ?Q => find_lemmapre_rec (P |-- Q)
+     end in
+   find_lemmapre_rec h);
+  subst_all_strings.
+
 (* ----- Experimental / disabled ideas kept for reference ----- *)
 
-(* Lemma split_pure_right : forall P Q R, P |-- R -> P |-- [| Q |] -> P |-- R && [| Q |].
+(* Lemma split_pure_right : forall P Q R, P |-- R -> P |-- “ Q ” -> P |-- R && “ Q ”.
 Proof.
   intros. split.
   - apply H. assumption.

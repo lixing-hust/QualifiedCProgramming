@@ -293,9 +293,9 @@ End generic_n_bytes.
 Lemma store_int_store_char: forall p v,
   store_int p v --||--
   EX v1 v2 v3 v4: Z,
-    [| merge_int v1 v2 v3 v4 v |] &&
-    [| Int.min_signed <= v <= Int.max_signed |] &&
-    [| aligned_4 p|] &&
+    “ merge_int v1 v2 v3 v4 v ” &&
+    “ Int.min_signed <= v <= Int.max_signed ” &&
+    “ aligned_4 p ” &&
     store_char p v1 **
     store_char (p + 1) v2 **
     store_char (p + 2) v3 **
@@ -355,7 +355,7 @@ Proof.
 Qed.
 
 Lemma undef_store_uint_undef_store_char : forall p,
-  undef_store_uint p --||-- [| aligned_4 p |]  && undef_store_char p ** undef_store_char (p + 1) ** undef_store_char (p + 2) ** undef_store_char (p + 3).
+  undef_store_uint p --||-- “ aligned_4 p ”  && undef_store_char p ** undef_store_char (p + 1) ** undef_store_char (p + 2) ** undef_store_char (p + 3).
 Proof.
   intros.
   unfold undef_store_uint, undef_store_char. 
@@ -364,7 +364,7 @@ Proof.
 Qed.
 
 Lemma undef_store_int_undef_store_char : forall p,
-  undef_store_int p --||-- [| aligned_4 p |]  && undef_store_char p ** undef_store_char (p + 1) ** undef_store_char (p + 2) ** undef_store_char (p + 3).
+  undef_store_int p --||-- “ aligned_4 p ”  && undef_store_char p ** undef_store_char (p + 1) ** undef_store_char (p + 2) ** undef_store_char (p + 3).
 Proof.
   intros.
   unfold undef_store_int, undef_store_char. 
@@ -375,9 +375,9 @@ Qed.
 Lemma store_uint_store_char: forall p v,
   store_uint p v --||--
   EX v1 v2 v3 v4: Z,
-    [| merge_int v1 v2 v3 v4 v |] &&
-    [| 0 <= v <= Int.max_unsigned |] &&
-    [| aligned_4 p|] &&
+    “ merge_int v1 v2 v3 v4 v ” &&
+    “ 0 <= v <= Int.max_unsigned ” &&
+    “ aligned_4 p ” &&
     store_char p v1 **
     store_char (p + 1) v2 **
     store_char (p + 2) v3 **
@@ -499,7 +499,7 @@ Proof.
 Qed.
 
 Lemma store_int_range : forall x v,
-  (x # Int |-> v) |-- [| Int.min_signed <= v <= Int.max_signed |].
+  (x # Int |-> v) |-- “ Int.min_signed <= v <= Int.max_signed ”.
 Proof.
   intros.
   unfold store_int.
@@ -516,7 +516,7 @@ Proof.
 Qed.
 
 Lemma store_char_range : forall x v,
-  (x # Char |-> v) |-- [| Byte.min_signed <= v <= Byte.max_signed |].
+  (x # Char |-> v) |-- “ Byte.min_signed <= v <= Byte.max_signed ”.
 Proof.
   intros.
   unfold store_char.
@@ -533,7 +533,7 @@ Proof.
 Qed.
 
 Lemma store_short_range : forall x v,
-  (x # Short |-> v) |-- [| -32768 <= v <= 32767 |].
+  (x # Short |-> v) |-- “ -32768 <= v <= 32767 ”.
 Proof. 
   intros.
   unfold store_short.
@@ -550,7 +550,7 @@ Proof.
 Qed.
 
 Lemma store_int64_range : forall x v,
-  (x # Int64 |-> v) |-- [| Int64.min_signed <= v <= Int64.max_signed |].
+  (x # Int64 |-> v) |-- “ Int64.min_signed <= v <= Int64.max_signed ”.
 Proof.
   intros.
   unfold store_int64.
@@ -567,7 +567,7 @@ Proof.
 Qed.
 
 Lemma store_uint_range : forall x v,
-  (x # UInt |-> v) |-- [| 0 <= v <= Int.max_unsigned |].
+  (x # UInt |-> v) |-- “ 0 <= v <= Int.max_unsigned ”.
 Proof.
   intros.
   unfold store_uint.
@@ -584,7 +584,7 @@ Proof.
 Qed.
 
 Lemma store_uchar_range : forall x v,
-  (x # UChar |-> v) |-- [| 0 <= v <= Byte.max_unsigned |].
+  (x # UChar |-> v) |-- “ 0 <= v <= Byte.max_unsigned ”.
 Proof.
   intros.
   unfold store_uchar.
@@ -601,7 +601,7 @@ Proof.
 Qed.
 
 Lemma store_ushort_range : forall x v,
-  (x # UShort |-> v) |-- [| 0 <= v <= 65535 |].
+  (x # UShort |-> v) |-- “ 0 <= v <= 65535 ”.
 Proof.
   intros.
   unfold store_ushort.
@@ -618,7 +618,7 @@ Proof.
 Qed.
 
 Lemma store_uint64_range : forall x v,
-  (x # UInt64 |-> v) |-- [| 0 <= v <= Int64.max_unsigned |].
+  (x # UInt64 |-> v) |-- “ 0 <= v <= Int64.max_unsigned ”.
 Proof.
   intros.
   unfold store_uint64.
@@ -655,7 +655,7 @@ Proof.
 Qed.
 
 Lemma dup_mstore: forall x v1 v2,
-  mstore x v1 ** mstore x v2 |-- [| False |].
+  mstore x v1 ** mstore x v2 |-- “ False ”.
 Proof.
   intros.
   eapply derivable1_trans.
@@ -666,7 +666,7 @@ Proof.
 Qed.
 
 Lemma dup_store_byte_noninit: forall x, 
-  store_byte_noninit x ** store_byte_noninit x |-- [| False |].
+  store_byte_noninit x ** store_byte_noninit x |-- “ False ”.
 Proof.
   intros.
   unfold store_byte_noninit.
@@ -674,7 +674,7 @@ Proof.
 Qed.
 
 Lemma dup_store_byte: forall x v1 v2,
-  store_byte x v1 ** store_byte x v2 |-- [| False |].
+  store_byte x v1 ** store_byte x v2 |-- “ False ”.
 Proof.
   intros.
   unfold store_byte.
@@ -682,22 +682,22 @@ Proof.
 Qed.
 
 Lemma dup_store_2bytes_noninit: forall x,
-  store_2byte_noninit x ** store_2byte_noninit x |-- [| False |].
+  store_2byte_noninit x ** store_2byte_noninit x |-- “ False ”.
 Proof.
   intros.
   unfold store_2byte_noninit.
   eapply derivable1_trans. apply derivable1_sepcon_assoc1.
-  apply (derivable1_trans _ ([|False|] ** TT)). 2: entailer!.
+  apply (derivable1_trans _ (“ False ” ** TT)). 2: entailer!.
   apply derivable1_sepcon_mono. 2: entailer!.
   eapply derivable1_trans. apply derivable1_sepcon_comm.
   eapply derivable1_trans. apply derivable1_sepcon_assoc1.
-  apply (derivable1_trans _ ([|False|] ** TT)). 2: entailer!.
+  apply (derivable1_trans _ (“ False ” ** TT)). 2: entailer!.
   apply derivable1_sepcon_mono. 2: entailer!.
   apply dup_store_byte_noninit.
 Qed.
 
 Lemma dup_store_2bytes: forall x v1 v2,
-  store_2byte x v1 ** store_2byte x v2 |-- [| False |].
+  store_2byte x v1 ** store_2byte x v2 |-- “ False ”.
 Proof.
   intros.
   eapply derivable1_trans.
@@ -707,22 +707,22 @@ Proof.
 Qed.
 
 Lemma dup_store_4bytes_noninit: forall x,
-  store_4byte_noninit x ** store_4byte_noninit x |-- [| False |].
+  store_4byte_noninit x ** store_4byte_noninit x |-- “ False ”.
 Proof.
   intros.
   unfold store_4byte_noninit.
   eapply derivable1_trans. apply derivable1_sepcon_assoc1.
-  apply (derivable1_trans _ ([|False|] ** TT)). 2: entailer!.
+  apply (derivable1_trans _ (“ False ” ** TT)). 2: entailer!.
   apply derivable1_sepcon_mono. 2: entailer!.
   eapply derivable1_trans. apply derivable1_sepcon_comm.
   eapply derivable1_trans. apply derivable1_sepcon_assoc1.
-  apply (derivable1_trans _ ([|False|] ** TT)). 2: entailer!.
+  apply (derivable1_trans _ (“ False ” ** TT)). 2: entailer!.
   apply derivable1_sepcon_mono. 2: entailer!.
   apply dup_store_byte_noninit.
 Qed.
 
 Lemma dup_store_4bytes: forall x v1 v2,
-  store_4byte x v1 ** store_4byte x v2 |-- [| False |].
+  store_4byte x v1 ** store_4byte x v2 |-- “ False ”.
 Proof.
   intros.
   eapply derivable1_trans.
@@ -732,22 +732,22 @@ Proof.
 Qed.
 
 Lemma dup_store_8bytes_noninit: forall x,
-  store_8byte_noninit x ** store_8byte_noninit x |-- [| False |].
+  store_8byte_noninit x ** store_8byte_noninit x |-- “ False ”.
 Proof.
   intros.
   unfold store_8byte_noninit.
   eapply derivable1_trans. apply derivable1_sepcon_assoc1.
-  apply (derivable1_trans _ ([|False|] ** TT)). 2: entailer!.
+  apply (derivable1_trans _ (“ False ” ** TT)). 2: entailer!.
   apply derivable1_sepcon_mono. 2: entailer!.
   eapply derivable1_trans. apply derivable1_sepcon_comm.
   eapply derivable1_trans. apply derivable1_sepcon_assoc1.
-  apply (derivable1_trans _ ([|False|] ** TT)). 2: entailer!.
+  apply (derivable1_trans _ (“ False ” ** TT)). 2: entailer!.
   apply derivable1_sepcon_mono. 2: entailer!.
   apply dup_store_byte_noninit.
 Qed.
 
 Lemma dup_store_8bytes: forall x v1 v2,
-  store_8byte x v1 ** store_8byte x v2 |-- [| False |].
+  store_8byte x v1 ** store_8byte x v2 |-- “ False ”.
 Proof.
   intros.
   eapply derivable1_trans.
@@ -757,7 +757,7 @@ Proof.
 Qed.
 
 Lemma dup_undef_store_int: forall x,
-  (x # Int |->_) ** (x # Int |->_) |-- [| False |].
+  (x # Int |->_) ** (x # Int |->_) |-- “ False ”.
 Proof.
   intros.
   unfold undef_store_int.
@@ -767,7 +767,7 @@ Proof.
 Qed.
 
 Lemma dup_store_int: forall x v1 v2,
-  (x # Int |-> v1) ** (x # Int |-> v2) |-- [| False |].
+  (x # Int |-> v1) ** (x # Int |-> v2) |-- “ False ”.
 Proof.
   intros.
   eapply derivable1_trans.
@@ -776,7 +776,7 @@ Proof.
 Qed.
 
 Lemma dup_undef_store_ptr: forall x,
-  (x # Ptr |->_) ** (x # Ptr |->_) |-- [| False |].
+  (x # Ptr |->_) ** (x # Ptr |->_) |-- “ False ”.
 Proof.
   intros.
   unfold undef_store_ptr.
@@ -786,7 +786,7 @@ Proof.
 Qed.
 
 Lemma dup_store_ptr: forall x v1 v2,
-  (x # Ptr |-> v1) ** (x # Ptr |-> v2) |-- [| False |].
+  (x # Ptr |-> v1) ** (x # Ptr |-> v2) |-- “ False ”.
 Proof.
   intros.
   eapply derivable1_trans.
@@ -983,129 +983,181 @@ Proof.
     replace Int64.min_signed with (- 2 ^ 63) by reflexivity. lia.
 Qed.
 
-Lemma valid_store_char : forall x v, x # Char |-> v |-- [| Byte.min_signed <= v <= Byte.max_signed /\ isvalidptr_char x |].
+Lemma valid_store_char : forall x v, x # Char |-> v |-- “ Byte.min_signed <= v <= Byte.max_signed /\ isvalidptr_char x ”.
 Proof.
   intros.
   unfold store_char.
   entailer!.
 Qed.
 
-Lemma valid_store_uchar : forall x v, x # UChar |-> v |-- [| 0 <= v <= Byte.max_unsigned /\ isvalidptr_char x |].
+Lemma valid_store_uchar : forall x v, x # UChar |-> v |-- “ 0 <= v <= Byte.max_unsigned /\ isvalidptr_char x ”.
 Proof.
   intros.
   unfold store_uchar.
   entailer!.
 Qed.
 
-Lemma valid_undef_store_char : forall x, x # Char |->_ |-- [| isvalidptr_char x |].
+Lemma valid_undef_store_char : forall x, x # Char |->_ |-- “ isvalidptr_char x ”.
 Proof.
   intros.
   unfold undef_store_char.
   entailer!.
 Qed.
 
-Lemma valid_undef_store_uchar : forall x, x # UChar |->_ |-- [| isvalidptr_char x |].
+Lemma valid_undef_store_uchar : forall x, x # UChar |->_ |-- “ isvalidptr_char x ”.
 Proof.
   intros.
   unfold undef_store_uchar.
   entailer!.
 Qed.
 
-Lemma valid_store_short : forall x v, x # Short |-> v |-- [| -32768 <= v <= 32767 /\ isvalidptr_short x |].
+Lemma valid_store_short : forall x v, x # Short |-> v |-- “ -32768 <= v <= 32767 /\ isvalidptr_short x ”.
 Proof.
   intros.
   unfold store_short.
   entailer!.
 Qed.
 
-Lemma valid_store_ushort : forall x v, x # UShort |-> v |-- [| 0 <= v <= 65535 /\ isvalidptr_short x |].
+Lemma valid_store_ushort : forall x v, x # UShort |-> v |-- “ 0 <= v <= 65535 /\ isvalidptr_short x ”.
 Proof.
   intros.
   unfold store_ushort.
   entailer!.
 Qed.
 
-Lemma valid_undef_store_short : forall x, x # Short |->_ |-- [| isvalidptr_short x |].
+Lemma valid_undef_store_short : forall x, x # Short |->_ |-- “ isvalidptr_short x ”.
 Proof.
   intros.
   unfold undef_store_short.
   entailer!.
 Qed.
 
-Lemma valid_undef_store_ushort : forall x, x # UShort |->_ |-- [| isvalidptr_short x |].
+Lemma valid_undef_store_ushort : forall x, x # UShort |->_ |-- “ isvalidptr_short x ”.
 Proof.
   intros.
   unfold undef_store_ushort.
   entailer!.
 Qed.
 
-Lemma valid_store_int : forall x v, x # Int |-> v |-- [| Int.min_signed <= v <= Int.max_signed /\ isvalidptr_int x |].
+Lemma valid_store_int : forall x v, x # Int |-> v |-- “ Int.min_signed <= v <= Int.max_signed /\ isvalidptr_int x ”.
 Proof.
   intros.
   unfold store_int.
   entailer!.
 Qed.
 
-Lemma valid_store_uint : forall x v, x # UInt |-> v |-- [| 0 <= v <= Int.max_unsigned /\ isvalidptr_int x |].
+Lemma valid_store_uint : forall x v, x # UInt |-> v |-- “ 0 <= v <= Int.max_unsigned /\ isvalidptr_int x ”.
 Proof.
   intros.
   unfold store_uint.
   entailer!.
 Qed.
 
-Lemma valid_undef_store_int : forall x, x # Int |->_ |-- [| isvalidptr_int x |].
+Lemma valid_undef_store_int : forall x, x # Int |->_ |-- “ isvalidptr_int x ”.
 Proof.
   intros.
   unfold undef_store_int.
   entailer!.
 Qed.
 
-Lemma valid_undef_store_uint : forall x, x # UInt |->_ |-- [| isvalidptr_int x |].
+Lemma valid_undef_store_uint : forall x, x # UInt |->_ |-- “ isvalidptr_int x ”.
 Proof.
   intros.
   unfold undef_store_uint.
   entailer!.
 Qed.
 
-Lemma valid_store_int64 : forall x v, x # Int64 |-> v |-- [| Int64.min_signed <= v <= Int64.max_signed /\ isvalidptr_int64 x |].
+Lemma valid_store_int64 : forall x v, x # Int64 |-> v |-- “ Int64.min_signed <= v <= Int64.max_signed /\ isvalidptr_int64 x ”.
 Proof.
   intros.
   unfold store_int64.
   entailer!.
 Qed.
 
-Lemma valid_store_uint64 : forall x v, x # UInt64 |-> v |-- [| 0 <= v <= Int64.max_unsigned /\ isvalidptr_int64 x |].
+Lemma valid_store_uint64 : forall x v, x # UInt64 |-> v |-- “ 0 <= v <= Int64.max_unsigned /\ isvalidptr_int64 x ”.
 Proof.
   intros.
   unfold store_uint64.
   entailer!.
 Qed.
 
-Lemma valid_undef_store_int64 : forall x, x # Int64 |->_ |-- [| isvalidptr_int64 x |].
+Lemma valid_undef_store_int64 : forall x, x # Int64 |->_ |-- “ isvalidptr_int64 x ”.
 Proof.
   intros.
   unfold undef_store_int64.
   entailer!.
 Qed.
 
-Lemma valid_undef_store_uint64 : forall x, x # UInt64 |->_ |-- [| isvalidptr_int64 x |].
+Lemma valid_undef_store_uint64 : forall x, x # UInt64 |->_ |-- “ isvalidptr_int64 x ”.
 Proof.
   intros.
   unfold undef_store_uint64.
   entailer!.
 Qed.
 
-Lemma valid_store_ptr : forall x v, x # Ptr |-> v |-- [| isvalidptr x /\ 0 <= v /\ v <= Int.max_unsigned|].
+Lemma valid_store_ptr : forall x v, x # Ptr |-> v |-- “ isvalidptr x /\ 0 <= v /\ v <= Int.max_unsigned ”.
 Proof.
   intros.
   unfold store_ptr.
   entailer!.
 Qed.
 
-Lemma valid_undef_store_ptr : forall x, x # Ptr |->_ |-- [| isvalidptr x |].
+Lemma valid_undef_store_ptr : forall x, x # Ptr |->_ |-- “ isvalidptr x ”.
 Proof.
   intros.
   unfold undef_store_ptr.
+  entailer!.
+Qed.
+
+Lemma undef_store_char_align : forall x, x # Char |->_ |-- store_align_n 1.
+Proof.
+  intros.
+  unfold undef_store_char, store_align_n. simpl.
+  Intros. Exists [x].
+  simpl.
+  entailer!.
+  unfold isvalidptr_char in H.
+  constructor ; auto ; try lia.
+  constructor.
+Qed.
+
+Lemma store_char_align : forall x v, x # Char |-> v |-- store_align_n 1.
+Proof.
+  intros.
+  sep_apply store_char_undef_store_char.
+  sep_apply undef_store_char_align.
+  entailer!.
+Qed.
+
+Lemma store_byte_align1 : forall x, isvalidptr_char x -> store_byte_noninit x |-- store_align_n 1.
+Proof.
+  intros.
+  unfold store_align_n.
+  Exists [x].
+  simpl.
+  entailer!.
+  unfold isvalidptr_char in H.
+  constructor ; auto ; try lia.
+  constructor.
+Qed.
+
+Lemma undef_store_uchar_align : forall x, x # UChar |->_ |-- store_align_n 1.
+Proof.
+  intros.
+  unfold undef_store_uchar, store_align_n. simpl.
+  Intros. Exists [x].
+  simpl.
+  entailer!.
+  unfold isvalidptr_char in H.
+  constructor ; auto ; try lia.
+  constructor.
+Qed.
+
+Lemma store_uchar_align : forall x v, x # UChar |-> v |-- store_align_n 1.
+Proof.
+  intros.
+  sep_apply store_uchar_undef_store_uchar.
+  sep_apply undef_store_uchar_align.
   entailer!.
 Qed.
 
@@ -1239,7 +1291,22 @@ Proof.
   entailer!.
 Qed.
 
-Lemma store_4byte_valid : forall x y, store_4byte_noninit x ** store_4byte_noninit y |-- [| x + 3 < y \/ y + 3 < x |].
+Lemma store_byte_valid : forall x y, store_byte_noninit x ** store_byte_noninit y |-- “ x < y \/ y < x ”.
+Proof.
+  intros.
+  unfold store_byte_noninit.
+  destruct (Z_lt_ge_dec (x + 1) y).
+  - entailer!.
+  - destruct (Z_lt_ge_dec (y + 1) x).
+    + entailer!.
+    + assert (x = y - 1 \/ x = y \/ x = y + 1) by lia.
+      destruct H as [? | [? | ?]] ; subst.
+      * entailer!.
+      * prop_apply (dup_store_byte_noninit y). Intros. lia.
+      * entailer!.
+Qed.
+
+Lemma store_4byte_valid : forall x y, store_4byte_noninit x ** store_4byte_noninit y |-- “ x + 3 < y \/ y + 3 < x ”.
 Proof.
   intros.
   unfold store_4byte_noninit.
@@ -1261,10 +1328,10 @@ Proof.
       * prop_apply (dup_store_byte_noninit (y + 3)). Intros. lia. 
 Qed.
 
-Lemma store_align4_valid : forall x l, store_align4_list l ** store_4byte_noninit x |-- [| Forall (fun x' => x + 3 < x' \/ x' + 3 < x) l |].
+Lemma store_align4_valid : forall x l, store_align4_list l ** store_4byte_noninit x |-- “ Forall (fun x' => x + 3 < x' \/ x' + 3 < x) l ”.
 Proof.
   intros.
-  induction l; simpl in *. 
+  induction l; simpl in *.
   - entailer!.
   - Intros.
     prop_apply (store_4byte_valid a x). Intros.
@@ -1292,7 +1359,7 @@ Proof.
     constructor ; auto.
 Qed. 
 
-Lemma store_align4_n_valid : forall n, store_align4_n n |-- [| n <= Int.max_unsigned / 4 + 1|].
+Lemma store_align4_n_valid : forall n, store_align4_n n |-- “ n <= Int.max_unsigned / 4 + 1 ”.
 Proof.
   intros.
   unfold store_align4_n.
@@ -1304,6 +1371,132 @@ Proof.
   pose proof interval_list_range l 3 0 4294967295 (ltac:(lia)) (ltac:(lia)) H0.
   simpl in *.
   lia.
+Qed.
+
+Lemma store_align_valid : forall x l, store_align_list l ** store_byte_noninit x |-- “ Forall (fun x' => x + 0 < x' \/ x' + 0 < x) l ”.
+Proof.
+  intros.
+  induction l; simpl in *.
+  - entailer!.
+  - Intros.
+    prop_apply (store_byte_valid a x). Intros.
+    prop_apply IHl. Intros.
+    entailer!.
+    constructor ; auto.
+    destruct H0; lia.
+Qed.
+
+Lemma store_align_merge : forall n m, store_align_n n ** store_align_n m |-- store_align_n (n + m).
+Proof.
+  intros.
+  unfold store_align_n. Intros l1 l2.
+  Exists (l1 ++ l2). destruct H , H0.
+  generalize dependent l2. generalize dependent n. revert m.
+  induction H1 ; simpl in * ; intros ; auto.
+  - entailer!. cbv in H. lia.
+  - rewrite Zlength_cons in *.
+    specialize (IHinterval_list m (n - 1) (ltac:(lia)) l2 H4 H5).
+    Intros.
+    sep_apply IHinterval_list. Intros.
+    destruct H7.
+    prop_apply (store_align_valid x (l ++ l2)). Intros.
+    entailer!.
+    constructor ; auto.
+Qed.
+
+Lemma undef_store_short_align : forall x, x # Short |->_ |-- store_align_n 2.
+Proof.
+  intros.
+  unfold undef_store_short, store_2byte_noninit.
+  Intros.
+  sep_apply (store_byte_align1 x ltac:(
+    unfold isvalidptr_short, isvalidptr_char in H;
+    destruct H as [? [? ?]];
+    split; lia)).
+  sep_apply (store_byte_align1 (x + 1) ltac:(
+    unfold isvalidptr_short, isvalidptr_char in H;
+    destruct H as [? [? ?]];
+    split; lia)).
+  sep_apply (store_align_merge 1 1).
+  replace (1 + 1) with 2 by lia.
+  entailer!.
+Qed.
+
+Lemma store_short_align : forall x v, x # Short |-> v |-- store_align_n 2.
+Proof.
+  intros.
+  sep_apply store_short_undef_store_short.
+  sep_apply undef_store_short_align.
+  entailer!.
+Qed.
+
+Lemma undef_store_ushort_align : forall x, x # UShort |->_ |-- store_align_n 2.
+Proof.
+  intros.
+  unfold undef_store_ushort, store_2byte_noninit.
+  Intros.
+  sep_apply (store_byte_align1 x ltac:(
+    unfold isvalidptr_short, isvalidptr_char in H;
+    destruct H as [? [? ?]];
+    split; lia)).
+  sep_apply (store_byte_align1 (x + 1) ltac:(
+    unfold isvalidptr_short, isvalidptr_char in H;
+    destruct H as [? [? ?]];
+    split; lia)).
+  sep_apply (store_align_merge 1 1).
+  replace (1 + 1) with 2 by lia.
+  entailer!.
+Qed.
+
+Lemma store_ushort_align : forall x v, x # UShort |-> v |-- store_align_n 2.
+Proof.
+  intros.
+  sep_apply store_ushort_undef_store_ushort.
+  sep_apply undef_store_ushort_align.
+  entailer!.
+Qed.
+
+Lemma store_align_n_valid : forall n, store_align_n n |-- “ n <= Int.max_unsigned / 1 + 1 ”.
+Proof.
+  intros.
+  unfold store_align_n.
+  Intros l.
+  destruct H.
+  rewrite <- H.
+  entailer!.
+  replace Int.max_unsigned with (4294967295) in * by reflexivity.
+  pose proof interval_list_range l 0 0 4294967295 (ltac:(lia)) (ltac:(lia)) H0.
+  simpl in *.
+  lia.
+Qed.
+
+Lemma store_align4_to_store_align : forall n, store_align4_n n |-- store_align_n (4 * n).
+Proof.
+  intros.
+  unfold store_align4_n, store_align_n.
+  Intros l.
+  generalize dependent n.
+  induction l ; intros.
+  - Exists nil. rewrite Zlength_nil in *. entailer!.
+    constructor.
+  - simpl store_align4_list. Intros.
+    sep_apply (IHl (n - 1)).
+    Intros l0.
+    + unfold store_4byte_noninit.
+      prop_apply (store_align_valid a l0). Intros.
+      prop_apply (store_align_valid (a + 1) l0). Intros.
+      prop_apply (store_align_valid (a + 2) l0). Intros.
+      prop_apply (store_align_valid (a + 3) l0). Intros.
+      Exists ((a :: (a + 1) :: (a + 2) :: (a + 3) :: l0)).
+      simpl store_align_list. unfold isvalidptr_char.
+      unfold isvalidptr in H0. entailer!.
+      repeat rewrite Zlength_cons. lia.
+      destruct H2.
+      repeat constructor ; auto ; try lia.
+    + rewrite Zlength_cons in H.
+      split ; try lia.
+      destruct H. inversion H1.
+      auto.
 Qed.
 
 Lemma store_ptr_store_uint : forall x v, x # Ptr |-> v |-- x # UInt |-> v.

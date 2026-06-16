@@ -27,15 +27,15 @@ Local Open Scope sac.
 
 Definition store_map {A B: Type} (P: A -> B -> Assertion) (m: A -> option B): Assertion :=
   EX l: list A,
-    [| forall a, In a l <-> exists b, m a = Some b |] &&
-    [| NoDup l |] &&
+    “ forall a, In a l <-> exists b, m a = Some b ” &&
+    “ NoDup l ” &&
     iter_sepcon
       (map (fun a => match m a with Some b => P a b | None => emp end) l).
 
 Definition store_map_missing_i {A B: Type} (P: A -> B -> Assertion) (m: A -> option B) (i:A): Assertion :=
   EX l: list A,
-    [| forall a, In a l <-> (exists b, m a = Some b ) /\ a <> i |] &&
-    [| NoDup l |] &&
+    “ forall a, In a l <-> (exists b, m a = Some b ) /\ a <> i ” &&
+    “ NoDup l ” &&
     iter_sepcon
       (map (fun a => match m a with Some b => P a b | None => emp end) l).
 

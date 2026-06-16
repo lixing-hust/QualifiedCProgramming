@@ -874,13 +874,13 @@ Fixpoint prop_atom_term_denote (t : PropAtomTerm) ty_env (env : environment _) :
     end.
 
 Definition prop_term_denote (t : PropTerm) ty_env (env : environment _) : expr :=
-    fold_right (fun b a => a && [|prop_atom_term_denote b ty_env env|]) CRules.truep t.
+    fold_right (fun b a => a && “ prop_atom_term_denote b ty_env env ”) CRules.truep t.
 
 Definition prop_term_denote' (t : PropTerm) ty_env (env : environment _) : Prop :=
     fold_right (fun b a => a /\ (prop_atom_term_denote b ty_env env)) True t.
 
 Lemma prop_term_denote_equiv :
-    forall (p : PropTerm) ty_env env, prop_term_denote p ty_env env --||-- [|prop_term_denote' p ty_env env|].
+    forall (p : PropTerm) ty_env env, prop_term_denote p ty_env env --||-- “ prop_term_denote' p ty_env env ”.
     induction p; intros; simpl.
     -   unfold CRules.truep,  CRules.logic_equiv, CRules.derivable1, CRules.coq_prop.
         split; intros; auto.
@@ -1642,7 +1642,7 @@ Lemma not_appear_free_prop_atom_equiv :
     forall t x,
         not_appear_free_prop_atom t x = true ->
     forall ty_env env v,
-        [| prop_atom_term_denote t ty_env env |] --||-- [| prop_atom_term_denote t ty_env (term_mapping_update_env env (fst x) (snd x) v) |].
+        “ prop_atom_term_denote t ty_env env ” --||-- “ prop_atom_term_denote t ty_env (term_mapping_update_env env (fst x) (snd x) v) ”.
     induction t; intros.
     -   simpl; reflexivity.
     -   simpl; reflexivity.

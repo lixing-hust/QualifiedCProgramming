@@ -78,13 +78,13 @@ Import R1 R2.
 Local Open Scope sac.
 
 Definition Critical (hs: list Z) (s: @critical_STS_state NC.nc_sts): expr :=
-  [| hs = nil |] &&
+  “ hs = nil ” &&
     EX s',
     at_states (fun cs => exists s'',
                  cs = Build_nested_critical_state _ nil s'' /\
                  critical_STS_transition s' s'') **
     has_tokens Sets.empty ||
-  [| hs <> nil |] &&
+  “ hs <> nil ” &&
     at_states (fun cs => exists hs',
                  cs = Build_nested_critical_state _ (hs' ++ hs) s) **
     has_tokens (fun n => n < List.length hs)%nat.

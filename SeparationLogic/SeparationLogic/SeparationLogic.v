@@ -12,7 +12,7 @@ Require Import SetsClass.SetsClass. Import SetsNotation.
 From compcert.lib Require Export Integers.
 
 From SimpleC.SL Require Import Mem.
-From SimpleC.SL Require Export IntLib ArrayLib StoreAux MapLib.
+From SimpleC.SL Require Export IntLib ArrayLib Array2Lib PtrArray2Lib StoreAux MapLib StringLib.
 From AUXLib Require Export ListLib.
 From SimpleC.SL Require Export CommonAssertion.
 From SimpleC.SL Require Assertion ConAssertion CriticalSTS.
@@ -27,7 +27,10 @@ Module CRules <: SeparationLogicSig.
   Include DerivedPredSig.
   Include StoreLibSig.
   Include ArrayLibSig.
+  Include Array2LibSig.
+  Include PtrArray2LibSig.
   Include MapLibSig.
+  Include StringLibSig.
 End CRules.
 
 Module naive_C_Rules <: ConAssertion.CSL ConAssertion.STS_naive <: SeparationLogicSig.
@@ -36,7 +39,10 @@ Module naive_C_Rules <: ConAssertion.CSL ConAssertion.STS_naive <: SeparationLog
   Include DerivedPredSig.
   Include StoreLibSig.
   Include ArrayLibSig.
+  Include Array2LibSig.
+  Include PtrArray2LibSig.
   Include MapLibSig.
+  Include StringLibSig.
 End naive_C_Rules.
 
 Parameter field_address : Z -> string -> string -> Z.
