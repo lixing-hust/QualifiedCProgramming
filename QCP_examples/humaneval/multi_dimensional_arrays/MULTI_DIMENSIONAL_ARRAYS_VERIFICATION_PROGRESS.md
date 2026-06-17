@@ -742,4 +742,4 @@ rg -n "\b(Admitted|Abort|Axiom)\b" \
 
 ### 成本记录
 
-本题成本已经写入 `../ledger.md` 的 `C_29` 行：`2026-06-17 15:39 CST` 到 `2026-06-17 17:39 CST`，120 分钟，token delta `36010404`。
+本题成本已经写入 `../ledger.md` 的 `C_29` 行：`2026-06-17 15:39 CST` 到 `2026-06-17 16:32 CST`，53 分钟，token delta `30555449`。后续把 `PtrArray` 整合进公共 `ptr_array2_def.h` / `ptr_array2.strategies` 属于验证后的整理，不计入本题验证成本。
