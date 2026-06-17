@@ -25,9 +25,58 @@
 | --- | --- | --- | --- |
 | `C_95` | 字符串数组 `char **` | 已全链通过 | `problem_95_spec_z` 已直接 wrapper 原始 `spec/95.v` 的 `problem_95_spec`；使用 `CharPtrArray2.full/missing_i` 和 `CharArray.full` 表示二维字符串数组资源；已通过 `coins_95.v`、`C_95_goal.v`、`C_95_proof_auto.v`、`C_95_proof_manual.v`、`C_95_goal_check.v` 编译，`coins/manual/goal_check` 无 `Admitted.` 或新增 `Axiom`。成本见 `../ledger.md` 的 `C_95` 与 `C_95_continuation`。 |
 | `C_115` | 整数矩阵 `int **` | 已全链通过 | `problem_115_spec_z` 直接 wrapper 原始 `spec/115.v` 的 `problem_115_spec`；使用 `IntPtrArray2.full/missing_i` 和 `IntArray.full` 表示二维 `int **` 矩阵资源；已通过 `coins_115.v`、`C_115_goal.v`、`C_115_proof_auto.v`、`C_115_proof_manual.v`、`C_115_goal_check.v` 编译，`coins/manual/goal_check` 无 `Admitted.` 或新增 `Axiom`。成本见 `../ledger.md` 的 `C_115`。 |
-| `C_12` | 字符串数组 `const char **` | 待确认 | 原注释/spec 要求空输入返回 `None`，但 C 程序初始化 `out = ""` 并在空输入时返回空字符串；继续前需要确认语义。 |
+| `C_12` | 字符串数组 `const char **` | 已全链通过 | 用户确认按原注释/spec 语义处理空输入，C 实现已改为空输入返回 `NULL`；`problem_12_pre_z/spec_*_z` 直接 wrapper 原始 `spec/12.v` 的 `problem_12_pre/spec`；使用 `CharPtrArray2.full/missing_i`、`CharArray.full` 和 `QCP_examples/stdlib/string.h` 的 `strlen`/`store_string` 表示二维字符串数组与行长度；已通过 `coins_12.v`、`C_12_goal.v`、`C_12_proof_auto.v`、`C_12_proof_manual.v`、`C_12_goal_check.v` 编译，`coins/manual/goal_check` 无 `Admitted.` 或新增 `Axiom`。成本见 `../ledger.md` 的 `C_12_continuation`。 |
 
 其它题目暂按 `待建模` 处理。
+
+## C_12 longest 验证记录
+
+### 当前状态
+
+`C_12` 已全链通过。
+
+已完成：
+
+```bash
+opam exec --switch=coq8201 -- linux-binary/symexec \
+  --goal-file=QCP_examples/humaneval/multi_dimensional_arrays/C_12_goal.v \
+  --proof-auto-file=QCP_examples/humaneval/multi_dimensional_arrays/C_12_proof_auto.v \
+  --proof-manual-file=QCP_examples/humaneval/multi_dimensional_arrays/C_12_proof_manual.v \
+  --coq-logic-path=SimpleC.EE \
+  -slp QCP_examples/humaneval/multi_dimensional_arrays SimpleC.EE \
+  -slp QCP_examples/QCP_demos_LLM SimpleC.EE.QCP_demos_LLM \
+  --strategy-folder-path=SeparationLogic/examples/QCP_demos_LLM/ \
+  --input-file=QCP_examples/humaneval/multi_dimensional_arrays/C_12.c \
+  -IQCP_examples/LLM_friendly_cases \
+  -IQCP_examples/QCP_demos_LLM \
+  -IQCP_examples/stdlib \
+  --gen-and-backup \
+  --no-exec-info
+```
+
+并通过 `coins_12.v`、`C_12_goal.v`、`C_12_proof_auto.v`、`C_12_proof_manual.v`、`C_12_goal_check.v` 编译。编译时需要额外给 `string_lib` 与 unqualified `string_strategy_*` 加 load path：
+
+```bash
+coqc -Q ../../../SeparationLogic/stdlib "" \
+     -R ../../../SeparationLogic/stdlib SimpleC.StdLib \
+     $COQINCLUDES C_12_goal_check.v
+```
+
+扫描结果：
+
+```bash
+rg -n "Admitted\.|^\s*Axiom\b" \
+  coins_12.v C_12_proof_manual.v C_12_goal_check.v
+```
+
+无输出。
+
+### 语义与建模约束
+
+1. 空输入语义按原注释和 `spec/12.v`：返回 `None`。用户已确认将 C 实现从返回空字符串改为空输入返回 `NULL`。
+2. 最终 spec 直接桥接原始 `spec/12.v`：`problem_12_pre_z` 调用 `problem_12_pre`，`problem_12_spec_none_z` / `problem_12_spec_some_z` 调用 `problem_12_spec` 的 `None` / `Some` 返回形式。
+3. 行内存使用 `CharPtrArray2.full/missing_i` 和 `CharArray.full`。调用 `strlen` 前，把当前行资源转换成 `store_string(cur, row_payload_z_12 row)`，使用 `QCP_examples/stdlib/string.h` 的规格。
+4. 非空返回时后置条件保持 split 形态：`CharPtrArray2.missing_i * data_at(strings + best_idx * sizeof(char *)) * CharArray.full`。这样既保留完整二维数组所有权，也暴露 `__return == row_ptr` 与 `best_idx` 的关系。
 
 ## C_95 check_dict_case 验证记录
 
@@ -510,3 +559,95 @@ scan_state_z
 5. 看到 `split_goal_*` 不必恐慌。
 
 它是 symexec 生成的可选拆分目标。若直接证明主 witness，manual 中的 split goal `Abort` 可以保留或清理；验收看 `goal_check` 和主 witness proof，不看被 `Abort` 废弃的 split lemma。
+
+## C_28 concatenate 验证记录
+
+### 当前状态
+
+`C_28` 已全链通过。本轮按用户要求只参考 `../SKILL.md`、`QCP_examples/QCP_demos_LLM/2DCharPtrArray.c` 和 `QCP_examples/stdlib/string.h`，未使用 `.agents` 下的 skill 或 subagent。
+
+已完成：
+
+```bash
+linux-binary/symexec \
+  --goal-file=QCP_examples/humaneval/multi_dimensional_arrays/C_28_goal.v \
+  --proof-auto-file=QCP_examples/humaneval/multi_dimensional_arrays/C_28_proof_auto.v \
+  --proof-manual-file=QCP_examples/humaneval/multi_dimensional_arrays/C_28_proof_manual.v \
+  --coq-logic-path=SimpleC.EE \
+  -slp QCP_examples/humaneval/multi_dimensional_arrays SimpleC.EE \
+  -slp QCP_examples/QCP_demos_LLM SimpleC.EE.QCP_demos_LLM \
+  --strategy-folder-path=SeparationLogic/examples/QCP_demos_LLM/ \
+  --input-file=QCP_examples/humaneval/multi_dimensional_arrays/C_28.c \
+  -IQCP_examples/LLM_friendly_cases \
+  -IQCP_examples/QCP_demos_LLM \
+  -IQCP_examples/stdlib \
+  --gen-and-backup \
+  --no-exec-info
+```
+
+并通过：
+
+```bash
+cd QCP_examples/humaneval/multi_dimensional_arrays
+COQINCLUDES="$(tr "\n" " " < ../IntClaude/_CoqProject)"
+coqc -Q ../../../SeparationLogic/stdlib "" -R ../../../SeparationLogic/stdlib SimpleC.StdLib $COQINCLUDES coins_28.v
+coqc -Q ../../../SeparationLogic/stdlib "" -R ../../../SeparationLogic/stdlib SimpleC.StdLib $COQINCLUDES C_28_goal.v
+coqc -Q ../../../SeparationLogic/stdlib "" -R ../../../SeparationLogic/stdlib SimpleC.StdLib $COQINCLUDES C_28_proof_auto.v
+coqc -Q ../../../SeparationLogic/stdlib "" -R ../../../SeparationLogic/stdlib SimpleC.StdLib $COQINCLUDES C_28_proof_manual.v
+coqc -Q ../../../SeparationLogic/stdlib "" -R ../../../SeparationLogic/stdlib SimpleC.StdLib $COQINCLUDES C_28_goal_check.v
+```
+
+扫描结果：
+
+```bash
+rg -n "Admitted\.|Abort\.|^\s*Axiom\b" \
+  coins_28.v C_28_proof_manual.v C_28_goal_check.v
+```
+
+无输出。
+
+### 语义与建模约束
+
+1. 最终 spec 直连原始 `spec/28.v`。
+
+`coins_28.v` 中 `problem_28_pre_z/spec_z` 只是把 `list (list Z)` 转换为原始 spec 使用的 `list string` / `string`，最终 `problem_28_spec_z_intro` 把拼接后的 payload 桥回 `problem_28_spec`。
+
+2. C 层保持原始双循环拼接算法。
+
+函数主体仍先用 `strlen` 统计总长度，再分配输出缓冲区，第二个循环用 `strlen` 和 `memcpy` 逐行复制，最后写入 `'\0'`。新增的 `total_prefix_state_28`、`copy_prefix_state_28`、`concat_prefix_payload_28` 只服务 invariant 和 bridge proof。
+
+3. `char **` 资源使用 `CharPtrArray2`。
+
+外层持有：
+
+```coq
+CharPtrArray2.full strings_pre strings_size_pre rows
+```
+
+需要访问当前字符串时借出：
+
+```coq
+CharPtrArray2.missing_i strings_pre strings_size_pre i row_ptr rows *
+data_at (strings_pre + i * sizeof(char *)) char* row_ptr *
+store_string row_ptr (row_payload_z_28 (Znth i rows nil))
+```
+
+用完后通过 `CharPtrArray2.missing_i_merge_to_full` 合回完整二维指针数组。
+
+### 主要踩坑与解决办法
+
+1. 行内容需要显式表示为 C string。
+
+`rows_well_formed_28` 要求每行 `row = c_string payload`，并保存 `valid_string`、`all_ascii`、`string_length payload < INT_MAX`。这让 `strlen`/`memcpy` 的库规格可以直接使用 `row_payload_z_28`。
+
+2. 循环退出后的局部变量 frame 要在 C annotation 中保留。
+
+第二个循环退出后，如果断言过薄，symexec 会生成一个试图从参数栈槽加输出尾段推出单独输出尾段的空间目标。最终在退出断言和写零后的断言里保留 `strings_size == strings_size@pre` 与 `strings == strings@pre`，让局部 frame 被自然处理。
+
+3. return witness 只需要长度等式和原始 spec bridge。
+
+`copy_prefix_state_28 rows strings_size k out_l` 给出 `k = Zlength out_l`；`rows_well_formed_28` 给出 `Zlength rows = strings_size`；两者合起来可用 `problem_28_spec_z_intro` 直接证明原始 concat spec。
+
+### 成本记录
+
+本题成本已经写入 `../ledger.md` 的 `C_28` 行：`2026-06-17 13:51 CST` 到 `2026-06-17 15:19 CST`，88 分钟，token delta `44134773`。
