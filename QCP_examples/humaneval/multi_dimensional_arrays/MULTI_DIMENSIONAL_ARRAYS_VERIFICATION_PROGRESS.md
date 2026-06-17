@@ -29,8 +29,53 @@
 | `C_29` | 字符串数组过滤 `char **` | 已全链通过 | `problem_29_pre_z/spec_z` 直接 wrapper 原始 `spec/29.v` 的 `problem_29_pre/spec`；使用 `CharPtrArray2.full/missing_i` 和 `CharArray.full/store_string` 表示输入二维字符串数组，使用公共 `PtrArray` 谓词表示返回的借用指针数组；使用 `QCP_examples/stdlib/string.h` 的 `strlen`/`strncmp`；已通过公共 `ptr_array2_strategy_*`、`coins_29.v`、`C_29_goal.v`、`C_29_proof_auto.v`、`C_29_proof_manual.v`、`C_29_goal_check.v` 编译，`coins/manual/goal_check/strategy_proof` 无 `Admitted.` / `Abort` / 新增 `Axiom`。成本见 `../ledger.md` 的 `C_29`。 |
 | `C_7` | 字符串数组过滤 `char **` | 已全链通过 | 已补充公共 `strstr` 规格；`problem_7_pre_z/spec_z` 直接 wrapper 原始 `spec/7.v` 的 `problem_7_pre/spec`；使用 `CharPtrArray2.full/missing_i` 和 `CharArray.full/store_string` 表示输入二维字符串数组，使用公共 `PtrArray` 谓词表示返回的借用指针数组；已通过 `coins_7.v`、`C_7_goal.v`、`C_7_proof_auto.v`、`C_7_proof_manual.v`、`C_7_goal_check.v` 编译，`coins/manual/goal_check/string_lib` 无 `Admitted.` / `Abort` / 新增 `Axiom`。成本见 `../ledger.md` 的 `C_7` 与 `C_7_continuation`。 |
 | `C_14` | 字符串前缀数组 `char **` | 已全链通过 | `problem_14_pre_z/spec_z` 直接 wrapper 原始 `spec/14.v` 的 `problem_14_pre/spec`；使用公共 `PtrArray` 表示返回的行指针数组，使用 `CharArray.full` 表示每个新分配的 C 字符串行；使用 `QCP_examples/stdlib/string.h` 的 `strlen`/`memcpy`；已通过 `coins_14.v`、`C_14_goal.v`、`C_14_proof_auto.v`、`C_14_proof_manual.v`、`C_14_goal_check.v` 编译，`coins/manual/goal_check` 无 `Admitted.` / `Abort` / 新增 `Axiom`。成本见 `../ledger.md` 的 `C_14`。 |
+| `C_74` | 字符串数组比较 `char **` | 已全链通过 | `problem_74_pre_z/spec_z` 直接 wrapper 原始 `spec/74.v` 的 `problem_74_pre/spec`；使用 `CharPtrArray2.full/missing_i` 和 `CharArray.full/store_string` 表示两个输入字符串数组，使用 `QCP_examples/stdlib/string.h` 的 `strlen`；返回值是 QCP 分配的 `StrArray *` 包装结构，内部 `data` 借用 `lst1` 或 `lst2`，核心总长度比较和长度相等时返回第一个数组的语义保持不变；已通过 `coins_74.v`、`C_74_goal.v`、`C_74_proof_auto.v`、`C_74_proof_manual.v`、`C_74_goal_check.v` 编译，`coins/manual/goal_check` 无 `Admitted.` / `Abort` / 新增 `Axiom`。成本见 `../ledger.md` 的 `C_74`。 |
 
 其它题目暂按 `待建模` 处理。
+
+## C_74 total_match 验证记录
+
+### 当前状态
+
+`C_74` 已全链通过。
+
+已完成：
+
+```bash
+opam exec --switch=coq8201 -- linux-binary/symexec \
+  --goal-file=QCP_examples/humaneval/multi_dimensional_arrays/C_74_goal.v \
+  --proof-auto-file=QCP_examples/humaneval/multi_dimensional_arrays/C_74_proof_auto.v \
+  --proof-manual-file=QCP_examples/humaneval/multi_dimensional_arrays/C_74_proof_manual.v \
+  --coq-logic-path=SimpleC.EE \
+  -slp QCP_examples/humaneval/multi_dimensional_arrays SimpleC.EE \
+  -slp QCP_examples/QCP_demos_LLM SimpleC.EE.QCP_demos_LLM \
+  --strategy-folder-path=SeparationLogic/examples/QCP_demos_LLM/ \
+  --input-file=QCP_examples/humaneval/multi_dimensional_arrays/C_74.c \
+  -IQCP_examples/LLM_friendly_cases \
+  -IQCP_examples/QCP_demos_LLM \
+  -IQCP_examples/stdlib \
+  --gen-and-backup \
+  --no-exec-info
+```
+
+并通过 `coins_74.v`、`C_74_goal.v`、`C_74_proof_auto.v`、`C_74_proof_manual.v`、`C_74_goal_check.v` 编译。
+
+扫描结果：
+
+```bash
+rg -n "Admitted\.|^\s*Axiom\b|\bAbort\b" \
+  coins_74.v C_74_proof_manual.v C_74_goal_check.v
+```
+
+无输出。
+
+### 语义与建模约束
+
+1. 最终 spec 直接桥接原始 `spec/74.v`：`problem_74_pre_z` 调用 `problem_74_pre`，`problem_74_spec_z` 调用 `problem_74_spec`。
+2. C 实现保留原始核心逻辑：分别累加 `lst1` / `lst2` 中所有字符串的 `strlen`，若 `num1 > num2` 返回第二个数组，否则返回第一个数组；相等时返回第一个数组。
+3. 为适配 QCP，返回接口从按值返回 `StrArray` 改成返回 `StrArray *`，只分配包装结构；`data` 字段仍借用原输入数组，不分配新的输出指针数组。
+4. 两个输入数组的内存资源使用 `CharPtrArray2.full/missing_i` 和 `CharArray.full`；调用 `strlen` 前把当前行资源转换为 `store_string`，使用 `QCP_examples/stdlib/string.h` 中已有规格。
+5. 循环语义通过 `total_prefix_state_74` 跟踪已扫描前缀总长度，最终 bridge lemma 将 C 层行表示接回原始 `spec/74.v`。
 
 ## C_14 all_prefixes 验证记录
 
