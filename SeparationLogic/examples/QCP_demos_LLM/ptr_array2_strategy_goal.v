@@ -90,11 +90,135 @@ Definition ptr_array2_strategy2 :=
     emp
     ).
 
+Definition ptr_array2_strategy11 :=
+  forall (i x y p : Z) (l : list Z),
+    TT &&
+    “ (x <= i) ” &&
+    “ (i < y) ” &&
+    emp **
+    PtrArray.seg p x y l
+    |--
+    (
+      TT &&
+      emp **
+      PtrArray.missing_i p i x y l
+    ) ** (
+      ALL (v : Z),
+        TT &&
+        “ (v = Znth (i - x) l 0) ” &&
+        emp -*
+        TT &&
+        emp **
+        poly_store FET_ptr (p + i * sizeof(PTR)) v
+    ).
+
+Definition ptr_array2_strategy12 :=
+  forall (i x y p v : Z) (l : list Z),
+    TT &&
+    “ (x <= i) ” &&
+    “ (i < y) ” &&
+    emp **
+    PtrArray.missing_i p i x y l **
+    poly_store FET_ptr (p + i * sizeof(PTR)) v
+    |--
+    (
+      TT &&
+      emp **
+      PtrArray.seg p x y (replace_Znth (i - x) v l)
+    ) ** (
+      TT &&
+      emp -*
+      TT &&
+      emp
+    ).
+
+Definition ptr_array2_strategy13 :=
+  forall (x y z p : Z) (l3 : list Z),
+    TT &&
+    “ (x <= y) ” &&
+    “ (y <= z) ” &&
+    emp **
+    PtrArray.seg p x z l3
+    |--
+    (
+      TT &&
+      emp **
+      PtrArray.seg p x y (sublist 0 (y - x) l3) **
+      PtrArray.seg p y z (sublist (y - x) (z - x) l3)
+    ) ** (
+      TT &&
+      emp -*
+      TT &&
+      emp
+    ).
+
+Definition ptr_array2_strategy14 :=
+  forall (x p : Z),
+    TT &&
+    emp
+    |--
+    (
+      TT &&
+      emp
+    ) ** (
+      TT &&
+      emp -*
+      TT &&
+      emp **
+      PtrArray.seg p x x nil
+    ).
+
+Definition ptr_array2_strategy15 :=
+  forall (x y z p : Z),
+    TT &&
+    “ (x <= y) ” &&
+    “ (y <= z) ” &&
+    emp **
+    PtrArray.undef_seg p x z
+    |--
+    (
+      TT &&
+      emp **
+      PtrArray.undef_seg p x y **
+      PtrArray.undef_seg p y z
+    ) ** (
+      TT &&
+      emp -*
+      TT &&
+      emp
+    ).
+
+Definition ptr_array2_strategy16 :=
+  forall (x y z p : Z) (l1 l2 : list Z),
+    TT &&
+    “ (x <= y) ” &&
+    “ (y <= z) ” &&
+    emp **
+    PtrArray.seg p x y l1 **
+    PtrArray.seg p y z l2
+    |--
+    (
+      TT &&
+      emp **
+      PtrArray.seg p x z (app l1 l2)
+    ) ** (
+      TT &&
+      emp -*
+      TT &&
+      emp
+    ).
+
 Module Type ptr_array2_Strategy_Correct.
 
   Axiom ptr_array2_strategy1_correctness : ptr_array2_strategy1.
   Axiom ptr_array2_strategy4_correctness : ptr_array2_strategy4.
   Axiom ptr_array2_strategy5_correctness : ptr_array2_strategy5.
   Axiom ptr_array2_strategy2_correctness : ptr_array2_strategy2.
+  Axiom ptr_array2_strategy11_correctness : ptr_array2_strategy11.
+  Axiom ptr_array2_strategy12_correctness : ptr_array2_strategy12.
+  Axiom ptr_array2_strategy13_correctness : ptr_array2_strategy13.
+  Axiom ptr_array2_strategy14_correctness : ptr_array2_strategy14.
+  Axiom ptr_array2_strategy15_correctness : ptr_array2_strategy15.
+  Axiom ptr_array2_strategy16_correctness : ptr_array2_strategy16.
 
 End ptr_array2_Strategy_Correct.

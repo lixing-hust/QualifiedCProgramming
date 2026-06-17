@@ -60,3 +60,64 @@ Proof.
   rewrite replace_Znth_Znth by lia.
   cancel.
 Qed.
+
+Lemma ptr_array2_strategy11_correctness : ptr_array2_strategy11.
+Proof.
+  pre_process_default.
+  sep_apply_l_atomic (PtrArray.seg_split_to_missing_i p x i y l 0).
+  - dump_pre_spatial.
+    lia.
+  - cancel (PtrArray.missing_i p i x y l).
+    Intros_r v.
+    apply_sepcon_adjoint.
+    Intros_p Hv.
+    subst v.
+    unfold StorePtrAsElement.storeA.
+    rewrite sizeof_ptr.
+    cancel.
+Qed.
+
+Lemma ptr_array2_strategy12_correctness : ptr_array2_strategy12.
+Proof.
+  pre_process_default.
+  unfold StorePtrAsElement.storeA.
+  rewrite sizeof_ptr.
+  sep_apply_l_atomic (PtrArray.missing_i_merge_to_seg p x i y v l).
+  - dump_pre_spatial.
+    lia.
+  - cancel.
+Qed.
+
+Lemma ptr_array2_strategy13_correctness : ptr_array2_strategy13.
+Proof.
+  pre_process_default.
+  sep_apply_l_atomic (PtrArray.seg_split_to_seg p x y z l3).
+  - dump_pre_spatial.
+    lia.
+  - cancel.
+Qed.
+
+Lemma ptr_array2_strategy14_correctness : ptr_array2_strategy14.
+Proof.
+  pre_process_default.
+  rewrite PtrArray.seg_empty.
+  entailer!.
+Qed.
+
+Lemma ptr_array2_strategy15_correctness : ptr_array2_strategy15.
+Proof.
+  pre_process_default.
+  sep_apply_l_atomic (PtrArray.undef_seg_split_to_undef_seg p x y z).
+  - dump_pre_spatial.
+    lia.
+  - cancel.
+Qed.
+
+Lemma ptr_array2_strategy16_correctness : ptr_array2_strategy16.
+Proof.
+  pre_process_default.
+  sep_apply_l_atomic (PtrArray.seg_merge_to_seg p x y z l1 l2).
+  - dump_pre_spatial.
+    lia.
+  - cancel.
+Qed.
