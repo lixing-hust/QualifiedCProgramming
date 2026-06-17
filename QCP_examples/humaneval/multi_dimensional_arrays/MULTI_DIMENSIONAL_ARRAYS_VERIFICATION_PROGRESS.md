@@ -1,6 +1,6 @@
 # multi_dimensional_arrays 验证进度记录
 
-更新时间：2026-06-17
+更新时间：2026-06-18
 
 这份文档记录 `QCP_examples/humaneval/multi_dimensional_arrays` 下多维数组程序的验证进展、建模方式、踩坑和后续继续时需要注意的事项。状态口径参考 `StringClaude/STRINGCLAUDE_VERIFICATION_PROGRESS.md`。
 
@@ -27,8 +27,53 @@
 | `C_115` | 整数矩阵 `int **` | 已全链通过 | `problem_115_spec_z` 直接 wrapper 原始 `spec/115.v` 的 `problem_115_spec`；使用 `IntPtrArray2.full/missing_i` 和 `IntArray.full` 表示二维 `int **` 矩阵资源；已通过 `coins_115.v`、`C_115_goal.v`、`C_115_proof_auto.v`、`C_115_proof_manual.v`、`C_115_goal_check.v` 编译，`coins/manual/goal_check` 无 `Admitted.` 或新增 `Axiom`。成本见 `../ledger.md` 的 `C_115`。 |
 | `C_12` | 字符串数组 `const char **` | 已全链通过 | 用户确认按原注释/spec 语义处理空输入，C 实现已改为空输入返回 `NULL`；`problem_12_pre_z/spec_*_z` 直接 wrapper 原始 `spec/12.v` 的 `problem_12_pre/spec`；使用 `CharPtrArray2.full/missing_i`、`CharArray.full` 和 `QCP_examples/stdlib/string.h` 的 `strlen`/`store_string` 表示二维字符串数组与行长度；已通过 `coins_12.v`、`C_12_goal.v`、`C_12_proof_auto.v`、`C_12_proof_manual.v`、`C_12_goal_check.v` 编译，`coins/manual/goal_check` 无 `Admitted.` 或新增 `Axiom`。成本见 `../ledger.md` 的 `C_12_continuation`。 |
 | `C_29` | 字符串数组过滤 `char **` | 已全链通过 | `problem_29_pre_z/spec_z` 直接 wrapper 原始 `spec/29.v` 的 `problem_29_pre/spec`；使用 `CharPtrArray2.full/missing_i` 和 `CharArray.full/store_string` 表示输入二维字符串数组，使用公共 `PtrArray` 谓词表示返回的借用指针数组；使用 `QCP_examples/stdlib/string.h` 的 `strlen`/`strncmp`；已通过公共 `ptr_array2_strategy_*`、`coins_29.v`、`C_29_goal.v`、`C_29_proof_auto.v`、`C_29_proof_manual.v`、`C_29_goal_check.v` 编译，`coins/manual/goal_check/strategy_proof` 无 `Admitted.` / `Abort` / 新增 `Axiom`。成本见 `../ledger.md` 的 `C_29`。 |
+| `C_7` | 字符串数组过滤 `char **` | 已全链通过 | 已补充公共 `strstr` 规格；`problem_7_pre_z/spec_z` 直接 wrapper 原始 `spec/7.v` 的 `problem_7_pre/spec`；使用 `CharPtrArray2.full/missing_i` 和 `CharArray.full/store_string` 表示输入二维字符串数组，使用公共 `PtrArray` 谓词表示返回的借用指针数组；已通过 `coins_7.v`、`C_7_goal.v`、`C_7_proof_auto.v`、`C_7_proof_manual.v`、`C_7_goal_check.v` 编译，`coins/manual/goal_check/string_lib` 无 `Admitted.` / `Abort` / 新增 `Axiom`。成本见 `../ledger.md` 的 `C_7` 与 `C_7_continuation`。 |
+| `C_14` | 字符串前缀数组 `char **` | 已全链通过 | `problem_14_pre_z/spec_z` 直接 wrapper 原始 `spec/14.v` 的 `problem_14_pre/spec`；使用公共 `PtrArray` 表示返回的行指针数组，使用 `CharArray.full` 表示每个新分配的 C 字符串行；使用 `QCP_examples/stdlib/string.h` 的 `strlen`/`memcpy`；已通过 `coins_14.v`、`C_14_goal.v`、`C_14_proof_auto.v`、`C_14_proof_manual.v`、`C_14_goal_check.v` 编译，`coins/manual/goal_check` 无 `Admitted.` / `Abort` / 新增 `Axiom`。成本见 `../ledger.md` 的 `C_14`。 |
 
 其它题目暂按 `待建模` 处理。
+
+## C_14 all_prefixes 验证记录
+
+### 当前状态
+
+`C_14` 已全链通过。
+
+已完成：
+
+```bash
+opam exec --switch=coq8201 -- linux-binary/symexec \
+  --goal-file=QCP_examples/humaneval/multi_dimensional_arrays/C_14_goal.v \
+  --proof-auto-file=QCP_examples/humaneval/multi_dimensional_arrays/C_14_proof_auto.v \
+  --proof-manual-file=QCP_examples/humaneval/multi_dimensional_arrays/C_14_proof_manual.v \
+  --coq-logic-path=SimpleC.EE \
+  -slp QCP_examples/humaneval/multi_dimensional_arrays SimpleC.EE \
+  -slp QCP_examples/QCP_demos_LLM SimpleC.EE.QCP_demos_LLM \
+  --strategy-folder-path=SeparationLogic/examples/QCP_demos_LLM/ \
+  --input-file=QCP_examples/humaneval/multi_dimensional_arrays/C_14.c \
+  -IQCP_examples/LLM_friendly_cases \
+  -IQCP_examples/QCP_demos_LLM \
+  -IQCP_examples/stdlib \
+  --gen-and-backup \
+  --no-exec-info
+```
+
+并通过 `coins_14.v`、`C_14_goal.v`、`C_14_proof_auto.v`、`C_14_proof_manual.v`、`C_14_goal_check.v` 编译。
+
+扫描结果：
+
+```bash
+rg -n "\b(Admitted|Axiom|Abort)\b" \
+  coins_14.v C_14_proof_manual.v C_14_goal_check.v
+```
+
+无输出。
+
+### 语义与建模约束
+
+1. 最终 spec 直接桥接原始 `spec/14.v`：`problem_14_pre_z` 调用 `problem_14_pre`，`problem_14_spec_z` 调用 `problem_14_spec`。
+2. C 实现保持原始前缀生成语义：第 `i` 行分配 `i + 2` 字节，`memcpy(cur, str, i + 1)` 后写入终止符 `cur[i + 1] = '\0'`。
+3. 使用 `QCP_examples/stdlib/string.h` 中已有的 `strlen` / `memcpy` 规格；未引入本地替代库函数规格。
+4. 返回二维字符串结果用公共 `PtrArray.seg` 表示外层 `char **`，用递归的 `prefix_rows_heap_14` 持有每一行 `CharArray.full`。
 
 ## C_12 longest 验证记录
 
@@ -743,3 +788,52 @@ rg -n "\b(Admitted|Abort|Axiom)\b" \
 ### 成本记录
 
 本题成本已经写入 `../ledger.md` 的 `C_29` 行：`2026-06-17 15:39 CST` 到 `2026-06-17 16:32 CST`，53 分钟，token delta `30555449`。后续把 `PtrArray` 整合进公共 `ptr_array2_def.h` / `ptr_array2.strategies` 属于验证后的整理，不计入本题验证成本。
+
+## C_7 filter_by_substring 验证记录
+
+### 当前状态
+
+`C_7` 已全链通过。intake 时曾因 `QCP_examples/stdlib/string.h` 缺少 `strstr` 规格而按要求暂停；后续已在公共 `QCP_examples/stdlib/string.h` 和 `SeparationLogic/stdlib/string_lib.v` 中补充 `strstr` / `strstr_result`，并完成 C_7 的 QCP 转换、symexec 和 manual proof。
+
+本轮按用户要求只参考 `../SKILL.md`、`QCP_examples/QCP_demos_LLM/2DCharPtrArray.c` 和 `QCP_examples/stdlib/string.h`，未使用 `.agents` 下的 skill 或 subagent。
+
+核心 C 逻辑仍是原始子串过滤：遍历 `strings[i]`，调用 `strstr(cur, substring)`，非空时把当前行指针写入输出数组。QCP 接口层沿用 `C_29` 的返回结构适配方式，返回 `StrArray *`，输出数组本身用公共 `PtrArray.seg/undef_seg` 表示借用指针前缀和未初始化后缀。
+
+语义层 `coins_7.v` 中 `problem_7_pre_z` / `problem_7_spec_z` 直接桥接原始 `../spec/7.v`。中间的 `substring_match_z_7`、`filter_substring_state_7` 只服务循环 invariant 和 bridge lemma；`strstr_result_contains_match_7` / `strstr_result_no_match_7` 把公共 `strstr_result` 连接回原始 spec 使用的 `contains_substring`。
+
+已完成：
+
+```bash
+opam exec --switch=coq8201 -- linux-binary/symexec \
+  --goal-file=QCP_examples/humaneval/multi_dimensional_arrays/C_7_goal.v \
+  --proof-auto-file=QCP_examples/humaneval/multi_dimensional_arrays/C_7_proof_auto.v \
+  --proof-manual-file=QCP_examples/humaneval/multi_dimensional_arrays/C_7_proof_manual.v \
+  --coq-logic-path=SimpleC.EE \
+  -slp QCP_examples/humaneval/multi_dimensional_arrays SimpleC.EE \
+  -slp QCP_examples/QCP_demos_LLM SimpleC.EE.QCP_demos_LLM \
+  --strategy-folder-path=SeparationLogic/examples/QCP_demos_LLM/ \
+  --input-file=QCP_examples/humaneval/multi_dimensional_arrays/C_7.c \
+  -IQCP_examples/LLM_friendly_cases \
+  -IQCP_examples/QCP_demos_LLM \
+  -IQCP_examples/stdlib \
+  --gen-and-backup \
+  --no-exec-info
+```
+
+并通过 `coins_7.v`、`C_7_goal.v`、`C_7_proof_auto.v`、`C_7_proof_manual.v`、`C_7_goal_check.v` 编译。扫描：
+
+```bash
+rg -n "\b(Admitted|Abort|Axiom)\b" \
+  coins_7.v C_7_proof_manual.v C_7_goal_check.v \
+  ../../../SeparationLogic/stdlib/string_lib.v \
+  ../../stdlib/string.h
+```
+
+无输出。
+
+### 成本记录
+
+本题成本已经写入 `../ledger.md`：
+
+- `C_7`：intake 阻塞记录，`2026-06-17 18:20 CST` 到 `2026-06-17 18:22 CST`，状态为 `blocked`。
+- `C_7_continuation`：补充公共 `strstr` 规格后完成验证，状态为 `full-chain passed`。
