@@ -11,6 +11,8 @@
                (string_length : list Z -> Z)
                (memchr_result : list Z -> Z -> Z -> Z -> Z -> Prop)
                (strchr_result : list Z -> Z -> Z -> Z -> Prop)
+               (substring_at : list Z -> list Z -> Z -> Prop)
+               (strstr_result : list Z -> list Z -> Z -> Z -> Prop)
                (strcmp_result : list Z -> list Z -> Z -> Prop)
                (strncmp_result : list Z -> list Z -> Z -> Z -> Prop)
                (strncpy_content : list Z -> Z -> list Z -> Prop)
@@ -72,6 +74,16 @@ char *strchr(char *s, int c)
             string_length(str) < INT_MAX &&
             store_string(s, str)
     Ensure strchr_result(str, c, __return, s) && store_string(s, str)
+*/
+;
+
+char *strstr(char *s1, char *s2)
+/*@ With str1 str2
+    Require valid_string(str1) && valid_string(str2) &&
+            string_length(str1) < INT_MAX && string_length(str2) < INT_MAX &&
+            store_string(s1, str1) * store_string(s2, str2)
+    Ensure strstr_result(str1, str2, __return, s1) &&
+           store_string(s1, str1) * store_string(s2, str2)
 */
 ;
 

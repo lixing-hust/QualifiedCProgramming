@@ -55,6 +55,21 @@ Definition strchr_result (str : list Z) (c ret s : Z) : Prop :=
    ((c = 0 /\ ret = s + string_length str) \/
     (c <> 0 /\ ret = 0))).
 
+Definition substring_at (str sub : list Z) (i : Z) : Prop :=
+  0 <= i <= string_length str /\
+  i + string_length sub <= string_length str /\
+  forall k, 0 <= k < string_length sub ->
+    Znth (i + k) str 0 = Znth k sub 0.
+
+Definition strstr_result (str sub : list Z) (ret s : Z) : Prop :=
+  (exists i,
+      substring_at str sub i /\
+      (forall k, 0 <= k < i -> ~ substring_at str sub k) /\
+      ret = s + i /\
+      ret <> 0) \/
+  ((forall k, 0 <= k <= string_length str -> ~ substring_at str sub k) /\
+   ret = 0).
+
 Definition strcmp_result (str1 str2 : list Z) (ret : Z) : Prop :=
   exists i,
     0 <= i <= string_length str1 /\
