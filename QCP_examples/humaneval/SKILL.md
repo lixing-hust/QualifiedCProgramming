@@ -14,6 +14,18 @@ description: "中文精简流程：用于 humaneval/IntClaude、IntArrayClaude �
 - `C_XX_goal_check.v` 编译成功。
 - 对数组程序，内存所有权与数组内容约束保持一致，无未初始化读取。
 - 对字符串程序，明确 `CharArray` 内容、终止符、输出缓冲区和字符编码约束。
+- 在 `QCP_examples/humaneval/ledger.md` 中记录每个题目的验证 token 与耗时。
+
+## Token 与耗时记录
+
+- 每个 `C_XX` case 必须在开始正式 intake 时记录一次成本起点，在完成、暂停、blocked、skipped 或切换到另一个 case 前记录一次成本终点。
+- 成本记录统一写入 `QCP_examples/humaneval/ledger.md`；progress 文档只记录验证状态和技术经验，不替代 ledger。
+- 起点记录应包含：`case`、suite（`IntClaude` / `IntArrayClaude` / `StringClaude`）、`status=in_progress`、`start_time`、当前 Codex `session_id`、`rollout_path`、`token_start`。
+- 终点记录应补齐：`end_time`、`elapsed_minutes`、`token_end`、`token_delta`、可取得时的 input/cached input/output/reasoning token delta、最终 `status`、简短 notes。
+- token 优先从当前 Codex thread 的 `event_msg` / `token_count` 或 `/status` 暴露的 context usage 中读取；本地回查使用 `~/.codex/history.jsonl` 定位 session id，再读取 `~/.codex/sessions/YYYY/MM/DD/rollout-*.jsonl`。
+- 如果一次 thread 中连续验证多个 case，必须在每次 case 切换前关闭上一题 ledger 记录，再为下一题开新记录；不能只记录整轮总 token。
+- 如果旧对话没有 case 边界，只能回填估算值，`confidence` 必须写 `estimated`，并在 notes 说明按用户指令时间、文件修改时间、progress 更新时间或 token_count 时间点拆分。
+- 如果 token 字段暂时取不到，先记录时间、session id、rollout path 和 `token_start/token_end=unknown`，等 session 日志可读后再回填；不得编造 token 数。
 
 ## 强约束
 
@@ -67,6 +79,7 @@ description: "中文精简流程：用于 humaneval/IntClaude、IntArrayClaude �
 ### 1) 约束确认与资料读取
 
 - 确认目标文件 `C_XX.c`。
+- 在 `ledger.md` 为本题创建或更新 `in_progress` 起点记录，记录 `start_time`、session id、rollout path 和当前 token 起点。
 - 默认允许做 QCP 格式转换和验证注解/证明修改；默认不允许改核心逻辑。
 - 读取 `QCP_FORMAT_CONVERSION_GUIDE.md`、目标文件、对应 `spec/XX.v`、相邻已验证例子和进度文档。
 - 确认用户偏好：是否要求先展示格式转换结果、是否禁止复用旧不变式、是否要求最小新增引理。
@@ -234,6 +247,7 @@ linux-binary/symexec \
   - `grep -nE "Admitted\\.|Axiom[[:space:]]" coins_XX.v C_XX_proof_manual.v || true`
   - 同时用 **rocq-mcp 的 `rocq-verify`** 二次确认无 Axiom 引入。
 - 将本题遇到的问题、解决办法、是否有格式转换中的行为适配，更新到对应 progress 文档。
+- 更新 `ledger.md` 中本题的成本记录：补齐结束时间、耗时、token 终点、token delta、最终状态和简短 notes。即使本题 blocked、skipped 或只 partial，也必须记录本轮已消耗的 token 与时间。
 - progress 中必须明确写清：
   - “已直接桥接原始 `spec/XX.v` pre/spec”；或
   - “仅 C 层规格通过，尚未完成原始 spec 桥接”。
