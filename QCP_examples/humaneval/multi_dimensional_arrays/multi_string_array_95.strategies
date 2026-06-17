@@ -1,4 +1,0 @@
-// Placeholder for string-array strategies.
-// The first attempt showed that the strategy language cannot use a free row
-// index in check clauses; the row index must appear in the matched pattern or
-// be carried by a dedicated missing/borrow predicate.
