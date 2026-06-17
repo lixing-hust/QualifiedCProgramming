@@ -26,6 +26,7 @@
 | `C_95` | 字符串数组 `char **` | 已全链通过 | `problem_95_spec_z` 已直接 wrapper 原始 `spec/95.v` 的 `problem_95_spec`；使用 `CharPtrArray2.full/missing_i` 和 `CharArray.full` 表示二维字符串数组资源；已通过 `coins_95.v`、`C_95_goal.v`、`C_95_proof_auto.v`、`C_95_proof_manual.v`、`C_95_goal_check.v` 编译，`coins/manual/goal_check` 无 `Admitted.` 或新增 `Axiom`。成本见 `../ledger.md` 的 `C_95` 与 `C_95_continuation`。 |
 | `C_115` | 整数矩阵 `int **` | 已全链通过 | `problem_115_spec_z` 直接 wrapper 原始 `spec/115.v` 的 `problem_115_spec`；使用 `IntPtrArray2.full/missing_i` 和 `IntArray.full` 表示二维 `int **` 矩阵资源；已通过 `coins_115.v`、`C_115_goal.v`、`C_115_proof_auto.v`、`C_115_proof_manual.v`、`C_115_goal_check.v` 编译，`coins/manual/goal_check` 无 `Admitted.` 或新增 `Axiom`。成本见 `../ledger.md` 的 `C_115`。 |
 | `C_12` | 字符串数组 `const char **` | 已全链通过 | 用户确认按原注释/spec 语义处理空输入，C 实现已改为空输入返回 `NULL`；`problem_12_pre_z/spec_*_z` 直接 wrapper 原始 `spec/12.v` 的 `problem_12_pre/spec`；使用 `CharPtrArray2.full/missing_i`、`CharArray.full` 和 `QCP_examples/stdlib/string.h` 的 `strlen`/`store_string` 表示二维字符串数组与行长度；已通过 `coins_12.v`、`C_12_goal.v`、`C_12_proof_auto.v`、`C_12_proof_manual.v`、`C_12_goal_check.v` 编译，`coins/manual/goal_check` 无 `Admitted.` 或新增 `Axiom`。成本见 `../ledger.md` 的 `C_12_continuation`。 |
+| `C_29` | 字符串数组过滤 `char **` | 已全链通过 | `problem_29_pre_z/spec_z` 直接 wrapper 原始 `spec/29.v` 的 `problem_29_pre/spec`；使用 `CharPtrArray2.full/missing_i` 和 `CharArray.full/store_string` 表示输入二维字符串数组，使用公共 `PtrArray` 谓词表示返回的借用指针数组；使用 `QCP_examples/stdlib/string.h` 的 `strlen`/`strncmp`；已通过公共 `ptr_array2_strategy_*`、`coins_29.v`、`C_29_goal.v`、`C_29_proof_auto.v`、`C_29_proof_manual.v`、`C_29_goal_check.v` 编译，`coins/manual/goal_check/strategy_proof` 无 `Admitted.` / `Abort` / 新增 `Axiom`。成本见 `../ledger.md` 的 `C_29`。 |
 
 其它题目暂按 `待建模` 处理。
 
@@ -651,3 +652,94 @@ store_string row_ptr (row_payload_z_28 (Znth i rows nil))
 ### 成本记录
 
 本题成本已经写入 `../ledger.md` 的 `C_28` 行：`2026-06-17 13:51 CST` 到 `2026-06-17 15:19 CST`，88 分钟，token delta `44134773`。
+
+## C_29 filter_by_prefix 验证记录
+
+### 当前状态
+
+`C_29` 已全链通过。本轮按用户要求只参考 `../SKILL.md`、`QCP_examples/QCP_demos_LLM/2DCharPtrArray.c` 和 `QCP_examples/stdlib/string.h`，未使用 `.agents` 下的 skill 或 subagent。
+
+已确认 `QCP_examples/stdlib/string.h` 提供本题需要的 `strlen` 和 `strncmp`。
+
+注意：`C_29.c` 文件头示例把 `"vector"` 写进 prefix `"a"` 的输出，但 `spec/29.v` 的示例、正式 `problem_29_spec` 和 C 实现本身都是标准前缀过滤语义。本轮证明按正式 `spec/29.v` 与实际 C 前缀过滤逻辑完成。
+
+已完成：
+
+```bash
+opam exec --switch=coq8201 -- linux-binary/symexec \
+  --goal-file=QCP_examples/humaneval/multi_dimensional_arrays/C_29_goal.v \
+  --proof-auto-file=QCP_examples/humaneval/multi_dimensional_arrays/C_29_proof_auto.v \
+  --proof-manual-file=QCP_examples/humaneval/multi_dimensional_arrays/C_29_proof_manual.v \
+  --coq-logic-path=SimpleC.EE \
+  -slp QCP_examples/humaneval/multi_dimensional_arrays SimpleC.EE \
+  -slp QCP_examples/QCP_demos_LLM SimpleC.EE.QCP_demos_LLM \
+  --strategy-folder-path=SeparationLogic/examples/QCP_demos_LLM/ \
+  --input-file=QCP_examples/humaneval/multi_dimensional_arrays/C_29.c \
+  -IQCP_examples/LLM_friendly_cases \
+  -IQCP_examples/QCP_demos_LLM \
+  -IQCP_examples/stdlib \
+  --gen-and-backup \
+  --no-exec-info
+```
+
+并通过：
+
+```bash
+COQINCLUDES_COMMON="$(head -n -1 QCP_examples/humaneval/IntClaude/_CoqProject | tr "\n" " ")"
+coqc -Q SeparationLogic/stdlib "" -R SeparationLogic/stdlib SimpleC.StdLib $COQINCLUDES_COMMON SeparationLogic/examples/QCP_demos_LLM/ptr_array2_strategy_goal.v
+coqc -Q SeparationLogic/stdlib "" -R SeparationLogic/stdlib SimpleC.StdLib $COQINCLUDES_COMMON SeparationLogic/examples/QCP_demos_LLM/ptr_array2_strategy_proof.v
+
+cd QCP_examples/humaneval/multi_dimensional_arrays
+COQINCLUDES="$(tr "\n" " " < ../IntClaude/_CoqProject)"
+coqc -Q ../../../SeparationLogic/stdlib "" -R ../../../SeparationLogic/stdlib SimpleC.StdLib $COQINCLUDES coins_29.v
+coqc -Q ../../../SeparationLogic/stdlib "" -R ../../../SeparationLogic/stdlib SimpleC.StdLib $COQINCLUDES C_29_goal.v
+coqc -Q ../../../SeparationLogic/stdlib "" -R ../../../SeparationLogic/stdlib SimpleC.StdLib $COQINCLUDES C_29_proof_auto.v
+coqc -Q ../../../SeparationLogic/stdlib "" -R ../../../SeparationLogic/stdlib SimpleC.StdLib $COQINCLUDES C_29_proof_manual.v
+coqc -Q ../../../SeparationLogic/stdlib "" -R ../../../SeparationLogic/stdlib SimpleC.StdLib $COQINCLUDES C_29_goal_check.v
+```
+
+扫描结果：
+
+```bash
+rg -n "\b(Admitted|Abort|Axiom)\b" \
+  coins_29.v C_29_proof_manual.v C_29_goal_check.v \
+  ../../../SeparationLogic/examples/QCP_demos_LLM/ptr_array2_strategy_proof.v
+```
+
+无输出。
+
+### 语义与建模约束
+
+1. 最终 spec 直连原始 `spec/29.v`。
+
+`coins_29.v` 中 `problem_29_pre_z` 和 `problem_29_spec_z` 只是把 C 层 `list (list Z)` / `list Z` 转换成原始 spec 使用的 `list string` / `string`，定义体直接调用 `problem_29_pre` 和 `problem_29_spec`。
+
+2. C 层保持原始过滤逻辑。
+
+函数仍按原逻辑先计算 `plen = strlen(prefix)`，遍历 `strings[i]`，用 `strncmp(cur, prefix, plen) == 0` 判断前缀匹配，匹配时把原行指针写入输出数组。
+
+3. `char **` 输入资源使用 `CharPtrArray2`。
+
+外层持有 `CharPtrArray2.full strings strings_size rows`。访问当前行时用 `missing_i` 借出当前指针槽和行字符串资源，调用 `strncmp` 后再合回完整输入数组。
+
+4. 返回数组是借用指针数组。
+
+`PtrArray` 已整合进公共 `QCP_examples/QCP_demos_LLM/ptr_array2_def.h`，并由公共 `ptr_array2.strategies` / `ptr_array2_strategy_*` 支撑，用 `PtrArray.seg` 和 `PtrArray.undef_seg` 表示已写输出指针前缀与未初始化后缀。
+
+### 主要踩坑与解决办法
+
+1. `strncmp` 结果需要和原始 string prefix 规格桥接。
+
+在 `coins_29.v` 中补了 `strncmp_result_prefix_match_29` / `strncmp_result_prefix_nomatch_29` 等局部 bridge，把 C 层 `list Z` 前缀比较连接到原始 `Coq.Strings.String.prefix` 语义。
+
+2. 返回指针数组需要公共 `PtrArray` 策略。
+
+输出数组只存放已有行指针，不拥有行字符串内容；因此使用公共 `PtrArray` 指针数组谓词和 split/merge strategy，比把它混入 `CharPtrArray2` 更稳定。
+
+3. 循环 invariant 分成两条线。
+
+语义线用 `filter_prefix_state_29 rows prefix_l i output_rows` 描述已处理前缀的过滤结果；内存线用 `PtrArray.seg data 0 output_size output_ptrs * PtrArray.undef_seg data output_size strings_size` 描述输出数组写入进度。
+
+### 成本记录
+
+本题成本已经写入 `../ledger.md` 的 `C_29` 行：`2026-06-17 15:39 CST` 到 `2026-06-17 17:39 CST`，120 分钟，token delta `36010404`。
