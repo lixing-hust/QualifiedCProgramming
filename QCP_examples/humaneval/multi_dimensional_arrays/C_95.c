@@ -9,106 +9,126 @@ check_map_case({{"a","apple"}, {"8","banana"}, {"a","apple"}}) should return fal
 check_map_case({{"Name","John"}, {"Age","36"}, {"City","Houston"}}) should return false.
 check_map_case({{"STATE","NC"}, {"ZIP","12345"} }) should return true.
 */
-#include "verification_stdlib.h"
-#include "verification_list.h"
-#include "char_array_def.h"
-#include "ptr_array_def.h"
+
+#include "ptr_array2_def.h"
 
 /*@ Extern Coq (problem_95_pre_z: list (list Z) -> Prop)
                (problem_95_spec_z: list (list Z) -> Z -> Prop)
-               (string_lengths_z: list (list Z) -> list Z -> Prop)
-               (string_rows_full: list Z -> list Z -> list (list Z) -> Assertion)
-               (dict_case_prefix_z: Z -> list (list Z) -> Z -> Z -> Prop) */
+               (rows_well_formed_z: list (list Z) -> Z -> Prop)
+               (scan_state_z: list (list Z) -> Z -> Z -> Z -> Z -> Prop)
+               (rows_have_uniform_case_z: list (list Z) -> Prop)
+               (invalid_char_seen_z: list (list Z) -> Z -> Z -> Prop)
+               (mixed_case_seen_z: list (list Z) -> Z -> Z -> Prop)
+               (Znth: {A} -> Z -> list A -> A -> A)
+               (Zlength: {A} -> list A -> Z)
+*/
 /*@ Import Coq Require Import coins_95 */
 
-int strlen(char *s)
-/*@ With l len
+int check_dict_case(const char** keys, int dict_size)
+/*@ With rows
     Require
-        0 <= len &&
-        Zlength(l) == len &&
-        CharArray::full(s, len + 1, app(l, cons(0, nil)))
+      0 <= dict_size && dict_size <= 100 &&
+      rows_well_formed_z(rows, dict_size) &&
+      problem_95_pre_z(rows) &&
+      CharPtrArray2::full(keys, dict_size, rows)
     Ensure
-        __return == len &&
-        CharArray::full(s, len + 1, app(l, cons(0, nil)))
-*/
-;
-
-int check_dict_case(char **keys, int dict_size)
-/*@ With key_ls lens ptrs
-    Require
-        0 <= dict_size && dict_size < INT_MAX &&
-        Zlength(key_ls) == dict_size &&
-        Zlength(lens) == dict_size &&
-        Zlength(ptrs) == dict_size &&
-        string_lengths_z(key_ls, lens) &&
-        problem_95_pre_z(key_ls) &&
-        PtrArray::full(keys, dict_size, ptrs) *
-        string_rows_full(ptrs, lens, key_ls)
-    Ensure
-        (__return == 0 || __return == 1) &&
-        problem_95_spec_z(key_ls, __return) &&
-        PtrArray::full(keys, dict_size, ptrs) *
-        string_rows_full(ptrs, lens, key_ls)
+      (__return == 0 || __return == 1) &&
+      problem_95_spec_z(rows, __return) &&
+      CharPtrArray2::full(keys, dict_size, rows)
 */
 {
-    int islower = 0;
-    int isupper = 0;
-    int k;
-    int i;
-    int key_len;
-    char *key;
-
-    i = 0;
-    key_len = 0;
-    key = 0;
-    if (dict_size == 0) return 0;
-
-    /*@ Inv Assert
-        0 <= k && k <= dict_size &&
-        dict_size > 0 &&
-        0 <= islower && islower <= 1 &&
-        0 <= isupper && isupper <= 1 &&
-        islower + isupper <= 1 &&
-        i == i &&
-        key_len == key_len &&
-        key == key &&
-        Zlength(key_ls) == dict_size &&
-        Zlength(lens) == dict_size &&
-        Zlength(ptrs) == dict_size &&
-        string_lengths_z(key_ls, lens) &&
-        problem_95_pre_z(key_ls) &&
-        dict_case_prefix_z(k, key_ls, islower, isupper) &&
-        PtrArray::full(keys, dict_size, ptrs) *
-        string_rows_full(ptrs, lens, key_ls)
-    */
-    for (k = 0; k < dict_size; k++) {
-        key = keys[k];
-        key_len = strlen(key) /*@ where l = key_ls[k], len = lens[k] */;
-
-        /*@ Inv Assert
-            0 <= k && k < dict_size &&
-            0 <= i && i <= key_len &&
-            key == ptrs[k] &&
-            key_len == lens[k] &&
-            dict_size > 0 &&
-            0 <= islower && islower <= 1 &&
-            0 <= isupper && isupper <= 1 &&
-            islower + isupper <= 1 &&
-            Zlength(key_ls) == dict_size &&
-            Zlength(lens) == dict_size &&
-            Zlength(ptrs) == dict_size &&
-            string_lengths_z(key_ls, lens) &&
-            problem_95_pre_z(key_ls) &&
-            dict_case_prefix_z(k, key_ls, islower, isupper) &&
-            PtrArray::full(keys, dict_size, ptrs) *
-            string_rows_full(ptrs, lens, key_ls)
+    int islower = 0, isupper = 0;
+    if (dict_size == 0) {
+        /*@ Assert
+          dict_size == 0 &&
+          keys == keys@pre &&
+          islower == 0 &&
+          isupper == 0 &&
+          rows_well_formed_z(rows, dict_size@pre) &&
+          problem_95_spec_z(rows, 0) &&
+          CharPtrArray2::full(keys@pre, dict_size@pre, rows)
         */
-        for (i = 0; i < key_len; i++) {
-            if (key[i] < 65 || (key[i] > 90 && key[i] < 97) || key[i] > 122) return 0;
+        return 0;
+    }
+    /*@ Inv Assert
+      0 <= k && k <= dict_size@pre &&
+      0 < dict_size@pre && dict_size@pre <= 100 &&
+      dict_size == dict_size@pre &&
+      keys == keys@pre &&
+      rows_well_formed_z(rows, dict_size@pre) &&
+      problem_95_pre_z(rows) &&
+      scan_state_z(rows, k, 0, islower, isupper) &&
+      CharPtrArray2::full(keys@pre, dict_size@pre, rows)
+    */
+    for (int k = 0; k < dict_size; k++) {
+        /*@ Assert
+          exists row_ptr,
+          0 <= k && k < dict_size@pre &&
+          0 < dict_size@pre && dict_size@pre <= 100 &&
+          dict_size == dict_size@pre &&
+          keys == keys@pre &&
+          rows_well_formed_z(rows, dict_size@pre) &&
+          problem_95_pre_z(rows) &&
+          scan_state_z(rows, k, 0, islower, isupper) &&
+          CharPtrArray2::missing_i(keys@pre, dict_size@pre, k, row_ptr, rows) *
+          data_at(keys@pre + k * sizeof(char *), char *, row_ptr) *
+          CharArray::full(row_ptr, Zlength(Znth(k, rows, nil)), Znth(k, rows, nil))
+        */
+        const char* key = keys[k];
+
+        /*@ Assert
+          exists row_ptr,
+          0 <= k && k < dict_size@pre &&
+          0 < dict_size@pre && dict_size@pre <= 100 &&
+          dict_size == dict_size@pre &&
+          keys == keys@pre &&
+          key == row_ptr &&
+          rows_well_formed_z(rows, dict_size@pre) &&
+          problem_95_pre_z(rows) &&
+          scan_state_z(rows, k, 0, islower, isupper) &&
+          CharPtrArray2::missing_i(keys@pre, dict_size@pre, k, row_ptr, rows) *
+          data_at(keys@pre + k * sizeof(char *), char *, row_ptr) *
+          CharArray::full(row_ptr, Zlength(Znth(k, rows, nil)), Znth(k, rows, nil))
+        */
+        /*@ Inv Assert
+          exists row_ptr,
+          0 <= i && i < Zlength(Znth(k, rows, nil)) &&
+          0 <= k && k < dict_size@pre &&
+          0 < dict_size@pre && dict_size@pre <= 100 &&
+          dict_size == dict_size@pre &&
+          keys == keys@pre &&
+          key == row_ptr &&
+          rows_well_formed_z(rows, dict_size@pre) &&
+          problem_95_pre_z(rows) &&
+          scan_state_z(rows, k, i, islower, isupper) &&
+          CharPtrArray2::missing_i(keys@pre, dict_size@pre, k, row_ptr, rows) *
+          data_at(keys@pre + k * sizeof(char *), char *, row_ptr) *
+          CharArray::full(row_ptr, Zlength(Znth(k, rows, nil)), Znth(k, rows, nil))
+        */
+        for (int i = 0; key[i] != '\0'; i++) {
+            if (key[i] < 65 || (key[i] > 90 && key[i] < 97) || key[i] > 122) {
+                return 0;
+            }
             if (key[i] >= 65 && key[i] <= 90) isupper = 1;
             if (key[i] >= 97 && key[i] <= 122) islower = 1;
-            if (isupper + islower == 2) return 0;
+            if (isupper + islower == 2) {
+                return 0;
+            }
         }
+        /*@ Assert
+          0 <= k && k < dict_size@pre &&
+          0 < dict_size@pre && dict_size@pre <= 100 &&
+          key == key &&
+          k == k &&
+          dict_size == dict_size@pre &&
+          keys == keys@pre &&
+          0 <= islower && islower <= 1 &&
+          0 <= isupper && isupper <= 1 &&
+          rows_well_formed_z(rows, dict_size@pre) &&
+          problem_95_pre_z(rows) &&
+          scan_state_z(rows, k + 1, 0, islower, isupper) &&
+          CharPtrArray2::full(keys@pre, dict_size@pre, rows)
+        */
     }
     return 1;
 }
