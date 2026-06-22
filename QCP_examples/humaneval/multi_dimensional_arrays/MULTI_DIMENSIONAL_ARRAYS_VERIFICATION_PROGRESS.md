@@ -1,6 +1,6 @@
 # multi_dimensional_arrays 验证进度记录
 
-更新时间：2026-06-18
+更新时间：2026-06-22
 
 这份文档记录 `QCP_examples/humaneval/multi_dimensional_arrays` 下多维数组程序的验证进展、建模方式、踩坑和后续继续时需要注意的事项。状态口径参考 `StringClaude/STRINGCLAUDE_VERIFICATION_PROGRESS.md`。
 
@@ -30,8 +30,105 @@
 | `C_7` | 字符串数组过滤 `char **` | 已全链通过 | 已补充公共 `strstr` 规格；`problem_7_pre_z/spec_z` 直接 wrapper 原始 `spec/7.v` 的 `problem_7_pre/spec`；使用 `CharPtrArray2.full/missing_i` 和 `CharArray.full/store_string` 表示输入二维字符串数组，使用公共 `PtrArray` 谓词表示返回的借用指针数组；已通过 `coins_7.v`、`C_7_goal.v`、`C_7_proof_auto.v`、`C_7_proof_manual.v`、`C_7_goal_check.v` 编译，`coins/manual/goal_check/string_lib` 无 `Admitted.` / `Abort` / 新增 `Axiom`。成本见 `../ledger.md` 的 `C_7` 与 `C_7_continuation`。 |
 | `C_14` | 字符串前缀数组 `char **` | 已全链通过 | `problem_14_pre_z/spec_z` 直接 wrapper 原始 `spec/14.v` 的 `problem_14_pre/spec`；使用公共 `PtrArray` 表示返回的行指针数组，使用 `CharArray.full` 表示每个新分配的 C 字符串行；使用 `QCP_examples/stdlib/string.h` 的 `strlen`/`memcpy`；已通过 `coins_14.v`、`C_14_goal.v`、`C_14_proof_auto.v`、`C_14_proof_manual.v`、`C_14_goal_check.v` 编译，`coins/manual/goal_check` 无 `Admitted.` / `Abort` / 新增 `Axiom`。成本见 `../ledger.md` 的 `C_14`。 |
 | `C_74` | 字符串数组比较 `char **` | 已全链通过 | `problem_74_pre_z/spec_z` 直接 wrapper 原始 `spec/74.v` 的 `problem_74_pre/spec`；使用 `CharPtrArray2.full/missing_i` 和 `CharArray.full/store_string` 表示两个输入字符串数组，使用 `QCP_examples/stdlib/string.h` 的 `strlen`；返回值是 QCP 分配的 `StrArray *` 包装结构，内部 `data` 借用 `lst1` 或 `lst2`，核心总长度比较和长度相等时返回第一个数组的语义保持不变；已通过 `coins_74.v`、`C_74_goal.v`、`C_74_proof_auto.v`、`C_74_proof_manual.v`、`C_74_goal_check.v` 编译，`coins/manual/goal_check` 无 `Admitted.` / `Abort` / 新增 `Axiom`。成本见 `../ledger.md` 的 `C_74`。 |
+| `C_87` | 整数 ragged 二维数组 `int **` | 待确认 | intake 已确认题面注释、原 C 遍历顺序和 `spec/87.v` 一致：按行升序、每行按列降序返回命中坐标；本题不调用字符串库函数。当前暂停在 QCP 转换前：原 C 使用 `realloc` 做输出动态扩容，仓库没有可复用的 Humaneval `realloc` wrapper；按 `../SKILL.md`，若改成预计算总容量或固定容量，属于容量策略变化，需要用户确认后才能继续。成本见 `../ledger.md` 的 `C_87`。 |
+| `C_129` | 整数方阵路径 `int **` | 已全链通过 | 已按用户确认修正 `spec/129.v`：删除错误的路径枚举/`best_by_lex` 递归算法，改为无自定义 `Fixpoint` / `Inductive` 的逻辑规格；`problem_129_pre` 表达 `N x N`、`N >= 2`、`1..N*N` 排列和 `k >= 1`，`problem_129_spec` 表达输出在值 `1` 与 `1` 的最小邻居之间交替。`coins_129.v` 中 `problem_129_pre_z/spec_z` 直接 wrapper 原始 `spec/129.v`。`C_129.c` 已完成 QCP 建模并通过 symexec；`coins_129.v`、`C_129_goal.v`、`C_129_proof_auto.v`、`C_129_proof_manual.v`、`C_129_goal_check.v` 均编译通过，`spec/coins/manual` 无 `Admitted.`、新增 `Axiom`、`Fixpoint` 或 `Inductive` 命中。成本见 `../ledger.md` 的 `C_129*` 记录。 |
 
 其它题目暂按 `待建模` 处理。
+
+## C_129 minPath 验证记录
+
+### 当前状态
+
+`C_129` 当前状态为 `已全链通过`。原始 spec 已按题面和用户要求修正，C/QCP 建模、symexec、manual proof 和 `goal_check` 均已完成。
+
+已完成 intake：
+
+1. 读取并核对 `C_129.c`、`../spec/129.v`、`../SKILL.md`、`../QCP_FORMAT_CONVERSION_GUIDE.md` 和同目录已验证的 `C_115` / `C_74` 等样例。
+2. 确认本题是 `int **` 方阵输入和 `IntArray` 输出问题，不调用字符串库函数。
+3. 确认原 C 核心逻辑依赖题面注释中的强前提：网格是 `N x N`，并且 `1..N*N` 每个整数恰好出现一次。因此值 `1` 唯一存在，最小字典序路径从 `1` 开始，之后在相邻最小值和 `1` 之间交替。
+4. 发现 `spec/129.v` 的 `problem_129_pre` 过弱：它只要求 `k >= 1`、网格非空、每行非空，没有表达方阵、值域、唯一性或值 `1` 必然存在。
+
+### spec 修正记录
+
+用户已确认允许处理 `../spec/129.v` 的 pre 问题。继续检查时又发现更深一层的原始 spec 计算定义与题面示例不一致：
+
+```coq
+Eval compute in (find_minimum_path_impl [[1;2;3];[4;5;6];[7;8;9]] 3).
+(* = [] : list nat *)
+
+Eval compute in (find_minimum_path_impl [[5;9;3];[4;1;6];[7;8;2]] 1).
+(* = [] : list nat *)
+```
+
+原因是 `best_by_lex` 的递归基例为 `[]`，而 `lex_le v []` 对非空 `v` 为 `false`，导致非空候选集合最终也会选出 `[]`。这和文件开头注释中的输出 `[1; 2; 1]` / `[1]`、以及原 C 可观察行为都冲突。
+
+已按用户要求把 `../spec/129.v` 改成更直接的逻辑规格：
+
+1. 删除原来的 `Fixpoint get_val` / `lex_le` / `extend_paths` / `best_by_lex` / `build_starts`，不再用可执行枚举算法定义题意。
+2. 用 `grid_cell` 和四方向的 `neighbor_min_at` 直接描述 `1` 的相邻最小值，避免自定义递归路径枚举。
+3. 用 `is_neighbor_min_of_one` 封装存在某个值为 `1` 的格点，且 `m` 是其上下左右有效邻居中的最小值。
+4. 用 `alternating_min_path_values` 表达输出长度为 `k`，偶数下标为 `1`，奇数下标为该最小邻居值。
+5. 用 `square_permutation_grid` 和 `Permutation (concat grid) (seq 1 (n * n))` 表达题面中的 `N x N` 与 `1..N*N` 每个整数恰好出现一次。
+
+检查命令：
+
+```bash
+opam exec --switch=coq8201 -- coqtop -quiet -l QCP_examples/humaneval/spec/129.v
+```
+
+在 coqtop 中 `Check problem_129_pre.` 与 `Check problem_129_spec.` 均通过。直接 `coqc QCP_examples/humaneval/spec/129.v` 仍会因为文件名 `129.v` 生成的模块名数字开头而失败，这是 Coq 对文件名模块的限制；该目录的使用方式是从 `coins_129.v` 中 `Load "../spec/129".`。
+
+### QCP 建模与 symexec 记录
+
+本轮已经新增/更新：
+
+- `C_129.c`：改为 QCP 支持格式，使用 `IntPtrArray2::full/missing_i` 表示输入 `int **` 方阵；返回值适配为 QCP 分配的 `IntArray *`；保留原算法的扫描 `1`、四邻居取最小值、交替写输出的核心逻辑。
+- `coins_129.v`：`problem_129_pre_z/spec_z` 直接 wrapper 原始 `../spec/129.v` 的 `problem_129_pre/spec`，并补充 C proof 需要的 `find_one_state_129`、`min_neighbor_state_129`、`output_prefix_129` 等中间谓词。
+- `C_129_goal.v`、`C_129_proof_auto.v`、`C_129_proof_manual.v`、`C_129_goal_check.v`：由 symexec 生成。
+
+检查结果：
+
+```bash
+opam exec --switch=coq8201 -- linux-binary/symexec ... --input-file=QCP_examples/humaneval/multi_dimensional_arrays/C_129.c ... --gen-and-backup --no-exec-info
+
+cd QCP_examples/humaneval/multi_dimensional_arrays
+opam exec --switch=coq8201 -- coqc $(tr '\n' ' ' < ../IntClaude/_CoqProject) coins_129.v
+opam exec --switch=coq8201 -- coqc $(tr '\n' ' ' < ../IntClaude/_CoqProject) C_129_goal.v
+opam exec --switch=coq8201 -- coqc $(tr '\n' ' ' < ../IntClaude/_CoqProject) C_129_proof_auto.v
+opam exec --switch=coq8201 -- coqc $(tr '\n' ' ' < ../IntClaude/_CoqProject) C_129_proof_manual.v
+opam exec --switch=coq8201 -- coqc $(tr '\n' ' ' < ../IntClaude/_CoqProject) C_129_goal_check.v
+```
+
+以上命令均已通过，且本轮扫描：
+
+```bash
+rg -n "Admitted\.|^\s*Axiom\b|\bFixpoint\b|\bInductive\b" \
+  spec/129.v multi_dimensional_arrays/coins_129.v multi_dimensional_arrays/C_129_proof_manual.v
+```
+
+无输出。关键证明点是把找 `1` 的双重循环写成 `find_one_scan_state_129` / `find_one_state_129`，把四方向最小值检查写成 `checked_neighbor_min_129`，最终通过 `checked_neighbor_min_to_spec_129` 和 `min_neighbor_output_spec_129` 桥接回原始 `problem_129_spec_z`。
+
+## C_87 get_row 验证记录
+
+### 当前状态
+
+`C_87` 暂停在 QCP 转换前，状态为 `待确认`。
+
+已完成 intake：
+
+1. 读取并核对 `C_87.c`、`../spec/87.v`、`../SKILL.md`、`../QCP_FORMAT_CONVERSION_GUIDE.md`、`QCP_examples/stdlib/string.h` 以及同目录 `C_115` / `C_28` 等已验证样例。
+2. 确认本题是 `int **` 和 `row_sizes` 建模问题，不调用 `strlen` 等字符串库函数，因此没有触发 `string.h` 缺函数阻塞。
+3. 确认原始题意和 `spec/87.v` 一致：返回所有等于 `x` 的坐标，行号升序，同一行列号降序。
+4. 搜索仓库后未找到可直接复用的 Humaneval `realloc` wrapper；当前原 C 的动态扩容逻辑是：
+   - 初始 `cap = 16`；
+   - 输出坐标数量达到 `cap` 时 `cap *= 2`；
+   - `realloc` 失败时返回当前 partial output。
+
+### 继续前需要确认
+
+若继续验证，建议用户确认是否允许把输出容量策略适配为“先计算或要求一个足够上界，然后一次性分配 `2 * total_cells` 个 `int` 槽”。这会保留坐标收集顺序和最终正常路径结果，但会改变原程序的动态扩容和内存分配失败行为。
+
+本轮未修改 `C_87.c`、未新增 `coins_87.v`，也未生成 `C_87_goal.v` / `C_87_proof_auto.v` / `C_87_proof_manual.v` / `C_87_goal_check.v`。
 
 ## C_74 total_match 验证记录
 

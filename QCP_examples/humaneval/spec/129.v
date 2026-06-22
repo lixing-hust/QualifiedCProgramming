@@ -1,4 +1,7 @@
-(*You have to find the minimum path of length k in the grid. You can start
+(*Given a grid with N rows and N columns (N >= 2) and a positive integer k,
+each cell of the grid contains a value. Every integer in the range [1, N * N]
+inclusive appears exactly once on the cells of the grid.
+You have to find the minimum path of length k in the grid. You can start
 from any cell, and in each step you can move to any of the neighbor cells,
 in other words, you can go to cells which share an edge with you current
 cell.
@@ -22,84 +25,58 @@ Output: [1, 2, 1]
 Input: grid = [ [5,9,3], [4,1,6], [7,8,2]], k = 1
 Output: [1] *)
 
-Require Import Coq.Lists.List Coq.Arith.Arith.
+Require Import Coq.Lists.List.
+Require Import Coq.Arith.Arith.
+Require Import Coq.Sorting.Permutation.
 Import ListNotations.
 
 Definition Grid := list (list nat).
 Definition Pos := (nat * nat)%type.
 
-Definition in_bounds (grid : Grid) (p : Pos) : bool :=
-  let '(r,c) := p in
-  andb (r <? length grid)
-       (match nth_error grid r with
-        | Some row => c <? length row
-        | None => false
-        end).
+Definition grid_cell (grid : Grid) (r c : nat) : nat :=
+  nth c (nth r grid []) 0.
 
-Definition neighbors (p:Pos) : list Pos :=
-  let '(r,c) := p in [(r, c+1); (r+1, c); (r, c-1); (r-1, c)].
+Definition cell_value (grid : Grid) (p : Pos) (v : nat) : Prop :=
+  grid_cell grid (fst p) (snd p) = v.
 
-Fixpoint get_val (grid:Grid) (p:Pos) : nat :=
-  let '(r,c) := p in
-  match nth_error grid r with
-  | Some row => match nth_error row c with Some v => v | None => 0 end
-  | None => 0
-  end.
+Definition neighbor_min_at
+    (grid : Grid) (n r c m : nat) : Prop :=
+  r < n /\
+  c < n /\
+  grid_cell grid r c = 1 /\
+  ((0 < r /\ m = grid_cell grid (r - 1) c) \/
+   (S r < n /\ m = grid_cell grid (S r) c) \/
+   (0 < c /\ m = grid_cell grid r (c - 1)) \/
+   (S c < n /\ m = grid_cell grid r (S c))) /\
+  (0 < r -> m <= grid_cell grid (r - 1) c) /\
+  (S r < n -> m <= grid_cell grid (S r) c) /\
+  (0 < c -> m <= grid_cell grid r (c - 1)) /\
+  (S c < n -> m <= grid_cell grid r (S c)).
 
-Fixpoint lex_le (l1 l2 : list nat) : bool :=
-  match l1,l2 with
-  | [], _ => true
-  | _::_, [] => false
-  | h1::t1, h2::t2 => (h1 <? h2) || (andb (h1 =? h2) (lex_le t1 t2))
-  end.
+Definition is_neighbor_min_of_one (grid : Grid) (m : nat) : Prop :=
+  exists n r c,
+    length grid = n /\
+    Forall (fun row => length row = n) grid /\
+    neighbor_min_at grid n r c m.
 
-Fixpoint extend_paths (grid:Grid) (k:nat) (fuel:nat) (paths:list (list Pos)) : list (list Pos) :=
-  match fuel with
-  | 0 => paths
-  | S f' =>
-    if k <=? 1 then paths else
-    let ex :=
-      fold_right (fun p acc =>
-        match p with
-        | [] => acc | q::_ =>
-          fold_right (fun nb acc2 => if in_bounds grid nb then (nb::p)::acc2 else acc2)
-                     acc (neighbors q)
-        end) [] paths in
-    extend_paths grid (k-1) f' ex
-  end.
+Definition alternating_min_path_values (k m : nat) (output : list nat) : Prop :=
+  length output = k /\
+  forall i,
+    i < k ->
+    nth_error output i =
+      Some (if Nat.even i then 1 else m).
 
-Definition get_path_values (grid:Grid) (path:list Pos) : list nat := map (get_val grid) (rev path).
+Definition square_permutation_grid (grid : Grid) (n : nat) : Prop :=
+  2 <= n /\
+  length grid = n /\
+  Forall (fun row => length row = n) grid /\
+  Permutation (concat grid) (seq 1 (n * n)).
 
-Fixpoint best_by_lex (grid:Grid) (candidates:list (list Pos)) : list nat :=
-  match candidates with
-  | [] => []
-  | p::ps =>
-    let v := get_path_values grid p in
-    let best_rest := best_by_lex grid ps in
-    if lex_le v best_rest then v else best_rest
-  end.
-
-Fixpoint build_row_starts (r:nat) (row:list nat) (c:nat) : list (list Pos) :=
-  match row with
-  | [] => []
-  | _::t => [(r,c)] :: build_row_starts r t (S c)
-  end.
-
-Fixpoint build_starts (g:Grid) (r:nat) : list (list Pos) :=
-  match g with
-  | [] => []
-  | row::gs => build_row_starts r row 0 ++ build_starts gs (S r)
-  end.
-
-Definition find_minimum_path_impl (grid:Grid) (k:nat) : list nat :=
-  let starts := build_starts grid 0 in
-  let cand := extend_paths grid k (k * (length grid + 1)) starts in
-  best_by_lex grid cand.
-
-(* k 至少为 1；网格非空且每行非空 *)
 Definition problem_129_pre (grid : Grid) (k : nat) : Prop :=
-  k >= 1 /\ grid <> [] /\ Forall (fun row => row <> []) grid.
+  1 <= k /\
+  exists n, square_permutation_grid grid n.
 
 Definition problem_129_spec (grid : Grid) (k : nat) (output : list nat) : Prop :=
-  output = find_minimum_path_impl grid k.
-
+  exists m,
+    is_neighbor_min_of_one grid m /\
+    alternating_min_path_values k m output.
