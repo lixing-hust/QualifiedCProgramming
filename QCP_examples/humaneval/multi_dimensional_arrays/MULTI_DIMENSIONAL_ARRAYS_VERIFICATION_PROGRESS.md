@@ -1,6 +1,6 @@
 # multi_dimensional_arrays 验证进度记录
 
-更新时间：2026-06-22
+更新时间：2026-06-23
 
 这份文档记录 `QCP_examples/humaneval/multi_dimensional_arrays` 下多维数组程序的验证进展、建模方式、踩坑和后续继续时需要注意的事项。状态口径参考 `StringClaude/STRINGCLAUDE_VERIFICATION_PROGRESS.md`。
 
@@ -30,7 +30,7 @@
 | `C_7` | 字符串数组过滤 `char **` | 已全链通过 | 已补充公共 `strstr` 规格；`problem_7_pre_z/spec_z` 直接 wrapper 原始 `spec/7.v` 的 `problem_7_pre/spec`；使用 `CharPtrArray2.full/missing_i` 和 `CharArray.full/store_string` 表示输入二维字符串数组，使用公共 `PtrArray` 谓词表示返回的借用指针数组；已通过 `coins_7.v`、`C_7_goal.v`、`C_7_proof_auto.v`、`C_7_proof_manual.v`、`C_7_goal_check.v` 编译，`coins/manual/goal_check/string_lib` 无 `Admitted.` / `Abort` / 新增 `Axiom`。成本见 `../ledger.md` 的 `C_7` 与 `C_7_continuation`。 |
 | `C_14` | 字符串前缀数组 `char **` | 已全链通过 | `problem_14_pre_z/spec_z` 直接 wrapper 原始 `spec/14.v` 的 `problem_14_pre/spec`；使用公共 `PtrArray` 表示返回的行指针数组，使用 `CharArray.full` 表示每个新分配的 C 字符串行；使用 `QCP_examples/stdlib/string.h` 的 `strlen`/`memcpy`；已通过 `coins_14.v`、`C_14_goal.v`、`C_14_proof_auto.v`、`C_14_proof_manual.v`、`C_14_goal_check.v` 编译，`coins/manual/goal_check` 无 `Admitted.` / `Abort` / 新增 `Axiom`。成本见 `../ledger.md` 的 `C_14`。 |
 | `C_74` | 字符串数组比较 `char **` | 已全链通过 | `problem_74_pre_z/spec_z` 直接 wrapper 原始 `spec/74.v` 的 `problem_74_pre/spec`；使用 `CharPtrArray2.full/missing_i` 和 `CharArray.full/store_string` 表示两个输入字符串数组，使用 `QCP_examples/stdlib/string.h` 的 `strlen`；返回值是 QCP 分配的 `StrArray *` 包装结构，内部 `data` 借用 `lst1` 或 `lst2`，核心总长度比较和长度相等时返回第一个数组的语义保持不变；已通过 `coins_74.v`、`C_74_goal.v`、`C_74_proof_auto.v`、`C_74_proof_manual.v`、`C_74_goal_check.v` 编译，`coins/manual/goal_check` 无 `Admitted.` / `Abort` / 新增 `Axiom`。成本见 `../ledger.md` 的 `C_74`。 |
-| `C_87` | 整数 ragged 二维数组 `int **` | 待确认 | intake 已确认题面注释、原 C 遍历顺序和 `spec/87.v` 一致：按行升序、每行按列降序返回命中坐标；本题不调用字符串库函数。当前暂停在 QCP 转换前：原 C 使用 `realloc` 做输出动态扩容，仓库没有可复用的 Humaneval `realloc` wrapper；按 `../SKILL.md`，若改成预计算总容量或固定容量，属于容量策略变化，需要用户确认后才能继续。成本见 `../ledger.md` 的 `C_87`。 |
+| `C_87` | 整数 ragged 二维数组 `int **` | 已全链通过 | 用户已确认允许容量策略适配；`problem_87_pre_z/spec_z` 直接 wrapper 原始 `spec/87.v` 的 `problem_87_pre/spec`；使用 `IntPtrArray2.full/missing_i`、`IntArray.full/seg/undef_seg` 表示输入 ragged `int **` 和输出坐标数组；本题不调用字符串库函数。已通过 `coins_87.v`、`C_87_goal.v`、`C_87_proof_auto.v`、`C_87_proof_manual.v`、`C_87_goal_check.v` 编译，`coins/manual` 无 `Admitted.` 或新增 `Axiom`。成本见 `../ledger.md` 的 `C_87_continuation*`。 |
 | `C_129` | 整数方阵路径 `int **` | 已全链通过 | 已按用户确认修正 `spec/129.v`：删除错误的路径枚举/`best_by_lex` 递归算法，改为无自定义 `Fixpoint` / `Inductive` 的逻辑规格；`problem_129_pre` 表达 `N x N`、`N >= 2`、`1..N*N` 排列和 `k >= 1`，`problem_129_spec` 表达输出在值 `1` 与 `1` 的最小邻居之间交替。`coins_129.v` 中 `problem_129_pre_z/spec_z` 直接 wrapper 原始 `spec/129.v`。`C_129.c` 已完成 QCP 建模并通过 symexec；`coins_129.v`、`C_129_goal.v`、`C_129_proof_auto.v`、`C_129_proof_manual.v`、`C_129_goal_check.v` 均编译通过，`spec/coins/manual` 无 `Admitted.`、新增 `Axiom`、`Fixpoint` 或 `Inductive` 命中。成本见 `../ledger.md` 的 `C_129*` 记录。 |
 
 其它题目暂按 `待建模` 处理。
@@ -112,23 +112,46 @@ rg -n "Admitted\.|^\s*Axiom\b|\bFixpoint\b|\bInductive\b" \
 
 ### 当前状态
 
-`C_87` 暂停在 QCP 转换前，状态为 `待确认`。
+`C_87` 已全链通过。
 
 已完成 intake：
 
 1. 读取并核对 `C_87.c`、`../spec/87.v`、`../SKILL.md`、`../QCP_FORMAT_CONVERSION_GUIDE.md`、`QCP_examples/stdlib/string.h` 以及同目录 `C_115` / `C_28` 等已验证样例。
 2. 确认本题是 `int **` 和 `row_sizes` 建模问题，不调用 `strlen` 等字符串库函数，因此没有触发 `string.h` 缺函数阻塞。
 3. 确认原始题意和 `spec/87.v` 一致：返回所有等于 `x` 的坐标，行号升序，同一行列号降序。
-4. 搜索仓库后未找到可直接复用的 Humaneval `realloc` wrapper；当前原 C 的动态扩容逻辑是：
+4. 搜索仓库后未找到可直接复用的 Humaneval `realloc` wrapper；原 C 的动态扩容逻辑是：
    - 初始 `cap = 16`；
    - 输出坐标数量达到 `cap` 时 `cap *= 2`；
    - `realloc` 失败时返回当前 partial output。
 
-### 继续前需要确认
+### QCP 建模与验证结果
 
-若继续验证，建议用户确认是否允许把输出容量策略适配为“先计算或要求一个足够上界，然后一次性分配 `2 * total_cells` 个 `int` 槽”。这会保留坐标收集顺序和最终正常路径结果，但会改变原程序的动态扩容和内存分配失败行为。
+用户已确认允许把输出容量策略适配为预计算总元素数后一次性分配。当前 C/QCP 版本先计算 `total_cells_prefix_87 matrix rows`，为输出坐标数组分配 `total * 2 + 2` 个 `int` 槽；坐标收集核心逻辑保持为按行升序遍历、每行按列降序遍历，命中时依次写入 `(i, j)`，返回的 `size` 仍表示坐标对数量。
 
-本轮未修改 `C_87.c`、未新增 `coins_87.v`，也未生成 `C_87_goal.v` / `C_87_proof_auto.v` / `C_87_proof_manual.v` / `C_87_goal_check.v`。
+本轮新增/更新：
+
+- `C_87.c`：改为 QCP 支持格式，使用 `IntPtrArray2::full/missing_i` 表示输入 ragged `int **`，使用 `IntArray::seg/undef_seg` 表示已写输出前缀和未写后缀。
+- `coins_87.v`：`problem_87_pre_z/spec_z` 直接 wrapper 原始 `../spec/87.v` 的 `problem_87_pre/spec`；内部用 `prefix_state_87` / `scan_state_87` 跟踪运行时行列扫描，并用 row-desc / `sort_coords` bridge lemma 接回原始 spec。
+- `C_87_goal.v`、`C_87_proof_auto.v`、`C_87_proof_manual.v`、`C_87_goal_check.v`：由 symexec 生成，其中 manual 已补完 `wit_8`、`wit_9` 和 return 证明。
+
+已通过：
+
+```bash
+cd QCP_examples/humaneval/multi_dimensional_arrays
+opam exec --switch=coq8201 -- coqc $(tr '\n' ' ' < ../IntClaude/_CoqProject) coins_87.v
+opam exec --switch=coq8201 -- coqc $(tr '\n' ' ' < ../IntClaude/_CoqProject) C_87_goal.v
+opam exec --switch=coq8201 -- coqc $(tr '\n' ' ' < ../IntClaude/_CoqProject) C_87_proof_auto.v
+opam exec --switch=coq8201 -- coqc $(tr '\n' ' ' < ../IntClaude/_CoqProject) C_87_proof_manual.v
+opam exec --switch=coq8201 -- coqc $(tr '\n' ' ' < ../IntClaude/_CoqProject) C_87_goal_check.v
+```
+
+扫描：
+
+```bash
+rg -n "Admitted\.|Axiom[[:space:]]" coins_87.v C_87_proof_manual.v
+```
+
+无输出。本题成本已写入 `../ledger.md` 的 `C_87`、`C_87_continuation` 和 `C_87_continuation_2` 行。
 
 ## C_74 total_match 验证记录
 
