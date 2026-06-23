@@ -32,8 +32,32 @@
 | `C_74` | 字符串数组比较 `char **` | 已全链通过 | `problem_74_pre_z/spec_z` 直接 wrapper 原始 `spec/74.v` 的 `problem_74_pre/spec`；使用 `CharPtrArray2.full/missing_i` 和 `CharArray.full/store_string` 表示两个输入字符串数组，使用 `QCP_examples/stdlib/string.h` 的 `strlen`；返回值是 QCP 分配的 `StrArray *` 包装结构，内部 `data` 借用 `lst1` 或 `lst2`，核心总长度比较和长度相等时返回第一个数组的语义保持不变；已通过 `coins_74.v`、`C_74_goal.v`、`C_74_proof_auto.v`、`C_74_proof_manual.v`、`C_74_goal_check.v` 编译，`coins/manual/goal_check` 无 `Admitted.` / `Abort` / 新增 `Axiom`。成本见 `../ledger.md` 的 `C_74`。 |
 | `C_87` | 整数 ragged 二维数组 `int **` | 已全链通过 | 用户已确认允许容量策略适配；`problem_87_pre_z/spec_z` 直接 wrapper 原始 `spec/87.v` 的 `problem_87_pre/spec`；使用 `IntPtrArray2.full/missing_i`、`IntArray.full/seg/undef_seg` 表示输入 ragged `int **` 和输出坐标数组；本题不调用字符串库函数。已通过 `coins_87.v`、`C_87_goal.v`、`C_87_proof_auto.v`、`C_87_proof_manual.v`、`C_87_goal_check.v` 编译，`coins/manual` 无 `Admitted.` 或新增 `Axiom`。成本见 `../ledger.md` 的 `C_87_continuation*`。 |
 | `C_129` | 整数方阵路径 `int **` | 已全链通过 | 已按用户确认修正 `spec/129.v`：删除错误的路径枚举/`best_by_lex` 递归算法，改为无自定义 `Fixpoint` / `Inductive` 的逻辑规格；`problem_129_pre` 表达 `N x N`、`N >= 2`、`1..N*N` 排列和 `k >= 1`，`problem_129_spec` 表达输出在值 `1` 与 `1` 的最小邻居之间交替。`coins_129.v` 中 `problem_129_pre_z/spec_z` 直接 wrapper 原始 `spec/129.v`。`C_129.c` 已完成 QCP 建模并通过 symexec；`coins_129.v`、`C_129_goal.v`、`C_129_proof_auto.v`、`C_129_proof_manual.v`、`C_129_goal_check.v` 均编译通过，`spec/coins/manual` 无 `Admitted.`、新增 `Axiom`、`Fixpoint` 或 `Inductive` 命中。成本见 `../ledger.md` 的 `C_129*` 记录。 |
+| `C_158` | 字符串数组 max unique `char **` | 已全链通过 | 已确认 `strlen`、`strcmp` 和 `strcmp_result` 均来自 `QCP_examples/stdlib/string.h`，未新增 `count_unique_chars_158` 这类 C helper。`coins_158.v` 中 `problem_158_pre_z/spec_z` 直接 wrapper 原始 `spec/158.v`；`strcmp(cur,max)` 使用 `char_ptr_array2_missing_two_158` 建模双行借出，并补齐 row-block 双行 split/merge、best-prefix/spec bridge 等证明。已重新运行 symexec，并通过 `coins_158.v`、`C_158_goal.v`、`C_158_proof_auto.v`、`C_158_proof_manual.v`、`C_158_goal_check.v` 编译；`coins/manual/C` 无 `Admitted.`、`Abort.`、`Show.` 或新增 `Axiom` 声明。成本见 `../ledger.md` 的 `C_158*` 记录。 |
 
 其它题目暂按 `待建模` 处理。
+
+## C_158 find_max 验证记录
+
+### 当前状态
+
+`C_158` 当前状态为 `已全链通过`。
+
+已完成 intake 与建模：
+
+1. 按 `../SKILL.md` 直接执行本题验证流程，未使用 `.agents` 下的 skill 或 subagent。
+2. 检查 `QCP_examples/stdlib/string.h`，确认本题用到的 `strlen` 和 `strcmp` 都已有声明与规格。
+3. `C_158.c` 已转换为 QCP 风格，使用 `CharPtrArray2.full/missing_i` 表示输入 `char **`，使用 `IntArray` 表示 `seen[128]`；没有新增 `count_unique_chars_158` 这类 C 辅助函数。
+4. `coins_158.v` 已加载原始 `../spec/158.v`，`problem_158_pre_z` / `problem_158_spec_z` 直接调用原始 `problem_158_pre` / `problem_158_spec`，并补充行格式、reset 前缀、best 前缀、删除索引等基础引理。
+5. 已重新运行 symexec，且 `coins_158.v`、`C_158_goal.v`、`C_158_proof_auto.v`、`C_158_proof_manual.v`、`C_158_goal_check.v` 可编译。
+6. 已调整 `strcmp(cur, max)` 前后的双行借出模型：current 行的指针槽不再单独暴露给 `strcmp`，而是进入 residual pointer table；best 行指针槽单独暴露；row residual 用 `remove_Znth` 表示先借 current、再借 best 后剩余的行块。
+7. 已补齐 `row_blocks_except_two_merge_missing_i_158`、`char_ptr_array2_missing_two_merge_full_158`、`char_ptr_array2_missing_two_merge_full_cstring_158` 等双行合并引理，完成 `strcmp(cur,max)` tie 分支的空间资源合回。
+8. `C_158_proof_manual.v` 中剩余 manual witness 已补齐；由 `proof_auto` 覆盖的重复 witness 已从 manual 中移除，避免 `goal_check` Include 冲突。
+
+```bash
+rg -n "^\s*(Admitted\.|Axiom\b|Abort\.|Show\.)" coins_158.v C_158_proof_manual.v C_158.c
+```
+
+当前无命中；`C_158_goal_check.v` 已编译通过。成本记录见 `../ledger.md` 的 `C_158`、`C_158_continuation`、`C_158_continuation_2`。
 
 ## C_129 minPath 验证记录
 
