@@ -50,7 +50,8 @@ Definition strchr_result (str : list Z) (c ret s : Z) : Prop :=
       0 <= i < string_length str /\
       Znth i str 0 = c /\
       (forall k, 0 <= k < i -> Znth k str 0 <> c) /\
-      ret = s + i) \/
+      ret = s + i /\
+      ret <> 0) \/
   ((forall k, 0 <= k < string_length str -> Znth k str 0 <> c) /\
    ((c = 0 /\ ret = s + string_length str) \/
     (c <> 0 /\ ret = 0))).
