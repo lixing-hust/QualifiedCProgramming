@@ -34,8 +34,48 @@
 | `C_129` | 整数方阵路径 `int **` | 已全链通过 | 已按用户确认修正 `spec/129.v`：删除错误的路径枚举/`best_by_lex` 递归算法，改为无自定义 `Fixpoint` / `Inductive` 的逻辑规格；`problem_129_pre` 表达 `N x N`、`N >= 2`、`1..N*N` 排列和 `k >= 1`，`problem_129_spec` 表达输出在值 `1` 与 `1` 的最小邻居之间交替。`coins_129.v` 中 `problem_129_pre_z/spec_z` 直接 wrapper 原始 `spec/129.v`。`C_129.c` 已完成 QCP 建模并通过 symexec；`coins_129.v`、`C_129_goal.v`、`C_129_proof_auto.v`、`C_129_proof_manual.v`、`C_129_goal_check.v` 均编译通过，`spec/coins/manual` 无 `Admitted.`、新增 `Axiom`、`Fixpoint` 或 `Inductive` 命中。成本见 `../ledger.md` 的 `C_129*` 记录。 |
 | `C_158` | 字符串数组 max unique `char **` | 已全链通过 | 已确认 `strlen`、`strcmp` 和 `strcmp_result` 均来自 `QCP_examples/stdlib/string.h`，未新增 `count_unique_chars_158` 这类 C helper。`coins_158.v` 中 `problem_158_pre_z/spec_z` 直接 wrapper 原始 `spec/158.v`；`strcmp(cur,max)` 使用 `char_ptr_array2_missing_two_158` 建模双行借出，并补齐 row-block 双行 split/merge、best-prefix/spec bridge 等证明。已重新运行 symexec，并通过 `coins_158.v`、`C_158_goal.v`、`C_158_proof_auto.v`、`C_158_proof_manual.v`、`C_158_goal_check.v` 编译；`coins/manual/C` 无 `Admitted.`、`Abort.`、`Show.` 或新增 `Axiom` 声明。成本见 `../ledger.md` 的 `C_158*` 记录。 |
 | `C_101` | 字符串切词 `char **` | 已全链通过 | 用户已确认允许容量策略适配；`problem_101_pre_z/spec_z` 直接 wrapper 原始 `spec/101.v` 的 `problem_101_pre/spec`；`C_101.c` 已改为 QCP 可验证形状，使用 `n + 1` 上界容量替代 `realloc`，单词分配和复制逻辑直接内联在 `words_string` 内，没有 `make_word_101` 辅助函数。已确认 `QCP_examples/stdlib/string.h` 提供 `strlen` / `memcpy`，当前 C 实际调用 `strlen`。已重新运行 symexec，并通过 `coins_101.v`、`C_101_goal.v`、`C_101_proof_auto.v`、`C_101_proof_manual.v`、`C_101_goal_check.v` 编译；`coins/manual` 精确扫描无 `Admitted.`、`Abort` 或新增 `Axiom` 声明。成本见 `../ledger.md` 的 `C_101` 与 `C_101_continuation`。 |
+| `C_112` | 字符串过滤与回文判断 | 已全链通过 | `problem_112_pre_z/spec_z` 直接 wrapper 原始 `spec/112.v` 的 `problem_112_pre/spec`；`C_112.c` 已转换为 QCP 可验证形状，返回 QCP 分配的 `StrArray *`，第一行是删除 `c` 中字符后的新字符串，第二行是 `"True"`/`"False"` 结果行。已确认 `QCP_examples/stdlib/string.h` 提供原始程序涉及的 `strlen`、`strchr`、`memcpy`，当前 QCP C 实际调用 `strlen` 和 `strchr`。已重新运行 symexec，并通过 `coins_112.v`、`C_112_goal.v`、`C_112_proof_auto.v`、`C_112_proof_manual.v`、`C_112_goal_check.v` 编译；`coins/manual/C/string_lib` 精确扫描无 `Admitted.`、`Axiom`、`Abort.` 或 `Show.` 声明；已清理 C_112 相关 Coq 编译产物和 `C_112_proof_manual_backup*.v`。成本见 `../ledger.md` 的 `C_112`。 |
 
 其它题目暂按 `待建模` 处理。
+
+## C_112 reverse_delete 验证记录
+
+### 当前状态
+
+`C_112` 当前状态为 `已全链通过`。
+
+已完成：
+
+1. 按 `../SKILL.md` 直接执行本题流程，未使用 `.agents` 下的 skill 或 subagent。
+2. 核对 `C_112.c`、`../spec/112.v`、共享 `QCP_examples/stdlib/string.h` 和本目录进度/ledger。
+3. 确认原始程序涉及的 `strlen`、`strchr`、`memcpy` 均已由共享 `QCP_examples/stdlib/string.h` 提供；当前 QCP 版本实际调用 `strlen` 和 `strchr`。
+4. `coins_112.v` 中 `problem_112_pre_z` / `problem_112_spec_z` 直接 wrapper 原始 `../spec/112.v`。
+5. `C_112.c` 已改为 QCP 支持格式，使用 `CharArray.full/undef_seg` 表示过滤后字符串的已写前缀和剩余尾部，返回 `StrArray *` 包装结构；布尔输出行由 `malloc_true_row` / `malloc_false_row` 分配并桥接到原始 spec 的输出。
+6. 已重新运行 symexec，并编译通过 `coins_112.v`、`C_112_goal.v`、`C_112_proof_auto.v`、`C_112_proof_manual.v`、`C_112_goal_check.v`。
+7. 已补齐过滤前缀、回文扫描状态、ASCII/list Z 与原始 `spec/112.v` 中 string/list ascii 规格之间的桥接证明。
+8. 已从 `C_112_proof_auto.v` 删除与 manual 同名的两个 `Admitted` 占位，避免 `goal_check` Include 冲突；对应 witness 由 manual 中的正式证明提供。
+9. 已清理 `C_112` / `coins_112` 相关 `.vo`、`.vos`、`.vok`、`.glob`、隐藏 `.aux` 编译产物，以及 `C_112_proof_manual_backup*.v`。
+
+检查命令：
+
+```bash
+cd QCP_examples/humaneval/multi_dimensional_arrays
+opam exec --switch=coq8201 -- coqc $(tr '\n' ' ' < ../IntClaude/_CoqProject) -R /home/lixing/projects/QualifiedCProgramming/SeparationLogic/stdlib SimpleC.StdLib coins_112.v
+opam exec --switch=coq8201 -- coqc $(tr '\n' ' ' < ../IntClaude/_CoqProject) -R /home/lixing/projects/QualifiedCProgramming/SeparationLogic/stdlib SimpleC.StdLib C_112_goal.v
+opam exec --switch=coq8201 -- coqc $(tr '\n' ' ' < ../IntClaude/_CoqProject) -R /home/lixing/projects/QualifiedCProgramming/SeparationLogic/stdlib SimpleC.StdLib C_112_proof_auto.v
+opam exec --switch=coq8201 -- coqc $(tr '\n' ' ' < ../IntClaude/_CoqProject) -R /home/lixing/projects/QualifiedCProgramming/SeparationLogic/stdlib SimpleC.StdLib C_112_proof_manual.v
+opam exec --switch=coq8201 -- coqc $(tr '\n' ' ' < ../IntClaude/_CoqProject) -R /home/lixing/projects/QualifiedCProgramming/SeparationLogic/stdlib SimpleC.StdLib C_112_goal_check.v
+```
+
+扫描：
+
+```bash
+rg -n "^\s*(Admitted\.|Axiom\b|Abort\.|Show\.)" \
+  coins_112.v C_112_proof_manual.v C_112.c \
+  ../../../SeparationLogic/stdlib/string_lib.v
+```
+
+当前无命中。成本记录见 `../ledger.md` 的 `C_112`。
 
 ## C_101 words_string 验证记录
 
