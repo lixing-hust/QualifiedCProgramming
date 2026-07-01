@@ -1,6 +1,6 @@
 # multi_dimensional_arrays 验证进度记录
 
-更新时间：2026-06-23
+更新时间：2026-07-01
 
 这份文档记录 `QCP_examples/humaneval/multi_dimensional_arrays` 下多维数组程序的验证进展、建模方式、踩坑和后续继续时需要注意的事项。状态口径参考 `StringClaude/STRINGCLAUDE_VERIFICATION_PROGRESS.md`。
 
@@ -33,8 +33,34 @@
 | `C_87` | 整数 ragged 二维数组 `int **` | 已全链通过 | 用户已确认允许容量策略适配；`problem_87_pre_z/spec_z` 直接 wrapper 原始 `spec/87.v` 的 `problem_87_pre/spec`；使用 `IntPtrArray2.full/missing_i`、`IntArray.full/seg/undef_seg` 表示输入 ragged `int **` 和输出坐标数组；本题不调用字符串库函数。已通过 `coins_87.v`、`C_87_goal.v`、`C_87_proof_auto.v`、`C_87_proof_manual.v`、`C_87_goal_check.v` 编译，`coins/manual` 无 `Admitted.` 或新增 `Axiom`。成本见 `../ledger.md` 的 `C_87_continuation*`。 |
 | `C_129` | 整数方阵路径 `int **` | 已全链通过 | 已按用户确认修正 `spec/129.v`：删除错误的路径枚举/`best_by_lex` 递归算法，改为无自定义 `Fixpoint` / `Inductive` 的逻辑规格；`problem_129_pre` 表达 `N x N`、`N >= 2`、`1..N*N` 排列和 `k >= 1`，`problem_129_spec` 表达输出在值 `1` 与 `1` 的最小邻居之间交替。`coins_129.v` 中 `problem_129_pre_z/spec_z` 直接 wrapper 原始 `spec/129.v`。`C_129.c` 已完成 QCP 建模并通过 symexec；`coins_129.v`、`C_129_goal.v`、`C_129_proof_auto.v`、`C_129_proof_manual.v`、`C_129_goal_check.v` 均编译通过，`spec/coins/manual` 无 `Admitted.`、新增 `Axiom`、`Fixpoint` 或 `Inductive` 命中。成本见 `../ledger.md` 的 `C_129*` 记录。 |
 | `C_158` | 字符串数组 max unique `char **` | 已全链通过 | 已确认 `strlen`、`strcmp` 和 `strcmp_result` 均来自 `QCP_examples/stdlib/string.h`，未新增 `count_unique_chars_158` 这类 C helper。`coins_158.v` 中 `problem_158_pre_z/spec_z` 直接 wrapper 原始 `spec/158.v`；`strcmp(cur,max)` 使用 `char_ptr_array2_missing_two_158` 建模双行借出，并补齐 row-block 双行 split/merge、best-prefix/spec bridge 等证明。已重新运行 symexec，并通过 `coins_158.v`、`C_158_goal.v`、`C_158_proof_auto.v`、`C_158_proof_manual.v`、`C_158_goal_check.v` 编译；`coins/manual/C` 无 `Admitted.`、`Abort.`、`Show.` 或新增 `Axiom` 声明。成本见 `../ledger.md` 的 `C_158*` 记录。 |
+| `C_101` | 字符串切词 `char **` | 已全链通过 | 用户已确认允许容量策略适配；`problem_101_pre_z/spec_z` 直接 wrapper 原始 `spec/101.v` 的 `problem_101_pre/spec`；`C_101.c` 已改为 QCP 可验证形状，使用 `n + 1` 上界容量替代 `realloc`，单词分配和复制逻辑直接内联在 `words_string` 内，没有 `make_word_101` 辅助函数。已确认 `QCP_examples/stdlib/string.h` 提供 `strlen` / `memcpy`，当前 C 实际调用 `strlen`。已重新运行 symexec，并通过 `coins_101.v`、`C_101_goal.v`、`C_101_proof_auto.v`、`C_101_proof_manual.v`、`C_101_goal_check.v` 编译；`coins/manual` 精确扫描无 `Admitted.`、`Abort` 或新增 `Axiom` 声明。成本见 `../ledger.md` 的 `C_101` 与 `C_101_continuation`。 |
 
 其它题目暂按 `待建模` 处理。
+
+## C_101 words_string 验证记录
+
+### 当前状态
+
+`C_101` 当前状态为 `已全链通过`。
+
+已完成：
+
+1. 按 `../SKILL.md` 直接执行本题流程，未使用 `.agents` 下的 skill 或 subagent。
+2. 读取并核对 `C_101.c`、`../spec/101.v`、`../QCP_FORMAT_CONVERSION_GUIDE.md`、共享 `QCP_examples/stdlib/string.h` 和本目录进度/ledger。
+3. 确认 `../spec/101.v` 与题面注释一致：输入字符串只含字母、逗号或空格，按逗号/空格分隔，忽略连续分隔符，输出词列表。
+4. 确认原始 `C_101.c` 使用的常见字符串库函数 `strlen` 与 `memcpy` 均已在 `QCP_examples/stdlib/string.h` 中提供规格；当前 QCP 版本实际调用 `strlen`，单词复制改为主函数内联循环。
+5. 搜索仓库后，未找到可直接复用在本题 `char **` 动态扩容上的 HumanEval `realloc` wrapper；命中的 `realloc` 相关规格主要属于 minigmp 示例域。
+6. 用户确认允许容量策略适配后，将输出指针数组改为一次性分配 `n + 1` 上界容量，保留返回 `StrArray *` 的 QCP 包装结构。
+7. 添加 `coins_101.v`，其中 `problem_101_pre_z` / `problem_101_spec_z` 直接 wrapper `../spec/101.v`。
+8. 按最新要求移除了 `make_word_101`；当前 C 和重新生成的 Coq 文件中均无 `make_word_101` 残留。
+9. 已重新运行 symexec，并编译通过 `coins_101.v`、`C_101_goal.v`、`C_101_proof_auto.v`、`C_101_proof_manual.v`、`C_101_goal_check.v`。
+10. 已补齐 split-state、word-row heap append、最终输出与原 `spec/101.v` 的桥接证明；`coins_101.v` / `C_101_proof_manual.v` 精确扫描无 `Admitted.`、`Abort` 或新增 `Axiom` 声明。
+
+本轮改动：
+
+- `C_101.c`
+- `coins_101.v`
+- `C_101_goal.v` / `C_101_proof_auto.v` / `C_101_proof_manual.v` / `C_101_goal_check.v`
 
 ## C_158 find_max 验证记录
 
