@@ -3,6 +3,31 @@
 
 #include "number_words_19_def.h"
 
+id : 21
+priority : core(1)
+left : PtrArray::undef_full(?p, ?n) at 0
+right : PtrArray::undef_seg(?p, 0, ?n) at 1
+action : right_erase(1);
+         left_erase(0);
+
+id : 22
+priority : core(1)
+left : PtrArray::undef_seg(?p, ?l, ?n) at 0
+right : undef_data_at(?p + (?i * sizeof(PTR)), PTR) at 1
+check : infer(l <= i);
+        infer(i < n);
+action : right_erase(1);
+         left_erase(0);
+         left_add(PtrArray::undef_missing_i(p, i, l, n));
+
+id : 23
+priority : post(1)
+left : PtrArray::undef_missing_i(?p, ?i, ?l, ?n) at 0
+check : infer(l == i);
+        infer(i < n);
+action : left_erase(0);
+         left_add(PtrArray::undef_seg(p, i + 1, n));
+
 id : 1
 priority : core(1)
 left : PtrArray::full(?words, 10,

@@ -40,8 +40,8 @@ Definition number_words_19_strategy1 :=
 Definition number_words_19_strategy2 :=
   forall (d : Z) (words : Z) (w1 : Z) (w3 : Z) (w5 : Z) (w7 : Z) (w9 : Z) (w8 : Z) (w6 : Z) (w4 : Z) (w2 : Z) (w0 : Z),
     TT &&
-    ([| (Z.le 0 d) |]) &&
-    ([| (Z.lt d 10) |]) &&
+    (coq_prop (Z.le 0 d)) &&
+    (coq_prop (Z.lt d 10)) &&
     emp **
     ((number_words_full words w0 w1 w2 w3 w4 w5 w6 w7 w8 w9))
     |--
@@ -52,7 +52,7 @@ Definition number_words_19_strategy2 :=
     ) ** (
     ALL (v : Z),
       TT &&
-      ([| (v = (@Znth Z d (@cons Z w0 (@cons Z w1 (@cons Z w2 (@cons Z w3 (@cons Z w4 (@cons Z w5 (@cons Z w6 (@cons Z w7 (@cons Z w8 (@cons Z w9 (@nil Z))))))))))) 0)) |]) &&
+      (coq_prop (v = (@Znth Z d (@cons Z w0 (@cons Z w1 (@cons Z w2 (@cons Z w3 (@cons Z w4 (@cons Z w5 (@cons Z w6 (@cons Z w7 (@cons Z w8 (@cons Z w9 (@nil Z))))))))))) 0))) &&
       emp -*
       TT &&
       emp **
@@ -62,9 +62,9 @@ Definition number_words_19_strategy2 :=
 Definition number_words_19_strategy3 :=
   forall (word : Z) (d : Z) (w0 : Z) (w1 : Z) (w2 : Z) (w3 : Z) (w4 : Z) (w5 : Z) (w6 : Z) (w7 : Z) (w8 : Z) (w9 : Z) (words : Z),
     TT &&
-    ([| (Z.le 0 d) |]) &&
-    ([| (Z.lt d 10) |]) &&
-    ([| (word = (@Znth Z d (@cons Z w0 (@cons Z w1 (@cons Z w2 (@cons Z w3 (@cons Z w4 (@cons Z w5 (@cons Z w6 (@cons Z w7 (@cons Z w8 (@cons Z w9 (@nil Z))))))))))) 0)) |]) &&
+    (coq_prop (Z.le 0 d)) &&
+    (coq_prop (Z.lt d 10)) &&
+    (coq_prop (word = (@Znth Z d (@cons Z w0 (@cons Z w1 (@cons Z w2 (@cons Z w3 (@cons Z w4 (@cons Z w5 (@cons Z w6 (@cons Z w7 (@cons Z w8 (@cons Z w9 (@nil Z))))))))))) 0))) &&
     emp **
     ((number_words_full words w0 w1 w2 w3 w4 w5 w6 w7 w8 w9))
     |--
@@ -110,8 +110,8 @@ Definition number_words_19_strategy7 :=
 Definition number_words_19_strategy4 :=
   forall (d : Z) (w0 : Z) (w2 : Z) (w4 : Z) (w6 : Z) (w8 : Z) (w9 : Z) (w7 : Z) (w5 : Z) (w3 : Z) (w1 : Z) (words : Z) (word : Z),
     TT &&
-    ([| (Z.le 0 d) |]) &&
-    ([| (Z.lt d 10) |]) &&
+    (coq_prop (Z.le 0 d)) &&
+    (coq_prop (Z.lt d 10)) &&
     emp **
     ((number_words_missing words d word w0 w1 w2 w3 w4 w5 w6 w7 w8 w9)) **
     ((CharArray.full word (Z.add ( number_word_len_z d) 1) (@app Z ( number_word_z d) (@cons Z 0 (@nil Z)))))
@@ -130,7 +130,7 @@ Definition number_words_19_strategy4 :=
 Definition number_words_19_strategy5 :=
   forall (n1 : Z) (n2 : Z) (p : Z) (l1 : (@list Z)),
     TT &&
-    ([| (n1 = n2) |]) &&
+    (coq_prop (n1 = n2)) &&
     emp **
     ((CharArray.full p n1 l1))
     |--
@@ -140,7 +140,7 @@ Definition number_words_19_strategy5 :=
     ) ** (
     ALL (l2 : (@list Z)),
       TT &&
-      ([| (l1 = l2) |]) &&
+      (coq_prop (l1 = l2)) &&
       emp -*
       TT &&
       emp **
@@ -150,7 +150,7 @@ Definition number_words_19_strategy5 :=
 Definition number_words_19_strategy6 :=
   forall (l1 : Z) (l2 : Z) (p : Z) (r : Z),
     TT &&
-    ([| (l1 = l2) |]) &&
+    (coq_prop (l1 = l2)) &&
     emp **
     ((CharArray.undef_seg p l1 r))
     |--

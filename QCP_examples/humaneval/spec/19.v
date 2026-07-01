@@ -8,8 +8,8 @@ Return the string with numbers sorted from smallest to largest
 (* Spec(input, output) :=
 
 ∃ input_list, output_list,
-    split_by_space(input, input_list) ∧
-    split_by_space(output, output_list) ∧
+    String.concat " " input_list = input ∧
+    String.concat " " output_list = output ∧
     IsPermutation(input_list, output_list) ∧
     IsSorted(output_list) *)
 
@@ -56,32 +56,21 @@ Definition IsSorted (l : list string) : Prop :=
       WordToNum s_j n_j ->
       (n_i <= n_j)%nat.
 
-Fixpoint SplitOnSpaces_aux (current_group : list ascii) (S : string) : list string :=
-  match S with
-  | EmptyString =>
-    match current_group with
-    | [] => []
-    | _ => [string_of_list_ascii (List.rev current_group)]
-    end
-  | String h t =>
-    if ascii_dec h " "%char then
-      match current_group with
-      | [] => SplitOnSpaces_aux [] t (* 多个或前导空格 *)
-      | _ => (string_of_list_ascii (List.rev current_group)) :: SplitOnSpaces_aux [] t
-      end
-    else
-      SplitOnSpaces_aux (h :: current_group) t
-  end.
-
-Definition SplitOnSpaces (S : string) : list string :=
-  SplitOnSpaces_aux [] S.
+Definition SpaceDelimited (s : string) (words : list string) : Prop :=
+  String.concat " " words = s.
 
 Definition problem_19_pre (input : string) : Prop :=
-  Forall is_valid_word (SplitOnSpaces input).
+  exists input_list,
+    SpaceDelimited input input_list /\
+    Forall is_valid_word input_list.
 
 Definition problem_19_spec (input output : string) : Prop :=
-    let input_list := SplitOnSpaces input in
-    let output_list := SplitOnSpaces output in
+    exists input_list output_list,
+    SpaceDelimited input input_list /\
+    SpaceDelimited output output_list /\
+    Forall is_valid_word input_list /\
+    Forall is_valid_word output_list /\
+
     (*  输出列表是输入列表的一个排列 *)
     Permutation input_list output_list /\
 

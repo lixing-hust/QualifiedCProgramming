@@ -163,10 +163,32 @@ coqc C_19_goal_check.v
 扫描结果：
 
 ```bash
-grep -nE "Admitted\.|Axiom[[:space:]]" coins_19.v C_19_proof_manual.v
+grep -nE "Admitted\.|Axiom[[:space:]]|C_19_return_bridge" coins_19.v C_19_proof_manual.v C_19_goal_check.v
 ```
 
 无输出。
+
+本轮收尾后没有保留单独的 `C_19_return_bridge.v`；相关返回桥接证明已经并入正式证明文件。
+
+编译通过后已清理本 case 相关编译产物：`C_19*.vo/.vos/.vok/.glob`、`coins_19.vo/.vos/.vok/.glob`、`number_words_19_strategy*.vo/.vos/.vok/.glob`、相关 `.aux`，以及本轮用于 `goal_check` 的 `/tmp/qcp_c19_strategies` / `/tmp/qcp_c19_aliases` 临时目录。
+
+### 本轮遇到的问题与解决办法
+
+1. 不保留额外 bridge 文件。
+
+最初为了返回值 bridge 单独放过 `C_19_return_bridge.v`，但用户要求不要新增这个文件。最终把 `problem_19_spec_sorted_output_bridge_19` 等返回桥接证明并入 `C_19_proof_manual.v`，删除独立 bridge 文件和对应编译产物，`goal_check` 仍通过。
+
+2. 字符串常量支持暂不用于本题。
+
+QCP 虽然新增了字符串常量支持，但本题里直接使用字符串常量会让证明和生成目标更难稳定复现。最终按用户要求回退到原来的 ASCII 数字列表表示，例如数字词仍通过 `number_word_z` / `number_word_string` 等 Coq 侧描述和 C annotation bridge 对齐。
+
+3. `manual.v` 重编时间长。
+
+`C_19_proof_manual.v` 体量大，且包含大量空间资源拆合和字符串/计数 bridge；完整 `coqc` 会反复穿过这些重证明段。收尾时同一版 `manual.v` 已经成功编译过一次，后续冗余复跑在长时间无输出后中断，不再把它作为新失败处理；最终用 `C_19_goal_check.v` 确认当前 `goal/proof_auto/proof_manual` 覆盖关系。
+
+4. `goal_check` 的 loadpath 容易踩 library mismatch。
+
+`C_19_goal.v` 里有无前缀的 `Require Import int_array_strategy_goal` 等 strategy import；但仓库中 `SeparationLogic/examples/QCP_demos_LLM` 和 `SeparationLogic/examples/LLM_friendly_cases` 现有 `.vo` 多数是带 `SimpleC.EE...` 前缀编译出来的，直接把这些目录挂成空前缀会报 “contains library ... and not library ...”。本轮解决办法是在 `/tmp/qcp_c19_strategies` 临时准备一套无前缀 strategy `.v/.vo`：数组/指针 strategy 来自 `QCP_demos_LLM`，字符串 strategy 来自 `SeparationLogic/stdlib`，把 proof 文件中的 strategy goal import 改成无前缀后编译；`goal_check` 使用这套临时无前缀产物通过。收尾时该 `/tmp` 目录已删除，后续如需复现需要重新准备这套临时 strategy 产物。
 
 ### 语义与建模约束
 
@@ -307,7 +329,7 @@ token_unsat_end_extend_z
 
 4. 生成文件路径注意。
 
-`C_19_goal.v` 直接 `Require Import char_array_strategy_goal`，本目录编译时应避免同时把 `SeparationLogic/examples` 和 `SeparationLogic/examples/LLM_friendly_cases` 都作为无前缀路径加入，否则会出现同名 `.vo` 二义性。可用本次通过的形式：
+`C_19_goal.v` 直接 `Require Import char_array_strategy_goal`，本目录编译时必须提供一套逻辑名为无前缀的 strategy `.vo`。本轮最后一次通过使用的是临时目录 `/tmp/qcp_c19_strategies`；收尾时该目录已作为编译产物删除。不要把 `SeparationLogic/examples/QCP_demos_LLM` 或 `SeparationLogic/examples/LLM_friendly_cases` 直接作为空前缀路径使用，因为它们现有 `.vo` 的逻辑名带 `SimpleC.EE...` 前缀，会触发 library mismatch。
 
 ```bash
 COQINCLUDES="-R ../../../SeparationLogic/SeparationLogic SimpleC.SL \
@@ -320,8 +342,10 @@ COQINCLUDES="-R ../../../SeparationLogic/SeparationLogic SimpleC.SL \
 -R ../../../SeparationLogic/fixedpoints FP \
 -R ../../../SeparationLogic/MonadLib MonadLib \
 -R ../../../SeparationLogic/listlib ListLib \
+-R ../../../SeparationLogic/stdlib SimpleC.StdLib \
+-R /tmp/qcp_c19_strategies \"\" \
 -R . SimpleC.EE \
--R ../../../SeparationLogic/examples/LLM_friendly_cases \"\""
+"
 ```
 
 ## C_143 words in sentence 验证记录

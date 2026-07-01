@@ -203,6 +203,12 @@ linux-binary/symexec \
   - 是否缺最小桥接引理
   - 数组元素访问是否缺 `0 <= i < n` 或 `INT_MIN/INT_MAX` 边界
   - 字符串是否缺 `n + 1` 长度界、字符集约束或 `0` 终止符证明
+- 超大 `C_XX_proof_manual.v` 的临时加速策略：
+  - 如果前面若干 witness 已经在本轮确认通过，而当前只需要修改后面的 VC，可以在**调试阶段**把已确认通过的前置 witness 临时改成 `Admitted.`，用来减少反复编译时间。
+  - 这个做法只允许用于临时调试或 scratch 版本；最终交付前必须恢复所有真实证明。
+  - 优先在 `.tmp` 下复制一个临时 manual 文件调试，避免把临时 `Admitted.` 混进正式文件。若直接改正式 `C_XX_proof_manual.v`，必须在最终收尾前逐个恢复。
+  - 仅对已经完整通过、且后续证明不依赖其证明体的前置 witness 使用。若前置部分包含后续会用到的 helper lemma / definition，不能直接用 `Admitted.` 代替。
+  - 恢复后必须重新完整编译 `C_XX_proof_manual.v` 和 `C_XX_goal_check.v`，并执行 `Admitted.` / `Axiom` 扫描。不能带着临时 `Admitted.` 报告完成。
 
 ### 9) 全链编译验收
 
@@ -222,6 +228,8 @@ linux-binary/symexec \
 5. `C_XX_goal_check.v`
 
 可接受 load-path remap warning，但必须整体编译通过。
+
+如果第 8 步曾用临时 `Admitted.` 加速调试，进入本步骤前必须先恢复完整证明；第 9 步的编译结果必须来自无临时 `Admitted.` 的正式 `C_XX_proof_manual.v`。
 
 ### 10) 清理编译产物
 
