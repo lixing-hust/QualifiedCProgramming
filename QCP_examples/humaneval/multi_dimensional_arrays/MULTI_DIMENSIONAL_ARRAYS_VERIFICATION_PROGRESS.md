@@ -35,8 +35,83 @@
 | `C_158` | 字符串数组 max unique `char **` | 已全链通过 | 已确认 `strlen`、`strcmp` 和 `strcmp_result` 均来自 `QCP_examples/stdlib/string.h`，未新增 `count_unique_chars_158` 这类 C helper。`coins_158.v` 中 `problem_158_pre_z/spec_z` 直接 wrapper 原始 `spec/158.v`；`strcmp(cur,max)` 使用 `char_ptr_array2_missing_two_158` 建模双行借出，并补齐 row-block 双行 split/merge、best-prefix/spec bridge 等证明。已重新运行 symexec，并通过 `coins_158.v`、`C_158_goal.v`、`C_158_proof_auto.v`、`C_158_proof_manual.v`、`C_158_goal_check.v` 编译；`coins/manual/C` 无 `Admitted.`、`Abort.`、`Show.` 或新增 `Axiom` 声明。成本见 `../ledger.md` 的 `C_158*` 记录。 |
 | `C_101` | 字符串切词 `char **` | 已全链通过 | 用户已确认允许容量策略适配；`problem_101_pre_z/spec_z` 直接 wrapper 原始 `spec/101.v` 的 `problem_101_pre/spec`；`C_101.c` 已改为 QCP 可验证形状，使用 `n + 1` 上界容量替代 `realloc`，单词分配和复制逻辑直接内联在 `words_string` 内，没有 `make_word_101` 辅助函数。已确认 `QCP_examples/stdlib/string.h` 提供 `strlen` / `memcpy`，当前 C 实际调用 `strlen`。已重新运行 symexec，并通过 `coins_101.v`、`C_101_goal.v`、`C_101_proof_auto.v`、`C_101_proof_manual.v`、`C_101_goal_check.v` 编译；`coins/manual` 精确扫描无 `Admitted.`、`Abort` 或新增 `Axiom` 声明。成本见 `../ledger.md` 的 `C_101` 与 `C_101_continuation`。 |
 | `C_112` | 字符串过滤与回文判断 | 已全链通过 | `problem_112_pre_z/spec_z` 直接 wrapper 原始 `spec/112.v` 的 `problem_112_pre/spec`；`C_112.c` 已转换为 QCP 可验证形状，返回 QCP 分配的 `StrArray *`，第一行是删除 `c` 中字符后的新字符串，第二行是 `"True"`/`"False"` 结果行。已确认 `QCP_examples/stdlib/string.h` 提供原始程序涉及的 `strlen`、`strchr`、`memcpy`，当前 QCP C 实际调用 `strlen` 和 `strchr`。已重新运行 symexec，并通过 `coins_112.v`、`C_112_goal.v`、`C_112_proof_auto.v`、`C_112_proof_manual.v`、`C_112_goal_check.v` 编译；`coins/manual/C/string_lib` 精确扫描无 `Admitted.`、`Axiom`、`Abort.` 或 `Show.` 声明；已清理 C_112 相关 Coq 编译产物和 `C_112_proof_manual_backup*.v`。成本见 `../ledger.md` 的 `C_112`。 |
+| `C_113` | 字符串数组 `char **` 输出构造 | 已全链通过 | 按 `../SKILL.md` 直接完成，未使用 `.agents` skill/subagent。`../spec/113.v` 已按用户确认改成无本地 `Fixpoint` / `let fix` 的标准库组合定义；`coins_113.v` 中 `problem_113_pre_z/spec_z` 直接 wrapper 原始 `spec/113.v`。`C_113.c` 已按用户要求移除 `sprintf` / `stdio.h` 和 `template_char`，保留字符串常量 `const char *tpl = "..."; ch = tpl[t];`，十进制写入使用不带 `113` 后缀的 `write_decimal` 规格。由于 `numbuf` 是未释放的临时 buffer，最终后置条件显式暴露 `scratch` 的 `CharArray::undef_full(scratch, 32)` 所有权。已重新运行 symexec，并通过 `coins_113.v`、`C_113_goal.v`、`C_113_proof_auto.v`、`C_113_proof_manual.v`、`C_113_goal_check.v` 编译；扫描确认 `spec/113.v` 无 `Fixpoint`/`let fix`，`C_113.c`/`coins_113.v` 无 `template_char`、`sprintf`、`snprintf`、`stdio.h` 或 `write_decimal_113`，`coins/manual/spec` 无 `Admitted.`、`Abort.`、`Show.` 或新增 `Axiom` 声明；已清理 C_113 相关 Coq 编译产物和 manual backup。成本见 `../ledger.md` 的 `C_113*` 记录。 |
 
 其它题目暂按 `待建模` 处理。
+
+## C_113 odd_count 验证记录
+
+### 当前状态
+
+`C_113` 当前状态为 `已全链通过`。
+
+已完成 intake：
+
+1. 按 `../SKILL.md` 直接执行本题流程，未使用 `.agents` 下的 skill 或 subagent。
+2. 读取并核对 `C_113.c`、`../spec/113.v`、`../QCP_FORMAT_CONVERSION_GUIDE.md`、共享 `QCP_examples/stdlib/string.h` 和本目录进度/ledger。
+3. 确认 `../spec/113.v` 与文件头注释一致：输入字符串均由数字组成，输出为把模板中每个 `i` 替换为该输入串中奇数字符数量的字符串列表。
+4. 原始 `C_113.c` 涉及的常见库函数是 `strlen`、`sprintf`、`memcpy`。共享 `QCP_examples/stdlib/string.h` 中已有 `strlen` 和 `memcpy`，但没有 `sprintf` 或 `snprintf`。
+5. 按用户要求，“如果 string.h 里没有某个库函数，停下来告诉我”，因此最初暂停在 QCP 转换前。没有修改 `../spec/113.v`，也没有创建 `coins_113.v` 或生成 `C_113_goal.v` 等证明文件。
+6. 用户指出本函数不应使用 `sprintf` 并要求移除后，已把 `sprintf(numbuf, "%d", sum)` 改为 `write_decimal(numbuf, sum)`，并删除 `stdio.h`。该 helper 用反向收集再翻转的方式写出非负整数十进制表示，支持 `sum >= 10` 的多位输出，保持原 `%d` 可观察语义。
+
+当前检查：
+
+```bash
+gcc -fsyntax-only QCP_examples/humaneval/multi_dimensional_arrays/C_113.c
+rg -n "sprintf|snprintf|stdio\\.h" QCP_examples/humaneval/multi_dimensional_arrays/C_113.c
+```
+
+`gcc -fsyntax-only` 通过；`rg` 对 `sprintf` / `snprintf` / `stdio.h` 无命中。
+
+继续验证时，已起草 QCP 版本 `C_113.c` 和 `coins_113.v`，但在进入 symexec 前发现原始 `../spec/113.v` 不能被 Coq 接受：
+
+```bash
+opam exec --switch=coq8201 -- coqtop -quiet -l QCP_examples/humaneval/spec/113.v
+```
+
+失败原因是 `nat_to_string` 中的局部递归 `aux` 调用 `aux (m / 10)`，Coq guard checker 不认为这是对结构子项的递归调用。因此当前不能按 `../SKILL.md` 要求把 `problem_113_pre_z/spec_z` 直接建立在可加载的原始 spec 上。
+
+用户确认后，`../spec/113.v` 已改写为无本地 `Fixpoint` / `let fix` 版本：
+
+1. `count_odd_digits` 使用 `list_ascii_of_string`、`List.filter` 和 `List.length`。
+2. `nat_to_string` 使用 `NilZero.string_of_uint (N.to_uint (N.of_nat n))`。
+3. `replace_char_with_string` 使用 `list_ascii_of_string`、`List.flat_map` 和 `string_of_list_ascii`。
+4. `problem_113_pre` 使用 `Forall` over `list_ascii_of_string` 表达每个字符都是数字。
+
+已确认：
+
+```bash
+opam exec --switch=coq8201 -- coqtop -quiet -l QCP_examples/humaneval/spec/113.v
+rg -n "\bFixpoint\b|let fix" QCP_examples/humaneval/spec/113.v
+opam exec --switch=coq8201 -- coqtop -quiet
+```
+
+其中 `spec/113.v` 加载通过；`rg` 无命中；交互计算确认 `nat_to_string 0 = "0"`、`nat_to_string 42 = "42"`，以及题面 `process_string "1234567"` / `"3"` 的输出符合预期。
+
+最终完成：
+
+1. `C_113.c` 使用 QCP 字符串常量支持保留原始模板读取，不再使用 `template_char` wrapper；循环 invariant 保留 `tpl_v == LitMap(template_literal_113)`，使 return 处可由 `GlobalStrings_missing + store_stringLit` 合回 `GlobalStrings LitMap`。
+2. `coins_113.v` 将 `decimal_digits_113` 直接对齐到 `spec/113.v` 的 `nat_to_string`，并补充模板替换、odd digit 计数、`odd_count_rows_113` 到原始 `problem_113_spec` 的桥接。
+3. 因 `numbuf` 是函数内分配且未释放的临时 buffer，后置条件增加 existential `scratch` 并返回 `CharArray::undef_full(scratch, 32)` 资源，避免在分离逻辑中丢弃所有权；这不改变函数返回的可观察数据。
+4. 已重新运行 symexec，并通过：
+
+```bash
+opam exec --switch=coq8201 -- coqc $(tr '\n' ' ' < ../IntClaude/_CoqProject) -R /home/lixing/projects/QualifiedCProgramming/SeparationLogic/stdlib SimpleC.StdLib coins_113.v
+opam exec --switch=coq8201 -- coqc $(tr '\n' ' ' < ../IntClaude/_CoqProject) -R /home/lixing/projects/QualifiedCProgramming/SeparationLogic/stdlib SimpleC.StdLib C_113_goal.v
+opam exec --switch=coq8201 -- coqc $(tr '\n' ' ' < ../IntClaude/_CoqProject) -R /home/lixing/projects/QualifiedCProgramming/SeparationLogic/stdlib SimpleC.StdLib C_113_proof_auto.v
+opam exec --switch=coq8201 -- coqc $(tr '\n' ' ' < ../IntClaude/_CoqProject) -R /home/lixing/projects/QualifiedCProgramming/SeparationLogic/stdlib SimpleC.StdLib C_113_proof_manual.v
+opam exec --switch=coq8201 -- coqc $(tr '\n' ' ' < ../IntClaude/_CoqProject) -R /home/lixing/projects/QualifiedCProgramming/SeparationLogic/stdlib SimpleC.StdLib C_113_goal_check.v
+```
+
+5. 最终扫描：
+
+```bash
+rg -n "Admitted\.|Abort\.|Show\.|^\s*Axiom\b" QCP_examples/humaneval/multi_dimensional_arrays/coins_113.v QCP_examples/humaneval/multi_dimensional_arrays/C_113_proof_manual.v QCP_examples/humaneval/spec/113.v
+rg -n "\bFixpoint\b|let fix" QCP_examples/humaneval/spec/113.v
+rg -n "sprintf|snprintf|template_char|write_decimal_113|stdio\.h" QCP_examples/humaneval/multi_dimensional_arrays/C_113.c QCP_examples/humaneval/multi_dimensional_arrays/coins_113.v
+```
+
+均无命中；已清理本题 Coq 编译产物和 `C_113_proof_manual_backup*.v`。
 
 ## C_112 reverse_delete 验证记录
 
