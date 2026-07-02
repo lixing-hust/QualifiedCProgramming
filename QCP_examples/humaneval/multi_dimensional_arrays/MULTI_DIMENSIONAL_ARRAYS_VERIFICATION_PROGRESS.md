@@ -1,6 +1,6 @@
 # multi_dimensional_arrays 验证进度记录
 
-更新时间：2026-07-01
+更新时间：2026-07-02
 
 这份文档记录 `QCP_examples/humaneval/multi_dimensional_arrays` 下多维数组程序的验证进展、建模方式、踩坑和后续继续时需要注意的事项。状态口径参考 `StringClaude/STRINGCLAUDE_VERIFICATION_PROGRESS.md`。
 
@@ -36,6 +36,8 @@
 | `C_101` | 字符串切词 `char **` | 已全链通过 | 用户已确认允许容量策略适配；`problem_101_pre_z/spec_z` 直接 wrapper 原始 `spec/101.v` 的 `problem_101_pre/spec`；`C_101.c` 已改为 QCP 可验证形状，使用 `n + 1` 上界容量替代 `realloc`，单词分配和复制逻辑直接内联在 `words_string` 内，没有 `make_word_101` 辅助函数。已确认 `QCP_examples/stdlib/string.h` 提供 `strlen` / `memcpy`，当前 C 实际调用 `strlen`。已重新运行 symexec，并通过 `coins_101.v`、`C_101_goal.v`、`C_101_proof_auto.v`、`C_101_proof_manual.v`、`C_101_goal_check.v` 编译；`coins/manual` 精确扫描无 `Admitted.`、`Abort` 或新增 `Axiom` 声明。成本见 `../ledger.md` 的 `C_101` 与 `C_101_continuation`。 |
 | `C_112` | 字符串过滤与回文判断 | 已全链通过 | `problem_112_pre_z/spec_z` 直接 wrapper 原始 `spec/112.v` 的 `problem_112_pre/spec`；`C_112.c` 已转换为 QCP 可验证形状，返回 QCP 分配的 `StrArray *`，第一行是删除 `c` 中字符后的新字符串，第二行是 `"True"`/`"False"` 结果行。已确认 `QCP_examples/stdlib/string.h` 提供原始程序涉及的 `strlen`、`strchr`、`memcpy`，当前 QCP C 实际调用 `strlen` 和 `strchr`。已重新运行 symexec，并通过 `coins_112.v`、`C_112_goal.v`、`C_112_proof_auto.v`、`C_112_proof_manual.v`、`C_112_goal_check.v` 编译；`coins/manual/C/string_lib` 精确扫描无 `Admitted.`、`Axiom`、`Abort.` 或 `Show.` 声明；已清理 C_112 相关 Coq 编译产物和 `C_112_proof_manual_backup*.v`。成本见 `../ledger.md` 的 `C_112`。 |
 | `C_113` | 字符串数组 `char **` 输出构造 | 已全链通过 | 按 `../SKILL.md` 直接完成，未使用 `.agents` skill/subagent。`../spec/113.v` 已按用户确认改成无本地 `Fixpoint` / `let fix` 的标准库组合定义；`coins_113.v` 中 `problem_113_pre_z/spec_z` 直接 wrapper 原始 `spec/113.v`。`C_113.c` 已按用户要求移除 `sprintf` / `stdio.h` 和 `template_char`，保留字符串常量 `const char *tpl = "..."; ch = tpl[t];`，十进制写入使用不带 `113` 后缀的 `write_decimal` 规格。由于 `numbuf` 是未释放的临时 buffer，最终后置条件显式暴露 `scratch` 的 `CharArray::undef_full(scratch, 32)` 所有权。已重新运行 symexec，并通过 `coins_113.v`、`C_113_goal.v`、`C_113_proof_auto.v`、`C_113_proof_manual.v`、`C_113_goal_check.v` 编译；扫描确认 `spec/113.v` 无 `Fixpoint`/`let fix`，`C_113.c`/`coins_113.v` 无 `template_char`、`sprintf`、`snprintf`、`stdio.h` 或 `write_decimal_113`，`coins/manual/spec` 无 `Admitted.`、`Abort.`、`Show.` 或新增 `Axiom` 声明；已清理 C_113 相关 Coq 编译产物和 manual backup。成本见 `../ledger.md` 的 `C_113*` 记录。 |
+| `C_125` | 字符串切词或小写奇序计数 | 验证中 | 按 `../SKILL.md` 直接推进，未使用 `.agents` skill/subagent。已确认共享 `QCP_examples/stdlib/string.h` 提供 `strlen`、`strchr`、`memcpy`、`strcpy`；已移除 `sprintf` / `stdio.h` / `realloc`，并按用户要求撤掉未实现的 `malloc_decimal_row` helper。当前 `C_125.c` 使用 `n+1` 固定上界替代 `realloc`，使用有 C 函数体的 `decimal_len` / `write_decimal` 做机械十进制格式化。`coins_125.v` 中 `problem_125_pre_z/spec_z` 直接 wrapper 原始 `../spec/125.v`；symexec 已成功生成 `C_125_goal.v` / `C_125_proof_auto.v` / `C_125_proof_manual.v` / `C_125_goal_check.v`，并可在 `/tmp/qcp125_strategies` 临时 unqualified strategy loadpath 下编译到 `goal_check`，但当前仍非全链通过：`C_125_proof_manual.v` 有 `Admitted.` / `Abort.` 占位，`C_125_proof_auto.v` 也有生成的 `Admitted.` 占位。成本见 `../ledger.md` 的 `C_125`。 |
+| `C_148` | 行星名字符串比较 / 借用指针输出 | 已全链通过 | 按 `../SKILL.md` 直接完成，未使用 `.agents` skill/subagent。确认共享 `QCP_examples/stdlib/string.h` 提供 `strcmp` / `strcmp_result`，未遇到缺失 libc helper。按用户要求未引入 `planet_cmp`，保留两个主 `for` 循环形状；使用 QCP 字符串常量、各行星单独 literal 指针和直接 `strcmp` 分支建模查找，输出数组用公共 `PtrArray.seg/undef_seg` 表示借用 planet literal 指针。`coins_148.v` 中 `problem_148_pre_z/spec_z` 直接 wrapper 原始 `../spec/148.v`；已用带 `QCP_examples/QCP_demos_LLM -> SimpleC.EE.QCP_demos_LLM` 和 `QCP_examples/stdlib -> SimpleC.StdLib` 的 `-slp` 命令重新运行 symexec，`C_148_goal.v` 现在直接 import canonical strategy，不需要 multi 目录本地 `*_strategy_*` shim；并通过 `coins_148.v`、`C_148_goal.v`、`C_148_proof_auto.v`、`C_148_proof_manual.v`、`C_148_goal_check.v` 编译；`C_148.c`/`coins_148.v`/`C_148_proof_manual.v` 扫描无 `Admitted.`、`Show.`、`planet_cmp` 或手写新增 `Axiom` 声明。已清理 C_148/coins_148 Coq 编译产物、`C_148_proof_manual_backup*.v` 和误加的本地 strategy shim；成本与过程指标见 `../ledger.md` 的 `C_148`。 |
 
 其它题目暂按 `待建模` 处理。
 
@@ -1167,3 +1169,31 @@ rg -n "\b(Admitted|Abort|Axiom)\b" \
 
 - `C_7`：intake 阻塞记录，`2026-06-17 18:20 CST` 到 `2026-06-17 18:22 CST`，状态为 `blocked`。
 - `C_7_continuation`：补充公共 `strstr` 规格后完成验证，状态为 `full-chain passed`。
+
+## C_125 split_words 验证记录
+
+### 当前状态
+
+`C_125` 仍是 partial，尚未全链通过。本轮继续按 `../SKILL.md` 直接验证，未使用 `.agents` skill/subagent。
+
+已确认 `QCP_examples/stdlib/string.h` 提供本题当前需要的 `strlen` 和 `strchr`；symexec 输出也显示从 `QCP_examples/stdlib/string.strategies` 解析了这些字符串库函数。当前 `C_125.c` / `coins_125.v` 中没有 `realloc`、`sprintf`、`snprintf`、`stdio.h` 或 `malloc_decimal_row` 命中。
+
+本轮完成/推进：
+
+- `coins_125.v` 保持 `Load "../spec/125".`，`problem_125_pre_z` / `problem_125_spec_z` 直接桥接原始 `spec/125.v`。
+- 补充了 `strchr_result` 到 `contains_zb_125` 的局部 bridge lemmas。
+- `write_decimal` 的主 witness 已实证闭合，split goal 按用户要求保持 `Abort`。
+- `split_words_entail_wit_1_1` / `1_2` / `1_3` 主 witness 已实证闭合；`C_125_proof_manual.v` 当前可编译，但仍含后续 `Admitted.`。
+- 当前主证明停在 `split_words_entail_wit_2_1` / `2_2`：进入扫描循环时，loop invariant 还需要保留或消解仍在作用域内的 `comma_hit`、`space_hit`、`has_space`、`has_comma` 局部 frame 资源。
+
+最新成功检查：
+
+```bash
+linux-binary/symexec ... C_125.c ... --gen-and-backup --no-exec-info
+opam exec --switch=coq8201 -- coqc ... coins_125.v
+opam exec --switch=coq8201 -- coqc ... C_125_goal.v
+opam exec --switch=coq8201 -- coqc ... C_125_proof_auto.v
+opam exec --switch=coq8201 -- coqc ... C_125_proof_manual.v
+```
+
+成本已写入 `../ledger.md` 的 `C_125_continuation` 行，状态为 `partial`。
