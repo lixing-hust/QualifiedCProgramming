@@ -190,6 +190,36 @@ linux-binary/symexec \
 - `-IQCP_examples/LLM_friendly_cases` 必须带上，否则 `verification_stdlib.h` / `int_array_def.h` 可能找不到。
 - 如果 `--gen-and-backup` 生成了 `C_XX_proof_manual_backup*.v`，补完新 manual 后应清理这些 backup 文件。
 
+`multi_dimensional_arrays` 或其它会使用共享 `QCP_examples/QCP_demos_LLM/*.strategies`、`QCP_examples/stdlib/string.strategies` 的 case，必须同时给出 strategy 源目录到 Coq 逻辑路径的 `-slp` 映射，避免 `symexec` 在 `C_XX_goal.v` 中生成短名 `Require Import ptr_array2_strategy_goal` / `Require Import string_strategy_goal`。统一使用：
+
+```bash
+opam exec --switch=coq8201 -- linux-binary/symexec \
+  --goal-file=QCP_examples/humaneval/multi_dimensional_arrays/C_XX_goal.v \
+  --proof-auto-file=QCP_examples/humaneval/multi_dimensional_arrays/C_XX_proof_auto.v \
+  --proof-manual-file=QCP_examples/humaneval/multi_dimensional_arrays/C_XX_proof_manual.v \
+  --coq-logic-path=SimpleC.EE \
+  -slp QCP_examples/humaneval/multi_dimensional_arrays SimpleC.EE \
+  -slp QCP_examples/QCP_demos_LLM SimpleC.EE.QCP_demos_LLM \
+  -slp QCP_examples/stdlib SimpleC.StdLib \
+  --strategy-folder-path=SeparationLogic/examples/QCP_demos_LLM/ \
+  --input-file=QCP_examples/humaneval/multi_dimensional_arrays/C_XX.c \
+  -IQCP_examples/LLM_friendly_cases \
+  -IQCP_examples/QCP_demos_LLM \
+  -IQCP_examples/stdlib \
+  --gen-and-backup \
+  --no-exec-info
+```
+
+这会让生成的 shared strategy import 使用 canonical 路径，例如：
+
+```coq
+From SimpleC.EE.QCP_demos_LLM Require Import ptr_array2_strategy_goal.
+From SimpleC.EE.QCP_demos_LLM Require Import char_array_strategy_goal.
+From SimpleC.StdLib Require Import string_strategy_goal.
+```
+
+不要为了修复短名 import 在 case 目录新增 `*_strategy_goal.v` / `*_strategy_proof.v` shim；应修正 `symexec` 调用参数并重新生成 `C_XX_goal.v` / `C_XX_proof_auto.v` / `C_XX_proof_manual.v` / `C_XX_goal_check.v`。
+
 ### 8) manual 逐项证明
 
 - 通过 symexec symbolic 到文件尾来获得完整的 witness 列表。
@@ -282,6 +312,32 @@ coqc $COQINCLUDES C_XX_goal_check.v
 eval "$(opam env --switch=coq8201 --set-switch)"
 cd QCP_examples/humaneval/IntArrayClaude
 COQINCLUDES="$(tr '\n' ' ' < ../IntClaude/_CoqProject)"
+coqc $COQINCLUDES coins_XX.v
+coqc $COQINCLUDES C_XX_goal.v
+coqc $COQINCLUDES C_XX_proof_auto.v
+coqc $COQINCLUDES C_XX_proof_manual.v
+coqc $COQINCLUDES C_XX_goal_check.v
+```
+
+`multi_dimensional_arrays` 同样复用 `../IntClaude/_CoqProject`，并依赖 `SeparationLogic/examples/QCP_demos_LLM` 与 `SeparationLogic/stdlib` 下的 canonical strategy `.vo`。如果相关 strategy 尚未编译，先在仓库根执行：
+
+```bash
+eval "$(opam env --switch=coq8201 --set-switch)"
+COQINCLUDES_ROOT="$(tr '\n' ' ' < _CoqProject)"
+coqc $COQINCLUDES_ROOT SeparationLogic/examples/QCP_demos_LLM/ptr_array2_strategy_goal.v
+coqc $COQINCLUDES_ROOT SeparationLogic/examples/QCP_demos_LLM/ptr_array2_strategy_proof.v
+coqc $COQINCLUDES_ROOT SeparationLogic/examples/QCP_demos_LLM/char_array_strategy_goal.v
+coqc $COQINCLUDES_ROOT SeparationLogic/examples/QCP_demos_LLM/char_array_strategy_proof.v
+coqc $COQINCLUDES_ROOT SeparationLogic/stdlib/string_strategy_goal.v
+coqc $COQINCLUDES_ROOT SeparationLogic/stdlib/string_strategy_proof.v
+```
+
+然后在 case 目录编译：
+
+```bash
+eval "$(opam env --switch=coq8201 --set-switch)"
+cd QCP_examples/humaneval/multi_dimensional_arrays
+COQINCLUDES="-R ../../../SeparationLogic/stdlib SimpleC.StdLib $(tr '\n' ' ' < ../IntClaude/_CoqProject)"
 coqc $COQINCLUDES coins_XX.v
 coqc $COQINCLUDES C_XX_goal.v
 coqc $COQINCLUDES C_XX_proof_auto.v
