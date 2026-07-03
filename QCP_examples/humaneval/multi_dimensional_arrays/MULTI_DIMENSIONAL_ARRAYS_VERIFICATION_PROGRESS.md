@@ -1184,7 +1184,9 @@ rg -n "\b(Admitted|Abort|Axiom)\b" \
 - 补充了 `strchr_result` 到 `contains_zb_125` 的局部 bridge lemmas。
 - `write_decimal` 的主 witness 已实证闭合，split goal 按用户要求保持 `Abort`。
 - `split_words_entail_wit_1_1` / `1_2` / `1_3` 主 witness 已实证闭合；`C_125_proof_manual.v` 当前可编译，但仍含后续 `Admitted.`。
-- 当前主证明停在 `split_words_entail_wit_2_1` / `2_2`：进入扫描循环时，loop invariant 还需要保留或消解仍在作用域内的 `comma_hit`、`space_hit`、`has_space`、`has_comma` 局部 frame 资源。
+- `split_words_entail_wit_2_1` / `2_2` 已闭合：入口断言保持 pure split-branch 事实，扫描 loop invariant 携带 QCP 需要清理的 `has_space` / `has_comma` 局部 frame，return 前断言也保留这两个局部资源。
+- `split_words_entail_wit_3_1` / `3_2` 已闭合：进入单词拷贝循环时复用当前 `output_ptrs_2` / `output_rows_2`，用 `CharArray.undef_full_to_undef_seg` 和 `CharArray.full_empty` 拆分新分配 word buffer，并补了 manual 局部引理 `word_payload_125_empty_manual`。
+- 当前主证明停在 `split_words_entail_wit_4_1`：这是单词拷贝循环的逐字符写入保持步骤，需要继续处理 `CharArray.full` 前缀扩展与 `word_payload_125` 的 sublist step 关系。后续 main witnesses 仍有 `Admitted.`；split goals 按用户要求保持 `Abort`。
 
 最新成功检查：
 
@@ -1196,4 +1198,4 @@ opam exec --switch=coq8201 -- coqc ... C_125_proof_auto.v
 opam exec --switch=coq8201 -- coqc ... C_125_proof_manual.v
 ```
 
-成本已写入 `../ledger.md` 的 `C_125_continuation` 行，状态为 `partial`。
+成本已写入 `../ledger.md` 的 `C_125_continuation_2` 行，状态为 `partial`。
