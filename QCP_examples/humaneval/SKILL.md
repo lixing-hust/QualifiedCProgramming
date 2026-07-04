@@ -22,6 +22,12 @@ description: "中文精简流程：用于 humaneval/IntClaude、IntArrayClaude �
 - 成本记录统一写入 `QCP_examples/humaneval/ledger.md`；progress 文档只记录验证状态和技术经验，不替代 ledger。
 - 起点记录应包含：`case`、suite（`IntClaude` / `IntArrayClaude` / `StringClaude`）、`status=in_progress`、`start_time`、当前 Codex `session_id`、`rollout_path`、`token_start`。
 - 终点记录应补齐：`end_time`、`elapsed_minutes`、`token_end`、`token_delta`、可取得时的 input/cached input/output/reasoning token delta、最终 `status`、简短 notes。
+- 采用 ledger v2 行时，`elapsed_minutes` 记录实际工作时间，不把暂停、等待用户、跨天空档或穿插其他 case 的墙钟时间计入；`start_time` / `end_time` 仍保留本 case 的外层起止时间。
+- 若本题使用 `--gen-and-backup` 生成了 `C_XX_proof_manual_backup*.v`，终点记录必须尽量补齐结构化 symexec 计数，不能在 backup 仍可见时写 `unknown`：
+  - `total_symexec_runs`：取最高 backup 编号；例如最高是 `C_XX_proof_manual_backup12.v`，则填 `12`。
+  - `first_vc_symexec_runs`：清理 backup 前用 `wc -l C_XX_proof_manual_backup*.v` 或等价命令找第一份非空 manual backup 的编号；若 `backup1` 到 `backup10` 为 0 行、`backup11` 非空，则填 `11`。
+  - `vc_annotation_regens_after_first_vc`：默认用 `total_symexec_runs - first_vc_symexec_runs`，表示第一次非空 VC 之后因 annotation、loop invariant、函数规格、frame 条件或 coins/spec bridge 调整导致的重新 symexec 次数；若 rollout 日志有更精确的分类证据，按精确证据填写。
+  - 若 backup 已被清理但需要回填，应先查 `rollout_path` 中的 `ls` / `wc -l` / `git status` / `symexec` 输出；只有确实找不到证据时才写 `unknown`，并在 progress 或最终汇报中说明原因。
 - token 优先从当前 Codex thread 的 `event_msg` / `token_count` 或 `/status` 暴露的 context usage 中读取；本地回查使用 `~/.codex/history.jsonl` 定位 session id，再读取 `~/.codex/sessions/YYYY/MM/DD/rollout-*.jsonl`。
 - 如果一次 thread 中连续验证多个 case，必须在每次 case 切换前关闭上一题 ledger 记录，再为下一题开新记录；不能只记录整轮总 token。
 - 如果旧对话没有 case 边界，只能回填估算值，`confidence` 必须写 `estimated`，并在 notes 说明按用户指令时间、文件修改时间、progress 更新时间或 token_count 时间点拆分。
@@ -270,6 +276,10 @@ From SimpleC.StdLib Require Import string_strategy_goal.
   - `.vok`
   - `.vos`
   - `C_XX_proof_manual_backup*.v`
+- 删除 `C_XX_proof_manual_backup*.v` 前，必须先完成 ledger 的 backup-derived 计数记录：
+  - 运行并保留可回查证据：`wc -l C_XX_proof_manual_backup*.v C_XX_goal.v C_XX_proof_manual.v coins_XX.v`，或至少记录每个 backup 是否为空、第一份非空 backup 编号和最高 backup 编号。
+  - 将 `first_vc_symexec_runs`、`vc_annotation_regens_after_first_vc`、`total_symexec_runs` 写入 `ledger.md` 后，再清理 backup。
+  - 如果后续又重新 symexec 生成了新的 backup，必须重新计算这些字段，不能沿用旧计数。
 - 只清理本题相关的编译产物，不删除源码和证明源文件。
 - 必须保留：
   - `C_XX.c`
