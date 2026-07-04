@@ -471,6 +471,64 @@ coqc $COQINCLUDES C_XX_goal_check.v
   - `char *malloc_char_array(int n)`
   - `Ensure exists l, __return != 0 && CharArray::full(__return, n, l)`
 
+### B.1 字符串常量与字符串常量数组
+
+- 字符串常量需要使用 QCP 的全局字符串资源：
+  - C 文件中声明 `LitMap`、`GlobalStrings`、`GlobalStrings_missing`、`store_stringLit`。
+  - 函数前后条件通常保留 `GlobalStrings(LitMap)`。
+  - 读字符串常量内容前，需要把 `GlobalStrings(LitMap)` split 成 `GlobalStrings_missing(...) * store_stringLit(ptr, "...")`，读完或返回前再 merge 回 `GlobalStrings(LitMap)`。
+- 当前不推荐直接写局部字符串常量数组 initializer：
+  ```c
+  char *words[2] = {"aa", "bb"};
+  ```
+  这种写法容易让 QCP 只得到 `PtrArray::undef_full(words, 2)`，没有生成每个元素的写入资源，后续读 `words[i]` 或证明 `PtrArray::full` 会失败。
+- 推荐改成显式指针变量加逐项写入，保持 C 可观察语义不变：
+  ```c
+  char *words[2];
+  char *aa = "aa";
+  char *bb = "bb";
+
+  /*@ Assert
+      aa == LitMap("aa") &&
+      bb == LitMap("bb") &&
+      PtrArray::undef_full(words, 2) *
+      GlobalStrings(LitMap)
+  */
+  words[0] = aa;
+  /*@ Assert
+      aa == LitMap("aa") &&
+      bb == LitMap("bb") &&
+      PtrArray::seg(words, 0, 1, cons(aa, nil)) *
+      PtrArray::undef_seg(words, 1, 2) *
+      GlobalStrings(LitMap)
+  */
+  words[1] = bb;
+  /*@ Assert
+      aa == LitMap("aa") &&
+      bb == LitMap("bb") &&
+      PtrArray::full(words, 2, cons(aa, cons(bb, nil))) *
+      GlobalStrings(LitMap)
+  */
+  ```
+- 如果后续读取某个字符串常量，例如 `char *p = words[0]; int x = p[0];`，读取前的资源形态应包含：
+  ```c
+  /*@ Assert
+      p == aa &&
+      aa == LitMap("aa") &&
+      PtrArray::full(words, 2, cons(aa, cons(bb, nil))) *
+      GlobalStrings_missing(LitMap, cons("aa", nil)) *
+      store_stringLit(p, "aa")
+  */
+  ```
+- 证明时常用引理：
+  - `GlobalStrings_split` / `GlobalStrings_missing_split`
+  - `GlobalStrings_merge` / `GlobalStrings_missing_merge`
+  - `PtrArray.undef_full_split_to_undef_missing_i`
+  - `PtrArray.undef_seg_split_to_undef_missing_i`
+  - `PtrArray.undef_missing_i_to_undef_seg_head`
+  - `PtrArray.seg_single`
+  - `PtrArray.full_split_to_missing_i`
+
 ### C. 字符编码
 
 - `CharArray` 内容是 `list Z`，常见字符码：

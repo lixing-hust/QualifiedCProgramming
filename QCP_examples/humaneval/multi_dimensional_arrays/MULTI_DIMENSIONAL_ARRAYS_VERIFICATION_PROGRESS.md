@@ -1,6 +1,6 @@
 # multi_dimensional_arrays 验证进度记录
 
-更新时间：2026-07-02
+更新时间：2026-07-04
 
 这份文档记录 `QCP_examples/humaneval/multi_dimensional_arrays` 下多维数组程序的验证进展、建模方式、踩坑和后续继续时需要注意的事项。状态口径参考 `StringClaude/STRINGCLAUDE_VERIFICATION_PROGRESS.md`。
 
@@ -24,6 +24,7 @@
 | 题目 | 类型 | 当前状态 | 备注 |
 | --- | --- | --- | --- |
 | `C_1` | 括号组拆分 `char * -> char **` | 已全链通过 | 按 `../SKILL.md` 直接完成，未使用 `.agents` skill/subagent。确认共享 `QCP_examples/stdlib/string.h` 提供本题需要的 `strlen`；`C_1.c` 已移除 `realloc`，使用输入长度 `n + 1` 作为输出指针数组固定上界，关闭一个括号组时再按精确长度分配该行字符串；未使用 `sprintf` / `snprintf` / `stdio.h`。`coins_1.v` 中 `problem_1_pre_z/spec_z` 直接 wrapper 原始 `../spec/1.v`，并以本题局部 `paren_safe_input_1` 携带扫描安全性和输出/spec bridge。已通过 `coins_1.v`、`C_1_goal.v`、`C_1_proof_auto.v`、`C_1_proof_manual.v`、`C_1_goal_check.v` 编译；`coins/manual/goal_check` 精确扫描无 `Admitted.`、`Abort.`、`Show.` 或新增 `Axiom` 声明。成本见 `../ledger.md` 的 `C_1`。 |
+| `C_105` | int 数组排序后映射英文数字名 | 已全链通过 | 按 `../SKILL.md` 直接完成，未使用 `.agents` skill/subagent。原始 C 不调用 `strlen` 等字符串库函数；未新增 `get_int_array` 这类 C helper，保留的外部 wrapper 仅为 `malloc_*`、`free_int_array`、`sort_int_array` 这类分配/释放/排序基础操作。为匹配 QCP 循环不变式，第二轮遍历使用 `for (int k = 0; k < arr_size; k++)` 与 `i = arr_size - 1 - k` 表示原始逆序扫描。`coins_105.v` 中 `problem_105_pre_z/spec_z` 直接 wrapper 原始 `../spec/105.v`，并补充 digit literal、反向过滤、Permutation/filter、Sorted/filter 和输出状态到原始 spec 的桥接证明。已通过 `coins_105.v`、`C_105_goal.v`、`C_105_proof_auto.v`、`C_105_proof_manual.v`、`C_105_goal_check.v` 编译；`coins/manual/goal_check/C` 扫描无 `Admitted.`、`Abort.`、`Show.` 或新增 `Axiom` 声明。成本见 `../ledger.md` 的 `C_105`。 |
 | `C_95` | 字符串数组 `char **` | 已全链通过 | `problem_95_spec_z` 已直接 wrapper 原始 `spec/95.v` 的 `problem_95_spec`；使用 `CharPtrArray2.full/missing_i` 和 `CharArray.full` 表示二维字符串数组资源；已通过 `coins_95.v`、`C_95_goal.v`、`C_95_proof_auto.v`、`C_95_proof_manual.v`、`C_95_goal_check.v` 编译，`coins/manual/goal_check` 无 `Admitted.` 或新增 `Axiom`。成本见 `../ledger.md` 的 `C_95` 与 `C_95_continuation`。 |
 | `C_115` | 整数矩阵 `int **` | 已全链通过 | `problem_115_spec_z` 直接 wrapper 原始 `spec/115.v` 的 `problem_115_spec`；使用 `IntPtrArray2.full/missing_i` 和 `IntArray.full` 表示二维 `int **` 矩阵资源；已通过 `coins_115.v`、`C_115_goal.v`、`C_115_proof_auto.v`、`C_115_proof_manual.v`、`C_115_goal_check.v` 编译，`coins/manual/goal_check` 无 `Admitted.` 或新增 `Axiom`。成本见 `../ledger.md` 的 `C_115`。 |
 | `C_12` | 字符串数组 `const char **` | 已全链通过 | 用户确认按原注释/spec 语义处理空输入，C 实现已改为空输入返回 `NULL`；`problem_12_pre_z/spec_*_z` 直接 wrapper 原始 `spec/12.v` 的 `problem_12_pre/spec`；使用 `CharPtrArray2.full/missing_i`、`CharArray.full` 和 `QCP_examples/stdlib/string.h` 的 `strlen`/`store_string` 表示二维字符串数组与行长度；已通过 `coins_12.v`、`C_12_goal.v`、`C_12_proof_auto.v`、`C_12_proof_manual.v`、`C_12_goal_check.v` 编译，`coins/manual/goal_check` 无 `Admitted.` 或新增 `Axiom`。成本见 `../ledger.md` 的 `C_12_continuation`。 |
