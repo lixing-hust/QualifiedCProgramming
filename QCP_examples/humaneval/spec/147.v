@@ -37,7 +37,7 @@ Definition is_valid_triple (n i j k : nat) : Prop :=
   (a_val i + a_val j + a_val k) mod 3 = 0.
 
 (* 独立的输入前置条件 *)
-Definition problem_147_pre (n : nat) : Prop := n > 0.
+Definition problem_147_pre (n : nat) : Prop := (n > 0)%nat.
 
 (*
  * get_max_triples 函数的程序规约。
