@@ -19,39 +19,29 @@ Definition rparen : ascii := ")".
 Definition space : ascii := " ".
 
 (*
-  规约 1: IsBalanced(s)
-  使用一个辅助递归函数，其中 count 代表当前未闭合的左括号数。
+  规约 1: balanced_chars(cs)
+  使用前缀计数关系刻画括号平衡，避免在规格文件中写本地递归定义。
 *)
-Fixpoint IsBalanced_aux (s : string) (count : nat) : Prop :=
-  match s with
-  | EmptyString => count = 0
-  | String h t =>
-    if ascii_dec h lparen then
-      IsBalanced_aux t (S count)
-    else if ascii_dec h rparen then
-      match count with
-      | 0 => False (* 右括号比左括号多，不平衡 *)
-      | S n' => IsBalanced_aux t n'
-      end
-    else
-      IsBalanced_aux t count (* 忽略其他字符 *)
-  end.
+Definition balanced_chars (cs : list ascii) : Prop :=
+  count_occ ascii_dec cs lparen = count_occ ascii_dec cs rparen /\
+  forall prefix suffix,
+    cs = (prefix ++ suffix)%list ->
+    count_occ ascii_dec prefix rparen <= count_occ ascii_dec prefix lparen.
 
 Definition IsBalanced (s : string) : Prop :=
-  IsBalanced_aux s 0.
+  balanced_chars (list_ascii_of_string s).
 
 (*
-  辅助函数: 移除列表中的空格
+  辅助函数: 移除列表中的空格。这里复用标准库 filter，而非本地递归。
 *)
-Fixpoint remove_spaces (s : string) : string :=
-  match s with
-  | EmptyString => EmptyString
-  | String h t =>
-    if ascii_dec h space then
-      remove_spaces t
-    else
-      String h (remove_spaces t)
-  end.
+Definition nonspace_char (c : ascii) : bool :=
+  if ascii_dec c space then false else true.
+
+Definition chars_without_spaces (s : string) : list ascii :=
+  filter nonspace_char (list_ascii_of_string s).
+
+Definition remove_spaces (s : string) : string :=
+  string_of_list_ascii (chars_without_spaces s).
 
 (*
   辅助断言: 检查一个字符是否为括号或空格
@@ -61,46 +51,37 @@ Definition is_paren_or_space (c : ascii) : Prop :=
   c = lparen \/ c = rparen \/ c = space.
 
 (*
-  辅助函数: 检查字符串中的所有字符是否满足属性 P
+  辅助断言: 字符是否为括号。
 *)
-Fixpoint ForallChars (P : ascii -> Prop) (s : string) : Prop :=
-  match s with
-  | EmptyString => True
-  | String h t => P h /\ ForallChars P t
-  end.
-
+Definition is_paren (c : ascii) : Prop :=
+  c = lparen \/ c = rparen.
 
 (*
-  实现函数: separate_paren_groups_impl
+  辅助断言: 检查字符串中的所有字符是否满足属性 P。
+  这里复用标准库 List.Forall。
 *)
-Fixpoint separate_paren_groups_aux (s : string) (count : nat) (current : list ascii) (acc : list string) : list string :=
-  match s with
-  | EmptyString => 
-    match current with
-    | [] => acc
-    | _ => acc ++ [string_of_list_ascii (List.rev current)]
-    end
-  | String h t =>
-    if ascii_dec h lparen then
-      separate_paren_groups_aux t (S count) (h :: current) acc
-    else if ascii_dec h rparen then
-      match count with
-      | 0 => acc
-      | S n' =>
-        let new_current := h :: current in
-        if Nat.eqb n' 0 then
-          separate_paren_groups_aux t n' [] (acc ++ [string_of_list_ascii (List.rev new_current)])
-        else
-          separate_paren_groups_aux t n' new_current acc
-      end
-    else if ascii_dec h space then
-      separate_paren_groups_aux t count current acc
-    else
-      separate_paren_groups_aux t count (h :: current) acc
-  end.
+Definition ForallChars (P : ascii -> Prop) (s : string) : Prop :=
+  Forall P (list_ascii_of_string s).
 
-Definition separate_paren_groups_impl (input : string) : list string :=
-  separate_paren_groups_aux (remove_spaces input) 0 [] [].
+(*
+  一个 primitive group 是一个非空、平衡、只含括号的最外层括号组；
+  “没有非空真前缀已经平衡”排除了 "()()" 这类多个组粘在一起的情况。
+*)
+Definition primitive_group_chars (cs : list ascii) : Prop :=
+  cs <> [] /\
+  Forall is_paren cs /\
+  balanced_chars cs /\
+  forall prefix suffix,
+    cs = (prefix ++ suffix)%list ->
+    prefix <> [] ->
+    suffix <> [] ->
+    ~ balanced_chars prefix.
+
+Definition primitive_group (s : string) : Prop :=
+  primitive_group_chars (list_ascii_of_string s).
+
+Definition output_chars (output : list string) : list ascii :=
+  List.concat (map list_ascii_of_string output).
 
 (*
   前提条件: separate_paren_groups_pre
@@ -109,9 +90,10 @@ Definition separate_paren_groups_impl (input : string) : list string :=
 *)
 Definition problem_1_pre (input : string) : Prop :=
   (ForallChars is_paren_or_space input) /\
-  (IsBalanced (remove_spaces input)).
+  (balanced_chars (chars_without_spaces input)).
 (*
   最终的程序规约: separate_paren_groups_spec(input, output)
 *)
 Definition problem_1_spec (input : string) (output : list string) : Prop :=
-  output = separate_paren_groups_impl input.
+  Forall primitive_group output /\
+  output_chars output = chars_without_spaces input.
