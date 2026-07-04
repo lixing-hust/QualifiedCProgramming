@@ -39,6 +39,7 @@
 | C_148 | multi_dimensional_arrays | full-chain passed | 2026-07-02 14:33 CST | 2026-07-02 19:16 CST | 283 | 019f2186-c88b-7ba0-9bcf-745b07b1bbf4 | ~/.codex/sessions/2026/07/02/rollout-2026-07-02T14-31-49-019f2186-c88b-7ba0-9bcf-745b07b1bbf4.jsonl | 212401 | 141738905 | 141526504 | unknown | unknown | 33 | multiple, unstructured |
 | C_1 | multi_dimensional_arrays | full-chain passed | 2026-07-04 02:06 CST | 2026-07-04 03:12 CST | 66 | 019f2927-b5a3-74d2-a85a-29c9089d53da | ~/.codex/sessions/2026/07/04/rollout-2026-07-04T02-04-56-019f2927-b5a3-74d2-a85a-29c9089d53da.jsonl | 203202 | 52278084 | 52074882 | 11 | 1 | 12 | multiple, unstructured |
 | C_105 | multi_dimensional_arrays | full-chain passed | 2026-07-04 16:10 CST | 2026-07-04 19:15 CST | 185 | 019f2c2c-b60d-7952-833e-2142662d04a5 | ~/.codex/sessions/2026/07/04/rollout-2026-07-04T16-09-15-019f2c2c-b60d-7952-833e-2142662d04a5.jsonl | 200479 | 83921034 | 83720555 | 16 | unknown | 22 | multiple, unstructured |
+| C_117 | multi_dimensional_arrays | full-chain passed | 2026-07-04 19:59 CST | 2026-07-04 23:56 CST | 237 | 019f2cfd-f50f-7b93-b452-7890c6a70e3a | ~/.codex/sessions/2026/07/04/rollout-2026-07-04T19-57-48-019f2cfd-f50f-7b93-b452-7890c6a70e3a.jsonl | 123479 | 81337005 | 81213526 | 2 | 1 | 3 | multiple, unstructured |
 
 ## Legacy Ledger
 

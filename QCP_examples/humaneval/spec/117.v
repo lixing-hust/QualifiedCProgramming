@@ -22,45 +22,44 @@ Definition is_vowel (c : ascii) : bool :=
   | _ => false
   end.
 
-Fixpoint count_consonants (w : list ascii) : nat :=
-  match w with
-  | [] => 0
-  | h :: t =>
-    let n := nat_of_ascii h in
-    let is_upper := (Nat.leb 65 n) && (Nat.leb n 90) in
-    let is_lower := (Nat.leb 97 n) && (Nat.leb n 122) in
-    let is_letter := is_upper || is_lower in
-    (if is_letter && negb (is_vowel h) then 1 else 0) +
-    count_consonants t
-  end.
+Definition is_letter (c : ascii) : bool :=
+  let n := nat_of_ascii c in
+  ((Nat.leb 65 n) && (Nat.leb n 90)) ||
+  ((Nat.leb 97 n) && (Nat.leb n 122)).
 
-Definition split_words (s : list ascii) : list (list ascii) :=
-  let space := " "%char in
-  let fix aux (cur : list ascii) (rest : list ascii) : list (list ascii) :=
-    match rest with
-    | [] =>
-      match cur with
-      | [] => []
-      | _ => [rev cur]
-      end
-    | h :: t =>
-      if Ascii.eqb h space then
-        match cur with
-        | [] => aux [] t
-        | _ => (rev cur) :: aux [] t
-        end
-      else
-        aux (h :: cur) t
-    end
-  in aux [] s.
+Definition is_consonant (c : ascii) : bool :=
+  is_letter c && negb (is_vowel c).
 
-Definition select_words_impl (s : list ascii) (n : nat) : list (list ascii) :=
-  filter (fun w => Nat.eqb (count_consonants w) n) (split_words s).
+Definition count_consonants (w : list ascii) : nat :=
+  length (filter is_consonant w).
 
-Definition select_words (s : string) (n : nat) : list string :=
-  let l := list_ascii_of_string s in
-  let res := select_words_impl l n in
-  map string_of_list_ascii res.
+Definition only_spaces (xs : list ascii) : Prop :=
+  Forall (fun c => c = " "%char) xs.
+
+Definition nonempty_spaces (xs : list ascii) : Prop :=
+  xs <> [] /\ only_spaces xs.
+
+Definition word_chars (w : list ascii) : Prop :=
+  w <> [] /\ Forall (fun c => c <> " "%char) w.
+
+Definition separated_words
+    (front : list (list ascii)) (seps : list (list ascii)) (last : list ascii)
+    : list ascii :=
+  (concat (map (fun ws => ((fst ws) ++ (snd ws))%list) (combine front seps)) ++ last)%list.
+
+Definition split_words_shape (s : list ascii) (words : list (list ascii)) : Prop :=
+  (words = [] /\ only_spaces s) \/
+  exists leading trailing front last seps,
+    words = (front ++ [last])%list /\
+    Forall word_chars (front ++ [last]) /\
+    only_spaces leading /\
+    only_spaces trailing /\
+    Forall nonempty_spaces seps /\
+    length seps = length front /\
+    s = (leading ++ separated_words front seps last ++ trailing)%list.
+
+Definition select_words_impl (words : list (list ascii)) (n : nat) : list (list ascii) :=
+  filter (fun w => Nat.eqb (count_consonants w) n) words.
 
 (* 字符串只含字母与空格 *)
 Definition problem_117_pre (s : string) : Prop :=
@@ -68,4 +67,6 @@ Definition problem_117_pre (s : string) : Prop :=
   Forall (fun c => c = " "%char \/ let n := nat_of_ascii c in (65 <= n /\ n <= 90) \/ (97 <= n /\ n <= 122)) l.
 
 Definition problem_117_spec (s : string) (n : nat) (output : list string) : Prop :=
-  output = select_words s n.
+  exists words,
+    split_words_shape (list_ascii_of_string s) words /\
+    output = map string_of_list_ascii (select_words_impl words n).
