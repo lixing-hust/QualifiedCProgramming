@@ -23,6 +23,7 @@
 
 | 题目 | 类型 | 当前状态 | 备注 |
 | --- | --- | --- | --- |
+| `C_1` | 括号组拆分 `char * -> char **` | 已全链通过 | 按 `../SKILL.md` 直接完成，未使用 `.agents` skill/subagent。确认共享 `QCP_examples/stdlib/string.h` 提供本题需要的 `strlen`；`C_1.c` 已移除 `realloc`，使用输入长度 `n + 1` 作为输出指针数组固定上界，关闭一个括号组时再按精确长度分配该行字符串；未使用 `sprintf` / `snprintf` / `stdio.h`。`coins_1.v` 中 `problem_1_pre_z/spec_z` 直接 wrapper 原始 `../spec/1.v`，并以本题局部 `paren_safe_input_1` 携带扫描安全性和输出/spec bridge。已通过 `coins_1.v`、`C_1_goal.v`、`C_1_proof_auto.v`、`C_1_proof_manual.v`、`C_1_goal_check.v` 编译；`coins/manual/goal_check` 精确扫描无 `Admitted.`、`Abort.`、`Show.` 或新增 `Axiom` 声明。成本见 `../ledger.md` 的 `C_1`。 |
 | `C_95` | 字符串数组 `char **` | 已全链通过 | `problem_95_spec_z` 已直接 wrapper 原始 `spec/95.v` 的 `problem_95_spec`；使用 `CharPtrArray2.full/missing_i` 和 `CharArray.full` 表示二维字符串数组资源；已通过 `coins_95.v`、`C_95_goal.v`、`C_95_proof_auto.v`、`C_95_proof_manual.v`、`C_95_goal_check.v` 编译，`coins/manual/goal_check` 无 `Admitted.` 或新增 `Axiom`。成本见 `../ledger.md` 的 `C_95` 与 `C_95_continuation`。 |
 | `C_115` | 整数矩阵 `int **` | 已全链通过 | `problem_115_spec_z` 直接 wrapper 原始 `spec/115.v` 的 `problem_115_spec`；使用 `IntPtrArray2.full/missing_i` 和 `IntArray.full` 表示二维 `int **` 矩阵资源；已通过 `coins_115.v`、`C_115_goal.v`、`C_115_proof_auto.v`、`C_115_proof_manual.v`、`C_115_goal_check.v` 编译，`coins/manual/goal_check` 无 `Admitted.` 或新增 `Axiom`。成本见 `../ledger.md` 的 `C_115`。 |
 | `C_12` | 字符串数组 `const char **` | 已全链通过 | 用户确认按原注释/spec 语义处理空输入，C 实现已改为空输入返回 `NULL`；`problem_12_pre_z/spec_*_z` 直接 wrapper 原始 `spec/12.v` 的 `problem_12_pre/spec`；使用 `CharPtrArray2.full/missing_i`、`CharArray.full` 和 `QCP_examples/stdlib/string.h` 的 `strlen`/`store_string` 表示二维字符串数组与行长度；已通过 `coins_12.v`、`C_12_goal.v`、`C_12_proof_auto.v`、`C_12_proof_manual.v`、`C_12_goal_check.v` 编译，`coins/manual/goal_check` 无 `Admitted.` 或新增 `Axiom`。成本见 `../ledger.md` 的 `C_12_continuation`。 |
@@ -1199,3 +1200,33 @@ opam exec --switch=coq8201 -- coqc ... C_125_proof_manual.v
 ```
 
 成本已写入 `../ledger.md` 的 `C_125_continuation_2` 行，状态为 `partial`。
+
+## C_1 separate_paren_groups 验证记录
+
+### 当前状态
+
+`C_1` 当前状态为 `已全链通过`。
+
+已完成：
+
+1. 按 `../SKILL.md` 直接执行本题流程，未使用 `.agents` 下的 skill 或 subagent。
+2. 核对 `C_1.c`、`../spec/1.v`、共享 `QCP_examples/stdlib/string.h` 和本目录进度/ledger；本题实际需要的常见库函数只有 `strlen`，已由共享 `string.h` 提供。
+3. `C_1.c` 已转换为 QCP 可验证形状，返回 QCP 分配的 `StrArray *`；使用 `n + 1` 输出指针容量替代原 `realloc`，每个闭合括号组按 `len + 1` 精确分配和复制；没有 `realloc`、`sprintf`、`snprintf`、`stdio.h` 或 `stdlib.h` 命中。
+4. `coins_1.v` 中 `problem_1_pre_z` / `problem_1_spec_z` 直接 wrapper 原始 `../spec/1.v`；本题额外使用 `paren_safe_input_1` 在 C 前置条件和循环不变式中携带括号扫描安全性以及 `paren_output_rows_1` 到原始 spec 的 bridge。
+5. 已重新运行 symexec，并编译通过 `coins_1.v`、`C_1_goal.v`、`C_1_proof_auto.v`、`C_1_proof_manual.v`、`C_1_goal_check.v`。
+6. 最终扫描 `coins_1.v`、`C_1_proof_manual.v`、`C_1_goal_check.v` 无 `Admitted.`、`Abort.`、`Show.` 或本题新增 `Axiom` 声明。
+
+检查命令：
+
+```bash
+cd QCP_examples/humaneval/multi_dimensional_arrays
+opam exec --switch=coq8201 -- coqc -R ../../../SeparationLogic/stdlib SimpleC.StdLib $(tr '\n' ' ' < ../IntClaude/_CoqProject) coins_1.v
+opam exec --switch=coq8201 -- coqc -R ../../../SeparationLogic/stdlib SimpleC.StdLib $(tr '\n' ' ' < ../IntClaude/_CoqProject) C_1_goal.v
+opam exec --switch=coq8201 -- coqc -R ../../../SeparationLogic/stdlib SimpleC.StdLib $(tr '\n' ' ' < ../IntClaude/_CoqProject) C_1_proof_auto.v
+opam exec --switch=coq8201 -- coqc -R ../../../SeparationLogic/stdlib SimpleC.StdLib $(tr '\n' ' ' < ../IntClaude/_CoqProject) C_1_proof_manual.v
+opam exec --switch=coq8201 -- coqc -R ../../../SeparationLogic/stdlib SimpleC.StdLib $(tr '\n' ' ' < ../IntClaude/_CoqProject) C_1_goal_check.v
+rg -n "Admitted\.|Abort\.|Show\.|^\s*Axiom\b" coins_1.v C_1_proof_manual.v C_1_goal_check.v
+rg -n "realloc|sprintf|snprintf|stdio\.h|stdlib\.h" C_1.c
+```
+
+成本已写入 `../ledger.md` 的 `C_1` 行。
