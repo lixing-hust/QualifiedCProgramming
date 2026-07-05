@@ -1233,3 +1233,37 @@ rg -n "realloc|sprintf|snprintf|stdio\.h|stdlib\.h" C_1.c
 ```
 
 成本已写入 `../ledger.md` 的 `C_1` 行。
+
+## C_149 sorted_list_sum 验证记录
+
+### 当前状态
+
+`C_149` 当前状态为 `已全链通过`。本轮按 `../SKILL.md` 直接验证，未使用 `.agents` 下的 skill 或 subagent。
+
+完成要点：
+
+1. `C_149.c` 已改为 QCP 可验证形状，返回 `StrArray *`，使用共享 `../../stdlib/string.h` 中的 `strlen` / `strcmp`；排序保持为通用四参 `qsort` wrapper，调用点为 `qsort(data, output_size, sizeof(char *), cmp_word)`，`cmp_word` 保留原始长度优先、同长度字典序的真实定义，`qsort` wrapper 本身只描述输入字符串行数组的 permutation 与字符串序排序结果，调用点再把本题的偶长度过滤前缀传入。
+2. `coins_149.v` 中 `problem_149_pre_z` / `problem_149_spec_z` 直接 wrapper 当前 `../spec/149.v`；循环中使用 `filter_even_state_149` 记录偶长度字符串过滤前缀，并用 `problem_149_spec_z_of_sorted_prefix` 桥回原 spec。
+3. 已重新运行 symexec，并编译通过 `coins_149.v`、`C_149_goal.v`、`C_149_proof_auto.v`、`C_149_proof_manual.v`、`C_149_goal_check.v`。
+4. 最终扫描 `coins_149.v`、`C_149_proof_manual.v`、`C_149_goal_check.v`、`C_149.c` 无 `Admitted.`、`Axiom`、`Abort.`、`Show` 命中。
+
+`qsort` / comparator 建模说明：
+
+- 当前证明将 `qsort` 作为 trusted sorting wrapper 使用。排序正确性来自 `qsort` 规格后置条件中的 `string_rows_sorted(sorted_rows)` 与 `Permutation(l, sorted_rows)`。
+- `string_rows_sorted` 在 `coins_149.v` 中定义为题意所需的字符串顺序：长度优先，同长度按字典序。后续 bridge lemma 只证明满足该谓词的过滤结果可推出当前 `../spec/149.v` 的原始规格。
+- `cmp_word` 在 `C_149.c` 中保留原始 C comparator 定义，以保持调用点 `qsort(data, output_size, sizeof(char *), cmp_word)` 的程序形状；但当前证明没有从 `cmp_word` 函数体推出 `string_rows_sorted`，也没有证明 `qsort` 内部确实按该函数指针比较元素。
+- 因此本轮验证的可信边界是：假设外部库函数 `qsort` 在该 wrapper 合同下返回一个满足 `string_rows_sorted` 的 permutation。若后续要证明“真实 `qsort(..., cmp_word)` 因 comparator 语义而满足排序规格”，需要额外建模函数指针与排序关系，或改为展开一个可验证的排序实现。
+
+检查命令：
+
+```bash
+cd QCP_examples/humaneval/multi_dimensional_arrays
+opam exec --switch=coq8201 -- coqc -R ../../../SeparationLogic/stdlib SimpleC.StdLib $(tr '\n' ' ' < ../IntClaude/_CoqProject) coins_149.v
+opam exec --switch=coq8201 -- coqc -R ../../../SeparationLogic/stdlib SimpleC.StdLib $(tr '\n' ' ' < ../IntClaude/_CoqProject) C_149_goal.v
+opam exec --switch=coq8201 -- coqc -R ../../../SeparationLogic/stdlib SimpleC.StdLib $(tr '\n' ' ' < ../IntClaude/_CoqProject) C_149_proof_auto.v
+opam exec --switch=coq8201 -- coqc -R ../../../SeparationLogic/stdlib SimpleC.StdLib $(tr '\n' ' ' < ../IntClaude/_CoqProject) C_149_proof_manual.v
+opam exec --switch=coq8201 -- coqc -R ../../../SeparationLogic/stdlib SimpleC.StdLib $(tr '\n' ' ' < ../IntClaude/_CoqProject) C_149_goal_check.v
+rg -n "Admitted\.|Axiom[[:space:]]|Abort\.|Show" coins_149.v C_149_proof_manual.v C_149_goal_check.v C_149.c
+```
+
+成本已写入 `../ledger.md` 的 `C_149` 行。
