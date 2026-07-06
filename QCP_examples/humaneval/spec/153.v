@@ -24,18 +24,6 @@ Require Import Bool.
 Import ListNotations.
 Open Scope bool_scope.
 
-Fixpoint list_ascii_of_string (s : string) : list ascii :=
-  match s with
-  | EmptyString => []
-  | String c s' => c :: list_ascii_of_string s'
-  end.
-
-Fixpoint string_of_list_ascii (l : list ascii) : string :=
-  match l with
-  | [] => EmptyString
-  | c :: l' => String c (string_of_list_ascii l')
-  end.
-
 (* 定义：检查一个字符是否为大写字母 *)
 Definition is_uppercase (c : ascii) : bool :=
   ("A" <=? c)%char && (c <=? "Z")%char.
@@ -87,5 +75,5 @@ Definition problem_153_spec (class_name : string) (extensions : list string) (re
       exists strongest_ext,
         is_strongest strongest_ext extensions /\
         (* 并且输出 'res' 是 class_name, '.', 和 strongest_ext 的拼接 *)
-        res = class_name ++ "." %string ++ strongest_ext
+        res = (class_name ++ "." ++ strongest_ext)%string
   end.
