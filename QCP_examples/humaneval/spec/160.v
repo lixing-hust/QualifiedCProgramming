@@ -45,67 +45,44 @@ Definition interp_op (op : ascii) : (Z -> Z -> Z) :=
   | _ => fun _ _ => 0
   end.
 
-(* 手动实现 find_index 函数。*)
-Fixpoint find_index_aux {A} (p : A -> bool) (l : list A) (n : nat) : option nat :=
-  match l with
-  | [] => None
-  | x :: xs => if p x then Some n else find_index_aux p xs (S n)
-  end.
-
-Definition find_index {A} (p : A -> bool) (l : list A) : option nat :=
-  find_index_aux p l 0.
-
-(* 辅助函数，用于从列表末尾查找满足条件的第一个元素的索引。*)
-Definition rfind_index {A} (p : A -> bool) (l : list A) : option nat :=
-  match find_index p (rev l) with
-  | Some i => Some ( (length l - 1) - i )%nat
-  | None => None
-  end.
-
-(*
-  核心的求值函数 - 辅助函数版本
-*)
-Fixpoint eval_helper (ops : list ascii) (nums : list Z) (fuel : nat) : Z :=
-  match fuel with
-  | O => 0 (* 燃料耗尽，在正常逻辑下不应发生 *)
-  | S fuel' => (* 还有燃料，继续执行 *)
-      match nums with
-      | [] => 0
-      | [n] => n
-      | _::_ =>
-        match rfind_index (fun c => orb (c =? "+"%char)%char (c =? "-"%char)%char) ops with
-        | Some i =>
-            let op := nth i ops (" "%char) in
-            interp_op op
-              (eval_helper (firstn i ops) (firstn (i + 1) nums) fuel')
-              (eval_helper (skipn (i + 1) ops) (skipn (i + 1) nums) fuel')
-        | None =>
-            match rfind_index (fun c => orb (c =? "*"%char)%char (c =? "/"%char)%char) ops with
-            | Some i =>
-                let op := nth i ops (" "%char) in
-                interp_op op
-                  (eval_helper (firstn i ops) (firstn (i + 1) nums) fuel')
-                  (eval_helper (skipn (i + 1) ops) (skipn (i + 1) nums) fuel')
-            | None =>
-                match find_index (fun c => (c =? "^"%char)%char) ops with
-                | Some i =>
-                    let op := nth i ops (" "%char) in
-                    interp_op op
-                      (eval_helper (firstn i ops) (firstn (i + 1) nums) fuel')
-                      (eval_helper (skipn (i + 1) ops) (skipn (i + 1) nums) fuel')
-                | None => 0
-                end
-            end
-        end
-      end
-  end.
-
-(*
-  主求值函数
-  它调用辅助函数，并提供初始燃料值，即操作数列表的长度。
-*)
 Definition eval (ops : list ascii) (nums : list Z) : Z :=
-  eval_helper ops nums (length nums).
+  let prec := fun op =>
+    match op with
+    | "+"%char | "-"%char => 0%nat
+    | "*"%char | "/"%char => 1%nat
+    | "^"%char => 2%nat
+    | _ => 0%nat
+    end in
+  let should_reduce := fun incoming top =>
+    orb (Nat.ltb (prec incoming) (prec top))
+        (andb (Nat.eqb (prec incoming) (prec top))
+              (negb (incoming =? "^"%char)%char)) in
+  let apply_top : (list Z * list ascii)%type -> (list Z * list ascii)%type :=
+    fun st =>
+      match st with
+      | (rhs :: lhs :: values, op :: rest_ops) =>
+          (interp_op op lhs rhs :: values, rest_ops)
+      | _ => st
+      end in
+  let reduce_before : ascii -> (list Z * list ascii)%type -> (list Z * list ascii)%type :=
+    fun incoming st =>
+      Nat.iter (List.length (snd st))
+        (fun st' =>
+           match snd st' with
+           | top :: _ => if should_reduce incoming top then apply_top st' else st'
+           | [] => st'
+           end)
+        st in
+  let push : (list Z * list ascii)%type -> (ascii * Z)%type -> (list Z * list ascii)%type :=
+    fun st item =>
+      let '(op, rhs) := item in
+      let st' := reduce_before op st in
+      (rhs :: fst st', op :: snd st') in
+  let st := fold_left push (combine ops (tl nums)) ([hd 0 nums], []) in
+  match fst (Nat.iter (List.length (snd st)) apply_top st) with
+  | result :: _ => result
+  | [] => 0
+  end.
 
 Definition do_algebra_impl (operators : string) (operands : list Z) : Z :=
   eval (list_ascii_of_string operators) operands.
@@ -117,8 +94,8 @@ Definition do_algebra_impl (operators : string) (operands : list Z) : Z :=
 *)
 Definition problem_160_pre (operators : string) (operands : list Z) : Prop :=
   let ops := list_ascii_of_string operators in
-  S (length ops) = length operands /\
-  (1 <= length ops)%nat /\ (2 <= length operands)%nat /\
+  S (List.length ops) = List.length operands /\
+  (1 <= List.length ops)%nat /\ (2 <= List.length operands)%nat /\
   Forall (fun z => 0 <= z) operands /\
   Forall (fun c => c = "+"%char \/ c = "-"%char \/ c = "*"%char \/ c = "/"%char \/ c = "^"%char) ops.
 

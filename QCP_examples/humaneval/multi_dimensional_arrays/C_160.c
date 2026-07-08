@@ -22,74 +22,411 @@ Note:
     Operator vector has at least one operator, && operand vector has at least two operands.
 
 */
-#include<stdio.h>
-#include<math.h>
-#include<string.h>
-#include<stdlib.h>
-static int is_in(const char* op, const char* a, const char* b) {
-    return strcmp(op, a) == 0 || strcmp(op, b) == 0;
+#include "ptr_array2_def.h"
+#include "int_array_def.h"
+#include "string.h"
+
+/*@ Extern Coq (problem_160_pre_z: list (list Z) -> list Z -> Prop)
+               (problem_160_spec_z: list (list Z) -> list Z -> Z -> Prop)
+               (operator_rows_well_formed_160: list (list Z) -> Z -> Prop)
+               (operator_payload_valid_160: list Z -> Prop)
+               (operator_code_payload_160: list Z -> Z)
+               (operator_codes_160: list (list Z) -> list Z)
+               (row_payload_z_160: list Z -> list Z)
+               (do_algebra_safe_160: list (list Z) -> list Z -> Prop)
+               (eval_range_160: list Z -> list Z -> Z -> Z -> Z)
+               (eval_range_safe_160: list Z -> list Z -> Z -> Z -> Prop)
+               (find_addsub_prefix_160: list Z -> Z -> Z -> Z)
+               (find_muldiv_prefix_160: list Z -> Z -> Z -> Z)
+               (find_pow_left_prefix_160: list Z -> Z -> Z -> Z)
+               (pow_prefix_safe_160: Z -> Z -> Prop)
+               (Zpow_160: Z -> Z -> Z)
+               (Zlength: {A} -> list A -> Z)
+               (Znth: {A} -> Z -> list A -> A -> A)
+*/
+/*@ Import Coq Require Import coins_160 */
+
+int *malloc_int_array(int size)
+/*@ Require size >= 0 && size < INT_MAX
+    Ensure __return != 0 && IntArray::undef_full(__return, size)
+*/;
+
+void free_int_array(int *array, int size)
+/*@ Require
+      exists l,
+      array != 0 &&
+      0 <= size && size < INT_MAX &&
+      size == Zlength(l) &&
+      IntArray::full(array, size, l)
+    Ensure emp
+*/;
+
+int operator_code(char *op)
+/*@ With payload
+    Require
+      operator_payload_valid_160(payload) &&
+      store_string(op, payload)
+    Ensure
+      __return == operator_code_payload_160(payload) &&
+      store_string(op, payload)
+*/
+{
+    if (op[0] == 42) {
+        if (op[1] == 42) return 4;
+        return 2;
+    }
+    if (op[0] == 47) return 3;
+    if (op[0] == 43) return 0;
+    return 1;
 }
 
-int do_algebra(const char** operato, int operato_size, const int* operand, int operand_size){
-    int* nums;
-    const char** ops;
-    int nums_n = operand_size;
-    int ops_n = operato_size;
+int int_pow(int base, int exp)
+/*@ Require
+      0 <= exp && exp < INT_MAX &&
+      pow_prefix_safe_160(base, exp) &&
+      emp
+    Ensure
+      __return == Zpow_160(base, exp) &&
+      emp
+*/
+{
+    int result = 1;
+    /*@ Inv Assert
+      0 <= i && i <= exp &&
+      base == base@pre &&
+      exp == exp@pre &&
+      result == Zpow_160(base, i) &&
+      pow_prefix_safe_160(base, exp) &&
+      emp
+    */
+    for (int i = 0; i < exp; i++) {
+        result *= base;
+    }
+    return result;
+}
 
-    nums = (int*)malloc((size_t)operand_size * sizeof(int));
-    ops = (const char**)malloc((size_t)operato_size * sizeof(const char*));
-    if (nums == NULL || ops == NULL) {
-        free(nums);
-        free(ops);
+int eval_range(int *ops, int ops_size, int *nums, int nums_size, int lo, int hi)
+/*@ With ops_l nums_l
+    Require
+      ops_size == Zlength(ops_l) &&
+      nums_size == Zlength(nums_l) &&
+      ops_size + 1 == nums_size &&
+      0 <= lo && lo <= hi && hi < nums_size &&
+      eval_range_safe_160(ops_l, nums_l, lo, hi) &&
+      IntArray::full(ops, ops_size, ops_l) *
+      IntArray::full(nums, nums_size, nums_l)
+    Ensure
+      __return == eval_range_160(ops_l, nums_l, lo, hi) &&
+      IntArray::full(ops, ops_size, ops_l) *
+      IntArray::full(nums, nums_size, nums_l)
+*/
+{
+    if (lo == hi) {
+        return nums[lo];
+    }
+
+    int idx = -1;
+    /*@ Inv Assert
+      lo <= i && i <= hi &&
+      idx == find_addsub_prefix_160(ops_l, lo, i) &&
+      (idx == -1 || lo <= idx && idx < i) &&
+      ops_size == Zlength(ops_l) &&
+      nums_size == Zlength(nums_l) &&
+      ops_size + 1 == nums_size &&
+      0 <= lo && lo < hi && hi < nums_size &&
+      eval_range_safe_160(ops_l, nums_l, lo, hi) &&
+      lo == lo@pre &&
+      hi == hi@pre &&
+      ops_size == ops_size@pre &&
+      nums_size == nums_size@pre &&
+      ops == ops@pre &&
+      nums == nums@pre &&
+      IntArray::full(ops, ops_size, ops_l) *
+      IntArray::full(nums, nums_size, nums_l)
+    */
+    for (int i = lo; i < hi; i++) {
+        if (ops[i] == 0 || ops[i] == 1) {
+            idx = i;
+        }
+    }
+    if (idx != -1) {
+        int left = eval_range(ops, ops_size, nums, nums_size, lo, idx)
+          /*@ where ops_l = ops_l, nums_l = nums_l */;
+        int right = eval_range(ops, ops_size, nums, nums_size, idx + 1, hi)
+          /*@ where ops_l = ops_l, nums_l = nums_l */;
+        if (ops[idx] == 0) {
+            return left + right;
+        } else {
+            return left - right;
+        }
+    }
+    /*@ Assert
+      idx == -1 &&
+      find_addsub_prefix_160(ops_l, lo, hi) == -1 &&
+      ops_size == Zlength(ops_l) &&
+      nums_size == Zlength(nums_l) &&
+      ops_size + 1 == nums_size &&
+      0 <= lo && lo < hi && hi < nums_size &&
+      eval_range_safe_160(ops_l, nums_l, lo, hi) &&
+      lo == lo@pre &&
+      hi == hi@pre &&
+      ops_size == ops_size@pre &&
+      nums_size == nums_size@pre &&
+      ops == ops@pre &&
+      nums == nums@pre &&
+      IntArray::full(ops, ops_size, ops_l) *
+      IntArray::full(nums, nums_size, nums_l)
+    */
+
+    idx = -1;
+    /*@ Inv Assert
+      lo <= i && i <= hi &&
+      idx == find_muldiv_prefix_160(ops_l, lo, i) &&
+      (idx == -1 || lo <= idx && idx < i) &&
+      find_addsub_prefix_160(ops_l, lo, hi) == -1 &&
+      ops_size == Zlength(ops_l) &&
+      nums_size == Zlength(nums_l) &&
+      ops_size + 1 == nums_size &&
+      0 <= lo && lo < hi && hi < nums_size &&
+      eval_range_safe_160(ops_l, nums_l, lo, hi) &&
+      lo == lo@pre &&
+      hi == hi@pre &&
+      ops_size == ops_size@pre &&
+      nums_size == nums_size@pre &&
+      ops == ops@pre &&
+      nums == nums@pre &&
+      IntArray::full(ops, ops_size, ops_l) *
+      IntArray::full(nums, nums_size, nums_l)
+    */
+    for (int i = lo; i < hi; i++) {
+        if (ops[i] == 2 || ops[i] == 3) {
+            idx = i;
+        }
+    }
+    if (idx != -1) {
+        int left = eval_range(ops, ops_size, nums, nums_size, lo, idx)
+          /*@ where ops_l = ops_l, nums_l = nums_l */;
+        int right = eval_range(ops, ops_size, nums, nums_size, idx + 1, hi)
+          /*@ where ops_l = ops_l, nums_l = nums_l */;
+        if (ops[idx] == 2) {
+            return left * right;
+        } else {
+            return left / right;
+        }
+    }
+    /*@ Assert
+      idx == -1 &&
+      find_addsub_prefix_160(ops_l, lo, hi) == -1 &&
+      find_muldiv_prefix_160(ops_l, lo, hi) == -1 &&
+      ops_size == Zlength(ops_l) &&
+      nums_size == Zlength(nums_l) &&
+      ops_size + 1 == nums_size &&
+      0 <= lo && lo < hi && hi < nums_size &&
+      eval_range_safe_160(ops_l, nums_l, lo, hi) &&
+      lo == lo@pre &&
+      hi == hi@pre &&
+      ops_size == ops_size@pre &&
+      nums_size == nums_size@pre &&
+      ops == ops@pre &&
+      nums == nums@pre &&
+      IntArray::full(ops, ops_size, ops_l) *
+      IntArray::full(nums, nums_size, nums_l)
+    */
+
+    idx = -1;
+    /*@ Inv Assert
+      lo <= i && i <= hi &&
+      idx == find_pow_left_prefix_160(ops_l, lo, i) &&
+      (idx == -1 || lo <= idx && idx < i) &&
+      find_addsub_prefix_160(ops_l, lo, hi) == -1 &&
+      find_muldiv_prefix_160(ops_l, lo, hi) == -1 &&
+      ops_size == Zlength(ops_l) &&
+      nums_size == Zlength(nums_l) &&
+      ops_size + 1 == nums_size &&
+      0 <= lo && lo < hi && hi < nums_size &&
+      eval_range_safe_160(ops_l, nums_l, lo, hi) &&
+      lo == lo@pre &&
+      hi == hi@pre &&
+      ops_size == ops_size@pre &&
+      nums_size == nums_size@pre &&
+      ops == ops@pre &&
+      nums == nums@pre &&
+      IntArray::full(ops, ops_size, ops_l) *
+      IntArray::full(nums, nums_size, nums_l)
+    */
+    for (int i = lo; i < hi; i++) {
+        if (idx == -1 && ops[i] == 4) {
+            idx = i;
+        }
+    }
+    if (idx != -1) {
+        int left = eval_range(ops, ops_size, nums, nums_size, lo, idx)
+          /*@ where ops_l = ops_l, nums_l = nums_l */;
+        int right = eval_range(ops, ops_size, nums, nums_size, idx + 1, hi)
+          /*@ where ops_l = ops_l, nums_l = nums_l */;
+        return int_pow(left, right);
+    }
+
+    return 0;
+}
+
+int do_algebra(char** operato, int operato_size, int* operand, int operand_size)
+/*@ With rows operands
+    Require
+      0 < operato_size && operato_size < INT_MAX &&
+      operand_size == operato_size + 1 &&
+      operand_size < INT_MAX &&
+      operator_rows_well_formed_160(rows, operato_size) &&
+      problem_160_pre_z(rows, operands) &&
+      do_algebra_safe_160(rows, operands) &&
+      CharPtrArray2::full(operato, operato_size, rows) *
+      IntArray::full(operand, operand_size, operands)
+    Ensure
+      problem_160_spec_z(rows, operands, __return) &&
+      CharPtrArray2::full(operato, operato_size, rows) *
+      IntArray::full(operand, operand_size, operands)
+*/
+{
+    int* ops;
+    char* cur_op = 0;
+
+    ops = malloc_int_array(operato_size);
+    if (ops == 0) {
         return 0;
     }
-    for (int i = 0; i < operand_size; i++) nums[i] = operand[i];
-    for (int i = 0; i < operato_size; i++) ops[i] = operato[i];
 
-    for (int pass = 0; pass < 3; pass++) {
-        int new_nums_n = 0;
-        int new_ops_n = 0;
-        int* new_nums = (int*)malloc((size_t)nums_n * sizeof(int));
-        const char** new_ops = (const char**)malloc((size_t)ops_n * sizeof(const char*));
-        if (new_nums == NULL || new_ops == NULL) {
-            free(new_nums);
-            free(new_ops);
-            break;
-        }
-        new_nums[new_nums_n++] = nums[0];
-        for (int i = 0; i < ops_n; i++) {
-            int match = 0;
-            if (pass == 0) match = strcmp(ops[i], "**") == 0;
-            if (pass == 1) match = is_in(ops[i], "*", "//");
-            if (pass == 2) match = is_in(ops[i], "+", "-");
-
-            if (match) {
-                int left = new_nums[new_nums_n - 1];
-                int right = nums[i + 1];
-                if (strcmp(ops[i], "**") == 0) new_nums[new_nums_n - 1] = (int)pow(left, right);
-                else if (strcmp(ops[i], "*") == 0) new_nums[new_nums_n - 1] = left * right;
-                else if (strcmp(ops[i], "//") == 0) new_nums[new_nums_n - 1] = left / right;
-                else if (strcmp(ops[i], "+") == 0) new_nums[new_nums_n - 1] = left + right;
-                else new_nums[new_nums_n - 1] = left - right;
-            } else {
-                new_ops[new_ops_n++] = ops[i];
-                new_nums[new_nums_n++] = nums[i + 1];
-            }
-        }
-        free(nums);
-        free(ops);
-        nums = new_nums;
-        ops = new_ops;
-        nums_n = new_nums_n;
-        ops_n = new_ops_n;
+    /*@ Inv Assert
+      exists ops_l,
+      0 <= i && i <= operato_size@pre &&
+      operand_size == operand_size@pre &&
+	      operato_size == operato_size@pre &&
+	      operand == operand@pre &&
+	      operato == operato@pre &&
+	      cur_op == cur_op &&
+	      ops != 0 &&
+      operand_size@pre == operato_size@pre + 1 &&
+      0 < operato_size@pre && operato_size@pre < INT_MAX &&
+      operand_size@pre < INT_MAX &&
+      ops_l == sublist(0, i, operator_codes_160(rows)) &&
+      operator_rows_well_formed_160(rows, operato_size@pre) &&
+      problem_160_pre_z(rows, operands) &&
+      do_algebra_safe_160(rows, operands) &&
+      CharPtrArray2::full(operato@pre, operato_size@pre, rows) *
+      IntArray::full(operand@pre, operand_size@pre, operands) *
+      IntArray::seg(ops, 0, i, ops_l) *
+      IntArray::undef_seg(ops, i, operato_size@pre)
+    */
+    for (int i = 0; i < operato_size; i++) {
+        /*@ Assert
+          exists ops_l row_ptr,
+          0 <= i && i < operato_size@pre &&
+          operand_size == operand_size@pre &&
+          operato_size == operato_size@pre &&
+          operand == operand@pre &&
+          operato == operato@pre &&
+          cur_op == cur_op &&
+          ops != 0 &&
+          operand_size@pre == operato_size@pre + 1 &&
+          0 < operato_size@pre && operato_size@pre < INT_MAX &&
+          operand_size@pre < INT_MAX &&
+          ops_l == sublist(0, i, operator_codes_160(rows)) &&
+          operator_rows_well_formed_160(rows, operato_size@pre) &&
+          operator_payload_valid_160(row_payload_z_160(Znth(i, rows, nil))) &&
+          problem_160_pre_z(rows, operands) &&
+          do_algebra_safe_160(rows, operands) &&
+          CharPtrArray2::missing_i(operato@pre, operato_size@pre, i, row_ptr, rows) *
+          data_at(operato@pre + i * sizeof(char *), char *, row_ptr) *
+          CharArray::full(row_ptr, Zlength(Znth(i, rows, nil)), Znth(i, rows, nil)) *
+          IntArray::full(operand@pre, operand_size@pre, operands) *
+          IntArray::seg(ops, 0, i, ops_l) *
+          IntArray::undef_seg(ops, i, operato_size@pre)
+        */
+        cur_op = operato[i];
+        /*@ Assert
+          exists ops_l row_ptr,
+          0 <= i && i < operato_size@pre &&
+          operand_size == operand_size@pre &&
+          operato_size == operato_size@pre &&
+          operand == operand@pre &&
+          operato == operato@pre &&
+          cur_op == row_ptr &&
+          ops != 0 &&
+          operand_size@pre == operato_size@pre + 1 &&
+          0 < operato_size@pre && operato_size@pre < INT_MAX &&
+          operand_size@pre < INT_MAX &&
+          ops_l == sublist(0, i, operator_codes_160(rows)) &&
+          operator_rows_well_formed_160(rows, operato_size@pre) &&
+          operator_payload_valid_160(row_payload_z_160(Znth(i, rows, nil))) &&
+          problem_160_pre_z(rows, operands) &&
+          do_algebra_safe_160(rows, operands) &&
+          CharPtrArray2::missing_i(operato@pre, operato_size@pre, i, row_ptr, rows) *
+          data_at(operato@pre + i * sizeof(char *), char *, row_ptr) *
+          store_string(cur_op, row_payload_z_160(Znth(i, rows, nil))) *
+          IntArray::full(operand@pre, operand_size@pre, operands) *
+          IntArray::seg(ops, 0, i, ops_l) *
+          IntArray::undef_seg(ops, i, operato_size@pre)
+        */
+        ops[i] = operator_code(cur_op)
+          /*@ where payload = row_payload_z_160(Znth(i, rows, nil)) */;
     }
+    /*@ Assert
+      ops != 0 &&
+      operand_size == operand_size@pre &&
+      operato_size == operato_size@pre &&
+      operand == operand@pre &&
+      operato == operato@pre &&
+      cur_op == cur_op &&
+      ops == ops &&
+      operand_size@pre == operato_size@pre + 1 &&
+      0 < operato_size@pre && operato_size@pre < INT_MAX &&
+      operand_size@pre < INT_MAX &&
+      operator_rows_well_formed_160(rows, operato_size@pre) &&
+      problem_160_pre_z(rows, operands) &&
+      do_algebra_safe_160(rows, operands) &&
+      CharPtrArray2::full(operato@pre, operato_size@pre, rows) *
+      IntArray::full(operand@pre, operand_size@pre, operands) *
+      IntArray::full(ops, operato_size@pre, operator_codes_160(rows))
+    */
 
-    {
-        int ans = nums_n > 0 ? nums[0] : 0;
-        free(nums);
-        free(ops);
-        return ans;
-    }
+    int ans = eval_range(ops, operato_size, operand, operand_size, 0, operand_size - 1)
+      /*@ where ops_l = operator_codes_160(rows), nums_l = operands */;
+    /*@ Assert
+      ops != 0 &&
+      ans == eval_range_160(operator_codes_160(rows), operands, 0, operand_size@pre - 1) &&
+      operand_size == operand_size@pre &&
+      operato_size == operato_size@pre &&
+      operand == operand@pre &&
+      operato == operato@pre &&
+      cur_op == cur_op &&
+      ops == ops &&
+      operand_size@pre == operato_size@pre + 1 &&
+      0 < operato_size@pre && operato_size@pre < INT_MAX &&
+      operand_size@pre < INT_MAX &&
+      operator_rows_well_formed_160(rows, operato_size@pre) &&
+      problem_160_pre_z(rows, operands) &&
+      do_algebra_safe_160(rows, operands) &&
+      CharPtrArray2::full(operato@pre, operato_size@pre, rows) *
+      IntArray::full(operand@pre, operand_size@pre, operands) *
+      IntArray::full(ops, operato_size@pre, operator_codes_160(rows))
+    */
+    free_int_array(ops, operato_size);
+    /*@ Assert
+      ans == eval_range_160(operator_codes_160(rows), operands, 0, operand_size@pre - 1) &&
+      operand_size == operand_size@pre &&
+      operato_size == operato_size@pre &&
+      operand == operand@pre &&
+      operato == operato@pre &&
+      cur_op == cur_op &&
+      ops == ops &&
+      operand_size@pre == operato_size@pre + 1 &&
+      0 < operato_size@pre && operato_size@pre < INT_MAX &&
+      operand_size@pre < INT_MAX &&
+      operator_rows_well_formed_160(rows, operato_size@pre) &&
+      problem_160_pre_z(rows, operands) &&
+      do_algebra_safe_160(rows, operands) &&
+      CharPtrArray2::full(operato@pre, operato_size@pre, rows) *
+      IntArray::full(operand@pre, operand_size@pre, operands)
+    */
+    return ans;
 
 }
-

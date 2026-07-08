@@ -1,6 +1,6 @@
 # multi_dimensional_arrays 验证进度记录
 
-更新时间：2026-07-06
+更新时间：2026-07-08
 
 这份文档记录 `QCP_examples/humaneval/multi_dimensional_arrays` 下多维数组程序的验证进展、建模方式、踩坑和后续继续时需要注意的事项。状态口径参考 `StringClaude/STRINGCLAUDE_VERIFICATION_PROGRESS.md`。
 
@@ -43,8 +43,35 @@
 | `C_125` | 字符串切词或小写奇序计数 | 验证中 | 按 `../SKILL.md` 直接推进，未使用 `.agents` skill/subagent。已确认共享 `QCP_examples/stdlib/string.h` 提供 `strlen`、`strchr`、`memcpy`、`strcpy`；已移除 `sprintf` / `stdio.h` / `realloc`，并按用户要求撤掉未实现的 `malloc_decimal_row` helper。当前 `C_125.c` 使用 `n+1` 固定上界替代 `realloc`，使用有 C 函数体的 `decimal_len` / `write_decimal` 做机械十进制格式化。`coins_125.v` 中 `problem_125_pre_z/spec_z` 直接 wrapper 原始 `../spec/125.v`；symexec 已成功生成 `C_125_goal.v` / `C_125_proof_auto.v` / `C_125_proof_manual.v` / `C_125_goal_check.v`，并可在 `/tmp/qcp125_strategies` 临时 unqualified strategy loadpath 下编译到 `goal_check`，但当前仍非全链通过：`C_125_proof_manual.v` 有 `Admitted.` / `Abort.` 占位，`C_125_proof_auto.v` 也有生成的 `Admitted.` 占位。成本见 `../ledger.md` 的 `C_125`。 |
 | `C_148` | 行星名字符串比较 / 借用指针输出 | 已全链通过 | 按 `../SKILL.md` 直接完成，未使用 `.agents` skill/subagent。确认共享 `QCP_examples/stdlib/string.h` 提供 `strcmp` / `strcmp_result`，未遇到缺失 libc helper。按用户要求未引入 `planet_cmp`，保留两个主 `for` 循环形状；使用 QCP 字符串常量、各行星单独 literal 指针和直接 `strcmp` 分支建模查找，输出数组用公共 `PtrArray.seg/undef_seg` 表示借用 planet literal 指针。`coins_148.v` 中 `problem_148_pre_z/spec_z` 直接 wrapper 原始 `../spec/148.v`；已用带 `QCP_examples/QCP_demos_LLM -> SimpleC.EE.QCP_demos_LLM` 和 `QCP_examples/stdlib -> SimpleC.StdLib` 的 `-slp` 命令重新运行 symexec，`C_148_goal.v` 现在直接 import canonical strategy，不需要 multi 目录本地 `*_strategy_*` shim；并通过 `coins_148.v`、`C_148_goal.v`、`C_148_proof_auto.v`、`C_148_proof_manual.v`、`C_148_goal_check.v` 编译；`C_148.c`/`coins_148.v`/`C_148_proof_manual.v` 扫描无 `Admitted.`、`Show.`、`planet_cmp` 或手写新增 `Axiom` 声明。已清理 C_148/coins_148 Coq 编译产物、`C_148_proof_manual_backup*.v` 和误加的本地 strategy shim；成本与过程指标见 `../ledger.md` 的 `C_148`。 |
 | `C_153` | 最强文件扩展名 `char ** -> char *` | 已全链通过 | 按 `../SKILL.md` 直接完成，未使用 `.agents` skill/subagent。已确认并使用共享 `QCP_examples/stdlib/string.h` 中的 `strlen` / `memcpy`；`C_153.c` 转成 QCP 可解析形状，增加已实现的 `extension_strength` 辅助函数，并保持返回第一条最大强度 extension 的语义。`coins_153.v` 中 `problem_153_pre_z/spec_z` 直接 wrapper 原始 `../spec/153.v`，并补齐字符强度、最佳前缀、输出行到原始 spec 的桥接。关键修正包括在 `memcpy` 前后携带参数和 frame annotation、用 `CharPtrArray2.missing_i_merge_to_full` 还原输入二维字符串数组、以及移除最终无用的 `i == extensions_size@pre` 断言以避免重复栈资源目标。已重新运行 symexec，并通过 `coins_153.v`、`C_153_goal.v`、`C_153_proof_auto.v`、`C_153_proof_manual.v`、`C_153_goal_check.v` 编译；扫描 `coins_153.v` / `C_153_proof_manual.v` / `C_153_goal_check.v` 无 `Admitted.`、`Abort.`、`Show.`、新增 `Axiom` 或 leftover 标记。成本见 `../ledger.md` 的 `C_153` 行；backup 计数为 first non-empty 15、total 34、after-first VC annotation regens 19。 |
+| `C_160` | 代数表达式求值 `char ** + int * -> int` | 已全链通过 | 按 `../SKILL.md` 直接完成，未使用 `.agents` skill/subagent。用户确认按数学右结合指数语义验证后，`../spec/160.v` 已改为 `^` 右结合；`C_160.c` 已移除 `math.h`/浮点 `pow`，加入有 C 函数体的 `int_pow`，并改为递归 `eval_range`：`+/-` 与 `*//` 取最右同优先级 operator 以保持左结合，`**` 取最左 operator 以实现右结合。确认使用共享 `QCP_examples/stdlib/string.h` 中的 `strlen`。`coins_160.v` 中 `problem_160_pre_z/spec_z` 直接 wrapper 原始 `../spec/160.v`，并补齐 operator code、右结合 `eval_range_160`、fuel 安全、长度、数组和最终 return/spec 证明。已通过 `coins_160.v`、`C_160_goal.v`、`C_160_proof_auto.v`、`C_160_proof_manual.v`、`C_160_goal_check.v` 编译；`coins/manual/goal_check` 扫描无 `Admitted.` 或新增 `Axiom`。成本见 `../ledger.md` 的 `C_160`。 |
 
 其它题目暂按 `待建模` 处理。
+
+## C_160 do_algebra 验证记录
+
+### 当前状态
+
+`C_160` 当前状态为 `已全链通过`。
+
+已完成：
+
+1. 按 `../SKILL.md` 直接执行本题流程，未使用 `.agents` 下的 skill 或 subagent。
+2. 核对 `../spec/160.v`：原始 spec 的 `^` 使用右结合；用户确认“改成右结合来验证”。
+3. `C_160.c` 已从 `<math.h>`/浮点 `pow` 改为本地已实现 `int_pow`，并去掉 `stdio.h`/`math.h`。
+4. `C_160.c` 已按 QCP 格式引入 `ptr_array2_def.h`、`int_array_def.h` 和共享 `QCP_examples/stdlib/string.h`；裸 `malloc/free` 改为带规格的 `malloc_int_array` / `free_int_array` wrapper。
+5. 为避免复制 `char **` 后丢失字符串资源，内部 operator 数组改为 int 操作码数组；`operator_code` helper 有 C 函数体，只读取当前 operator 字符串并返回 `+/-/*///**` 对应 code。
+6. 当前实现已改为递归 `eval_range`：加减层和乘除层扫描到最右同优先级 operator 后拆分，因此同优先级保持左结合；幂层只记录最左 `**` 后拆分右子区间，因此 `2 ** 3 ** 2` 按 `2 ** (3 ** 2)` 验证。
+7. 新增并持续扩展 `coins_160.v`，其中 `problem_160_pre_z` / `problem_160_spec_z` 直接调用原始 `problem_160_pre` / `problem_160_spec`；`operator_string_160` 将 C 行 `"**"` 映射为 spec 字符 `^`，将 `"//"` 映射为 `/`。`coins_160.v` 当前可编译。
+8. symexec 已成功生成非空 `C_160_goal.v` / `C_160_proof_auto.v` / `C_160_proof_manual.v` / `C_160_goal_check.v`；manual 已补 `operator_code`、`int_pow`、`eval_range` 安全分支、finder 循环维护、operator row 合并、最终 return/spec 和 pure length/safety 证明。
+
+最新验证状态：
+
+- 最新 symexec 命令使用 `../SKILL.md` 推荐的 multi-dimensional `-slp` 参数，已成功生成非空 VC。
+- 已通过完整编译链：`coins_160.v`、`C_160_goal.v`、`C_160_proof_auto.v`、`C_160_proof_manual.v`、`C_160_goal_check.v`。
+- `problem_160_pre_z/spec_z` 直接 wrapper `../spec/160.v`；最终 return 证明通过 `problem_160_pre_z_operand_length_160` 将原始 pre 的长度事实桥接到 C 层 `operand_size_pre`，并使用 `do_algebra_safe_160` 中携带的 `eval_range_safe_160` 与 spec 证书关闭最终 spec 目标。
+- 扫描 `coins_160.v`、`C_160_proof_manual.v`、`C_160_goal_check.v` 未发现 `Admitted.` 或新增 `Axiom`。
+
+成本与 symexec 计数已写入 `../ledger.md` 的 `C_160` 行：当前 `first_vc_symexec_runs=19`、`vc_annotation_regens_after_first_vc=8`、`total_symexec_runs=27`，依据清理前 `C_160_proof_manual_backup*.v` 行数统计。
 
 ## C_113 odd_count 验证记录
 
