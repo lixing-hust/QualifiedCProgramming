@@ -15,20 +15,11 @@ Require Import Coq.ZArith.ZArith.
 Import ListNotations.
 Open Scope Z_scope.
 
-(*
-  count_diff l1 l2 acc := 计算 l1 和 l2 之间不同元素的数量
-*)
-Fixpoint count_diff (l1 l2: list Z) (acc: Z): Z :=
-  match l1, l2 with
-  | [], _ => acc
-  | _, [] => acc
-  | h1 :: t1, h2 :: t2 =>
-    if Z.eqb h1 h2 then
-      count_diff t1 t2 acc
-    else
-      count_diff t1 t2 (Z.succ acc)
-  end.
+(* count_diff counts unequal pairs, adding the supplied accumulator. *)
+Definition count_diff (l1 l2: list Z) (acc: Z): Z :=
+  acc + Z.of_nat (length (filter (fun p => negb (Z.eqb (fst p) (snd p))) (combine l1 l2))).
 
+(* smallest_change_impl compares the two halves around the center of the list. *)
 Definition smallest_change_impl (arr: list Z): Z :=
   let len := length arr in
   let half_len := (len / 2)%nat in
@@ -37,7 +28,9 @@ Definition smallest_change_impl (arr: list Z): Z :=
   let second_half := skipn (len - half_len) arr in
   count_diff first_half (rev second_half) 0.
 
+(* problem_73_pre imposes no input constraints. *)
 Definition problem_73_pre (arr : list Z) : Prop := True.
 
+(* problem_73_spec states that n is the minimum number of palindromic changes. *)
 Definition problem_73_spec (arr: list Z) (n: Z): Prop :=
   n = smallest_change_impl arr.

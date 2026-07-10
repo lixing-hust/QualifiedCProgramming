@@ -14,8 +14,10 @@ get_closest_vowel("ab") ==> ""*)
 
 (* 导入所需的 Coq 库 *)
 Require Import Coq.Strings.String Coq.Strings.Ascii.
+Require Import Coq.Lists.List.
 Require Import Arith.
 Require Import Coq.Logic.FunctionalExtensionality.
+Import ListNotations.
 
 
 
@@ -40,15 +42,11 @@ Definition is_alpha (c : ascii) : Prop :=
 Definition is_consonant (c : ascii) : Prop :=
   is_alpha c /\ ~ is_vowel c.
 
-(* 输入字符串只包含英文字母 *)
+(* problem_118_pre requires all characters to be English letters. *)
 Definition problem_118_pre (word : string) : Prop :=
-  let fix all_letters (w : string) : Prop :=
-    match w with
-    | EmptyString => True
-    | String ch rest =>
-        let n := nat_of_ascii ch in ((65 <= n /\ n <= 90) \/ (97 <= n /\ n <= 122)) /\ all_letters rest
-    end in all_letters word.
+  Forall is_alpha (list_ascii_of_string word).
 
+(* problem_118_spec returns the rightmost vowel between two consonants, if any. *)
 Definition problem_118_spec (word: string) (result: string) : Prop :=
   (* 情况一：找到了符合条件的元音 *)
   (exists i c_curr,

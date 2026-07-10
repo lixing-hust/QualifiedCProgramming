@@ -20,24 +20,21 @@ Require Import List.
 Import ListNotations.
 
 
-(* 使用Fixpoint来实现Tribonacci序列的计算 *)
-Fixpoint tri (n : nat) : nat :=
+(* tri computes the benchmark Tribonacci variant by a closed finite sum. *)
+Definition tri (n : nat) : nat :=
   match n with
   | 0 => 1
   | 1 => 3
-  | S (S k) =>
-      if Nat.even n then
-        1 + n / 2
-      else
-        let t_prev := 1 + (n - 1) / 2 in
-        let t_next := 1 + (n + 1) / 2 in
-        t_prev + tri k + t_next
+  | _ =>
+      if Nat.even n
+      then 1 + n / 2
+      else 3 + fold_left Nat.add (map (fun k => 2 * k + 3) (seq 1 (n / 2))) 0
   end.
 
-(* n 为非负整数（nat 已满足），无额外约束 *)
+(* problem_130_pre imposes no extra constraints beyond nat input. *)
 Definition problem_130_pre (n : nat) : Prop := True.
 
-(* 定义tri函数的程序规约 *)
+(* problem_130_spec characterizes the first n+1 values of tri. *)
 Definition problem_130_spec (n : nat) (l : list nat) : Prop :=
   length l = n + 1 /\
   forall i, i <= n -> nth i l 0 = tri i.

@@ -10,17 +10,9 @@ Return n-th Fibonacci number.
 (* 引入Coq标准库，用于自然数（nat）的定义 *)
 Require Import Coq.Init.Nat.
 
-(*
-  fib 是一个递归函数，定义了斐波那契数列。
-*)
-Fixpoint fib (n : nat) : nat :=
-  match n with
-  | 0 => 0
-  | S n' => match n' with
-    | 0 => 1
-    | S n'' => fib n'' + fib n'
-    end
-  end.
+(* fib computes the n-th Fibonacci number by iterating the adjacent pair state. *)
+Definition fib (n : nat) : nat :=
+  fst (Nat.iter n (fun p => (snd p, fst p + snd p)) (0, 1)).
 
 (*
   fib_spec 是对 fib 函数的程序规约。
@@ -30,8 +22,9 @@ Fixpoint fib (n : nat) : nat :=
   - res: nat  (代表程序的输出)
 
 *)
-(* Pre: no special constraints for `fib` *)
+(* problem_55_pre imposes no input constraints. *)
 Definition problem_55_pre (n : nat) : Prop := True.
 
+(* problem_55_spec states that res is the n-th Fibonacci number. *)
 Definition problem_55_spec (n : nat) (res : nat) : Prop :=
   res = fib n.

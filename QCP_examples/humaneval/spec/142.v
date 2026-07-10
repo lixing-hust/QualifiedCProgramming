@@ -12,22 +12,25 @@ For lst = [-1,-5,2,-1,-5] the output should be -126
 Require Import Coq.Lists.List Coq.ZArith.ZArith Coq.NArith.NArith Coq.Bool.Bool.
 Import ListNotations.
 
+(* transformed_entry applies the index-dependent square/cube rule. *)
+Definition transformed_entry (n : nat) (h : Z) : Z :=
+  if (Nat.modulo n 3 =? 0%nat) then (Z.mul h h)
+  else if andb (Nat.modulo n 4 =? 0%nat) (negb (Nat.modulo n 3 =? 0%nat)) then Z.mul (Z.mul h h) h
+  else h.
 
-Fixpoint sum_transformed (l : list Z) (n : nat) : Z :=
-  match l with
-  | [] => 0%Z
-  | h :: t =>
-      let transformed :=
-        if (Nat.modulo n 3 =? 0%nat) then (Z.mul h h)
-        else if andb (Nat.modulo n 4 =? 0%nat) (negb (Nat.modulo n 3 =? 0%nat)) then Z.mul (Z.mul h h) h
-        else h in
-      Z.add transformed (sum_transformed t (S n))
-  end.
+(* sum_transformed folds over the indexed entries after applying the rule. *)
+Definition sum_transformed (l : list Z) (n : nat) : Z :=
+  fold_left
+    Z.add
+    (map (fun p => transformed_entry (fst p) (snd p)) (combine (seq n (length l)) l))
+    0%Z.
 
+(* sum_squares_impl starts the transformed sum at index 0. *)
 Definition sum_squares_impl (lst : list Z) : Z := sum_transformed lst 0%nat.
 
-(* 任意整数列表（允许为空） *)
+(* problem_142_pre accepts any integer list. *)
 Definition problem_142_pre (lst : list Z) : Prop := True.
 
+(* problem_142_spec states that output is the transformed sum. *)
 Definition problem_142_spec (lst : list Z) (output : Z) : Prop :=
   output = sum_squares_impl lst.

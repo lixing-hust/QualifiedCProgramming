@@ -15,96 +15,40 @@ For example:
 Require Import Coq.Lists.List.
 Require Import Coq.Arith.Arith.
 Require Import Coq.Sorting.Sorted.
+Require Import Coq.Sorting.Permutation.
 Require Import Coq.Bool.Bool.
 
 Import ListNotations.
 
-(* 辅助定义：判断单个数字是否为奇数 (与之前相同) *)
+(* is_odd_digit recognizes decimal odd digits. *)
 Definition is_odd_digit (d : nat) : Prop :=
   d = 1 \/ d = 3 \/ d = 5 \/ d = 7 \/ d = 9.
 
+(* all_digits_odd_list states that every digit in a list is odd. *)
+Definition all_digits_odd_list (l : list nat) : Prop :=
+  Forall is_odd_digit l.
 
-Fixpoint all_digits_odd_list (l : list nat) : Prop :=
-  match l with
-  | [] => True (* 空列表满足条件 *)
-  | h :: t => is_odd_digit h /\ all_digits_odd_list t (* 头部是奇数且尾部也满足条件 *)
-  end.
-
-(*
-  将 nat 转换为 list nat (使用结构递归)
-*)
-
-(*
-  这是一个使用 "fuel" 技巧的辅助函数。
-  - n: 我们要转换的数。
-  - fuel: 一个计数器，确保递归会终止。递归调用在 fuel 的前驱 (fuel') 上进行。
-*)
-Fixpoint nat_to_digits_fueled (n fuel : nat) : list nat :=
-  match fuel with
-  | 0 => [] (* 燃料耗尽，停止 *)
-  | S fuel' => (* 还有燃料，继续 *)
-      (* 我们也需要检查 n 是否已经为0 *)
-      if Nat.eqb n 0 then
-        []
-      else
-        (n mod 10) :: nat_to_digits_fueled (n / 10) fuel'
-  end.
-
-(*
-  主转换函数。
-  它调用辅助函数，并提供足够的 "fuel"。
-  一个安全的做法是提供 n 本身作为 fuel，因为一个数字的位数永远不会超过其本身的值。
-*)
+(* nat_to_digits enumerates enough decimal positions for positive n. *)
 Definition nat_to_digits (n : nat) : list nat :=
-  nat_to_digits_fueled n n.
+  map (fun p => (n / Nat.pow 10 p) mod 10) (seq 0 n).
 
-
+(* has_only_odd_digits is the logical predicate for numbers with no even digit. *)
 Definition has_only_odd_digits (n : nat) : Prop :=
   all_digits_odd_list (nat_to_digits n).
 
-(*
-  第四部分: 实现函数
-*)
-
-(* 判断数字是否只有奇数字（bool版本） *)
+(* has_only_odd_digits_bool is the executable boolean used by library filter. *)
 Definition has_only_odd_digits_bool (n : nat) : bool :=
   let digits := nat_to_digits n in
   forallb (fun d => orb (Nat.eqb d 1) (orb (Nat.eqb d 3) (orb (Nat.eqb d 5) (orb (Nat.eqb d 7) (Nat.eqb d 9))))) digits.
 
-(* 过滤函数 *)
-Fixpoint filter_odd_digits (l : list nat) : list nat :=
-  match l with
-  | [] => []
-  | h :: t =>
-      if has_only_odd_digits_bool h then
-        h :: filter_odd_digits t
-      else
-        filter_odd_digits t
-  end.
+(* filter_odd_digits keeps exactly the elements whose decimal digits are all odd. *)
+Definition filter_odd_digits (l : list nat) : list nat :=
+  filter has_only_odd_digits_bool l.
 
-(* 插入排序 *)
-Fixpoint insert_sorted (x : nat) (l : list nat) : list nat :=
-  match l with
-  | [] => [x]
-  | h :: t =>
-      if x <=? h then
-        x :: l
-      else
-        h :: insert_sorted x t
-  end.
-
-Fixpoint sort_list (l : list nat) : list nat :=
-  match l with
-  | [] => []
-  | h :: t => insert_sorted h (sort_list t)
-  end.
-
-Definition unique_digits_impl (x : list nat) : list nat :=
-  sort_list (filter_odd_digits x).
-
-
-(* 列表元素均为正整数 *)
+(* problem_104_pre requires all input elements to be positive. *)
 Definition problem_104_pre (x : list nat) : Prop := Forall (fun n => n > 0) x.
 
+(* problem_104_spec characterizes the sorted list of elements with only odd digits. *)
 Definition problem_104_spec (x y : list nat) : Prop :=
-  y = unique_digits_impl x.
+  Permutation y (filter_odd_digits x) /\
+  Sorted le y.

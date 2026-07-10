@@ -10,26 +10,15 @@ digits(235) == 15
 Require Import Coq.Lists.List Coq.Arith.Arith.
 Import ListNotations.
 
-
-Fixpoint get_digits_helper (n fuel : nat) : list nat :=
-  match fuel with
-  | 0 => []
-  | S f' =>
-    match n with
-    | 0 => []
-    | _ => (n mod 10) :: get_digits_helper (n / 10) f'
-    end
-  end.
-
+(* get_digits enumerates enough decimal positions for n; high zero digits are harmless. *)
 Definition get_digits (n : nat) : list nat :=
-  get_digits_helper n n.
+  map (fun p => (n / Nat.pow 10 p) mod 10) (List.seq 0 n).
 
-Fixpoint product (l : list nat) : nat :=
-  match l with
-  | [] => 1
-  | h :: t => h * product t
-  end.
+(* product multiplies all numbers in a list using the standard fold combinator. *)
+Definition product (l : list nat) : nat :=
+  fold_left Nat.mul l 1.
 
+(* digits_impl returns the product of odd decimal digits, or 0 if none exist. *)
 Definition digits_impl (n : nat) : nat :=
   let ds := filter Nat.odd (get_digits n) in
   match ds with
@@ -37,8 +26,9 @@ Definition digits_impl (n : nat) : nat :=
   | _ => product ds
   end.
 
-(* n 为正整数 *)
+(* problem_131_pre requires a positive input. *)
 Definition problem_131_pre (n : nat) : Prop := n > 0.
 
+(* problem_131_spec states that output matches the odd-digit product. *)
 Definition problem_131_spec (n : nat) (output : nat) : Prop :=
   output = digits_impl n.

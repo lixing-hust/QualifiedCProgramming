@@ -25,10 +25,8 @@ Definition is_lowercase (s : string) : Prop :=
 Definition is_uppercase (s : string) : Prop :=
   Forall (fun c => (("A" <=? c)%char && (c <=? "Z")%char) = true) (list_ascii_of_string s).
 
-(* 定义键的类型，可以是字符串或其他类型 *)
-Inductive KeyType :=
-  | KeyString (s : string)
-  | KeyOther.
+(* KeyType represents string keys as Some s and non-string keys as None. *)
+Definition KeyType := option string.
 
 (* 定义字典的类型，键为 KeyType，值为字符串 *)
 Definition dictionary := list (KeyType * string).
@@ -41,7 +39,7 @@ Definition problem_95_spec (d : dictionary) (output : bool) : Prop :=
   match d with
   | [] => output = false
   | _ =>
-    ( (forall k v, In (k, v) d -> match k with KeyString s => is_lowercase s | KeyOther => False end) \/
-      (forall k v, In (k, v) d -> match k with KeyString s => is_uppercase s | KeyOther => False end) )
+    ( (forall k v, In (k, v) d -> exists s, k = Some s /\ is_lowercase s) \/
+      (forall k v, In (k, v) d -> exists s, k = Some s /\ is_uppercase s) )
     <-> output = true
   end.

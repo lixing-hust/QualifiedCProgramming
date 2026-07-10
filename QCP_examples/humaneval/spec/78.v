@@ -22,6 +22,7 @@ Require Import Coq.Strings.String Coq.Strings.Ascii Coq.Lists.List.
 Import ListNotations.
 Open Scope string_scope.
 
+(* is_prime_hex_digit recognizes hexadecimal digits with prime numeric value. *)
 Definition is_prime_hex_digit (c : ascii) : bool :=
   match c with
   | "2"%char | "3"%char | "5"%char | "7"%char
@@ -29,19 +30,17 @@ Definition is_prime_hex_digit (c : ascii) : bool :=
   | _ => false
   end.
 
-Fixpoint count_prime_hex (s : string) : nat :=
-  match s with
-  | "" => 0
-  | String h t =>
-    (if is_prime_hex_digit h then 1 else 0) +
-    count_prime_hex t
-  end.
+(* count_prime_hex counts hexadecimal digits whose value is prime. *)
+Definition count_prime_hex (s : string) : nat :=
+  length (filter is_prime_hex_digit (list_ascii_of_string s)).
 
+(* hex_key_impl is the public implementation-level expression. *)
 Definition hex_key_impl (s : string) : nat :=
   count_prime_hex s.
 
-
+(* problem_78_pre imposes no input constraints. *)
 Definition problem_78_pre (s : string) : Prop := True.
 
+(* problem_78_spec states that output is the prime-hex digit count. *)
 Definition problem_78_spec (s : string) (output : nat) : Prop :=
   output = hex_key_impl s.

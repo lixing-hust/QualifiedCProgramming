@@ -23,27 +23,15 @@ Please write a function to efficiently compute the n-th element of the fib4 numb
 
 Require Import Coq.Arith.Arith.
 
-(* 使用 Fixpoint 表示 fib4 序列 *)
-Fixpoint fib4 (n : nat) : nat :=
-  match n with
-  | 0 => 0
-  | S n1 =>
-    match n1 with
-    | 0 => 0
-    | S n2 =>
-      match n2 with
-      | 0 => 2
-      | S n3 =>
-        match n3 with
-        | 0 => 0
-        | S n4 => fib4 n1 + fib4 n2 + fib4 n3 + fib4 n4
-        end
-      end
-    end
-  end.
+(* fib4 computes the sequence by iterating the four-value sliding window. *)
+Definition fib4 (n : nat) : nat :=
+  let '(a, b, c, d) :=
+    Nat.iter n (fun '(a, b, c, d) => (b, c, d, a + b + c + d)) (0, 0, 2, 0)
+  in a.
 
-
+(* problem_46_pre imposes no input constraints. *)
 Definition problem_46_pre (input : nat) : Prop := True.
 
+(* problem_46_spec states that output is the requested Fib4 value. *)
 Definition problem_46_spec (input : nat) (output : nat) : Prop :=
   output = fib4 input.

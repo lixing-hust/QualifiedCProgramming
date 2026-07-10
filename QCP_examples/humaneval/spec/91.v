@@ -15,28 +15,33 @@ Require Import Coq.Strings.String Coq.Strings.Ascii Coq.Lists.List Coq.Arith.Ari
 Import ListNotations.
 Open Scope string_scope.
 
+(* is_sentence_delimiter recognizes punctuation that starts a new sentence. *)
 Definition is_sentence_delimiter (c : ascii) : bool :=
   match c with
   | "."%char | "?"%char | "!"%char => true
   | _ => false
   end.
 
-Fixpoint is_bored_aux (S : string) (isstart isi : bool) : nat :=
-  match S with
-  | "" => 0
-  | String c rest =>
-    let add := if andb (Ascii.eqb c " "%char) isi then 1 else 0 in
-    let isi' := if andb (Ascii.eqb c "I"%char) isstart then true else false in
-    let isstart_after_char := if Ascii.eqb c " "%char then isstart else false in
-    let isstart' := if is_sentence_delimiter c then true else isstart_after_char in
-    add + is_bored_aux rest isstart' isi'
-  end.
+(* bored_state is (count, at_sentence_start, saw_starting_I). *)
+Definition bored_state : Type := nat * bool * bool.
 
+(* bored_step updates the boredom scan state for one character. *)
+Definition bored_step (st : bored_state) (c : ascii) : bored_state :=
+  let '(count, isstart, isi) := st in
+  let add := if andb (Ascii.eqb c " "%char) isi then 1 else 0 in
+  let isi' := if andb (Ascii.eqb c "I"%char) isstart then true else false in
+  let isstart_after_char := if Ascii.eqb c " "%char then isstart else false in
+  let isstart' := if is_sentence_delimiter c then true else isstart_after_char in
+  (count + add, isstart', isi').
+
+(* is_bored_impl counts sentences that start with the word I. *)
 Definition is_bored_impl (S : string) : nat :=
-  is_bored_aux S true false.
+  let '(count, _, _) := fold_left bored_step (list_ascii_of_string S) (0, true, false) in
+  count.
 
-(* 输入字符串可为任意内容，无额外约束 *)
+(* problem_91_pre imposes no input constraints. *)
 Definition problem_91_pre (S : string) : Prop := True.
 
+(* problem_91_spec states that output is the boredom count. *)
 Definition problem_91_spec (S : string) (output : nat) : Prop :=
   output = is_bored_impl S.

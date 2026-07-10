@@ -11,40 +11,55 @@ rounded_avg(20, 33) => "11010" *)
 (* 引入所需的库 *)
 Require Import ZArith.
 Require Import String.
+Require Import Coq.Strings.Ascii.
+Require Import Coq.Lists.List.
+Require Import Coq.Arith.Arith.
 Require Import PArith. (* 用于 positive 类型 *)
+Import ListNotations.
 Open Scope Z_scope.
 Open Scope string_scope.
 
-(*
-  一个作用于 positive 类型的递归辅助函数，用于生成二进制字符串。
-  这是在 Coq 中进行此类转换的标准方法。
-*)
-Fixpoint to_binary_p (p : positive) : string :=
-  match p with
-  | xH    => "1" (* Base case for p = 1 *)
-  | xO p' => to_binary_p p' ++ "0" (* Case for p = 2 * p' *)
-  | xI p' => to_binary_p p' ++ "1" (* Case for p = 2 * p' + 1 *)
+(* bit_char converts a binary digit to its ASCII character. *)
+Definition bit_char (b : nat) : ascii :=
+  if Nat.eqb b 0 then "0"%char else "1"%char.
+
+(* msb_pos returns the highest non-zero binary position, defaulting to 0. *)
+Definition msb_pos (n : nat) : nat :=
+  fst
+    (fold_left
+       (fun acc p =>
+          let b := Nat.modulo (Nat.div n (Nat.pow 2 p)) 2 in
+          if Nat.eqb b 0 then acc else (p, b))
+       (seq 0 (S n))
+       (0%nat, 0%nat)).
+
+(* nat_to_binary converts a natural number to its binary string. *)
+Definition nat_to_binary (n : nat) : string :=
+  match n with
+  | O => "0"
+  | _ =>
+      string_of_list_ascii
+        (map (fun p => bit_char (Nat.modulo (Nat.div n (Nat.pow 2 p)) 2)) (rev (seq 0 (S (msb_pos n)))))
   end.
 
-(*
-  主转换函数，用于将 Z 类型（整数）转换为不带前缀的二进制字符串。
-  它处理了 0 的情况，并使用 to_binary_p 处理正数。
-*)
+(* to_binary converts integers to the benchmark binary string convention. *)
 Definition to_binary (n : Z) : string :=
   match n with
   | Z0 => "0"
-  | Zpos p => to_binary_p p
+  | Zpos p => nat_to_binary (Pos.to_nat p)
   | Zneg _ => "-1"
   end.
 
+(* rounded_avg_impl returns -1 for an empty interval, otherwise the rounded average in binary. *)
 Definition rounded_avg_impl (n m : Z) : string :=
   if Z.gtb n m then
     "-1"
   else
     to_binary ((n + m) / 2).
 
-(* n 与 m 为正整数 *)
+(* problem_103_pre requires positive endpoints. *)
 Definition problem_103_pre (n m : Z) : Prop := n > 0 /\ m > 0.
 
+(* problem_103_spec states that output is the benchmark rounded-average string. *)
 Definition problem_103_spec (n m : Z) (output : string) : Prop :=
   output = rounded_avg_impl n m.

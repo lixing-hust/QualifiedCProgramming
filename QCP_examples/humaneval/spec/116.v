@@ -12,87 +12,20 @@ Require Import Permutation.
 Require Import Sorting.Sorted.
 Import ListNotations.
 
-
-(*
-  定义一个带有 "燃料" 参数的辅助函数。
-  递归在燃料参数 `fuel` 上是结构性的 (S fuel' -> fuel')，
-  这满足了 Coq 对 Fixpoint 的要求。
-*)
-Fixpoint count_ones_helper (n fuel : nat) : nat :=
-  match fuel with
-  | 0 => 0 (* 燃料耗尽，停止递归 *)
-  | S fuel' => (* 还有燃料 *)
-      match n with
-      | 0 => 0 (* n为0，递归的自然基准情况 *)
-      | _ => (n mod 2) + count_ones_helper (n / 2) fuel' (* 递归调用，燃料减少 *)
-      end
-  end.
-
-(*
-  定义主函数，它用 n 自身作为初始燃料来调用辅助函数。
-  对于任何 n，其二进制表示的位数都小于 n 本身，所以 n 是足够多的“燃料”。
-*)
+(* count_ones counts set bits in the lower 31 binary positions. *)
 Definition count_ones (n : nat) : nat :=
-  count_ones_helper n 31.
+  length (filter (fun p => Nat.eqb ((n / Nat.pow 2 p) mod 2) 1) (seq 0 31)).
 
-(*
-  定义两个自然数的比较逻辑:
-  - 首先比较它们二进制中1的个数
-  - 如果1的个数相等，则直接比较数值大小
-*)
-Definition lt_custom (a b : nat) : Prop :=
+(* le_custom orders numbers first by bit count and then by numeric value. *)
+Definition le_custom (a b : nat) : Prop :=
   let ones_a := count_ones a in
   let ones_b := count_ones b in
-  (ones_a < ones_b) \/ (ones_a = ones_b /\ a < b).
+  (ones_a < ones_b) \/ (ones_a = ones_b /\ a <= b).
 
-(* 用于实现的bool版本比较函数 *)
-Definition lt_custom_bool (a b : nat) : bool :=
-  let ones_a := count_ones a in
-  let ones_b := count_ones b in
-  if ones_a <? ones_b then true
-  else if ones_a =? ones_b then a <? b
-  else false.
-
-(*
-  排序函数的规约 (Spec)
-
-  它描述了输入列表(input)和输出列表(output)之间的关系
-*)
-
-Definition should_swap_custom_bool (a b : nat) : bool :=
-  if count_ones b <? count_ones a then true
-  else if count_ones b =? count_ones a then b <? a
-  else false.
-
-Definition swap_adjacent_custom (j : nat) (l : list nat) : list nat :=
-  match nth_error l j, nth_error l (S j) with
-  | Some a, Some b =>
-      if should_swap_custom_bool a b
-      then firstn j l ++ b :: a :: skipn (S (S j)) l
-      else l
-  | _, _ => l
-  end.
-
-Fixpoint bubble_pass_custom_from (fuel j : nat) (l : list nat) : list nat :=
-  match fuel with
-  | O => l
-  | S fuel' => bubble_pass_custom_from fuel' (S j) (swap_adjacent_custom j l)
-  end.
-
-Definition bubble_pass_custom (l : list nat) : list nat :=
-  bubble_pass_custom_from (length l - 1)%nat 0 l.
-
-Fixpoint bubble_sort_custom_fuel (fuel : nat) (l : list nat) : list nat :=
-  match fuel with
-  | O => l
-  | S fuel' => bubble_sort_custom_fuel fuel' (bubble_pass_custom l)
-  end.
-
-Definition sort_array_impl (input : list nat) : list nat :=
-  bubble_sort_custom_fuel (length input) input.
-
-(* 输入为非负整数列表（nat 已保证） *)
+(* problem_116_pre imposes no extra constraints beyond nat inputs. *)
 Definition problem_116_pre (input : list nat) : Prop := True.
 
+(* problem_116_spec characterizes sorting by bit count and numeric tie-breaker. *)
 Definition problem_116_spec (input output : list nat) : Prop :=
-  output = sort_array_impl input.
+  Permutation output input /\
+  Sorted le_custom output.

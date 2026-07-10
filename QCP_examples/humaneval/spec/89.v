@@ -32,16 +32,16 @@ Definition char_relation (c_in c_out : ascii) : Prop :=
   | _ => c_out = c_in
   end.
 
+(* is_lowercase_ascii recognizes lowercase ASCII letters. *)
 Definition is_lowercase_ascii (c : ascii) : Prop :=
   let n := nat_of_ascii c in
   (nat_of_ascii "a"%char <= n <= nat_of_ascii "z"%char)%nat.
 
-Fixpoint all_lowercase_ascii (s : string) : Prop :=
-  match s with
-  | EmptyString => True
-  | String c rest => is_lowercase_ascii c /\ all_lowercase_ascii rest
-  end.
+(* all_lowercase_ascii requires every character in the string to be lowercase. *)
+Definition all_lowercase_ascii (s : string) : Prop :=
+  Forall is_lowercase_ascii (list_ascii_of_string s).
 
+(* problem_89_pre restricts the input to lowercase ASCII letters. *)
 Definition problem_89_pre (s : string) : Prop := all_lowercase_ascii s.
 
 (*
@@ -51,6 +51,7 @@ Definition problem_89_pre (s : string) : Prop := all_lowercase_ascii s.
   2. 对于两个列表中每个位置上对应的字符 (c_in, c_out)，
      它们必须满足 char_relation 定义的关系。
 *)
+(* problem_89_spec relates each input character to the rotated output character. *)
 Definition problem_89_spec (s : string) (output : string) : Prop :=
   String.length s = String.length output /\
   forall i, i < String.length s ->

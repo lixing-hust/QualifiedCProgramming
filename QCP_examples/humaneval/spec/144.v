@@ -22,20 +22,15 @@ Definition char_to_digit (c : ascii) : nat :=
   let zero := nat_of_ascii ("0"%char) in
   n - zero.
 
-(* 辅助函数：将list ascii转换为自然数 *)
-Fixpoint list_ascii_to_nat_aux (l : list ascii) (acc : nat) : nat :=
-  match l with
-  | [] => acc
-  | c :: l' => list_ascii_to_nat_aux l' (acc * 10 + char_to_digit c)
-  end.
-
-(* 主函数：将list ascii转换为自然数 *)
+(* list_ascii_to_nat parses a decimal character list with a left fold. *)
 Definition list_ascii_to_nat (l : list ascii) : nat :=
-  list_ascii_to_nat_aux l 0.
+  fold_left (fun acc c => acc * 10 + char_to_digit c) l 0.
 
+(* is_digit_ascii recognizes decimal digit characters. *)
 Definition is_digit_ascii (c : ascii) : Prop :=
   nat_of_ascii ("0"%char) <= nat_of_ascii c <= nat_of_ascii ("9"%char).
 
+(* all_digits states that every character in the list is a decimal digit. *)
 Definition all_digits (l : list ascii) : Prop :=
   Forall is_digit_ascii l.
 
@@ -64,6 +59,7 @@ Definition Parse_Fraction (s : list ascii) (num den : nat) : Prop :=
  *   n: 代表第二个分数的 list ascii。
  *   output: 函数的期望布尔输出。
  *)
+(* problem_144_pre requires both inputs to be positive valid fraction strings. *)
  (* 约束：x 与 n 均为有效分数串，且分子/分母为正整数 *)
 Definition problem_144_pre (x n : string) : Prop :=
   exists nx dx ny dy nx_s dx_s ny_s dy_s,
@@ -79,6 +75,7 @@ Definition problem_144_pre (x n : string) : Prop :=
     Parse_Fraction (list_ascii_of_string n) ny dy /\
     nx > 0 /\ dx > 0 /\ ny > 0 /\ dy > 0.
 
+(* problem_144_spec states whether the product of two parsed fractions is integral. *)
 Definition problem_144_spec (x n : string) (output : bool) : Prop :=
   exists num_x den_x num_n den_n : nat,
     (* 1. 解析输入的 list ascii *)

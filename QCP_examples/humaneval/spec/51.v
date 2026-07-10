@@ -34,11 +34,9 @@ Definition is_vowel (c : ascii) : bool :=
   | _ => false
   end.
 
-Fixpoint filter_string (f : ascii -> bool) (s : string) : string :=
-  match s with
-  | EmptyString => EmptyString
-  | String c s' => if f c then String c (filter_string f s') else filter_string f s'
-  end.
+(* filter_string filters a string through the standard list/string conversions. *)
+Definition filter_string (f : ascii -> bool) (s : string) : string :=
+  string_of_list_ascii (filter f (list_ascii_of_string s)).
 
 (*
  * 描述: 这是 remove_vowels 函数的程序规约 (Specification)，完全基于属性定义。
@@ -48,8 +46,9 @@ Fixpoint filter_string (f : ascii -> bool) (s : string) : string :=
  * @param output: string - 函数的输出字符列表。
  * @return: Prop - 一个表示输入和输出之间关系的命题。
  *)
-(* Pre: no special constraints for `remove_vowels` *)
+(* problem_51_pre imposes no input constraints. *)
 Definition problem_51_pre (input : string) : Prop := True.
 
+(* problem_51_spec states that output is input with vowels removed. *)
 Definition problem_51_spec (input : string) (output : string) : Prop :=
   output = filter_string (fun c => negb (is_vowel c)) input.

@@ -21,71 +21,27 @@ get_row([[], [1], [1, 2, 3]], 3) == [(2, 2)]
 Require Import Coq.Lists.List.
 Require Import Coq.Arith.Arith.
 Require Import Coq.ZArith.ZArith.
+Require Import Coq.Sorting.Sorted.
 Import ListNotations.
 Open Scope Z_scope.
 
 (*
- * 排序关系定义：
- * - 首先按行号 (r) 升序。
- * - 如果行号相同，则按列号 (c) 降序。
+ * coord_order sorts by row ascending and, within one row, column descending.
  *)
-Inductive coord_order (c1 c2 : Z * Z) : Prop :=
-  | row_lt : fst c1 < fst c2 -> coord_order c1 c2
-  | col_gt : fst c1 = fst c2 -> snd c1 > snd c2 -> coord_order c1 c2.
+Definition coord_order (c1 c2 : Z * Z) : Prop :=
+  fst c1 < fst c2 \/ (fst c1 = fst c2 /\ snd c1 > snd c2).
 
-(*
- * 检查一个坐标列表是否根据 coord_order 关系进行了排序。
- * 这个版本可以通过 Coq 的终止性检查。
- *)
-Fixpoint is_sorted (l : list (Z * Z)) : Prop :=
-  match l with
-  | [] => True
-  | [_] => True
-  | c1 :: (c2 :: _ as tail) => coord_order c1 c2 /\ is_sorted tail
-  end.
+(* coord_hits states that coordinate (r,c) points to a cell equal to x. *)
+Definition coord_hits (lst : list (list Z)) (x : Z) (coord : Z * Z) : Prop :=
+  exists row,
+    nth_error lst (Z.to_nat (fst coord)) = Some row /\
+    nth_error row (Z.to_nat (snd coord)) = Some x /\
+    0 <= fst coord /\ 0 <= snd coord.
 
-Fixpoint collect_coords_row (row : list Z) (r c : Z) (x : Z) : list (Z * Z) :=
-  match row with
-  | [] => []
-  | h :: t =>
-      if Z.eqb h x then
-        (r, c) :: collect_coords_row t r (Z.succ c) x
-      else
-        collect_coords_row t r (Z.succ c) x
-  end.
-
-Fixpoint collect_all_coords (lst : list (list Z)) (r : Z) (x : Z) : list (Z * Z) :=
-  match lst with
-  | [] => []
-  | row :: rest =>
-      collect_coords_row row r 0 x ++ collect_all_coords rest (Z.succ r) x
-  end.
-
-Fixpoint insert_coord (coord : Z * Z) (coords : list (Z * Z)) : list (Z * Z) :=
-  match coords with
-  | [] => [coord]
-  | h :: t =>
-      if Z.ltb (fst coord) (fst h) then
-        coord :: coords
-      else if Z.eqb (fst coord) (fst h) then
-        if Z.ltb (snd h) (snd coord) then
-          coord :: coords
-        else
-          h :: insert_coord coord t
-      else
-        h :: insert_coord coord t
-  end.
-
-Fixpoint sort_coords (coords : list (Z * Z)) : list (Z * Z) :=
-  match coords with
-  | [] => []
-  | h :: t => insert_coord h (sort_coords t)
-  end.
-
-Definition get_row_impl (lst : list (list Z)) (x : Z) : list (Z * Z) :=
-  sort_coords (collect_all_coords lst 0 x).
-
+(* problem_87_pre imposes no input constraints. *)
 Definition problem_87_pre (lst : list (list Z)) (x : Z) : Prop := True.
 
+(* problem_87_spec characterizes exactly the sorted coordinates whose cell equals x. *)
 Definition problem_87_spec (lst : list (list Z)) (x : Z) (res : list (Z * Z)) : Prop :=
-  res = get_row_impl lst x.
+  (forall coord, In coord res <-> coord_hits lst x coord) /\
+  Sorted coord_order res.

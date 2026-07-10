@@ -30,46 +30,26 @@ Open Scope Z_scope.
 Import ListNotations.
 
 
+(* sorted_list states non-decreasing order over integers. *)
+Definition sorted_list (l : list Z) : Prop :=
+  Sorted Z.le l.
 
-Fixpoint is_sorted_bool (l : list Z) : bool :=
-  match l with
-  | [] => true
-  | [_] => true
-  | h1 :: t =>
-      match t with
-      | [] => true
-      | h2 :: t' => if Z.leb h1 h2 then is_sorted_bool t else false
-      end
-  end.
-
+(* right_shift moves the last element to the front, preserving empty lists. *)
 Definition right_shift (l : list Z) : list Z :=
   match rev l with
   | [] => []
   | hd :: tl => hd :: rev tl
   end.
 
+(* rotation_sorted says that some cyclic rotation of arr is sorted. *)
+Definition rotation_sorted (arr : list Z) : Prop :=
+  exists prefix suffix,
+    arr = prefix ++ suffix /\
+    sorted_list (suffix ++ prefix).
 
-Fixpoint n_shifts (n : nat) (l : list Z) : list Z :=
-  match n with
-  | 0%nat => l
-  | S n' => right_shift (n_shifts n' l)
-  end.
-
-
-Fixpoint check_all_shifts (arr : list Z) (n : nat) : bool :=
-  match n with
-  | O => is_sorted_bool arr
-  | S n' => orb (is_sorted_bool (n_shifts n arr)) (check_all_shifts arr n')
-  end.
-
-Definition move_one_ball_impl (arr : list Z) : bool :=
-  match arr with
-  | [] => true
-  | _ :: _ => check_all_shifts arr (length arr)
-  end.
-
-(* 输入数组元素互不相同（唯一性），可空列表允许直接返回 True *)
+(* problem_109_pre requires unique elements, matching the task statement. *)
 Definition problem_109_pre (arr : list Z) : Prop := NoDup arr.
 
+(* problem_109_spec relates the boolean result to the existence of a sorted rotation. *)
 Definition problem_109_spec (arr : list Z) (result : bool) : Prop :=
-  result = move_one_ball_impl arr.
+  result = true <-> rotation_sorted arr.

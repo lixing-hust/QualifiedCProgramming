@@ -19,19 +19,13 @@ Import ListNotations.
 
 Local Open Scope string_scope.
 
+(* char_to_digit converts an ASCII decimal digit to its numeric value. *)
 Definition char_to_digit (c : ascii) : nat :=
   nat_of_ascii c - nat_of_ascii "0"%char.
 
-(* 辅助函数：将字符串转换为自然数 *)
-Fixpoint string_to_nat_aux (s : string) (acc : nat) : nat :=
-  match s with
-  | EmptyString => acc
-  | String c s' => string_to_nat_aux s' (acc * 10 + char_to_digit c)
-  end.
-
-(* 主函数：将字符串转换为自然数 *)
+(* string_to_nat parses a decimal string with a left fold. *)
 Definition string_to_nat (s : string) : nat :=
-  string_to_nat_aux s 0.
+  fold_left (fun acc c => acc * 10 + char_to_digit c) (list_ascii_of_string s) 0.
 
 (*
   辅助规约: parse_fruit_string
@@ -43,11 +37,13 @@ Definition parse_fruit_string (s : string) (apples oranges : nat) : Prop :=
     oranges = string_to_nat s_oranges /\
     s = (s_apples ++ " apples and " ++ s_oranges ++ " oranges")%string.
 
+(* problem_67_spec subtracts parsed apples and oranges from the total fruit count. *)
 Definition problem_67_spec (s : string) (n : nat) (ret : nat) : Prop :=
   exists apples oranges,
     parse_fruit_string s apples oranges /\
     ret = n - (apples + oranges).
 
+(* problem_67_pre states the required fruit-string shape with decimal counts. *)
 Definition problem_67_pre (s : string) (n : nat) : Prop :=
   exists s_apples s_oranges,
     s_apples <> EmptyString /\

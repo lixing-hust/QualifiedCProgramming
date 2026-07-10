@@ -17,23 +17,24 @@ Import ListNotations.
 Open Scope string_scope.
 
 
-Fixpoint to_digits_fuel (n fuel : nat) : list nat :=
-  match fuel with
-  | O => []
-  | S fuel' =>
-      if (n <? 10)%nat then
-        [n]
-      else
-        (to_digits_fuel (n / 10) fuel') ++ [n mod 10]
-  end.
+(* msd_pos returns the highest non-zero decimal position, defaulting to 0. *)
+Definition msd_pos (n : nat) : nat :=
+  fst
+    (fold_left
+       (fun acc p =>
+          let d := (n / Nat.pow 10 p) mod 10 in
+          if Nat.eqb d 0 then acc else (p, d))
+       (seq 0 (S n))
+       (0, 0)).
 
+(* to_digits returns the decimal digits of n from most to least significant. *)
 Definition to_digits (n : nat) : list nat :=
   if (n =? 0)%nat then
     [0]
   else
-    to_digits_fuel n n.
+    map (fun p => (n / Nat.pow 10 p) mod 10) (rev (seq 0 (S (msd_pos n)))).
 
-
+(* digit_to_string converts a decimal digit to a one-character string. *)
 Definition digit_to_string (d : nat) : string :=
   match d with
   | 0 => "0" | 1 => "1" | 2 => "2" | 3 => "3" | 4 => "4"
@@ -41,12 +42,11 @@ Definition digit_to_string (d : nat) : string :=
   | _ => ""
   end.
 
-Fixpoint from_digits_to_string (l : list nat) : string :=
-  match l with
-  | [] => ""
-  | h :: t => (digit_to_string h) ++ (from_digits_to_string t)
-  end.
+(* from_digits_to_string concatenates the one-character strings for all digits. *)
+Definition from_digits_to_string (l : list nat) : string :=
+  String.concat "" (map digit_to_string l).
 
+(* circular_shift_impl rotates decimal digits right, or reverses when shift is too large. *)
 Definition circular_shift_impl (x : nat) (shift : nat) : string :=
   let digits := to_digits x in
   let len := length digits in
@@ -65,8 +65,9 @@ Definition circular_shift_impl (x : nat) (shift : nat) : string :=
         let new_tail := firstn split_point digits in
         from_digits_to_string (new_head ++ new_tail).
 
+(* problem_65_pre imposes no input constraints. *)
 Definition problem_65_pre (x : nat) (shift : nat) : Prop := True.
 
+(* problem_65_spec states that result is the circular-shifted decimal string. *)
 Definition problem_65_spec (x : nat) (shift : nat) (result : string) : Prop :=
   result = circular_shift_impl x shift.
-

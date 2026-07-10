@@ -25,24 +25,23 @@ Require Import Permutation.
 Import ListNotations.
 Open Scope string_scope.
 
-(*
-  定义一个从单词 (string) 到数字 (nat) 的关系。
-*)
-Inductive WordToNum : string -> nat -> Prop :=
-  | wtn_zero  : WordToNum "zero" 0
-  | wtn_one   : WordToNum "one" 1
-  | wtn_two   : WordToNum "two" 2
-  | wtn_three : WordToNum "three" 3
-  | wtn_four  : WordToNum "four" 4
-  | wtn_five  : WordToNum "five" 5
-  | wtn_six   : WordToNum "six" 6
-  | wtn_seven : WordToNum "seven" 7
-  | wtn_eight : WordToNum "eight" 8
-  | wtn_nine  : WordToNum "nine" 9.
+(* word_to_num maps valid numeral words to their numeric value. *)
+Definition word_to_num (s : string) : option nat :=
+  if string_dec s "zero" then Some 0
+  else if string_dec s "one" then Some 1
+  else if string_dec s "two" then Some 2
+  else if string_dec s "three" then Some 3
+  else if string_dec s "four" then Some 4
+  else if string_dec s "five" then Some 5
+  else if string_dec s "six" then Some 6
+  else if string_dec s "seven" then Some 7
+  else if string_dec s "eight" then Some 8
+  else if string_dec s "nine" then Some 9
+  else None.
 
-(* 定义一个谓词，用于判断一个 string 是否是有效的数字单词 *)
+(* is_valid_word states that a string is one of the ten numeral words. *)
 Definition is_valid_word (s : string) : Prop :=
-  exists n, WordToNum s n.
+  exists n, word_to_num s = Some n.
 
 (*
   定义一个谓词，用于判断一个 string 列表是否已排序。
@@ -52,18 +51,21 @@ Definition IsSorted (l : list string) : Prop :=
     forall s_i s_j n_i n_j,
       nth i l "" = s_i ->
       nth j l "" = s_j ->
-      WordToNum s_i n_i ->
-      WordToNum s_j n_j ->
+      word_to_num s_i = Some n_i ->
+      word_to_num s_j = Some n_j ->
       (n_i <= n_j)%nat.
 
+(* SpaceDelimited relates a string to the words joined by single spaces. *)
 Definition SpaceDelimited (s : string) (words : list string) : Prop :=
   String.concat " " words = s.
 
+(* problem_19_pre requires the input to be a space-delimited list of numeral words. *)
 Definition problem_19_pre (input : string) : Prop :=
   exists input_list,
     SpaceDelimited input input_list /\
     Forall is_valid_word input_list.
 
+(* problem_19_spec characterizes a sorted permutation of the numeral words. *)
 Definition problem_19_spec (input output : string) : Prop :=
     exists input_list output_list,
     SpaceDelimited input input_list /\

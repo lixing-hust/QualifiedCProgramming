@@ -14,24 +14,18 @@ Require Import Coq.Strings.Ascii.
 Require Import Coq.Strings.String.
 Import ListNotations.
 
-Fixpoint list_ascii_of_string (s : string) : list ascii :=
-  match s with
-  | EmptyString => []
-  | String c s' => c :: list_ascii_of_string s'
-  end.
-
-(* 定义：sub 是 main 的子串 *)
+(* is_substring states that sub appears contiguously inside main. *)
 Definition is_substring (sub main : list ascii) : Prop :=
   exists prefix suffix, main = prefix ++ sub ++ suffix.
 
-(* 定义：r 是 b 的一个循环旋转 *)
+(* is_rotation_of states that r is a cyclic rotation of b. *)
 Definition is_rotation_of (r b : list ascii) : Prop :=
   exists p1 p2, b = p1 ++ p2 /\ r = p2 ++ p1.
 
-(* 任意字符串输入，无额外约束 *)
+(* problem_154_pre imposes no input constraints. *)
 Definition problem_154_pre (a b : string) : Prop := True.
 
-(* cycpattern_check 函数的程序规约 *)
+(* problem_154_spec states that some rotation of b is a substring of a exactly when res is true. *)
 Definition problem_154_spec (a b : string) (res : bool) : Prop :=
   let la := list_ascii_of_string a in
   let lb := list_ascii_of_string b in

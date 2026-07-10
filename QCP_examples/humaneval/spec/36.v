@@ -12,21 +12,15 @@
 Require Import Coq.Lists.List Coq.Arith.Arith Coq.Bool.Bool.
 Import ListNotations.
 
-Fixpoint count_digit_7_aux (k fuel : nat) : nat :=
-  match fuel with
-  | 0 => 0
-  | S f' =>
-    match k with
-    | 0 => 0
-    | _ =>
-      (if Nat.eqb (k mod 10) 7 then 1 else 0) +
-      count_digit_7_aux (k / 10) f'
-    end
-  end.
-
+(* count_digit_7 counts decimal positions whose digit is 7 by enumerating all
+   positions below k; positions past the most significant digit contribute 0. *)
 Definition count_digit_7 (k : nat) : nat :=
-  count_digit_7_aux k k.
+  length
+    (filter
+       (fun p => Nat.eqb (((k / Nat.pow 10 p) mod 10)) 7)
+       (List.seq 0 k)).
 
+(* fizz_buzz_impl sums the number of 7 digits in each qualifying integer below n. *)
 Definition fizz_buzz_impl (n : nat) : nat :=
   List.fold_left
     (fun acc i =>
@@ -39,8 +33,9 @@ Definition fizz_buzz_impl (n : nat) : nat :=
     0.
 
 
-(* Pre: no additional constraints for `fizz_buzz` by default *)
+(* problem_36_pre imposes no additional input constraints. *)
 Definition problem_36_pre (n : nat) : Prop := True.
 
+(* problem_36_spec states that the output is the finite fizz_buzz sum. *)
 Definition problem_36_spec (n : nat) (output : nat) : Prop :=
   output = fizz_buzz_impl n.

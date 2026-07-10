@@ -18,50 +18,35 @@ Require Import Arith.
 Import ListNotations.
 Open Scope Z_scope.
 
-
-Fixpoint sum_digits_pos_fuel (fuel : nat) (n : Z) : Z :=
-  match fuel with
-  | O => 0
-  | S f => if Z_le_gt_dec n 0 then 0 else (n mod 10) + sum_digits_pos_fuel f (n / 10)
-  end.
-
-Fixpoint msd_fuel (fuel : nat) (n : Z) : Z :=
-  match fuel with
-  | O => n mod 10
-  | S f => if Z_lt_le_dec n 10 then n else msd_fuel f (n / 10)
-  end.
-
+(* digit_fuel_145 documents the original benchmark's bounded digit range. *)
 Definition digit_fuel_145 : nat := 8%nat.
 
-Fixpoint highest_power10_loop_145 (fuel : nat) (t p : Z) : Z :=
-  match fuel with
-  | O => p
-  | S fuel' =>
-      if Z.leb (p * 10) t
-      then highest_power10_loop_145 fuel' t (p * 10)
-      else p
-  end.
+(* decimal_digit returns the digit at decimal position p of a non-negative number. *)
+Definition decimal_digit (n : Z) (p : nat) : Z :=
+  (n / Z.of_nat (Nat.pow 10 p)) mod 10.
 
-Fixpoint digit_tail_loop_145 (fuel : nat) (t sum : Z) : Z :=
-  match fuel with
-  | O => sum
-  | S fuel' =>
-      if Z.leb t 0
-      then sum
-      else digit_tail_loop_145 fuel' (t / 10) (sum + t mod 10)
-  end.
+(* msd_pos returns the highest position with a non-zero digit, defaulting to 0. *)
+Definition msd_pos (n : Z) : nat :=
+  fst
+    (fold_left
+       (fun acc p =>
+          let d := decimal_digit n p in
+          if d =? 0 then acc else (p, d))
+       (seq 0 (S digit_fuel_145))
+       (0%nat, 0)).
 
+(* digit_sum_abs sums the decimal digits of a non-negative number. *)
+Definition digit_sum_abs (n : Z) : Z :=
+  fold_left Z.add (map (decimal_digit n) (seq 0 (S (msd_pos n)))) 0.
+
+(* sum_digits treats the most significant digit of a negative number as signed. *)
 Definition sum_digits (n : Z) : Z :=
   let t := Z.abs n in
-  let msd := msd_fuel digit_fuel_145 t in
-  let sum := if Z_ge_dec n 0 then msd else - msd in
-  if Z.leb 10 t
-  then digit_tail_loop_145
-         digit_fuel_145
-         (t mod highest_power10_loop_145 digit_fuel_145 t 1)
-         sum
-  else sum.
+  if n <? 0
+  then digit_sum_abs t - 2 * decimal_digit t (msd_pos t)
+  else digit_sum_abs t.
 
+(* le_stable orders indexed values by digit sum and keeps original-index ties stable. *)
 Definition le_stable (p1 p2 : Z * nat) : Prop :=
   let (z1, i1) := p1 in
   let (z2, i2) := p2 in
@@ -69,51 +54,16 @@ Definition le_stable (p1 p2 : Z * nat) : Prop :=
   let s2 := sum_digits z2 in
   s1 < s2 \/ (s1 = s2 /\ (i1 <= i2)%nat).
 
-Definition swap_adjacent_points (j : nat) (l : list Z) : list Z :=
-  match nth_error l j, nth_error l (S j) with
-  | Some a, Some b =>
-      if Z.gtb (sum_digits a) (sum_digits b)
-      then firstn j l ++ b :: a :: skipn (S (S j)) l
-      else l
-  | _, _ => l
-  end.
+(* indexed attaches each input element to its original zero-based position. *)
+Definition indexed (l_in : list Z) : list (Z * nat) :=
+  combine l_in (seq 0 (length l_in)).
 
-Fixpoint bubble_pass_points_from (fuel j : nat) (l : list Z) : list Z :=
-  match fuel with
-  | O => l
-  | S fuel' => bubble_pass_points_from fuel' (S j) (swap_adjacent_points j l)
-  end.
-
-Definition bubble_pass_points (l : list Z) : list Z :=
-  bubble_pass_points_from (length l - 1)%nat 0 l.
-
-Fixpoint bubble_sort_points_fuel (fuel : nat) (l : list Z) : list Z :=
-  match fuel with
-  | O => l
-  | S fuel' => bubble_sort_points_fuel fuel' (bubble_pass_points l)
-  end.
-
-Definition bubble_sort_points (l : list Z) : list Z :=
-  bubble_sort_points_fuel (length l) l.
-
-Fixpoint insert_sorted (x : Z * nat) (l : list (Z * nat)) : list (Z * nat) :=
-  match l with
-  | [] => [x]
-  | h :: t => let '(zx, ix) := x in let '(zh, ih) := h in
-              let sx := sum_digits zx in let sh := sum_digits zh in
-              if Z.ltb sx sh then x :: l
-              else if Z.eqb sx sh then if Nat.leb ix ih then x :: l else h :: insert_sorted x t
-              else h :: insert_sorted x t
-  end.
-
-Fixpoint stable_sort (l : list (Z * nat)) : list (Z * nat) :=
-  match l with [] => [] | h :: t => insert_sorted h (stable_sort t) end.
-
-Definition order_by_points_impl (l_in : list Z) : list Z :=
-  bubble_sort_points l_in.
-
-(* 任意整数列表输入均可 *)
+(* problem_145_pre accepts any integer list. *)
 Definition problem_145_pre (l_in : list Z) : Prop := True.
 
+(* problem_145_spec characterizes stable sorting by signed digit sum. *)
 Definition problem_145_spec (l_in : list Z) (output : list Z) : Prop :=
-  output = order_by_points_impl l_in.
+  exists indexed_output,
+    Permutation indexed_output (indexed l_in) /\
+    Sorted le_stable indexed_output /\
+    output = map fst indexed_output.

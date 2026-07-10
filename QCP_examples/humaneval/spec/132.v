@@ -19,26 +19,20 @@ Import ListNotations.
 
 (* 定义开方括号和闭方括号的 Ascii 字符表示 *)
 Definition open_bracket : ascii := "["%char.
+
+(* close_bracket is the ASCII closing square bracket. *)
 Definition close_bracket : ascii := "]"%char.
 
-Fixpoint contains_subseq (s : list ascii) (target : list ascii) : bool :=
-  match target with
-  | [] => true
-  | t :: ts =>
-      match s with
-      | [] => false
-      | c :: cs =>
-          if Ascii.ascii_dec c t then
-            contains_subseq cs ts
-          else
-            contains_subseq cs target
-      end
-  end.
+(* nested_subseq states that "[[]]" appears as a subsequence. *)
+Definition nested_subseq (s : string) : Prop :=
+  exists i j k l,
+    i < j /\ j < k /\ k < l /\
+    String.get i s = Some open_bracket /\
+    String.get j s = Some open_bracket /\
+    String.get k s = Some close_bracket /\
+    String.get l s = Some close_bracket.
 
-Definition is_nested (s : string) : bool :=
-  contains_subseq (list_ascii_of_string s) [open_bracket; open_bracket; close_bracket; close_bracket].
-
-(* 仅允许 '[' 或 ']' 字符 *)
+(* problem_132_pre only allows square bracket characters. *)
 Definition problem_132_pre (s : string) : Prop :=
   Forall (fun c => c = "["%char \/ c = "]"%char) (list_ascii_of_string s).
 
@@ -49,5 +43,6 @@ Definition problem_132_pre (s : string) : Prop :=
   规约内容：
   输出为 `true` 当且仅当输入字符串包含 "[[]]" 作为子序列。
 *)
+(* problem_132_spec relates the boolean result to the nested bracket subsequence. *)
 Definition problem_132_spec (s : string) (output : bool) : Prop :=
-  output = is_nested s.
+  output = true <-> nested_subseq s.

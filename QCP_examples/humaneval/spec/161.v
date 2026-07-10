@@ -59,21 +59,20 @@ Definition change_case (a : ascii) : ascii :=
   else
     a.
 
-(* 定义一个递归函数 contains_letter_dec 来判断一个列表 (字符串) 是否包含任何字母。*)
-Fixpoint contains_letter_dec (s : list ascii) : bool :=
-  match s with
-  | [] => false
-  | h :: t => is_letter_dec h || contains_letter_dec t
-  end.
+(* contains_letter_dec checks whether a character list contains any letter. *)
+Definition contains_letter_dec (s : list ascii) : bool :=
+  existsb is_letter_dec s.
 
+(* solve_impl changes case if any letter exists, otherwise reverses the string. *)
 Definition solve_impl (s : string) : string :=
   let l := list_ascii_of_string s in
   if contains_letter_dec l
   then string_of_list_ascii (map change_case l)
   else string_of_list_ascii (rev l).
 
-(* 任意字符串输入 *)
+(* problem_161_pre imposes no input constraints. *)
 Definition problem_161_pre (s : string) : Prop := True.
 
+(* problem_161_spec states that s' is the transformed string. *)
 Definition problem_161_spec (s s' : string) : Prop :=
   s' = solve_impl s.

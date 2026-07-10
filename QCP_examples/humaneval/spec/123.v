@@ -22,31 +22,24 @@ Require Import Coq.Sorting.Sorted.      (* 列表排序谓词 *)
 Import ListNotations.
 Open Scope Z_scope.
 
-(*
-  辅助函数：带燃料的 Collatz 序列生成
-*)
-Fixpoint collatz_aux (n : Z) (fuel : nat) : list Z :=
-  match fuel with
-  | O => []
-  | S fuel' =>
-    if Z.eqb n 1 then [1]
-    else
-      let next := if Z.even n then n / 2 else 3 * n + 1 in
-      n :: collatz_aux next fuel'
-  end.
+(* collatz_step relates one Collatz sequence value to its successor. *)
+Definition collatz_step (x y : Z) : Prop :=
+  x <> 1 /\ y = if Z.even x then x / 2 else 3 * x + 1.
 
-(*
-  [collatz_list n l] 定义：存在某个燃料使得生成的序列为 l，且序列以 1 结尾。
-*)
+(* collatz_list says l starts at n, ends at 1, and follows Collatz adjacent steps. *)
 Definition collatz_list (n : Z) (l : list Z) : Prop :=
-  exists fuel, collatz_aux n fuel = l /\ last l 0 = 1.
+  l <> [] /\
+  hd 0 l = n /\
+  last l 0 = 1 /\
+  Forall (fun p => collatz_step (fst p) (snd p)) (combine l (tl l)).
 
-(* n 为正整数 *)
+(* problem_123_pre requires a positive input. *)
 Definition problem_123_pre (n : Z) : Prop := n > 0.
 (*
   [get_odd_collatz_spec n result] 定义了程序的规约。
   它描述了输入 [n] 和输出 [result] 之间必须满足的关系。
 *)
+(* problem_123_spec returns the sorted odd elements of a Collatz sequence for n. *)
 Definition  problem_123_spec (n : Z) (result : list Z) : Prop :=
   (* 存在一个列表 c_seq ... *)
   exists (c_seq : list Z),

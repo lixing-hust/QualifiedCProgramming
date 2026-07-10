@@ -15,37 +15,27 @@ Require Import Coq.Strings.String.
 Require Import Coq.Arith.PeanoNat.
 Import ListNotations.
 
-(* 字典序比较 *)
-Fixpoint string_le (s1 s2 : string) : Prop :=
-  match s1, s2 with
-  | EmptyString, _ => True
-  | String _ _, EmptyString => False
-  | String c1 s1', String c2 s2' =>
-      (nat_of_ascii c1 < nat_of_ascii c2) \/ (c1 = c2 /\ string_le s1' s2')
-  end.
+(* string_le is lexicographic order expressed with a shared prefix and first difference. *)
+Definition string_le (s1 s2 : string) : Prop :=
+  let l1 := list_ascii_of_string s1 in
+  let l2 := list_ascii_of_string s2 in
+  l1 = l2 \/
+  exists prefix c1 c2 rest1 rest2,
+    l1 = prefix ++ c1 :: rest1 /\
+    l2 = prefix ++ c2 :: rest2 /\
+    nat_of_ascii c1 < nat_of_ascii c2.
 
-(* 检查字符是否在字符串中 *)
-Fixpoint string_contains (c : ascii) (s : string) : bool :=
-  match s with
-  | EmptyString => false
-  | String c' s' => if Ascii.eqb c c' then true else string_contains c s'
-  end.
+(* count_unique_chars counts distinct ASCII characters with the library nodup. *)
+Definition count_unique_chars (s : string) : nat :=
+  List.length (nodup Ascii.ascii_dec (list_ascii_of_string s)).
 
-(* 计算唯一字符数 *)
-Fixpoint count_unique_chars (s : string) : nat :=
-  match s with
-  | EmptyString => 0
-  | String c s' =>
-      let n := count_unique_chars s' in
-      if string_contains c s' then n else S n
-  end.
-
-(* 输入单词列表需非空 *)
+(* problem_158_pre requires a non-empty word list. *)
 Definition problem_158_pre (words : list string) : Prop := words <> [].
 
 (*
   find_max 函数的程序规约 (Spec)。
 *)
+(* problem_158_spec selects a word with maximal unique-character count and lexicographic tie-break. *)
 Definition problem_158_spec (words : list string) (result : string) : Prop :=
   In result words /\
   forall w, In w words ->

@@ -16,25 +16,15 @@ Require Import Coq.Lists.List.
 Require Import Coq.ZArith.Znumtheory. 
 Import ListNotations.
 Open Scope nat_scope.
-(*
-  辅助定义2: 计算一个自然数各位数字之和 (使用燃料)
-*)
-Fixpoint sum_digits_fueled (n fuel : nat) : nat :=
-  match fuel with
-  | 0 => 0 (* 燃料耗尽，停止递归 *)
-  | S fuel' =>
-    match n with
-    | 0 => 0 (* n 本身为 0，则各位和为 0 *)
-    | _ => (n mod 10) + sum_digits_fueled (n / 10) fuel'
-    end
-  end.
 
+(* sum_digits sums all decimal digits by enumerating enough digit positions. *)
 Definition sum_digits (n : nat) : nat :=
-  sum_digits_fueled n n.
+  fold_left Nat.add (map (fun p => (n / Nat.pow 10 p) mod 10) (seq 0 n)) 0.
 
-(* 输入列表可含任意自然数（允许为空） *)
+(* problem_94_pre accepts any list of natural numbers. *)
 Definition problem_94_pre (lst : list nat) : Prop := True.
 
+(* problem_94_spec returns the digit sum of the largest prime in the list, or 0. *)
 Definition problem_94_spec (lst : list nat) (output : nat) : Prop :=
   (exists p,
     (* 1. 必须存在一个p，它是列表lst中的元素 *)

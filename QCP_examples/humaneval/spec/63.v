@@ -15,20 +15,13 @@ Please write a function to efficiently compute the n-th element of the fibfib nu
 (* 引入Coq中关于自然数的基础库 *)
 Require Import Coq.Init.Nat.
 
-Fixpoint fibfib (n : nat) : nat :=
-  match n with
-  | 0 => 0
-  | S n' =>
-    match n' with
-    | 0 => 0
-    | S n'' =>
-      match n'' with
-      | 0 => 1
-      | S n''' => fibfib n' + fibfib n'' + fibfib n'''
-      end
-    end
-  end.
+(* fibfib computes the sequence by iterating the three-value sliding window. *)
+Definition fibfib (n : nat) : nat :=
+  let '(a, b, c) :=
+    Nat.iter n (fun '(a, b, c) => (b, c, a + b + c)) (0, 0, 1)
+  in a.
 
+(* problem_63_pre imposes no input constraints. *)
 Definition problem_63_pre (n : nat) : Prop := True.
 (*
   problem_63_spec 是对 fibfib 函数的程序规约。
@@ -40,6 +33,6 @@ Definition problem_63_pre (n : nat) : Prop := True.
   - n: nat    (代表程序的输入)
   - res: nat  (代表程序的输出)
 *)
+(* problem_63_spec states that res is the requested FibFib value. *)
 Definition problem_63_spec (n : nat) (res : nat) : Prop :=
   res = fibfib n.
-
