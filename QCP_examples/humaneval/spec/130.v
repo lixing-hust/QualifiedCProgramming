@@ -20,15 +20,19 @@ Require Import List.
 Import ListNotations.
 
 
-(* tri computes the benchmark Tribonacci variant by a closed finite sum. *)
-Definition tri (n : nat) : nat :=
+(* tri follows the benchmark recurrence; the odd case expands tri (n + 1)
+   with the even formula so that the definition stays structurally recursive. *)
+Fixpoint tri (n : nat) : nat :=
   match n with
   | 0 => 1
-  | 1 => 3
-  | _ =>
-      if Nat.even n
-      then 1 + n / 2
-      else 3 + fold_left Nat.add (map (fun k => 2 * k + 3) (seq 1 (n / 2))) 0
+  | S p =>
+      match p with
+      | 0 => 3
+      | S m =>
+          if Nat.even n
+          then 1 + n / 2
+          else tri p + tri m + (1 + (n + 1) / 2)
+      end
   end.
 
 (* problem_130_pre imposes no extra constraints beyond nat input. *)
