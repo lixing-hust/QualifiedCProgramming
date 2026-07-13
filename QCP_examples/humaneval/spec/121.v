@@ -4,27 +4,26 @@ solution([5, 8, 7, 1]) ==> 12
 solution([3, 3, 3, 3, 3]) ==> 9
 solution([30, 13, 24, 321]) ==>0*)
 
-Require Import Coq.Arith.Arith Coq.Lists.List Coq.Bool.Bool.
+Require Import Coq.Arith.Arith Coq.Lists.List.
 Import ListNotations.
 
-(* sum_odd_in_even_pos_aux sums odd values paired with even zero-based indices. *)
-Definition sum_odd_in_even_pos_aux (l : list nat) (idx : nat) : nat :=
-  fold_left
-    Nat.add
-    (map
-       (fun p =>
-          let i := fst p in
-          let h := snd p in
-          if (Nat.even i) && negb (Nat.even h) then h else 0)
-       (combine (seq idx (length l)) l))
-    0.
-
-(* sum_odd_in_even_pos_impl starts the indexed sum at index 0. *)
-Definition sum_odd_in_even_pos_impl (l : list nat) : nat := sum_odd_in_even_pos_aux l 0.
+(* selected_121 states that indices/values are exactly the odd values at even zero-based indices. *)
+Definition selected (l indices values : list nat) : Prop :=
+  NoDup indices /\
+  Forall2
+    (fun i x => nth_error l i = Some x /\ Nat.Even i /\ Nat.Odd x)
+    indices values /\
+  forall i x,
+    nth_error l i = Some x ->
+    Nat.Even i ->
+    Nat.Odd x ->
+    In i indices.
 
 (* problem_121_pre requires a non-empty list. *)
 Definition problem_121_pre (l : list nat) : Prop := l <> [].
 
-(* problem_121_spec states that output is the selected-index sum. *)
+(* problem_121_spec states that output is the sum of all odd values at even zero-based indices. *)
 Definition problem_121_spec (l : list nat) (output : nat) : Prop :=
-  output = sum_odd_in_even_pos_impl l.
+  exists indices values,
+    selected l indices values /\
+    output = fold_right Nat.add 0 values.
