@@ -13,127 +13,50 @@ Require Import PeanoNat.
 Import ListNotations.
 Open Scope string_scope.
 
-(* 定义 '(' 和 ')' 和 ' ' 的 ASCII 表示 *)
+(* Characters used by the parenthesis language. *)
 Definition lparen : ascii := "(".
 Definition rparen : ascii := ")".
 Definition space : ascii := " ".
 
-(*
-  规约 1: MaxDepth(g)
-  计算单个括号组的最大嵌套深度。
-*)
-Fixpoint max_depth_aux (g : string) (current_depth max_seen : nat) : nat :=
-  match g with
-  | EmptyString => max_seen
-  | String h t =>
-    if ascii_dec h lparen then
-      let new_depth := S current_depth in
-      max_depth_aux t new_depth (Nat.max max_seen new_depth)
-    else if ascii_dec h rparen then
-      max_depth_aux t (Nat.pred current_depth) max_seen
-    else
-      max_depth_aux t current_depth max_seen (* 忽略其他字符 *)
-  end.
+(* A group is a non-empty string segment that does not itself contain spaces. *)
+Definition SpaceFreeGroup (g : string) : Prop :=
+  g <> "" /\ ~ In space (list_ascii_of_string g).
 
-Definition MaxDepth (g : string) : nat :=
-  max_depth_aux g 0 0.
+(* The input is exactly the single-space concatenation of its groups. *)
+Definition SpaceDelimited (input : string) (groups : list string) : Prop :=
+  String.concat " " groups = input /\ Forall SpaceFreeGroup groups.
 
-(*
-  规约 2: SplitOnSpaces(S)
-  将一个字符列表按空格分割成一个列表的列表。
-*)
-Fixpoint SplitOnSpaces_aux (current_group : list ascii) (S : string) : list string :=
-  match S with
-  | EmptyString =>
-    match current_group with
-    | [] => []
-    | _ => [string_of_list_ascii (List.rev current_group)]
-    end
-  | String h t =>
-    if ascii_dec h space then
-      match current_group with
-      | [] => SplitOnSpaces_aux [] t (* 多个或前导空格 *)
-      | _ => (string_of_list_ascii (List.rev current_group)) :: SplitOnSpaces_aux [] t
-      end
-    else
-      SplitOnSpaces_aux (h :: current_group) t
-  end.
+(* Relational scan for the tail of a single top-level parenthesis group.
+   The current depth is always positive while the tail is non-empty.  The only
+   way to return to depth 0 is the final right parenthesis, so strings such as
+   "()()" are not treated as one group. *)
+Inductive MaxDepthGroupScan : string -> nat -> nat -> nat -> Prop :=
+| mdgs_close : forall max_seen,
+    MaxDepthGroupScan (String rparen "") 1 max_seen max_seen
+| mdgs_lparen : forall t current_depth max_seen result,
+    MaxDepthGroupScan t
+      (S current_depth)
+      (Nat.max max_seen (S current_depth))
+      result ->
+    MaxDepthGroupScan (String lparen t) current_depth max_seen result
+| mdgs_rparen_nested : forall t current_depth max_seen result,
+    MaxDepthGroupScan t (S current_depth) max_seen result ->
+    MaxDepthGroupScan (String rparen t) (S (S current_depth)) max_seen result.
 
-Definition SplitOnSpaces (S : string) : list string :=
-  SplitOnSpaces_aux [] S.
+(* MaxDepth relates a parenthesis group to its maximum nesting depth. *)
+Definition MaxDepth (g : string) (depth : nat) : Prop :=
+  exists t,
+    g = String lparen t /\
+    MaxDepthGroupScan t 1 1 depth.
 
-(*
-  最终的程序规约: parse_nested_parens_spec(input, output)
-  输入是 string, 输出是 list nat。
-*)
-
-(*
-  辅助断言: 检查一个字符是否为括号或空格
-  直接使用等式，其类型为 Prop
-*)
-Definition is_paren_or_space (c : ascii) : Prop :=
-  c = lparen \/ c = rparen \/ c = space.
-
-Fixpoint IsBalanced_aux (l : string) (count : nat) : Prop :=
-  match l with
-  | EmptyString => count = 0
-  | String h t =>
-    if ascii_dec h lparen then
-      IsBalanced_aux t (S count)
-    else if ascii_dec h rparen then
-      match count with
-      | 0 => False (* 右括号比左括号多，不平衡 *)
-      | S n' => IsBalanced_aux t n'
-      end
-    else
-      IsBalanced_aux t count (* 忽略其他字符 *)
-  end.
-
-Definition IsBalanced (l : string) : Prop :=
-  IsBalanced_aux l 0.
-  
-
-Fixpoint parse_nested_parens_scan_aux
-  (input : string) (out : list nat) (in_group : bool)
-  (current_depth max_seen : nat) : list nat :=
-  match input with
-  | EmptyString =>
-    if in_group then out ++ [max_seen] else out
-  | String h t =>
-    if ascii_dec h space then
-      if in_group then
-        parse_nested_parens_scan_aux t (out ++ [max_seen]) false 0 0
-      else
-        parse_nested_parens_scan_aux t out false current_depth max_seen
-    else if ascii_dec h lparen then
-      let new_depth := S current_depth in
-      parse_nested_parens_scan_aux t out true new_depth (Nat.max max_seen new_depth)
-    else if ascii_dec h rparen then
-      parse_nested_parens_scan_aux t out true (Nat.pred current_depth) max_seen
-    else
-      parse_nested_parens_scan_aux t out in_group current_depth max_seen
-  end.
-
-Definition parse_nested_parens_impl (input : string) : list nat :=
-  parse_nested_parens_scan_aux input [] false 0 0.
-
-(*
-  辅助函数: 检查字符串中的所有字符是否满足属性 P
-*)
-Fixpoint ForallChars (P : ascii -> Prop) (s : string) : Prop :=
-  match s with
-  | EmptyString => True
-  | String h t => P h /\ ForallChars P t
-  end.
-
-(*
-  前提条件: separate_paren_groups_pre
-  1. 输入列表中的所有字符都必须是括号或空格。
-  2. 移除空格后的输入列表必须是平衡的。
-*)
+(* The input must be a sequence of balanced parenthesis groups separated by spaces. *)
 Definition problem_6_pre (input : string) : Prop :=
-  (ForallChars is_paren_or_space input) /\
-  (IsBalanced input).
+  exists groups,
+    SpaceDelimited input groups /\
+    Forall (fun group => exists depth, MaxDepth group depth) groups.
 
+(* The output contains exactly the maximum depth of each space-delimited group. *)
 Definition problem_6_spec (input : string) (output : list nat) : Prop :=
-  output = parse_nested_parens_impl input.
+  exists groups,
+    SpaceDelimited input groups /\
+    Forall2 MaxDepth groups output.
