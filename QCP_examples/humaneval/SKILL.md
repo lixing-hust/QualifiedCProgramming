@@ -39,21 +39,23 @@ description: "中文精简流程：用于 humaneval/IntClaude、IntArrayClaude �
 2. 格式转换只能做接口与验证环境适配：替换 QCP 头文件、结构体指针返回适配、增加 `malloc/free/sort/qsort` 等通用库函数 wrapper 规格、添加目标函数前后条件骨架和 `coins_XX.v` 桥接定义。
 3. 未经用户确认，不修改原 C 程序的核心业务逻辑。若为了验证需要改变循环结构、分支行为、容量策略、提前返回语义、过滤/排序/计算规则，必须暂停并告诉用户原因、原逻辑、拟改逻辑和影响。
 4. 不允许把原程序核心逻辑替换成未实现函数规格。只有 `malloc/free/qsort/sort` 这类通用库函数可以用未定义 wrapper 规格表示。
-5. 原程序已有 helper 可以保留并补规格；如需新抽 helper，helper 必须有 C 实现并单独验证，且只能拆分局部机械操作或独立子逻辑，不能隐藏题目主逻辑。
-6. `sort_int_array` 必须保持通用排序函数规格，不得在后置条件加入当前题目的语义约束；题目相关结论放在 `coins_XX.v` 的 bridge 引理中证明。
-7. 优先复用题目规格文件已有定义，少造新谓词和大引理。
-8. 每次改注解、C 语句或桥接逻辑后，必须重新 symexec 生成 goal 文件。
-9. **严禁手动修改 `C_XX_goal.v`、`C_XX_proof_auto.v`、`C_XX_goal_check.v`。**
+5. 不能随意引入新的 C 辅助函数来简化证明或绕过循环/分支。默认只允许为 `malloc/free/calloc/realloc`、结构体/数组分配、`qsort/sort`、`strlen/memcpy` 等常见库函数或项目统一库函数写 wrapper 规格；这类 wrapper 必须保持通用语义，不能携带当前题目的业务结论。
+6. 字符串库函数必须优先使用共享库 `QCP_examples/stdlib/string.h` 中已有的规格和策略，不要在单个 case 里重复声明或自写 wrapper。当前共享头已覆盖 `strlen`、`memcpy`、`memmove`、`memset`、`memchr`、`strchr`、`strstr`、`strcmp`、`strncmp`、`strcpy`、`strncpy`、`strcat`、`strncat` 等；若所需函数不在其中，先检查共享库是否应补充，不能私自写一个题目专用替代函数。
+7. 原程序已有 helper 可以保留并补规格；如需新增题目相关 helper，必须先征得用户确认；helper 必须有 C 函数体并单独验证，且只能拆分局部机械操作或独立子逻辑，不能隐藏题目主逻辑。禁止新增未实现的题目语义 wrapper，例如 `has_only_odd_digits_int`、`is_valid_result`、`check_answer` 这类把核心判定整体吞掉的函数。
+8. `sort_int_array` 必须保持通用排序函数规格，不得在后置条件加入当前题目的语义约束；题目相关结论放在 `coins_XX.v` 的 bridge 引理中证明。
+9. 优先复用题目规格文件已有定义，少造新谓词和大引理。
+10. 每次改注解、C 语句或桥接逻辑后，必须重新 symexec 生成 goal 文件。
+11. **严禁手动修改 `C_XX_goal.v`、`C_XX_proof_auto.v`、`C_XX_goal_check.v`。**
    - 这三个文件必须始终保持 `symexec` 原样生成状态，只能通过重新运行 `symexec` 更新。
    - 可以阅读它们来定位 VC，但不能手工补 scope、改 import、改定义、改 proof、删改生成内容。
    - 如果这三个生成文件编译失败，必须回到源头修正 `C_XX.c` annotation、`coins_XX.v`、原始 `spec/XX.v`（需用户许可时先询问）或 symexec 调用参数，然后重新生成；不得直接 patch 生成文件。
    - 只有 `C_XX_proof_manual.v` 是允许手写/回填证明的生成配套文件。
-10. 证明失败先回查信息是否不足，避免盲目堆引理。
-11. 数组程序禁止在未说明内存所有权的情况下读取数组元素。
-12. 数组程序若涉及写入，必须在 invariant 中区分“已写前缀/未写后缀”。
-13. 字符串程序禁止把 Coq `string` 规格直接当作 `CharArray` 内存规格，必须明确二者表示桥接。
-14. 字符串输出必须显式证明末尾 `0` 终止符。
-15. **验证时必须使用原始规格文件中的 pre 和 spec，这是硬验收标准。**
+12. 证明失败先回查信息是否不足，避免盲目堆引理。
+13. 数组程序禁止在未说明内存所有权的情况下读取数组元素。
+14. 数组程序若涉及写入，必须在 invariant 中区分“已写前缀/未写后缀”。
+15. 字符串程序禁止把 Coq `string` 规格直接当作 `CharArray` 内存规格，必须明确二者表示桥接。
+16. 字符串输出必须显式证明末尾 `0` 终止符。
+17. **验证时必须使用原始规格文件中的 pre 和 spec，这是硬验收标准。**
    - 目标题目的函数规格必须以 `QCP_examples/humaneval/spec/XX.v` 中已有的 `problem_XX_pre` / `problem_XX_spec` 为题意来源。
    - 在 `coins_XX.v` 中可以定义 `problem_XX_pre_z` / `problem_XX_spec_z` 作为 C 层 `list Z`、`Z`、数组内存表示到原始规格的桥接 wrapper，但 wrapper 的定义体必须直接调用原始 `problem_XX_pre` / `problem_XX_spec`。
    - wrapper 必须是“纯原规格桥接”：除必要的格式转换、类型转换、`bool_of_z` / `Z.to_nat` / `string_of_list_z` 等表示转换外，不得额外加入题目语义条件、C 层操作式条件或加强后的结果性质。
@@ -421,8 +423,9 @@ coqc $COQINCLUDES C_XX_goal_check.v
   - wrapper 后置只写 `sorted_int_list_by(ascending, sorted_l)`、`Permutation(l, sorted_l)`、长度和数组资源。
   - 不把“top-k”“unique”“公共元素”“题目最终 spec”写进排序函数后置。
 - helper：
-  - 可以把局部独立逻辑抽成已实现 helper，例如数字逐位检查、数组尾追加。
-  - helper 必须有 C 函数体并单独通过验证；不能只声明一个规格把原程序核心逻辑吞掉。
+  - 默认不要新增题目相关 helper；优先直接给原有循环/分支写 invariant 和 bridge lemma。
+  - 只有 `malloc/free/calloc/realloc`、结构体/数组分配、`qsort/sort`、`strlen/memcpy` 等常见库函数或项目统一库函数可以作为未实现 wrapper 使用。
+  - 如确需新增题目相关 helper，必须先征得用户确认；helper 必须有 C 函数体并单独通过验证，不能只声明一个规格把原程序核心逻辑吞掉。
   - 如果 helper 只是机械内存操作，应避免名字和规格暗示题目语义。
 - 数组追加：
   - 写 `data[output_size] = value; output_size++` 时，常用资源形态是 `seg(data,0,output_size,l) * undef_seg(data,output_size,cap)`。
@@ -569,6 +572,7 @@ coqc $COQINCLUDES C_XX_goal_check.v
 - 主要参考 QCP 原生例子和库：
   - `QCP_examples/chars.c`
   - `QCP_examples/kmp_rel.c`
+  - `QCP_examples/stdlib/string.h`
   - `QCP_examples/char_array_def.h`
   - `QCP_examples/char_array.strategies`
   - `SeparationLogic/examples/char_array_strategy_proof.v`
