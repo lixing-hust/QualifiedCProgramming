@@ -7,37 +7,43 @@ specialFilter([15, -73, 14, -15]) => 1
 specialFilter([33, -2, -3, 45, 21, 109]) => 2
 """ *)
 
-Require Import Coq.Lists.List Coq.ZArith.ZArith Coq.Strings.Ascii Coq.Arith.Arith.
+Require Import Coq.Lists.List Coq.ZArith.ZArith Coq.Arith.Arith.
+From SimpleC.EE.Applications_human.minigmp_sumlib Require Import GmpNumber.
 Import ListNotations.
 Open Scope Z_scope.
 
-(* last_digit returns the final decimal digit of the absolute value. *)
-Definition last_digit (n : Z) : Z := Z.abs (n mod 10).
+(* decimal_digits follows spec/145.v: digits are stored least-significant first. *)
+Definition decimal_digits (n : Z) (digits : list Z) : Prop :=
+  list_within_bound 10 digits /\
+  list_to_Z 10 digits = Z.abs n /\
+  ((n = 0 /\ digits = [0]) \/
+   (n <> 0 /\ digits <> [] /\ last digits 0 <> 0)).
 
-(* decimal_digit returns the digit at decimal position p of a non-negative number. *)
-Definition decimal_digit (n : Z) (p : nat) : Z :=
-  (n / Z.of_nat (Nat.pow 10 p)) mod 10.
+(* decimal_edge_digits exposes the most and least significant decimal digits. *)
+Definition decimal_edge_digits (n first last_digit : Z) : Prop :=
+  exists digits,
+    decimal_digits n digits /\
+    first = last digits 0 /\
+    last_digit = hd 0 digits.
 
-(* msd returns the most significant decimal digit by keeping the last non-zero digit. *)
-Definition msd (n : Z) : Z :=
-  snd
-    (fold_left
-       (fun acc p =>
-          let d := decimal_digit n p in
-          if d =? 0 then acc else (p, d))
-       (seq 0 (Z.to_nat n + 1))
-       (0%nat, 0)).
-
-(* special_number_b recognizes values greater than 10 whose first and last digits are odd. *)
-Definition special_number_b (n : Z) : bool :=
-  let abs_n := Z.abs n in (10 <? n) && (Z.odd (msd abs_n)) && (Z.odd (last_digit abs_n)).
-
-(* specialFilter_impl counts special numbers in the input list. *)
-Definition specialFilter_impl (nums : list Z) : Z := Z.of_nat (length (filter special_number_b nums)).
+(* Each input contributes either 1 or 0 to the final count. *)
+Definition special_number_score (n score : Z) : Prop :=
+  exists first last_digit,
+    decimal_edge_digits n first last_digit /\
+    ((10 < n /\
+      Z.odd first = true /\
+      Z.odd last_digit = true /\
+      score = 1) \/
+     ((n <= 10 \/
+       Z.odd first = false \/
+       Z.odd last_digit = false) /\
+      score = 0)).
 
 (* problem_146_pre accepts any integer list. *)
 Definition problem_146_pre (nums : list Z) : Prop := True.
 
 (* problem_146_spec states that output is the count of special numbers. *)
 Definition problem_146_spec (nums : list Z) (output : Z) : Prop :=
-  output = specialFilter_impl nums.
+  exists scores,
+    Forall2 special_number_score nums scores /\
+    output = fold_left Z.add scores 0.
