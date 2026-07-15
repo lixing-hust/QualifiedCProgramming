@@ -30,17 +30,20 @@ Definition is_prime_hex_digit (c : ascii) : bool :=
   | _ => false
   end.
 
-(* count_prime_hex counts hexadecimal digits whose value is prime. *)
-Definition count_prime_hex (s : string) : nat :=
-  length (filter is_prime_hex_digit (list_ascii_of_string s)).
+(* prime_hex_digit states that a character is one of the prime-valued hex digits. *)
+Definition prime_hex_digit (c : ascii) : Prop :=
+  is_prime_hex_digit c = true.
 
-(* hex_key_impl is the public implementation-level expression. *)
-Definition hex_key_impl (s : string) : nat :=
-  count_prime_hex s.
+(* prime_hex_digits says the witness list contains exactly the prime hex digit values from s. *)
+Definition prime_hex_digits (s : string) (digits : list ascii) : Prop :=
+  (forall c, In c digits -> In c (list_ascii_of_string s) /\ prime_hex_digit c) /\
+  (forall c, In c (list_ascii_of_string s) -> prime_hex_digit c -> In c digits).
 
 (* problem_78_pre imposes no input constraints. *)
 Definition problem_78_pre (s : string) : Prop := True.
 
-(* problem_78_spec states that output is the prime-hex digit count. *)
+(* problem_78_spec states the count through an explicit list of prime hex digits. *)
 Definition problem_78_spec (s : string) (output : nat) : Prop :=
-  output = hex_key_impl s.
+  exists digits,
+    prime_hex_digits s digits /\
+    output = length digits.
