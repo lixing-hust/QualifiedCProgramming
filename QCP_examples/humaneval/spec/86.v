@@ -11,51 +11,35 @@ anti_shuffle('Hi') returns 'Hi'
 anti_shuffle('hello') returns 'ehllo'
 anti_shuffle('Hello World!!!') returns 'Hello !!!Wdlor'
 """ *)
-(* 引入 Coq 标准库中关于字符串、列表、算术和置换的理论 *)
 Require Import Coq.Strings.Ascii.
-Require Import Coq.Lists.List.
-Require Import Coq.Arith.Arith.
-Require Import Coq.Sorting.Permutation.
 Require Import Coq.Strings.String.
+Require Import Coq.Lists.List.
+Require Import Coq.Sorting.Permutation.
+Require Import Coq.Sorting.Sorted.
 
 Import ListNotations.
 Open Scope string_scope.
 
-Definition is_space_bool (c : ascii) : bool :=
-  if ascii_dec c " "%char then true else false.
+Definition no_space_string (s : string) : Prop :=
+  Forall (fun c => c <> " "%char) (list_ascii_of_string s).
 
-Fixpoint insert_char (c : ascii) (s : string) : string :=
-  match s with
-  | EmptyString => String c EmptyString
-  | String h t =>
-      if Nat.leb (nat_of_ascii c) (nat_of_ascii h) then
-        String c s
-      else
-        String h (insert_char c t)
-  end.
+Definition split_by_spaces (s : string) (parts : list string) : Prop :=
+  String.concat " " parts = s /\ Forall no_space_string parts.
 
-Fixpoint sort_chars (s : string) : string :=
-  match s with
-  | EmptyString => EmptyString
-  | String h t => insert_char h (sort_chars t)
-  end.
+Definition ascii_le (c1 c2 : ascii) : Prop :=
+  nat_of_ascii c1 <= nat_of_ascii c2.
 
-Fixpoint anti_shuffle_aux (s : string) (acc : string) : string :=
-  match s with
-  | EmptyString => sort_chars acc
-  | String c rest =>
-      if is_space_bool c then
-        (sort_chars acc) ++ (String c EmptyString) ++ (anti_shuffle_aux rest EmptyString)
-      else
-        anti_shuffle_aux rest (String c acc)
-  end.
+Definition sorted_string (s : string) : Prop :=
+  StronglySorted ascii_le (list_ascii_of_string s).
 
-
-
-Definition anti_shuffle_impl (s : string) : string :=
-  anti_shuffle_aux s EmptyString.
+Definition sorted_version (s s_sorted : string) : Prop :=
+  Permutation (list_ascii_of_string s) (list_ascii_of_string s_sorted) /\
+  sorted_string s_sorted.
 
 Definition problem_86_pre (s : string) : Prop := True.
 
 Definition problem_86_spec (s s_out : string) : Prop :=
-  s_out = anti_shuffle_impl s.
+  exists L L2 : list string,
+    split_by_spaces s L /\
+    Forall2 sorted_version L L2 /\
+    s_out = String.concat " " L2.
