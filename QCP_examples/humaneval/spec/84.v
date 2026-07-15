@@ -14,43 +14,53 @@ a string of binary number
 """ *)
 Require Import Coq.Strings.String.
 Require Import Coq.Strings.Ascii.
-Require Import Coq.Arith.Arith.
 Require Import Coq.Lists.List.
-Require Import Coq.micromega.Lia.
+Require Import Coq.ZArith.ZArith.
+From SimpleC.EE.Applications_human.minigmp_sumlib Require Import GmpNumber.
 Import ListNotations.
 
-(* sum_decimal_digits sums decimal digits by enumerating enough digit positions. *)
-Definition sum_decimal_digits (n : nat) : nat :=
-  fold_left Nat.add (map (fun p => (n / Nat.pow 10 p) mod 10) (seq 0 n)) 0.
+Open Scope string_scope.
+Open Scope Z_scope.
+
+(* decimal_digits follows spec/79.v's GmpNumber digit-list style:
+   digits are stored least-significant first. *)
+Definition decimal_digits (N : nat) (digits : list Z) : Prop :=
+  list_within_bound 10 digits /\
+  list_to_Z 10 digits = Z.of_nat N /\
+  ((N = 0%nat /\ digits = [0]) \/
+   (N <> 0%nat /\ digits <> [] /\ last digits 0 <> 0)).
+
+(* digit_sum_list sums a decimal digit list. *)
+Definition digit_sum_list (digits : list Z) : Z :=
+  fold_left Z.add digits 0.
+
+(* decimal_digit_sum relates N to the sum of its decimal digits. *)
+Definition decimal_digit_sum (N : nat) (sum : Z) : Prop :=
+  exists digits,
+    decimal_digits N digits /\
+    sum = digit_sum_list digits.
 
 (* bit_char converts a binary digit to its ASCII character. *)
-Definition bit_char (b : nat) : ascii :=
-  if Nat.eqb b 0 then "0"%char else "1"%char.
+Definition bit_char (b : Z) : ascii :=
+  if Z.eqb b 0 then "0"%char else "1"%char.
 
-(* msb_pos returns the highest non-zero binary position, defaulting to 0. *)
-Definition msb_pos (n : nat) : nat :=
-  fst
-    (fold_left
-       (fun acc p =>
-          let b := (n / Nat.pow 2 p) mod 2 in
-          if Nat.eqb b 0 then acc else (p, b))
-       (seq 0 (S n))
-       (0, 0)).
+(* binary_digits uses the same canonical low-digit-first positional encoding as spec/79.v. *)
+Definition binary_digits (n : Z) (bits : list Z) : Prop :=
+  list_within_bound 2 bits /\
+  list_to_Z 2 bits = n /\
+  ((n = 0 /\ bits = [0]) \/
+   (n <> 0 /\ bits <> [] /\ last bits 0 = 1)).
 
-(* nat_to_binary_string converts n to binary using finite bit-position enumeration. *)
-Definition nat_to_binary_string (n : nat) : string :=
-  if Nat.eqb n 0 then "0"
-  else
-    string_of_list_ascii
-      (map (fun p => bit_char ((n / Nat.pow 2 p) mod 2)) (rev (seq 0 (S (msb_pos n))))).
-
-(* solve_impl converts the decimal digit sum of N to binary. *)
-Definition solve_impl (N : nat) : string :=
-  nat_to_binary_string (sum_decimal_digits N).
+(* The visible binary string prints the most significant bit first. *)
+Definition binary_string_from_digits (bits : list Z) : string :=
+  string_of_list_ascii (map bit_char (rev bits)).
 
 (* problem_84_pre keeps the benchmark input bound. *)
 Definition problem_84_pre (N : nat) : Prop := (N <= 10000)%nat.
 
-(* problem_84_spec states that output is the binary digit-sum string. *)
+(* problem_84_spec relates output to the canonical binary string of the decimal digit sum. *)
 Definition problem_84_spec (N : nat) (output : string) : Prop :=
-  output = solve_impl N.
+  exists sum bits,
+    decimal_digit_sum N sum /\
+    binary_digits sum bits /\
+    output = binary_string_from_digits bits.
