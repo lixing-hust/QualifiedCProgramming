@@ -16,26 +16,26 @@ Import ListNotations.
 Open Scope string_scope.
 
 
-(* 判断 s 是否包含子串 sub *)
-Fixpoint contains_substring (s sub : string) : bool :=
-  match s with
-  | EmptyString => if sub =? EmptyString then true else false
-  | String _ rest =>
-      if String.prefix sub s then true
-      else contains_substring rest sub
-  end.
+(* contains_substring_rel states that sub occurs contiguously inside s.
+   In particular, EmptyString is a substring of every string. *)
+Definition contains_substring (s sub : string) : Prop :=
+  exists pre suf, s = pre ++ sub ++ suf.
 
-Fixpoint filter_by_substring_impl (input : list string) (sub : string) : list string :=
-  match input with
-  | [] => []
-  | h :: t =>
-    if contains_substring h sub then
-      h :: filter_by_substring_impl t sub
-    else
-      filter_by_substring_impl t sub
-  end.
+(* filter_by_substring is stable filtering: matching strings are kept,
+   non-matching strings are dropped, and the input order is preserved. *)
+Inductive filter_by_substring : list string -> string -> list string -> Prop :=
+  | fbsr_nil : forall sub,
+      filter_by_substring [] sub []
+  | fbsr_keep : forall h t sub output,
+      contains_substring h sub ->
+      filter_by_substring t sub output ->
+      filter_by_substring (h :: t) sub (h :: output)
+  | fbsr_drop : forall h t sub output,
+      ~ contains_substring h sub ->
+      filter_by_substring t sub output ->
+      filter_by_substring (h :: t) sub output.
 
 Definition problem_7_pre : Prop:= True.
 
 Definition problem_7_spec (input output : list string) (sub : string) : Prop :=
-  output = filter_by_substring_impl input sub.
+  filter_by_substring input sub output.
