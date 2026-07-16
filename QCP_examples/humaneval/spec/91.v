@@ -11,37 +11,46 @@ For example:
 1
 """ *)
 
-Require Import Coq.Strings.String Coq.Strings.Ascii Coq.Lists.List Coq.Arith.Arith.
+Require Import Coq.Strings.String Coq.Strings.Ascii Coq.Lists.List.
 Import ListNotations.
 Open Scope string_scope.
 
-(* is_sentence_delimiter recognizes punctuation that starts a new sentence. *)
-Definition is_sentence_delimiter (c : ascii) : bool :=
-  match c with
-  | "."%char | "?"%char | "!"%char => true
-  | _ => false
-  end.
+(* The three characters that end one sentence and start the next. *)
+Definition sentence_delimiter (c : ascii) : Prop :=
+  c = "."%char \/ c = "?"%char \/ c = "!"%char.
 
-(* bored_state is (count, at_sentence_start, saw_starting_I). *)
-Definition bored_state : Type := nat * bool * bool.
+(* [start] is the first position after a delimiter, or the beginning of the
+   whole string. *)
+Definition sentence_start (chars : list ascii) (start : nat) : Prop :=
+  start = 0 \/
+  exists delimiter_pos delimiter,
+    start = S delimiter_pos /\
+    nth_error chars delimiter_pos = Some delimiter /\
+    sentence_delimiter delimiter.
 
-(* bored_step updates the boredom scan state for one character. *)
-Definition bored_step (st : bored_state) (c : ascii) : bored_state :=
-  let '(count, isstart, isi) := st in
-  let add := if andb (Ascii.eqb c " "%char) isi then 1 else 0 in
-  let isi' := if andb (Ascii.eqb c "I"%char) isstart then true else false in
-  let isstart_after_char := if Ascii.eqb c " "%char then isstart else false in
-  let isstart' := if is_sentence_delimiter c then true else isstart_after_char in
-  (count + add, isstart', isi').
+(* Position [i] begins a sentence after ignoring its leading spaces. *)
+Definition begins_sentence_at (chars : list ascii) (i : nat) : Prop :=
+  exists start,
+    sentence_start chars start /\
+    start <= i /\
+    forall j, start <= j < i -> nth_error chars j = Some " "%char.
 
-(* is_bored_impl counts sentences that start with the word I. *)
-Definition is_bored_impl (S : string) : nat :=
-  let '(count, _, _) := fold_left bored_step (list_ascii_of_string S) (0, true, false) in
-  count.
+(* A boredom is represented by the position of the [I] that begins it.
+   Requiring a following space makes [I] an independent word, rather than
+   merely the first letter of a word such as [It]. *)
+Definition boredom_at (chars : list ascii) (i : nat) : Prop :=
+  begins_sentence_at chars i /\
+  nth_error chars i = Some "I"%char /\
+  nth_error chars (S i) = Some " "%char.
 
-(* problem_91_pre imposes no input constraints. *)
-Definition problem_91_pre (S : string) : Prop := True.
+Definition problem_91_pre (_ : string) : Prop := True.
 
-(* problem_91_spec states that output is the boredom count. *)
+(* [boredoms] contains every boredom position exactly once.  This states the
+   result as a relation between the input, the selected sentence starts, and
+   their count; it does not prescribe a scanning algorithm. *)
 Definition problem_91_spec (S : string) (output : nat) : Prop :=
-  output = is_bored_impl S.
+  exists boredoms : list nat,
+    NoDup boredoms /\
+    (forall i,
+       In i boredoms <-> boredom_at (list_ascii_of_string S) i) /\
+    output = length boredoms.
