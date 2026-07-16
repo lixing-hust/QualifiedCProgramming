@@ -8,58 +8,42 @@ rounded_avg(7, 5) => "-1"
 rounded_avg(10, 20) => "1111"
 rounded_avg(20, 33) => "11010" *)
 
-(* 引入所需的库 *)
-Require Import ZArith.
-Require Import String.
+Require Import Coq.Strings.String.
 Require Import Coq.Strings.Ascii.
 Require Import Coq.Lists.List.
-Require Import Coq.Arith.Arith.
-Require Import PArith. (* 用于 positive 类型 *)
+Require Import Coq.ZArith.ZArith.
+From SimpleC.EE.Applications_human.minigmp_sumlib Require Import GmpNumber.
 Import ListNotations.
-Open Scope Z_scope.
+
 Open Scope string_scope.
+Open Scope Z_scope.
 
 (* bit_char converts a binary digit to its ASCII character. *)
-Definition bit_char (b : nat) : ascii :=
-  if Nat.eqb b 0 then "0"%char else "1"%char.
+Definition bit_char (b : Z) : ascii :=
+  if Z.eqb b 0 then "0"%char else "1"%char.
 
-(* msb_pos returns the highest non-zero binary position, defaulting to 0. *)
-Definition msb_pos (n : nat) : nat :=
-  fst
-    (fold_left
-       (fun acc p =>
-          let b := Nat.modulo (Nat.div n (Nat.pow 2 p)) 2 in
-          if Nat.eqb b 0 then acc else (p, b))
-       (seq 0 (S n))
-       (0%nat, 0%nat)).
+(* As in spec/79.v, bits are stored least-significant first.  The final
+   condition gives zero its unique representation and excludes leading zeros
+   from every positive representation. *)
+Definition binary_digits (n : nat) (bits : list Z) : Prop :=
+  list_within_bound 2 bits /\
+  list_to_Z 2 bits = Z.of_nat n /\
+  ((n = O /\ bits = [0]) \/
+   (n <> O /\ bits <> [] /\ last bits 0 = 1)).
 
-(* nat_to_binary converts a natural number to its binary string. *)
-Definition nat_to_binary (n : nat) : string :=
-  match n with
-  | O => "0"
-  | _ =>
-      string_of_list_ascii
-        (map (fun p => bit_char (Nat.modulo (Nat.div n (Nat.pow 2 p)) 2)) (rev (seq 0 (S (msb_pos n)))))
-  end.
-
-(* to_binary converts integers to the benchmark binary string convention. *)
-Definition to_binary (n : Z) : string :=
-  match n with
-  | Z0 => "0"
-  | Zpos p => nat_to_binary (Pos.to_nat p)
-  | Zneg _ => "-1"
-  end.
-
-(* rounded_avg_impl returns -1 for an empty interval, otherwise the rounded average in binary. *)
-Definition rounded_avg_impl (n m : Z) : string :=
-  if Z.gtb n m then
-    "-1"
-  else
-    to_binary ((n + m) / 2).
+(* The visible binary string prints the most significant bit first. *)
+Definition binary_string_from_digits (bits : list Z) : string :=
+  string_of_list_ascii (map bit_char (rev bits)).
 
 (* problem_103_pre requires positive endpoints. *)
 Definition problem_103_pre (n m : Z) : Prop := n > 0 /\ m > 0.
 
-(* problem_103_spec states that output is the benchmark rounded-average string. *)
+(* A successful result relates the integer average to a natural number and
+   then relates that number to its canonical binary representation. *)
 Definition problem_103_spec (n m : Z) (output : string) : Prop :=
-  output = rounded_avg_impl n m.
+  (n > m /\ output = "-1") \/
+  (exists avg bits,
+     n <= m /\
+     Z.of_nat avg = (n + m) / 2 /\
+     binary_digits avg bits /\
+     output = binary_string_from_digits bits).
