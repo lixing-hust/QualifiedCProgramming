@@ -59,36 +59,25 @@ Definition Parse_Fraction (s : list ascii) (num den : nat) : Prop :=
  *   n: 代表第二个分数的 list ascii。
  *   output: 函数的期望布尔输出。
  *)
-(* problem_144_pre requires both inputs to be positive valid fraction strings. *)
- (* 约束：x 与 n 均为有效分数串，且分子/分母为正整数 *)
+(* A valid fraction has decimal digits on both sides of its slash. *)
+Definition Valid_Fraction (s : string) (num den : nat) : Prop :=
+  exists num_s den_s,
+    list_ascii_of_string s = num_s ++ ["/"%char] ++ den_s /\
+    all_digits num_s /\ all_digits den_s /\
+    num = list_ascii_to_nat num_s /\
+    den = list_ascii_to_nat den_s.
+
 Definition problem_144_pre (x n : string) : Prop :=
-  exists nx dx ny dy nx_s dx_s ny_s dy_s,
-    list_ascii_of_string x = nx_s ++ ["/"%char] ++ dx_s /\
-    list_ascii_of_string n = ny_s ++ ["/"%char] ++ dy_s /\
-    all_digits nx_s /\ all_digits dx_s /\
-    all_digits ny_s /\ all_digits dy_s /\
-    nx = list_ascii_to_nat nx_s /\
-    dx = list_ascii_to_nat dx_s /\
-    ny = list_ascii_to_nat ny_s /\
-    dy = list_ascii_to_nat dy_s /\
-    Parse_Fraction (list_ascii_of_string x) nx dx /\
-    Parse_Fraction (list_ascii_of_string n) ny dy /\
+  exists nx dx ny dy,
+    Valid_Fraction x nx dx /\
+    Valid_Fraction n ny dy /\
     nx > 0 /\ dx > 0 /\ ny > 0 /\ dy > 0.
 
 (* problem_144_spec states whether the product of two parsed fractions is integral. *)
 Definition problem_144_spec (x n : string) (output : bool) : Prop :=
   exists num_x den_x num_n den_n : nat,
-    (* 1. 解析输入的 list ascii *)
     Parse_Fraction (list_ascii_of_string x) num_x den_x /\
     Parse_Fraction (list_ascii_of_string n) num_n den_n /\
-
-    (* 2. 根据题目描述，分子和分母都是正整数（在nat中即 > 0） *)
     num_x > 0 /\ den_x > 0 /\
     num_n > 0 /\ den_n > 0 /\
-
-    (* 3. 定义核心逻辑：乘积是否为整数 *)
-    let product_num := num_x * num_n in
-    let product_den := den_x * den_n in
-    output = if (product_num mod product_den) =? 0
-             then true
-             else false.
+    output = ((num_x * num_n) mod (den_x * den_n) =? 0).
