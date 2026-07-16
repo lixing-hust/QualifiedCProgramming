@@ -17,7 +17,6 @@ false
 
 /*@ Extern Coq (problem_61_pre_z: list Z -> Prop)
                (problem_61_spec_z: list Z -> bool -> Prop)
-               (bracket_safe_input_61: list Z -> Prop)
                (bracket_state_61: list Z -> Z -> Z -> Prop)
                (string_length: list Z -> Z)
                (true: bool) (false: bool) */
@@ -29,7 +28,6 @@ int correct_bracketing(char *brackets)
         valid_string(str_l) &&
         all_ascii(str_l) &&
         problem_61_pre_z(str_l) &&
-        bracket_safe_input_61(str_l) &&
         string_length(str_l) < INT_MAX &&
         store_string(brackets, str_l)
     Ensure
@@ -52,7 +50,6 @@ int correct_bracketing(char *brackets)
         valid_string(str_l) &&
         all_ascii(str_l) &&
         problem_61_pre_z(str_l) &&
-        bracket_safe_input_61(str_l) &&
         string_length(str_l) < INT_MAX &&
         bracket_state_61(str_l, i, level) &&
         store_string(brackets@pre, str_l)
@@ -70,7 +67,6 @@ int correct_bracketing(char *brackets)
                 valid_string(str_l) &&
                 all_ascii(str_l) &&
                 problem_61_pre_z(str_l) &&
-                bracket_safe_input_61(str_l) &&
                 string_length(str_l) < INT_MAX &&
                 bracket_state_61(str_l, i + 1, level) &&
                 store_string(brackets@pre, str_l)
@@ -87,7 +83,6 @@ int correct_bracketing(char *brackets)
                     valid_string(str_l) &&
                     all_ascii(str_l) &&
                     problem_61_pre_z(str_l) &&
-                    bracket_safe_input_61(str_l) &&
                     string_length(str_l) < INT_MAX &&
                     problem_61_spec_z(str_l, false) &&
                     store_string(brackets@pre, str_l)
@@ -103,7 +98,6 @@ int correct_bracketing(char *brackets)
                 valid_string(str_l) &&
                 all_ascii(str_l) &&
                 problem_61_pre_z(str_l) &&
-                bracket_safe_input_61(str_l) &&
                 string_length(str_l) < INT_MAX &&
                 bracket_state_61(str_l, i + 1, level) &&
                 store_string(brackets@pre, str_l)
@@ -120,7 +114,6 @@ int correct_bracketing(char *brackets)
             valid_string(str_l) &&
             all_ascii(str_l) &&
             problem_61_pre_z(str_l) &&
-            bracket_safe_input_61(str_l) &&
             string_length(str_l) < INT_MAX &&
             bracket_state_61(str_l, n, level) &&
             problem_61_spec_z(str_l, false) &&
@@ -137,7 +130,6 @@ int correct_bracketing(char *brackets)
         valid_string(str_l) &&
         all_ascii(str_l) &&
         problem_61_pre_z(str_l) &&
-        bracket_safe_input_61(str_l) &&
         string_length(str_l) < INT_MAX &&
         bracket_state_61(str_l, n, 0) &&
         problem_61_spec_z(str_l, true) &&

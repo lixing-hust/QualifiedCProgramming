@@ -27,7 +27,7 @@ Proof.
   left.
   pre_process.
   entailer!.
-  apply bracket_safe_initial_61; auto.
+  apply bracket_state_initial_61.
   subst retval. unfold string_length. apply Zlength_nonneg.
 Qed.
 
@@ -35,13 +35,12 @@ Lemma proof_of_correct_bracketing_entail_wit_2 : correct_bracketing_entail_wit_2
 Proof.
   left.
   pre_process.
+  assert (Hidx : 0 <= i < string_length str_l) by lia.
+  pose proof (c_string_Znth_inside str_l i 0 Hidx) as Hcin.
+  assert (Hopen : Znth i str_l 0 = 40) by (rewrite <- Hcin; exact PreH1).
   entailer!.
-  eapply bracket_safe_open_61; eauto.
-  - unfold string_length in *; lia.
-  - assert (Hidx : 0 <= i < string_length str_l) by lia.
-    pose proof (c_string_Znth_inside str_l i 0 Hidx) as Hcin.
-    rewrite <- Hcin.
-    exact PreH1.
+  eapply bracket_state_open_61; eauto.
+  unfold string_length in *; lia.
 Qed.
 
 Lemma proof_of_correct_bracketing_entail_wit_3 : correct_bracketing_entail_wit_3.
@@ -50,37 +49,33 @@ Proof.
   pre_process.
   assert (Hlevel0 : level = 0) by lia.
   assert (Hidx : 0 <= i < string_length str_l) by lia.
-  assert (Hi_bounds : 0 <= i < Zlength str_l) by (unfold string_length in *; lia).
+  assert (Hi_bounds : 0 <= i < Zlength str_l)
+    by (unfold string_length in *; lia).
   pose proof (c_string_Znth_inside str_l i 0 Hidx) as Hcin.
-  assert (Hclose : Znth i str_l 0 = 41).
-  {
-    destruct (bracket_safe_char_61 str_l i PreH14 Hi_bounds) as [Hopen | Hclose].
-    - rewrite <- Hcin in Hopen. contradiction.
-    - exact Hclose.
-  }
-  entailer!.
-  - eapply bracket_safe_close_negative_61 with (i := i); eauto.
-    + rewrite Hlevel0 in PreH16. exact PreH16.
-    + unfold string_length in *; lia.
+  destruct (problem_61_pre_z_char_61 str_l i PreH13 PreH12 Hi_bounds)
+    as [Hopen | Hclose].
+  - rewrite <- Hcin in Hopen. contradiction.
+  - entailer!.
+    rewrite Hlevel0 in PreH15.
+    eapply bracket_state_early_close_false_61; eauto.
+    unfold string_length in *; lia.
 Qed.
 
 Lemma proof_of_correct_bracketing_entail_wit_4 : correct_bracketing_entail_wit_4.
 Proof.
   left.
   pre_process.
-  assert (Hpos : 0 < level) by lia.
   assert (Hidx : 0 <= i < string_length str_l) by lia.
-  assert (Hi_bounds : 0 <= i < Zlength str_l) by (unfold string_length in *; lia).
+  assert (Hi_bounds : 0 <= i < Zlength str_l)
+    by (unfold string_length in *; lia).
   pose proof (c_string_Znth_inside str_l i 0 Hidx) as Hcin.
-  assert (Hclose : Znth i str_l 0 = 41).
-  {
-    destruct (bracket_safe_char_61 str_l i PreH14 Hi_bounds) as [Hopen | Hclose].
-    - rewrite <- Hcin in Hopen. contradiction.
-    - exact Hclose.
-  }
-  entailer!.
-  eapply bracket_safe_close_continue_61; eauto.
-  unfold string_length in *; lia.
+  destruct (problem_61_pre_z_char_61 str_l i PreH13 PreH12 Hi_bounds)
+    as [Hopen | Hclose].
+  - rewrite <- Hcin in Hopen. contradiction.
+  - entailer!.
+    eapply bracket_state_close_61; eauto.
+    unfold string_length in *; lia.
+    lia.
 Qed.
 
 Lemma proof_of_correct_bracketing_entail_wit_6 : correct_bracketing_entail_wit_6.
@@ -90,9 +85,9 @@ Proof.
   assert (Hi : i = n) by lia.
   subst i.
   entailer!.
-  eapply bracket_safe_final_false_61; eauto.
+  eapply bracket_state_final_false_61; eauto.
   replace (Zlength str_l) with n by (unfold string_length in *; lia).
-  exact PreH15.
+  exact PreH14.
 Qed.
 
 Lemma proof_of_correct_bracketing_entail_wit_7 : correct_bracketing_entail_wit_7.
@@ -103,7 +98,7 @@ Proof.
   subst i.
   subst level.
   entailer!.
-  eapply bracket_safe_final_true_61; eauto.
+  apply bracket_state_final_true_61.
   replace (Zlength str_l) with n by (unfold string_length in *; lia).
-  exact PreH15.
+  exact PreH14.
 Qed.
