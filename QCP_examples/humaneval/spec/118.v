@@ -12,20 +12,11 @@ get_closest_vowel("FULL") ==> "U"
 get_closest_vowel("quick") ==> ""
 get_closest_vowel("ab") ==> ""*)
 
-(* 导入所需的 Coq 库 *)
 Require Import Coq.Strings.String Coq.Strings.Ascii.
 Require Import Coq.Lists.List.
-Require Import Arith.
-Require Import Coq.Logic.FunctionalExtensionality.
 Import ListNotations.
 
-
-
-(*
- * 辅助定义
- *)
-
-(* 定义：检查一个字符是否为元音（区分大小写） *)
+(* Check whether a character is a vowel (case sensitive). *)
 Definition is_vowel (c : ascii) : Prop :=
   match c with
   | "a"%char | "e"%char | "i"%char | "o"%char | "u"%char => True
@@ -33,12 +24,11 @@ Definition is_vowel (c : ascii) : Prop :=
   | _ => False
   end.
 
-(* 定义：检查一个字符是否为英文字母 *)
+(* Check whether a character is an English letter. *)
 Definition is_alpha (c : ascii) : Prop :=
   let n := nat_of_ascii c in
   (65 <= n /\ n <= 90) \/ (97 <= n /\ n <= 122).
 
-(* 定义：检查一个字符是否为辅音 *)
 Definition is_consonant (c : ascii) : Prop :=
   is_alpha c /\ ~ is_vowel c.
 
@@ -46,40 +36,23 @@ Definition is_consonant (c : ascii) : Prop :=
 Definition problem_118_pre (word : string) : Prop :=
   Forall is_alpha (list_ascii_of_string word).
 
-(* problem_118_spec returns the rightmost vowel between two consonants, if any. *)
-Definition problem_118_spec (word: string) (result: string) : Prop :=
-  (* 情况一：找到了符合条件的元音 *)
-  (exists i c_curr,
-    1 <= i < String.length word - 1 /\
-    (*
-     * 断言在 i-1, i, i+1 的位置上确实存在字符 (c_prev, c_curr, c_next)，
-     * 并且这些字符满足 "辅音-元音-辅音" 的模式。
-     * 这是处理 `option ascii` 类型的关键。
-     *)
-    (exists c_prev c_next,
-        String.get (i - 1) word = Some c_prev /\
-        String.get i word = Some c_curr /\
-        String.get (i + 1) word = Some c_next /\
-        is_consonant c_prev /\ is_vowel c_curr /\ is_consonant c_next) /\
-    result = String c_curr ""%string /\
-    (* 并且，这是最右边（即索引最大）的一个 *)
-    (forall j,
-      i < j < String.length word - 1 ->
-      ~ (exists j_prev j_curr j_next,
-            String.get (j - 1) word = Some j_prev /\
-            String.get j word = Some j_curr /\
-            String.get (j + 1) word = Some j_next /\
-            is_consonant j_prev /\ is_vowel j_curr /\ is_consonant j_next))
-  )
+(* The character at [i] is a vowel with a consonant on either side. *)
+Definition vowel_between_consonants
+    (word : string) (i : nat) (vowel : ascii) : Prop :=
+  1 <= i < String.length word - 1 /\
+  exists left right,
+      String.get (i - 1) word = Some left /\
+      String.get i word = Some vowel /\
+      String.get (i + 1) word = Some right /\
+      is_consonant left /\ is_vowel vowel /\ is_consonant right.
+
+(* Return the rightmost vowel between two consonants, if one exists. *)
+Definition problem_118_spec (word result : string) : Prop :=
+  (exists i vowel,
+      vowel_between_consonants word i vowel /\
+      (forall j other,
+          i < j -> ~ vowel_between_consonants word j other) /\
+      result = String vowel EmptyString)
   \/
-  (* 情况二：不存在符合条件的元音 *)
-  (
-    (forall i,
-      1 <= i < String.length word - 1 ->
-      ~ (exists c_prev c_curr c_next,
-            String.get (i - 1) word = Some c_prev /\
-            String.get i word = Some c_curr /\
-            String.get (i + 1) word = Some c_next /\
-            is_consonant c_prev /\ is_vowel c_curr /\ is_consonant c_next)) /\
-    result = ""%string
-  ).
+  ((forall i vowel, ~ vowel_between_consonants word i vowel) /\
+   result = EmptyString).
