@@ -14,32 +14,43 @@ For example:
 (* 导入所需的基础库 *)
 Require Import Coq.Lists.List.
 Require Import Coq.Arith.Arith.
+Require Import Coq.Numbers.DecimalString.
 Require Import Coq.Sorting.Sorted.
 Require Import Coq.Sorting.Permutation.
 Require Import Coq.Bool.Bool.
 
 Import ListNotations.
 
-(* is_odd_digit recognizes decimal odd digits. *)
-Definition is_odd_digit (d : nat) : Prop :=
-  d = 1 \/ d = 3 \/ d = 5 \/ d = 7 \/ d = 9.
+(* Decimal.uint is the stdlib decimal representation produced by Nat.to_uint.
+   This eliminator is the no-Fixpoint form of:
+   D0 rest -> 0 :: digits(rest), ..., D9 rest -> 9 :: digits(rest).
+   Example: Nat.to_uint 15 is D1 (D5 Nil), so this returns [1; 5]. *)
+Definition decimal_uint_digits (u : Decimal.uint) : list nat :=
+  Decimal.uint_rect
+    (fun _ => list nat)
+    nil
+    (fun _ digits => 0 :: digits)
+    (fun _ digits => 1 :: digits)
+    (fun _ digits => 2 :: digits)
+    (fun _ digits => 3 :: digits)
+    (fun _ digits => 4 :: digits)
+    (fun _ digits => 5 :: digits)
+    (fun _ digits => 6 :: digits)
+    (fun _ digits => 7 :: digits)
+    (fun _ digits => 8 :: digits)
+    (fun _ digits => 9 :: digits)
+    u.
 
-(* all_digits_odd_list states that every digit in a list is odd. *)
-Definition all_digits_odd_list (l : list nat) : Prop :=
-  Forall is_odd_digit l.
-
-(* nat_to_digits enumerates enough decimal positions for positive n. *)
-Definition nat_to_digits (n : nat) : list nat :=
-  map (fun p => (n / Nat.pow 10 p) mod 10) (seq 0 n).
-
-(* has_only_odd_digits is the logical predicate for numbers with no even digit. *)
-Definition has_only_odd_digits (n : nat) : Prop :=
-  all_digits_odd_list (nat_to_digits n).
+(* decimal_nat_digits returns the decimal digits of n, with 0 represented as [0]. *)
+Definition decimal_nat_digits (n : nat) : list nat :=
+  match decimal_uint_digits (Nat.to_uint n) with
+  | nil => [0]
+  | digits => digits
+  end.
 
 (* has_only_odd_digits_bool is the executable boolean used by library filter. *)
 Definition has_only_odd_digits_bool (n : nat) : bool :=
-  let digits := nat_to_digits n in
-  forallb (fun d => orb (Nat.eqb d 1) (orb (Nat.eqb d 3) (orb (Nat.eqb d 5) (orb (Nat.eqb d 7) (Nat.eqb d 9))))) digits.
+  forallb Nat.odd (decimal_nat_digits n).
 
 (* filter_odd_digits keeps exactly the elements whose decimal digits are all odd. *)
 Definition filter_odd_digits (l : list nat) : list nat :=
