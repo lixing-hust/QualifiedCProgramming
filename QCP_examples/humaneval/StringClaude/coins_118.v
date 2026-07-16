@@ -217,10 +217,11 @@ Proof.
   unfold closest_vowel_candidate_z in Hcand.
   destruct Hcand as [Hi Hrest].
   split.
-  - rewrite string_of_list_z_length.
-    rewrite <- z_to_nat_Zlength.
-    lia.
-  - split.
+  - unfold vowel_between_consonants.
+    split.
+    + rewrite string_of_list_z_length.
+      rewrite <- z_to_nat_Zlength.
+      lia.
     + destruct Hrest as [Hprev [Hcur Hnext]].
       pose proof (candidate_z_to_spec_candidate l i Hrange
         (conj Hi (conj Hprev (conj Hcur Hnext)))) as Hspec.
@@ -233,21 +234,22 @@ Proof.
       split; [exact H4 |].
       split; [rewrite <- Hcurr; exact H5 |].
       exact H6.
-    + split.
-      * simpl. reflexivity.
-      * intros j Hj Hbad.
-        apply (Hafter (Z.of_nat j)).
-        -- rewrite string_of_list_z_length in Hj.
-           rewrite <- z_to_nat_Zlength in Hj.
-           lia.
-        -- destruct Hbad as [j_prev [j_curr [j_next [Hprev [Hcur [Hnext Hcons]]]]]].
-           destruct Hcons as [Hcprev [Hvcurr Hcnext]].
-           eapply spec_candidate_to_candidate_z with
-             (c_prev := j_prev) (c_curr := j_curr) (c_next := j_next);
-             try eassumption.
-           ++ rewrite string_of_list_z_length in Hj.
-              rewrite <- z_to_nat_Zlength in Hj.
-              lia.
+  - split.
+    + intros j other Hij Hbad.
+      unfold vowel_between_consonants in Hbad.
+      destruct Hbad as [Hj [j_prev [j_next [Hprev [Hcur [Hnext Hcons]]]]]].
+      destruct Hcons as [Hcprev [Hvother Hcnext]].
+      apply (Hafter (Z.of_nat j)).
+      * rewrite string_of_list_z_length in Hj.
+        rewrite <- z_to_nat_Zlength in Hj.
+        lia.
+      * eapply spec_candidate_to_candidate_z with
+          (c_prev := j_prev) (c_curr := other) (c_next := j_next);
+          try eassumption.
+        rewrite string_of_list_z_length in Hj.
+        rewrite <- z_to_nat_Zlength in Hj.
+        lia.
+    + simpl. reflexivity.
 Qed.
 
 Lemma problem_118_spec_z_not_found : forall l,
@@ -260,15 +262,16 @@ Proof.
   unfold problem_118_spec_z, problem_118_spec.
   right.
   split.
-  - intros i Hi Hbad.
+  - intros i vowel Hbad.
+    unfold vowel_between_consonants in Hbad.
+    destruct Hbad as [Hi [c_prev [c_next [Hprev [Hcur [Hnext Hcons]]]]]].
+    destruct Hcons as [Hcprev [Hvvowel Hcnext]].
     apply (Hnone (Z.of_nat i)).
     + rewrite string_of_list_z_length in Hi.
       rewrite <- z_to_nat_Zlength in Hi.
       lia.
-    + destruct Hbad as [c_prev [c_curr [c_next [Hprev [Hcur [Hnext Hcons]]]]]].
-      destruct Hcons as [Hcprev [Hvcurr Hcnext]].
-      apply spec_candidate_to_candidate_z with
-        (c_prev := c_prev) (c_curr := c_curr) (c_next := c_next);
+    + apply spec_candidate_to_candidate_z with
+        (c_prev := c_prev) (c_curr := vowel) (c_next := c_next);
         try assumption.
       rewrite string_of_list_z_length in Hi.
       rewrite <- z_to_nat_Zlength in Hi.

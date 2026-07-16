@@ -12,7 +12,7 @@
 - 现象：`spec/19.v` 中 `problem_19_pre` 原为 `True`，但 `problem_19_spec` 要求 `SplitOnSpaces input` 中所有单词都是 `"zero"` 到 `"nine"` 的有效数字词。原 C 对无效 token 会在 `strcmp` 匹配失败后忽略该 token，因此无效输入满足原 pre，却无法同时满足输出是输入 token permutation 的 spec。
 - 例子：输入 `"one bad two"` 时，原 C 只统计并输出有效 token `"one two"`；原 spec 若把 `"bad"` 保留在输入 token 列表中，则输出 token 不可能既是输入 token 的 permutation 又全部按数字词排序。
 - 当前处理：已按用户确认收紧 `problem_19_pre`，要求 `Forall is_valid_word (SplitOnSpaces input)`；`problem_19_spec` 保持 permutation 与 sorted 语义，不再重复携带该输入有效性条件。
-- 验证：待继续完成 `StringClaude/C_19.c` 的 QCP 改写、symexec 与全链证明。
+- 验证：2026-06-23 已完成 `StringClaude/C_19.c` 的更新验证；`problem_19_pre_z/spec_z` 直接桥接更新后的 `spec/19.v`，并通过 `symexec`、`coins_19.v`、`C_19_goal.v`、`C_19_proof_auto.v`、`C_19_proof_manual.v`、`C_19_goal_check.v` 全链编译，扫描无 `Admitted.` / `Abort.` / 新增 `Axiom`。
 
 ### 问题编号：SPEC-C_103-001
 
