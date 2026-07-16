@@ -1,4 +1,5 @@
 Load "../spec/64".
+Load "../StringClaude/string_bridge".
 
 Require Import Coq.ZArith.ZArith.
 Require Import Coq.Bool.Bool.
@@ -20,20 +21,11 @@ Local Open Scope sac.
 
 Parameter LitMap : string -> addr.
 
-Definition ascii_of_z_64 (z : Z) : ascii :=
-  ascii_of_nat (Z.to_nat z).
-
-Fixpoint string_of_list_z_64 (l : list Z) : string :=
-  match l with
-  | [] => EmptyString
-  | c :: rest => String (ascii_of_z_64 c) (string_of_list_z_64 rest)
-  end.
-
 Definition problem_64_pre_z (s : list Z) : Prop :=
-  problem_64_pre (string_of_list_z_64 s).
+  problem_64_pre (string_of_list_z s).
 
 Definition problem_64_spec_z (s : list Z) (output : Z) : Prop :=
-  problem_64_spec (string_of_list_z_64 s) (Z.to_nat output).
+  problem_64_spec (string_of_list_z s) (Z.to_nat output).
 
 Definition vowel_literal_64 : string := "aeiouAEIOU"%string.
 
@@ -62,8 +54,28 @@ Definition regular_vowel_code_64 (c : Z) : Prop :=
 Definition y_code_64 (c : Z) : Prop :=
   c = 121 \/ c = 89.
 
+Definition regular_vowel_codeb_64 (c : Z) : bool :=
+  Z.eqb c 97 || Z.eqb c 101 || Z.eqb c 105 || Z.eqb c 111 ||
+  Z.eqb c 117 || Z.eqb c 65 || Z.eqb c 69 || Z.eqb c 73 ||
+  Z.eqb c 79 || Z.eqb c 85.
+
+Lemma regular_vowel_codeb_spec_64 : forall c,
+  regular_vowel_codeb_64 c = true <-> regular_vowel_code_64 c.
+Proof.
+  intros c. unfold regular_vowel_codeb_64, regular_vowel_code_64.
+  repeat rewrite Bool.orb_true_iff.
+  repeat rewrite Z.eqb_eq.
+  tauto.
+Qed.
+
+Definition regular_positions_prefix_64 (s : list Z) (i : Z) : list nat :=
+  filter
+    (fun k => regular_vowel_codeb_64 (Znth (Z.of_nat k) s 0))
+    (seq 0 (Z.to_nat i)).
+
 Definition vowel_count_state_64 (s : list Z) (i count : Z) : Prop :=
-  0 <= i <= string_length s /\ 0 <= count <= i.
+  0 <= i <= string_length s /\
+  count = Z.of_nat (List.length (regular_positions_prefix_64 s i)).
 
 Definition vowel_regular_step_64 (s : list Z) (i count : Z) : Prop :=
   0 <= i < string_length s /\
@@ -88,105 +100,310 @@ Definition vowel_final_not_y_64 (s : list Z) (count : Z) : Prop :=
   ~ y_code_64 (Znth (string_length s - 1) (c_string s) 0) /\
   problem_64_spec_z s count.
 
-Definition vowel_count_safe_64 (s : list Z) : Prop :=
-  vowel_count_state_64 s 0 0 /\
-  (forall i count,
-      vowel_count_state_64 s i count ->
-      0 <= i < string_length s ->
-      regular_vowel_code_64 (Znth i (c_string s) 0) ->
-      vowel_regular_step_64 s i (count + 1)) /\
-  (forall i count,
-      vowel_count_state_64 s i count ->
-      0 <= i < string_length s ->
-      ~ regular_vowel_code_64 (Znth i (c_string s) 0) ->
-      vowel_miss_step_64 s i count) /\
-  (forall count,
-      vowel_count_state_64 s (string_length s) count ->
-      string_length s = 0 ->
-      vowel_final_empty_64 s count) /\
-  (forall count,
-      vowel_count_state_64 s (string_length s) (count - 1) ->
-      0 < string_length s ->
-      y_code_64 (Znth (string_length s - 1) (c_string s) 0) ->
-      vowel_final_y_64 s count) /\
-  (forall count,
-      vowel_count_state_64 s (string_length s) count ->
-      0 < string_length s ->
-      ~ y_code_64 (Znth (string_length s - 1) (c_string s) 0) ->
-      vowel_final_not_y_64 s count).
-
 Lemma vowel_count_initial_64 : forall s,
-  vowel_count_safe_64 s ->
   vowel_count_state_64 s 0 0.
 Proof.
-  intros s Hsafe.
-  unfold vowel_count_safe_64 in Hsafe.
-  tauto.
+  intros s. unfold vowel_count_state_64, regular_positions_prefix_64.
+  split; [unfold string_length; pose proof (Zlength_nonneg s); lia|reflexivity].
 Qed.
 
 Lemma vowel_regular_step_intro_64 : forall s i count,
-  vowel_count_safe_64 s ->
   vowel_count_state_64 s i (count - 1) ->
   0 <= i < string_length s ->
   regular_vowel_code_64 (Znth i (c_string s) 0) ->
   vowel_regular_step_64 s i count.
 Proof.
-  intros s i count Hsafe Hstate Hi Hreg.
-  unfold vowel_count_safe_64 in Hsafe.
-  destruct Hsafe as [_ [Hstep _]].
-  replace count with ((count - 1) + 1) by lia.
-  apply Hstep; assumption.
+  intros s i count Hstate Hi Hreg.
+  unfold vowel_regular_step_64. split; [exact Hi|].
+  split; [exact Hreg|].
+  unfold vowel_count_state_64 in *. destruct Hstate as [Hbounds Hcount].
+  split; [lia|].
+  unfold regular_positions_prefix_64 in *.
+  replace (Z.to_nat (i + 1)) with (S (Z.to_nat i)) by lia.
+  rewrite seq_S, filter_app, length_app. simpl.
+  rewrite c_string_Znth_inside in Hreg by exact Hi.
+  replace (Z.of_nat (Z.to_nat i)) with i by lia.
+  apply regular_vowel_codeb_spec_64 in Hreg. rewrite Hreg. simpl.
+  rewrite Nat2Z.inj_add. simpl. lia.
 Qed.
 
 Lemma vowel_miss_step_intro_64 : forall s i count,
-  vowel_count_safe_64 s ->
   vowel_count_state_64 s i count ->
   0 <= i < string_length s ->
   ~ regular_vowel_code_64 (Znth i (c_string s) 0) ->
   vowel_miss_step_64 s i count.
 Proof.
-  intros s i count Hsafe Hstate Hi Hmiss.
-  unfold vowel_count_safe_64 in Hsafe.
-  destruct Hsafe as [_ [_ [Hstep _]]].
-  apply Hstep; assumption.
+  intros s i count Hstate Hi Hmiss.
+  unfold vowel_miss_step_64. split; [exact Hi|].
+  split; [exact Hmiss|].
+  unfold vowel_count_state_64 in *. destruct Hstate as [Hbounds Hcount].
+  split; [lia|].
+  unfold regular_positions_prefix_64 in *.
+  replace (Z.to_nat (i + 1)) with (S (Z.to_nat i)) by lia.
+  rewrite seq_S, filter_app, length_app. simpl.
+  rewrite c_string_Znth_inside in Hmiss by exact Hi.
+  replace (Z.of_nat (Z.to_nat i)) with i by lia.
+  assert (regular_vowel_codeb_64 (Znth i s 0) = false).
+  { destruct (regular_vowel_codeb_64 (Znth i s 0)) eqn:Hb; auto.
+    apply regular_vowel_codeb_spec_64 in Hb. contradiction. }
+  rewrite H. simpl. replace
+    (List.length
+       (filter
+          (fun k : nat => regular_vowel_codeb_64 (Znth (Z.of_nat k) s 0%Z))
+          (seq 0 (Z.to_nat i))) + 0)%nat
+    with
+    (List.length
+       (filter
+          (fun k : nat => regular_vowel_codeb_64 (Znth (Z.of_nat k) s 0%Z))
+          (seq 0 (Z.to_nat i))))%nat by lia.
+  exact Hcount.
+Qed.
+
+Lemma ascii_of_z_eq_64 : forall x y,
+  0 <= x <= 127 -> 0 <= y <= 127 ->
+  (ascii_of_z x = ascii_of_z y <-> x = y).
+Proof.
+  intros x y Hx Hy. split; [intro H|now intros ->].
+  apply (f_equal nat_of_ascii) in H.
+  rewrite !nat_of_ascii_ascii_of_z in H by lia.
+  apply (f_equal Z.of_nat) in H.
+  rewrite !Z2Nat.id in H by lia. exact H.
+Qed.
+
+Lemma regular_vowel_ascii_code_64 : forall z,
+  0 <= z <= 127 ->
+  (regular_vowel_64 (ascii_of_z z) <-> regular_vowel_code_64 z).
+Proof.
+  intros z Hz.
+  change
+    ((ascii_of_z z = ascii_of_z 97 \/ ascii_of_z z = ascii_of_z 101 \/
+      ascii_of_z z = ascii_of_z 105 \/ ascii_of_z z = ascii_of_z 111 \/
+      ascii_of_z z = ascii_of_z 117 \/ ascii_of_z z = ascii_of_z 65 \/
+      ascii_of_z z = ascii_of_z 69 \/ ascii_of_z z = ascii_of_z 73 \/
+      ascii_of_z z = ascii_of_z 79 \/ ascii_of_z z = ascii_of_z 85) <->
+     (z = 97 \/ z = 101 \/ z = 105 \/ z = 111 \/ z = 117 \/
+      z = 65 \/ z = 69 \/ z = 73 \/ z = 79 \/ z = 85)).
+  repeat rewrite (ascii_of_z_eq_64 z) by lia.
+  reflexivity.
+Qed.
+
+Lemma y_ascii_code_64 : forall z,
+  0 <= z <= 127 ->
+  ((ascii_of_z z = "y"%char \/ ascii_of_z z = "Y"%char) <-> y_code_64 z).
+Proof.
+  intros z Hz.
+  change
+    ((ascii_of_z z = ascii_of_z 121 \/ ascii_of_z z = ascii_of_z 89) <->
+     (z = 121 \/ z = 89)).
+  repeat rewrite (ascii_of_z_eq_64 z) by lia.
+  reflexivity.
+Qed.
+
+Lemma nth_error_Znth_64 : forall {A : Type} (l : list A) k d,
+  (k < List.length l)%nat ->
+  nth_error l k = Some (Znth (Z.of_nat k) l d).
+Proof.
+  intros A l k d Hk. unfold Znth.
+  rewrite Nat2Z.id. apply nth_error_nth'. exact Hk.
+Qed.
+
+Lemma nth_error_ascii_Znth_64 : forall s k,
+  (k < List.length s)%nat ->
+  nth_error (map ascii_of_z s) k =
+    Some (ascii_of_z (Znth (Z.of_nat k) s 0)).
+Proof.
+  intros s k Hk. rewrite nth_error_map.
+  rewrite (nth_error_Znth_64 s k 0 Hk). reflexivity.
+Qed.
+
+Lemma regular_positions_prefix_In_64 : forall s i k,
+  0 <= i ->
+  In k (regular_positions_prefix_64 s i) <->
+  (k < Z.to_nat i)%nat /\
+  regular_vowel_code_64 (Znth (Z.of_nat k) s 0).
+Proof.
+  intros s i k Hi. unfold regular_positions_prefix_64.
+  split.
+  - intro Hin. apply filter_In in Hin. destruct Hin as [Hseq Hb].
+    apply in_seq in Hseq. split; [lia|].
+    apply regular_vowel_codeb_spec_64. exact Hb.
+  - intros [Hk Hreg]. apply filter_In. split.
+    + apply in_seq. lia.
+    + apply regular_vowel_codeb_spec_64. exact Hreg.
+Qed.
+
+Lemma counted_vowel_position_code_64 : forall s k,
+  all_ascii s ->
+  (counted_vowel_position_64 (map ascii_of_z s) k <->
+   (k < List.length s)%nat /\
+   (regular_vowel_code_64 (Znth (Z.of_nat k) s 0) \/
+    (y_code_64 (Znth (Z.of_nat k) s 0) /\ S k = List.length s))).
+Proof.
+  intros s k Hascii. split.
+  - intros [c [Hnth Hkind]].
+    assert (Hk : (k < List.length s)%nat).
+    { apply nth_error_Some. rewrite nth_error_map in Hnth.
+      destruct (nth_error s k); discriminate. }
+    rewrite (nth_error_ascii_Znth_64 s k Hk) in Hnth.
+    inversion Hnth; subst c.
+    assert (Hz : 0 <= Znth (Z.of_nat k) s 0 <= 127).
+    { apply Hascii. rewrite Zlength_correct. lia. }
+    split; [exact Hk|].
+    destruct Hkind as [Hregular | [Hy Hlast]].
+    + left. apply (regular_vowel_ascii_code_64 _ Hz). exact Hregular.
+    + right. split.
+      * apply (y_ascii_code_64 _ Hz). exact Hy.
+      * rewrite length_map in Hlast. exact Hlast.
+  - intros [Hk Hkind].
+    exists (ascii_of_z (Znth (Z.of_nat k) s 0)).
+    split; [apply nth_error_ascii_Znth_64; exact Hk|].
+    assert (Hz : 0 <= Znth (Z.of_nat k) s 0 <= 127).
+    { apply Hascii. rewrite Zlength_correct. lia. }
+    destruct Hkind as [Hregular | [Hy Hlast]].
+    + left. apply (regular_vowel_ascii_code_64 _ Hz). exact Hregular.
+    + right. split.
+      * apply (y_ascii_code_64 _ Hz). exact Hy.
+      * rewrite length_map. exact Hlast.
+Qed.
+
+Lemma regular_positions_full_In_64 : forall s k,
+  In k (regular_positions_prefix_64 s (string_length s)) <->
+  (k < List.length s)%nat /\
+  regular_vowel_code_64 (Znth (Z.of_nat k) s 0).
+Proof.
+  intros s k. rewrite regular_positions_prefix_In_64.
+  - unfold string_length. rewrite Zlength_correct, Nat2Z.id. reflexivity.
+  - unfold string_length. apply Zlength_nonneg.
+Qed.
+
+Lemma regular_positions_full_NoDup_64 : forall s,
+  NoDup (regular_positions_prefix_64 s (string_length s)).
+Proof.
+  intros s. unfold regular_positions_prefix_64.
+  apply NoDup_filter. apply seq_NoDup.
+Qed.
+
+Lemma y_code_not_regular_64 : forall z,
+  y_code_64 z -> ~ regular_vowel_code_64 z.
+Proof.
+  intros z Hy. unfold y_code_64, regular_vowel_code_64 in *.
+  destruct Hy as [-> | ->]; intuition congruence.
+Qed.
+
+Lemma problem_64_spec_regular_64 : forall s count,
+  all_ascii s ->
+  vowel_count_state_64 s (string_length s) count ->
+  (forall k, S k = List.length s ->
+     ~ y_code_64 (Znth (Z.of_nat k) s 0)) ->
+  problem_64_spec_z s count.
+Proof.
+  intros s count Hascii Hstate Hnoty.
+  unfold vowel_count_state_64 in Hstate. destruct Hstate as [_ Hcount].
+  unfold problem_64_spec_z, problem_64_spec.
+  rewrite list_ascii_of_string_string_of_list_z.
+  exists (regular_positions_prefix_64 s (string_length s)).
+  split.
+  - split; [apply regular_positions_full_NoDup_64|].
+    intros k. rewrite regular_positions_full_In_64.
+    rewrite counted_vowel_position_code_64 by exact Hascii.
+    split.
+    + intros [Hk Hreg]. split; [exact Hk|now left].
+    + intros [Hk [Hreg | [Hy Hlast]]]; [now split|].
+      exfalso. exact (Hnoty k Hlast Hy).
+  - rewrite Hcount. rewrite Nat2Z.id. reflexivity.
 Qed.
 
 Lemma vowel_final_empty_intro_64 : forall s count,
-  vowel_count_safe_64 s ->
+  all_ascii s ->
   vowel_count_state_64 s (string_length s) count ->
   string_length s = 0 ->
   vowel_final_empty_64 s count.
 Proof.
-  intros s count Hsafe Hstate Hlen.
-  unfold vowel_count_safe_64 in Hsafe.
-  destruct Hsafe as [_ [_ [_ [Hfinal _]]]].
-  apply Hfinal; assumption.
-Qed.
-
-Lemma vowel_final_y_intro_64 : forall s count,
-  vowel_count_safe_64 s ->
-  vowel_count_state_64 s (string_length s) (count - 1) ->
-  0 < string_length s ->
-  y_code_64 (Znth (string_length s - 1) (c_string s) 0) ->
-  vowel_final_y_64 s count.
-Proof.
-  intros s count Hsafe Hstate Hpos Hy.
-  unfold vowel_count_safe_64 in Hsafe.
-  destruct Hsafe as [_ [_ [_ [_ [Hfinal _]]]]].
-  apply Hfinal; assumption.
+  intros s count Hascii Hstate Hlen.
+  assert (Hcount : count = 0).
+  { unfold vowel_count_state_64 in Hstate. destruct Hstate as [_ Hcount].
+    unfold regular_positions_prefix_64 in Hcount. rewrite Hlen in Hcount.
+    simpl in Hcount. exact Hcount. }
+  unfold vowel_final_empty_64. repeat split; try assumption.
+  apply problem_64_spec_regular_64; try assumption.
+  intros k Hlast. unfold string_length in Hlen.
+  rewrite Zlength_correct in Hlen. lia.
 Qed.
 
 Lemma vowel_final_not_y_intro_64 : forall s count,
-  vowel_count_safe_64 s ->
+  all_ascii s ->
   vowel_count_state_64 s (string_length s) count ->
   0 < string_length s ->
   ~ y_code_64 (Znth (string_length s - 1) (c_string s) 0) ->
   vowel_final_not_y_64 s count.
 Proof.
-  intros s count Hsafe Hstate Hpos Hy.
-  unfold vowel_count_safe_64 in Hsafe.
-  destruct Hsafe as [_ [_ [_ [_ [_ Hfinal]]]]].
-  apply Hfinal; assumption.
+  intros s count Hascii Hstate Hpos Hnoty.
+  unfold vowel_final_not_y_64. repeat split; try assumption.
+  apply problem_64_spec_regular_64; try assumption.
+  intros k Hlast Hy.
+  assert (Hkz : Z.of_nat k = string_length s - 1).
+  { unfold string_length. rewrite Zlength_correct. lia. }
+  assert (Hy_c : y_code_64 (Znth (Z.of_nat k) (c_string s) 0)).
+  { rewrite c_string_Znth_inside; [exact Hy|].
+    change (0 <= Z.of_nat k < Zlength s).
+    rewrite Zlength_correct. lia. }
+  apply Hnoty.
+  rewrite <- Hkz. exact Hy_c.
+Qed.
+
+Lemma vowel_final_y_intro_64 : forall s count,
+  all_ascii s ->
+  vowel_count_state_64 s (string_length s) (count - 1) ->
+  0 < string_length s ->
+  y_code_64 (Znth (string_length s - 1) (c_string s) 0) ->
+  vowel_final_y_64 s count.
+Proof.
+  intros s count Hascii Hstate Hpos Hy_c.
+  assert (Hidx : 0 <= string_length s - 1 < string_length s) by lia.
+  pose proof Hy_c as Hy_raw.
+  rewrite c_string_Znth_inside in Hy_raw by exact Hidx.
+  set (last := Z.to_nat (string_length s - 1)).
+  set (regular := regular_positions_prefix_64 s (string_length s)).
+  assert (Hlast : S last = List.length s).
+  { apply Nat2Z.inj. rewrite Nat2Z.inj_succ.
+    unfold last. rewrite Z2Nat.id by lia.
+    change (Zlength s - 1 + 1 = Z.of_nat (List.length s)).
+    rewrite <- Zlength_correct. lia. }
+  assert (Hlastz : Z.of_nat last = string_length s - 1).
+  { unfold last. rewrite Z2Nat.id by lia. reflexivity. }
+  assert (Hlast_notin : ~ In last regular).
+  { intro Hin. unfold regular in Hin.
+    apply regular_positions_full_In_64 in Hin. destruct Hin as [_ Hreg].
+    rewrite Hlastz in Hreg.
+    apply (y_code_not_regular_64 _ Hy_raw Hreg). }
+  unfold vowel_final_y_64. split; [exact Hpos|].
+  split; [exact Hy_c|].
+  unfold problem_64_spec_z, problem_64_spec.
+  rewrite list_ascii_of_string_string_of_list_z.
+  exists (regular ++ [last]). split.
+  - split.
+    + apply NoDup_app.
+      * apply regular_positions_full_NoDup_64.
+      * constructor; [simpl; tauto|constructor].
+      * intros x Hin Hsingle. simpl in Hsingle.
+        destruct Hsingle as [-> | []]. contradiction.
+    + intros k. unfold regular. rewrite in_app_iff. simpl.
+      rewrite regular_positions_full_In_64.
+      rewrite counted_vowel_position_code_64 by exact Hascii.
+      split.
+      * intros [[Hk Hreg] | [-> | []]].
+        -- split; [exact Hk|now left].
+        -- split; [lia|right]. split; [rewrite Hlastz; exact Hy_raw|exact Hlast].
+      * intros [Hk [Hreg | [Hy Hk_last]]].
+        -- left. now split.
+        -- right. left. lia.
+  - unfold vowel_count_state_64 in Hstate. destruct Hstate as [_ Hcount].
+    unfold regular in *. rewrite length_app. simpl.
+    replace count with
+      (Z.of_nat
+         (List.length
+            (regular_positions_prefix_64 s (string_length s))) + 1) by lia.
+    rewrite Z2Nat.inj_add by lia. rewrite Nat2Z.id. simpl. lia.
 Qed.
 
 Lemma all_ascii_c_string_inside_64 : forall s i,

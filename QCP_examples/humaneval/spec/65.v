@@ -7,67 +7,58 @@ If shift > number of digits, return digits reversed.
 >>> circular_shift(12, 2)
 "12"
 """ *)
-(* 导入所需的标准库 *)
+
 Require Import Coq.Arith.Arith.
 Require Import Coq.Strings.String.
+Require Import Coq.Strings.Ascii.
 Require Import Coq.Lists.List.
+Require Import Coq.ZArith.ZArith.
+From AUXLib Require Import ListLib.
+From SimpleC.EE.Applications_human.minigmp_sumlib Require Import GmpNumber.
 Import ListNotations.
 
-
 Open Scope string_scope.
+Open Scope Z_scope.
 
+(* decimal_digits relates x to its decimal digits in reading order. *)
+Definition decimal_digits (x : nat) (digits : list Z) : Prop :=
+  list_within_bound 10 (rev digits) /\
+  list_to_Z 10 (rev digits) = Z.of_nat x /\
+  ((x = 0%nat /\ digits = [0]) \/
+   (x <> 0%nat /\ digits <> [] /\ hd 0 digits <> 0)).
 
-(* msd_pos returns the highest non-zero decimal position, defaulting to 0. *)
-Definition msd_pos (n : nat) : nat :=
-  fst
-    (fold_left
-       (fun acc p =>
-          let d := (n / Nat.pow 10 p) mod 10 in
-          if Nat.eqb d 0 then acc else (p, d))
-       (seq 0 (S n))
-       (0, 0)).
+(* digit_ascii maps one decimal digit to its character. *)
+Definition digit_ascii (d : Z) : ascii :=
+  ascii_of_nat (Z.to_nat (48 + d)).
 
-(* to_digits returns the decimal digits of n from most to least significant. *)
-Definition to_digits (n : nat) : list nat :=
-  if (n =? 0)%nat then
-    [0]
-  else
-    map (fun p => (n / Nat.pow 10 p) mod 10) (rev (seq 0 (S (msd_pos n)))).
+(* digits_to_string maps l1 to a character list and then uses the stdlib
+   string/list conversion, so leading zero digits are preserved. *)
+Definition digits_to_string (digits : list Z) : string :=
+  string_of_list_ascii (map digit_ascii digits).
 
-(* digit_to_string converts a decimal digit to a one-character string. *)
-Definition digit_to_string (d : nat) : string :=
-  match d with
-  | 0 => "0" | 1 => "1" | 2 => "2" | 3 => "3" | 4 => "4"
-  | 5 => "5" | 6 => "6" | 7 => "7" | 8 => "8" | 9 => "9"
-  | _ => ""
-  end.
+(* digits_string relates shifted digits l1 to the returned string. *)
+Definition digits_string (digits : list Z) (result : string) : Prop :=
+  result = digits_to_string digits.
 
-(* from_digits_to_string concatenates the one-character strings for all digits. *)
-Definition from_digits_to_string (l : list nat) : string :=
-  String.concat "" (map digit_to_string l).
-
-(* circular_shift_impl rotates decimal digits right, or reverses when shift is too large. *)
-Definition circular_shift_impl (x : nat) (shift : nat) : string :=
-  let digits := to_digits x in
-  let len := length digits in
-  if (x =? 0)%nat then
-    "0"
-  else
-    if (len <? shift)%nat then
-      from_digits_to_string (rev digits)
+(* circular_shift_digits relates l and l1 by the source index of each output digit. *)
+Definition circular_shift_digits
+    (digits : list Z) (shift : nat) (output_digits : list Z) : Prop :=
+  let len := Zlength digits in
+  Zlength output_digits = len /\
+  forall i,
+    0 <= i < len ->
+    Znth i output_digits 0 =
+    if (len <? Z.of_nat shift)%Z then
+      Znth (len - 1 - i) digits 0
     else
-      let effective_shift := shift mod len in
-      if (effective_shift =? 0)%nat then
-        from_digits_to_string digits
-      else
-        let split_point := len - effective_shift in
-        let new_head := skipn split_point digits in
-        let new_tail := firstn split_point digits in
-        from_digits_to_string (new_head ++ new_tail).
+      Znth ((len - (Z.of_nat shift mod len) + i) mod len) digits 0.
 
 (* problem_65_pre imposes no input constraints. *)
 Definition problem_65_pre (x : nat) (shift : nat) : Prop := True.
 
-(* problem_65_spec states that result is the circular-shifted decimal string. *)
+(* problem_65_spec characterizes the output through digit relations. *)
 Definition problem_65_spec (x : nat) (shift : nat) (result : string) : Prop :=
-  result = circular_shift_impl x shift.
+  exists digits output_digits,
+    decimal_digits x digits /\
+    circular_shift_digits digits shift output_digits /\
+    digits_string output_digits result.

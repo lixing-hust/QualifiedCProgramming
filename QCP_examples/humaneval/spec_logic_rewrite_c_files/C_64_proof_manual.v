@@ -55,7 +55,7 @@ Proof.
   pre_process_default.
   entailer!.
   - subst retval. apply string_length_nonneg.
-  - apply vowel_count_initial_64; assumption.
+  - apply vowel_count_initial_64.
 Qed.
 
 Lemma proof_of_vowels_count_entail_wit_3 : vowels_count_entail_wit_3.
@@ -71,7 +71,7 @@ Proof.
   {
     eapply vowel_regular_step_intro_64; eauto.
     replace ((count + 1) - 1) with count by lia.
-    exact PreH18.
+    exact PreH17.
   }
   assert (Hstate : vowel_count_state_64 str_l (i + 1) (count + 1)) by
     (destruct Hstep as [_ [_ Hstate]]; exact Hstate).
@@ -116,7 +116,7 @@ Proof.
     unfold naive_C_Rules.string_length, string_lib.string_length in *.
     replace (Zlength str_l) with i by lia.
     replace ((count + 1) - 1) with count by lia.
-    exact PreH19.
+    exact PreH18.
   }
   assert (Hstate_n :
     vowel_count_state_64 str_l n ((count + 1) - 1)).
@@ -127,7 +127,7 @@ Proof.
   }
   assert (Hfinal : vowel_final_y_64 str_l (count + 1)) by
     (eapply vowel_final_y_intro_64;
-     [exact PreH16 | exact Hstate |
+     [exact PreH14 | exact Hstate |
       unfold naive_C_Rules.string_length, string_lib.string_length in *; lia |
       exact Hy]).
   pose proof Hfinal as [_ [_ Hspec]].
@@ -158,7 +158,7 @@ Proof.
     unfold naive_C_Rules.string_length, string_lib.string_length in *.
     replace (Zlength str_l) with i by lia.
     replace ((count + 1) - 1) with count by lia.
-    exact PreH18.
+    exact PreH17.
   }
   assert (Hstate_n :
     vowel_count_state_64 str_l n ((count + 1) - 1)).
@@ -169,7 +169,7 @@ Proof.
   }
   assert (Hfinal : vowel_final_y_64 str_l (count + 1)) by
     (eapply vowel_final_y_intro_64;
-     [exact PreH15 | exact Hstate |
+     [exact PreH13 | exact Hstate |
       unfold naive_C_Rules.string_length, string_lib.string_length in *; lia |
       exact Hy]).
   pose proof Hfinal as [_ [_ Hspec]].
@@ -197,7 +197,7 @@ Proof.
   {
     unfold naive_C_Rules.string_length, string_lib.string_length in *.
     replace (Zlength str_l) with i by lia.
-    exact PreH19.
+    exact PreH18.
   }
   assert (Hstate_n : vowel_count_state_64 str_l n count).
   {
@@ -207,7 +207,7 @@ Proof.
   }
   assert (Hfinal : vowel_final_not_y_64 str_l count) by
     (eapply vowel_final_not_y_intro_64;
-     [exact PreH16 | exact Hstate |
+     [exact PreH14 | exact Hstate |
       unfold naive_C_Rules.string_length, string_lib.string_length in *; lia |
       exact Hnoty]).
   pose proof Hfinal as [_ [_ Hspec]].
@@ -226,7 +226,7 @@ Proof.
   {
     unfold naive_C_Rules.string_length, string_lib.string_length in *.
     replace (Zlength str_l) with i by lia.
-    exact PreH17.
+    exact PreH16.
   }
   assert (Hstate_n : vowel_count_state_64 str_l n count).
   {
@@ -236,7 +236,7 @@ Proof.
   }
   assert (Hfinal : vowel_final_empty_64 str_l count) by
     (eapply vowel_final_empty_intro_64;
-     [exact PreH14 | exact Hstate |
+     [exact PreH12 | exact Hstate |
       unfold naive_C_Rules.string_length, string_lib.string_length in *; lia]).
   pose proof Hfinal as [_ [_ Hspec]].
   c64_finish.
@@ -271,7 +271,7 @@ Lemma proof_of_vowels_count_partial_solve_wit_2_pure :
 Proof.
   right.
   pre_process_default.
-  destruct PreH22 as [Hvalid [Hascii_vowels Hlen_vowels]].
+  destruct PreH21 as [Hvalid [Hascii_vowels Hlen_vowels]].
   pose proof (c_string_char_bound str_l i PreH18 ltac:(subst n; lia))
     as Hchar.
   entailer!; lia.

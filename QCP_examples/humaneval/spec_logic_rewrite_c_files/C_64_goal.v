@@ -27,7 +27,7 @@ From SimpleC.StdLib Require Import string_strategy_proof.
 (*----- Function vowels_count -----*)
 
 Definition vowels_count_safety_wit_1 := 
-forall (s_pre: Z) (str_l: (@list Z)) (PreH1 : (valid_string str_l )) (PreH2 : (all_ascii str_l )) (PreH3 : (problem_64_pre_z str_l )) (PreH4 : (vowel_count_safe_64 str_l )) (PreH5 : ((string_length (str_l)) < INT_MAX)) ,
+forall (s_pre: Z) (str_l: (@list Z)) (PreH1 : (valid_string str_l )) (PreH2 : (all_ascii str_l )) (PreH3 : (problem_64_pre_z str_l )) (PreH4 : ((string_length (str_l)) < INT_MAX)) ,
   (store_stringLit (LitMap (("aeiouAEIOU"%string))) ("aeiouAEIOU"%string) )
   **  (GlobalStrings_missing LitMap (cons (("aeiouAEIOU"%string)) ((@nil string))) )
   **  ((( &( "vowels" ) )) # Ptr  |->_)
@@ -39,7 +39,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (PreH1 : (valid_string str_l )) (PreH2 : (a
 .
 
 Definition vowels_count_safety_wit_2 := 
-forall (s_pre: Z) (str_l: (@list Z)) (vowels: Z) (retval: Z) (PreH1 : (retval = (string_length (str_l)))) (PreH2 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH3 : (0 <= ((string_length (str_l)) + 1 ))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (valid_string str_l )) (PreH6 : (all_ascii str_l )) (PreH7 : (problem_64_pre_z str_l )) (PreH8 : (vowel_count_safe_64 str_l )) (PreH9 : (vowel_payload_safe_64 )) (PreH10 : ((string_length (str_l)) < INT_MAX)) ,
+forall (s_pre: Z) (str_l: (@list Z)) (vowels: Z) (retval: Z) (PreH1 : (retval = (string_length (str_l)))) (PreH2 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH3 : (0 <= ((string_length (str_l)) + 1 ))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (valid_string str_l )) (PreH6 : (all_ascii str_l )) (PreH7 : (problem_64_pre_z str_l )) (PreH8 : (vowel_payload_safe_64 )) (PreH9 : ((string_length (str_l)) < INT_MAX)) ,
   ((( &( "count" ) )) # Int  |->_)
   **  (store_string s_pre str_l )
   **  (CharArray.full vowels ((string_length (vowel_payload_64)) + 1 ) (c_string (vowel_payload_64)) )
@@ -53,7 +53,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (vowels: Z) (retval: Z) (PreH1 : (retval = 
 .
 
 Definition vowels_count_safety_wit_3 := 
-forall (s_pre: Z) (str_l: (@list Z)) (vowels: Z) (retval: Z) (PreH1 : (retval = (string_length (str_l)))) (PreH2 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH3 : (0 <= ((string_length (str_l)) + 1 ))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (valid_string str_l )) (PreH6 : (all_ascii str_l )) (PreH7 : (problem_64_pre_z str_l )) (PreH8 : (vowel_count_safe_64 str_l )) (PreH9 : (vowel_payload_safe_64 )) (PreH10 : ((string_length (str_l)) < INT_MAX)) ,
+forall (s_pre: Z) (str_l: (@list Z)) (vowels: Z) (retval: Z) (PreH1 : (retval = (string_length (str_l)))) (PreH2 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH3 : (0 <= ((string_length (str_l)) + 1 ))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (valid_string str_l )) (PreH6 : (all_ascii str_l )) (PreH7 : (problem_64_pre_z str_l )) (PreH8 : (vowel_payload_safe_64 )) (PreH9 : ((string_length (str_l)) < INT_MAX)) ,
   ((( &( "i" ) )) # Int  |->_)
   **  ((( &( "count" ) )) # Int  |-> 0)
   **  (store_string s_pre str_l )
@@ -68,7 +68,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (vowels: Z) (retval: Z) (PreH1 : (retval = 
 .
 
 Definition vowels_count_safety_wit_4 := 
-forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH2 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH3 : (0 <= ((string_length (str_l)) + 1 ))) (PreH4 : (i < n)) (PreH5 : (n = (string_length (str_l)))) (PreH6 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH7 : (0 <= i)) (PreH8 : (i <= n)) (PreH9 : (0 <= count)) (PreH10 : (count <= i)) (PreH11 : (valid_string str_l )) (PreH12 : (all_ascii str_l )) (PreH13 : (problem_64_pre_z str_l )) (PreH14 : (vowel_count_safe_64 str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH2 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH3 : (0 <= ((string_length (str_l)) + 1 ))) (PreH4 : (i < n)) (PreH5 : (n = (string_length (str_l)))) (PreH6 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH7 : (0 <= i)) (PreH8 : (i <= n)) (PreH9 : (0 <= count)) (PreH10 : (count <= i)) (PreH11 : (valid_string str_l )) (PreH12 : (all_ascii str_l )) (PreH13 : (problem_64_pre_z str_l )) (PreH14 : (vowel_payload_safe_64 )) (PreH15 : ((string_length (str_l)) < INT_MAX)) (PreH16 : (vowel_count_state_64 str_l i count )) ,
   (store_string vowels vowel_payload_64 )
   **  (CharArray.full s_pre ((string_length (str_l)) + 1 ) (c_string (str_l)) )
   **  ((( &( "found" ) )) # Ptr  |-> retval)
@@ -85,7 +85,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retva
 .
 
 Definition vowels_count_safety_wit_5 := 
-forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval <> 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_count_safe_64 str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval <> 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
   (store_string vowels vowel_payload_64 )
   **  (CharArray.full s_pre ((string_length (str_l)) + 1 ) (c_string (str_l)) )
   **  ((( &( "found" ) )) # Ptr  |-> retval)
@@ -102,7 +102,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retva
 .
 
 Definition vowels_count_safety_wit_6 := 
-forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval <> 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_count_safe_64 str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval <> 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
   (store_string vowels vowel_payload_64 )
   **  (CharArray.full s_pre ((string_length (str_l)) + 1 ) (c_string (str_l)) )
   **  ((( &( "found" ) )) # Ptr  |-> retval)
@@ -119,7 +119,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retva
 .
 
 Definition vowels_count_safety_wit_7 := 
-forall (s_pre: Z) (str_l: (@list Z)) (n: Z) (vowels: Z) (i: Z) (count: Z) (ch: Z) (PreH1 : (n = (string_length (str_l)))) (PreH2 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH3 : (0 <= i)) (PreH4 : (i < n)) (PreH5 : (0 <= count)) (PreH6 : (count <= (i + 1 ))) (PreH7 : (0 <= ch)) (PreH8 : (ch <= 127)) (PreH9 : (valid_string str_l )) (PreH10 : (all_ascii str_l )) (PreH11 : (problem_64_pre_z str_l )) (PreH12 : (vowel_count_safe_64 str_l )) (PreH13 : (vowel_payload_safe_64 )) (PreH14 : ((string_length (str_l)) < INT_MAX)) (PreH15 : (vowel_regular_step_64 str_l i count )) (PreH16 : (vowel_count_state_64 str_l (i + 1 ) count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (n: Z) (vowels: Z) (i: Z) (count: Z) (ch: Z) (PreH1 : (n = (string_length (str_l)))) (PreH2 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH3 : (0 <= i)) (PreH4 : (i < n)) (PreH5 : (0 <= count)) (PreH6 : (count <= (i + 1 ))) (PreH7 : (0 <= ch)) (PreH8 : (ch <= 127)) (PreH9 : (valid_string str_l )) (PreH10 : (all_ascii str_l )) (PreH11 : (problem_64_pre_z str_l )) (PreH12 : (vowel_payload_safe_64 )) (PreH13 : ((string_length (str_l)) < INT_MAX)) (PreH14 : (vowel_regular_step_64 str_l i count )) (PreH15 : (vowel_count_state_64 str_l (i + 1 ) count )) ,
   ((( &( "s" ) )) # Ptr  |-> s_pre)
   **  ((( &( "n" ) )) # Int  |-> n)
   **  ((( &( "vowels" ) )) # Ptr  |-> vowels)
@@ -134,7 +134,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (n: Z) (vowels: Z) (i: Z) (count: Z) (ch: Z
 .
 
 Definition vowels_count_safety_wit_8 := 
-forall (s_pre: Z) (str_l: (@list Z)) (n: Z) (vowels: Z) (i: Z) (count: Z) (ch: Z) (PreH1 : (n = (string_length (str_l)))) (PreH2 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH3 : (0 <= i)) (PreH4 : (i < n)) (PreH5 : (0 <= count)) (PreH6 : (count <= i)) (PreH7 : (0 <= ch)) (PreH8 : (ch <= 127)) (PreH9 : (valid_string str_l )) (PreH10 : (all_ascii str_l )) (PreH11 : (problem_64_pre_z str_l )) (PreH12 : (vowel_count_safe_64 str_l )) (PreH13 : (vowel_payload_safe_64 )) (PreH14 : ((string_length (str_l)) < INT_MAX)) (PreH15 : (vowel_miss_step_64 str_l i count )) (PreH16 : (vowel_count_state_64 str_l (i + 1 ) count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (n: Z) (vowels: Z) (i: Z) (count: Z) (ch: Z) (PreH1 : (n = (string_length (str_l)))) (PreH2 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH3 : (0 <= i)) (PreH4 : (i < n)) (PreH5 : (0 <= count)) (PreH6 : (count <= i)) (PreH7 : (0 <= ch)) (PreH8 : (ch <= 127)) (PreH9 : (valid_string str_l )) (PreH10 : (all_ascii str_l )) (PreH11 : (problem_64_pre_z str_l )) (PreH12 : (vowel_payload_safe_64 )) (PreH13 : ((string_length (str_l)) < INT_MAX)) (PreH14 : (vowel_miss_step_64 str_l i count )) (PreH15 : (vowel_count_state_64 str_l (i + 1 ) count )) ,
   ((( &( "s" ) )) # Ptr  |-> s_pre)
   **  ((( &( "n" ) )) # Int  |-> n)
   **  ((( &( "vowels" ) )) # Ptr  |-> vowels)
@@ -149,7 +149,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (n: Z) (vowels: Z) (i: Z) (count: Z) (ch: Z
 .
 
 Definition vowels_count_safety_wit_9 := 
-forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (i >= n)) (PreH2 : (n = (string_length (str_l)))) (PreH3 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH4 : (0 <= i)) (PreH5 : (i <= n)) (PreH6 : (0 <= count)) (PreH7 : (count <= i)) (PreH8 : (valid_string str_l )) (PreH9 : (all_ascii str_l )) (PreH10 : (problem_64_pre_z str_l )) (PreH11 : (vowel_count_safe_64 str_l )) (PreH12 : (vowel_payload_safe_64 )) (PreH13 : ((string_length (str_l)) < INT_MAX)) (PreH14 : (vowel_count_state_64 str_l i count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (i >= n)) (PreH2 : (n = (string_length (str_l)))) (PreH3 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH4 : (0 <= i)) (PreH5 : (i <= n)) (PreH6 : (0 <= count)) (PreH7 : (count <= i)) (PreH8 : (valid_string str_l )) (PreH9 : (all_ascii str_l )) (PreH10 : (problem_64_pre_z str_l )) (PreH11 : (vowel_payload_safe_64 )) (PreH12 : ((string_length (str_l)) < INT_MAX)) (PreH13 : (vowel_count_state_64 str_l i count )) ,
   ((( &( "s" ) )) # Ptr  |-> s_pre)
   **  ((( &( "n" ) )) # Int  |-> n)
   **  ((( &( "vowels" ) )) # Ptr  |-> vowels)
@@ -164,7 +164,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1
 .
 
 Definition vowels_count_safety_wit_10 := 
-forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (n > 0)) (PreH2 : (i >= n)) (PreH3 : (n = (string_length (str_l)))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (0 <= i)) (PreH6 : (i <= n)) (PreH7 : (0 <= count)) (PreH8 : (count <= i)) (PreH9 : (valid_string str_l )) (PreH10 : (all_ascii str_l )) (PreH11 : (problem_64_pre_z str_l )) (PreH12 : (vowel_count_safe_64 str_l )) (PreH13 : (vowel_payload_safe_64 )) (PreH14 : ((string_length (str_l)) < INT_MAX)) (PreH15 : (vowel_count_state_64 str_l i count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (n > 0)) (PreH2 : (i >= n)) (PreH3 : (n = (string_length (str_l)))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (0 <= i)) (PreH6 : (i <= n)) (PreH7 : (0 <= count)) (PreH8 : (count <= i)) (PreH9 : (valid_string str_l )) (PreH10 : (all_ascii str_l )) (PreH11 : (problem_64_pre_z str_l )) (PreH12 : (vowel_payload_safe_64 )) (PreH13 : ((string_length (str_l)) < INT_MAX)) (PreH14 : (vowel_count_state_64 str_l i count )) ,
   ((( &( "ch" ) )) # Int  |->_)
   **  ((( &( "s" ) )) # Ptr  |-> s_pre)
   **  ((( &( "n" ) )) # Int  |-> n)
@@ -180,7 +180,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1
 .
 
 Definition vowels_count_safety_wit_11 := 
-forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (n > 0)) (PreH2 : (i >= n)) (PreH3 : (n = (string_length (str_l)))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (0 <= i)) (PreH6 : (i <= n)) (PreH7 : (0 <= count)) (PreH8 : (count <= i)) (PreH9 : (valid_string str_l )) (PreH10 : (all_ascii str_l )) (PreH11 : (problem_64_pre_z str_l )) (PreH12 : (vowel_count_safe_64 str_l )) (PreH13 : (vowel_payload_safe_64 )) (PreH14 : ((string_length (str_l)) < INT_MAX)) (PreH15 : (vowel_count_state_64 str_l i count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (n > 0)) (PreH2 : (i >= n)) (PreH3 : (n = (string_length (str_l)))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (0 <= i)) (PreH6 : (i <= n)) (PreH7 : (0 <= count)) (PreH8 : (count <= i)) (PreH9 : (valid_string str_l )) (PreH10 : (all_ascii str_l )) (PreH11 : (problem_64_pre_z str_l )) (PreH12 : (vowel_payload_safe_64 )) (PreH13 : ((string_length (str_l)) < INT_MAX)) (PreH14 : (vowel_count_state_64 str_l i count )) ,
   ((( &( "ch" ) )) # Int  |->_)
   **  ((( &( "s" ) )) # Ptr  |-> s_pre)
   **  ((( &( "n" ) )) # Int  |-> n)
@@ -196,7 +196,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1
 .
 
 Definition vowels_count_safety_wit_12 := 
-forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (n > 0)) (PreH2 : (i >= n)) (PreH3 : (n = (string_length (str_l)))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (0 <= i)) (PreH6 : (i <= n)) (PreH7 : (0 <= count)) (PreH8 : (count <= i)) (PreH9 : (valid_string str_l )) (PreH10 : (all_ascii str_l )) (PreH11 : (problem_64_pre_z str_l )) (PreH12 : (vowel_count_safe_64 str_l )) (PreH13 : (vowel_payload_safe_64 )) (PreH14 : ((string_length (str_l)) < INT_MAX)) (PreH15 : (vowel_count_state_64 str_l i count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (n > 0)) (PreH2 : (i >= n)) (PreH3 : (n = (string_length (str_l)))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (0 <= i)) (PreH6 : (i <= n)) (PreH7 : (0 <= count)) (PreH8 : (count <= i)) (PreH9 : (valid_string str_l )) (PreH10 : (all_ascii str_l )) (PreH11 : (problem_64_pre_z str_l )) (PreH12 : (vowel_payload_safe_64 )) (PreH13 : ((string_length (str_l)) < INT_MAX)) (PreH14 : (vowel_count_state_64 str_l i count )) ,
   ((( &( "ch" ) )) # Int  |-> (Znth (n - 1 ) (c_string (str_l)) 0))
   **  ((( &( "s" ) )) # Ptr  |-> s_pre)
   **  ((( &( "n" ) )) # Int  |-> n)
@@ -212,7 +212,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1
 .
 
 Definition vowels_count_safety_wit_13 := 
-forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH2 : (n > 0)) (PreH3 : (i >= n)) (PreH4 : (n = (string_length (str_l)))) (PreH5 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH6 : (0 <= i)) (PreH7 : (i <= n)) (PreH8 : (0 <= count)) (PreH9 : (count <= i)) (PreH10 : (valid_string str_l )) (PreH11 : (all_ascii str_l )) (PreH12 : (problem_64_pre_z str_l )) (PreH13 : (vowel_count_safe_64 str_l )) (PreH14 : (vowel_payload_safe_64 )) (PreH15 : ((string_length (str_l)) < INT_MAX)) (PreH16 : (vowel_count_state_64 str_l i count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH2 : (n > 0)) (PreH3 : (i >= n)) (PreH4 : (n = (string_length (str_l)))) (PreH5 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH6 : (0 <= i)) (PreH7 : (i <= n)) (PreH8 : (0 <= count)) (PreH9 : (count <= i)) (PreH10 : (valid_string str_l )) (PreH11 : (all_ascii str_l )) (PreH12 : (problem_64_pre_z str_l )) (PreH13 : (vowel_payload_safe_64 )) (PreH14 : ((string_length (str_l)) < INT_MAX)) (PreH15 : (vowel_count_state_64 str_l i count )) ,
   ((( &( "ch" ) )) # Int  |-> (Znth (n - 1 ) (c_string (str_l)) 0))
   **  ((( &( "s" ) )) # Ptr  |-> s_pre)
   **  ((( &( "n" ) )) # Int  |-> n)
@@ -228,7 +228,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1
 .
 
 Definition vowels_count_safety_wit_14 := 
-forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 121)) (PreH2 : (n > 0)) (PreH3 : (i >= n)) (PreH4 : (n = (string_length (str_l)))) (PreH5 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH6 : (0 <= i)) (PreH7 : (i <= n)) (PreH8 : (0 <= count)) (PreH9 : (count <= i)) (PreH10 : (valid_string str_l )) (PreH11 : (all_ascii str_l )) (PreH12 : (problem_64_pre_z str_l )) (PreH13 : (vowel_count_safe_64 str_l )) (PreH14 : (vowel_payload_safe_64 )) (PreH15 : ((string_length (str_l)) < INT_MAX)) (PreH16 : (vowel_count_state_64 str_l i count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 121)) (PreH2 : (n > 0)) (PreH3 : (i >= n)) (PreH4 : (n = (string_length (str_l)))) (PreH5 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH6 : (0 <= i)) (PreH7 : (i <= n)) (PreH8 : (0 <= count)) (PreH9 : (count <= i)) (PreH10 : (valid_string str_l )) (PreH11 : (all_ascii str_l )) (PreH12 : (problem_64_pre_z str_l )) (PreH13 : (vowel_payload_safe_64 )) (PreH14 : ((string_length (str_l)) < INT_MAX)) (PreH15 : (vowel_count_state_64 str_l i count )) ,
   ((( &( "ch" ) )) # Int  |-> (Znth (n - 1 ) (c_string (str_l)) 0))
   **  ((( &( "s" ) )) # Ptr  |-> s_pre)
   **  ((( &( "n" ) )) # Int  |-> n)
@@ -244,7 +244,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1
 .
 
 Definition vowels_count_safety_wit_15 := 
-forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 121)) (PreH2 : (n > 0)) (PreH3 : (i >= n)) (PreH4 : (n = (string_length (str_l)))) (PreH5 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH6 : (0 <= i)) (PreH7 : (i <= n)) (PreH8 : (0 <= count)) (PreH9 : (count <= i)) (PreH10 : (valid_string str_l )) (PreH11 : (all_ascii str_l )) (PreH12 : (problem_64_pre_z str_l )) (PreH13 : (vowel_count_safe_64 str_l )) (PreH14 : (vowel_payload_safe_64 )) (PreH15 : ((string_length (str_l)) < INT_MAX)) (PreH16 : (vowel_count_state_64 str_l i count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 121)) (PreH2 : (n > 0)) (PreH3 : (i >= n)) (PreH4 : (n = (string_length (str_l)))) (PreH5 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH6 : (0 <= i)) (PreH7 : (i <= n)) (PreH8 : (0 <= count)) (PreH9 : (count <= i)) (PreH10 : (valid_string str_l )) (PreH11 : (all_ascii str_l )) (PreH12 : (problem_64_pre_z str_l )) (PreH13 : (vowel_payload_safe_64 )) (PreH14 : ((string_length (str_l)) < INT_MAX)) (PreH15 : (vowel_count_state_64 str_l i count )) ,
   ((( &( "ch" ) )) # Int  |-> (Znth (n - 1 ) (c_string (str_l)) 0))
   **  ((( &( "s" ) )) # Ptr  |-> s_pre)
   **  ((( &( "n" ) )) # Int  |-> n)
@@ -260,7 +260,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1
 .
 
 Definition vowels_count_safety_wit_16 := 
-forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 89)) (PreH2 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH3 : (n > 0)) (PreH4 : (i >= n)) (PreH5 : (n = (string_length (str_l)))) (PreH6 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH7 : (0 <= i)) (PreH8 : (i <= n)) (PreH9 : (0 <= count)) (PreH10 : (count <= i)) (PreH11 : (valid_string str_l )) (PreH12 : (all_ascii str_l )) (PreH13 : (problem_64_pre_z str_l )) (PreH14 : (vowel_count_safe_64 str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 89)) (PreH2 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH3 : (n > 0)) (PreH4 : (i >= n)) (PreH5 : (n = (string_length (str_l)))) (PreH6 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH7 : (0 <= i)) (PreH8 : (i <= n)) (PreH9 : (0 <= count)) (PreH10 : (count <= i)) (PreH11 : (valid_string str_l )) (PreH12 : (all_ascii str_l )) (PreH13 : (problem_64_pre_z str_l )) (PreH14 : (vowel_payload_safe_64 )) (PreH15 : ((string_length (str_l)) < INT_MAX)) (PreH16 : (vowel_count_state_64 str_l i count )) ,
   ((( &( "ch" ) )) # Int  |-> (Znth (n - 1 ) (c_string (str_l)) 0))
   **  ((( &( "s" ) )) # Ptr  |-> s_pre)
   **  ((( &( "n" ) )) # Int  |-> n)
@@ -276,7 +276,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1
 .
 
 Definition vowels_count_safety_wit_17 := 
-forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 89)) (PreH2 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH3 : (n > 0)) (PreH4 : (i >= n)) (PreH5 : (n = (string_length (str_l)))) (PreH6 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH7 : (0 <= i)) (PreH8 : (i <= n)) (PreH9 : (0 <= count)) (PreH10 : (count <= i)) (PreH11 : (valid_string str_l )) (PreH12 : (all_ascii str_l )) (PreH13 : (problem_64_pre_z str_l )) (PreH14 : (vowel_count_safe_64 str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 89)) (PreH2 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH3 : (n > 0)) (PreH4 : (i >= n)) (PreH5 : (n = (string_length (str_l)))) (PreH6 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH7 : (0 <= i)) (PreH8 : (i <= n)) (PreH9 : (0 <= count)) (PreH10 : (count <= i)) (PreH11 : (valid_string str_l )) (PreH12 : (all_ascii str_l )) (PreH13 : (problem_64_pre_z str_l )) (PreH14 : (vowel_payload_safe_64 )) (PreH15 : ((string_length (str_l)) < INT_MAX)) (PreH16 : (vowel_count_state_64 str_l i count )) ,
   ((( &( "ch" ) )) # Int  |-> (Znth (n - 1 ) (c_string (str_l)) 0))
   **  ((( &( "s" ) )) # Ptr  |-> s_pre)
   **  ((( &( "n" ) )) # Int  |-> n)
@@ -293,7 +293,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1
 
 Definition vowels_count_entail_wit_1 := 
 (
-forall (s_pre: Z) (str_l: (@list Z)) (PreH1 : (valid_string str_l )) (PreH2 : (all_ascii str_l )) (PreH3 : (problem_64_pre_z str_l )) (PreH4 : (vowel_count_safe_64 str_l )) (PreH5 : ((string_length (str_l)) < INT_MAX)) ,
+forall (s_pre: Z) (str_l: (@list Z)) (PreH1 : (valid_string str_l )) (PreH2 : (all_ascii str_l )) (PreH3 : (problem_64_pre_z str_l )) (PreH4 : ((string_length (str_l)) < INT_MAX)) ,
   (store_stringLit (LitMap (("aeiouAEIOU"%string))) ("aeiouAEIOU"%string) )
   **  (GlobalStrings_missing LitMap (cons (("aeiouAEIOU"%string)) ((@nil string))) )
   **  (store_string s_pre str_l )
@@ -302,7 +302,6 @@ forall (s_pre: Z) (str_l: (@list Z)) (PreH1 : (valid_string str_l )) (PreH2 : (a
   &&  “ (valid_string str_l ) ” 
   &&  “ (all_ascii str_l ) ” 
   &&  “ (problem_64_pre_z str_l ) ” 
-  &&  “ (vowel_count_safe_64 str_l ) ” 
   &&  “ (vowel_payload_safe_64 ) ” 
   &&  “ ((string_length (str_l)) < INT_MAX) ”
   &&  (store_string s_pre str_l )
@@ -310,7 +309,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (PreH1 : (valid_string str_l )) (PreH2 : (a
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
 ) \/
 (
-forall (str_l: (@list Z)) (PreH1 : (0 <= ((string_length (str_l)) + 1 ))) (PreH2 : (valid_string str_l )) (PreH3 : (all_ascii str_l )) (PreH4 : (problem_64_pre_z str_l )) (PreH5 : (vowel_count_safe_64 str_l )) (PreH6 : ((string_length (str_l)) < INT_MAX)) ,
+forall (str_l: (@list Z)) (PreH1 : (0 <= ((string_length (str_l)) + 1 ))) (PreH2 : (valid_string str_l )) (PreH3 : (all_ascii str_l )) (PreH4 : (problem_64_pre_z str_l )) (PreH5 : ((string_length (str_l)) < INT_MAX)) ,
   (GlobalStrings LitMap )
 |--
   “ (vowel_payload_safe_64 ) ” 
@@ -320,21 +319,21 @@ forall (str_l: (@list Z)) (PreH1 : (0 <= ((string_length (str_l)) + 1 ))) (PreH2
 ).
 
 Definition vowels_count_entail_wit_1_split_goal_1 := 
-forall (str_l: (@list Z)) (PreH1 : (0 <= ((string_length (str_l)) + 1 ))) (PreH2 : (valid_string str_l )) (PreH3 : (all_ascii str_l )) (PreH4 : (problem_64_pre_z str_l )) (PreH5 : (vowel_count_safe_64 str_l )) (PreH6 : ((string_length (str_l)) < INT_MAX)) ,
+forall (str_l: (@list Z)) (PreH1 : (0 <= ((string_length (str_l)) + 1 ))) (PreH2 : (valid_string str_l )) (PreH3 : (all_ascii str_l )) (PreH4 : (problem_64_pre_z str_l )) (PreH5 : ((string_length (str_l)) < INT_MAX)) ,
   (GlobalStrings LitMap )
 |--
   “ (vowel_payload_safe_64 ) ”
 .
 
 Definition vowels_count_entail_wit_1_split_goal_2 := 
-forall (str_l: (@list Z)) (PreH1 : (0 <= ((string_length (str_l)) + 1 ))) (PreH2 : (valid_string str_l )) (PreH3 : (all_ascii str_l )) (PreH4 : (problem_64_pre_z str_l )) (PreH5 : (vowel_count_safe_64 str_l )) (PreH6 : ((string_length (str_l)) < INT_MAX)) ,
+forall (str_l: (@list Z)) (PreH1 : (0 <= ((string_length (str_l)) + 1 ))) (PreH2 : (valid_string str_l )) (PreH3 : (all_ascii str_l )) (PreH4 : (problem_64_pre_z str_l )) (PreH5 : ((string_length (str_l)) < INT_MAX)) ,
   (GlobalStrings LitMap )
 |--
   “ (((LitMap (("aeiouAEIOU"%string))) + (0 * sizeof(CHAR) ) ) = (vowel_ptr_64 (LitMap))) ”
 .
 
 Definition vowels_count_entail_wit_1_split_goal_spatial := 
-forall (str_l: (@list Z)) (PreH1 : (0 <= ((string_length (str_l)) + 1 ))) (PreH2 : (valid_string str_l )) (PreH3 : (all_ascii str_l )) (PreH4 : (problem_64_pre_z str_l )) (PreH5 : (vowel_count_safe_64 str_l )) (PreH6 : ((string_length (str_l)) < INT_MAX)) ,
+forall (str_l: (@list Z)) (PreH1 : (0 <= ((string_length (str_l)) + 1 ))) (PreH2 : (valid_string str_l )) (PreH3 : (all_ascii str_l )) (PreH4 : (problem_64_pre_z str_l )) (PreH5 : ((string_length (str_l)) < INT_MAX)) ,
   (GlobalStrings LitMap )
 |--
   (CharArray.full ((LitMap (("aeiouAEIOU"%string))) + (0 * sizeof(CHAR) ) ) ((string_length (vowel_payload_64)) + 1 ) (c_string (vowel_payload_64)) )
@@ -343,7 +342,7 @@ forall (str_l: (@list Z)) (PreH1 : (0 <= ((string_length (str_l)) + 1 ))) (PreH2
 
 Definition vowels_count_entail_wit_2 := 
 (
-forall (s_pre: Z) (str_l: (@list Z)) (vowels: Z) (retval: Z) (PreH1 : (retval = (string_length (str_l)))) (PreH2 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH3 : (0 <= ((string_length (str_l)) + 1 ))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (valid_string str_l )) (PreH6 : (all_ascii str_l )) (PreH7 : (problem_64_pre_z str_l )) (PreH8 : (vowel_count_safe_64 str_l )) (PreH9 : (vowel_payload_safe_64 )) (PreH10 : ((string_length (str_l)) < INT_MAX)) ,
+forall (s_pre: Z) (str_l: (@list Z)) (vowels: Z) (retval: Z) (PreH1 : (retval = (string_length (str_l)))) (PreH2 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH3 : (0 <= ((string_length (str_l)) + 1 ))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (valid_string str_l )) (PreH6 : (all_ascii str_l )) (PreH7 : (problem_64_pre_z str_l )) (PreH8 : (vowel_payload_safe_64 )) (PreH9 : ((string_length (str_l)) < INT_MAX)) ,
   (store_string s_pre str_l )
   **  (CharArray.full vowels ((string_length (vowel_payload_64)) + 1 ) (c_string (vowel_payload_64)) )
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
@@ -357,7 +356,6 @@ forall (s_pre: Z) (str_l: (@list Z)) (vowels: Z) (retval: Z) (PreH1 : (retval = 
   &&  “ (valid_string str_l ) ” 
   &&  “ (all_ascii str_l ) ” 
   &&  “ (problem_64_pre_z str_l ) ” 
-  &&  “ (vowel_count_safe_64 str_l ) ” 
   &&  “ (vowel_payload_safe_64 ) ” 
   &&  “ ((string_length (str_l)) < INT_MAX) ” 
   &&  “ (vowel_count_state_64 str_l 0 0 ) ”
@@ -366,7 +364,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (vowels: Z) (retval: Z) (PreH1 : (retval = 
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
 ) \/
 (
-forall (str_l: (@list Z)) (vowels: Z) (retval: Z) (PreH1 : (retval = (string_length (str_l)))) (PreH2 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH3 : (0 <= ((string_length (str_l)) + 1 ))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (valid_string str_l )) (PreH6 : (all_ascii str_l )) (PreH7 : (problem_64_pre_z str_l )) (PreH8 : (vowel_count_safe_64 str_l )) (PreH9 : (vowel_payload_safe_64 )) (PreH10 : ((string_length (str_l)) < INT_MAX)) ,
+forall (str_l: (@list Z)) (vowels: Z) (retval: Z) (PreH1 : (retval = (string_length (str_l)))) (PreH2 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH3 : (0 <= ((string_length (str_l)) + 1 ))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (valid_string str_l )) (PreH6 : (all_ascii str_l )) (PreH7 : (problem_64_pre_z str_l )) (PreH8 : (vowel_payload_safe_64 )) (PreH9 : ((string_length (str_l)) < INT_MAX)) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ (vowel_count_state_64 str_l 0 0 ) ” 
@@ -375,21 +373,21 @@ forall (str_l: (@list Z)) (vowels: Z) (retval: Z) (PreH1 : (retval = (string_len
 ).
 
 Definition vowels_count_entail_wit_2_split_goal_1 := 
-forall (str_l: (@list Z)) (vowels: Z) (retval: Z) (PreH1 : (retval = (string_length (str_l)))) (PreH2 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH3 : (0 <= ((string_length (str_l)) + 1 ))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (valid_string str_l )) (PreH6 : (all_ascii str_l )) (PreH7 : (problem_64_pre_z str_l )) (PreH8 : (vowel_count_safe_64 str_l )) (PreH9 : (vowel_payload_safe_64 )) (PreH10 : ((string_length (str_l)) < INT_MAX)) ,
+forall (str_l: (@list Z)) (vowels: Z) (retval: Z) (PreH1 : (retval = (string_length (str_l)))) (PreH2 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH3 : (0 <= ((string_length (str_l)) + 1 ))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (valid_string str_l )) (PreH6 : (all_ascii str_l )) (PreH7 : (problem_64_pre_z str_l )) (PreH8 : (vowel_payload_safe_64 )) (PreH9 : ((string_length (str_l)) < INT_MAX)) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ (vowel_count_state_64 str_l 0 0 ) ”
 .
 
 Definition vowels_count_entail_wit_2_split_goal_2 := 
-forall (str_l: (@list Z)) (vowels: Z) (retval: Z) (PreH1 : (retval = (string_length (str_l)))) (PreH2 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH3 : (0 <= ((string_length (str_l)) + 1 ))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (valid_string str_l )) (PreH6 : (all_ascii str_l )) (PreH7 : (problem_64_pre_z str_l )) (PreH8 : (vowel_count_safe_64 str_l )) (PreH9 : (vowel_payload_safe_64 )) (PreH10 : ((string_length (str_l)) < INT_MAX)) ,
+forall (str_l: (@list Z)) (vowels: Z) (retval: Z) (PreH1 : (retval = (string_length (str_l)))) (PreH2 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH3 : (0 <= ((string_length (str_l)) + 1 ))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (valid_string str_l )) (PreH6 : (all_ascii str_l )) (PreH7 : (problem_64_pre_z str_l )) (PreH8 : (vowel_payload_safe_64 )) (PreH9 : ((string_length (str_l)) < INT_MAX)) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ (0 <= retval) ”
 .
 
 Definition vowels_count_entail_wit_2_split_goal_spatial := 
-forall (str_l: (@list Z)) (vowels: Z) (retval: Z) (PreH1 : (retval = (string_length (str_l)))) (PreH2 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH3 : (0 <= ((string_length (str_l)) + 1 ))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (valid_string str_l )) (PreH6 : (all_ascii str_l )) (PreH7 : (problem_64_pre_z str_l )) (PreH8 : (vowel_count_safe_64 str_l )) (PreH9 : (vowel_payload_safe_64 )) (PreH10 : ((string_length (str_l)) < INT_MAX)) ,
+forall (str_l: (@list Z)) (vowels: Z) (retval: Z) (PreH1 : (retval = (string_length (str_l)))) (PreH2 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH3 : (0 <= ((string_length (str_l)) + 1 ))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (valid_string str_l )) (PreH6 : (all_ascii str_l )) (PreH7 : (problem_64_pre_z str_l )) (PreH8 : (vowel_payload_safe_64 )) (PreH9 : ((string_length (str_l)) < INT_MAX)) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
@@ -397,7 +395,7 @@ forall (str_l: (@list Z)) (vowels: Z) (retval: Z) (PreH1 : (retval = (string_len
 
 Definition vowels_count_entail_wit_3 := 
 (
-forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval <> 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_count_safe_64 str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval <> 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
   (store_string vowels vowel_payload_64 )
   **  (CharArray.full s_pre ((string_length (str_l)) + 1 ) (c_string (str_l)) )
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
@@ -413,7 +411,6 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retva
   &&  “ (valid_string str_l ) ” 
   &&  “ (all_ascii str_l ) ” 
   &&  “ (problem_64_pre_z str_l ) ” 
-  &&  “ (vowel_count_safe_64 str_l ) ” 
   &&  “ (vowel_payload_safe_64 ) ” 
   &&  “ ((string_length (str_l)) < INT_MAX) ” 
   &&  “ (vowel_regular_step_64 str_l i (count + 1 ) ) ” 
@@ -423,7 +420,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retva
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
 ) \/
 (
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval <> 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_count_safe_64 str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval <> 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ (vowel_count_state_64 str_l (i + 1 ) (count + 1 ) ) ” 
@@ -434,35 +431,35 @@ forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH
 ).
 
 Definition vowels_count_entail_wit_3_split_goal_1 := 
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval <> 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_count_safe_64 str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval <> 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ (vowel_count_state_64 str_l (i + 1 ) (count + 1 ) ) ”
 .
 
 Definition vowels_count_entail_wit_3_split_goal_2 := 
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval <> 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_count_safe_64 str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval <> 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ (vowel_regular_step_64 str_l i (count + 1 ) ) ”
 .
 
 Definition vowels_count_entail_wit_3_split_goal_3 := 
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval <> 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_count_safe_64 str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval <> 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ ((Znth i (c_string (str_l)) 0) <= 127) ”
 .
 
 Definition vowels_count_entail_wit_3_split_goal_4 := 
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval <> 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_count_safe_64 str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval <> 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ (0 <= (Znth i (c_string (str_l)) 0)) ”
 .
 
 Definition vowels_count_entail_wit_3_split_goal_spatial := 
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval <> 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_count_safe_64 str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval <> 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
@@ -470,7 +467,7 @@ forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH
 
 Definition vowels_count_entail_wit_4 := 
 (
-forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval = 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_count_safe_64 str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval = 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
   (store_string vowels vowel_payload_64 )
   **  (CharArray.full s_pre ((string_length (str_l)) + 1 ) (c_string (str_l)) )
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
@@ -486,7 +483,6 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retva
   &&  “ (valid_string str_l ) ” 
   &&  “ (all_ascii str_l ) ” 
   &&  “ (problem_64_pre_z str_l ) ” 
-  &&  “ (vowel_count_safe_64 str_l ) ” 
   &&  “ (vowel_payload_safe_64 ) ” 
   &&  “ ((string_length (str_l)) < INT_MAX) ” 
   &&  “ (vowel_miss_step_64 str_l i count ) ” 
@@ -496,7 +492,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retva
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
 ) \/
 (
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval = 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_count_safe_64 str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval = 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ (vowel_count_state_64 str_l (i + 1 ) count ) ” 
@@ -507,42 +503,42 @@ forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH
 ).
 
 Definition vowels_count_entail_wit_4_split_goal_1 := 
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval = 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_count_safe_64 str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval = 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ (vowel_count_state_64 str_l (i + 1 ) count ) ”
 .
 
 Definition vowels_count_entail_wit_4_split_goal_2 := 
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval = 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_count_safe_64 str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval = 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ (vowel_miss_step_64 str_l i count ) ”
 .
 
 Definition vowels_count_entail_wit_4_split_goal_3 := 
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval = 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_count_safe_64 str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval = 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ ((Znth i (c_string (str_l)) 0) <= 127) ”
 .
 
 Definition vowels_count_entail_wit_4_split_goal_4 := 
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval = 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_count_safe_64 str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval = 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ (0 <= (Znth i (c_string (str_l)) 0)) ”
 .
 
 Definition vowels_count_entail_wit_4_split_goal_spatial := 
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval = 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_count_safe_64 str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (retval: Z) (PreH1 : (retval = 0)) (PreH2 : (strchr_result vowel_payload_64 (Znth i (c_string (str_l)) 0) retval vowels )) (PreH3 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH4 : (0 <= ((string_length (str_l)) + 1 ))) (PreH5 : (i < n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 .
 
 Definition vowels_count_entail_wit_5_1 := 
-forall (s_pre: Z) (str_l: (@list Z)) (n: Z) (vowels: Z) (i: Z) (count: Z) (ch: Z) (PreH1 : (n = (string_length (str_l)))) (PreH2 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH3 : (0 <= i)) (PreH4 : (i < n)) (PreH5 : (0 <= count)) (PreH6 : (count <= (i + 1 ))) (PreH7 : (0 <= ch)) (PreH8 : (ch <= 127)) (PreH9 : (valid_string str_l )) (PreH10 : (all_ascii str_l )) (PreH11 : (problem_64_pre_z str_l )) (PreH12 : (vowel_count_safe_64 str_l )) (PreH13 : (vowel_payload_safe_64 )) (PreH14 : ((string_length (str_l)) < INT_MAX)) (PreH15 : (vowel_regular_step_64 str_l i count )) (PreH16 : (vowel_count_state_64 str_l (i + 1 ) count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (n: Z) (vowels: Z) (i: Z) (count: Z) (ch: Z) (PreH1 : (n = (string_length (str_l)))) (PreH2 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH3 : (0 <= i)) (PreH4 : (i < n)) (PreH5 : (0 <= count)) (PreH6 : (count <= (i + 1 ))) (PreH7 : (0 <= ch)) (PreH8 : (ch <= 127)) (PreH9 : (valid_string str_l )) (PreH10 : (all_ascii str_l )) (PreH11 : (problem_64_pre_z str_l )) (PreH12 : (vowel_payload_safe_64 )) (PreH13 : ((string_length (str_l)) < INT_MAX)) (PreH14 : (vowel_regular_step_64 str_l i count )) (PreH15 : (vowel_count_state_64 str_l (i + 1 ) count )) ,
   (store_string s_pre str_l )
   **  (store_string vowels vowel_payload_64 )
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
@@ -556,7 +552,6 @@ forall (s_pre: Z) (str_l: (@list Z)) (n: Z) (vowels: Z) (i: Z) (count: Z) (ch: Z
   &&  “ (valid_string str_l ) ” 
   &&  “ (all_ascii str_l ) ” 
   &&  “ (problem_64_pre_z str_l ) ” 
-  &&  “ (vowel_count_safe_64 str_l ) ” 
   &&  “ (vowel_payload_safe_64 ) ” 
   &&  “ ((string_length (str_l)) < INT_MAX) ” 
   &&  “ (vowel_count_state_64 str_l (i + 1 ) count ) ”
@@ -566,7 +561,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (n: Z) (vowels: Z) (i: Z) (count: Z) (ch: Z
 .
 
 Definition vowels_count_entail_wit_5_2 := 
-forall (s_pre: Z) (str_l: (@list Z)) (n: Z) (vowels: Z) (i: Z) (count: Z) (ch: Z) (PreH1 : (n = (string_length (str_l)))) (PreH2 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH3 : (0 <= i)) (PreH4 : (i < n)) (PreH5 : (0 <= count)) (PreH6 : (count <= i)) (PreH7 : (0 <= ch)) (PreH8 : (ch <= 127)) (PreH9 : (valid_string str_l )) (PreH10 : (all_ascii str_l )) (PreH11 : (problem_64_pre_z str_l )) (PreH12 : (vowel_count_safe_64 str_l )) (PreH13 : (vowel_payload_safe_64 )) (PreH14 : ((string_length (str_l)) < INT_MAX)) (PreH15 : (vowel_miss_step_64 str_l i count )) (PreH16 : (vowel_count_state_64 str_l (i + 1 ) count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (n: Z) (vowels: Z) (i: Z) (count: Z) (ch: Z) (PreH1 : (n = (string_length (str_l)))) (PreH2 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH3 : (0 <= i)) (PreH4 : (i < n)) (PreH5 : (0 <= count)) (PreH6 : (count <= i)) (PreH7 : (0 <= ch)) (PreH8 : (ch <= 127)) (PreH9 : (valid_string str_l )) (PreH10 : (all_ascii str_l )) (PreH11 : (problem_64_pre_z str_l )) (PreH12 : (vowel_payload_safe_64 )) (PreH13 : ((string_length (str_l)) < INT_MAX)) (PreH14 : (vowel_miss_step_64 str_l i count )) (PreH15 : (vowel_count_state_64 str_l (i + 1 ) count )) ,
   (store_string s_pre str_l )
   **  (store_string vowels vowel_payload_64 )
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
@@ -580,7 +575,6 @@ forall (s_pre: Z) (str_l: (@list Z)) (n: Z) (vowels: Z) (i: Z) (count: Z) (ch: Z
   &&  “ (valid_string str_l ) ” 
   &&  “ (all_ascii str_l ) ” 
   &&  “ (problem_64_pre_z str_l ) ” 
-  &&  “ (vowel_count_safe_64 str_l ) ” 
   &&  “ (vowel_payload_safe_64 ) ” 
   &&  “ ((string_length (str_l)) < INT_MAX) ” 
   &&  “ (vowel_count_state_64 str_l (i + 1 ) count ) ”
@@ -591,7 +585,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (n: Z) (vowels: Z) (i: Z) (count: Z) (ch: Z
 
 Definition vowels_count_entail_wit_6_1 := 
 (
-forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 89)) (PreH2 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH3 : (n > 0)) (PreH4 : (i >= n)) (PreH5 : (n = (string_length (str_l)))) (PreH6 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH7 : (0 <= i)) (PreH8 : (i <= n)) (PreH9 : (0 <= count)) (PreH10 : (count <= i)) (PreH11 : (valid_string str_l )) (PreH12 : (all_ascii str_l )) (PreH13 : (problem_64_pre_z str_l )) (PreH14 : (vowel_count_safe_64 str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 89)) (PreH2 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH3 : (n > 0)) (PreH4 : (i >= n)) (PreH5 : (n = (string_length (str_l)))) (PreH6 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH7 : (0 <= i)) (PreH8 : (i <= n)) (PreH9 : (0 <= count)) (PreH10 : (count <= i)) (PreH11 : (valid_string str_l )) (PreH12 : (all_ascii str_l )) (PreH13 : (problem_64_pre_z str_l )) (PreH14 : (vowel_payload_safe_64 )) (PreH15 : ((string_length (str_l)) < INT_MAX)) (PreH16 : (vowel_count_state_64 str_l i count )) ,
   (store_string s_pre str_l )
   **  (store_string vowels vowel_payload_64 )
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
@@ -606,7 +600,6 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1
   &&  “ (valid_string str_l ) ” 
   &&  “ (all_ascii str_l ) ” 
   &&  “ (problem_64_pre_z str_l ) ” 
-  &&  “ (vowel_count_safe_64 str_l ) ” 
   &&  “ (vowel_payload_safe_64 ) ” 
   &&  “ ((string_length (str_l)) < INT_MAX) ” 
   &&  “ (vowel_count_state_64 str_l n ((count + 1 ) - 1 ) ) ” 
@@ -617,7 +610,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
 ) \/
 (
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 89)) (PreH4 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH5 : (n > 0)) (PreH6 : (i >= n)) (PreH7 : (n = (string_length (str_l)))) (PreH8 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH9 : (0 <= i)) (PreH10 : (i <= n)) (PreH11 : (0 <= count)) (PreH12 : (count <= i)) (PreH13 : (valid_string str_l )) (PreH14 : (all_ascii str_l )) (PreH15 : (problem_64_pre_z str_l )) (PreH16 : (vowel_count_safe_64 str_l )) (PreH17 : (vowel_payload_safe_64 )) (PreH18 : ((string_length (str_l)) < INT_MAX)) (PreH19 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 89)) (PreH4 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH5 : (n > 0)) (PreH6 : (i >= n)) (PreH7 : (n = (string_length (str_l)))) (PreH8 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH9 : (0 <= i)) (PreH10 : (i <= n)) (PreH11 : (0 <= count)) (PreH12 : (count <= i)) (PreH13 : (valid_string str_l )) (PreH14 : (all_ascii str_l )) (PreH15 : (problem_64_pre_z str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ (problem_64_spec_z str_l (count + 1 ) ) ” 
@@ -627,28 +620,28 @@ forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((
 ).
 
 Definition vowels_count_entail_wit_6_1_split_goal_1 := 
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 89)) (PreH4 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH5 : (n > 0)) (PreH6 : (i >= n)) (PreH7 : (n = (string_length (str_l)))) (PreH8 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH9 : (0 <= i)) (PreH10 : (i <= n)) (PreH11 : (0 <= count)) (PreH12 : (count <= i)) (PreH13 : (valid_string str_l )) (PreH14 : (all_ascii str_l )) (PreH15 : (problem_64_pre_z str_l )) (PreH16 : (vowel_count_safe_64 str_l )) (PreH17 : (vowel_payload_safe_64 )) (PreH18 : ((string_length (str_l)) < INT_MAX)) (PreH19 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 89)) (PreH4 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH5 : (n > 0)) (PreH6 : (i >= n)) (PreH7 : (n = (string_length (str_l)))) (PreH8 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH9 : (0 <= i)) (PreH10 : (i <= n)) (PreH11 : (0 <= count)) (PreH12 : (count <= i)) (PreH13 : (valid_string str_l )) (PreH14 : (all_ascii str_l )) (PreH15 : (problem_64_pre_z str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ (problem_64_spec_z str_l (count + 1 ) ) ”
 .
 
 Definition vowels_count_entail_wit_6_1_split_goal_2 := 
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 89)) (PreH4 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH5 : (n > 0)) (PreH6 : (i >= n)) (PreH7 : (n = (string_length (str_l)))) (PreH8 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH9 : (0 <= i)) (PreH10 : (i <= n)) (PreH11 : (0 <= count)) (PreH12 : (count <= i)) (PreH13 : (valid_string str_l )) (PreH14 : (all_ascii str_l )) (PreH15 : (problem_64_pre_z str_l )) (PreH16 : (vowel_count_safe_64 str_l )) (PreH17 : (vowel_payload_safe_64 )) (PreH18 : ((string_length (str_l)) < INT_MAX)) (PreH19 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 89)) (PreH4 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH5 : (n > 0)) (PreH6 : (i >= n)) (PreH7 : (n = (string_length (str_l)))) (PreH8 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH9 : (0 <= i)) (PreH10 : (i <= n)) (PreH11 : (0 <= count)) (PreH12 : (count <= i)) (PreH13 : (valid_string str_l )) (PreH14 : (all_ascii str_l )) (PreH15 : (problem_64_pre_z str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ (vowel_final_y_64 str_l (count + 1 ) ) ”
 .
 
 Definition vowels_count_entail_wit_6_1_split_goal_3 := 
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 89)) (PreH4 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH5 : (n > 0)) (PreH6 : (i >= n)) (PreH7 : (n = (string_length (str_l)))) (PreH8 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH9 : (0 <= i)) (PreH10 : (i <= n)) (PreH11 : (0 <= count)) (PreH12 : (count <= i)) (PreH13 : (valid_string str_l )) (PreH14 : (all_ascii str_l )) (PreH15 : (problem_64_pre_z str_l )) (PreH16 : (vowel_count_safe_64 str_l )) (PreH17 : (vowel_payload_safe_64 )) (PreH18 : ((string_length (str_l)) < INT_MAX)) (PreH19 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 89)) (PreH4 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH5 : (n > 0)) (PreH6 : (i >= n)) (PreH7 : (n = (string_length (str_l)))) (PreH8 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH9 : (0 <= i)) (PreH10 : (i <= n)) (PreH11 : (0 <= count)) (PreH12 : (count <= i)) (PreH13 : (valid_string str_l )) (PreH14 : (all_ascii str_l )) (PreH15 : (problem_64_pre_z str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ (vowel_count_state_64 str_l n ((count + 1 ) - 1 ) ) ”
 .
 
 Definition vowels_count_entail_wit_6_1_split_goal_spatial := 
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 89)) (PreH4 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH5 : (n > 0)) (PreH6 : (i >= n)) (PreH7 : (n = (string_length (str_l)))) (PreH8 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH9 : (0 <= i)) (PreH10 : (i <= n)) (PreH11 : (0 <= count)) (PreH12 : (count <= i)) (PreH13 : (valid_string str_l )) (PreH14 : (all_ascii str_l )) (PreH15 : (problem_64_pre_z str_l )) (PreH16 : (vowel_count_safe_64 str_l )) (PreH17 : (vowel_payload_safe_64 )) (PreH18 : ((string_length (str_l)) < INT_MAX)) (PreH19 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 89)) (PreH4 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH5 : (n > 0)) (PreH6 : (i >= n)) (PreH7 : (n = (string_length (str_l)))) (PreH8 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH9 : (0 <= i)) (PreH10 : (i <= n)) (PreH11 : (0 <= count)) (PreH12 : (count <= i)) (PreH13 : (valid_string str_l )) (PreH14 : (all_ascii str_l )) (PreH15 : (problem_64_pre_z str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
@@ -656,7 +649,7 @@ forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((
 
 Definition vowels_count_entail_wit_6_2 := 
 (
-forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 121)) (PreH2 : (n > 0)) (PreH3 : (i >= n)) (PreH4 : (n = (string_length (str_l)))) (PreH5 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH6 : (0 <= i)) (PreH7 : (i <= n)) (PreH8 : (0 <= count)) (PreH9 : (count <= i)) (PreH10 : (valid_string str_l )) (PreH11 : (all_ascii str_l )) (PreH12 : (problem_64_pre_z str_l )) (PreH13 : (vowel_count_safe_64 str_l )) (PreH14 : (vowel_payload_safe_64 )) (PreH15 : ((string_length (str_l)) < INT_MAX)) (PreH16 : (vowel_count_state_64 str_l i count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 121)) (PreH2 : (n > 0)) (PreH3 : (i >= n)) (PreH4 : (n = (string_length (str_l)))) (PreH5 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH6 : (0 <= i)) (PreH7 : (i <= n)) (PreH8 : (0 <= count)) (PreH9 : (count <= i)) (PreH10 : (valid_string str_l )) (PreH11 : (all_ascii str_l )) (PreH12 : (problem_64_pre_z str_l )) (PreH13 : (vowel_payload_safe_64 )) (PreH14 : ((string_length (str_l)) < INT_MAX)) (PreH15 : (vowel_count_state_64 str_l i count )) ,
   (store_string s_pre str_l )
   **  (store_string vowels vowel_payload_64 )
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
@@ -671,7 +664,6 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1
   &&  “ (valid_string str_l ) ” 
   &&  “ (all_ascii str_l ) ” 
   &&  “ (problem_64_pre_z str_l ) ” 
-  &&  “ (vowel_count_safe_64 str_l ) ” 
   &&  “ (vowel_payload_safe_64 ) ” 
   &&  “ ((string_length (str_l)) < INT_MAX) ” 
   &&  “ (vowel_count_state_64 str_l n ((count + 1 ) - 1 ) ) ” 
@@ -682,7 +674,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
 ) \/
 (
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 121)) (PreH4 : (n > 0)) (PreH5 : (i >= n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_count_safe_64 str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 121)) (PreH4 : (n > 0)) (PreH5 : (i >= n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ (problem_64_spec_z str_l (count + 1 ) ) ” 
@@ -692,28 +684,28 @@ forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((
 ).
 
 Definition vowels_count_entail_wit_6_2_split_goal_1 := 
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 121)) (PreH4 : (n > 0)) (PreH5 : (i >= n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_count_safe_64 str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 121)) (PreH4 : (n > 0)) (PreH5 : (i >= n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ (problem_64_spec_z str_l (count + 1 ) ) ”
 .
 
 Definition vowels_count_entail_wit_6_2_split_goal_2 := 
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 121)) (PreH4 : (n > 0)) (PreH5 : (i >= n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_count_safe_64 str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 121)) (PreH4 : (n > 0)) (PreH5 : (i >= n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ (vowel_final_y_64 str_l (count + 1 ) ) ”
 .
 
 Definition vowels_count_entail_wit_6_2_split_goal_3 := 
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 121)) (PreH4 : (n > 0)) (PreH5 : (i >= n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_count_safe_64 str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 121)) (PreH4 : (n > 0)) (PreH5 : (i >= n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ (vowel_count_state_64 str_l n ((count + 1 ) - 1 ) ) ”
 .
 
 Definition vowels_count_entail_wit_6_2_split_goal_spatial := 
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 121)) (PreH4 : (n > 0)) (PreH5 : (i >= n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_count_safe_64 str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) = 121)) (PreH4 : (n > 0)) (PreH5 : (i >= n)) (PreH6 : (n = (string_length (str_l)))) (PreH7 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH8 : (0 <= i)) (PreH9 : (i <= n)) (PreH10 : (0 <= count)) (PreH11 : (count <= i)) (PreH12 : (valid_string str_l )) (PreH13 : (all_ascii str_l )) (PreH14 : (problem_64_pre_z str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
@@ -721,7 +713,7 @@ forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((
 
 Definition vowels_count_entail_wit_7 := 
 (
-forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 89)) (PreH2 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH3 : (n > 0)) (PreH4 : (i >= n)) (PreH5 : (n = (string_length (str_l)))) (PreH6 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH7 : (0 <= i)) (PreH8 : (i <= n)) (PreH9 : (0 <= count)) (PreH10 : (count <= i)) (PreH11 : (valid_string str_l )) (PreH12 : (all_ascii str_l )) (PreH13 : (problem_64_pre_z str_l )) (PreH14 : (vowel_count_safe_64 str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 89)) (PreH2 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH3 : (n > 0)) (PreH4 : (i >= n)) (PreH5 : (n = (string_length (str_l)))) (PreH6 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH7 : (0 <= i)) (PreH8 : (i <= n)) (PreH9 : (0 <= count)) (PreH10 : (count <= i)) (PreH11 : (valid_string str_l )) (PreH12 : (all_ascii str_l )) (PreH13 : (problem_64_pre_z str_l )) (PreH14 : (vowel_payload_safe_64 )) (PreH15 : ((string_length (str_l)) < INT_MAX)) (PreH16 : (vowel_count_state_64 str_l i count )) ,
   (store_string s_pre str_l )
   **  (store_string vowels vowel_payload_64 )
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
@@ -736,7 +728,6 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1
   &&  “ (valid_string str_l ) ” 
   &&  “ (all_ascii str_l ) ” 
   &&  “ (problem_64_pre_z str_l ) ” 
-  &&  “ (vowel_count_safe_64 str_l ) ” 
   &&  “ (vowel_payload_safe_64 ) ” 
   &&  “ ((string_length (str_l)) < INT_MAX) ” 
   &&  “ (vowel_count_state_64 str_l n count ) ” 
@@ -747,7 +738,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
 ) \/
 (
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 89)) (PreH4 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH5 : (n > 0)) (PreH6 : (i >= n)) (PreH7 : (n = (string_length (str_l)))) (PreH8 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH9 : (0 <= i)) (PreH10 : (i <= n)) (PreH11 : (0 <= count)) (PreH12 : (count <= i)) (PreH13 : (valid_string str_l )) (PreH14 : (all_ascii str_l )) (PreH15 : (problem_64_pre_z str_l )) (PreH16 : (vowel_count_safe_64 str_l )) (PreH17 : (vowel_payload_safe_64 )) (PreH18 : ((string_length (str_l)) < INT_MAX)) (PreH19 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 89)) (PreH4 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH5 : (n > 0)) (PreH6 : (i >= n)) (PreH7 : (n = (string_length (str_l)))) (PreH8 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH9 : (0 <= i)) (PreH10 : (i <= n)) (PreH11 : (0 <= count)) (PreH12 : (count <= i)) (PreH13 : (valid_string str_l )) (PreH14 : (all_ascii str_l )) (PreH15 : (problem_64_pre_z str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ (problem_64_spec_z str_l count ) ” 
@@ -759,42 +750,42 @@ forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((
 ).
 
 Definition vowels_count_entail_wit_7_split_goal_1 := 
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 89)) (PreH4 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH5 : (n > 0)) (PreH6 : (i >= n)) (PreH7 : (n = (string_length (str_l)))) (PreH8 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH9 : (0 <= i)) (PreH10 : (i <= n)) (PreH11 : (0 <= count)) (PreH12 : (count <= i)) (PreH13 : (valid_string str_l )) (PreH14 : (all_ascii str_l )) (PreH15 : (problem_64_pre_z str_l )) (PreH16 : (vowel_count_safe_64 str_l )) (PreH17 : (vowel_payload_safe_64 )) (PreH18 : ((string_length (str_l)) < INT_MAX)) (PreH19 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 89)) (PreH4 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH5 : (n > 0)) (PreH6 : (i >= n)) (PreH7 : (n = (string_length (str_l)))) (PreH8 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH9 : (0 <= i)) (PreH10 : (i <= n)) (PreH11 : (0 <= count)) (PreH12 : (count <= i)) (PreH13 : (valid_string str_l )) (PreH14 : (all_ascii str_l )) (PreH15 : (problem_64_pre_z str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ (problem_64_spec_z str_l count ) ”
 .
 
 Definition vowels_count_entail_wit_7_split_goal_2 := 
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 89)) (PreH4 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH5 : (n > 0)) (PreH6 : (i >= n)) (PreH7 : (n = (string_length (str_l)))) (PreH8 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH9 : (0 <= i)) (PreH10 : (i <= n)) (PreH11 : (0 <= count)) (PreH12 : (count <= i)) (PreH13 : (valid_string str_l )) (PreH14 : (all_ascii str_l )) (PreH15 : (problem_64_pre_z str_l )) (PreH16 : (vowel_count_safe_64 str_l )) (PreH17 : (vowel_payload_safe_64 )) (PreH18 : ((string_length (str_l)) < INT_MAX)) (PreH19 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 89)) (PreH4 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH5 : (n > 0)) (PreH6 : (i >= n)) (PreH7 : (n = (string_length (str_l)))) (PreH8 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH9 : (0 <= i)) (PreH10 : (i <= n)) (PreH11 : (0 <= count)) (PreH12 : (count <= i)) (PreH13 : (valid_string str_l )) (PreH14 : (all_ascii str_l )) (PreH15 : (problem_64_pre_z str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ (vowel_final_not_y_64 str_l count ) ”
 .
 
 Definition vowels_count_entail_wit_7_split_goal_3 := 
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 89)) (PreH4 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH5 : (n > 0)) (PreH6 : (i >= n)) (PreH7 : (n = (string_length (str_l)))) (PreH8 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH9 : (0 <= i)) (PreH10 : (i <= n)) (PreH11 : (0 <= count)) (PreH12 : (count <= i)) (PreH13 : (valid_string str_l )) (PreH14 : (all_ascii str_l )) (PreH15 : (problem_64_pre_z str_l )) (PreH16 : (vowel_count_safe_64 str_l )) (PreH17 : (vowel_payload_safe_64 )) (PreH18 : ((string_length (str_l)) < INT_MAX)) (PreH19 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 89)) (PreH4 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH5 : (n > 0)) (PreH6 : (i >= n)) (PreH7 : (n = (string_length (str_l)))) (PreH8 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH9 : (0 <= i)) (PreH10 : (i <= n)) (PreH11 : (0 <= count)) (PreH12 : (count <= i)) (PreH13 : (valid_string str_l )) (PreH14 : (all_ascii str_l )) (PreH15 : (problem_64_pre_z str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ (vowel_count_state_64 str_l n count ) ”
 .
 
 Definition vowels_count_entail_wit_7_split_goal_4 := 
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 89)) (PreH4 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH5 : (n > 0)) (PreH6 : (i >= n)) (PreH7 : (n = (string_length (str_l)))) (PreH8 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH9 : (0 <= i)) (PreH10 : (i <= n)) (PreH11 : (0 <= count)) (PreH12 : (count <= i)) (PreH13 : (valid_string str_l )) (PreH14 : (all_ascii str_l )) (PreH15 : (problem_64_pre_z str_l )) (PreH16 : (vowel_count_safe_64 str_l )) (PreH17 : (vowel_payload_safe_64 )) (PreH18 : ((string_length (str_l)) < INT_MAX)) (PreH19 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 89)) (PreH4 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH5 : (n > 0)) (PreH6 : (i >= n)) (PreH7 : (n = (string_length (str_l)))) (PreH8 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH9 : (0 <= i)) (PreH10 : (i <= n)) (PreH11 : (0 <= count)) (PreH12 : (count <= i)) (PreH13 : (valid_string str_l )) (PreH14 : (all_ascii str_l )) (PreH15 : (problem_64_pre_z str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ ((Znth (n - 1 ) (c_string (str_l)) 0) <= 127) ”
 .
 
 Definition vowels_count_entail_wit_7_split_goal_5 := 
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 89)) (PreH4 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH5 : (n > 0)) (PreH6 : (i >= n)) (PreH7 : (n = (string_length (str_l)))) (PreH8 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH9 : (0 <= i)) (PreH10 : (i <= n)) (PreH11 : (0 <= count)) (PreH12 : (count <= i)) (PreH13 : (valid_string str_l )) (PreH14 : (all_ascii str_l )) (PreH15 : (problem_64_pre_z str_l )) (PreH16 : (vowel_count_safe_64 str_l )) (PreH17 : (vowel_payload_safe_64 )) (PreH18 : ((string_length (str_l)) < INT_MAX)) (PreH19 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 89)) (PreH4 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH5 : (n > 0)) (PreH6 : (i >= n)) (PreH7 : (n = (string_length (str_l)))) (PreH8 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH9 : (0 <= i)) (PreH10 : (i <= n)) (PreH11 : (0 <= count)) (PreH12 : (count <= i)) (PreH13 : (valid_string str_l )) (PreH14 : (all_ascii str_l )) (PreH15 : (problem_64_pre_z str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ (0 <= (Znth (n - 1 ) (c_string (str_l)) 0)) ”
 .
 
 Definition vowels_count_entail_wit_7_split_goal_spatial := 
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 89)) (PreH4 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH5 : (n > 0)) (PreH6 : (i >= n)) (PreH7 : (n = (string_length (str_l)))) (PreH8 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH9 : (0 <= i)) (PreH10 : (i <= n)) (PreH11 : (0 <= count)) (PreH12 : (count <= i)) (PreH13 : (valid_string str_l )) (PreH14 : (all_ascii str_l )) (PreH15 : (problem_64_pre_z str_l )) (PreH16 : (vowel_count_safe_64 str_l )) (PreH17 : (vowel_payload_safe_64 )) (PreH18 : ((string_length (str_l)) < INT_MAX)) (PreH19 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 89)) (PreH4 : ((Znth (n - 1 ) (c_string (str_l)) 0) <> 121)) (PreH5 : (n > 0)) (PreH6 : (i >= n)) (PreH7 : (n = (string_length (str_l)))) (PreH8 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH9 : (0 <= i)) (PreH10 : (i <= n)) (PreH11 : (0 <= count)) (PreH12 : (count <= i)) (PreH13 : (valid_string str_l )) (PreH14 : (all_ascii str_l )) (PreH15 : (problem_64_pre_z str_l )) (PreH16 : (vowel_payload_safe_64 )) (PreH17 : ((string_length (str_l)) < INT_MAX)) (PreH18 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
@@ -802,7 +793,7 @@ forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((
 
 Definition vowels_count_entail_wit_8 := 
 (
-forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (n <= 0)) (PreH2 : (i >= n)) (PreH3 : (n = (string_length (str_l)))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (0 <= i)) (PreH6 : (i <= n)) (PreH7 : (0 <= count)) (PreH8 : (count <= i)) (PreH9 : (valid_string str_l )) (PreH10 : (all_ascii str_l )) (PreH11 : (problem_64_pre_z str_l )) (PreH12 : (vowel_count_safe_64 str_l )) (PreH13 : (vowel_payload_safe_64 )) (PreH14 : ((string_length (str_l)) < INT_MAX)) (PreH15 : (vowel_count_state_64 str_l i count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (n <= 0)) (PreH2 : (i >= n)) (PreH3 : (n = (string_length (str_l)))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (0 <= i)) (PreH6 : (i <= n)) (PreH7 : (0 <= count)) (PreH8 : (count <= i)) (PreH9 : (valid_string str_l )) (PreH10 : (all_ascii str_l )) (PreH11 : (problem_64_pre_z str_l )) (PreH12 : (vowel_payload_safe_64 )) (PreH13 : ((string_length (str_l)) < INT_MAX)) (PreH14 : (vowel_count_state_64 str_l i count )) ,
   (store_string s_pre str_l )
   **  (store_string vowels vowel_payload_64 )
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
@@ -814,7 +805,6 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1
   &&  “ (valid_string str_l ) ” 
   &&  “ (all_ascii str_l ) ” 
   &&  “ (problem_64_pre_z str_l ) ” 
-  &&  “ (vowel_count_safe_64 str_l ) ” 
   &&  “ (vowel_payload_safe_64 ) ” 
   &&  “ ((string_length (str_l)) < INT_MAX) ” 
   &&  “ (vowel_count_state_64 str_l n count ) ” 
@@ -825,7 +815,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
 ) \/
 (
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : (n <= 0)) (PreH4 : (i >= n)) (PreH5 : (n = (string_length (str_l)))) (PreH6 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH7 : (0 <= i)) (PreH8 : (i <= n)) (PreH9 : (0 <= count)) (PreH10 : (count <= i)) (PreH11 : (valid_string str_l )) (PreH12 : (all_ascii str_l )) (PreH13 : (problem_64_pre_z str_l )) (PreH14 : (vowel_count_safe_64 str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : (n <= 0)) (PreH4 : (i >= n)) (PreH5 : (n = (string_length (str_l)))) (PreH6 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH7 : (0 <= i)) (PreH8 : (i <= n)) (PreH9 : (0 <= count)) (PreH10 : (count <= i)) (PreH11 : (valid_string str_l )) (PreH12 : (all_ascii str_l )) (PreH13 : (problem_64_pre_z str_l )) (PreH14 : (vowel_payload_safe_64 )) (PreH15 : ((string_length (str_l)) < INT_MAX)) (PreH16 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ (problem_64_spec_z str_l count ) ” 
@@ -835,28 +825,28 @@ forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((
 ).
 
 Definition vowels_count_entail_wit_8_split_goal_1 := 
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : (n <= 0)) (PreH4 : (i >= n)) (PreH5 : (n = (string_length (str_l)))) (PreH6 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH7 : (0 <= i)) (PreH8 : (i <= n)) (PreH9 : (0 <= count)) (PreH10 : (count <= i)) (PreH11 : (valid_string str_l )) (PreH12 : (all_ascii str_l )) (PreH13 : (problem_64_pre_z str_l )) (PreH14 : (vowel_count_safe_64 str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : (n <= 0)) (PreH4 : (i >= n)) (PreH5 : (n = (string_length (str_l)))) (PreH6 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH7 : (0 <= i)) (PreH8 : (i <= n)) (PreH9 : (0 <= count)) (PreH10 : (count <= i)) (PreH11 : (valid_string str_l )) (PreH12 : (all_ascii str_l )) (PreH13 : (problem_64_pre_z str_l )) (PreH14 : (vowel_payload_safe_64 )) (PreH15 : ((string_length (str_l)) < INT_MAX)) (PreH16 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ (problem_64_spec_z str_l count ) ”
 .
 
 Definition vowels_count_entail_wit_8_split_goal_2 := 
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : (n <= 0)) (PreH4 : (i >= n)) (PreH5 : (n = (string_length (str_l)))) (PreH6 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH7 : (0 <= i)) (PreH8 : (i <= n)) (PreH9 : (0 <= count)) (PreH10 : (count <= i)) (PreH11 : (valid_string str_l )) (PreH12 : (all_ascii str_l )) (PreH13 : (problem_64_pre_z str_l )) (PreH14 : (vowel_count_safe_64 str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : (n <= 0)) (PreH4 : (i >= n)) (PreH5 : (n = (string_length (str_l)))) (PreH6 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH7 : (0 <= i)) (PreH8 : (i <= n)) (PreH9 : (0 <= count)) (PreH10 : (count <= i)) (PreH11 : (valid_string str_l )) (PreH12 : (all_ascii str_l )) (PreH13 : (problem_64_pre_z str_l )) (PreH14 : (vowel_payload_safe_64 )) (PreH15 : ((string_length (str_l)) < INT_MAX)) (PreH16 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ (vowel_final_empty_64 str_l count ) ”
 .
 
 Definition vowels_count_entail_wit_8_split_goal_3 := 
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : (n <= 0)) (PreH4 : (i >= n)) (PreH5 : (n = (string_length (str_l)))) (PreH6 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH7 : (0 <= i)) (PreH8 : (i <= n)) (PreH9 : (0 <= count)) (PreH10 : (count <= i)) (PreH11 : (valid_string str_l )) (PreH12 : (all_ascii str_l )) (PreH13 : (problem_64_pre_z str_l )) (PreH14 : (vowel_count_safe_64 str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : (n <= 0)) (PreH4 : (i >= n)) (PreH5 : (n = (string_length (str_l)))) (PreH6 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH7 : (0 <= i)) (PreH8 : (i <= n)) (PreH9 : (0 <= count)) (PreH10 : (count <= i)) (PreH11 : (valid_string str_l )) (PreH12 : (all_ascii str_l )) (PreH13 : (problem_64_pre_z str_l )) (PreH14 : (vowel_payload_safe_64 )) (PreH15 : ((string_length (str_l)) < INT_MAX)) (PreH16 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   “ (vowel_count_state_64 str_l n count ) ”
 .
 
 Definition vowels_count_entail_wit_8_split_goal_spatial := 
-forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : (n <= 0)) (PreH4 : (i >= n)) (PreH5 : (n = (string_length (str_l)))) (PreH6 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH7 : (0 <= i)) (PreH8 : (i <= n)) (PreH9 : (0 <= count)) (PreH10 : (count <= i)) (PreH11 : (valid_string str_l )) (PreH12 : (all_ascii str_l )) (PreH13 : (problem_64_pre_z str_l )) (PreH14 : (vowel_count_safe_64 str_l )) (PreH15 : (vowel_payload_safe_64 )) (PreH16 : ((string_length (str_l)) < INT_MAX)) (PreH17 : (vowel_count_state_64 str_l i count )) ,
+forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : (n <= 0)) (PreH4 : (i >= n)) (PreH5 : (n = (string_length (str_l)))) (PreH6 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH7 : (0 <= i)) (PreH8 : (i <= n)) (PreH9 : (0 <= count)) (PreH10 : (count <= i)) (PreH11 : (valid_string str_l )) (PreH12 : (all_ascii str_l )) (PreH13 : (problem_64_pre_z str_l )) (PreH14 : (vowel_payload_safe_64 )) (PreH15 : ((string_length (str_l)) < INT_MAX)) (PreH16 : (vowel_count_state_64 str_l i count )) ,
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
   (GlobalStrings_missing LitMap all_vowel_literals_64 )
@@ -864,7 +854,7 @@ forall (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (0 <= ((
 
 Definition vowels_count_return_wit_1 := 
 (
-forall (s_pre: Z) (str_l: (@list Z)) (n: Z) (vowels: Z) (count: Z) (ch: Z) (PreH1 : (n = (string_length (str_l)))) (PreH2 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH3 : (n > 0)) (PreH4 : (0 <= count)) (PreH5 : (count <= (n + 1 ))) (PreH6 : (0 <= ch)) (PreH7 : (ch <= 127)) (PreH8 : (valid_string str_l )) (PreH9 : (all_ascii str_l )) (PreH10 : (problem_64_pre_z str_l )) (PreH11 : (vowel_count_safe_64 str_l )) (PreH12 : (vowel_payload_safe_64 )) (PreH13 : ((string_length (str_l)) < INT_MAX)) (PreH14 : (vowel_count_state_64 str_l n (count - 1 ) )) (PreH15 : (vowel_final_y_64 str_l count )) (PreH16 : (problem_64_spec_z str_l count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (n: Z) (vowels: Z) (count: Z) (ch: Z) (PreH1 : (n = (string_length (str_l)))) (PreH2 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH3 : (n > 0)) (PreH4 : (0 <= count)) (PreH5 : (count <= (n + 1 ))) (PreH6 : (0 <= ch)) (PreH7 : (ch <= 127)) (PreH8 : (valid_string str_l )) (PreH9 : (all_ascii str_l )) (PreH10 : (problem_64_pre_z str_l )) (PreH11 : (vowel_payload_safe_64 )) (PreH12 : ((string_length (str_l)) < INT_MAX)) (PreH13 : (vowel_count_state_64 str_l n (count - 1 ) )) (PreH14 : (vowel_final_y_64 str_l count )) (PreH15 : (problem_64_spec_z str_l count )) ,
   (store_string s_pre str_l )
   **  (store_string vowels vowel_payload_64 )
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
@@ -875,7 +865,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (n: Z) (vowels: Z) (count: Z) (ch: Z) (PreH
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
 ) \/
 (
-forall (str_l: (@list Z)) (n: Z) (vowels: Z) (count: Z) (ch: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : (n = (string_length (str_l)))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (n > 0)) (PreH6 : (0 <= count)) (PreH7 : (count <= (n + 1 ))) (PreH8 : (0 <= ch)) (PreH9 : (ch <= 127)) (PreH10 : (valid_string str_l )) (PreH11 : (all_ascii str_l )) (PreH12 : (problem_64_pre_z str_l )) (PreH13 : (vowel_count_safe_64 str_l )) (PreH14 : (vowel_payload_safe_64 )) (PreH15 : ((string_length (str_l)) < INT_MAX)) (PreH16 : (vowel_count_state_64 str_l n (count - 1 ) )) (PreH17 : (vowel_final_y_64 str_l count )) (PreH18 : (problem_64_spec_z str_l count )) ,
+forall (str_l: (@list Z)) (n: Z) (vowels: Z) (count: Z) (ch: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : (n = (string_length (str_l)))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (n > 0)) (PreH6 : (0 <= count)) (PreH7 : (count <= (n + 1 ))) (PreH8 : (0 <= ch)) (PreH9 : (ch <= 127)) (PreH10 : (valid_string str_l )) (PreH11 : (all_ascii str_l )) (PreH12 : (problem_64_pre_z str_l )) (PreH13 : (vowel_payload_safe_64 )) (PreH14 : ((string_length (str_l)) < INT_MAX)) (PreH15 : (vowel_count_state_64 str_l n (count - 1 ) )) (PreH16 : (vowel_final_y_64 str_l count )) (PreH17 : (problem_64_spec_z str_l count )) ,
   (CharArray.full vowels ((string_length (vowel_payload_64)) + 1 ) (c_string (vowel_payload_64)) )
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
@@ -884,7 +874,7 @@ forall (str_l: (@list Z)) (n: Z) (vowels: Z) (count: Z) (ch: Z) (PreH1 : (0 <= (
 ).
 
 Definition vowels_count_return_wit_1_split_goal_spatial := 
-forall (str_l: (@list Z)) (n: Z) (vowels: Z) (count: Z) (ch: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : (n = (string_length (str_l)))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (n > 0)) (PreH6 : (0 <= count)) (PreH7 : (count <= (n + 1 ))) (PreH8 : (0 <= ch)) (PreH9 : (ch <= 127)) (PreH10 : (valid_string str_l )) (PreH11 : (all_ascii str_l )) (PreH12 : (problem_64_pre_z str_l )) (PreH13 : (vowel_count_safe_64 str_l )) (PreH14 : (vowel_payload_safe_64 )) (PreH15 : ((string_length (str_l)) < INT_MAX)) (PreH16 : (vowel_count_state_64 str_l n (count - 1 ) )) (PreH17 : (vowel_final_y_64 str_l count )) (PreH18 : (problem_64_spec_z str_l count )) ,
+forall (str_l: (@list Z)) (n: Z) (vowels: Z) (count: Z) (ch: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : (n = (string_length (str_l)))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (n > 0)) (PreH6 : (0 <= count)) (PreH7 : (count <= (n + 1 ))) (PreH8 : (0 <= ch)) (PreH9 : (ch <= 127)) (PreH10 : (valid_string str_l )) (PreH11 : (all_ascii str_l )) (PreH12 : (problem_64_pre_z str_l )) (PreH13 : (vowel_payload_safe_64 )) (PreH14 : ((string_length (str_l)) < INT_MAX)) (PreH15 : (vowel_count_state_64 str_l n (count - 1 ) )) (PreH16 : (vowel_final_y_64 str_l count )) (PreH17 : (problem_64_spec_z str_l count )) ,
   (CharArray.full vowels ((string_length (vowel_payload_64)) + 1 ) (c_string (vowel_payload_64)) )
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
@@ -894,7 +884,7 @@ forall (str_l: (@list Z)) (n: Z) (vowels: Z) (count: Z) (ch: Z) (PreH1 : (0 <= (
 
 Definition vowels_count_return_wit_2 := 
 (
-forall (s_pre: Z) (str_l: (@list Z)) (n: Z) (vowels: Z) (count: Z) (ch: Z) (PreH1 : (n = (string_length (str_l)))) (PreH2 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH3 : (n > 0)) (PreH4 : (0 <= count)) (PreH5 : (count <= n)) (PreH6 : (0 <= ch)) (PreH7 : (ch <= 127)) (PreH8 : (valid_string str_l )) (PreH9 : (all_ascii str_l )) (PreH10 : (problem_64_pre_z str_l )) (PreH11 : (vowel_count_safe_64 str_l )) (PreH12 : (vowel_payload_safe_64 )) (PreH13 : ((string_length (str_l)) < INT_MAX)) (PreH14 : (vowel_count_state_64 str_l n count )) (PreH15 : (vowel_final_not_y_64 str_l count )) (PreH16 : (problem_64_spec_z str_l count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (n: Z) (vowels: Z) (count: Z) (ch: Z) (PreH1 : (n = (string_length (str_l)))) (PreH2 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH3 : (n > 0)) (PreH4 : (0 <= count)) (PreH5 : (count <= n)) (PreH6 : (0 <= ch)) (PreH7 : (ch <= 127)) (PreH8 : (valid_string str_l )) (PreH9 : (all_ascii str_l )) (PreH10 : (problem_64_pre_z str_l )) (PreH11 : (vowel_payload_safe_64 )) (PreH12 : ((string_length (str_l)) < INT_MAX)) (PreH13 : (vowel_count_state_64 str_l n count )) (PreH14 : (vowel_final_not_y_64 str_l count )) (PreH15 : (problem_64_spec_z str_l count )) ,
   (store_string s_pre str_l )
   **  (store_string vowels vowel_payload_64 )
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
@@ -905,7 +895,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (n: Z) (vowels: Z) (count: Z) (ch: Z) (PreH
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
 ) \/
 (
-forall (str_l: (@list Z)) (n: Z) (vowels: Z) (count: Z) (ch: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : (n = (string_length (str_l)))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (n > 0)) (PreH6 : (0 <= count)) (PreH7 : (count <= n)) (PreH8 : (0 <= ch)) (PreH9 : (ch <= 127)) (PreH10 : (valid_string str_l )) (PreH11 : (all_ascii str_l )) (PreH12 : (problem_64_pre_z str_l )) (PreH13 : (vowel_count_safe_64 str_l )) (PreH14 : (vowel_payload_safe_64 )) (PreH15 : ((string_length (str_l)) < INT_MAX)) (PreH16 : (vowel_count_state_64 str_l n count )) (PreH17 : (vowel_final_not_y_64 str_l count )) (PreH18 : (problem_64_spec_z str_l count )) ,
+forall (str_l: (@list Z)) (n: Z) (vowels: Z) (count: Z) (ch: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : (n = (string_length (str_l)))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (n > 0)) (PreH6 : (0 <= count)) (PreH7 : (count <= n)) (PreH8 : (0 <= ch)) (PreH9 : (ch <= 127)) (PreH10 : (valid_string str_l )) (PreH11 : (all_ascii str_l )) (PreH12 : (problem_64_pre_z str_l )) (PreH13 : (vowel_payload_safe_64 )) (PreH14 : ((string_length (str_l)) < INT_MAX)) (PreH15 : (vowel_count_state_64 str_l n count )) (PreH16 : (vowel_final_not_y_64 str_l count )) (PreH17 : (problem_64_spec_z str_l count )) ,
   (CharArray.full vowels ((string_length (vowel_payload_64)) + 1 ) (c_string (vowel_payload_64)) )
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
@@ -914,7 +904,7 @@ forall (str_l: (@list Z)) (n: Z) (vowels: Z) (count: Z) (ch: Z) (PreH1 : (0 <= (
 ).
 
 Definition vowels_count_return_wit_2_split_goal_spatial := 
-forall (str_l: (@list Z)) (n: Z) (vowels: Z) (count: Z) (ch: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : (n = (string_length (str_l)))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (n > 0)) (PreH6 : (0 <= count)) (PreH7 : (count <= n)) (PreH8 : (0 <= ch)) (PreH9 : (ch <= 127)) (PreH10 : (valid_string str_l )) (PreH11 : (all_ascii str_l )) (PreH12 : (problem_64_pre_z str_l )) (PreH13 : (vowel_count_safe_64 str_l )) (PreH14 : (vowel_payload_safe_64 )) (PreH15 : ((string_length (str_l)) < INT_MAX)) (PreH16 : (vowel_count_state_64 str_l n count )) (PreH17 : (vowel_final_not_y_64 str_l count )) (PreH18 : (problem_64_spec_z str_l count )) ,
+forall (str_l: (@list Z)) (n: Z) (vowels: Z) (count: Z) (ch: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : (n = (string_length (str_l)))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (n > 0)) (PreH6 : (0 <= count)) (PreH7 : (count <= n)) (PreH8 : (0 <= ch)) (PreH9 : (ch <= 127)) (PreH10 : (valid_string str_l )) (PreH11 : (all_ascii str_l )) (PreH12 : (problem_64_pre_z str_l )) (PreH13 : (vowel_payload_safe_64 )) (PreH14 : ((string_length (str_l)) < INT_MAX)) (PreH15 : (vowel_count_state_64 str_l n count )) (PreH16 : (vowel_final_not_y_64 str_l count )) (PreH17 : (problem_64_spec_z str_l count )) ,
   (CharArray.full vowels ((string_length (vowel_payload_64)) + 1 ) (c_string (vowel_payload_64)) )
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
@@ -924,7 +914,7 @@ forall (str_l: (@list Z)) (n: Z) (vowels: Z) (count: Z) (ch: Z) (PreH1 : (0 <= (
 
 Definition vowels_count_return_wit_3 := 
 (
-forall (s_pre: Z) (str_l: (@list Z)) (n: Z) (vowels: Z) (count: Z) (PreH1 : (n = (string_length (str_l)))) (PreH2 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH3 : (n = 0)) (PreH4 : (count = 0)) (PreH5 : (valid_string str_l )) (PreH6 : (all_ascii str_l )) (PreH7 : (problem_64_pre_z str_l )) (PreH8 : (vowel_count_safe_64 str_l )) (PreH9 : (vowel_payload_safe_64 )) (PreH10 : ((string_length (str_l)) < INT_MAX)) (PreH11 : (vowel_count_state_64 str_l n count )) (PreH12 : (vowel_final_empty_64 str_l count )) (PreH13 : (problem_64_spec_z str_l count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (n: Z) (vowels: Z) (count: Z) (PreH1 : (n = (string_length (str_l)))) (PreH2 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH3 : (n = 0)) (PreH4 : (count = 0)) (PreH5 : (valid_string str_l )) (PreH6 : (all_ascii str_l )) (PreH7 : (problem_64_pre_z str_l )) (PreH8 : (vowel_payload_safe_64 )) (PreH9 : ((string_length (str_l)) < INT_MAX)) (PreH10 : (vowel_count_state_64 str_l n count )) (PreH11 : (vowel_final_empty_64 str_l count )) (PreH12 : (problem_64_spec_z str_l count )) ,
   (store_string s_pre str_l )
   **  (store_string vowels vowel_payload_64 )
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
@@ -935,7 +925,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (n: Z) (vowels: Z) (count: Z) (PreH1 : (n =
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
 ) \/
 (
-forall (str_l: (@list Z)) (n: Z) (vowels: Z) (count: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : (n = (string_length (str_l)))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (n = 0)) (PreH6 : (count = 0)) (PreH7 : (valid_string str_l )) (PreH8 : (all_ascii str_l )) (PreH9 : (problem_64_pre_z str_l )) (PreH10 : (vowel_count_safe_64 str_l )) (PreH11 : (vowel_payload_safe_64 )) (PreH12 : ((string_length (str_l)) < INT_MAX)) (PreH13 : (vowel_count_state_64 str_l n count )) (PreH14 : (vowel_final_empty_64 str_l count )) (PreH15 : (problem_64_spec_z str_l count )) ,
+forall (str_l: (@list Z)) (n: Z) (vowels: Z) (count: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : (n = (string_length (str_l)))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (n = 0)) (PreH6 : (count = 0)) (PreH7 : (valid_string str_l )) (PreH8 : (all_ascii str_l )) (PreH9 : (problem_64_pre_z str_l )) (PreH10 : (vowel_payload_safe_64 )) (PreH11 : ((string_length (str_l)) < INT_MAX)) (PreH12 : (vowel_count_state_64 str_l n count )) (PreH13 : (vowel_final_empty_64 str_l count )) (PreH14 : (problem_64_spec_z str_l count )) ,
   (CharArray.full vowels ((string_length (vowel_payload_64)) + 1 ) (c_string (vowel_payload_64)) )
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
@@ -944,7 +934,7 @@ forall (str_l: (@list Z)) (n: Z) (vowels: Z) (count: Z) (PreH1 : (0 <= ((string_
 ).
 
 Definition vowels_count_return_wit_3_split_goal_spatial := 
-forall (str_l: (@list Z)) (n: Z) (vowels: Z) (count: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : (n = (string_length (str_l)))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (n = 0)) (PreH6 : (count = 0)) (PreH7 : (valid_string str_l )) (PreH8 : (all_ascii str_l )) (PreH9 : (problem_64_pre_z str_l )) (PreH10 : (vowel_count_safe_64 str_l )) (PreH11 : (vowel_payload_safe_64 )) (PreH12 : ((string_length (str_l)) < INT_MAX)) (PreH13 : (vowel_count_state_64 str_l n count )) (PreH14 : (vowel_final_empty_64 str_l count )) (PreH15 : (problem_64_spec_z str_l count )) ,
+forall (str_l: (@list Z)) (n: Z) (vowels: Z) (count: Z) (PreH1 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH2 : (0 <= ((string_length (str_l)) + 1 ))) (PreH3 : (n = (string_length (str_l)))) (PreH4 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH5 : (n = 0)) (PreH6 : (count = 0)) (PreH7 : (valid_string str_l )) (PreH8 : (all_ascii str_l )) (PreH9 : (problem_64_pre_z str_l )) (PreH10 : (vowel_payload_safe_64 )) (PreH11 : ((string_length (str_l)) < INT_MAX)) (PreH12 : (vowel_count_state_64 str_l n count )) (PreH13 : (vowel_final_empty_64 str_l count )) (PreH14 : (problem_64_spec_z str_l count )) ,
   (CharArray.full vowels ((string_length (vowel_payload_64)) + 1 ) (c_string (vowel_payload_64)) )
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
 |--
@@ -953,7 +943,7 @@ forall (str_l: (@list Z)) (n: Z) (vowels: Z) (count: Z) (PreH1 : (0 <= ((string_
 .
 
 Definition vowels_count_partial_solve_wit_1_pure := 
-forall (s_pre: Z) (str_l: (@list Z)) (vowels: Z) (PreH1 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH2 : (valid_string str_l )) (PreH3 : (all_ascii str_l )) (PreH4 : (problem_64_pre_z str_l )) (PreH5 : (vowel_count_safe_64 str_l )) (PreH6 : (vowel_payload_safe_64 )) (PreH7 : ((string_length (str_l)) < INT_MAX)) ,
+forall (s_pre: Z) (str_l: (@list Z)) (vowels: Z) (PreH1 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH2 : (valid_string str_l )) (PreH3 : (all_ascii str_l )) (PreH4 : (problem_64_pre_z str_l )) (PreH5 : (vowel_payload_safe_64 )) (PreH6 : ((string_length (str_l)) < INT_MAX)) ,
   ((( &( "n" ) )) # Int  |->_)
   **  ((( &( "s" ) )) # Ptr  |-> s_pre)
   **  ((( &( "vowels" ) )) # Ptr  |-> vowels)
@@ -966,7 +956,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (vowels: Z) (PreH1 : (vowels = (vowel_ptr_6
 .
 
 Definition vowels_count_partial_solve_wit_1_aux := 
-forall (s_pre: Z) (str_l: (@list Z)) (vowels: Z) (PreH1 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH2 : (valid_string str_l )) (PreH3 : (all_ascii str_l )) (PreH4 : (problem_64_pre_z str_l )) (PreH5 : (vowel_count_safe_64 str_l )) (PreH6 : (vowel_payload_safe_64 )) (PreH7 : ((string_length (str_l)) < INT_MAX)) ,
+forall (s_pre: Z) (str_l: (@list Z)) (vowels: Z) (PreH1 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH2 : (valid_string str_l )) (PreH3 : (all_ascii str_l )) (PreH4 : (problem_64_pre_z str_l )) (PreH5 : (vowel_payload_safe_64 )) (PreH6 : ((string_length (str_l)) < INT_MAX)) ,
   (store_string s_pre str_l )
   **  (store_string vowels vowel_payload_64 )
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
@@ -979,7 +969,6 @@ forall (s_pre: Z) (str_l: (@list Z)) (vowels: Z) (PreH1 : (vowels = (vowel_ptr_6
   &&  “ (valid_string str_l ) ” 
   &&  “ (all_ascii str_l ) ” 
   &&  “ (problem_64_pre_z str_l ) ” 
-  &&  “ (vowel_count_safe_64 str_l ) ” 
   &&  “ (vowel_payload_safe_64 ) ” 
   &&  “ ((string_length (str_l)) < INT_MAX) ”
   &&  (store_string s_pre str_l )
@@ -991,7 +980,7 @@ Definition vowels_count_partial_solve_wit_1 := vowels_count_partial_solve_wit_1_
 
 Definition vowels_count_partial_solve_wit_2_pure := 
 (
-forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (i < n)) (PreH2 : (n = (string_length (str_l)))) (PreH3 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH4 : (0 <= i)) (PreH5 : (i <= n)) (PreH6 : (0 <= count)) (PreH7 : (count <= i)) (PreH8 : (valid_string str_l )) (PreH9 : (all_ascii str_l )) (PreH10 : (problem_64_pre_z str_l )) (PreH11 : (vowel_count_safe_64 str_l )) (PreH12 : (vowel_payload_safe_64 )) (PreH13 : ((string_length (str_l)) < INT_MAX)) (PreH14 : (vowel_count_state_64 str_l i count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (i < n)) (PreH2 : (n = (string_length (str_l)))) (PreH3 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH4 : (0 <= i)) (PreH5 : (i <= n)) (PreH6 : (0 <= count)) (PreH7 : (count <= i)) (PreH8 : (valid_string str_l )) (PreH9 : (all_ascii str_l )) (PreH10 : (problem_64_pre_z str_l )) (PreH11 : (vowel_payload_safe_64 )) (PreH12 : ((string_length (str_l)) < INT_MAX)) (PreH13 : (vowel_count_state_64 str_l i count )) ,
   ((( &( "found" ) )) # Ptr  |->_)
   **  ((( &( "ch" ) )) # Int  |-> (Znth i (c_string (str_l)) 0))
   **  ((( &( "s" ) )) # Ptr  |-> s_pre)
@@ -1009,7 +998,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1
   &&  “ (valid_string vowel_payload_64 ) ”
 ) \/
 (
-forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (count <= INT_MAX)) (PreH2 : (i <= INT_MAX)) (PreH3 : (n <= INT_MAX)) (PreH4 : ((Znth i (c_string (str_l)) 0) <= INT_MAX)) (PreH5 : (count >= INT_MIN)) (PreH6 : (i >= INT_MIN)) (PreH7 : (n >= INT_MIN)) (PreH8 : ((Znth i (c_string (str_l)) 0) >= INT_MIN)) (PreH9 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH10 : (0 <= ((string_length (str_l)) + 1 ))) (PreH11 : (i < n)) (PreH12 : (n = (string_length (str_l)))) (PreH13 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH14 : (0 <= i)) (PreH15 : (i <= n)) (PreH16 : (0 <= count)) (PreH17 : (count <= i)) (PreH18 : (valid_string str_l )) (PreH19 : (all_ascii str_l )) (PreH20 : (problem_64_pre_z str_l )) (PreH21 : (vowel_count_safe_64 str_l )) (PreH22 : (vowel_payload_safe_64 )) (PreH23 : ((string_length (str_l)) < INT_MAX)) (PreH24 : (vowel_count_state_64 str_l i count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (count <= INT_MAX)) (PreH2 : (i <= INT_MAX)) (PreH3 : (n <= INT_MAX)) (PreH4 : ((Znth i (c_string (str_l)) 0) <= INT_MAX)) (PreH5 : (count >= INT_MIN)) (PreH6 : (i >= INT_MIN)) (PreH7 : (n >= INT_MIN)) (PreH8 : ((Znth i (c_string (str_l)) 0) >= INT_MIN)) (PreH9 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH10 : (0 <= ((string_length (str_l)) + 1 ))) (PreH11 : (i < n)) (PreH12 : (n = (string_length (str_l)))) (PreH13 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH14 : (0 <= i)) (PreH15 : (i <= n)) (PreH16 : (0 <= count)) (PreH17 : (count <= i)) (PreH18 : (valid_string str_l )) (PreH19 : (all_ascii str_l )) (PreH20 : (problem_64_pre_z str_l )) (PreH21 : (vowel_payload_safe_64 )) (PreH22 : ((string_length (str_l)) < INT_MAX)) (PreH23 : (vowel_count_state_64 str_l i count )) ,
   (CharArray.full vowels ((string_length (vowel_payload_64)) + 1 ) (c_string (vowel_payload_64)) )
   **  (CharArray.full s_pre ((string_length (str_l)) + 1 ) (c_string (str_l)) )
   **  ((( &( "found" ) )) # Ptr  |->_)
@@ -1028,7 +1017,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1
 ).
 
 Definition vowels_count_partial_solve_wit_2_pure_split_goal_1 := 
-forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (count <= INT_MAX)) (PreH2 : (i <= INT_MAX)) (PreH3 : (n <= INT_MAX)) (PreH4 : ((Znth i (c_string (str_l)) 0) <= INT_MAX)) (PreH5 : (count >= INT_MIN)) (PreH6 : (i >= INT_MIN)) (PreH7 : (n >= INT_MIN)) (PreH8 : ((Znth i (c_string (str_l)) 0) >= INT_MIN)) (PreH9 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH10 : (0 <= ((string_length (str_l)) + 1 ))) (PreH11 : (i < n)) (PreH12 : (n = (string_length (str_l)))) (PreH13 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH14 : (0 <= i)) (PreH15 : (i <= n)) (PreH16 : (0 <= count)) (PreH17 : (count <= i)) (PreH18 : (valid_string str_l )) (PreH19 : (all_ascii str_l )) (PreH20 : (problem_64_pre_z str_l )) (PreH21 : (vowel_count_safe_64 str_l )) (PreH22 : (vowel_payload_safe_64 )) (PreH23 : ((string_length (str_l)) < INT_MAX)) (PreH24 : (vowel_count_state_64 str_l i count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (count <= INT_MAX)) (PreH2 : (i <= INT_MAX)) (PreH3 : (n <= INT_MAX)) (PreH4 : ((Znth i (c_string (str_l)) 0) <= INT_MAX)) (PreH5 : (count >= INT_MIN)) (PreH6 : (i >= INT_MIN)) (PreH7 : (n >= INT_MIN)) (PreH8 : ((Znth i (c_string (str_l)) 0) >= INT_MIN)) (PreH9 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH10 : (0 <= ((string_length (str_l)) + 1 ))) (PreH11 : (i < n)) (PreH12 : (n = (string_length (str_l)))) (PreH13 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH14 : (0 <= i)) (PreH15 : (i <= n)) (PreH16 : (0 <= count)) (PreH17 : (count <= i)) (PreH18 : (valid_string str_l )) (PreH19 : (all_ascii str_l )) (PreH20 : (problem_64_pre_z str_l )) (PreH21 : (vowel_payload_safe_64 )) (PreH22 : ((string_length (str_l)) < INT_MAX)) (PreH23 : (vowel_count_state_64 str_l i count )) ,
   (CharArray.full vowels ((string_length (vowel_payload_64)) + 1 ) (c_string (vowel_payload_64)) )
   **  (CharArray.full s_pre ((string_length (str_l)) + 1 ) (c_string (str_l)) )
   **  ((( &( "found" ) )) # Ptr  |->_)
@@ -1044,7 +1033,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1
 .
 
 Definition vowels_count_partial_solve_wit_2_pure_split_goal_2 := 
-forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (count <= INT_MAX)) (PreH2 : (i <= INT_MAX)) (PreH3 : (n <= INT_MAX)) (PreH4 : ((Znth i (c_string (str_l)) 0) <= INT_MAX)) (PreH5 : (count >= INT_MIN)) (PreH6 : (i >= INT_MIN)) (PreH7 : (n >= INT_MIN)) (PreH8 : ((Znth i (c_string (str_l)) 0) >= INT_MIN)) (PreH9 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH10 : (0 <= ((string_length (str_l)) + 1 ))) (PreH11 : (i < n)) (PreH12 : (n = (string_length (str_l)))) (PreH13 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH14 : (0 <= i)) (PreH15 : (i <= n)) (PreH16 : (0 <= count)) (PreH17 : (count <= i)) (PreH18 : (valid_string str_l )) (PreH19 : (all_ascii str_l )) (PreH20 : (problem_64_pre_z str_l )) (PreH21 : (vowel_count_safe_64 str_l )) (PreH22 : (vowel_payload_safe_64 )) (PreH23 : ((string_length (str_l)) < INT_MAX)) (PreH24 : (vowel_count_state_64 str_l i count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (count <= INT_MAX)) (PreH2 : (i <= INT_MAX)) (PreH3 : (n <= INT_MAX)) (PreH4 : ((Znth i (c_string (str_l)) 0) <= INT_MAX)) (PreH5 : (count >= INT_MIN)) (PreH6 : (i >= INT_MIN)) (PreH7 : (n >= INT_MIN)) (PreH8 : ((Znth i (c_string (str_l)) 0) >= INT_MIN)) (PreH9 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH10 : (0 <= ((string_length (str_l)) + 1 ))) (PreH11 : (i < n)) (PreH12 : (n = (string_length (str_l)))) (PreH13 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH14 : (0 <= i)) (PreH15 : (i <= n)) (PreH16 : (0 <= count)) (PreH17 : (count <= i)) (PreH18 : (valid_string str_l )) (PreH19 : (all_ascii str_l )) (PreH20 : (problem_64_pre_z str_l )) (PreH21 : (vowel_payload_safe_64 )) (PreH22 : ((string_length (str_l)) < INT_MAX)) (PreH23 : (vowel_count_state_64 str_l i count )) ,
   (CharArray.full vowels ((string_length (vowel_payload_64)) + 1 ) (c_string (vowel_payload_64)) )
   **  (CharArray.full s_pre ((string_length (str_l)) + 1 ) (c_string (str_l)) )
   **  ((( &( "found" ) )) # Ptr  |->_)
@@ -1060,7 +1049,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1
 .
 
 Definition vowels_count_partial_solve_wit_2_pure_split_goal_3 := 
-forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (count <= INT_MAX)) (PreH2 : (i <= INT_MAX)) (PreH3 : (n <= INT_MAX)) (PreH4 : ((Znth i (c_string (str_l)) 0) <= INT_MAX)) (PreH5 : (count >= INT_MIN)) (PreH6 : (i >= INT_MIN)) (PreH7 : (n >= INT_MIN)) (PreH8 : ((Znth i (c_string (str_l)) 0) >= INT_MIN)) (PreH9 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH10 : (0 <= ((string_length (str_l)) + 1 ))) (PreH11 : (i < n)) (PreH12 : (n = (string_length (str_l)))) (PreH13 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH14 : (0 <= i)) (PreH15 : (i <= n)) (PreH16 : (0 <= count)) (PreH17 : (count <= i)) (PreH18 : (valid_string str_l )) (PreH19 : (all_ascii str_l )) (PreH20 : (problem_64_pre_z str_l )) (PreH21 : (vowel_count_safe_64 str_l )) (PreH22 : (vowel_payload_safe_64 )) (PreH23 : ((string_length (str_l)) < INT_MAX)) (PreH24 : (vowel_count_state_64 str_l i count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (count <= INT_MAX)) (PreH2 : (i <= INT_MAX)) (PreH3 : (n <= INT_MAX)) (PreH4 : ((Znth i (c_string (str_l)) 0) <= INT_MAX)) (PreH5 : (count >= INT_MIN)) (PreH6 : (i >= INT_MIN)) (PreH7 : (n >= INT_MIN)) (PreH8 : ((Znth i (c_string (str_l)) 0) >= INT_MIN)) (PreH9 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH10 : (0 <= ((string_length (str_l)) + 1 ))) (PreH11 : (i < n)) (PreH12 : (n = (string_length (str_l)))) (PreH13 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH14 : (0 <= i)) (PreH15 : (i <= n)) (PreH16 : (0 <= count)) (PreH17 : (count <= i)) (PreH18 : (valid_string str_l )) (PreH19 : (all_ascii str_l )) (PreH20 : (problem_64_pre_z str_l )) (PreH21 : (vowel_payload_safe_64 )) (PreH22 : ((string_length (str_l)) < INT_MAX)) (PreH23 : (vowel_count_state_64 str_l i count )) ,
   (CharArray.full vowels ((string_length (vowel_payload_64)) + 1 ) (c_string (vowel_payload_64)) )
   **  (CharArray.full s_pre ((string_length (str_l)) + 1 ) (c_string (str_l)) )
   **  ((( &( "found" ) )) # Ptr  |->_)
@@ -1076,7 +1065,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1
 .
 
 Definition vowels_count_partial_solve_wit_2_pure_split_goal_4 := 
-forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (count <= INT_MAX)) (PreH2 : (i <= INT_MAX)) (PreH3 : (n <= INT_MAX)) (PreH4 : ((Znth i (c_string (str_l)) 0) <= INT_MAX)) (PreH5 : (count >= INT_MIN)) (PreH6 : (i >= INT_MIN)) (PreH7 : (n >= INT_MIN)) (PreH8 : ((Znth i (c_string (str_l)) 0) >= INT_MIN)) (PreH9 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH10 : (0 <= ((string_length (str_l)) + 1 ))) (PreH11 : (i < n)) (PreH12 : (n = (string_length (str_l)))) (PreH13 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH14 : (0 <= i)) (PreH15 : (i <= n)) (PreH16 : (0 <= count)) (PreH17 : (count <= i)) (PreH18 : (valid_string str_l )) (PreH19 : (all_ascii str_l )) (PreH20 : (problem_64_pre_z str_l )) (PreH21 : (vowel_count_safe_64 str_l )) (PreH22 : (vowel_payload_safe_64 )) (PreH23 : ((string_length (str_l)) < INT_MAX)) (PreH24 : (vowel_count_state_64 str_l i count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (count <= INT_MAX)) (PreH2 : (i <= INT_MAX)) (PreH3 : (n <= INT_MAX)) (PreH4 : ((Znth i (c_string (str_l)) 0) <= INT_MAX)) (PreH5 : (count >= INT_MIN)) (PreH6 : (i >= INT_MIN)) (PreH7 : (n >= INT_MIN)) (PreH8 : ((Znth i (c_string (str_l)) 0) >= INT_MIN)) (PreH9 : (0 <= ((string_length (vowel_payload_64)) + 1 ))) (PreH10 : (0 <= ((string_length (str_l)) + 1 ))) (PreH11 : (i < n)) (PreH12 : (n = (string_length (str_l)))) (PreH13 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH14 : (0 <= i)) (PreH15 : (i <= n)) (PreH16 : (0 <= count)) (PreH17 : (count <= i)) (PreH18 : (valid_string str_l )) (PreH19 : (all_ascii str_l )) (PreH20 : (problem_64_pre_z str_l )) (PreH21 : (vowel_payload_safe_64 )) (PreH22 : ((string_length (str_l)) < INT_MAX)) (PreH23 : (vowel_count_state_64 str_l i count )) ,
   (CharArray.full vowels ((string_length (vowel_payload_64)) + 1 ) (c_string (vowel_payload_64)) )
   **  (CharArray.full s_pre ((string_length (str_l)) + 1 ) (c_string (str_l)) )
   **  ((( &( "found" ) )) # Ptr  |->_)
@@ -1092,7 +1081,7 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1
 .
 
 Definition vowels_count_partial_solve_wit_2_aux := 
-forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (i < n)) (PreH2 : (n = (string_length (str_l)))) (PreH3 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH4 : (0 <= i)) (PreH5 : (i <= n)) (PreH6 : (0 <= count)) (PreH7 : (count <= i)) (PreH8 : (valid_string str_l )) (PreH9 : (all_ascii str_l )) (PreH10 : (problem_64_pre_z str_l )) (PreH11 : (vowel_count_safe_64 str_l )) (PreH12 : (vowel_payload_safe_64 )) (PreH13 : ((string_length (str_l)) < INT_MAX)) (PreH14 : (vowel_count_state_64 str_l i count )) ,
+forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1 : (i < n)) (PreH2 : (n = (string_length (str_l)))) (PreH3 : (vowels = (vowel_ptr_64 (LitMap)))) (PreH4 : (0 <= i)) (PreH5 : (i <= n)) (PreH6 : (0 <= count)) (PreH7 : (count <= i)) (PreH8 : (valid_string str_l )) (PreH9 : (all_ascii str_l )) (PreH10 : (problem_64_pre_z str_l )) (PreH11 : (vowel_payload_safe_64 )) (PreH12 : ((string_length (str_l)) < INT_MAX)) (PreH13 : (vowel_count_state_64 str_l i count )) ,
   (store_string s_pre str_l )
   **  (store_string vowels vowel_payload_64 )
   **  (GlobalStrings_missing LitMap all_vowel_literals_64 )
@@ -1113,7 +1102,6 @@ forall (s_pre: Z) (str_l: (@list Z)) (count: Z) (i: Z) (vowels: Z) (n: Z) (PreH1
   &&  “ (valid_string str_l ) ” 
   &&  “ (all_ascii str_l ) ” 
   &&  “ (problem_64_pre_z str_l ) ” 
-  &&  “ (vowel_count_safe_64 str_l ) ” 
   &&  “ (vowel_payload_safe_64 ) ” 
   &&  “ ((string_length (str_l)) < INT_MAX) ” 
   &&  “ (vowel_count_state_64 str_l i count ) ”

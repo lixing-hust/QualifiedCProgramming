@@ -12,44 +12,34 @@ Example:
 3
 """ *)
 
-Require Import Coq.Strings.String Coq.Strings.Ascii Coq.Arith.Arith Coq.Bool.Bool Coq.Lists.List.
+Require Import Coq.Strings.String Coq.Strings.Ascii Coq.Arith.Arith Coq.Lists.List.
 Import ListNotations.
 Open Scope string_scope.
 
-(* is_vowel_char recognizes ordinary English vowels in either case. *)
-Definition is_vowel_char (c : ascii) : bool :=
-  match c with
-  | "a"%char | "e"%char | "i"%char | "o"%char | "u"%char
-  | "A"%char | "E"%char | "I"%char | "O"%char | "U"%char => true
-  | _ => false
-  end.
+(* regular_vowel_64 recognizes ordinary English vowels in either case. *)
+Definition regular_vowel_64 (c : ascii) : Prop :=
+  c = "a"%char \/ c = "e"%char \/ c = "i"%char \/ c = "o"%char \/
+  c = "u"%char \/ c = "A"%char \/ c = "E"%char \/ c = "I"%char \/
+  c = "O"%char \/ c = "U"%char.
 
-(* is_y recognizes y/Y for the terminal-vowel rule. *)
-Definition is_y (c : ascii) : bool :=
-  match c with
-  | "y"%char | "Y"%char => true
-  | _ => false
-  end.
+(* counted_vowel_position_64 states that index i contributes one to the answer. *)
+Definition counted_vowel_position_64 (chars : list ascii) (i : nat) : Prop :=
+  exists c,
+    nth_error chars i = Some c /\
+    (regular_vowel_64 c \/
+     ((c = "y"%char \/ c = "Y"%char) /\ S i = List.length chars)).
 
-(* terminal_y_count contributes one when the final character is y or Y. *)
-Definition terminal_y_count (chars : list ascii) : nat :=
-  match rev chars with
-  | c :: _ => if is_y c then 1 else 0
-  | [] => 0
-  end.
-
-(* vowels_count_func counts ordinary vowels plus a terminal y/Y. *)
-Definition vowels_count_func (s : string) : nat :=
-  let chars := list_ascii_of_string s in
-  length (filter is_vowel_char chars) + terminal_y_count chars.
-
-(* vowels_count_impl is the public implementation-level expression. *)
-Definition vowels_count_impl (s : string) : nat :=
-  vowels_count_func s.
+(* selected_vowel_positions_64 is exactly the finite set of counted positions. *)
+Definition selected_vowel_positions_64 (chars : list ascii) (positions : list nat) : Prop :=
+  NoDup positions /\
+  forall i,
+    In i positions <-> counted_vowel_position_64 chars i.
 
 (* problem_64_pre imposes no input constraints. *)
 Definition problem_64_pre (s : string) : Prop := True.
 
-(* problem_64_spec states that output is the vowel count with terminal y/Y rule. *)
+(* problem_64_spec states that output is the number of positions counted as vowels. *)
 Definition problem_64_spec (s : string) (output : nat) : Prop :=
-  output = vowels_count_impl s.
+  exists positions,
+    selected_vowel_positions_64 (list_ascii_of_string s) positions /\
+    output = List.length positions.

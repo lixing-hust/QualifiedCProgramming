@@ -14,7 +14,6 @@ Example:
 
 /*@ Extern Coq (problem_64_pre_z: list Z -> Prop)
                (problem_64_spec_z: list Z -> Z -> Prop)
-               (vowel_count_safe_64: list Z -> Prop)
                (vowel_count_state_64: list Z -> Z -> Z -> Prop)
                (vowel_regular_step_64: list Z -> Z -> Z -> Prop)
                (vowel_miss_step_64: list Z -> Z -> Z -> Prop)
@@ -37,7 +36,6 @@ int vowels_count(char *s)
         valid_string(str_l) &&
         all_ascii(str_l) &&
         problem_64_pre_z(str_l) &&
-        vowel_count_safe_64(str_l) &&
         string_length(str_l) < INT_MAX &&
         store_string(s, str_l) *
         GlobalStrings(LitMap)
@@ -55,7 +53,6 @@ int vowels_count(char *s)
         valid_string(str_l) &&
         all_ascii(str_l) &&
         problem_64_pre_z(str_l) &&
-        vowel_count_safe_64(str_l) &&
         vowel_payload_safe_64 &&
         string_length(str_l) < INT_MAX &&
         store_string(s@pre, str_l) *
@@ -75,7 +72,6 @@ int vowels_count(char *s)
         valid_string(str_l) &&
         all_ascii(str_l) &&
         problem_64_pre_z(str_l) &&
-        vowel_count_safe_64(str_l) &&
         vowel_payload_safe_64 &&
         string_length(str_l) < INT_MAX &&
         vowel_count_state_64(str_l, i, count) &&
@@ -98,7 +94,6 @@ int vowels_count(char *s)
                 valid_string(str_l) &&
                 all_ascii(str_l) &&
                 problem_64_pre_z(str_l) &&
-                vowel_count_safe_64(str_l) &&
                 vowel_payload_safe_64 &&
                 string_length(str_l) < INT_MAX &&
                 vowel_regular_step_64(str_l, i, count) &&
@@ -119,7 +114,6 @@ int vowels_count(char *s)
                 valid_string(str_l) &&
                 all_ascii(str_l) &&
                 problem_64_pre_z(str_l) &&
-                vowel_count_safe_64(str_l) &&
                 vowel_payload_safe_64 &&
                 string_length(str_l) < INT_MAX &&
                 vowel_miss_step_64(str_l, i, count) &&
@@ -146,7 +140,6 @@ int vowels_count(char *s)
                 valid_string(str_l) &&
                 all_ascii(str_l) &&
                 problem_64_pre_z(str_l) &&
-                vowel_count_safe_64(str_l) &&
                 vowel_payload_safe_64 &&
                 string_length(str_l) < INT_MAX &&
                 vowel_count_state_64(str_l, n, count - 1) &&
@@ -168,7 +161,6 @@ int vowels_count(char *s)
                 valid_string(str_l) &&
                 all_ascii(str_l) &&
                 problem_64_pre_z(str_l) &&
-                vowel_count_safe_64(str_l) &&
                 vowel_payload_safe_64 &&
                 string_length(str_l) < INT_MAX &&
                 vowel_count_state_64(str_l, n, count) &&
@@ -190,7 +182,6 @@ int vowels_count(char *s)
             valid_string(str_l) &&
             all_ascii(str_l) &&
             problem_64_pre_z(str_l) &&
-            vowel_count_safe_64(str_l) &&
             vowel_payload_safe_64 &&
             string_length(str_l) < INT_MAX &&
             vowel_count_state_64(str_l, n, count) &&
