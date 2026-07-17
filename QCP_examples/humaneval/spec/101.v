@@ -16,22 +16,32 @@ Definition is_delimiter (c : ascii) : bool :=
   match c with
   | ","%char | " "%char => true | _ => false end.
 
-Fixpoint words_string_aux (current_word : list ascii) (input : list ascii) : list (list ascii) :=
-  match input with
-  | [] => match current_word with [] => [] | _ => [current_word] end
-  | c :: cs => if is_delimiter c then
-                 match current_word with
-                 | [] => words_string_aux [] cs
-                 | _ => current_word :: words_string_aux [] cs
-                 end
-               else words_string_aux (current_word ++ [c]) cs
-  end.
+(* A delimiter block may be empty; this covers the optional leading and trailing
+   delimiters as well as runs of consecutive delimiters. *)
+Definition delimiter_block (block : list ascii) : Prop :=
+  Forall (fun c => is_delimiter c = true) block.
 
-Definition words_string_list_impl (s : list ascii) : list (list ascii) :=
-  words_string_aux [] s.
+(* Every returned word is nonempty and contains no delimiter. *)
+Definition word_block (word : list ascii) : Prop :=
+  word <> [] /\
+  Forall (fun c => is_delimiter c = false) word.
 
-Definition words_string (s : string) : list string :=
-  map string_of_list_ascii (words_string_list_impl (list_ascii_of_string s)).
+(* The input consists of a leading delimiter block followed by the returned
+   words, each paired with the delimiter block after it.  Every block between
+   two words is nonempty, so a delimiter is required at each word boundary. *)
+Definition words_string_rel
+    (input : list ascii) (words : list (list ascii)) : Prop :=
+  exists leading trailing_blocks,
+    delimiter_block leading /\
+    length trailing_blocks = length words /\
+    Forall delimiter_block trailing_blocks /\
+    Forall (fun block => block <> []) (removelast trailing_blocks) /\
+    Forall word_block words /\
+    input =
+      leading ++
+      concat
+        (map (fun pair => fst pair ++ snd pair)
+             (combine words trailing_blocks)).
 
 (* 输入为仅包含字母、逗号或空格的字符列表 *)
 Definition problem_101_pre (s : string) : Prop :=
@@ -41,6 +51,7 @@ Definition problem_101_pre (s : string) : Prop :=
       (65 <= n /\ n <= 90) \/ (97 <= n /\ n <= 122) \/ c = ","%char \/ c = " "%char) l.
 
 Definition problem_101_spec (s : string) (output : list string) : Prop :=
-  output = words_string s.
-
+  exists words,
+    words_string_rel (list_ascii_of_string s) words /\
+    output = map string_of_list_ascii words.
 
