@@ -13,17 +13,12 @@ Require Import Coq.Lists.List.
 Require Import Coq.Strings.Ascii.
 Require Import Coq.Strings.String.
 Require Import Coq.Arith.PeanoNat.
+Require Import Coq.Structures.OrderedTypeEx.
 Import ListNotations.
 
-(* string_le is lexicographic order expressed with a shared prefix and first difference. *)
+(* string_le is standard lexicographic order, including equality. *)
 Definition string_le (s1 s2 : string) : Prop :=
-  let l1 := list_ascii_of_string s1 in
-  let l2 := list_ascii_of_string s2 in
-  l1 = l2 \/
-  exists prefix c1 c2 rest1 rest2,
-    l1 = prefix ++ c1 :: rest1 /\
-    l2 = prefix ++ c2 :: rest2 /\
-    nat_of_ascii c1 < nat_of_ascii c2.
+  s1 = s2 \/ String_as_OT.lt s1 s2.
 
 (* count_unique_chars counts distinct ASCII characters with the library nodup. *)
 Definition count_unique_chars (s : string) : nat :=

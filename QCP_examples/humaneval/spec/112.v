@@ -9,26 +9,33 @@ For s = "abcdef", c = "b" the result should be ('acdef',False)
 For s = "abcdedcba", c = "ab", the result should be ('cdedc',True)
 *)
 
-Require Import Coq.Lists.List Coq.Strings.Ascii Coq.Strings.String Coq.Bool.Bool.
+Require Import Coq.Lists.List Coq.Strings.Ascii Coq.Strings.String.
 Import ListNotations.
 
+(* The indices occur in the same order as their characters in the source. *)
+Definition strictly_increasing (indices : list nat) : Prop :=
+  Forall
+    (fun adjacent => (fst adjacent < snd adjacent)%nat)
+    (combine indices (tl indices)).
 
-(* delete_chars_impl removes every character that appears in c. *)
-Definition delete_chars_impl (s c : list ascii) : list ascii :=
-  filter (fun h => negb (existsb (fun x => Ascii.eqb x h) c)) s.
+(* [result] contains exactly the source characters whose indices are not
+   occupied by a character from [removed], in their original order. *)
+Definition delete_chars_rel
+    (source removed result : list ascii) : Prop :=
+  exists indices,
+    strictly_increasing indices /\
+    Forall2
+      (fun index ch =>
+         nth_error source index = Some ch /\ ~ In ch removed)
+      indices result /\
+    (forall index ch,
+       nth_error source index = Some ch ->
+       (In index indices <-> ~ In ch removed)).
 
-(* is_pal_impl compares a character list with its reverse. *)
-Definition is_pal_impl (s : list ascii) : bool :=
-  if list_eq_dec Ascii.ascii_dec s (rev s) then true else false.
-
-(* del_and_pal_impl returns the filtered characters and their palindrome flag. *)
-Definition del_and_pal_impl (s c : list ascii) : list ascii * bool :=
-  let r := delete_chars_impl s c in (r, is_pal_impl r).
-
-(* reverse_delete converts strings to lists, filters, checks palindrome, and converts back. *)
-Definition reverse_delete (s c : string) : string * bool :=
-  let (r, b) := del_and_pal_impl (list_ascii_of_string s) (list_ascii_of_string c) in
-  (string_of_list_ascii r, b).
+(* The flag is true exactly when the remaining character sequence is a
+   palindrome. *)
+Definition palindrome_flag (result : list ascii) (flag : bool) : Prop :=
+  flag = true <-> result = rev result.
 
 (* problem_112_pre restricts both strings to lowercase letters. *)
 Definition problem_112_pre (s c : string) : Prop :=
@@ -37,6 +44,10 @@ Definition problem_112_pre (s c : string) : Prop :=
   Forall (fun ch => let n := nat_of_ascii ch in 97 <= n /\ n <= 122) ls /\
   Forall (fun ch => let n := nat_of_ascii ch in 97 <= n /\ n <= 122) lc.
 
-(* problem_112_spec states that output is the filtered string and palindrome flag. *)
+(* The output string and flag are related directly to the two input strings. *)
 Definition problem_112_spec (s c : string) (output : string * bool) : Prop :=
-  output = reverse_delete s c.
+  let source := list_ascii_of_string s in
+  let removed := list_ascii_of_string c in
+  let result := list_ascii_of_string (fst output) in
+  delete_chars_rel source removed result /\
+  palindrome_flag result (snd output).
