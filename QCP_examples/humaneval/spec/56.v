@@ -18,32 +18,22 @@ Require Import Coq.Strings.String.
 Open Scope string_scope.
 
 
-(* bracket_step updates the optional depth for one angle-bracket character. *)
-Definition bracket_step (depth : option nat) (c : ascii) : option nat :=
-  match depth with
-  | None => None
-  | Some d =>
-      if Ascii.eqb c "<"%char then Some (S d)
-      else if Ascii.eqb c ">"%char then
-        match d with
-        | 0 => None
-        | S d' => Some d'
-        end
-      else Some d
-  end.
-
-(* correct_bracketing folds over the string and accepts exactly final depth 0. *)
-Definition correct_bracketing (s : string) : bool :=
-  match fold_left bracket_step (list_ascii_of_string s) (Some 0) with
-  | Some 0 => true
-  | _ => false
-  end.
+(* A sequence is correctly bracketed exactly when the total numbers of opening
+   and closing brackets agree and no prefix contains more closing brackets than
+   opening brackets. *)
+Definition correctly_bracketed (chars : list ascii) : Prop :=
+  count_occ ascii_dec chars "<"%char =
+    count_occ ascii_dec chars ">"%char /\
+  forall prefix suffix,
+    chars = (prefix ++ suffix)%list ->
+    count_occ ascii_dec prefix ">"%char <=
+      count_occ ascii_dec prefix "<"%char.
 
 
 (* problem_56_pre restricts the input to angle-bracket characters. *)
 Definition problem_56_pre (brackets : string) : Prop :=
   Forall (fun c => c = "<"%char \/ c = ">"%char) (list_ascii_of_string brackets).
 
-(* problem_56_spec states that b is the angle-bracket balance result. *)
+(* The result is true exactly when the input satisfies the bracket relation. *)
 Definition problem_56_spec (brackets : string) (b : bool) : Prop :=
-  b = correct_bracketing brackets.
+  b = true <-> correctly_bracketed (list_ascii_of_string brackets).
