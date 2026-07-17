@@ -34,12 +34,12 @@ Definition dictionary := list (KeyType * string).
 (* 字典类型已保证键值均为字符串，无附加约束；空字典由规约处理 *)
 Definition problem_95_pre (d : dictionary) : Prop := True.
 
-(* check_dict_case 函数的规约 *)
+(* 字典非空，且所有键统一为小写或统一为大写字符串。 *)
+Definition has_uniform_key_case (d : dictionary) : Prop :=
+  d <> [] /\
+  ( (forall k v, In (k, v) d -> exists s, k = Some s /\ is_lowercase s) \/
+    (forall k v, In (k, v) d -> exists s, k = Some s /\ is_uppercase s) ).
+
+(* check_dict_case 的输入输出关系。 *)
 Definition problem_95_spec (d : dictionary) (output : bool) : Prop :=
-  match d with
-  | [] => output = false
-  | _ =>
-    ( (forall k v, In (k, v) d -> exists s, k = Some s /\ is_lowercase s) \/
-      (forall k v, In (k, v) d -> exists s, k = Some s /\ is_uppercase s) )
-    <-> output = true
-  end.
+  output = true <-> has_uniform_key_case d.
