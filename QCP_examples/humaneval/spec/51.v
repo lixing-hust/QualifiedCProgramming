@@ -38,14 +38,7 @@ Definition is_vowel (c : ascii) : bool :=
 Definition filter_string (f : ascii -> bool) (s : string) : string :=
   string_of_list_ascii (filter f (list_ascii_of_string s)).
 
-(*
- * 描述: 这是 remove_vowels 函数的程序规约 (Specification)，完全基于属性定义。
- * 它将输出列表 (output) 定义为输入列表 (input) 中所有非元音字母的集合。
- *
- * @param input: string - 输入的原始字符列表。
- * @param output: string - 函数的输出字符列表。
- * @return: Prop - 一个表示输入和输出之间关系的命题。
- *)
+
 (* problem_51_pre imposes no input constraints. *)
 Definition problem_51_pre (input : string) : Prop := True.
 
