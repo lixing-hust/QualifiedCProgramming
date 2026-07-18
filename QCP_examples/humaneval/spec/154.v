@@ -25,8 +25,12 @@ Definition is_rotation_of (r b : list ascii) : Prop :=
 (* problem_154_pre imposes no input constraints. *)
 Definition problem_154_pre (a b : string) : Prop := True.
 
-(* problem_154_spec states that some rotation of b is a substring of a exactly when res is true. *)
+(* problem_154_spec follows the canonical program: the empty second word
+   produces false; otherwise, res is true exactly when some rotation of b is
+   a substring of a. *)
 Definition problem_154_spec (a b : string) (res : bool) : Prop :=
   let la := list_ascii_of_string a in
   let lb := list_ascii_of_string b in
-  res = true <-> (exists b', is_rotation_of b' lb /\ is_substring b' la).
+  res = true <->
+    lb <> [] /\
+    exists b', is_rotation_of b' lb /\ is_substring b' la.
