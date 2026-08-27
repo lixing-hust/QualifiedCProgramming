@@ -5,21 +5,27 @@ False
 >>> has_close_elements([1.0, 2.8, 3.0, 4.0, 5.0, 2.0], 0.3)
 True
 *)
-Require Import List Reals.
+Require Import List.
+From SimpleC.SL Require Import SeparationLogic.
 Import ListNotations.
-Open Scope R_scope.
 
-Definition problem_0_pre(threshold : R): Prop :=
-  threshold >= 0.
+Definition fp32_close_0 (x y threshold : fp32) : Prop :=
+  let difference := fp32_sub x y in
+  (fp32_lt difference fp32_zero /\
+   fp32_lt (fp32_neg difference) threshold) \/
+  (~ fp32_lt difference fp32_zero /\
+   fp32_lt difference threshold).
 
-Definition problem_0_spec (numbers : list R) (threshold : R) (output : bool): Prop :=
-  (exists (i j : nat) (x y : R),
-    i <> j /\
-    Nat.lt i (length numbers) /\
+Definition problem_0_pre (threshold : fp32) : Prop :=
+  fp32_ge threshold fp32_zero.
+
+Definition problem_0_spec
+    (numbers : list fp32) (threshold : fp32) (output : bool) : Prop :=
+  (exists (i j : nat),
+    Nat.lt i j /\
     Nat.lt j (length numbers) /\
-    nth i numbers 0 = x /\
-    nth j numbers 0 = y /\
-    Rabs (x - y) <= threshold) <->
+    fp32_close_0
+      (nth i numbers fp32_zero)
+      (nth j numbers fp32_zero)
+      threshold) <->
     output = true.
-
-
