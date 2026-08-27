@@ -1,63 +1,42 @@
 ---
 name: verification-orchestrator
-description: 为单个验证 case 定义 controller、main agent、fixed phase subagents、controller-owned vc-proving-preparing container、JSON handoff files、case_lib、group-worker deterministic merge 和 final-check 的协作合同。
+description: main agent 控制本仓库单个 C 验证 case 的完整 run 时使用；从 init-run 起依照 controller action 管理唯一 annotation agent、需要时的 vc-checking 与全部 group-worker、统一 annotation 缺口反馈、机械合并、final-apply 和 final-check，直到 done 或明确 blocker。
 ---
 
-# Verification Orchestrator
+# 验证编排
 
-本 skill 只由 main agent 使用。`controller` 是唯一 run 状态和 acceptance 写入口；main agent 调用 `controller`、启动 fixed phase subagents / group-worker、执行 controller-owned preparing / verify step，并在 owner 写出 report 或 controller step 成功后继续推进。
+只由 main agent 使用。以 `controller_state.json` 和 controller 返回的 action 为准，不直接调用内部
+模块，不自行实现状态转移，也不代替 owner 修改其文件。
 
-## 文档
+main 负责原样执行 action 自带的 invocation，维护 controller owner 到 agent target 的映射，并把
+claim response 的固定 `handoff.prompt` 原样发送给对应 agent。每个 run 只 spawn 一次 annotation
+agent，后续修正 append 到同一 target；vc-checking 和每组首次 group-worker 使用独立会话。
 
-- `docs/phase-handoff-report.md`：phase 顺序、worktree lineage、写入边界、handoff/report、stale / retry / compact error 规则。
-- `docs/forbidden-lemma.md`：manual proof 和 `case_lib` 禁用 lemma 列表。
+main 的主动阅读边界只有：
 
-## 必守边界
+- 本 skill 及下列全部 workflow/docs；
+- controller action 明确给出的当前 blocker、state 摘要和交接文件；
+- controller 进入 `final-check` 时，[`final-check/SKILL.md`](../final-check/SKILL.md) 及其 workflow；
+- Windows 上另读仓库根 [`AGENTS_WIN.md`](../../../AGENTS_WIN.md) 和它指向的
+  [Windows 适配说明](docs/windows.md)。
 
-- fixed phase subagents 只能由 main agent 按 `controller` 的 spawn instruction 启动；脚本不得启动 subagent 或 group-worker。
-- main agent 启动 owner 后默认等待；只有 report、compact error、stale、blocked、explicit error、用户取消或 `controller` 已落盘 evidence 能证明 attempt 失效时，才 retry 或替换。compact error 不是 owner 的 `blocked` 判断；owner 只报告事实，controller / main agent 决定重试或最终 blocker。
-- `controller` 发现的问题如果不改变 formal source 语义、不绕过版本 / freshness / fixed check / `case_lib` contract，且可由 main agent 或 controller 的 main-owned 简单补正解决，应记录补正并继续流程，不升级成 terminal `blocked`。例如报告形态缺口、inline artifact 需要落盘、非权威 output note 缺失或警告、可重新传入正确参数的 main-owned check，都不应阻断证明流；真正语义不可证、版本失效、必要工具不可用或验收 evidence 不可信仍按 `blocked` / `stale` 处理。
-- `annotation`、`vc-checking`、controller-owned `vc-proving-preparing`、group-worker 和 `final-check` 必须沿 AGENTS.md 的目录和 worktree lineage 推进。
-- `vc-proving-preparing` 和 parent merge/verify 不是独立 agent round，不创建 Git worktree，不生成 `agent_input.json`、`agent_report.json` 或 `agent_output.txt`。`worktrees/<run>/<case>-vc-proving-rN/` 是普通 container 目录，只用于容纳 group-worker Git worktrees。
-- `vc-proving-preparing` 或 parent merge/verify 失败时，controller command 直接非零返回给 main agent 裁决；不得把这类 controller step 失败写成 vc-proving round blocker。
-- `case_lib` 是唯一 active Rocq lib；annotation 写 seed spec declarations，group-worker 只新增带当前 group suffix 的 proved helper declarations。
-- `coq_tooling.py` 是唯一 Coq feedback 与 verification 入口；JSON 操作不依赖 `jq`。
+main 不读取、摘要或重新解释 `annotation-filling`、`annotation-checking`、`vc-checking`、
+`group-worker-proving` 等 owner skill。每个 owner 只根据原样 claim message 读取自己的 skill 和本次
+交接文件；main 只编排，不代替 owner 学习角色知识。`vc-proving` 不是 phase subagent，group 的准备、
+汇总、merge 与 parent verify 都由 controller 驱动。
 
-## Controller 调用入口
+没有 manual VC 时跳过 vc-checking 和 group-worker，但仍执行 controller 选择的 dependency
+preparation（公共 action 名保留为 `dune-build`）、parent check、写回和终检。有 group 时，即使已有
+group 报告 annotation 缺口，也继续派发本轮所有 group；全部 group
+到终态后才统一进入一次 annotation retry，本轮不 merge、不 verify。
 
-统一入口：
+## 需要阅读
 
-```bash
-python3 .agents/skills/verification-orchestrator/scripts/controller.py \
-  --main-worktree-root <main-worktree-root> <command> ...
-```
+- [总流程](workflows/verification-workflow.md)
+- [状态与交接](workflows/state-handoffs-and-reports.md)
+- [路径与命令](workflows/paths-and-commands.md)
+- [Controller 公共接口](docs/controller-cli.md)
 
-所有入口只推进 controller state、写 handoff/report/run log，或执行 main-owned check；它们不得启动 fixed phase subagent 或 group-worker。
-
-- `init-run`：创建本次 run 的 run root、report root、初始 `run_logs.json` state snapshot、`source_version`、problem context、reference policy 和 compact retry budget。
-- `step`：按当前 phase 串行推进 controller state；创建缺失 round attempt 或 `vc-proving-preparing` container、写 next action、为 ready attempt 写 main-owned action，并在 preparing phase 调度 dependency-ready group-worker 或 parent verify action。
-- `spawn-instructions`：根据 `next_actions[].id` 输出 subagent / group-worker 启动消息和 handoff 路径；main agent 读取后自行启动 owner。
-- `mark-attempt-started`：记录 attempt 已由 main agent 启动，更新 attempt 状态和 timing。
-- `mark-attempt-returned`：记录 owner 返回事实和 result status；不做 acceptance。
-- `review-attempt`：读取 `agent_report.json` 或 `group_worker_report.json`，按当前版本、phase contract、compact/stale/blocker 规则做 controller review；对可 main-owned 简单补正的报告形态问题记录 `controller_simple_repairs` 并继续。
-- `retry-round`：基于 previous attempt 创建同 phase 或 annotation retry round，携带只读 previous_attempt、required lessons 和 prior failure summaries。
-- `verify-round`：显式验证 vc-checking group plan 与 manual witnesses / `source_goal_version` 一致，并给 group plan 写入 `controller_verified`。
-- `annotation-check-round`：annotation accepted 前的 main-owned 检查入口；运行 canonical symbolic execution、diagnostics split、清理 manual diagnostic goals、计算 `source_version` / `source_goal_version`，并接受 annotation round。
-- `vc-checking-check-round`：验证 group plan 覆盖 cleaned manual obligations、依赖合法且绑定当前 `source_goal_version`，并接受 vc-checking round。
-- `vc-proving-preparing`：controller-owned preparing step；调用 vc-proving scripts 初始化 manifest、准备 group worktrees 和 group-worker handoff，并把 preparing container 推进到 ready-for-groups。兼容入口 `vc-proving-setup` 只作为旧命令别名保留。
-- `vc-proving-verify`：parent verify 唯一入口；调用 deterministic group merge，恢复 solved witness blocks，合并 suffixed helpers，运行 parent full fixed `coqc_check`，并写 `group_merged_result.json` / final candidate。
-- `annotation-preflight`：检查 annotation subagent 记录的 canonical QCP evidence 和 `case_lib` Coq evidence 是否满足最低要求。
-- `final-apply`：把 controller accepted final candidate formal files 复制回 main worktree；失败时回滚并写 blocker。
-- `final-check`：final-candidate-apply 后的最终一致性检查，覆盖 symbolic execution freshness、fixed `coqc_check`、manual proof structure、`case_lib` contract、forbidden lemma 和 cleanup scan。
-- `validate-artifact`：轻量校验 `agent-input`、`agent-report`、`group-worker-input`、`group-worker-report`、`manifest` 或 `run-log` 的 schema / 必要字段。
-- `render-output`：从 structured report 渲染 `agent_output.txt` 或 `group_worker_output.txt` 非权威复用笔记。
-- `check-output-note`：检查 output note 是否满足非权威复用笔记格式；该检查结果不是 acceptance evidence。
-
-## 正常推进
-
-1. `intake` 创建 run root、report root 和初始 `source_version`。
-2. `annotation` 由 annotation-subagent 修改目标 `.c` 和 `case_lib`；`annotation-check-round` 刷新 generated files、写 diagnostics，并生成 `source_goal_version`。
-3. `vc-checking` 由 vc-checking-subagent 只读检查 manual VC，并输出绑定当前 `source_goal_version` 的 group plan。
-4. `vc-proving-preparing` 由 controller/main-owned step 准备 manifest、普通 container 目录、group worktree 和 group-worker handoff；group-worker 证明 assigned witnesses。
-5. `vc-proving-verify` 由 `controller` 调用 parent verify，确定性合并 solved witness blocks 和 suffixed helpers，写 `group_merged_result.json`。
-6. `final-candidate-apply` 后由 main agent 执行 `final-check`，确认 freshness、fixed `coqc_check`、manual proof structure、`case_lib` contract 和 cleanup。
+`SKILL.md` 只做入口和阅读路由；状态转移与写入边界放在 `workflows/`，公共接口和稳定知识放在
+`docs/`。本仓库不跟踪 skill 回归测试，不得在 `.agents/skills/**/scripts/test/` 或语言镜像中加入
+测试脚本。

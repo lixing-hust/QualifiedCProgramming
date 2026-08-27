@@ -1,6 +1,4 @@
-/*@ Extern Coq (sum : list Z -> Z)
-               (zeros: Z -> list Z)
-*/
+/*@ Extern Coq (sum : list Z -> Z) */
 
 
 
@@ -94,17 +92,22 @@ int arr_sum_which_implies(int n, int *a)
 int arr_sum_update(int n, int *a)
 /*@ With l
     Require 0 < n && n < 100 && (forall (i: Z), (0 <= i && i < n) => (0 <= l[i] && l[i] < 100)) && IntArray::full(a, n, l)
-    Ensure  __return == sum(l) && IntArray::full(a, n, zeros(n))
+    Ensure  exists l1, __return == sum(l) && n == Zlength(l1) &&
+            (forall (i: Z), (0 <= i && i < n) => l1[i] == 0) &&
+            IntArray::full(a, n, l1)
 */
 {
   int i;
   int ret = 0;
   /*@ Inv Assert
+      exists l1, 
       0 < n@pre && n@pre < 100 && a == a@pre && n == n@pre &&
-      0 <= i && i <= n@pre && n == Zlength(l) &&
+      0 <= i && i <= n@pre && n == Zlength(l) && n == Zlength(l1) && 
       (forall (i: Z), (0 <= i && i < n) => (0 <= l[i] && l[i] < 100)) &&
+      (forall (k: Z), (0 <= k && k < i) => l1[k] == 0) &&
+      (forall (k: Z), (i <= k && k < n) => l1[k] == l[k]) &&
       ret == sum(sublist(0, i, l)) &&
-      IntArray::full(a, n@pre, app(zeros(i), sublist(i, n@pre, l)))
+      IntArray::full(a, n@pre, l1)
   */
   for (i = 0; i < n; ++i) {
     ret += a[i];
@@ -141,4 +144,3 @@ int arr_sum_pointer(int n, int *a)
   }
   return ret;
 }
-

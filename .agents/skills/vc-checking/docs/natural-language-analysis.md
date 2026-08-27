@@ -1,139 +1,47 @@
-# 自然语言证明分析指南
+# 自然语言证明分析
 
-## 目标
+自然语言分析用于记录proofability、proof-mode理由、具体proof strategy、第二次负载/耦合审查、public-helper ownership和group边界，写入`agent_output.md`；controller不解析其固定结构，机器acceptance来自current version、group plan、conditional reuse hints、group validation、parent verify与final-check。
 
-`vc-checking-subagent` 应先用自然语言判断每个 target VC 是否可证，再用这些分析结果辅助生成 proof group plan。自然语言分析是 vc-checking 内部判断 proofability 和分组边界的结构化辅助，不是 controller acceptance gate；controller 的基本验收仍以版本、target witness 覆盖、proof group 合法性和后续 parent verify 为准。
+## 读取顺序
 
-每个 target witness 至少要回答：
+1. `agent_input.md`：version、target witnesses、group bound和输出路径。
+2. raw `*_proof_manual.v`：top-level VC与其`<vc>_split_goal_*` obligation source、mapping与顺序。
+3. goal/auto/check：只读 theorem展开。
+4. current `formal_case_lib`。
 
-1. 当前 VC 写成 `P |-- Q` 后，是否在现有 annotation / `case_lib` spec 下语义成立。
-2. 若成立，`Q` 中每个空间资源、纯命题和存在 witness 如何从 `P` 构造出来。
-3. 若需要 helper lemma，lemma 的数学陈述、premise、premise discharge 来源，以及它属于哪个 analysis group / proof group。
-4. 若不成立，缺口来自 C annotation、`case_lib` spec、输入 stale、generated/manual skeleton mismatch，还是 witness 结构本身。
+不读取或生成额外manual preprocessing artifact。
 
-自然语言证明阻塞就是 vc-checking blocker。不得把自然语言上无法说明的 VC 交给 group-worker 硬证。
+优先参考 `Rocq/examples/LLM_bench` 与 `QCP_demos_LLM`；human cases只作非权威思路提示。
 
-## 先读什么
+## 顺序
 
-1. `agent_input.json`：确认 `target_witnesses`、`source_goal_version`、`target_files`、`grouping_policy`、report 路径和 diagnostics hint 位置。
-2. `*_proof_manual.v`：读取 cleaned manual witness statements，确认 target witness 集合和顺序。
-3. `*_goal.v` / `*_proof_auto.v` / `*_goal_check.v`：只读 VC theorem 展开形状，不修改 generated files。
-4. 当前 case 的 `case_lib`：区分 annotation-approved spec declarations 和已存在 helper lemma。
-5. diagnostics 文件和 `diagnostics_snapshot.json`：只作为 planning hint，不作为 target witness 来源。
+先遍历全部split goals，只记录“可证”或“不可证”，不分析任何top-level VC，也不规划helper、具体证明路线或复用。某个top-level VC至少有一个split goal且全部可证时，选择`aggressive_pre_process`；任一split goal不可证或没有split goal时，才只判断整个top-level VC的可证性，整体可证则选择`LLM_pre_process`，整体仍不可证才返回annotation/spec缺口。
 
-参考 Rocq 风格时优先看 `SeparationLogic/examples/LLM_bench` 和 `QCP_demos_LLM`，不得参考 `QCP_demos_human`。
+全部`proof_mode`确定后，再写证明思路，并在handoff绑定正好上一轮sealed vc-proving source时同时完成reuse comparison。`aggressive_pre_process`只分析和比较split goals，忽略top-level VC；`LLM_pre_process`只分析和比较整个top-level VC，忽略split goals。使用current/reference debug commands逐comparison unit执行`Show.`、取得controller script/combined-build-seal/version receipts；combined build digest机械绑定local tree与accepted dependency artifact digest。source可以failed，也可以verified后因annotation/freshness retry而stale。未绑定时直接写证明思路，不扫描历史或创建reuse hints。
 
-## Witness 分析规范
+## 每个被分析目标回答
 
-建议在 `agent_report.json.agent_result.vc_checking.natural_language_analysis.witnesses` 中按 target witness 顺序记录每个 witness：
+- `P |-- Q` 是否语义成立？
+- pre/post spatial、pure、existential分别是什么？
+- 右侧 witness取什么值？
+- 哪些资源直接 cancel，哪些 segment/list需要转换？
+- arithmetic依赖哪些 bounds、guards、length facts与等式？不要只写“lia”。
+- refinement hypothesis/目标 state是什么，需哪些 unfold/choice step？
+- helper若需要，其 statement、premises、premise来源和 destination是什么？
+- 若失败，缺口位于 C annotation、`formal_case_lib`、stale files还是 malformed VC？
 
-```json
-{
-  "witness_name": "proof_of_xxx_entail_wit_N",
-  "judgment": "proofable | needs-helper | annotation-bug | blocked",
-  "vc_shape": {
-    "pre_spatial": "...",
-    "pre_pure": "...",
-    "pre_exists": "...",
-    "post_spatial": "...",
-    "post_pure": "...",
-    "post_exists": "..."
-  },
-  "witness_instantiation": "...",
-  "space_plan": "...",
-  "pure_plan": "...",
-  "refinement_plan": "...",
-  "used_existing_lemmas": [],
-  "candidate_helper_declarations": [],
-  "premise_discharge": [],
-  "failure_signal": "",
-  "recommended_next_phase": "vc-proving-preparing | annotation",
-  "analysis_group_candidate": "group_id",
-  "grouping_reason": ""
-}
-```
+可使用简洁 Markdown 小节，不要为了模拟旧 JSON template填空。内容要具体到能指导 group-worker或 annotation repair。
 
-`vc_shape` 应把 `P` 与 `Q` 分开写。`witness_instantiation` 要说明右侧 `EX` 的值来自旧逻辑列表、`replace_Znth`、`sublist`、`app`、当前 loop variable、abstract state，还是某个 case-specific spec relation。`premise_discharge` 应逐项对应当前 VC 的前条件，不允许只写“显然”或“lia”。
+## Helper 判定
 
-Judgment 规则：
+`needs-helper` 必须说明 helper的 statement shape、used witnesses、每个 premise如何从当前 VC discharge，以及 destination为owner的`group_worker_lib`。只有本轮新证或改写的helper进入当前plan并使用owner suffix；上一轮或public snapshot中声明/proof token一致的helper只是机会性复用。只供本组的helper写`visibility: local`；稳定且不依赖具体C局部变量、预计可在后续group/round复用的数学性质写`visibility: public`，具体潜在消费者写notes。controller在owner group通过validation后把public helper及必要本地helper依赖闭包append到durable pool，供未来round。不能discharge的premise意味着annotation/spec缺口；正式spec本身缺失时仍回annotation，不能把public pool当作spec替代品。
 
-- `proofable`：自然语言证明完整，现有 facts / existing lemmas 足够。
-- `needs-helper`：自然语言证明完整，但需要 group-worker 在 group-local `case_lib` 中新增当前 group suffix helper。
-- `annotation-bug`：当前 annotation 或 `case_lib` seed spec 缺失/错误，导致 `P` 无法推出 `Q`。
-- `blocked`：VC 读取/解析/版本检查等必要前提失败，或自然语言 proof obligation 无法闭合且不是可由 group-local helper 修复。
+## Group 分析
 
-只要存在 `annotation-bug` 或 `blocked` witness，本轮 vc-checking 必须返回 `blocked`，不得输出可进入 proving 的完整 group plan。
+证明思路完成后，按invariant、proof pattern、array/frame transformation、refinement transition和helper family对top-level VC形成初步groups，再逐组做第二次负载、耦合与预计关键路径审查。split goal不单独分组，始终随所属top-level VC进入同一group；aggressive top-level VC按其全部split-goal思路的整体负担分组。至少记录top-level witness数、aggressive split-goal负担、预计helper family数量/复杂度、数学库、proof mode差异、程序阶段、需持续保留的上下文、helper owner和最终拆分/合并理由。对likely tail group判断final-result与transition/safety能否独立；能则拆组，不能则说明不可分割helper/context，并规划可提前提供的formal/public helper。通常以2到6个witnesses为合理区间；manual seed只控制final witness order，plan控制group/helper merge order。这些prose是human review/worker输入，不是controller acceptance parser的输入。
 
-## Analysis Group 规范
+最终`group_plan.json`只保留group id、逐VC proof mode、aggressive `split_strategies`、`LLM_pre_process`整体`strategy`、1到5的`estimated_difficulty`和带owner suffix/visibility的planned helpers。aggressive witness不写top-level `strategy`，`LLM_pre_process` witness不写`split_strategies`。plan不保存version、verified或dependency字段。所有groups必须能从正式seed与preparing时冻结的同一个public candidate snapshot独立证明：不可分割的proof-specific helper family决定合组；本轮producer晋升不会改变任何sibling输入。不得规划读取/import sibling `group_worker_lib`、等待pool更新、直接helper注入或重复证明大型helper family。
 
-`natural_language_analysis.analysis_groups` 是 proof grouping 的辅助依据。每个 analysis group 应只包含自然语言证明已通过的 witnesses，即 judgment 为 `proofable` 或 `needs-helper`。
+若启用了sealed-source reuse，每个group的`reuse_hints/<group-id>.md`只放固定五列comparison table，按全部helper → 全部aggressive split goals → 全部`LLM_pre_process` top-level VC排序。每个非from-scratch `Lines` 必须从首行到末行精确覆盖source中的完整helper/proof declaration，声明内部子范围即使含全部tactic也无效。helper direct引用accepted source group的完整proved declaration，不做partial；split/whole direct或partial引用compatible previous copied-manual proof block。proof direct还要求accepted source、完整route与current/previous semantic goal fingerprint一致；rename-only可direct。fingerprint变化只能partial并分析adapter/common-frame思路，或者from scratch。结构非法failed groups不出现；未accepted group不能提供direct。agent_output可总结判断，但不要复制整张table或previous proof。
 
-```json
-{
-  "group_id": "dp_transition",
-  "witness_names": ["proof_of_..."],
-  "representative_witness": "proof_of_...",
-  "shared_proof_pattern": "...",
-  "shared_space_plan": "...",
-  "shared_pure_plan": "...",
-  "shared_refinement_plan": "...",
-  "candidate_helper_declarations": [],
-  "dependencies": [],
-  "grouping_reason": "same invariant expansion and same recurrence helper family",
-  "proof_group_ready": true
-}
-```
-
-`agent_result.vc_checking.group_plan.proof_groups` 应参考这些 analysis groups 派生：
-
-- 每个 proof group 的 `group_id`、`witness_names`、`representative_witness`、`dependencies` 尽量与对应 analysis group 一致；若受 `agent_input.json.grouping_policy.max_witnesses_per_group` 限制而拆分，在 `grouping_reason` 中说明。
-- 不得把自然语言分析失败的 witness 混入 proof group。
-- 不得为了减少 spawn 数把 proof pattern 不同、helper family 不同或上下文明显不同的 witnesses 放入同一 group。
-- 当 target witness 数超过 controller 上限时，先按 analysis group 拆分，再用 manual witness order 作稳定 tie-breaker。
-
-## Helper 审计
-
-若 judgment 为 `needs-helper`，必须说明：
-
-```json
-{
-  "name_hint": "helper_name_without_group_suffix",
-  "statement_shape": "...",
-  "used_by_witnesses": [],
-  "premises": [
-    {
-      "premise": "...",
-      "discharged_by": "...",
-      "needs_unfold": [],
-      "arithmetic": "...",
-      "spatial_resource": "..."
-    }
-  ],
-  "destination": "group-local case_lib with helper_namespace.suffix"
-}
-```
-
-vc-checking 不修改 `case_lib`。候选 helper 只进入 group plan；group-worker 若使用它，必须在自己的 group worktree 中证明带当前 group suffix 的 declaration。若 helper 必须跨 group 共享，vc-checking 应返回 annotation/spec blocker，建议把该事实提升为 annotation-approved seed `case_lib` declaration。
-
-## Blocked 信号
-
-出现以下情况时，返回 `blocked` 并推荐回 annotation/spec 或报告工具问题：
-
-- `Q` 要求的数据结构资源在 `P` 中不存在。
-- 分支 proof 需要的 pure fact 没有来自 guard、invariant 或 local assertion。
-- witness 需要的逻辑 array/list value 没有在 C read 后绑定。
-- postcondition 使用 pre-state 值，但 assertion 缺少桥接等式。
-- refinement 目标中的 `safeExec` program state 与当前 abstract state 对不上。
-- candidate helper lemma 需要额外假设，而这些假设不能由当前 `P` 推出。
-- proof 需要修改 generated files、witness statements 或 seed `case_lib` spec。
-- `source_goal_version` mismatch、manual skeleton 与 target witnesses 不一致、或必要 VC 文件无法读取/解析。
-
-输入版本失效写 `stale`。context compaction 只写 `compact-error` 事实；是否重试或最终 block 由 controller / main agent 判定。
-
-## 反例
-
-- 不要把 C 循环直接翻译成 Rocq 函数后就声称 VC 可证；spec 必须描述数学性质，例如最大值、可达性、prefix/table relation、queue coverage。
-- 不要把 `lia` 当作 proof plan。必须写出 `lia` 依赖哪些 bound、guard、length fact 和等式。
-- 不要用“现有 invariant 足够”代替展开分析；要写明 invariant 的具体 conjunct 和实例化参数。
-- 不要建议在 `*_proof_manual.v` 中新增 helper lemma。
-- 不要在目标 stale、hash 不匹配、manual skeleton 与 goal witness 不一致时继续分组证明。
+split goal单独不可证只触发所属top-level VC的整体分析，不直接阻塞。只有整体分析后仍为`annotation-bug`或真正blocked的top-level VC，才不得输出可进入proving的完整plan；terminal report写相应status/blocker。`agent_output.md`同时保留具体分析；之后main agent读取它与JSON report，完成下一次annotation `agent_input.md`的blocker总结与反思，并把summary及原文件路径append到唯一annotation会话。

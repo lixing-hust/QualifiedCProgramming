@@ -1,23 +1,24 @@
 ---
 name: final-check
-description: 由 main agent 在 final-candidate-apply 后执行最终检查，确认 generated files、manual proofs、case_lib 和 main worktree 状态一致。
+description: Use from the main agent after final-apply has written the accepted proving_merged result back to main root; verify consistency among generated files, manual, formal_case_lib, versions, merge result, and cleanup.
 ---
 
 # Final Check
 
-本 skill 只由 main agent 使用，不启动 subagent。
+## When to invoke
 
-## 文档
+Only the main agent invokes this skill after the controller has completed `final-apply`; no subagent is created. If final-check fails and rollback succeeds, follow the controller action and perform `final-apply` again before another final-check.
 
-- `docs/final-check-guide.md`：final-candidate-apply、symbolic execution freshness、fixed `coqc_check`、manual proof / `case_lib` review 和 cleanup。
+A human starts the public boundary with the root uv/Python 3.12 environment. Here, main executes only the action argv beginning with the validated absolute `sys.executable`; it does not wrap final-check in uv again.
 
-## 完成要求
+## Broad purpose
 
-- main worktree 只从 controller accepted final candidate 采用正式文件；该 candidate 来自已通过 `vc-proving-verify` 的 `group_merged_result.json`。
-- symbolic execution 到文件尾，且 generated files 与当前 main worktree 目标 `.c` 一致。
-- main-path fixed `coqc_check` 通过。
-- `*_proof_manual.v` 和 `case_lib` 不含 `Admitted.`、extra `Axiom` 或 forbidden lemma。
-- `*_proof_manual.v` 只含当前 case 的 manual witness theorem proofs，没有 helper declarations 或 forbidden top-level declarations。
-- `case_lib` contract 通过，新增 helper declarations 可追踪到 parent verify merge record。
-- cleanup 只清理本 run 临时产物，不删除正式交付文件。
-- `run_logs.json` 记录 final-check 结果。
+Use the controller to recheck source seals, symbolic-execution freshness, the full Rocq check, manual routes, the three active libraries, forbidden lemmas, and by-product cleanup. The run finishes only after every item passes.
+
+## Required reading
+
+- [Final-apply and final-check flow](workflows/final-check.md)
+- [Paths and commands](../verification-orchestrator/workflows/paths-and-commands.md)
+- [Controller public interface](../verification-orchestrator/docs/controller-cli.md)
+
+Main does not need to read a group-worker or other subagent skill. The controller mechanically checks forbidden lemmas, proof structure, and source seals. Main only executes the complete invocation carried by the action.

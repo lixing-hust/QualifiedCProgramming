@@ -1,23 +1,24 @@
 ---
 name: final-check
-description: 由 main agent 在 final-candidate-apply 后执行最终检查，确认 generated files、manual proofs、case_lib 和 main worktree 状态一致。
+description: main agent 在 final-apply 写回 accepted proving_merged 后使用；确认 main root 的生成文件、manual、formal_case_lib、版本、合并结果与清理结果一致。
 ---
 
-# Final Check
+# 最终检查
 
-本 skill 只由 main agent 使用，不启动 subagent。
+## 何时调用
 
-## 文档
+只由 main agent 在 controller 已完成 `final-apply` 后调用，不创建 subagent。终检失败并成功回滚后，必须先按 controller action 重新执行 `final-apply`，不能直接重跑终检。
 
-- `docs/final-check-guide.md`：final-candidate-apply、symbolic execution freshness、fixed `coqc_check`、manual proof / `case_lib` review 和 cleanup。
+首次公共入口由人类用根级 uv/Python 3.12 环境启动；这里的 `final-check` 只执行 controller action 中以已验证绝对 `sys.executable` 开头的完整 argv，不重新包 uv。
 
-## 完成要求
+## 大概作用
 
-- main worktree 只从 controller accepted final candidate 采用正式文件；该 candidate 来自已通过 `vc-proving-verify` 的 `group_merged_result.json`。
-- symbolic execution 到文件尾，且 generated files 与当前 main worktree 目标 `.c` 一致。
-- main-path fixed `coqc_check` 通过。
-- `*_proof_manual.v` 和 `case_lib` 不含 `Admitted.`、extra `Axiom` 或 forbidden lemma。
-- `*_proof_manual.v` 只含当前 case 的 manual witness theorem proofs，没有 helper declarations 或 forbidden top-level declarations。
-- `case_lib` contract 通过，新增 helper declarations 可追踪到 parent verify merge record。
-- cleanup 只清理本 run 临时产物，不删除正式交付文件。
-- `run_logs.json` 记录 final-check 结果。
+通过 controller 复查来源封存、symbolic execution 新鲜度、Rocq 全量检查、manual 路线、三级 lib、禁用 lemma 与副产物清理；全部通过后才结束 run。
+
+## 需要阅读
+
+- [执行流程](workflows/final-check.md)
+- [路径与命令](../verification-orchestrator/workflows/paths-and-commands.md)
+- [Controller 公共接口](../verification-orchestrator/docs/controller-cli.md)
+
+main 不需要读取 group-worker 或其他 subagent skill。禁用 lemma、证明结构和来源封存由 controller 机械检查；main 只执行 action 自带的完整 invocation。
