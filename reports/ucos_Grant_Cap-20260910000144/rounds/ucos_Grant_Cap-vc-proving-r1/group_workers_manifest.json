@@ -1,0 +1,8 @@
+{
+  "base_manifest_sha256": "5174cf6ce7f21dcbba000b42316a452cbb855db853e2ceeba0b8115e3b578528",
+  "group_plan": "group_plan.json",
+  "group_plan_sha256": "4ea5e45828cc630698c2b6dd78dec2319daead3354f31c205ee1912a8652faf2",
+  "public_helper_snapshot_sha256": "d1dd6612ab2c2ca4fcb706e953f0d05ed1e858e7308c8a5d8dce3d87c228be6d",
+  "groups": [],
+  "dispatch_order": []
+}

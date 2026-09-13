@@ -1,0 +1,184 @@
+{
+  "run": {
+    "status": "completed",
+    "phase": "done",
+    "created_at": "2026-09-13T08:53:58.835844Z",
+    "finished_at": "2026-09-13T09:54:07.301527Z",
+    "elapsed_seconds": 3608.465683
+  },
+  "annotation_attempts": [
+    {
+      "attempt": "annotation-attempt1",
+      "round": "grant_cspace_cap-annotation-r1",
+      "status": "superseded",
+      "created_at": "2026-09-13T08:57:31.251985Z",
+      "finished_at": "2026-09-13T09:13:00.326190Z",
+      "elapsed_seconds": 929.074205,
+      "stages": [
+        {
+          "name": "annotation-work",
+          "started_at": "2026-09-13T08:57:40.192316Z",
+          "finished_at": "2026-09-13T09:13:00.230083Z",
+          "elapsed_seconds": 920.037767
+        },
+        {
+          "name": "symexec",
+          "started_at": "2026-09-13T09:11:21.621037Z",
+          "finished_at": "2026-09-13T09:11:21.775037Z",
+          "elapsed_seconds": 0.154
+        },
+        {
+          "name": "annotation-checking",
+          "started_at": "2026-09-13T09:11:42.192316Z",
+          "finished_at": "2026-09-13T09:11:52.100454Z",
+          "elapsed_seconds": 9.908138
+        },
+        {
+          "name": "controller-validation",
+          "started_at": "2026-09-13T09:13:00.207610Z",
+          "finished_at": "2026-09-13T09:13:00.326190Z",
+          "elapsed_seconds": 0.112489
+        }
+      ]
+    },
+    {
+      "attempt": "annotation-attempt2",
+      "round": "grant_cspace_cap-annotation-r2",
+      "status": "accepted",
+      "created_at": "2026-09-13T09:14:59.250255Z",
+      "finished_at": "2026-09-13T09:35:05.015201Z",
+      "elapsed_seconds": 1205.764946,
+      "stages": [
+        {
+          "name": "annotation-work",
+          "started_at": "2026-09-13T09:16:12.202887Z",
+          "finished_at": "2026-09-13T09:34:31.326891Z",
+          "elapsed_seconds": 1099.124004
+        },
+        {
+          "name": "symexec",
+          "started_at": "2026-09-13T09:18:38.140342Z",
+          "calls": 6,
+          "finished_at": "2026-09-13T09:34:46.860830Z",
+          "elapsed_seconds": 6.654
+        },
+        {
+          "name": "clean-output-freshness",
+          "started_at": "2026-09-13T09:34:47.469325Z",
+          "finished_at": "2026-09-13T09:34:50.465325Z",
+          "elapsed_seconds": 2.996
+        },
+        {
+          "name": "annotation-checking",
+          "started_at": "2026-09-13T09:30:43.342224Z",
+          "finished_at": "2026-09-13T09:33:15.092609Z",
+          "elapsed_seconds": 151.750385
+        },
+        {
+          "name": "controller-validation",
+          "started_at": "2026-09-13T09:34:31.298224Z",
+          "finished_at": "2026-09-13T09:34:31.438212Z",
+          "elapsed_seconds": 0.130811
+        },
+        {
+          "name": "controller-acceptance-check",
+          "started_at": "2026-09-13T09:34:44.018690Z",
+          "finished_at": "2026-09-13T09:34:50.489542Z",
+          "elapsed_seconds": 6.461787
+        },
+        {
+          "name": "dune-build",
+          "started_at": "2026-09-13T09:35:03.247802Z",
+          "finished_at": "2026-09-13T09:35:05.015201Z",
+          "elapsed_seconds": 1.758547
+        }
+      ]
+    }
+  ],
+  "rounds": [
+    {
+      "round": "grant_cspace_cap-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "created_at": "2026-09-13T09:35:09.375878Z",
+      "finished_at": "2026-09-13T09:43:19.817099Z",
+      "elapsed_seconds": 490.441221,
+      "stages": [
+        {
+          "name": "witness-analysis",
+          "started_at": "2026-09-13T09:35:18.413963Z",
+          "finished_at": "2026-09-13T09:43:10.465122Z",
+          "elapsed_seconds": 472.051159
+        },
+        {
+          "name": "controller-validation",
+          "started_at": "2026-09-13T09:43:10.453128Z",
+          "finished_at": "2026-09-13T09:43:10.521534Z",
+          "elapsed_seconds": 0.05902
+        },
+        {
+          "name": "controller-plan-check",
+          "started_at": "2026-09-13T09:43:19.771770Z",
+          "finished_at": "2026-09-13T09:43:19.817099Z",
+          "elapsed_seconds": 0.033954
+        }
+      ]
+    },
+    {
+      "round": "grant_cspace_cap-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "verified",
+      "created_at": "2026-09-13T09:43:24.949358Z",
+      "finished_at": "2026-09-13T09:53:27.301350Z",
+      "elapsed_seconds": 602.351992,
+      "stages": [
+        {
+          "name": "group-work",
+          "started_at": "2026-09-13T09:43:46.646974Z",
+          "finished_at": "2026-09-13T09:52:40.120950Z",
+          "elapsed_seconds": 533.473976
+        },
+        {
+          "name": "preparing",
+          "started_at": "2026-09-13T09:43:30.765939Z",
+          "finished_at": "2026-09-13T09:43:31.180397Z",
+          "elapsed_seconds": 0.402172
+        },
+        {
+          "name": "group-development-check",
+          "started_at": "2026-09-13T09:45:17.383621Z",
+          "calls": 13,
+          "finished_at": "2026-09-13T09:50:14.941834Z",
+          "elapsed_seconds": 141.022694
+        },
+        {
+          "name": "group-coq-check",
+          "started_at": "2026-09-13T09:48:57.611614Z",
+          "calls": 5,
+          "finished_at": "2026-09-13T09:52:03.138613Z",
+          "elapsed_seconds": 21.859125
+        },
+        {
+          "name": "group-validation",
+          "started_at": "2026-09-13T09:49:24.534710Z",
+          "calls": 4,
+          "finished_at": "2026-09-13T09:52:43.282311Z",
+          "elapsed_seconds": 13.695122
+        },
+        {
+          "name": "parent-verify",
+          "started_at": "2026-09-13T09:52:54.411369Z",
+          "finished_at": "2026-09-13T09:53:27.301350Z",
+          "elapsed_seconds": 32.876512
+        }
+      ]
+    }
+  ],
+  "finalization": {
+    "status": "passed",
+    "started_at": "2026-09-13T09:53:27.301350Z",
+    "applied_at": "2026-09-13T09:53:39.974534Z",
+    "finished_at": "2026-09-13T09:54:07.301527Z",
+    "elapsed_seconds": 40.000177
+  }
+}

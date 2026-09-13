@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "blocker": {
+    "failure_class": "annotation-input",
+    "kind": "unsupported-c-declaration-form",
+    "location": "QCP_examples/osverify_qcp/cases/ucos_Grant_Cap.c:55",
+    "message": "Canonical symbolic execution cannot parse the forward typedef `typedef struct cspace CSPACE;` because the QCP C frontend requires `struct cspace` to be declared or defined before that use. This fails before any annotation can be checked.",
+    "repair_boundary": "The main agent must make the semantics-preserving source-level type-declaration rewrite `typedef struct cspace { ... } CSPACE;` (or another parser-supported equivalent). The annotation owner may then continue in this same persistent session and construct the function contract."
+  }
+}

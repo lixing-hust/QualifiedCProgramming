@@ -1,0 +1,96 @@
+{
+  "run": {
+    "status": "completed",
+    "phase": "done",
+    "created_at": "2026-09-09T15:24:31.105699Z",
+    "finished_at": "2026-09-09T15:35:50.036437Z",
+    "elapsed_seconds": 678.930738
+  },
+  "annotation_attempts": [
+    {
+      "attempt": "annotation-attempt1",
+      "round": "UserAddrCheck-annotation-r1",
+      "status": "accepted",
+      "created_at": "2026-09-09T15:24:40.719054Z",
+      "finished_at": "2026-09-09T15:34:34.684474Z",
+      "elapsed_seconds": 593.96542,
+      "stages": [
+        {
+          "name": "annotation-work",
+          "started_at": "2026-09-09T15:24:51.925047Z",
+          "finished_at": "2026-09-09T15:28:21.752146Z",
+          "elapsed_seconds": 209.827099
+        },
+        {
+          "name": "symexec",
+          "started_at": "2026-09-09T15:26:56.033497Z",
+          "calls": 2,
+          "finished_at": "2026-09-09T15:28:39.873902Z",
+          "elapsed_seconds": 0.044
+        },
+        {
+          "name": "clean-output-freshness",
+          "started_at": "2026-09-09T15:28:39.906753Z",
+          "finished_at": "2026-09-09T15:28:39.926753Z",
+          "elapsed_seconds": 0.02
+        },
+        {
+          "name": "annotation-checking",
+          "started_at": "2026-09-09T15:27:08.144650Z",
+          "finished_at": "2026-09-09T15:28:06.098384Z",
+          "elapsed_seconds": 57.953734
+        },
+        {
+          "name": "controller-validation",
+          "started_at": "2026-09-09T15:28:21.730383Z",
+          "finished_at": "2026-09-09T15:28:21.849360Z",
+          "elapsed_seconds": 0.112789
+        },
+        {
+          "name": "controller-acceptance-check",
+          "started_at": "2026-09-09T15:28:39.841774Z",
+          "finished_at": "2026-09-09T15:28:39.946392Z",
+          "elapsed_seconds": 0.097725
+        },
+        {
+          "name": "dune-build",
+          "started_at": "2026-09-09T15:28:57.852065Z",
+          "calls": 3,
+          "finished_at": "2026-09-09T15:34:34.684474Z",
+          "elapsed_seconds": 188.039034
+        }
+      ]
+    }
+  ],
+  "rounds": [
+    {
+      "round": "UserAddrCheck-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "verified",
+      "created_at": "2026-09-09T15:34:41.843059Z",
+      "finished_at": "2026-09-09T15:35:11.556212Z",
+      "elapsed_seconds": 29.713153,
+      "stages": [
+        {
+          "name": "preparing",
+          "started_at": "2026-09-09T15:34:49.350294Z",
+          "finished_at": "2026-09-09T15:35:02.841807Z",
+          "elapsed_seconds": 12.786195
+        },
+        {
+          "name": "parent-verify",
+          "started_at": "2026-09-09T15:35:11.332986Z",
+          "finished_at": "2026-09-09T15:35:11.556212Z",
+          "elapsed_seconds": 0.214366
+        }
+      ]
+    }
+  ],
+  "finalization": {
+    "status": "passed",
+    "started_at": "2026-09-09T15:35:11.556212Z",
+    "applied_at": "2026-09-09T15:35:26.941686Z",
+    "finished_at": "2026-09-09T15:35:50.036437Z",
+    "elapsed_seconds": 38.480225
+  }
+}

@@ -1,0 +1,713 @@
+{
+  "generation": 75,
+  "run_id": "ucos_Grant_Cap-20260910000144",
+  "case": "ucos_Grant_Cap",
+  "phase": "done",
+  "main_root": "/home/lixing/projects/QualifiedCProgramming",
+  "run_root": "/home/lixing/projects/QualifiedCProgramming/verification_runs/ucos_Grant_Cap-20260910000144",
+  "report_root": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_Grant_Cap-20260910000144",
+  "target_files": {
+    "c_file": "QCP_examples/osverify_qcp/cases/ucos_Grant_Cap.c",
+    "formal_directory": "Rocq/examples/osverify_qcp/cases",
+    "formal_case_lib": "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_lib.v",
+    "goal_file": "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_goal.v",
+    "proof_auto_file": "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_proof_auto.v",
+    "proof_manual_file": "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_proof_manual.v",
+    "goal_check_file": "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_goal_check.v",
+    "case_name": "ucos_Grant_Cap",
+    "active_case_theory": "SimpleC.EE.osverify_qcp.cases"
+  },
+  "public_helper_lemma_lib": {
+    "path": "/home/lixing/projects/QualifiedCProgramming/verification_runs/ucos_Grant_Cap-20260910000144/public_helper_lemma_lib.v",
+    "sha256": "d1dd6612ab2c2ca4fcb706e953f0d05ed1e858e7308c8a5d8dce3d87c228be6d",
+    "declaration_count": 0,
+    "helper_count": 0
+  },
+  "problem_context": {
+    "problem_statement": "Verify the faithful QCP C transcription of CertiUCOS ucos_Grant_Cap_impl.",
+    "target_function": "ucos_Grant_Cap",
+    "expected_behavior": "Return 11 without changing the CSpace table when cap_Class is outside 0..16, destTask_Prio is outside 0..63, or the destination CSpace pointer is null. Otherwise update exactly the destination slot: cap_type becomes 1, category_content becomes cap_Class, category_right becomes (old_right & 4095) | cap_Right, preserve all unrelated memory, and return 0.",
+    "input_output_contract": "Inputs are uint8 destTask_Prio and uint32 cap_Class/cap_Right. Model OSCSpacePrioTbl as a 64-entry global pointer array and each CSpace as containing 255 slots. The postcondition must distinguish exact failure and success behavior and frame all unrelated table entries, CSpaces, slots, and fields.",
+    "spec_hint": [
+      "Use local array/slot representation predicates with missing-index or segment decomposition rather than unfolding all 64 table entries or 255 slots.",
+      "Preserve unsigned semantics: CAP_NULL_CLASS > cap_Class is unreachable, so class 0 is accepted; do not silently strengthen the implementation.",
+      "The successful rights value is exactly (old_right & 4095) | cap_Right; cap_Right itself is not masked."
+    ],
+    "preferred_hidden_properties": [
+      "Only the selected destination slot changes on success; every other table entry, CSpace, slot, and field is preserved."
+    ],
+    "forbidden_patterns": [
+      "Do not weaken the specification to return codes only.",
+      "Do not add Admitted, Abort, extra Axiom, or modify generated Rocq artifacts by hand."
+    ]
+  },
+  "spec_freeze": null,
+  "max_compact_attempts": 3,
+  "max_witnesses_per_group": 12,
+  "max_parallel_group_workers": 5,
+  "source_version": {
+    "digest": "07f9e22fb141f649046c659688b8453ad6e87074869c8e3af8150feca8907525",
+    "files": [
+      {
+        "relative_path": "QCP_examples/osverify_qcp/cases/ucos_Grant_Cap.c",
+        "sha256": "4ac6c08c96cfbe43b4d8d97a9621d452191e76b877101bad8bf331b6d49135fc",
+        "state": "present",
+        "role": "target-c-annotated"
+      },
+      {
+        "relative_path": "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_lib.v",
+        "sha256": null,
+        "state": "missing",
+        "role": "formal-case-lib"
+      }
+    ]
+  },
+  "source_goal_version": {
+    "digest": "fb294e775ae861ec89b219936aace68e40386fac0f4d6b103a38a087704c0ebc",
+    "generated_files": [
+      {
+        "relative_path": "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_goal.v",
+        "role": "goal_file",
+        "state": "present",
+        "sha256": "6d857f7afd44b74a5d3c72e2a687edb381b9728532d205d8a7489b246e1bb037"
+      },
+      {
+        "relative_path": "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_proof_auto.v",
+        "role": "proof_auto_file",
+        "state": "present",
+        "sha256": "1b91b946575a6c28253331efc33b75b52d37efe0c66876e718364a4243f7994a"
+      },
+      {
+        "relative_path": "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_proof_manual.v",
+        "role": "proof_manual_file",
+        "state": "present",
+        "sha256": "a5f74d3e449a8fe5d0637cd6eec893a8576c0f84ceb9678facea1d627cd8e897"
+      },
+      {
+        "relative_path": "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_goal_check.v",
+        "role": "goal_check_file",
+        "state": "present",
+        "sha256": "17e2118c4277ede0d633c3c2cc5c8732f26987e94bc99ee0e5603120a724a6cc"
+      }
+    ],
+    "target_witnesses": [],
+    "witness_statement_hashes": {},
+    "witness_goal_definition_hashes": {},
+    "split_goals": {}
+  },
+  "dune_preparation": {
+    "status": "passed",
+    "build_mode": "makefile",
+    "source_goal_version": "fb294e775ae861ec89b219936aace68e40386fac0f4d6b103a38a087704c0ebc",
+    "target": "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_goal_check.vo",
+    "build_root": ".",
+    "make_executable": "/usr/bin/make",
+    "coqc_executable": "/home/lixing/.opam/coq8201/bin/coqc",
+    "coqdep_executable": "/home/lixing/.opam/coq8201/bin/coqdep",
+    "run_makefile": "verification_runs/ucos_Grant_Cap-20260910000144/Makefile",
+    "run_makefile_sha256": "2957a747943eb390846084b68e1a0b8577986f7439bdb7d6c56b8c315d3ff709",
+    "snapshot": "verification_runs/ucos_Grant_Cap-20260910000144/makefile_dependency_snapshot.json",
+    "snapshot_sha256": "3403c9a0d8536c3730d0a5756ad7baf03fcff425d085c777112554f0fb768091",
+    "dependency_digest": "9cf54dfb0ee689d417a28025c62d52727dcf402aa7dbd8360c0a2622ded15d27",
+    "source_digest": "9f646d030da412bd2e3536e3e89fc6b4c488265b07417f9e951cbdcf61ae109c",
+    "artifact_digest": "19a6ee3c19c4ae39c66227088e41dbfa8000bd0e679e3e9d1eddf1d288599118",
+    "configuration_digest": "e168e3d3ec3ac6fc2a2a4a859a13ca33856035fba35d65747c60051798e550de",
+    "base_artifact_count": 143,
+    "current_source_count": 4,
+    "rebuilt_count": 0,
+    "dependency_metrics": {
+      "status": "resolved",
+      "strategy": "breadth-batched-coqdep",
+      "batch_count": 6,
+      "coqdep_process_count": 6,
+      "node_count": 147,
+      "source_count": 147,
+      "elapsed_seconds": 1.256387
+    },
+    "current_cleanup": {
+      "status": "passed",
+      "removed_count": 0,
+      "first_removed": null
+    },
+    "make_seconds": 0.005055,
+    "returncode": 0,
+    "elapsed_seconds": 1.666569
+  },
+  "rounds": {
+    "ucos_Grant_Cap-annotation-r1": {
+      "phase": "annotation",
+      "current_attempt": "ucos_Grant_Cap-annotation-r1-attempt-1"
+    },
+    "ucos_Grant_Cap-annotation-r2": {
+      "phase": "annotation",
+      "current_attempt": "ucos_Grant_Cap-annotation-r2-attempt-1"
+    },
+    "ucos_Grant_Cap-vc-checking-r1": {
+      "phase": "vc-checking",
+      "current_attempt": "ucos_Grant_Cap-vc-checking-r1-attempt-1"
+    },
+    "ucos_Grant_Cap-annotation-r3": {
+      "phase": "annotation",
+      "current_attempt": "ucos_Grant_Cap-annotation-r3-attempt-1"
+    },
+    "ucos_Grant_Cap-vc-proving-r1": {
+      "phase": "vc-proving-preparing",
+      "current_attempt": "ucos_Grant_Cap-vc-proving-r1"
+    }
+  },
+  "attempts": {
+    "ucos_Grant_Cap-annotation-r1-attempt-1": {
+      "attempt_id": "ucos_Grant_Cap-annotation-r1-attempt-1",
+      "round": "ucos_Grant_Cap-annotation-r1",
+      "phase": "annotation",
+      "status": "superseded",
+      "report_directory": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_Grant_Cap-20260910000144/annotation-attempts/annotation-attempt1",
+      "input": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_Grant_Cap-20260910000144/annotation-attempts/annotation-attempt1/agent_input.md",
+      "report": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_Grant_Cap-20260910000144/annotation-attempts/annotation-attempt1/agent_report.json",
+      "output": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_Grant_Cap-20260910000144/annotation-attempts/annotation-attempt1/agent_output.md",
+      "source_version": "ea4daa065b41ef7e86bef6ab48c587ea51695efcbfd5baec35ce27fd57547b4a",
+      "source_goal_version": null,
+      "allowed_write_paths": [
+        "QCP_examples/osverify_qcp/cases/ucos_Grant_Cap.c",
+        "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_goal.v",
+        "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_proof_auto.v",
+        "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_proof_manual.v",
+        "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_goal_check.v"
+      ],
+      "compact_attempt_index": 1,
+      "created_at": "2026-09-09T16:02:08.163986Z",
+      "annotation_history_directory": "/home/lixing/projects/QualifiedCProgramming/verification_runs/ucos_Grant_Cap-20260910000144/annotation_history/annotation-attempt1",
+      "annotation_iteration": 1,
+      "annotation_causal_retry_count": 0,
+      "feedback_sources": [],
+      "retry_reason": null,
+      "before_snapshot": {
+        "digest": "4665e2c39a3ae93034a31d1d98095d2405369b127495abe408a988f898c316b8",
+        "file_count": 1,
+        "missing_count": 5
+      },
+      "input_sha256": "c94aa14e5baae4ceb4985416392d7d4e3aad6d302cb82af8ad1518f50f01b329",
+      "owner": "annotation/ucos_Grant_Cap-20260910000144",
+      "started_at": "2026-09-09T16:02:15.525760Z",
+      "delivery": {
+        "action_id": "spawn-ucos_Grant_Cap-annotation-r1-attempt-1",
+        "kind": "spawn-annotation-agent",
+        "owner": "annotation/ucos_Grant_Cap-20260910000144",
+        "claimed_at": "2026-09-09T16:02:15.525760Z",
+        "finalized_at": "2026-09-09T16:12:28.575078Z"
+      },
+      "timing": {
+        "symexec": [
+          {
+            "started_at": "2026-09-09T16:11:32.104595Z",
+            "finished_at": "2026-09-09T16:11:32.116595Z",
+            "elapsed_seconds": 0.012
+          }
+        ],
+        "controller-validation": [
+          {
+            "started_at": "2026-09-09T16:12:28.554504Z",
+            "finished_at": "2026-09-09T16:12:28.663487Z",
+            "elapsed_seconds": 0.102861
+          }
+        ]
+      },
+      "returned_at": "2026-09-09T16:12:28.575078Z",
+      "artifact_sha256": {
+        "report": "3db58a785bce95d6ad522e5baef5a1ae395b4e47df4497c40908adc81cef0b7a",
+        "output": "882336b8c5f62c9af26c01b99b8dc290a56d87dd4d72488efe493225a0c813f8"
+      },
+      "after_snapshot": {
+        "digest": "4665e2c39a3ae93034a31d1d98095d2405369b127495abe408a988f898c316b8",
+        "file_count": 1,
+        "missing_count": 5
+      },
+      "changed_files": [],
+      "finished_at": "2026-09-09T16:12:28.663487Z"
+    },
+    "ucos_Grant_Cap-annotation-r2-attempt-1": {
+      "attempt_id": "ucos_Grant_Cap-annotation-r2-attempt-1",
+      "round": "ucos_Grant_Cap-annotation-r2",
+      "phase": "annotation",
+      "status": "stale",
+      "report_directory": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_Grant_Cap-20260910000144/annotation-attempts/annotation-attempt2",
+      "input": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_Grant_Cap-20260910000144/annotation-attempts/annotation-attempt2/agent_input.md",
+      "report": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_Grant_Cap-20260910000144/annotation-attempts/annotation-attempt2/agent_report.json",
+      "output": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_Grant_Cap-20260910000144/annotation-attempts/annotation-attempt2/agent_output.md",
+      "source_version": "ea4daa065b41ef7e86bef6ab48c587ea51695efcbfd5baec35ce27fd57547b4a",
+      "source_goal_version": null,
+      "allowed_write_paths": [
+        "QCP_examples/osverify_qcp/cases/ucos_Grant_Cap.c",
+        "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_goal.v",
+        "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_proof_auto.v",
+        "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_proof_manual.v",
+        "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_goal_check.v"
+      ],
+      "compact_attempt_index": 1,
+      "created_at": "2026-09-09T16:12:47.567406Z",
+      "annotation_history_directory": "/home/lixing/projects/QualifiedCProgramming/verification_runs/ucos_Grant_Cap-20260910000144/annotation_history/annotation-attempt2",
+      "annotation_iteration": 2,
+      "annotation_causal_retry_count": 0,
+      "feedback_sources": [
+        {
+          "phase": "annotation",
+          "attempt_id": "ucos_Grant_Cap-annotation-r1-attempt-1",
+          "evidence": [
+            "/home/lixing/projects/QualifiedCProgramming/reports/ucos_Grant_Cap-20260910000144/annotation-attempts/annotation-attempt1/agent_report.json",
+            "/home/lixing/projects/QualifiedCProgramming/reports/ucos_Grant_Cap-20260910000144/annotation-attempts/annotation-attempt1/agent_output.md"
+          ]
+        }
+      ],
+      "retry_reason": "annotation-blocked",
+      "before_snapshot": {
+        "digest": "4665e2c39a3ae93034a31d1d98095d2405369b127495abe408a988f898c316b8",
+        "file_count": 1,
+        "missing_count": 5
+      },
+      "retry_previous_attempt": "ucos_Grant_Cap-annotation-r1-attempt-1",
+      "input_sha256": "eb9d1589a948fbbf0615d17056b7842ae3f6218756df885b969d26302a546243",
+      "owner": "annotation/ucos_Grant_Cap-20260910000144",
+      "started_at": "2026-09-09T16:14:21.956953Z",
+      "delivery": {
+        "action_id": "append-ucos_Grant_Cap-annotation-r2-attempt-1",
+        "kind": "append-annotation-agent",
+        "owner": "annotation/ucos_Grant_Cap-20260910000144",
+        "claimed_at": "2026-09-09T16:14:21.956953Z",
+        "finalized_at": "2026-09-09T16:37:27.162403Z"
+      },
+      "timing": {
+        "symexec": [
+          {
+            "started_at": "2026-09-09T16:17:26.473118Z",
+            "finished_at": "2026-09-09T16:17:26.505118Z",
+            "elapsed_seconds": 0.032
+          },
+          {
+            "started_at": "2026-09-09T16:19:17.466503Z",
+            "finished_at": "2026-09-09T16:19:17.474503Z",
+            "elapsed_seconds": 0.008
+          },
+          {
+            "started_at": "2026-09-09T16:20:38.734572Z",
+            "finished_at": "2026-09-09T16:20:38.742572Z",
+            "elapsed_seconds": 0.008
+          },
+          {
+            "started_at": "2026-09-09T16:21:03.211236Z",
+            "finished_at": "2026-09-09T16:21:03.238236Z",
+            "elapsed_seconds": 0.027
+          },
+          {
+            "started_at": "2026-09-09T16:21:58.035667Z",
+            "finished_at": "2026-09-09T16:21:58.069667Z",
+            "elapsed_seconds": 0.034
+          },
+          {
+            "started_at": "2026-09-09T16:22:50.169017Z",
+            "finished_at": "2026-09-09T16:22:50.211017Z",
+            "elapsed_seconds": 0.042
+          },
+          {
+            "started_at": "2026-09-09T16:23:14.690904Z",
+            "finished_at": "2026-09-09T16:23:14.717904Z",
+            "elapsed_seconds": 0.027
+          },
+          {
+            "started_at": "2026-09-09T16:24:29.955710Z",
+            "finished_at": "2026-09-09T16:24:30.053710Z",
+            "elapsed_seconds": 0.098
+          },
+          {
+            "started_at": "2026-09-09T16:28:57.953503Z",
+            "finished_at": "2026-09-09T16:28:57.985503Z",
+            "elapsed_seconds": 0.032
+          },
+          {
+            "started_at": "2026-09-09T16:29:36.735835Z",
+            "finished_at": "2026-09-09T16:29:36.826835Z",
+            "elapsed_seconds": 0.091
+          },
+          {
+            "started_at": "2026-09-09T16:37:58.029939Z",
+            "finished_at": "2026-09-09T16:37:58.125939Z",
+            "elapsed_seconds": 0.096
+          }
+        ],
+        "annotation-checking": [
+          {
+            "started_at": "2026-09-09T16:33:04.524862Z",
+            "finished_at": "2026-09-09T16:36:47.588285Z",
+            "elapsed_seconds": 223.063423
+          }
+        ],
+        "controller-validation": [
+          {
+            "started_at": "2026-09-09T16:37:27.139427Z",
+            "finished_at": "2026-09-09T16:37:27.280161Z",
+            "elapsed_seconds": 0.131781
+          }
+        ],
+        "clean-output-freshness": [
+          {
+            "started_at": "2026-09-09T16:37:58.237021Z",
+            "finished_at": "2026-09-09T16:37:58.329021Z",
+            "elapsed_seconds": 0.092
+          }
+        ],
+        "controller-acceptance-check": [
+          {
+            "started_at": "2026-09-09T16:37:58.012863Z",
+            "finished_at": "2026-09-09T16:37:58.352141Z",
+            "elapsed_seconds": 0.330759
+          }
+        ],
+        "dune-build": [
+          {
+            "started_at": "2026-09-09T16:38:13.352909Z",
+            "finished_at": "2026-09-09T16:38:15.455213Z",
+            "elapsed_seconds": 2.092367
+          }
+        ]
+      },
+      "returned_at": "2026-09-09T16:37:27.162403Z",
+      "artifact_sha256": {
+        "report": "0cb87b61f0afab118ac222a0af92bc06c579959aeea208461294d16becf11b39",
+        "output": "023ad4e4a5f4ee750d00a0147d5f3a4041e015304fcb7f05593c6988b559c844"
+      },
+      "after_snapshot": {
+        "digest": "476b22489985a57b3c5f2e7ef979b9eb71d0cc1c03f5bf210c7931a0e02a48d8",
+        "file_count": 5,
+        "missing_count": 1
+      },
+      "changed_files": [
+        "QCP_examples/osverify_qcp/cases/ucos_Grant_Cap.c",
+        "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_goal.v",
+        "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_proof_auto.v",
+        "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_proof_manual.v",
+        "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_goal_check.v"
+      ],
+      "finished_at": "2026-09-09T16:38:15.455213Z",
+      "main_check": {
+        "symexec": {
+          "status": "passed",
+          "returncode": 0
+        },
+        "formal_case_lib_contract": {
+          "status": "passed",
+          "skipped": true,
+          "reason": "optional formal_case_lib candidate is absent"
+        },
+        "formal_case_lib_coqc": {
+          "status": "passed",
+          "skipped": true,
+          "reason": "optional formal_case_lib candidate is absent"
+        },
+        "clean_output_freshness": {
+          "status": "passed",
+          "source_goal_version": {
+            "reference": "51b5934813470cdb1db977a8ee61ea7ab5adfe2fcb7afbe5f638f195220edadd",
+            "fresh": "51b5934813470cdb1db977a8ee61ea7ab5adfe2fcb7afbe5f638f195220edadd"
+          }
+        }
+      },
+      "stale_reason": "retry:vc-checking-annotation-gap"
+    },
+    "ucos_Grant_Cap-vc-checking-r1-attempt-1": {
+      "attempt_id": "ucos_Grant_Cap-vc-checking-r1-attempt-1",
+      "round": "ucos_Grant_Cap-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "stale",
+      "report_directory": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_Grant_Cap-20260910000144/rounds/ucos_Grant_Cap-vc-checking-r1",
+      "input": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_Grant_Cap-20260910000144/rounds/ucos_Grant_Cap-vc-checking-r1/agent_input.md",
+      "report": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_Grant_Cap-20260910000144/rounds/ucos_Grant_Cap-vc-checking-r1/agent_report.json",
+      "output": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_Grant_Cap-20260910000144/rounds/ucos_Grant_Cap-vc-checking-r1/agent_output.md",
+      "source_version": "0822da1440f7f1cccb692672ccead6b53b7c74bcfd0e378ee937f48cb2029569",
+      "source_goal_version": "51b5934813470cdb1db977a8ee61ea7ab5adfe2fcb7afbe5f638f195220edadd",
+      "allowed_write_paths": [],
+      "compact_attempt_index": 1,
+      "created_at": "2026-09-09T16:38:21.628149Z",
+      "owner": "vc-checking/ucos_Grant_Cap-vc-checking-r1-attempt-1",
+      "started_at": "2026-09-09T16:38:30.433701Z",
+      "delivery": {
+        "action_id": "spawn-ucos_Grant_Cap-vc-checking-r1-attempt-1",
+        "kind": "spawn-attempt",
+        "owner": "vc-checking/ucos_Grant_Cap-vc-checking-r1-attempt-1",
+        "claimed_at": "2026-09-09T16:38:30.433701Z",
+        "finalized_at": "2026-09-09T16:44:01.920188Z"
+      },
+      "returned_at": "2026-09-09T16:44:01.920188Z",
+      "artifact_sha256": {
+        "report": "7b7909144bf575b04425cbc6ea8a07e3876a4608954c759cd7c47f5eecc427bb",
+        "output": "571ea088aa8c7d31e1778475c1f81843d1efe2899829cba8e2b9469feaf22da4"
+      },
+      "finished_at": "2026-09-09T16:44:03.281593Z",
+      "timing": {
+        "controller-validation": [
+          {
+            "started_at": "2026-09-09T16:44:01.903345Z",
+            "finished_at": "2026-09-09T16:44:03.281593Z",
+            "elapsed_seconds": 0.066468
+          }
+        ]
+      },
+      "stale_reason": "retry:vc-checking-annotation-gap"
+    },
+    "ucos_Grant_Cap-annotation-r3-attempt-1": {
+      "attempt_id": "ucos_Grant_Cap-annotation-r3-attempt-1",
+      "round": "ucos_Grant_Cap-annotation-r3",
+      "phase": "annotation",
+      "status": "accepted",
+      "report_directory": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_Grant_Cap-20260910000144/annotation-attempts/annotation-attempt3",
+      "input": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_Grant_Cap-20260910000144/annotation-attempts/annotation-attempt3/agent_input.md",
+      "report": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_Grant_Cap-20260910000144/annotation-attempts/annotation-attempt3/agent_report.json",
+      "output": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_Grant_Cap-20260910000144/annotation-attempts/annotation-attempt3/agent_output.md",
+      "source_version": "e718b0624645e57041e06b72337f503d3600b2d0811e34af2934f903881ac208",
+      "source_goal_version": null,
+      "allowed_write_paths": [
+        "QCP_examples/osverify_qcp/cases/ucos_Grant_Cap.c",
+        "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_goal.v",
+        "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_proof_auto.v",
+        "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_proof_manual.v",
+        "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_goal_check.v"
+      ],
+      "compact_attempt_index": 1,
+      "created_at": "2026-09-09T16:44:20.257293Z",
+      "annotation_history_directory": "/home/lixing/projects/QualifiedCProgramming/verification_runs/ucos_Grant_Cap-20260910000144/annotation_history/annotation-attempt3",
+      "annotation_iteration": 3,
+      "annotation_causal_retry_count": 1,
+      "feedback_sources": [
+        {
+          "phase": "vc-checking",
+          "attempt_id": "ucos_Grant_Cap-vc-checking-r1-attempt-1",
+          "evidence": [
+            "/home/lixing/projects/QualifiedCProgramming/reports/ucos_Grant_Cap-20260910000144/rounds/ucos_Grant_Cap-vc-checking-r1/agent_report.json",
+            "/home/lixing/projects/QualifiedCProgramming/reports/ucos_Grant_Cap-20260910000144/rounds/ucos_Grant_Cap-vc-checking-r1/agent_output.md"
+          ]
+        }
+      ],
+      "retry_reason": "vc-checking-annotation-gap",
+      "before_snapshot": {
+        "digest": "476b22489985a57b3c5f2e7ef979b9eb71d0cc1c03f5bf210c7931a0e02a48d8",
+        "file_count": 5,
+        "missing_count": 1
+      },
+      "retry_previous_attempt": "ucos_Grant_Cap-vc-checking-r1-attempt-1",
+      "input_sha256": "c9c112ff66a9989e7222c63472f0d21433ba35c2407a9ae50ef4692d9c531a75",
+      "owner": "annotation/ucos_Grant_Cap-20260910000144",
+      "started_at": "2026-09-09T16:45:29.615058Z",
+      "delivery": {
+        "action_id": "append-ucos_Grant_Cap-annotation-r3-attempt-1",
+        "kind": "append-annotation-agent",
+        "owner": "annotation/ucos_Grant_Cap-20260910000144",
+        "claimed_at": "2026-09-09T16:45:29.615058Z",
+        "finalized_at": "2026-09-09T16:51:17.635373Z"
+      },
+      "timing": {
+        "symexec": [
+          {
+            "started_at": "2026-09-09T16:49:02.650172Z",
+            "finished_at": "2026-09-09T16:49:02.801172Z",
+            "elapsed_seconds": 0.151
+          },
+          {
+            "started_at": "2026-09-09T16:51:51.876955Z",
+            "finished_at": "2026-09-09T16:51:52.016955Z",
+            "elapsed_seconds": 0.14
+          }
+        ],
+        "annotation-checking": [
+          {
+            "started_at": "2026-09-09T16:49:47.394498Z",
+            "finished_at": "2026-09-09T16:50:45.683890Z",
+            "elapsed_seconds": 58.289392
+          }
+        ],
+        "controller-validation": [
+          {
+            "started_at": "2026-09-09T16:51:17.606803Z",
+            "finished_at": "2026-09-09T16:51:17.766177Z",
+            "elapsed_seconds": 0.145437
+          }
+        ],
+        "clean-output-freshness": [
+          {
+            "started_at": "2026-09-09T16:51:52.113443Z",
+            "finished_at": "2026-09-09T16:51:52.246443Z",
+            "elapsed_seconds": 0.133
+          }
+        ],
+        "controller-acceptance-check": [
+          {
+            "started_at": "2026-09-09T16:51:51.855968Z",
+            "finished_at": "2026-09-09T16:51:52.275797Z",
+            "elapsed_seconds": 0.407698
+          }
+        ],
+        "dune-build": [
+          {
+            "started_at": "2026-09-09T16:52:07.056127Z",
+            "finished_at": "2026-09-09T16:52:08.806493Z",
+            "elapsed_seconds": 1.738014
+          }
+        ]
+      },
+      "returned_at": "2026-09-09T16:51:17.635373Z",
+      "artifact_sha256": {
+        "report": "0cb87b61f0afab118ac222a0af92bc06c579959aeea208461294d16becf11b39",
+        "output": "8836952255575fd861b32209ac13c7bc33d7938bc071ed7020e30f0f138ac552"
+      },
+      "after_snapshot": {
+        "digest": "2d8c884f5a5a0b19b16c8453262db831b6b7c1d4d3e78b50a534d5455a03d143",
+        "file_count": 5,
+        "missing_count": 1
+      },
+      "changed_files": [
+        "QCP_examples/osverify_qcp/cases/ucos_Grant_Cap.c",
+        "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_goal.v",
+        "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_proof_auto.v",
+        "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_proof_manual.v"
+      ],
+      "finished_at": "2026-09-09T16:52:08.806493Z",
+      "main_check": {
+        "symexec": {
+          "status": "passed",
+          "returncode": 0
+        },
+        "formal_case_lib_contract": {
+          "status": "passed",
+          "skipped": true,
+          "reason": "optional formal_case_lib candidate is absent"
+        },
+        "formal_case_lib_coqc": {
+          "status": "passed",
+          "skipped": true,
+          "reason": "optional formal_case_lib candidate is absent"
+        },
+        "clean_output_freshness": {
+          "status": "passed",
+          "source_goal_version": {
+            "reference": "fb294e775ae861ec89b219936aace68e40386fac0f4d6b103a38a087704c0ebc",
+            "fresh": "fb294e775ae861ec89b219936aace68e40386fac0f4d6b103a38a087704c0ebc"
+          }
+        }
+      }
+    },
+    "ucos_Grant_Cap-vc-proving-r1": {
+      "attempt_id": "ucos_Grant_Cap-vc-proving-r1",
+      "round": "ucos_Grant_Cap-vc-proving-r1",
+      "phase": "vc-proving-preparing",
+      "status": "verified",
+      "directory": "/home/lixing/projects/QualifiedCProgramming/verification_runs/ucos_Grant_Cap-20260910000144/ucos_Grant_Cap-vc-proving-r1",
+      "report_directory": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_Grant_Cap-20260910000144/rounds/ucos_Grant_Cap-vc-proving-r1",
+      "base_manifest": "/home/lixing/projects/QualifiedCProgramming/verification_runs/ucos_Grant_Cap-20260910000144/ucos_Grant_Cap-vc-proving-r1/base_manifest.json",
+      "group_workers_manifest": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_Grant_Cap-20260910000144/rounds/ucos_Grant_Cap-vc-proving-r1/group_workers_manifest.json",
+      "proving_merged_result": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_Grant_Cap-20260910000144/rounds/ucos_Grant_Cap-vc-proving-r1/proving_merged_result.json",
+      "groups": {},
+      "source_goal_version": "fb294e775ae861ec89b219936aace68e40386fac0f4d6b103a38a087704c0ebc",
+      "max_parallel_group_workers": 5,
+      "created_at": "2026-09-09T16:52:15.704740Z",
+      "reuse_source_snapshot": {
+        "status": "passed",
+        "source_goal_version": "fb294e775ae861ec89b219936aace68e40386fac0f4d6b103a38a087704c0ebc",
+        "digest": "2c5a037fecf7122a98f7c0f644ceae2aa4d07f4f2b5a7eb89440c8891c7a90ed",
+        "file_count": 24,
+        "preparation_sha256": "86129d0dfa950058733156944b9ea0b474974094213bdf58e773ec593b01ab4b"
+      },
+      "reuse_source_raw": {
+        "root": "/home/lixing/projects/QualifiedCProgramming/verification_runs/ucos_Grant_Cap-20260910000144/ucos_Grant_Cap-vc-proving-r1/reuse_source_raw",
+        "files": {
+          "goal_file": "6d857f7afd44b74a5d3c72e2a687edb381b9728532d205d8a7489b246e1bb037",
+          "proof_manual_file": "a5f74d3e449a8fe5d0637cd6eec893a8576c0f84ceb9678facea1d627cd8e897",
+          "formal_case_lib": null
+        }
+      },
+      "base_manifest_sha256": "5174cf6ce7f21dcbba000b42316a452cbb855db853e2ceeba0b8115e3b578528",
+      "group_workers_manifest_sha256": "e1da411ca0f5ae5cb051ca5a3d978d816f58bb7cfd6ce5b7395683dfc87194ab",
+      "timing": {
+        "preparing": [
+          {
+            "started_at": "2026-09-09T16:52:22.257627Z",
+            "finished_at": "2026-09-09T16:52:36.830871Z",
+            "elapsed_seconds": 13.292231
+          }
+        ],
+        "parent-verify": [
+          {
+            "started_at": "2026-09-09T16:52:43.707942Z",
+            "finished_at": "2026-09-09T16:52:43.959153Z",
+            "elapsed_seconds": 0.236312
+          }
+        ]
+      },
+      "finished_at": "2026-09-09T16:52:43.959153Z",
+      "verified_result_sha256": "310ddea36eb6e74a63b6ae0e11b8f3e50a2e035d2759b8583b710805382a444c"
+    }
+  },
+  "annotation_session": {
+    "session_id": "ucos_Grant_Cap-annotation-agent",
+    "status": "idle",
+    "current_attempt": "ucos_Grant_Cap-annotation-r3-attempt-1",
+    "iteration_count": 3,
+    "owner": "annotation/ucos_Grant_Cap-20260910000144"
+  },
+  "accepted_rounds": {
+    "annotation": {
+      "round": "ucos_Grant_Cap-annotation-r3",
+      "attempt_id": "ucos_Grant_Cap-annotation-r3-attempt-1",
+      "annotation_history_directory": "/home/lixing/projects/QualifiedCProgramming/verification_runs/ucos_Grant_Cap-20260910000144/annotation_history/annotation-attempt3",
+      "source_version": "07f9e22fb141f649046c659688b8453ad6e87074869c8e3af8150feca8907525",
+      "source_goal_version": "fb294e775ae861ec89b219936aace68e40386fac0f4d6b103a38a087704c0ebc"
+    },
+    "vc-checking": {
+      "group_plan": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_Grant_Cap-20260910000144/group_plan.json",
+      "group_plan_sha256": "4ea5e45828cc630698c2b6dd78dec2319daead3354f31c205ee1912a8652faf2"
+    },
+    "vc-proving-preparing": {
+      "round": "ucos_Grant_Cap-vc-proving-r1",
+      "attempt_id": "ucos_Grant_Cap-vc-proving-r1",
+      "result_sha256": "310ddea36eb6e74a63b6ae0e11b8f3e50a2e035d2759b8583b710805382a444c"
+    }
+  },
+  "next_actions": [],
+  "waiting_for": [],
+  "current_blockers": [],
+  "final_candidate": {
+    "round": "ucos_Grant_Cap-vc-proving-r1",
+    "proving_merged_result": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_Grant_Cap-20260910000144/rounds/ucos_Grant_Cap-vc-proving-r1/proving_merged_result.json",
+    "result_sha256": "310ddea36eb6e74a63b6ae0e11b8f3e50a2e035d2759b8583b710805382a444c",
+    "proof_manual_sha256": "a5f74d3e449a8fe5d0637cd6eec893a8576c0f84ceb9678facea1d627cd8e897",
+    "proving_merged_lib_sha256": null
+  },
+  "final_apply": {
+    "status": "passed",
+    "transaction_id": "7422c9ea92874efd883845b21815e153",
+    "applied_at": "2026-09-09T16:52:59.252340Z"
+  },
+  "final_check": {
+    "status": "passed",
+    "checked_at": "2026-09-09T16:53:27.848380Z",
+    "cleanup_removed_count": 0
+  },
+  "created_at": "2026-09-09T16:01:44.474539Z",
+  "updated_at": "2026-09-09T16:53:27.860401Z",
+  "final_apply_transaction": {
+    "transaction_id": "7422c9ea92874efd883845b21815e153",
+    "status": "completed",
+    "source_goal_version": "fb294e775ae861ec89b219936aace68e40386fac0f4d6b103a38a087704c0ebc",
+    "records": [
+      {
+        "source": "/home/lixing/projects/QualifiedCProgramming/verification_runs/ucos_Grant_Cap-20260910000144/ucos_Grant_Cap-vc-proving-r1/proving_merged/ucos_Grant_Cap_proof_manual.v",
+        "source_sha256": "a5f74d3e449a8fe5d0637cd6eec893a8576c0f84ceb9678facea1d627cd8e897",
+        "target": "/home/lixing/projects/QualifiedCProgramming/Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_proof_manual.v",
+        "relative_path": "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_proof_manual.v",
+        "existed": true,
+        "before_sha256": "a5f74d3e449a8fe5d0637cd6eec893a8576c0f84ceb9678facea1d627cd8e897",
+        "backup": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_Grant_Cap-20260910000144/final-check/backup/7422c9ea92874efd883845b21815e153/Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_proof_manual.v"
+      }
+    ],
+    "prepared_at": "2026-09-09T16:52:59.195789Z",
+    "backed_up_at": "2026-09-09T16:52:59.229089Z",
+    "completed_at": "2026-09-09T16:52:59.252326Z"
+  },
+  "finished_at": "2026-09-09T16:53:27.848380Z"
+}

@@ -1,0 +1,9 @@
+{
+  "source_goal_version": "9862b3b350d1fe195616454977488f78fe2b63f270792d9c9b4416638594df95",
+  "proof_manual": "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_proof_manual.v",
+  "formal_case_lib": "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_lib.v",
+  "seed_sha256": {
+    "proof_manual": "c32432d34ddcf99842a2cdd94f948a81df10cdd393dd52deb2986ec6a034715b",
+    "formal_case_lib": null
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "blocker": {
+    "failure_class": "annotation-input",
+    "kind": "missing-target-function",
+    "location": "QCP_examples/osverify_qcp/cases/ucos_Grant_Cap.c",
+    "message": "The assigned target function grant_cspace_cap is absent from the current C file. Canonical symbolic execution reports passed but generates only ucos_Grant_Cap obligations, so there is no wrapper implementation or annotation for this owner to verify.",
+    "repair_boundary": "The main agent must add the intended faithful sequential C translation of grant_cspace_cap, including any executable global/type declarations and ENTER_CRITICAL/EXIT_CRITICAL no-op boundaries. Adding executable C is outside the annotation owner's write boundary; after that source repair, continue with this same persistent annotation agent."
+  }
+}

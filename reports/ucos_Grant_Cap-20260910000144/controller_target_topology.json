@@ -1,0 +1,15 @@
+{
+  "case": "ucos_Grant_Cap",
+  "run_id": "ucos_Grant_Cap-20260910000144",
+  "target_files": {
+    "active_case_theory": "SimpleC.EE.osverify_qcp.cases",
+    "c_file": "QCP_examples/osverify_qcp/cases/ucos_Grant_Cap.c",
+    "case_name": "ucos_Grant_Cap",
+    "formal_case_lib": "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_lib.v",
+    "formal_directory": "Rocq/examples/osverify_qcp/cases",
+    "goal_check_file": "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_goal_check.v",
+    "goal_file": "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_goal.v",
+    "proof_auto_file": "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_proof_auto.v",
+    "proof_manual_file": "Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_proof_manual.v"
+  }
+}

@@ -1,0 +1,411 @@
+{
+  "generation": 35,
+  "run_id": "UserAddrCheck-20260909232431",
+  "case": "UserAddrCheck",
+  "phase": "done",
+  "main_root": "/home/lixing/projects/QualifiedCProgramming",
+  "run_root": "/home/lixing/projects/QualifiedCProgramming/verification_runs/UserAddrCheck-20260909232431",
+  "report_root": "/home/lixing/projects/QualifiedCProgramming/reports/UserAddrCheck-20260909232431",
+  "target_files": {
+    "c_file": "QCP_examples/osverify_qcp/cases/UserAddrCheck.c",
+    "formal_directory": "Rocq/examples/osverify_qcp/cases",
+    "formal_case_lib": "Rocq/examples/osverify_qcp/cases/UserAddrCheck_lib.v",
+    "goal_file": "Rocq/examples/osverify_qcp/cases/UserAddrCheck_goal.v",
+    "proof_auto_file": "Rocq/examples/osverify_qcp/cases/UserAddrCheck_proof_auto.v",
+    "proof_manual_file": "Rocq/examples/osverify_qcp/cases/UserAddrCheck_proof_manual.v",
+    "goal_check_file": "Rocq/examples/osverify_qcp/cases/UserAddrCheck_goal_check.v",
+    "case_name": "UserAddrCheck",
+    "active_case_theory": "SimpleC.EE.osverify_qcp.cases"
+  },
+  "public_helper_lemma_lib": {
+    "path": "/home/lixing/projects/QualifiedCProgramming/verification_runs/UserAddrCheck-20260909232431/public_helper_lemma_lib.v",
+    "sha256": "d1dd6612ab2c2ca4fcb706e953f0d05ed1e858e7308c8a5d8dce3d87c228be6d",
+    "declaration_count": 0,
+    "helper_count": 0
+  },
+  "problem_context": {
+    "problem_statement": "Faithfully port and verify the integer UserAddrCheck_impl from QCP_examples/osverify/certiucos/code/ifun_useraddrchk.v using QCP.",
+    "target_function": "UserAddrCheck",
+    "expected_behavior": "For a uint32 address a, return 0 iff a <= 0 or 4294867295 < a; otherwise return 1. Preserve the legacy control flow and constants.",
+    "input_output_contract": "Input is the mathematical unsigned value of addr in [0,4294967295]. No memory is accessed. Return is 0 on the legacy out-of-range condition and 1 on the legacy in-range condition.",
+    "spec_hint": [
+      "Legacy implementation: if UserAddrStart >= addr or addr > UserAddrEnd return 0, else return 1; UserAddrStart=0 and UserAddrEnd=4294867295."
+    ],
+    "forbidden_patterns": [
+      "Do not change the function body, constants, integer types, branch condition, or return values."
+    ]
+  },
+  "spec_freeze": {
+    "functions": [
+      "UserAddrCheck"
+    ],
+    "baseline": {
+      "extern_coq": {},
+      "import_coq": {},
+      "specs": {
+        "UserAddrCheck::<default>": "With (a : Z) Require addr == a && 0 <= a && a <= 4294967295 && emp Ensure (((a <= 0 || 4294867295 < a) && __return == 0) || ((0 < a && a <= 4294867295) && __return == 1)) && emp"
+      },
+      "lib": {}
+    }
+  },
+  "max_compact_attempts": 3,
+  "max_witnesses_per_group": 12,
+  "max_parallel_group_workers": 5,
+  "source_version": {
+    "digest": "bc41e3b2d8310df891b15881cc1822cbcced8430cd6d230c85b92a323e822298",
+    "files": [
+      {
+        "relative_path": "QCP_examples/osverify_qcp/cases/UserAddrCheck.c",
+        "sha256": "14c22d829785105661109390e7e317281d5b9a034ad2ef920cbf70297a803d5e",
+        "state": "present",
+        "role": "target-c-annotated"
+      },
+      {
+        "relative_path": "Rocq/examples/osverify_qcp/cases/UserAddrCheck_lib.v",
+        "sha256": null,
+        "state": "missing",
+        "role": "formal-case-lib"
+      }
+    ]
+  },
+  "source_goal_version": {
+    "digest": "6169a38dadbdf99801f486e19197c01afb1ca25426854815b046ac9a2268c80b",
+    "generated_files": [
+      {
+        "relative_path": "Rocq/examples/osverify_qcp/cases/UserAddrCheck_goal.v",
+        "role": "goal_file",
+        "state": "present",
+        "sha256": "7e3f9e694087e7f2c23e52fd6909f7cc7414b423a1fa5303172d444de530ed42"
+      },
+      {
+        "relative_path": "Rocq/examples/osverify_qcp/cases/UserAddrCheck_proof_auto.v",
+        "role": "proof_auto_file",
+        "state": "present",
+        "sha256": "164b2efa452a5b9bc43b969cdc9ab2c1eaedbddf5767674cc765609726c98788"
+      },
+      {
+        "relative_path": "Rocq/examples/osverify_qcp/cases/UserAddrCheck_proof_manual.v",
+        "role": "proof_manual_file",
+        "state": "present",
+        "sha256": "3f4ce75a24b0410b4c47c2d5fe9fb086aadc2cdffa550c8ab64a7ea32eadc90b"
+      },
+      {
+        "relative_path": "Rocq/examples/osverify_qcp/cases/UserAddrCheck_goal_check.v",
+        "role": "goal_check_file",
+        "state": "present",
+        "sha256": "f3938b6de23f2932549e7c472a1e1073d4ef6003b53bd4f2cf4333e0e9400f90"
+      }
+    ],
+    "target_witnesses": [],
+    "witness_statement_hashes": {},
+    "witness_goal_definition_hashes": {},
+    "split_goals": {}
+  },
+  "dune_preparation": {
+    "status": "passed",
+    "build_mode": "makefile",
+    "source_goal_version": "6169a38dadbdf99801f486e19197c01afb1ca25426854815b046ac9a2268c80b",
+    "target": "Rocq/examples/osverify_qcp/cases/UserAddrCheck_goal_check.vo",
+    "build_root": ".",
+    "make_executable": "/usr/bin/make",
+    "coqc_executable": "/home/lixing/.opam/coq8201/bin/coqc",
+    "coqdep_executable": "/home/lixing/.opam/coq8201/bin/coqdep",
+    "run_makefile": "verification_runs/UserAddrCheck-20260909232431/Makefile",
+    "run_makefile_sha256": "f2040e2a1a0b703b4ab9e2a32e5fe00659b6acd943a1caadde6c62554a46827a",
+    "snapshot": "verification_runs/UserAddrCheck-20260909232431/makefile_dependency_snapshot.json",
+    "snapshot_sha256": "3ba786ca066df3427707eb1294b412361f628c85fbc00108d0b17c2ee4c18107",
+    "dependency_digest": "19cdeeb5749b908f888d33749e29d90258be940873ec20a1b3a7435f085476aa",
+    "source_digest": "9f646d030da412bd2e3536e3e89fc6b4c488265b07417f9e951cbdcf61ae109c",
+    "artifact_digest": "19a6ee3c19c4ae39c66227088e41dbfa8000bd0e679e3e9d1eddf1d288599118",
+    "configuration_digest": "e168e3d3ec3ac6fc2a2a4a859a13ca33856035fba35d65747c60051798e550de",
+    "base_artifact_count": 143,
+    "current_source_count": 4,
+    "rebuilt_count": 143,
+    "dependency_metrics": {
+      "status": "resolved",
+      "strategy": "breadth-batched-coqdep",
+      "batch_count": 6,
+      "coqdep_process_count": 6,
+      "node_count": 147,
+      "source_count": 147,
+      "elapsed_seconds": 1.072676
+    },
+    "current_cleanup": {
+      "status": "passed",
+      "removed_count": 0,
+      "first_removed": null
+    },
+    "make_seconds": 176.571732,
+    "returncode": 0,
+    "elapsed_seconds": 177.937227
+  },
+  "rounds": {
+    "UserAddrCheck-annotation-r1": {
+      "phase": "annotation",
+      "current_attempt": "UserAddrCheck-annotation-r1-attempt-1"
+    },
+    "UserAddrCheck-vc-proving-r1": {
+      "phase": "vc-proving-preparing",
+      "current_attempt": "UserAddrCheck-vc-proving-r1"
+    }
+  },
+  "attempts": {
+    "UserAddrCheck-annotation-r1-attempt-1": {
+      "attempt_id": "UserAddrCheck-annotation-r1-attempt-1",
+      "round": "UserAddrCheck-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "report_directory": "/home/lixing/projects/QualifiedCProgramming/reports/UserAddrCheck-20260909232431/annotation-attempts/annotation-attempt1",
+      "input": "/home/lixing/projects/QualifiedCProgramming/reports/UserAddrCheck-20260909232431/annotation-attempts/annotation-attempt1/agent_input.md",
+      "report": "/home/lixing/projects/QualifiedCProgramming/reports/UserAddrCheck-20260909232431/annotation-attempts/annotation-attempt1/agent_report.json",
+      "output": "/home/lixing/projects/QualifiedCProgramming/reports/UserAddrCheck-20260909232431/annotation-attempts/annotation-attempt1/agent_output.md",
+      "source_version": "a8503962155af6868634c1753b7c95237d2f091229ef0a84ebeda8f8b2020666",
+      "source_goal_version": null,
+      "allowed_write_paths": [
+        "QCP_examples/osverify_qcp/cases/UserAddrCheck.c",
+        "Rocq/examples/osverify_qcp/cases/UserAddrCheck_goal.v",
+        "Rocq/examples/osverify_qcp/cases/UserAddrCheck_proof_auto.v",
+        "Rocq/examples/osverify_qcp/cases/UserAddrCheck_proof_manual.v",
+        "Rocq/examples/osverify_qcp/cases/UserAddrCheck_goal_check.v"
+      ],
+      "compact_attempt_index": 1,
+      "created_at": "2026-09-09T15:24:40.719054Z",
+      "annotation_history_directory": "/home/lixing/projects/QualifiedCProgramming/verification_runs/UserAddrCheck-20260909232431/annotation_history/annotation-attempt1",
+      "annotation_iteration": 1,
+      "annotation_causal_retry_count": 0,
+      "feedback_sources": [],
+      "retry_reason": null,
+      "before_snapshot": {
+        "digest": "f59d93426c7b538585710842a69053c0ffaa1c6115992282299f93b35f78b443",
+        "file_count": 1,
+        "missing_count": 5
+      },
+      "input_sha256": "718a015d454d7447be282660a607e8e670165415e45b89483eadf61221f0ff64",
+      "owner": "annotation/UserAddrCheck-20260909232431",
+      "started_at": "2026-09-09T15:24:51.925047Z",
+      "delivery": {
+        "action_id": "spawn-UserAddrCheck-annotation-r1-attempt-1",
+        "kind": "spawn-annotation-agent",
+        "owner": "annotation/UserAddrCheck-20260909232431",
+        "claimed_at": "2026-09-09T15:24:51.925047Z",
+        "finalized_at": "2026-09-09T15:28:21.752146Z"
+      },
+      "timing": {
+        "symexec": [
+          {
+            "started_at": "2026-09-09T15:26:56.033497Z",
+            "finished_at": "2026-09-09T15:26:56.059497Z",
+            "elapsed_seconds": 0.026
+          },
+          {
+            "started_at": "2026-09-09T15:28:39.855902Z",
+            "finished_at": "2026-09-09T15:28:39.873902Z",
+            "elapsed_seconds": 0.018
+          }
+        ],
+        "annotation-checking": [
+          {
+            "started_at": "2026-09-09T15:27:08.144650Z",
+            "finished_at": "2026-09-09T15:28:06.098384Z",
+            "elapsed_seconds": 57.953734
+          }
+        ],
+        "controller-validation": [
+          {
+            "started_at": "2026-09-09T15:28:21.730383Z",
+            "finished_at": "2026-09-09T15:28:21.849360Z",
+            "elapsed_seconds": 0.112789
+          }
+        ],
+        "clean-output-freshness": [
+          {
+            "started_at": "2026-09-09T15:28:39.906753Z",
+            "finished_at": "2026-09-09T15:28:39.926753Z",
+            "elapsed_seconds": 0.02
+          }
+        ],
+        "controller-acceptance-check": [
+          {
+            "started_at": "2026-09-09T15:28:39.841774Z",
+            "finished_at": "2026-09-09T15:28:39.946392Z",
+            "elapsed_seconds": 0.097725
+          }
+        ],
+        "dune-build": [
+          {
+            "started_at": "2026-09-09T15:28:57.852065Z",
+            "finished_at": "2026-09-09T15:29:02.614926Z",
+            "elapsed_seconds": 4.756492
+          },
+          {
+            "started_at": "2026-09-09T15:30:32.682044Z",
+            "finished_at": "2026-09-09T15:30:37.975471Z",
+            "elapsed_seconds": 5.28718
+          },
+          {
+            "started_at": "2026-09-09T15:31:32.966392Z",
+            "finished_at": "2026-09-09T15:34:34.684474Z",
+            "elapsed_seconds": 177.995362
+          }
+        ]
+      },
+      "returned_at": "2026-09-09T15:28:21.752146Z",
+      "artifact_sha256": {
+        "report": "0cb87b61f0afab118ac222a0af92bc06c579959aeea208461294d16becf11b39",
+        "output": "b1c559b2a5e3e4f476edbd6fe834ddacf50de30872a06f1a2d555327d2df3093"
+      },
+      "after_snapshot": {
+        "digest": "9583cad42c42aef04d2bd9b90ab37aa88480d11734d0e2c03d79b6d0091d8a13",
+        "file_count": 5,
+        "missing_count": 1
+      },
+      "changed_files": [
+        "Rocq/examples/osverify_qcp/cases/UserAddrCheck_goal.v",
+        "Rocq/examples/osverify_qcp/cases/UserAddrCheck_proof_auto.v",
+        "Rocq/examples/osverify_qcp/cases/UserAddrCheck_proof_manual.v",
+        "Rocq/examples/osverify_qcp/cases/UserAddrCheck_goal_check.v"
+      ],
+      "finished_at": "2026-09-09T15:34:34.684474Z",
+      "main_check": {
+        "symexec": {
+          "status": "passed",
+          "returncode": 0
+        },
+        "formal_case_lib_contract": {
+          "status": "passed",
+          "skipped": true,
+          "reason": "optional formal_case_lib candidate is absent"
+        },
+        "formal_case_lib_coqc": {
+          "status": "passed",
+          "skipped": true,
+          "reason": "optional formal_case_lib candidate is absent"
+        },
+        "clean_output_freshness": {
+          "status": "passed",
+          "source_goal_version": {
+            "reference": "6169a38dadbdf99801f486e19197c01afb1ca25426854815b046ac9a2268c80b",
+            "fresh": "6169a38dadbdf99801f486e19197c01afb1ca25426854815b046ac9a2268c80b"
+          }
+        }
+      }
+    },
+    "UserAddrCheck-vc-proving-r1": {
+      "attempt_id": "UserAddrCheck-vc-proving-r1",
+      "round": "UserAddrCheck-vc-proving-r1",
+      "phase": "vc-proving-preparing",
+      "status": "verified",
+      "directory": "/home/lixing/projects/QualifiedCProgramming/verification_runs/UserAddrCheck-20260909232431/UserAddrCheck-vc-proving-r1",
+      "report_directory": "/home/lixing/projects/QualifiedCProgramming/reports/UserAddrCheck-20260909232431/rounds/UserAddrCheck-vc-proving-r1",
+      "base_manifest": "/home/lixing/projects/QualifiedCProgramming/verification_runs/UserAddrCheck-20260909232431/UserAddrCheck-vc-proving-r1/base_manifest.json",
+      "group_workers_manifest": "/home/lixing/projects/QualifiedCProgramming/reports/UserAddrCheck-20260909232431/rounds/UserAddrCheck-vc-proving-r1/group_workers_manifest.json",
+      "proving_merged_result": "/home/lixing/projects/QualifiedCProgramming/reports/UserAddrCheck-20260909232431/rounds/UserAddrCheck-vc-proving-r1/proving_merged_result.json",
+      "groups": {},
+      "source_goal_version": "6169a38dadbdf99801f486e19197c01afb1ca25426854815b046ac9a2268c80b",
+      "max_parallel_group_workers": 5,
+      "created_at": "2026-09-09T15:34:41.843059Z",
+      "reuse_source_snapshot": {
+        "status": "passed",
+        "source_goal_version": "6169a38dadbdf99801f486e19197c01afb1ca25426854815b046ac9a2268c80b",
+        "digest": "a5d93fdb5f3a5386a53c20b781f49513ddde40129f7ef11479c23d48321c28aa",
+        "file_count": 24,
+        "preparation_sha256": "7e58d77527ce3b7bc172595f514674c6863b3cf0059ddb6c8aff16c32151e3b2"
+      },
+      "reuse_source_raw": {
+        "root": "/home/lixing/projects/QualifiedCProgramming/verification_runs/UserAddrCheck-20260909232431/UserAddrCheck-vc-proving-r1/reuse_source_raw",
+        "files": {
+          "goal_file": "7e3f9e694087e7f2c23e52fd6909f7cc7414b423a1fa5303172d444de530ed42",
+          "proof_manual_file": "3f4ce75a24b0410b4c47c2d5fe9fb086aadc2cdffa550c8ab64a7ea32eadc90b",
+          "formal_case_lib": null
+        }
+      },
+      "base_manifest_sha256": "4551bf7ec7c8f6b42233568ac6486484597ef493702ab8f51bd3ffbc1d2dc14a",
+      "group_workers_manifest_sha256": "f3fbb48ce7224eacbdaded48591d8400f9829ca094f0f967b33e5603e847a5e0",
+      "timing": {
+        "preparing": [
+          {
+            "started_at": "2026-09-09T15:34:49.350294Z",
+            "finished_at": "2026-09-09T15:35:02.841807Z",
+            "elapsed_seconds": 12.786195
+          }
+        ],
+        "parent-verify": [
+          {
+            "started_at": "2026-09-09T15:35:11.332986Z",
+            "finished_at": "2026-09-09T15:35:11.556212Z",
+            "elapsed_seconds": 0.214366
+          }
+        ]
+      },
+      "finished_at": "2026-09-09T15:35:11.556212Z",
+      "verified_result_sha256": "42f93b40de261cbb0ee37888a0f670476422a947612ba3c3986a9446960be477"
+    }
+  },
+  "annotation_session": {
+    "session_id": "UserAddrCheck-annotation-agent",
+    "status": "idle",
+    "current_attempt": "UserAddrCheck-annotation-r1-attempt-1",
+    "iteration_count": 1,
+    "owner": "annotation/UserAddrCheck-20260909232431"
+  },
+  "accepted_rounds": {
+    "annotation": {
+      "round": "UserAddrCheck-annotation-r1",
+      "attempt_id": "UserAddrCheck-annotation-r1-attempt-1",
+      "annotation_history_directory": "/home/lixing/projects/QualifiedCProgramming/verification_runs/UserAddrCheck-20260909232431/annotation_history/annotation-attempt1",
+      "source_version": "bc41e3b2d8310df891b15881cc1822cbcced8430cd6d230c85b92a323e822298",
+      "source_goal_version": "6169a38dadbdf99801f486e19197c01afb1ca25426854815b046ac9a2268c80b"
+    },
+    "vc-checking": {
+      "group_plan": "/home/lixing/projects/QualifiedCProgramming/reports/UserAddrCheck-20260909232431/group_plan.json",
+      "group_plan_sha256": "4ea5e45828cc630698c2b6dd78dec2319daead3354f31c205ee1912a8652faf2"
+    },
+    "vc-proving-preparing": {
+      "round": "UserAddrCheck-vc-proving-r1",
+      "attempt_id": "UserAddrCheck-vc-proving-r1",
+      "result_sha256": "42f93b40de261cbb0ee37888a0f670476422a947612ba3c3986a9446960be477"
+    }
+  },
+  "next_actions": [],
+  "waiting_for": [],
+  "current_blockers": [],
+  "final_candidate": {
+    "round": "UserAddrCheck-vc-proving-r1",
+    "proving_merged_result": "/home/lixing/projects/QualifiedCProgramming/reports/UserAddrCheck-20260909232431/rounds/UserAddrCheck-vc-proving-r1/proving_merged_result.json",
+    "result_sha256": "42f93b40de261cbb0ee37888a0f670476422a947612ba3c3986a9446960be477",
+    "proof_manual_sha256": "3f4ce75a24b0410b4c47c2d5fe9fb086aadc2cdffa550c8ab64a7ea32eadc90b",
+    "proving_merged_lib_sha256": null
+  },
+  "final_apply": {
+    "status": "passed",
+    "transaction_id": "dae6252b81a041e09730ac7e9dae68fc",
+    "applied_at": "2026-09-09T15:35:26.941686Z"
+  },
+  "final_check": {
+    "status": "passed",
+    "checked_at": "2026-09-09T15:35:50.036437Z",
+    "cleanup_removed_count": 0
+  },
+  "created_at": "2026-09-09T15:24:31.105699Z",
+  "updated_at": "2026-09-09T15:35:50.042265Z",
+  "final_apply_transaction": {
+    "transaction_id": "dae6252b81a041e09730ac7e9dae68fc",
+    "status": "completed",
+    "source_goal_version": "6169a38dadbdf99801f486e19197c01afb1ca25426854815b046ac9a2268c80b",
+    "records": [
+      {
+        "source": "/home/lixing/projects/QualifiedCProgramming/verification_runs/UserAddrCheck-20260909232431/UserAddrCheck-vc-proving-r1/proving_merged/UserAddrCheck_proof_manual.v",
+        "source_sha256": "3f4ce75a24b0410b4c47c2d5fe9fb086aadc2cdffa550c8ab64a7ea32eadc90b",
+        "target": "/home/lixing/projects/QualifiedCProgramming/Rocq/examples/osverify_qcp/cases/UserAddrCheck_proof_manual.v",
+        "relative_path": "Rocq/examples/osverify_qcp/cases/UserAddrCheck_proof_manual.v",
+        "existed": true,
+        "before_sha256": "3f4ce75a24b0410b4c47c2d5fe9fb086aadc2cdffa550c8ab64a7ea32eadc90b",
+        "backup": "/home/lixing/projects/QualifiedCProgramming/reports/UserAddrCheck-20260909232431/final-check/backup/dae6252b81a041e09730ac7e9dae68fc/Rocq/examples/osverify_qcp/cases/UserAddrCheck_proof_manual.v"
+      }
+    ],
+    "prepared_at": "2026-09-09T15:35:26.907961Z",
+    "backed_up_at": "2026-09-09T15:35:26.928361Z",
+    "completed_at": "2026-09-09T15:35:26.941675Z"
+  },
+  "finished_at": "2026-09-09T15:35:50.036437Z"
+}

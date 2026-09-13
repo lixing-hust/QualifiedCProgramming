@@ -1,0 +1,45 @@
+{"at": "2026-09-09T16:01:44.478091Z", "details": {"run_id": "ucos_Grant_Cap-20260910000144"}, "event": "run-initialized", "phase": "intake"}
+{"at": "2026-09-09T16:02:08.175375Z", "details": {"actions": ["spawn-ucos_Grant_Cap-annotation-r1-attempt-1"]}, "event": "controller-step", "phase": "annotation"}
+{"at": "2026-09-09T16:02:15.525793Z", "details": {"action": "spawn-ucos_Grant_Cap-annotation-r1-attempt-1", "attempt": "ucos_Grant_Cap-annotation-r1-attempt-1", "owner": "annotation/ucos_Grant_Cap-20260910000144"}, "event": "attempt-claimed", "phase": "annotation"}
+{"at": "2026-09-09T16:12:28.595345Z", "details": {"attempt": "ucos_Grant_Cap-annotation-r1-attempt-1", "owner": "annotation/ucos_Grant_Cap-20260910000144"}, "event": "delivery-finalized", "phase": "annotation"}
+{"at": "2026-09-09T16:12:28.646454Z", "details": {"attempt": "ucos_Grant_Cap-annotation-r1-attempt-1", "errors": [], "status": "blocked"}, "event": "round-attempt-validated", "phase": "annotation"}
+{"at": "2026-09-09T16:12:36.389497Z", "details": {"actions": ["annotation-feedback-ucos_Grant_Cap-annotation-r1-attempt-1"]}, "event": "controller-step", "phase": "annotation"}
+{"at": "2026-09-09T16:12:47.578016Z", "details": {"annotation_session": "ucos_Grant_Cap-annotation-agent", "phase": "annotation", "previous": "ucos_Grant_Cap-annotation-r1-attempt-1", "reason": "annotation-blocked"}, "event": "round-retried", "phase": "annotation"}
+{"at": "2026-09-09T16:13:57.936970Z", "details": {"actions": ["summarize-ucos_Grant_Cap-annotation-r2-attempt-1"]}, "event": "controller-step", "phase": "annotation"}
+{"at": "2026-09-09T16:14:05.057974Z", "details": {"attempt": "ucos_Grant_Cap-annotation-r2-attempt-1", "input_sha256": "eb9d1589a948fbbf0615d17056b7842ae3f6218756df885b969d26302a546243"}, "event": "annotation-summary-ready", "phase": "annotation"}
+{"at": "2026-09-09T16:14:13.639322Z", "details": {"actions": ["append-ucos_Grant_Cap-annotation-r2-attempt-1"]}, "event": "controller-step", "phase": "annotation"}
+{"at": "2026-09-09T16:14:21.956976Z", "details": {"action": "append-ucos_Grant_Cap-annotation-r2-attempt-1", "attempt": "ucos_Grant_Cap-annotation-r2-attempt-1", "owner": "annotation/ucos_Grant_Cap-20260910000144"}, "event": "attempt-claimed", "phase": "annotation"}
+{"at": "2026-09-09T16:37:27.187063Z", "details": {"attempt": "ucos_Grant_Cap-annotation-r2-attempt-1", "owner": "annotation/ucos_Grant_Cap-20260910000144"}, "event": "delivery-finalized", "phase": "annotation"}
+{"at": "2026-09-09T16:37:27.253697Z", "details": {"attempt": "ucos_Grant_Cap-annotation-r2-attempt-1", "errors": [], "status": "ready-for-main-check"}, "event": "round-attempt-validated", "phase": "annotation"}
+{"at": "2026-09-09T16:37:50.044148Z", "details": {"actions": ["annotation-check-ucos_Grant_Cap-annotation-r2"]}, "event": "controller-step", "phase": "annotation"}
+{"at": "2026-09-09T16:37:58.329071Z", "details": {"round": "ucos_Grant_Cap-annotation-r2", "source_goal_version": "51b5934813470cdb1db977a8ee61ea7ab5adfe2fcb7afbe5f638f195220edadd"}, "event": "annotation-round-accepted", "phase": "annotation"}
+{"at": "2026-09-09T16:38:07.520123Z", "details": {"actions": ["dune-build"]}, "event": "controller-step", "phase": "dune-build"}
+{"at": "2026-09-09T16:38:13.365577Z", "details": {"source_goal_version": "51b5934813470cdb1db977a8ee61ea7ab5adfe2fcb7afbe5f638f195220edadd"}, "event": "dune-preparation-started", "phase": "dune-build"}
+{"at": "2026-09-09T16:38:15.427904Z", "details": {"dependency_count": 143, "snapshot_digest": "3bbb9b09c17651f70f55ebcc7b32013f9f9c3296993dcc3aecf0e9156a9050b2"}, "event": "dune-preparation-passed", "phase": "dune-build"}
+{"at": "2026-09-09T16:38:21.628220Z", "details": {"actions": ["spawn-ucos_Grant_Cap-vc-checking-r1-attempt-1"]}, "event": "controller-step", "phase": "vc-checking"}
+{"at": "2026-09-09T16:38:30.433723Z", "details": {"action": "spawn-ucos_Grant_Cap-vc-checking-r1-attempt-1", "attempt": "ucos_Grant_Cap-vc-checking-r1-attempt-1", "owner": "vc-checking/ucos_Grant_Cap-vc-checking-r1-attempt-1"}, "event": "attempt-claimed", "phase": "vc-checking"}
+{"at": "2026-09-09T16:44:01.920205Z", "details": {"attempt": "ucos_Grant_Cap-vc-checking-r1-attempt-1", "owner": "vc-checking/ucos_Grant_Cap-vc-checking-r1-attempt-1"}, "event": "delivery-finalized", "phase": "vc-checking"}
+{"at": "2026-09-09T16:44:01.954569Z", "details": {"attempt": "ucos_Grant_Cap-vc-checking-r1-attempt-1", "errors": [], "status": "blocked"}, "event": "round-attempt-validated", "phase": "vc-checking"}
+{"at": "2026-09-09T16:44:09.976444Z", "details": {"actions": ["annotation-feedback-ucos_Grant_Cap-vc-checking-r1-attempt-1"]}, "event": "controller-step", "phase": "vc-checking"}
+{"at": "2026-09-09T16:44:20.271671Z", "details": {"annotation_session": "ucos_Grant_Cap-annotation-agent", "phase": "annotation", "previous": "ucos_Grant_Cap-vc-checking-r1-attempt-1", "reason": "vc-checking-annotation-gap"}, "event": "round-retried", "phase": "annotation"}
+{"at": "2026-09-09T16:45:08.020032Z", "details": {"actions": ["summarize-ucos_Grant_Cap-annotation-r3-attempt-1"]}, "event": "controller-step", "phase": "annotation"}
+{"at": "2026-09-09T16:45:16.797262Z", "details": {"attempt": "ucos_Grant_Cap-annotation-r3-attempt-1", "input_sha256": "c9c112ff66a9989e7222c63472f0d21433ba35c2407a9ae50ef4692d9c531a75"}, "event": "annotation-summary-ready", "phase": "annotation"}
+{"at": "2026-09-09T16:45:22.788160Z", "details": {"actions": ["append-ucos_Grant_Cap-annotation-r3-attempt-1"]}, "event": "controller-step", "phase": "annotation"}
+{"at": "2026-09-09T16:45:29.615080Z", "details": {"action": "append-ucos_Grant_Cap-annotation-r3-attempt-1", "attempt": "ucos_Grant_Cap-annotation-r3-attempt-1", "owner": "annotation/ucos_Grant_Cap-20260910000144"}, "event": "attempt-claimed", "phase": "annotation"}
+{"at": "2026-09-09T16:51:17.662711Z", "details": {"attempt": "ucos_Grant_Cap-annotation-r3-attempt-1", "owner": "annotation/ucos_Grant_Cap-20260910000144"}, "event": "delivery-finalized", "phase": "annotation"}
+{"at": "2026-09-09T16:51:17.731955Z", "details": {"attempt": "ucos_Grant_Cap-annotation-r3-attempt-1", "errors": [], "status": "ready-for-main-check"}, "event": "round-attempt-validated", "phase": "annotation"}
+{"at": "2026-09-09T16:51:42.822449Z", "details": {"actions": ["annotation-check-ucos_Grant_Cap-annotation-r3"]}, "event": "controller-step", "phase": "annotation"}
+{"at": "2026-09-09T16:51:52.246491Z", "details": {"round": "ucos_Grant_Cap-annotation-r3", "source_goal_version": "fb294e775ae861ec89b219936aace68e40386fac0f4d6b103a38a087704c0ebc"}, "event": "annotation-round-accepted", "phase": "annotation"}
+{"at": "2026-09-09T16:51:59.966915Z", "details": {"actions": ["dune-build"]}, "event": "controller-step", "phase": "dune-build"}
+{"at": "2026-09-09T16:52:07.070595Z", "details": {"source_goal_version": "fb294e775ae861ec89b219936aace68e40386fac0f4d6b103a38a087704c0ebc"}, "event": "dune-preparation-started", "phase": "dune-build"}
+{"at": "2026-09-09T16:52:08.775816Z", "details": {"dependency_count": 143, "snapshot_digest": "3403c9a0d8536c3730d0a5756ad7baf03fcff425d085c777112554f0fb768091"}, "event": "dune-preparation-passed", "phase": "dune-build"}
+{"at": "2026-09-09T16:52:15.704766Z", "details": {"witness_count": 0}, "event": "vc-checking-skipped", "phase": "vc-proving-preparing"}
+{"at": "2026-09-09T16:52:15.704773Z", "details": {"actions": ["vc-proving-preparing-ucos_Grant_Cap-vc-proving-r1"]}, "event": "controller-step", "phase": "vc-proving-preparing"}
+{"at": "2026-09-09T16:52:36.796856Z", "details": {"group_count": 0, "round": "ucos_Grant_Cap-vc-proving-r1"}, "event": "vc-proving-prepared", "phase": "vc-proving-preparing"}
+{"at": "2026-09-09T16:52:43.921963Z", "details": {"round": "ucos_Grant_Cap-vc-proving-r1"}, "event": "vc-proving-verified", "phase": "final-candidate-apply"}
+{"at": "2026-09-09T16:52:52.470099Z", "details": {"actions": ["final-candidate-apply"]}, "event": "controller-step", "phase": "final-candidate-apply"}
+{"at": "2026-09-09T16:52:59.195811Z", "details": {"transaction_id": "7422c9ea92874efd883845b21815e153"}, "event": "final-apply-transaction-prepared", "phase": "final-candidate-apply"}
+{"at": "2026-09-09T16:52:59.229115Z", "details": {"transaction_id": "7422c9ea92874efd883845b21815e153"}, "event": "final-apply-backups-sealed", "phase": "final-candidate-apply"}
+{"at": "2026-09-09T16:52:59.252424Z", "details": {"files": ["Rocq/examples/osverify_qcp/cases/ucos_Grant_Cap_proof_manual.v"]}, "event": "final-candidate-applied", "phase": "final-check"}
+{"at": "2026-09-09T16:53:20.840578Z", "details": {"actions": ["final-check"]}, "event": "controller-step", "phase": "final-check"}
+{"at": "2026-09-09T16:53:27.848404Z", "details": {"failure_classes": []}, "event": "final-check-passed", "phase": "done"}

@@ -1,0 +1,198 @@
+{
+  "run": {
+    "status": "completed",
+    "phase": "done",
+    "created_at": "2026-09-09T16:01:44.474539Z",
+    "finished_at": "2026-09-09T16:53:27.848380Z",
+    "elapsed_seconds": 3103.373841
+  },
+  "annotation_attempts": [
+    {
+      "attempt": "annotation-attempt1",
+      "round": "ucos_Grant_Cap-annotation-r1",
+      "status": "superseded",
+      "created_at": "2026-09-09T16:02:08.163986Z",
+      "finished_at": "2026-09-09T16:12:28.663487Z",
+      "elapsed_seconds": 620.499501,
+      "stages": [
+        {
+          "name": "annotation-work",
+          "started_at": "2026-09-09T16:02:15.525760Z",
+          "finished_at": "2026-09-09T16:12:28.575078Z",
+          "elapsed_seconds": 613.049318
+        },
+        {
+          "name": "symexec",
+          "started_at": "2026-09-09T16:11:32.104595Z",
+          "finished_at": "2026-09-09T16:11:32.116595Z",
+          "elapsed_seconds": 0.012
+        },
+        {
+          "name": "controller-validation",
+          "started_at": "2026-09-09T16:12:28.554504Z",
+          "finished_at": "2026-09-09T16:12:28.663487Z",
+          "elapsed_seconds": 0.102861
+        }
+      ]
+    },
+    {
+      "attempt": "annotation-attempt2",
+      "round": "ucos_Grant_Cap-annotation-r2",
+      "status": "stale",
+      "created_at": "2026-09-09T16:12:47.567406Z",
+      "finished_at": "2026-09-09T16:38:15.455213Z",
+      "elapsed_seconds": 1527.887807,
+      "stages": [
+        {
+          "name": "annotation-work",
+          "started_at": "2026-09-09T16:14:21.956953Z",
+          "finished_at": "2026-09-09T16:37:27.162403Z",
+          "elapsed_seconds": 1385.20545
+        },
+        {
+          "name": "symexec",
+          "started_at": "2026-09-09T16:17:26.473118Z",
+          "calls": 11,
+          "finished_at": "2026-09-09T16:37:58.125939Z",
+          "elapsed_seconds": 0.495
+        },
+        {
+          "name": "clean-output-freshness",
+          "started_at": "2026-09-09T16:37:58.237021Z",
+          "finished_at": "2026-09-09T16:37:58.329021Z",
+          "elapsed_seconds": 0.092
+        },
+        {
+          "name": "annotation-checking",
+          "started_at": "2026-09-09T16:33:04.524862Z",
+          "finished_at": "2026-09-09T16:36:47.588285Z",
+          "elapsed_seconds": 223.063423
+        },
+        {
+          "name": "controller-validation",
+          "started_at": "2026-09-09T16:37:27.139427Z",
+          "finished_at": "2026-09-09T16:37:27.280161Z",
+          "elapsed_seconds": 0.131781
+        },
+        {
+          "name": "controller-acceptance-check",
+          "started_at": "2026-09-09T16:37:58.012863Z",
+          "finished_at": "2026-09-09T16:37:58.352141Z",
+          "elapsed_seconds": 0.330759
+        },
+        {
+          "name": "dune-build",
+          "started_at": "2026-09-09T16:38:13.352909Z",
+          "finished_at": "2026-09-09T16:38:15.455213Z",
+          "elapsed_seconds": 2.092367
+        }
+      ]
+    },
+    {
+      "attempt": "annotation-attempt3",
+      "round": "ucos_Grant_Cap-annotation-r3",
+      "status": "accepted",
+      "created_at": "2026-09-09T16:44:20.257293Z",
+      "finished_at": "2026-09-09T16:52:08.806493Z",
+      "elapsed_seconds": 468.5492,
+      "stages": [
+        {
+          "name": "annotation-work",
+          "started_at": "2026-09-09T16:45:29.615058Z",
+          "finished_at": "2026-09-09T16:51:17.635373Z",
+          "elapsed_seconds": 348.020315
+        },
+        {
+          "name": "symexec",
+          "started_at": "2026-09-09T16:49:02.650172Z",
+          "calls": 2,
+          "finished_at": "2026-09-09T16:51:52.016955Z",
+          "elapsed_seconds": 0.291
+        },
+        {
+          "name": "clean-output-freshness",
+          "started_at": "2026-09-09T16:51:52.113443Z",
+          "finished_at": "2026-09-09T16:51:52.246443Z",
+          "elapsed_seconds": 0.133
+        },
+        {
+          "name": "annotation-checking",
+          "started_at": "2026-09-09T16:49:47.394498Z",
+          "finished_at": "2026-09-09T16:50:45.683890Z",
+          "elapsed_seconds": 58.289392
+        },
+        {
+          "name": "controller-validation",
+          "started_at": "2026-09-09T16:51:17.606803Z",
+          "finished_at": "2026-09-09T16:51:17.766177Z",
+          "elapsed_seconds": 0.145437
+        },
+        {
+          "name": "controller-acceptance-check",
+          "started_at": "2026-09-09T16:51:51.855968Z",
+          "finished_at": "2026-09-09T16:51:52.275797Z",
+          "elapsed_seconds": 0.407698
+        },
+        {
+          "name": "dune-build",
+          "started_at": "2026-09-09T16:52:07.056127Z",
+          "finished_at": "2026-09-09T16:52:08.806493Z",
+          "elapsed_seconds": 1.738014
+        }
+      ]
+    }
+  ],
+  "rounds": [
+    {
+      "round": "ucos_Grant_Cap-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "stale",
+      "created_at": "2026-09-09T16:38:21.628149Z",
+      "finished_at": "2026-09-09T16:44:03.281593Z",
+      "elapsed_seconds": 341.653444,
+      "stages": [
+        {
+          "name": "witness-analysis",
+          "started_at": "2026-09-09T16:38:30.433701Z",
+          "finished_at": "2026-09-09T16:44:01.920188Z",
+          "elapsed_seconds": 331.486487
+        },
+        {
+          "name": "controller-validation",
+          "started_at": "2026-09-09T16:44:01.903345Z",
+          "finished_at": "2026-09-09T16:44:03.281593Z",
+          "elapsed_seconds": 0.066468
+        }
+      ]
+    },
+    {
+      "round": "ucos_Grant_Cap-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "verified",
+      "created_at": "2026-09-09T16:52:15.704740Z",
+      "finished_at": "2026-09-09T16:52:43.959153Z",
+      "elapsed_seconds": 28.254413,
+      "stages": [
+        {
+          "name": "preparing",
+          "started_at": "2026-09-09T16:52:22.257627Z",
+          "finished_at": "2026-09-09T16:52:36.830871Z",
+          "elapsed_seconds": 13.292231
+        },
+        {
+          "name": "parent-verify",
+          "started_at": "2026-09-09T16:52:43.707942Z",
+          "finished_at": "2026-09-09T16:52:43.959153Z",
+          "elapsed_seconds": 0.236312
+        }
+      ]
+    }
+  ],
+  "finalization": {
+    "status": "passed",
+    "started_at": "2026-09-09T16:52:43.959153Z",
+    "applied_at": "2026-09-09T16:52:59.252340Z",
+    "finished_at": "2026-09-09T16:53:27.848380Z",
+    "elapsed_seconds": 43.889227
+  }
+}

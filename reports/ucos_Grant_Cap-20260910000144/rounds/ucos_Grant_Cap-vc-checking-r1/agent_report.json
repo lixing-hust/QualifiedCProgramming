@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "blocker": {
+    "failure_class": "annotation-gap",
+    "kind": "missing-annotation-premise",
+    "location": "proof_of_ucos_Grant_Cap_return_wit_1 and proof_of_ucos_Grant_Cap_return_wit_2",
+    "message": "The return obligations universally quantify cap_Class_pre and destTask_Prio_pre independently of cap_Class and destTask_Prio. Without equality bridges, current bounds cannot establish the required pre-variable bounds and ownership at current table/slot addresses cannot entail ownership at the pre-variable addresses; all three split goals for return_wit_1 and both whole return VCs are therefore unprovable.",
+    "repair_boundary": "Repair the ucos_Grant_Cap return annotation/contract so the relevant exits preserve cap_Class_pre = cap_Class and destTask_Prio_pre = destTask_Prio (or equivalent facts) in the generated obligations, then regenerate the formal files."
+  }
+}

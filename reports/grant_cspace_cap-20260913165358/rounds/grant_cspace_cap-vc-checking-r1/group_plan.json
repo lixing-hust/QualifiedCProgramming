@@ -1,0 +1,86 @@
+{
+  "groups": [
+    {
+      "id": "cap-update-success",
+      "estimated_difficulty": 3,
+      "witnesses": [
+        {
+          "name": "proof_of_ucos_Grant_Cap_return_wit_1_valid_target",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_ucos_Grant_Cap_return_wit_1_valid_target_split_goal_spatial": "Introduce the binders, normalize dest, class, and right with the pre-state equalities, then cancel the unchanged task-table cell and the three updated capability fields modulo separating-conjunction reassociation."
+          }
+        },
+        {
+          "name": "proof_of_grant_cspace_cap_return_wit_11_callee_success",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Select the running-zero success disjunct, derive running = 0 from the 32-bit-zero premise and the byte-valued OSRunning cell, normalize the CapParent address, and cancel the preserved scheduler, target-table, and updated capability resources."
+        }
+      ]
+    },
+    {
+      "id": "active-return-projections",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_grant_cspace_cap_return_wit_1",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_grant_cspace_cap_return_wit_1_split_goal_1": "Prove running is nonzero by contradiction: running = 0 reduces unsigned_last_nbits running 32 to 0, contradicting PreH3."
+          }
+        },
+        {
+          "name": "proof_of_grant_cspace_cap_return_wit_2",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_grant_cspace_cap_return_wit_2_split_goal_1": "Prove running is nonzero by contradiction: running = 0 reduces unsigned_last_nbits running 32 to 0, contradicting PreH3."
+          }
+        },
+        {
+          "name": "proof_of_grant_cspace_cap_return_wit_3",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_grant_cspace_cap_return_wit_3_split_goal_1": "Prove running is nonzero by contradiction: running = 0 reduces unsigned_last_nbits running 32 to 0, contradicting PreH3."
+          }
+        }
+      ]
+    },
+    {
+      "id": "grant-bit-clear-returns",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_grant_cspace_cap_return_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose the disjunct justified by Z.land grant_right 64 = 0, derive running <> 0 from its nonzero low-32-bit premise, rewrite destTask_Prio_pre to dest, and cancel the scheduler and CapParent frame."
+        },
+        {
+          "name": "proof_of_grant_cspace_cap_return_wit_5",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose the grant-bit-clear disjunct for a nonnull target, derive running <> 0, normalize the CapParent index, and cancel both the common scheduler frame and the unchanged target table/capability cells."
+        },
+        {
+          "name": "proof_of_grant_cspace_cap_return_wit_6",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose the grant-bit-clear disjunct for the null target, derive running <> 0, normalize the indexed addresses, and cancel the common scheduler, CapParent, and destination-table resources."
+        }
+      ]
+    },
+    {
+      "id": "callee-error-returns",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_grant_cspace_cap_return_wit_7_callee_null",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Select the running-zero, null-target, class-valid disjunct; derive running = 0 from the zero low-32-bit premise and byte-valued OSRunning ownership, normalize the destination table and CapParent indices, and cancel the full frame."
+        },
+        {
+          "name": "proof_of_grant_cspace_cap_return_wit_8_callee_invalid",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Select the running-zero, class-invalid disjunct; derive running = 0 from the zero low-32-bit premise and byte-valued OSRunning ownership, then cancel the scheduler and CapParent frame after index normalization."
+        }
+      ]
+    }
+  ]
+}

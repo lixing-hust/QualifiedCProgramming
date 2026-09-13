@@ -1,0 +1,26 @@
+{
+  "base_manifest_sha256": "3b5fda31e0ae2fef38f799ec19a7bd121058de71d58e579236cf213a8fed462d",
+  "group_plan": "rounds/grant_cspace_cap-vc-checking-r1/group_plan.json",
+  "group_plan_sha256": "ab1fa882fc064e9ea72ffbe235b1c1f1462edb7abf170a5ec6d0d74ece3df4d7",
+  "public_helper_snapshot_sha256": "d1dd6612ab2c2ca4fcb706e953f0d05ed1e858e7308c8a5d8dce3d87c228be6d",
+  "groups": [
+    {
+      "id": "cap-update-success"
+    },
+    {
+      "id": "active-return-projections"
+    },
+    {
+      "id": "grant-bit-clear-returns"
+    },
+    {
+      "id": "callee-error-returns"
+    }
+  ],
+  "dispatch_order": [
+    "cap-update-success",
+    "grant-bit-clear-returns",
+    "callee-error-returns",
+    "active-return-projections"
+  ]
+}

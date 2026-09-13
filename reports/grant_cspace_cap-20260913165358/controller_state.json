@@ -1,0 +1,923 @@
+{
+  "generation": 90,
+  "run_id": "grant_cspace_cap-20260913165358",
+  "case": "grant_cspace_cap",
+  "phase": "done",
+  "main_root": "/home/lixing/projects/QualifiedCProgramming",
+  "run_root": "/home/lixing/projects/QualifiedCProgramming/verification_runs/grant_cspace_cap-20260913165358",
+  "report_root": "/home/lixing/projects/QualifiedCProgramming/reports/grant_cspace_cap-20260913165358",
+  "target_files": {
+    "c_file": "QCP_examples/osverify_qcp/cases/ucos_Grant_Cap.c",
+    "formal_directory": "Rocq/examples/osverify_qcp/cases",
+    "formal_case_lib": "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_lib.v",
+    "goal_file": "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_goal.v",
+    "proof_auto_file": "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_proof_auto.v",
+    "proof_manual_file": "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_proof_manual.v",
+    "goal_check_file": "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_goal_check.v",
+    "case_name": "grant_cspace_cap",
+    "active_case_theory": "SimpleC.EE.osverify_qcp.cases"
+  },
+  "public_helper_lemma_lib": {
+    "path": "/home/lixing/projects/QualifiedCProgramming/verification_runs/grant_cspace_cap-20260913165358/public_helper_lemma_lib.v",
+    "sha256": "d1dd6612ab2c2ca4fcb706e953f0d05ed1e858e7308c8a5d8dce3d87c228be6d",
+    "declaration_count": 0,
+    "helper_count": 0
+  },
+  "problem_context": {
+    "problem_statement": "Verify a sequential C translation of osverify grant_cspace_cap_impl in the same case as the already verified ucos_Grant_Cap callee.",
+    "target_function": "grant_cspace_cap",
+    "expected_behavior": "Preserve the original return-code branches and call ucos_Grant_Cap; treat ENTER_CRITICAL and EXIT_CRITICAL only as sequential no-op boundaries and make no concurrency claim.",
+    "input_output_contract": "The wrapper validates destTask_Prio, checks the current task CSpace and grant authorization, invokes ucos_Grant_Cap when authorized, and returns the corresponding original status code while preserving or updating the shared capability state according to the callee result.",
+    "spec_hint": [
+      "Reuse the existing ucos_Grant_Cap implementation and contract as the callee; strengthen or modify that contract when necessary so the wrapper call composes.",
+      "Relate the wrapper specification to the original osverify grant_cspace_cap_spec and keep enough shared memory state for later kernel-function verification.",
+      "Sequential verification only: do not model or claim interrupt exclusion in this run."
+    ],
+    "reference_case_hints": [
+      "Existing ucos_Grant_Cap case and run ucos_Grant_Cap-20260910000144."
+    ]
+  },
+  "spec_freeze": null,
+  "max_compact_attempts": 3,
+  "max_witnesses_per_group": 12,
+  "max_parallel_group_workers": 5,
+  "source_version": {
+    "digest": "17a2aa0c769d115791367f95407ebf238d07c829e2d73586212b7bd104fd130f",
+    "files": [
+      {
+        "relative_path": "QCP_examples/osverify_qcp/cases/ucos_Grant_Cap.c",
+        "sha256": "01789904e84a6efc60fc8ea1b3e56480ff9540efe95ff5e85eb9f63141f601be",
+        "state": "present",
+        "role": "target-c-annotated"
+      },
+      {
+        "relative_path": "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_lib.v",
+        "sha256": null,
+        "state": "missing",
+        "role": "formal-case-lib"
+      }
+    ]
+  },
+  "source_goal_version": {
+    "digest": "9862b3b350d1fe195616454977488f78fe2b63f270792d9c9b4416638594df95",
+    "generated_files": [
+      {
+        "relative_path": "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_goal.v",
+        "role": "goal_file",
+        "state": "present",
+        "sha256": "450569abd6c97b1cdb2b13806f6215049a12ff9a07e9f854770a82cb9c7173f6"
+      },
+      {
+        "relative_path": "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_proof_auto.v",
+        "role": "proof_auto_file",
+        "state": "present",
+        "sha256": "0fc2413998344d10e0791ad983e0065f3ac114233cff4e64e794a387798cdf5a"
+      },
+      {
+        "relative_path": "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_proof_manual.v",
+        "role": "proof_manual_file",
+        "state": "present",
+        "sha256": "c32432d34ddcf99842a2cdd94f948a81df10cdd393dd52deb2986ec6a034715b"
+      },
+      {
+        "relative_path": "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_goal_check.v",
+        "role": "goal_check_file",
+        "state": "present",
+        "sha256": "a7d9f8837a933b7dfb1d0c332287e8c1f9ade0b256739f001c91adf4c907edf4"
+      }
+    ],
+    "target_witnesses": [
+      "proof_of_ucos_Grant_Cap_return_wit_1_valid_target",
+      "proof_of_grant_cspace_cap_return_wit_1",
+      "proof_of_grant_cspace_cap_return_wit_2",
+      "proof_of_grant_cspace_cap_return_wit_3",
+      "proof_of_grant_cspace_cap_return_wit_4",
+      "proof_of_grant_cspace_cap_return_wit_5",
+      "proof_of_grant_cspace_cap_return_wit_6",
+      "proof_of_grant_cspace_cap_return_wit_7_callee_null",
+      "proof_of_grant_cspace_cap_return_wit_8_callee_invalid",
+      "proof_of_grant_cspace_cap_return_wit_11_callee_success"
+    ],
+    "witness_statement_hashes": {
+      "proof_of_ucos_Grant_Cap_return_wit_1_valid_target": "e283e271856685eb871b24a276b43dea472c762f8dae3078c457f11e7b671c62",
+      "proof_of_grant_cspace_cap_return_wit_1": "800c014862aac3b6a842f151a9ce948d9eb5cbd31f5b01b5d7bad4a398f8d008",
+      "proof_of_grant_cspace_cap_return_wit_2": "11b6e63a1fa7918f56676f13fda7cbff24daa67bcca0facd8df2f505c6dccda7",
+      "proof_of_grant_cspace_cap_return_wit_3": "ffbb998685f87a0c64d42a43d712f64543a6a6c063148d6f40817c97968ebe96",
+      "proof_of_grant_cspace_cap_return_wit_4": "017894d06a7564e3620d98967a01da42c1f940927aebe21eb3a85166c7565087",
+      "proof_of_grant_cspace_cap_return_wit_5": "c3bfe2aa8c746ccd0ea9d78a00ab379927b287db93ebca617e6f5ab114de15f6",
+      "proof_of_grant_cspace_cap_return_wit_6": "64d559e68a327e66c5a6e7dea520bb65038fe481c3a8e7f11ba385fe4e1525f5",
+      "proof_of_grant_cspace_cap_return_wit_7_callee_null": "e6940a3fb0136ef0e5144b2c2dc331f010067eb0e28f2bb629461a70b883948b",
+      "proof_of_grant_cspace_cap_return_wit_8_callee_invalid": "8781383f889dce48ba790386d850a8337e5ea8e520d6608bd3887a3d856a75ce",
+      "proof_of_grant_cspace_cap_return_wit_11_callee_success": "43f999c351fe2fc05f903790a4d0c370e7ffedb37d623199d4af8b0b3443c232"
+    },
+    "witness_goal_definition_hashes": {
+      "proof_of_ucos_Grant_Cap_return_wit_1_valid_target": "6d64fe433dbec7a8459eefa0b32bef7ecf8d59e504cdd5318c967a02014dc07f",
+      "proof_of_grant_cspace_cap_return_wit_1": "e9a5009bd029e075a900c0d6ae48a0109020cd6b974cbb252e5127b885da0c96",
+      "proof_of_grant_cspace_cap_return_wit_2": "00c44986d20f1c20ba49e1f04314e16ce07978b82f588914ac34096d256dab63",
+      "proof_of_grant_cspace_cap_return_wit_3": "e70e2d4e447b88ef658ec9db03b9965a1f9e01f05034114e6d9eebd8508bd345",
+      "proof_of_grant_cspace_cap_return_wit_4": "67da283ce7e42179d6f1a741e11ce1521ef0ed92cf085d05eae17ab58e57d3a7",
+      "proof_of_grant_cspace_cap_return_wit_5": "d808938f7c87c4b5435f79fc1ff0d70ea5db3d000eecb54f9c71fb37cd2c6acf",
+      "proof_of_grant_cspace_cap_return_wit_6": "19bc94573bc066ca121970ce3a975ea5fedad51cefd2ab6c0ae1903dc081a8e0",
+      "proof_of_grant_cspace_cap_return_wit_7_callee_null": "fa84464a7558a6d4182df71e8d727768d7a5f741f25c0346bc4a37508f6a89fb",
+      "proof_of_grant_cspace_cap_return_wit_8_callee_invalid": "1ac07f03ffba6c636610fa5e4aeb33f1b9280f7d93fb0a9d62d9e58dc2bce02a",
+      "proof_of_grant_cspace_cap_return_wit_11_callee_success": "60da6544cb771fba9ca918e42e1e710321d1ed107fdaf24aa613fdcdc5c94998"
+    },
+    "split_goals": {
+      "proof_of_ucos_Grant_Cap_return_wit_1_valid_target": [
+        {
+          "name": "proof_of_ucos_Grant_Cap_return_wit_1_valid_target_split_goal_spatial",
+          "statement_hash": "5a809d655c62eed020cd36eebee809b80d5257fdd2bf49fca12731d9c42e1e81",
+          "goal_symbol": "ucos_Grant_Cap_return_wit_1_valid_target_split_goal_spatial",
+          "goal_definition_hash": "ee64145f163064784a4289de9dbcbd73862144f208d84ae0bce63a710cd77777"
+        }
+      ],
+      "proof_of_grant_cspace_cap_return_wit_1": [
+        {
+          "name": "proof_of_grant_cspace_cap_return_wit_1_split_goal_1",
+          "statement_hash": "da65243064cbdbad9ee8a9fa6d31c30b4401904533ebcbcee9c7bc6c27d19538",
+          "goal_symbol": "grant_cspace_cap_return_wit_1_split_goal_1",
+          "goal_definition_hash": "ed7133237eb9350478716817b3ecf92915ddd5c1d49c43b764fd157b3e8c0107"
+        }
+      ],
+      "proof_of_grant_cspace_cap_return_wit_2": [
+        {
+          "name": "proof_of_grant_cspace_cap_return_wit_2_split_goal_1",
+          "statement_hash": "0eff3e8b702bf804b5350696c0ee64b31d211ee94da920e7a21d4033c5bd99b5",
+          "goal_symbol": "grant_cspace_cap_return_wit_2_split_goal_1",
+          "goal_definition_hash": "0d3db28fa66ba38ec14abadb2f6a1eb8e23f11de14e650d369ba3ce998a38879"
+        }
+      ],
+      "proof_of_grant_cspace_cap_return_wit_3": [
+        {
+          "name": "proof_of_grant_cspace_cap_return_wit_3_split_goal_1",
+          "statement_hash": "ffbe3c618ccacd8335f942d7e9814cf98dbf7aa3dcefac845781319d81c0980d",
+          "goal_symbol": "grant_cspace_cap_return_wit_3_split_goal_1",
+          "goal_definition_hash": "ca5f7275bdd1031345c10bfb82a03eaefe24dc8bce426a294fcb75141b3d2902"
+        }
+      ],
+      "proof_of_grant_cspace_cap_return_wit_4": [],
+      "proof_of_grant_cspace_cap_return_wit_5": [],
+      "proof_of_grant_cspace_cap_return_wit_6": [],
+      "proof_of_grant_cspace_cap_return_wit_7_callee_null": [],
+      "proof_of_grant_cspace_cap_return_wit_8_callee_invalid": [],
+      "proof_of_grant_cspace_cap_return_wit_11_callee_success": []
+    }
+  },
+  "dune_preparation": {
+    "status": "passed",
+    "build_mode": "makefile",
+    "source_goal_version": "9862b3b350d1fe195616454977488f78fe2b63f270792d9c9b4416638594df95",
+    "target": "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_goal_check.vo",
+    "build_root": ".",
+    "make_executable": "/usr/bin/make",
+    "coqc_executable": "/home/lixing/.opam/coq8201/bin/coqc",
+    "coqdep_executable": "/home/lixing/.opam/coq8201/bin/coqdep",
+    "run_makefile": "verification_runs/grant_cspace_cap-20260913165358/Makefile",
+    "run_makefile_sha256": "243fa0f80d039f391841ccc3c59e8e563878c9f23ca7a83c56bc49a6517485db",
+    "snapshot": "verification_runs/grant_cspace_cap-20260913165358/makefile_dependency_snapshot.json",
+    "snapshot_sha256": "5cb762ed7cb101fc3dc002dbeff3f889f0bb90c0729590bc720c7e601366b940",
+    "dependency_digest": "00c3795b161de16d5c34b630e1f7c3faaf532f6390657567fc1de3da4cc49c03",
+    "source_digest": "9f646d030da412bd2e3536e3e89fc6b4c488265b07417f9e951cbdcf61ae109c",
+    "artifact_digest": "19a6ee3c19c4ae39c66227088e41dbfa8000bd0e679e3e9d1eddf1d288599118",
+    "configuration_digest": "e168e3d3ec3ac6fc2a2a4a859a13ca33856035fba35d65747c60051798e550de",
+    "base_artifact_count": 143,
+    "current_source_count": 4,
+    "rebuilt_count": 0,
+    "dependency_metrics": {
+      "status": "resolved",
+      "strategy": "breadth-batched-coqdep",
+      "batch_count": 6,
+      "coqdep_process_count": 6,
+      "node_count": 147,
+      "source_count": 147,
+      "elapsed_seconds": 1.287616
+    },
+    "current_cleanup": {
+      "status": "passed",
+      "removed_count": 0,
+      "first_removed": null
+    },
+    "make_seconds": 0.00471,
+    "returncode": 0,
+    "elapsed_seconds": 1.697187
+  },
+  "rounds": {
+    "grant_cspace_cap-annotation-r1": {
+      "phase": "annotation",
+      "current_attempt": "grant_cspace_cap-annotation-r1-attempt-1"
+    },
+    "grant_cspace_cap-annotation-r2": {
+      "phase": "annotation",
+      "current_attempt": "grant_cspace_cap-annotation-r2-attempt-1"
+    },
+    "grant_cspace_cap-vc-checking-r1": {
+      "phase": "vc-checking",
+      "current_attempt": "grant_cspace_cap-vc-checking-r1-attempt-1"
+    },
+    "grant_cspace_cap-vc-proving-r1": {
+      "phase": "vc-proving-preparing",
+      "current_attempt": "grant_cspace_cap-vc-proving-r1"
+    }
+  },
+  "attempts": {
+    "grant_cspace_cap-annotation-r1-attempt-1": {
+      "attempt_id": "grant_cspace_cap-annotation-r1-attempt-1",
+      "round": "grant_cspace_cap-annotation-r1",
+      "phase": "annotation",
+      "status": "superseded",
+      "report_directory": "/home/lixing/projects/QualifiedCProgramming/reports/grant_cspace_cap-20260913165358/annotation-attempts/annotation-attempt1",
+      "input": "/home/lixing/projects/QualifiedCProgramming/reports/grant_cspace_cap-20260913165358/annotation-attempts/annotation-attempt1/agent_input.md",
+      "report": "/home/lixing/projects/QualifiedCProgramming/reports/grant_cspace_cap-20260913165358/annotation-attempts/annotation-attempt1/agent_report.json",
+      "output": "/home/lixing/projects/QualifiedCProgramming/reports/grant_cspace_cap-20260913165358/annotation-attempts/annotation-attempt1/agent_output.md",
+      "source_version": "23be5a390650f88cbc3b75cfc1854c6f531e1bf009800f424639a2d558dfa109",
+      "source_goal_version": null,
+      "allowed_write_paths": [
+        "QCP_examples/osverify_qcp/cases/ucos_Grant_Cap.c",
+        "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_goal.v",
+        "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_proof_auto.v",
+        "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_proof_manual.v",
+        "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_goal_check.v"
+      ],
+      "compact_attempt_index": 1,
+      "created_at": "2026-09-13T08:57:31.251985Z",
+      "annotation_history_directory": "/home/lixing/projects/QualifiedCProgramming/verification_runs/grant_cspace_cap-20260913165358/annotation_history/annotation-attempt1",
+      "annotation_iteration": 1,
+      "annotation_causal_retry_count": 0,
+      "feedback_sources": [],
+      "retry_reason": null,
+      "before_snapshot": {
+        "digest": "2fdc49aae8ea014c94ec87c1c7bd060df31e4c5d54c441dc11c1440988f114ea",
+        "file_count": 1,
+        "missing_count": 5
+      },
+      "input_sha256": "23aed65aa039825308346cd574c50429c971cc96f2bc6ee58b2e626d68c53ebd",
+      "owner": "annotation/grant_cspace_cap-20260913165358",
+      "started_at": "2026-09-13T08:57:40.192316Z",
+      "delivery": {
+        "action_id": "spawn-grant_cspace_cap-annotation-r1-attempt-1",
+        "kind": "spawn-annotation-agent",
+        "owner": "annotation/grant_cspace_cap-20260913165358",
+        "claimed_at": "2026-09-13T08:57:40.192316Z",
+        "finalized_at": "2026-09-13T09:13:00.230083Z"
+      },
+      "timing": {
+        "symexec": [
+          {
+            "started_at": "2026-09-13T09:11:21.621037Z",
+            "finished_at": "2026-09-13T09:11:21.775037Z",
+            "elapsed_seconds": 0.154
+          }
+        ],
+        "annotation-checking": [
+          {
+            "started_at": "2026-09-13T09:11:42.192316Z",
+            "finished_at": "2026-09-13T09:11:52.100454Z",
+            "elapsed_seconds": 9.908138
+          }
+        ],
+        "controller-validation": [
+          {
+            "started_at": "2026-09-13T09:13:00.207610Z",
+            "finished_at": "2026-09-13T09:13:00.326190Z",
+            "elapsed_seconds": 0.112489
+          }
+        ]
+      },
+      "returned_at": "2026-09-13T09:13:00.230083Z",
+      "artifact_sha256": {
+        "report": "76a636069900b84455cc86c186278a465d98d07002c9bfb2cc7eed96355ef5de",
+        "output": "4e6141e71ce43e1c3ed9d8b5ea1eae1fc132f90f62401f4ead4e14ac3b08c476"
+      },
+      "after_snapshot": {
+        "digest": "70c4556dd1b102fd854c0cc58f8324211409e37811edfafec2b17f20821bb29a",
+        "file_count": 5,
+        "missing_count": 1
+      },
+      "changed_files": [
+        "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_goal.v",
+        "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_proof_auto.v",
+        "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_proof_manual.v",
+        "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_goal_check.v"
+      ],
+      "finished_at": "2026-09-13T09:13:00.326190Z"
+    },
+    "grant_cspace_cap-annotation-r2-attempt-1": {
+      "attempt_id": "grant_cspace_cap-annotation-r2-attempt-1",
+      "round": "grant_cspace_cap-annotation-r2",
+      "phase": "annotation",
+      "status": "accepted",
+      "report_directory": "/home/lixing/projects/QualifiedCProgramming/reports/grant_cspace_cap-20260913165358/annotation-attempts/annotation-attempt2",
+      "input": "/home/lixing/projects/QualifiedCProgramming/reports/grant_cspace_cap-20260913165358/annotation-attempts/annotation-attempt2/agent_input.md",
+      "report": "/home/lixing/projects/QualifiedCProgramming/reports/grant_cspace_cap-20260913165358/annotation-attempts/annotation-attempt2/agent_report.json",
+      "output": "/home/lixing/projects/QualifiedCProgramming/reports/grant_cspace_cap-20260913165358/annotation-attempts/annotation-attempt2/agent_output.md",
+      "source_version": "9289938965f5c42c2cc03fcd3f2f31b3e0e7efe89585a64948ea0081a3ee3443",
+      "source_goal_version": null,
+      "allowed_write_paths": [
+        "QCP_examples/osverify_qcp/cases/ucos_Grant_Cap.c",
+        "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_goal.v",
+        "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_proof_auto.v",
+        "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_proof_manual.v",
+        "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_goal_check.v"
+      ],
+      "compact_attempt_index": 1,
+      "created_at": "2026-09-13T09:14:59.250255Z",
+      "annotation_history_directory": "/home/lixing/projects/QualifiedCProgramming/verification_runs/grant_cspace_cap-20260913165358/annotation_history/annotation-attempt2",
+      "annotation_iteration": 2,
+      "annotation_causal_retry_count": 0,
+      "feedback_sources": [
+        {
+          "phase": "annotation",
+          "attempt_id": "grant_cspace_cap-annotation-r1-attempt-1",
+          "evidence": [
+            "/home/lixing/projects/QualifiedCProgramming/reports/grant_cspace_cap-20260913165358/annotation-attempts/annotation-attempt1/agent_report.json",
+            "/home/lixing/projects/QualifiedCProgramming/reports/grant_cspace_cap-20260913165358/annotation-attempts/annotation-attempt1/agent_output.md"
+          ]
+        }
+      ],
+      "retry_reason": "annotation-blocked",
+      "before_snapshot": {
+        "digest": "88665903cea63cf0096ed68a34753720b7e75e75e10aa62165d8f0fd09f4ab80",
+        "file_count": 5,
+        "missing_count": 1
+      },
+      "retry_previous_attempt": "grant_cspace_cap-annotation-r1-attempt-1",
+      "input_sha256": "6481c3811bc60976663949307357ffa9761025e2e8bdcccd84e38c99222f652b",
+      "owner": "annotation/grant_cspace_cap-20260913165358",
+      "started_at": "2026-09-13T09:16:12.202887Z",
+      "delivery": {
+        "action_id": "append-grant_cspace_cap-annotation-r2-attempt-1",
+        "kind": "append-annotation-agent",
+        "owner": "annotation/grant_cspace_cap-20260913165358",
+        "claimed_at": "2026-09-13T09:16:12.202887Z",
+        "finalized_at": "2026-09-13T09:34:31.326891Z"
+      },
+      "timing": {
+        "symexec": [
+          {
+            "started_at": "2026-09-13T09:18:38.140342Z",
+            "finished_at": "2026-09-13T09:18:38.439342Z",
+            "elapsed_seconds": 0.299
+          },
+          {
+            "started_at": "2026-09-13T09:19:06.060439Z",
+            "finished_at": "2026-09-13T09:19:06.356439Z",
+            "elapsed_seconds": 0.296
+          },
+          {
+            "started_at": "2026-09-13T09:20:05.488352Z",
+            "finished_at": "2026-09-13T09:20:05.800352Z",
+            "elapsed_seconds": 0.312
+          },
+          {
+            "started_at": "2026-09-13T09:22:21.943890Z",
+            "finished_at": "2026-09-13T09:22:22.028890Z",
+            "elapsed_seconds": 0.085
+          },
+          {
+            "started_at": "2026-09-13T09:28:25.732487Z",
+            "finished_at": "2026-09-13T09:28:28.569487Z",
+            "elapsed_seconds": 2.837
+          },
+          {
+            "started_at": "2026-09-13T09:34:44.035830Z",
+            "finished_at": "2026-09-13T09:34:46.860830Z",
+            "elapsed_seconds": 2.825
+          }
+        ],
+        "annotation-checking": [
+          {
+            "started_at": "2026-09-13T09:30:43.342224Z",
+            "finished_at": "2026-09-13T09:33:15.092609Z",
+            "elapsed_seconds": 151.750385
+          }
+        ],
+        "controller-validation": [
+          {
+            "started_at": "2026-09-13T09:34:31.298224Z",
+            "finished_at": "2026-09-13T09:34:31.438212Z",
+            "elapsed_seconds": 0.130811
+          }
+        ],
+        "clean-output-freshness": [
+          {
+            "started_at": "2026-09-13T09:34:47.469325Z",
+            "finished_at": "2026-09-13T09:34:50.465325Z",
+            "elapsed_seconds": 2.996
+          }
+        ],
+        "controller-acceptance-check": [
+          {
+            "started_at": "2026-09-13T09:34:44.018690Z",
+            "finished_at": "2026-09-13T09:34:50.489542Z",
+            "elapsed_seconds": 6.461787
+          }
+        ],
+        "dune-build": [
+          {
+            "started_at": "2026-09-13T09:35:03.247802Z",
+            "finished_at": "2026-09-13T09:35:05.015201Z",
+            "elapsed_seconds": 1.758547
+          }
+        ]
+      },
+      "returned_at": "2026-09-13T09:34:31.326891Z",
+      "artifact_sha256": {
+        "report": "0cb87b61f0afab118ac222a0af92bc06c579959aeea208461294d16becf11b39",
+        "output": "eb3f71d386246179671ab2eb05c8f5b042b0321693b59b5237026ff9f89b922c"
+      },
+      "after_snapshot": {
+        "digest": "ccb1a7ed665911789427dc3c61f42624e1c61378fa2f6acc2133b18997c26f9e",
+        "file_count": 5,
+        "missing_count": 1
+      },
+      "changed_files": [
+        "QCP_examples/osverify_qcp/cases/ucos_Grant_Cap.c",
+        "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_goal.v",
+        "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_proof_auto.v",
+        "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_proof_manual.v"
+      ],
+      "finished_at": "2026-09-13T09:35:05.015201Z",
+      "main_check": {
+        "symexec": {
+          "status": "passed",
+          "returncode": 0
+        },
+        "formal_case_lib_contract": {
+          "status": "passed",
+          "skipped": true,
+          "reason": "optional formal_case_lib candidate is absent"
+        },
+        "formal_case_lib_coqc": {
+          "status": "passed",
+          "skipped": true,
+          "reason": "optional formal_case_lib candidate is absent"
+        },
+        "clean_output_freshness": {
+          "status": "passed",
+          "source_goal_version": {
+            "reference": "9862b3b350d1fe195616454977488f78fe2b63f270792d9c9b4416638594df95",
+            "fresh": "9862b3b350d1fe195616454977488f78fe2b63f270792d9c9b4416638594df95"
+          }
+        }
+      }
+    },
+    "grant_cspace_cap-vc-checking-r1-attempt-1": {
+      "attempt_id": "grant_cspace_cap-vc-checking-r1-attempt-1",
+      "round": "grant_cspace_cap-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "report_directory": "/home/lixing/projects/QualifiedCProgramming/reports/grant_cspace_cap-20260913165358/rounds/grant_cspace_cap-vc-checking-r1",
+      "input": "/home/lixing/projects/QualifiedCProgramming/reports/grant_cspace_cap-20260913165358/rounds/grant_cspace_cap-vc-checking-r1/agent_input.md",
+      "report": "/home/lixing/projects/QualifiedCProgramming/reports/grant_cspace_cap-20260913165358/rounds/grant_cspace_cap-vc-checking-r1/agent_report.json",
+      "output": "/home/lixing/projects/QualifiedCProgramming/reports/grant_cspace_cap-20260913165358/rounds/grant_cspace_cap-vc-checking-r1/agent_output.md",
+      "source_version": "17a2aa0c769d115791367f95407ebf238d07c829e2d73586212b7bd104fd130f",
+      "source_goal_version": "9862b3b350d1fe195616454977488f78fe2b63f270792d9c9b4416638594df95",
+      "allowed_write_paths": [],
+      "compact_attempt_index": 1,
+      "created_at": "2026-09-13T09:35:09.375878Z",
+      "owner": "vc-checking/grant_cspace_cap-vc-checking-r1-attempt-1",
+      "started_at": "2026-09-13T09:35:18.413963Z",
+      "delivery": {
+        "action_id": "spawn-grant_cspace_cap-vc-checking-r1-attempt-1",
+        "kind": "spawn-attempt",
+        "owner": "vc-checking/grant_cspace_cap-vc-checking-r1-attempt-1",
+        "claimed_at": "2026-09-13T09:35:18.413963Z",
+        "finalized_at": "2026-09-13T09:43:10.465122Z"
+      },
+      "returned_at": "2026-09-13T09:43:10.465122Z",
+      "artifact_sha256": {
+        "report": "0cb87b61f0afab118ac222a0af92bc06c579959aeea208461294d16becf11b39",
+        "output": "60d9cb9da84235b5e15e6b0dfdc23307be715aca2c25ceafffbb06fee0c13884"
+      },
+      "timing": {
+        "controller-validation": [
+          {
+            "started_at": "2026-09-13T09:43:10.453128Z",
+            "finished_at": "2026-09-13T09:43:10.521534Z",
+            "elapsed_seconds": 0.05902
+          }
+        ],
+        "controller-plan-check": [
+          {
+            "started_at": "2026-09-13T09:43:19.771770Z",
+            "finished_at": "2026-09-13T09:43:19.817099Z",
+            "elapsed_seconds": 0.033954
+          }
+        ]
+      },
+      "agent_output_metrics": {
+        "bytes": 6884,
+        "lines": 49,
+        "common_pattern_count": 0,
+        "vc_delta_count": 0
+      },
+      "finished_at": "2026-09-13T09:43:19.817099Z",
+      "group_plan": "/home/lixing/projects/QualifiedCProgramming/reports/grant_cspace_cap-20260913165358/rounds/grant_cspace_cap-vc-checking-r1/group_plan.json",
+      "group_plan_sha256": "ab1fa882fc064e9ea72ffbe235b1c1f1462edb7abf170a5ec6d0d74ece3df4d7"
+    },
+    "grant_cspace_cap-vc-proving-r1": {
+      "attempt_id": "grant_cspace_cap-vc-proving-r1",
+      "round": "grant_cspace_cap-vc-proving-r1",
+      "phase": "vc-proving-preparing",
+      "status": "verified",
+      "directory": "/home/lixing/projects/QualifiedCProgramming/verification_runs/grant_cspace_cap-20260913165358/grant_cspace_cap-vc-proving-r1",
+      "report_directory": "/home/lixing/projects/QualifiedCProgramming/reports/grant_cspace_cap-20260913165358/rounds/grant_cspace_cap-vc-proving-r1",
+      "base_manifest": "/home/lixing/projects/QualifiedCProgramming/verification_runs/grant_cspace_cap-20260913165358/grant_cspace_cap-vc-proving-r1/base_manifest.json",
+      "group_workers_manifest": "/home/lixing/projects/QualifiedCProgramming/reports/grant_cspace_cap-20260913165358/rounds/grant_cspace_cap-vc-proving-r1/group_workers_manifest.json",
+      "proving_merged_result": "/home/lixing/projects/QualifiedCProgramming/reports/grant_cspace_cap-20260913165358/rounds/grant_cspace_cap-vc-proving-r1/proving_merged_result.json",
+      "groups": {
+        "cap-update-success": {
+          "status": "accepted",
+          "attempt_index": 1,
+          "owner": "group-worker/grant_cspace_cap-vc-proving-r1/cap-update-success",
+          "started_at": "2026-09-13T09:43:46.646974Z",
+          "delivery": {
+            "action_id": "spawn-grant_cspace_cap-vc-proving-r1-cap-update-success",
+            "kind": "spawn-group-worker",
+            "owner": "group-worker/grant_cspace_cap-vc-proving-r1/cap-update-success",
+            "claimed_at": "2026-09-13T09:43:46.646974Z",
+            "finalized_at": "2026-09-13T09:49:34.964640Z"
+          },
+          "timing_interval_index": 0,
+          "returned_at": "2026-09-13T09:49:34.964640Z",
+          "artifact_sha256": {
+            "report": "0cb87b61f0afab118ac222a0af92bc06c579959aeea208461294d16becf11b39",
+            "proof_manual": "750c2744529a567c5e6ae377b165a6faba479259f0c845012db55a6a50655d64"
+          },
+          "group_check": {
+            "status": "passed",
+            "returncode": 0,
+            "source_goal_version": "9862b3b350d1fe195616454977488f78fe2b63f270792d9c9b4416638594df95"
+          },
+          "public_helper_promotion": {
+            "status": "unchanged",
+            "appended_count": 0,
+            "skipped_count": 0,
+            "conflict_count": 0
+          },
+          "accepted_artifact_sha256": {
+            "report": "0cb87b61f0afab118ac222a0af92bc06c579959aeea208461294d16becf11b39",
+            "proof_manual": "750c2744529a567c5e6ae377b165a6faba479259f0c845012db55a6a50655d64"
+          },
+          "accepted_at": "2026-09-13T09:49:38.776176Z"
+        },
+        "active-return-projections": {
+          "status": "accepted",
+          "attempt_index": 1,
+          "owner": "group-worker/grant_cspace_cap-vc-proving-r1/active-return-projections",
+          "started_at": "2026-09-13T09:49:49.141255Z",
+          "delivery": {
+            "action_id": "spawn-grant_cspace_cap-vc-proving-r1-active-return-projections",
+            "kind": "spawn-group-worker",
+            "owner": "group-worker/grant_cspace_cap-vc-proving-r1/active-return-projections",
+            "claimed_at": "2026-09-13T09:49:49.141255Z",
+            "finalized_at": "2026-09-13T09:52:40.120950Z"
+          },
+          "timing_interval_index": 3,
+          "returned_at": "2026-09-13T09:52:40.120950Z",
+          "artifact_sha256": {
+            "report": "0cb87b61f0afab118ac222a0af92bc06c579959aeea208461294d16becf11b39",
+            "proof_manual": "7cc9b427a242c6a5317b120c155af6d7d8a87a959fad43923ca608d7c10f43a7"
+          },
+          "group_check": {
+            "status": "passed",
+            "returncode": 0,
+            "source_goal_version": "9862b3b350d1fe195616454977488f78fe2b63f270792d9c9b4416638594df95"
+          },
+          "public_helper_promotion": {
+            "status": "unchanged",
+            "appended_count": 0,
+            "skipped_count": 0,
+            "conflict_count": 0
+          },
+          "accepted_artifact_sha256": {
+            "report": "0cb87b61f0afab118ac222a0af92bc06c579959aeea208461294d16becf11b39",
+            "proof_manual": "7cc9b427a242c6a5317b120c155af6d7d8a87a959fad43923ca608d7c10f43a7"
+          },
+          "accepted_at": "2026-09-13T09:52:43.221453Z"
+        },
+        "grant-bit-clear-returns": {
+          "status": "accepted",
+          "attempt_index": 1,
+          "owner": "group-worker/grant_cspace_cap-vc-proving-r1/grant-bit-clear-returns",
+          "started_at": "2026-09-13T09:44:02.858332Z",
+          "delivery": {
+            "action_id": "spawn-grant_cspace_cap-vc-proving-r1-grant-bit-clear-returns",
+            "kind": "spawn-group-worker",
+            "owner": "group-worker/grant_cspace_cap-vc-proving-r1/grant-bit-clear-returns",
+            "claimed_at": "2026-09-13T09:44:02.858332Z",
+            "finalized_at": "2026-09-13T09:49:24.556004Z"
+          },
+          "timing_interval_index": 1,
+          "returned_at": "2026-09-13T09:49:24.556004Z",
+          "artifact_sha256": {
+            "report": "0cb87b61f0afab118ac222a0af92bc06c579959aeea208461294d16becf11b39",
+            "proof_manual": "58cea81163892f75e97f1a34a6b8761de4bf0a7c73ebfca926887f4cc62e1ac7"
+          },
+          "group_check": {
+            "status": "passed",
+            "returncode": 0,
+            "source_goal_version": "9862b3b350d1fe195616454977488f78fe2b63f270792d9c9b4416638594df95"
+          },
+          "public_helper_promotion": {
+            "status": "unchanged",
+            "appended_count": 0,
+            "skipped_count": 0,
+            "conflict_count": 0
+          },
+          "accepted_artifact_sha256": {
+            "report": "0cb87b61f0afab118ac222a0af92bc06c579959aeea208461294d16becf11b39",
+            "proof_manual": "58cea81163892f75e97f1a34a6b8761de4bf0a7c73ebfca926887f4cc62e1ac7"
+          },
+          "accepted_at": "2026-09-13T09:49:27.866258Z"
+        },
+        "callee-error-returns": {
+          "status": "accepted",
+          "attempt_index": 1,
+          "owner": "group-worker/grant_cspace_cap-vc-proving-r1/callee-error-returns",
+          "started_at": "2026-09-13T09:44:16.197859Z",
+          "delivery": {
+            "action_id": "spawn-grant_cspace_cap-vc-proving-r1-callee-error-returns",
+            "kind": "spawn-group-worker",
+            "owner": "group-worker/grant_cspace_cap-vc-proving-r1/callee-error-returns",
+            "claimed_at": "2026-09-13T09:44:16.197859Z",
+            "finalized_at": "2026-09-13T09:50:56.503865Z"
+          },
+          "timing_interval_index": 2,
+          "returned_at": "2026-09-13T09:50:56.503865Z",
+          "artifact_sha256": {
+            "report": "0cb87b61f0afab118ac222a0af92bc06c579959aeea208461294d16becf11b39",
+            "proof_manual": "d8d353196dfb7da75e0c839df85a1076d22828efa24977a72b7a8a69e7eae670"
+          },
+          "group_check": {
+            "status": "passed",
+            "returncode": 0,
+            "source_goal_version": "9862b3b350d1fe195616454977488f78fe2b63f270792d9c9b4416638594df95"
+          },
+          "public_helper_promotion": {
+            "status": "unchanged",
+            "appended_count": 0,
+            "skipped_count": 0,
+            "conflict_count": 0
+          },
+          "accepted_artifact_sha256": {
+            "report": "0cb87b61f0afab118ac222a0af92bc06c579959aeea208461294d16becf11b39",
+            "proof_manual": "d8d353196dfb7da75e0c839df85a1076d22828efa24977a72b7a8a69e7eae670"
+          },
+          "accepted_at": "2026-09-13T09:50:59.747087Z"
+        }
+      },
+      "source_goal_version": "9862b3b350d1fe195616454977488f78fe2b63f270792d9c9b4416638594df95",
+      "max_parallel_group_workers": 5,
+      "created_at": "2026-09-13T09:43:24.949358Z",
+      "reuse_source_snapshot": {
+        "status": "passed",
+        "source_goal_version": "9862b3b350d1fe195616454977488f78fe2b63f270792d9c9b4416638594df95",
+        "digest": "474f1de84f04b40015980faff923fbb5716c65276e6248d78e9890b007d8316b",
+        "file_count": 8,
+        "preparation_sha256": "40b046c27d73a148ca866334d5840af2a5e5caba0d45dccd539de826323d48f3"
+      },
+      "reuse_source_raw": {
+        "root": "/home/lixing/projects/QualifiedCProgramming/verification_runs/grant_cspace_cap-20260913165358/grant_cspace_cap-vc-proving-r1/reuse_source_raw",
+        "files": {
+          "goal_file": "450569abd6c97b1cdb2b13806f6215049a12ff9a07e9f854770a82cb9c7173f6",
+          "proof_manual_file": "c32432d34ddcf99842a2cdd94f948a81df10cdd393dd52deb2986ec6a034715b",
+          "formal_case_lib": null
+        }
+      },
+      "base_manifest_sha256": "3b5fda31e0ae2fef38f799ec19a7bd121058de71d58e579236cf213a8fed462d",
+      "group_workers_manifest_sha256": "3db6ebc66519e0aa320420078334333a8ce1bcfbc15335a549eddcc8f923e954",
+      "timing": {
+        "preparing": [
+          {
+            "started_at": "2026-09-13T09:43:30.765939Z",
+            "finished_at": "2026-09-13T09:43:31.180397Z",
+            "elapsed_seconds": 0.402172
+          }
+        ],
+        "group-work": [
+          {
+            "started_at": "2026-09-13T09:43:46.646974Z",
+            "finished_at": "2026-09-13T09:49:34.964640Z",
+            "elapsed_seconds": 348.317666
+          },
+          {
+            "started_at": "2026-09-13T09:44:02.858332Z",
+            "finished_at": "2026-09-13T09:49:24.556004Z",
+            "elapsed_seconds": 321.697672
+          },
+          {
+            "started_at": "2026-09-13T09:44:16.197859Z",
+            "finished_at": "2026-09-13T09:50:56.503865Z",
+            "elapsed_seconds": 400.306006
+          },
+          {
+            "started_at": "2026-09-13T09:49:49.141255Z",
+            "finished_at": "2026-09-13T09:52:40.120950Z",
+            "elapsed_seconds": 170.979695
+          }
+        ],
+        "group-development-check": [
+          {
+            "started_at": "2026-09-13T09:45:17.383621Z",
+            "finished_at": "2026-09-13T09:45:25.917427Z",
+            "elapsed_seconds": 8.533806
+          },
+          {
+            "started_at": "2026-09-13T09:46:09.922166Z",
+            "finished_at": "2026-09-13T09:46:15.701302Z",
+            "elapsed_seconds": 5.779136
+          },
+          {
+            "started_at": "2026-09-13T09:47:09.032716Z",
+            "finished_at": "2026-09-13T09:47:13.921946Z",
+            "elapsed_seconds": 4.88923
+          },
+          {
+            "started_at": "2026-09-13T09:47:15.462800Z",
+            "finished_at": "2026-09-13T09:47:21.727090Z",
+            "elapsed_seconds": 6.26429
+          },
+          {
+            "started_at": "2026-09-13T09:47:19.282755Z",
+            "finished_at": "2026-09-13T09:47:32.653225Z",
+            "elapsed_seconds": 13.37047
+          },
+          {
+            "started_at": "2026-09-13T09:47:31.236932Z",
+            "finished_at": "2026-09-13T09:47:36.209837Z",
+            "elapsed_seconds": 4.972905
+          },
+          {
+            "started_at": "2026-09-13T09:47:41.368441Z",
+            "finished_at": "2026-09-13T09:47:47.812676Z",
+            "elapsed_seconds": 6.444235
+          },
+          {
+            "started_at": "2026-09-13T09:47:59.958335Z",
+            "finished_at": "2026-09-13T09:48:13.859178Z",
+            "elapsed_seconds": 13.900843
+          },
+          {
+            "started_at": "2026-09-13T09:48:35.233400Z",
+            "finished_at": "2026-09-13T09:48:51.175213Z",
+            "elapsed_seconds": 15.941813
+          },
+          {
+            "started_at": "2026-09-13T09:48:44.015189Z",
+            "finished_at": "2026-09-13T09:48:53.848364Z",
+            "elapsed_seconds": 9.833175
+          },
+          {
+            "started_at": "2026-09-13T09:48:35.666192Z",
+            "finished_at": "2026-09-13T09:48:57.735562Z",
+            "elapsed_seconds": 22.06937
+          },
+          {
+            "started_at": "2026-09-13T09:49:27.989035Z",
+            "finished_at": "2026-09-13T09:49:40.397018Z",
+            "elapsed_seconds": 12.407983
+          },
+          {
+            "started_at": "2026-09-13T09:49:58.326396Z",
+            "finished_at": "2026-09-13T09:50:14.941834Z",
+            "elapsed_seconds": 16.615438
+          }
+        ],
+        "group-coq-check": [
+          {
+            "started_at": "2026-09-13T09:48:57.611614Z",
+            "finished_at": "2026-09-13T09:49:00.540132Z",
+            "elapsed_seconds": 2.928518
+          },
+          {
+            "started_at": "2026-09-13T09:49:04.557825Z",
+            "finished_at": "2026-09-13T09:49:07.770090Z",
+            "elapsed_seconds": 3.212265
+          },
+          {
+            "started_at": "2026-09-13T09:50:20.999619Z",
+            "finished_at": "2026-09-13T09:50:24.087146Z",
+            "elapsed_seconds": 3.087527
+          },
+          {
+            "started_at": "2026-09-13T09:51:06.450832Z",
+            "finished_at": "2026-09-13T09:51:09.880048Z",
+            "elapsed_seconds": 3.429216
+          },
+          {
+            "started_at": "2026-09-13T09:51:53.937014Z",
+            "finished_at": "2026-09-13T09:52:03.138613Z",
+            "elapsed_seconds": 9.201599
+          }
+        ],
+        "group-validation": [
+          {
+            "started_at": "2026-09-13T09:49:24.534710Z",
+            "finished_at": "2026-09-13T09:49:27.907952Z",
+            "elapsed_seconds": 3.360515
+          },
+          {
+            "started_at": "2026-09-13T09:49:34.941734Z",
+            "finished_at": "2026-09-13T09:49:38.822144Z",
+            "elapsed_seconds": 3.866791
+          },
+          {
+            "started_at": "2026-09-13T09:50:56.483208Z",
+            "finished_at": "2026-09-13T09:50:59.792831Z",
+            "elapsed_seconds": 3.297503
+          },
+          {
+            "started_at": "2026-09-13T09:52:40.099782Z",
+            "finished_at": "2026-09-13T09:52:43.282311Z",
+            "elapsed_seconds": 3.170313
+          }
+        ],
+        "parent-verify": [
+          {
+            "started_at": "2026-09-13T09:52:54.411369Z",
+            "finished_at": "2026-09-13T09:53:27.301350Z",
+            "elapsed_seconds": 32.876512
+          }
+        ]
+      },
+      "finished_at": "2026-09-13T09:53:27.301350Z",
+      "verified_result_sha256": "d26cfefe147a324896e150ba58aa07b2d547617018c3ad83e2ccedb20c979cd2"
+    }
+  },
+  "annotation_session": {
+    "session_id": "grant_cspace_cap-annotation-agent",
+    "status": "idle",
+    "current_attempt": "grant_cspace_cap-annotation-r2-attempt-1",
+    "iteration_count": 2,
+    "owner": "annotation/grant_cspace_cap-20260913165358"
+  },
+  "accepted_rounds": {
+    "annotation": {
+      "round": "grant_cspace_cap-annotation-r2",
+      "attempt_id": "grant_cspace_cap-annotation-r2-attempt-1",
+      "annotation_history_directory": "/home/lixing/projects/QualifiedCProgramming/verification_runs/grant_cspace_cap-20260913165358/annotation_history/annotation-attempt2",
+      "source_version": "17a2aa0c769d115791367f95407ebf238d07c829e2d73586212b7bd104fd130f",
+      "source_goal_version": "9862b3b350d1fe195616454977488f78fe2b63f270792d9c9b4416638594df95"
+    },
+    "vc-checking": {
+      "round": "grant_cspace_cap-vc-checking-r1",
+      "attempt_id": "grant_cspace_cap-vc-checking-r1-attempt-1",
+      "group_plan": "/home/lixing/projects/QualifiedCProgramming/reports/grant_cspace_cap-20260913165358/rounds/grant_cspace_cap-vc-checking-r1/group_plan.json",
+      "group_plan_sha256": "ab1fa882fc064e9ea72ffbe235b1c1f1462edb7abf170a5ec6d0d74ece3df4d7",
+      "agent_output_metrics": {
+        "bytes": 6884,
+        "lines": 49,
+        "common_pattern_count": 0,
+        "vc_delta_count": 0
+      }
+    },
+    "vc-proving-preparing": {
+      "round": "grant_cspace_cap-vc-proving-r1",
+      "attempt_id": "grant_cspace_cap-vc-proving-r1",
+      "result_sha256": "d26cfefe147a324896e150ba58aa07b2d547617018c3ad83e2ccedb20c979cd2"
+    }
+  },
+  "next_actions": [],
+  "waiting_for": [],
+  "current_blockers": [],
+  "final_candidate": {
+    "round": "grant_cspace_cap-vc-proving-r1",
+    "proving_merged_result": "/home/lixing/projects/QualifiedCProgramming/reports/grant_cspace_cap-20260913165358/rounds/grant_cspace_cap-vc-proving-r1/proving_merged_result.json",
+    "result_sha256": "d26cfefe147a324896e150ba58aa07b2d547617018c3ad83e2ccedb20c979cd2",
+    "proof_manual_sha256": "6da3a05ca46bf9cd3875321b284e4139141509ac1d822ca5ffe93210b68af384",
+    "proving_merged_lib_sha256": null
+  },
+  "final_apply": {
+    "status": "passed",
+    "transaction_id": "99519ec7c2ec4e41b25fee0fcdb30dda",
+    "applied_at": "2026-09-13T09:53:39.974534Z"
+  },
+  "final_check": {
+    "status": "passed",
+    "checked_at": "2026-09-13T09:54:07.301527Z",
+    "cleanup_removed_count": 0
+  },
+  "created_at": "2026-09-13T08:53:58.835844Z",
+  "updated_at": "2026-09-13T09:54:07.312695Z",
+  "final_apply_transaction": {
+    "transaction_id": "99519ec7c2ec4e41b25fee0fcdb30dda",
+    "status": "completed",
+    "source_goal_version": "9862b3b350d1fe195616454977488f78fe2b63f270792d9c9b4416638594df95",
+    "records": [
+      {
+        "source": "/home/lixing/projects/QualifiedCProgramming/verification_runs/grant_cspace_cap-20260913165358/grant_cspace_cap-vc-proving-r1/proving_merged/grant_cspace_cap_proof_manual.v",
+        "source_sha256": "6da3a05ca46bf9cd3875321b284e4139141509ac1d822ca5ffe93210b68af384",
+        "target": "/home/lixing/projects/QualifiedCProgramming/Rocq/examples/osverify_qcp/cases/grant_cspace_cap_proof_manual.v",
+        "relative_path": "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_proof_manual.v",
+        "existed": true,
+        "before_sha256": "c32432d34ddcf99842a2cdd94f948a81df10cdd393dd52deb2986ec6a034715b",
+        "backup": "/home/lixing/projects/QualifiedCProgramming/reports/grant_cspace_cap-20260913165358/final-check/backup/99519ec7c2ec4e41b25fee0fcdb30dda/Rocq/examples/osverify_qcp/cases/grant_cspace_cap_proof_manual.v"
+      }
+    ],
+    "prepared_at": "2026-09-13T09:53:39.920828Z",
+    "backed_up_at": "2026-09-13T09:53:39.949251Z",
+    "completed_at": "2026-09-13T09:53:39.974516Z"
+  },
+  "finished_at": "2026-09-13T09:54:07.301527Z"
+}
