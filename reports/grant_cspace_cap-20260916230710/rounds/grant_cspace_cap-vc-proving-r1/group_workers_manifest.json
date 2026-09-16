@@ -1,0 +1,26 @@
+{
+  "base_manifest_sha256": "9ba6c66c4b59223edf36b621a9c4a27bd8efcb603d4704001fbfa17ecef72ae9",
+  "group_plan": "rounds/grant_cspace_cap-vc-checking-r1/group_plan.json",
+  "group_plan_sha256": "4bb5d5c78b9557ec178402ca9fc62a8ccf8bc2b44ded2f071e2c126d74ebab5a",
+  "public_helper_snapshot_sha256": "d1dd6612ab2c2ca4fcb706e953f0d05ed1e858e7308c8a5d8dce3d87c228be6d",
+  "groups": [
+    {
+      "id": "running-nonzero"
+    },
+    {
+      "id": "permission-denied"
+    },
+    {
+      "id": "stopped-errors"
+    },
+    {
+      "id": "success-result"
+    }
+  ],
+  "dispatch_order": [
+    "stopped-errors",
+    "success-result",
+    "running-nonzero",
+    "permission-denied"
+  ]
+}

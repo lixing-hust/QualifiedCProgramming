@@ -16,362 +16,8 @@ Local Open Scope sets.
 Local Open Scope string_scope.
 Local Open Scope list.
 Import naive_C_Rules.
+Require Import SimpleC.EE.osverify_qcp.cap_model.
 Local Open Scope sac.
-
-(*----- Function ucos_Grant_Cap -----*)
-
-Definition ucos_Grant_Cap_safety_wit_1_class_invalid := 
-forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (right_class_invalid: Z) (class_class_invalid: Z) (dest_class_invalid: Z) (PreH1 : (0 > cap_Class_pre)) (PreH2 : (destTask_Prio_pre = dest_class_invalid)) (PreH3 : (cap_Class_pre = class_class_invalid)) (PreH4 : (cap_Right_pre = right_class_invalid)) (PreH5 : (0 <= dest_class_invalid)) (PreH6 : (dest_class_invalid <= 255)) (PreH7 : ((unsigned_last_nbits (dest_class_invalid) (32)) = dest_class_invalid)) (PreH8 : (0 <= class_class_invalid)) (PreH9 : (class_class_invalid <= UINT_MAX)) (PreH10 : (0 <= right_class_invalid)) (PreH11 : (right_class_invalid <= UINT_MAX)) (PreH12 : (class_class_invalid > 16)) ,
-  ((( &( "destTask_Prio" ) )) # UChar  |-> destTask_Prio_pre)
-  **  ((( &( "cap_Class" ) )) # UInt  |-> cap_Class_pre)
-  **  ((( &( "cap_Right" ) )) # UInt  |-> cap_Right_pre)
-|--
-  “ False ”
-.
-
-Definition ucos_Grant_Cap_safety_wit_2_prio_invalid := 
-forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (right_prio_invalid: Z) (class_prio_invalid: Z) (dest_prio_invalid: Z) (PreH1 : (0 > cap_Class_pre)) (PreH2 : (destTask_Prio_pre = dest_prio_invalid)) (PreH3 : (cap_Class_pre = class_prio_invalid)) (PreH4 : (cap_Right_pre = right_prio_invalid)) (PreH5 : (0 <= dest_prio_invalid)) (PreH6 : (dest_prio_invalid <= 255)) (PreH7 : ((unsigned_last_nbits (dest_prio_invalid) (32)) = dest_prio_invalid)) (PreH8 : (0 <= class_prio_invalid)) (PreH9 : (class_prio_invalid <= 16)) (PreH10 : (0 <= right_prio_invalid)) (PreH11 : (right_prio_invalid <= UINT_MAX)) (PreH12 : ((unsigned_last_nbits (dest_prio_invalid) (32)) >= 64)) ,
-  ((( &( "destTask_Prio" ) )) # UChar  |-> destTask_Prio_pre)
-  **  ((( &( "cap_Class" ) )) # UInt  |-> cap_Class_pre)
-  **  ((( &( "cap_Right" ) )) # UInt  |-> cap_Right_pre)
-|--
-  “ False ”
-.
-
-Definition ucos_Grant_Cap_safety_wit_3_null_target := 
-forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (right_null_target: Z) (class_null_target: Z) (dest_null_target: Z) (target_null_target: Z) (PreH1 : (0 > cap_Class_pre)) (PreH2 : (destTask_Prio_pre = dest_null_target)) (PreH3 : (cap_Class_pre = class_null_target)) (PreH4 : (cap_Right_pre = right_null_target)) (PreH5 : (0 <= dest_null_target)) (PreH6 : (dest_null_target <= 255)) (PreH7 : ((unsigned_last_nbits (dest_null_target) (32)) = dest_null_target)) (PreH8 : (0 <= class_null_target)) (PreH9 : (class_null_target <= 16)) (PreH10 : (0 <= right_null_target)) (PreH11 : (right_null_target <= UINT_MAX)) (PreH12 : ((unsigned_last_nbits (dest_null_target) (32)) < 64)) (PreH13 : (target_null_target = 0)) ,
-  ((( &( "destTask_Prio" ) )) # UChar  |-> destTask_Prio_pre)
-  **  ((( &( "cap_Class" ) )) # UInt  |-> cap_Class_pre)
-  **  ((( &( "cap_Right" ) )) # UInt  |-> cap_Right_pre)
-  **  (((( &( "OSCSpacePrioTbl" ) ) + (dest_null_target * sizeof(PTR)))) # Ptr  |-> target_null_target)
-|--
-  “ False ”
-.
-
-Definition ucos_Grant_Cap_safety_wit_4_valid_target := 
-forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (old_right_valid_target: Z) (old_content_valid_target: Z) (old_type_valid_target: Z) (right_valid_target: Z) (class_valid_target: Z) (dest_valid_target: Z) (target_valid_target: Z) (PreH1 : (0 > cap_Class_pre)) (PreH2 : (destTask_Prio_pre = dest_valid_target)) (PreH3 : (cap_Class_pre = class_valid_target)) (PreH4 : (cap_Right_pre = right_valid_target)) (PreH5 : (0 <= dest_valid_target)) (PreH6 : (dest_valid_target <= 255)) (PreH7 : ((unsigned_last_nbits (dest_valid_target) (32)) = dest_valid_target)) (PreH8 : (0 <= class_valid_target)) (PreH9 : (class_valid_target <= 16)) (PreH10 : (0 <= right_valid_target)) (PreH11 : (right_valid_target <= UINT_MAX)) (PreH12 : ((unsigned_last_nbits (dest_valid_target) (32)) < 64)) (PreH13 : (target_valid_target <> 0)) ,
-  ((( &( "destTask_Prio" ) )) # UChar  |-> destTask_Prio_pre)
-  **  ((( &( "cap_Class" ) )) # UInt  |-> cap_Class_pre)
-  **  ((( &( "cap_Right" ) )) # UInt  |-> cap_Right_pre)
-  **  (((( &( "OSCSpacePrioTbl" ) ) + (dest_valid_target * sizeof(PTR)))) # Ptr  |-> target_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_type")) # UInt  |-> old_type_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_content")) # UInt  |-> old_content_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_right")) # UInt  |-> old_right_valid_target)
-|--
-  “ False ”
-.
-
-Definition ucos_Grant_Cap_safety_wit_5_valid_target := 
-forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (old_right_valid_target: Z) (old_content_valid_target: Z) (old_type_valid_target: Z) (right_valid_target: Z) (class_valid_target: Z) (dest_valid_target: Z) (target_valid_target: Z) (PreH1 : (cap_Class_pre > 16)) (PreH2 : (0 <= cap_Class_pre)) (PreH3 : (destTask_Prio_pre = dest_valid_target)) (PreH4 : (cap_Class_pre = class_valid_target)) (PreH5 : (cap_Right_pre = right_valid_target)) (PreH6 : (0 <= dest_valid_target)) (PreH7 : (dest_valid_target <= 255)) (PreH8 : ((unsigned_last_nbits (dest_valid_target) (32)) = dest_valid_target)) (PreH9 : (0 <= class_valid_target)) (PreH10 : (class_valid_target <= 16)) (PreH11 : (0 <= right_valid_target)) (PreH12 : (right_valid_target <= UINT_MAX)) (PreH13 : ((unsigned_last_nbits (dest_valid_target) (32)) < 64)) (PreH14 : (target_valid_target <> 0)) ,
-  ((( &( "destTask_Prio" ) )) # UChar  |-> destTask_Prio_pre)
-  **  ((( &( "cap_Class" ) )) # UInt  |-> cap_Class_pre)
-  **  ((( &( "cap_Right" ) )) # UInt  |-> cap_Right_pre)
-  **  (((( &( "OSCSpacePrioTbl" ) ) + (dest_valid_target * sizeof(PTR)))) # Ptr  |-> target_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_type")) # UInt  |-> old_type_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_content")) # UInt  |-> old_content_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_right")) # UInt  |-> old_right_valid_target)
-|--
-  “ False ”
-.
-
-Definition ucos_Grant_Cap_safety_wit_6_null_target := 
-forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (right_null_target: Z) (class_null_target: Z) (dest_null_target: Z) (target_null_target: Z) (PreH1 : (cap_Class_pre > 16)) (PreH2 : (0 <= cap_Class_pre)) (PreH3 : (destTask_Prio_pre = dest_null_target)) (PreH4 : (cap_Class_pre = class_null_target)) (PreH5 : (cap_Right_pre = right_null_target)) (PreH6 : (0 <= dest_null_target)) (PreH7 : (dest_null_target <= 255)) (PreH8 : ((unsigned_last_nbits (dest_null_target) (32)) = dest_null_target)) (PreH9 : (0 <= class_null_target)) (PreH10 : (class_null_target <= 16)) (PreH11 : (0 <= right_null_target)) (PreH12 : (right_null_target <= UINT_MAX)) (PreH13 : ((unsigned_last_nbits (dest_null_target) (32)) < 64)) (PreH14 : (target_null_target = 0)) ,
-  ((( &( "destTask_Prio" ) )) # UChar  |-> destTask_Prio_pre)
-  **  ((( &( "cap_Class" ) )) # UInt  |-> cap_Class_pre)
-  **  ((( &( "cap_Right" ) )) # UInt  |-> cap_Right_pre)
-  **  (((( &( "OSCSpacePrioTbl" ) ) + (dest_null_target * sizeof(PTR)))) # Ptr  |-> target_null_target)
-|--
-  “ False ”
-.
-
-Definition ucos_Grant_Cap_safety_wit_7_prio_invalid := 
-forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (right_prio_invalid: Z) (class_prio_invalid: Z) (dest_prio_invalid: Z) (PreH1 : (cap_Class_pre > 16)) (PreH2 : (0 <= cap_Class_pre)) (PreH3 : (destTask_Prio_pre = dest_prio_invalid)) (PreH4 : (cap_Class_pre = class_prio_invalid)) (PreH5 : (cap_Right_pre = right_prio_invalid)) (PreH6 : (0 <= dest_prio_invalid)) (PreH7 : (dest_prio_invalid <= 255)) (PreH8 : ((unsigned_last_nbits (dest_prio_invalid) (32)) = dest_prio_invalid)) (PreH9 : (0 <= class_prio_invalid)) (PreH10 : (class_prio_invalid <= 16)) (PreH11 : (0 <= right_prio_invalid)) (PreH12 : (right_prio_invalid <= UINT_MAX)) (PreH13 : ((unsigned_last_nbits (dest_prio_invalid) (32)) >= 64)) ,
-  ((( &( "destTask_Prio" ) )) # UChar  |-> destTask_Prio_pre)
-  **  ((( &( "cap_Class" ) )) # UInt  |-> cap_Class_pre)
-  **  ((( &( "cap_Right" ) )) # UInt  |-> cap_Right_pre)
-|--
-  “ False ”
-.
-
-Definition ucos_Grant_Cap_safety_wit_8_class_invalid := 
-forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (right_class_invalid: Z) (class_class_invalid: Z) (dest_class_invalid: Z) (PreH1 : (cap_Class_pre <= 16)) (PreH2 : (0 <= cap_Class_pre)) (PreH3 : (destTask_Prio_pre = dest_class_invalid)) (PreH4 : (cap_Class_pre = class_class_invalid)) (PreH5 : (cap_Right_pre = right_class_invalid)) (PreH6 : (0 <= dest_class_invalid)) (PreH7 : (dest_class_invalid <= 255)) (PreH8 : ((unsigned_last_nbits (dest_class_invalid) (32)) = dest_class_invalid)) (PreH9 : (0 <= class_class_invalid)) (PreH10 : (class_class_invalid <= UINT_MAX)) (PreH11 : (0 <= right_class_invalid)) (PreH12 : (right_class_invalid <= UINT_MAX)) (PreH13 : (class_class_invalid > 16)) ,
-  ((( &( "destTask_Prio" ) )) # UChar  |-> destTask_Prio_pre)
-  **  ((( &( "cap_Class" ) )) # UInt  |-> cap_Class_pre)
-  **  ((( &( "cap_Right" ) )) # UInt  |-> cap_Right_pre)
-|--
-  “ False ”
-.
-
-Definition ucos_Grant_Cap_safety_wit_9_prio_invalid := 
-forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (right_prio_invalid: Z) (class_prio_invalid: Z) (dest_prio_invalid: Z) (PreH1 : (destTask_Prio_pre < 64)) (PreH2 : (cap_Class_pre <= 16)) (PreH3 : (0 <= cap_Class_pre)) (PreH4 : (destTask_Prio_pre = dest_prio_invalid)) (PreH5 : (cap_Class_pre = class_prio_invalid)) (PreH6 : (cap_Right_pre = right_prio_invalid)) (PreH7 : (0 <= dest_prio_invalid)) (PreH8 : (dest_prio_invalid <= 255)) (PreH9 : ((unsigned_last_nbits (dest_prio_invalid) (32)) = dest_prio_invalid)) (PreH10 : (0 <= class_prio_invalid)) (PreH11 : (class_prio_invalid <= 16)) (PreH12 : (0 <= right_prio_invalid)) (PreH13 : (right_prio_invalid <= UINT_MAX)) (PreH14 : ((unsigned_last_nbits (dest_prio_invalid) (32)) >= 64)) ,
-  ((( &( "destTask_Prio" ) )) # UChar  |-> destTask_Prio_pre)
-  **  ((( &( "cap_Class" ) )) # UInt  |-> cap_Class_pre)
-  **  ((( &( "cap_Right" ) )) # UInt  |-> cap_Right_pre)
-|--
-  “ False ”
-.
-
-Definition ucos_Grant_Cap_safety_wit_10_null_target := 
-forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (right_null_target: Z) (class_null_target: Z) (dest_null_target: Z) (target_null_target: Z) (PreH1 : (destTask_Prio_pre >= 64)) (PreH2 : (cap_Class_pre <= 16)) (PreH3 : (0 <= cap_Class_pre)) (PreH4 : (destTask_Prio_pre = dest_null_target)) (PreH5 : (cap_Class_pre = class_null_target)) (PreH6 : (cap_Right_pre = right_null_target)) (PreH7 : (0 <= dest_null_target)) (PreH8 : (dest_null_target <= 255)) (PreH9 : ((unsigned_last_nbits (dest_null_target) (32)) = dest_null_target)) (PreH10 : (0 <= class_null_target)) (PreH11 : (class_null_target <= 16)) (PreH12 : (0 <= right_null_target)) (PreH13 : (right_null_target <= UINT_MAX)) (PreH14 : ((unsigned_last_nbits (dest_null_target) (32)) < 64)) (PreH15 : (target_null_target = 0)) ,
-  ((( &( "destTask_Prio" ) )) # UChar  |-> destTask_Prio_pre)
-  **  ((( &( "cap_Class" ) )) # UInt  |-> cap_Class_pre)
-  **  ((( &( "cap_Right" ) )) # UInt  |-> cap_Right_pre)
-  **  (((( &( "OSCSpacePrioTbl" ) ) + (dest_null_target * sizeof(PTR)))) # Ptr  |-> target_null_target)
-|--
-  “ False ”
-.
-
-Definition ucos_Grant_Cap_safety_wit_11_valid_target := 
-forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (old_right_valid_target: Z) (old_content_valid_target: Z) (old_type_valid_target: Z) (right_valid_target: Z) (class_valid_target: Z) (dest_valid_target: Z) (target_valid_target: Z) (PreH1 : (destTask_Prio_pre >= 64)) (PreH2 : (cap_Class_pre <= 16)) (PreH3 : (0 <= cap_Class_pre)) (PreH4 : (destTask_Prio_pre = dest_valid_target)) (PreH5 : (cap_Class_pre = class_valid_target)) (PreH6 : (cap_Right_pre = right_valid_target)) (PreH7 : (0 <= dest_valid_target)) (PreH8 : (dest_valid_target <= 255)) (PreH9 : ((unsigned_last_nbits (dest_valid_target) (32)) = dest_valid_target)) (PreH10 : (0 <= class_valid_target)) (PreH11 : (class_valid_target <= 16)) (PreH12 : (0 <= right_valid_target)) (PreH13 : (right_valid_target <= UINT_MAX)) (PreH14 : ((unsigned_last_nbits (dest_valid_target) (32)) < 64)) (PreH15 : (target_valid_target <> 0)) ,
-  ((( &( "destTask_Prio" ) )) # UChar  |-> destTask_Prio_pre)
-  **  ((( &( "cap_Class" ) )) # UInt  |-> cap_Class_pre)
-  **  ((( &( "cap_Right" ) )) # UInt  |-> cap_Right_pre)
-  **  (((( &( "OSCSpacePrioTbl" ) ) + (dest_valid_target * sizeof(PTR)))) # Ptr  |-> target_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_type")) # UInt  |-> old_type_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_content")) # UInt  |-> old_content_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_right")) # UInt  |-> old_right_valid_target)
-|--
-  “ False ”
-.
-
-Definition ucos_Grant_Cap_safety_wit_12_null_target := 
-forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (right_null_target: Z) (class_null_target: Z) (dest_null_target: Z) (target_null_target: Z) (PreH1 : (destTask_Prio_pre < 64)) (PreH2 : (cap_Class_pre <= 16)) (PreH3 : (0 <= cap_Class_pre)) (PreH4 : (destTask_Prio_pre = dest_null_target)) (PreH5 : (cap_Class_pre = class_null_target)) (PreH6 : (cap_Right_pre = right_null_target)) (PreH7 : (0 <= dest_null_target)) (PreH8 : (dest_null_target <= 255)) (PreH9 : ((unsigned_last_nbits (dest_null_target) (32)) = dest_null_target)) (PreH10 : (0 <= class_null_target)) (PreH11 : (class_null_target <= 16)) (PreH12 : (0 <= right_null_target)) (PreH13 : (right_null_target <= UINT_MAX)) (PreH14 : ((unsigned_last_nbits (dest_null_target) (32)) < 64)) (PreH15 : (target_null_target = 0)) ,
-  (((( &( "OSCSpacePrioTbl" ) ) + (destTask_Prio_pre * sizeof(PTR)))) # Ptr  |-> 0)
-  **  ((( &( "destTask_Prio" ) )) # UChar  |-> destTask_Prio_pre)
-  **  ((( &( "cap_Class" ) )) # UInt  |-> cap_Class_pre)
-  **  ((( &( "cap_Right" ) )) # UInt  |-> cap_Right_pre)
-|--
-  “ (0 <= INT_MAX) ” 
-  &&  “ ((INT_MIN) <= 0) ”
-.
-
-Definition ucos_Grant_Cap_safety_wit_13_valid_target := 
-forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (old_right_valid_target: Z) (old_content_valid_target: Z) (old_type_valid_target: Z) (right_valid_target: Z) (class_valid_target: Z) (dest_valid_target: Z) (target_valid_target: Z) (PreH1 : (destTask_Prio_pre < 64)) (PreH2 : (cap_Class_pre <= 16)) (PreH3 : (0 <= cap_Class_pre)) (PreH4 : (destTask_Prio_pre = dest_valid_target)) (PreH5 : (cap_Class_pre = class_valid_target)) (PreH6 : (cap_Right_pre = right_valid_target)) (PreH7 : (0 <= dest_valid_target)) (PreH8 : (dest_valid_target <= 255)) (PreH9 : ((unsigned_last_nbits (dest_valid_target) (32)) = dest_valid_target)) (PreH10 : (0 <= class_valid_target)) (PreH11 : (class_valid_target <= 16)) (PreH12 : (0 <= right_valid_target)) (PreH13 : (right_valid_target <= UINT_MAX)) (PreH14 : ((unsigned_last_nbits (dest_valid_target) (32)) < 64)) (PreH15 : (target_valid_target <> 0)) ,
-  (((( &( "OSCSpacePrioTbl" ) ) + (destTask_Prio_pre * sizeof(PTR)))) # Ptr  |-> target_valid_target)
-  **  ((( &( "destTask_Prio" ) )) # UChar  |-> destTask_Prio_pre)
-  **  ((( &( "cap_Class" ) )) # UInt  |-> cap_Class_pre)
-  **  ((( &( "cap_Right" ) )) # UInt  |-> cap_Right_pre)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_type")) # UInt  |-> old_type_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_content")) # UInt  |-> old_content_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_right")) # UInt  |-> old_right_valid_target)
-|--
-  “ (0 <= INT_MAX) ” 
-  &&  “ ((INT_MIN) <= 0) ”
-.
-
-Definition ucos_Grant_Cap_safety_wit_14_valid_target := 
-forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (old_right_valid_target: Z) (old_content_valid_target: Z) (old_type_valid_target: Z) (right_valid_target: Z) (class_valid_target: Z) (dest_valid_target: Z) (target_valid_target: Z) (PreH1 : (target_valid_target = 0)) (PreH2 : (destTask_Prio_pre < 64)) (PreH3 : (cap_Class_pre <= 16)) (PreH4 : (0 <= cap_Class_pre)) (PreH5 : (destTask_Prio_pre = dest_valid_target)) (PreH6 : (cap_Class_pre = class_valid_target)) (PreH7 : (cap_Right_pre = right_valid_target)) (PreH8 : (0 <= dest_valid_target)) (PreH9 : (dest_valid_target <= 255)) (PreH10 : ((unsigned_last_nbits (dest_valid_target) (32)) = dest_valid_target)) (PreH11 : (0 <= class_valid_target)) (PreH12 : (class_valid_target <= 16)) (PreH13 : (0 <= right_valid_target)) (PreH14 : (right_valid_target <= UINT_MAX)) (PreH15 : ((unsigned_last_nbits (dest_valid_target) (32)) < 64)) (PreH16 : (target_valid_target <> 0)) ,
-  (((( &( "OSCSpacePrioTbl" ) ) + (destTask_Prio_pre * sizeof(PTR)))) # Ptr  |-> target_valid_target)
-  **  ((( &( "destTask_Prio" ) )) # UChar  |-> destTask_Prio_pre)
-  **  ((( &( "cap_Class" ) )) # UInt  |-> cap_Class_pre)
-  **  ((( &( "cap_Right" ) )) # UInt  |-> cap_Right_pre)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_type")) # UInt  |-> old_type_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_content")) # UInt  |-> old_content_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_right")) # UInt  |-> old_right_valid_target)
-|--
-  “ False ”
-.
-
-Definition ucos_Grant_Cap_return_wit_1_valid_target := 
-(
-forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (old_right_valid_target: Z) (right_valid_target: Z) (class_valid_target: Z) (dest_valid_target: Z) (target_valid_target: Z) (PreH1 : (target_valid_target <> 0)) (PreH2 : (destTask_Prio_pre < 64)) (PreH3 : (cap_Class_pre <= 16)) (PreH4 : (0 <= cap_Class_pre)) (PreH5 : (destTask_Prio_pre = dest_valid_target)) (PreH6 : (cap_Class_pre = class_valid_target)) (PreH7 : (cap_Right_pre = right_valid_target)) (PreH8 : (0 <= dest_valid_target)) (PreH9 : (dest_valid_target <= 255)) (PreH10 : ((unsigned_last_nbits (dest_valid_target) (32)) = dest_valid_target)) (PreH11 : (0 <= class_valid_target)) (PreH12 : (class_valid_target <= 16)) (PreH13 : (0 <= right_valid_target)) (PreH14 : (right_valid_target <= UINT_MAX)) (PreH15 : ((unsigned_last_nbits (dest_valid_target) (32)) < 64)) (PreH16 : (target_valid_target <> 0)) ,
-  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (cap_Class_pre * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_right")) # UInt  |-> (Z.lor (Z.land old_right_valid_target 4095) cap_Right_pre))
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (cap_Class_pre * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_content")) # UInt  |-> cap_Class_pre)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (cap_Class_pre * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_type")) # UInt  |-> 1)
-  **  (((( &( "OSCSpacePrioTbl" ) ) + (destTask_Prio_pre * sizeof(PTR)))) # Ptr  |-> target_valid_target)
-|--
-  “ (0 = 0) ”
-  &&  (((( &( "OSCSpacePrioTbl" ) ) + (dest_valid_target * sizeof(PTR)))) # Ptr  |-> target_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_type")) # UInt  |-> 1)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_content")) # UInt  |-> class_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_right")) # UInt  |-> (Z.lor (Z.land old_right_valid_target 4095) right_valid_target))
-) \/
-(
-forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (old_right_valid_target: Z) (right_valid_target: Z) (class_valid_target: Z) (dest_valid_target: Z) (target_valid_target: Z) (PreH1 : (1 <= UINT_MAX)) (PreH2 : (cap_Class_pre <= UINT_MAX)) (PreH3 : ((Z.lor (Z.land old_right_valid_target 4095) cap_Right_pre) <= UINT_MAX)) (PreH4 : (1 >= 0)) (PreH5 : (cap_Class_pre >= 0)) (PreH6 : ((Z.lor (Z.land old_right_valid_target 4095) cap_Right_pre) >= 0)) (PreH7 : (target_valid_target <> 0)) (PreH8 : (destTask_Prio_pre < 64)) (PreH9 : (cap_Class_pre <= 16)) (PreH10 : (0 <= cap_Class_pre)) (PreH11 : (destTask_Prio_pre = dest_valid_target)) (PreH12 : (cap_Class_pre = class_valid_target)) (PreH13 : (cap_Right_pre = right_valid_target)) (PreH14 : (0 <= dest_valid_target)) (PreH15 : (dest_valid_target <= 255)) (PreH16 : ((unsigned_last_nbits (dest_valid_target) (32)) = dest_valid_target)) (PreH17 : (0 <= class_valid_target)) (PreH18 : (class_valid_target <= 16)) (PreH19 : (0 <= right_valid_target)) (PreH20 : (right_valid_target <= UINT_MAX)) (PreH21 : ((unsigned_last_nbits (dest_valid_target) (32)) < 64)) (PreH22 : (target_valid_target <> 0)) ,
-  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (cap_Class_pre * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_right")) # UInt  |-> (Z.lor (Z.land old_right_valid_target 4095) cap_Right_pre))
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (cap_Class_pre * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_content")) # UInt  |-> cap_Class_pre)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (cap_Class_pre * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_type")) # UInt  |-> 1)
-  **  (((( &( "OSCSpacePrioTbl" ) ) + (destTask_Prio_pre * sizeof(PTR)))) # Ptr  |-> target_valid_target)
-|--
-  (((( &( "OSCSpacePrioTbl" ) ) + (dest_valid_target * sizeof(PTR)))) # Ptr  |-> target_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_type")) # UInt  |-> 1)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_content")) # UInt  |-> class_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_right")) # UInt  |-> (Z.lor (Z.land old_right_valid_target 4095) right_valid_target))
-).
-
-Definition ucos_Grant_Cap_return_wit_1_valid_target_split_goal_spatial := 
-forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (old_right_valid_target: Z) (right_valid_target: Z) (class_valid_target: Z) (dest_valid_target: Z) (target_valid_target: Z) (PreH1 : (1 <= UINT_MAX)) (PreH2 : (cap_Class_pre <= UINT_MAX)) (PreH3 : ((Z.lor (Z.land old_right_valid_target 4095) cap_Right_pre) <= UINT_MAX)) (PreH4 : (1 >= 0)) (PreH5 : (cap_Class_pre >= 0)) (PreH6 : ((Z.lor (Z.land old_right_valid_target 4095) cap_Right_pre) >= 0)) (PreH7 : (target_valid_target <> 0)) (PreH8 : (destTask_Prio_pre < 64)) (PreH9 : (cap_Class_pre <= 16)) (PreH10 : (0 <= cap_Class_pre)) (PreH11 : (destTask_Prio_pre = dest_valid_target)) (PreH12 : (cap_Class_pre = class_valid_target)) (PreH13 : (cap_Right_pre = right_valid_target)) (PreH14 : (0 <= dest_valid_target)) (PreH15 : (dest_valid_target <= 255)) (PreH16 : ((unsigned_last_nbits (dest_valid_target) (32)) = dest_valid_target)) (PreH17 : (0 <= class_valid_target)) (PreH18 : (class_valid_target <= 16)) (PreH19 : (0 <= right_valid_target)) (PreH20 : (right_valid_target <= UINT_MAX)) (PreH21 : ((unsigned_last_nbits (dest_valid_target) (32)) < 64)) (PreH22 : (target_valid_target <> 0)) ,
-  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (cap_Class_pre * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_right")) # UInt  |-> (Z.lor (Z.land old_right_valid_target 4095) cap_Right_pre))
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (cap_Class_pre * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_content")) # UInt  |-> cap_Class_pre)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (cap_Class_pre * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_type")) # UInt  |-> 1)
-  **  (((( &( "OSCSpacePrioTbl" ) ) + (destTask_Prio_pre * sizeof(PTR)))) # Ptr  |-> target_valid_target)
-|--
-  (((( &( "OSCSpacePrioTbl" ) ) + (dest_valid_target * sizeof(PTR)))) # Ptr  |-> target_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_type")) # UInt  |-> 1)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_content")) # UInt  |-> class_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_right")) # UInt  |-> (Z.lor (Z.land old_right_valid_target 4095) right_valid_target))
-.
-
-Definition ucos_Grant_Cap_return_wit_2_null_target := 
-forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (right_null_target: Z) (class_null_target: Z) (dest_null_target: Z) (target_null_target: Z) (PreH1 : (destTask_Prio_pre < 64)) (PreH2 : (cap_Class_pre <= 16)) (PreH3 : (0 <= cap_Class_pre)) (PreH4 : (destTask_Prio_pre = dest_null_target)) (PreH5 : (cap_Class_pre = class_null_target)) (PreH6 : (cap_Right_pre = right_null_target)) (PreH7 : (0 <= dest_null_target)) (PreH8 : (dest_null_target <= 255)) (PreH9 : ((unsigned_last_nbits (dest_null_target) (32)) = dest_null_target)) (PreH10 : (0 <= class_null_target)) (PreH11 : (class_null_target <= 16)) (PreH12 : (0 <= right_null_target)) (PreH13 : (right_null_target <= UINT_MAX)) (PreH14 : ((unsigned_last_nbits (dest_null_target) (32)) < 64)) (PreH15 : (target_null_target = 0)) ,
-  (((( &( "OSCSpacePrioTbl" ) ) + (destTask_Prio_pre * sizeof(PTR)))) # Ptr  |-> 0)
-|--
-  “ (11 = 11) ”
-  &&  (((( &( "OSCSpacePrioTbl" ) ) + (dest_null_target * sizeof(PTR)))) # Ptr  |-> 0)
-.
-
-Definition ucos_Grant_Cap_return_wit_3_prio_invalid := 
-forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (right_prio_invalid: Z) (class_prio_invalid: Z) (dest_prio_invalid: Z) (PreH1 : (destTask_Prio_pre >= 64)) (PreH2 : (cap_Class_pre <= 16)) (PreH3 : (0 <= cap_Class_pre)) (PreH4 : (destTask_Prio_pre = dest_prio_invalid)) (PreH5 : (cap_Class_pre = class_prio_invalid)) (PreH6 : (cap_Right_pre = right_prio_invalid)) (PreH7 : (0 <= dest_prio_invalid)) (PreH8 : (dest_prio_invalid <= 255)) (PreH9 : ((unsigned_last_nbits (dest_prio_invalid) (32)) = dest_prio_invalid)) (PreH10 : (0 <= class_prio_invalid)) (PreH11 : (class_prio_invalid <= 16)) (PreH12 : (0 <= right_prio_invalid)) (PreH13 : (right_prio_invalid <= UINT_MAX)) (PreH14 : ((unsigned_last_nbits (dest_prio_invalid) (32)) >= 64)) ,
-  TT && emp 
-|--
-  “ (11 = 11) ”
-  &&  emp
-.
-
-Definition ucos_Grant_Cap_return_wit_4_class_invalid := 
-forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (right_class_invalid: Z) (class_class_invalid: Z) (dest_class_invalid: Z) (PreH1 : (cap_Class_pre > 16)) (PreH2 : (0 <= cap_Class_pre)) (PreH3 : (destTask_Prio_pre = dest_class_invalid)) (PreH4 : (cap_Class_pre = class_class_invalid)) (PreH5 : (cap_Right_pre = right_class_invalid)) (PreH6 : (0 <= dest_class_invalid)) (PreH7 : (dest_class_invalid <= 255)) (PreH8 : ((unsigned_last_nbits (dest_class_invalid) (32)) = dest_class_invalid)) (PreH9 : (0 <= class_class_invalid)) (PreH10 : (class_class_invalid <= UINT_MAX)) (PreH11 : (0 <= right_class_invalid)) (PreH12 : (right_class_invalid <= UINT_MAX)) (PreH13 : (class_class_invalid > 16)) ,
-  TT && emp 
-|--
-  “ (11 = 11) ”
-  &&  emp
-.
-
-Definition ucos_Grant_Cap_partial_solve_wit_1_null_target := 
-forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (right_null_target: Z) (class_null_target: Z) (dest_null_target: Z) (target_null_target: Z) (PreH1 : (destTask_Prio_pre < 64)) (PreH2 : (cap_Class_pre <= 16)) (PreH3 : (0 <= cap_Class_pre)) (PreH4 : (destTask_Prio_pre = dest_null_target)) (PreH5 : (cap_Class_pre = class_null_target)) (PreH6 : (cap_Right_pre = right_null_target)) (PreH7 : (0 <= dest_null_target)) (PreH8 : (dest_null_target <= 255)) (PreH9 : ((unsigned_last_nbits (dest_null_target) (32)) = dest_null_target)) (PreH10 : (0 <= class_null_target)) (PreH11 : (class_null_target <= 16)) (PreH12 : (0 <= right_null_target)) (PreH13 : (right_null_target <= UINT_MAX)) (PreH14 : ((unsigned_last_nbits (dest_null_target) (32)) < 64)) (PreH15 : (target_null_target = 0)) ,
-  (((( &( "OSCSpacePrioTbl" ) ) + (dest_null_target * sizeof(PTR)))) # Ptr  |-> target_null_target)
-|--
-  “ (destTask_Prio_pre < 64) ” 
-  &&  “ (cap_Class_pre <= 16) ” 
-  &&  “ (0 <= cap_Class_pre) ” 
-  &&  “ (destTask_Prio_pre = dest_null_target) ” 
-  &&  “ (cap_Class_pre = class_null_target) ” 
-  &&  “ (cap_Right_pre = right_null_target) ” 
-  &&  “ (0 <= dest_null_target) ” 
-  &&  “ (dest_null_target <= 255) ” 
-  &&  “ ((unsigned_last_nbits (dest_null_target) (32)) = dest_null_target) ” 
-  &&  “ (0 <= class_null_target) ” 
-  &&  “ (class_null_target <= 16) ” 
-  &&  “ (0 <= right_null_target) ” 
-  &&  “ (right_null_target <= UINT_MAX) ” 
-  &&  “ ((unsigned_last_nbits (dest_null_target) (32)) < 64) ” 
-  &&  “ (target_null_target = 0) ”
-  &&  (((( &( "OSCSpacePrioTbl" ) ) + (destTask_Prio_pre * sizeof(PTR)))) # Ptr  |-> 0)
-.
-
-Definition ucos_Grant_Cap_partial_solve_wit_2_valid_target := 
-forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (old_right_valid_target: Z) (old_content_valid_target: Z) (old_type_valid_target: Z) (right_valid_target: Z) (class_valid_target: Z) (dest_valid_target: Z) (target_valid_target: Z) (PreH1 : (destTask_Prio_pre < 64)) (PreH2 : (cap_Class_pre <= 16)) (PreH3 : (0 <= cap_Class_pre)) (PreH4 : (destTask_Prio_pre = dest_valid_target)) (PreH5 : (cap_Class_pre = class_valid_target)) (PreH6 : (cap_Right_pre = right_valid_target)) (PreH7 : (0 <= dest_valid_target)) (PreH8 : (dest_valid_target <= 255)) (PreH9 : ((unsigned_last_nbits (dest_valid_target) (32)) = dest_valid_target)) (PreH10 : (0 <= class_valid_target)) (PreH11 : (class_valid_target <= 16)) (PreH12 : (0 <= right_valid_target)) (PreH13 : (right_valid_target <= UINT_MAX)) (PreH14 : ((unsigned_last_nbits (dest_valid_target) (32)) < 64)) (PreH15 : (target_valid_target <> 0)) ,
-  (((( &( "OSCSpacePrioTbl" ) ) + (dest_valid_target * sizeof(PTR)))) # Ptr  |-> target_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_type")) # UInt  |-> old_type_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_content")) # UInt  |-> old_content_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_right")) # UInt  |-> old_right_valid_target)
-|--
-  “ (destTask_Prio_pre < 64) ” 
-  &&  “ (cap_Class_pre <= 16) ” 
-  &&  “ (0 <= cap_Class_pre) ” 
-  &&  “ (destTask_Prio_pre = dest_valid_target) ” 
-  &&  “ (cap_Class_pre = class_valid_target) ” 
-  &&  “ (cap_Right_pre = right_valid_target) ” 
-  &&  “ (0 <= dest_valid_target) ” 
-  &&  “ (dest_valid_target <= 255) ” 
-  &&  “ ((unsigned_last_nbits (dest_valid_target) (32)) = dest_valid_target) ” 
-  &&  “ (0 <= class_valid_target) ” 
-  &&  “ (class_valid_target <= 16) ” 
-  &&  “ (0 <= right_valid_target) ” 
-  &&  “ (right_valid_target <= UINT_MAX) ” 
-  &&  “ ((unsigned_last_nbits (dest_valid_target) (32)) < 64) ” 
-  &&  “ (target_valid_target <> 0) ”
-  &&  (((( &( "OSCSpacePrioTbl" ) ) + (destTask_Prio_pre * sizeof(PTR)))) # Ptr  |-> target_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_type")) # UInt  |-> old_type_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_content")) # UInt  |-> old_content_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_right")) # UInt  |-> old_right_valid_target)
-.
-
-Definition ucos_Grant_Cap_partial_solve_wit_3_valid_target := 
-forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (old_right_valid_target: Z) (old_content_valid_target: Z) (old_type_valid_target: Z) (right_valid_target: Z) (class_valid_target: Z) (dest_valid_target: Z) (target_valid_target: Z) (PreH1 : (target_valid_target <> 0)) (PreH2 : (destTask_Prio_pre < 64)) (PreH3 : (cap_Class_pre <= 16)) (PreH4 : (0 <= cap_Class_pre)) (PreH5 : (destTask_Prio_pre = dest_valid_target)) (PreH6 : (cap_Class_pre = class_valid_target)) (PreH7 : (cap_Right_pre = right_valid_target)) (PreH8 : (0 <= dest_valid_target)) (PreH9 : (dest_valid_target <= 255)) (PreH10 : ((unsigned_last_nbits (dest_valid_target) (32)) = dest_valid_target)) (PreH11 : (0 <= class_valid_target)) (PreH12 : (class_valid_target <= 16)) (PreH13 : (0 <= right_valid_target)) (PreH14 : (right_valid_target <= UINT_MAX)) (PreH15 : ((unsigned_last_nbits (dest_valid_target) (32)) < 64)) (PreH16 : (target_valid_target <> 0)) ,
-  (((( &( "OSCSpacePrioTbl" ) ) + (destTask_Prio_pre * sizeof(PTR)))) # Ptr  |-> target_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_type")) # UInt  |-> old_type_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_content")) # UInt  |-> old_content_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_right")) # UInt  |-> old_right_valid_target)
-|--
-  “ (target_valid_target <> 0) ” 
-  &&  “ (destTask_Prio_pre < 64) ” 
-  &&  “ (cap_Class_pre <= 16) ” 
-  &&  “ (0 <= cap_Class_pre) ” 
-  &&  “ (destTask_Prio_pre = dest_valid_target) ” 
-  &&  “ (cap_Class_pre = class_valid_target) ” 
-  &&  “ (cap_Right_pre = right_valid_target) ” 
-  &&  “ (0 <= dest_valid_target) ” 
-  &&  “ (dest_valid_target <= 255) ” 
-  &&  “ ((unsigned_last_nbits (dest_valid_target) (32)) = dest_valid_target) ” 
-  &&  “ (0 <= class_valid_target) ” 
-  &&  “ (class_valid_target <= 16) ” 
-  &&  “ (0 <= right_valid_target) ” 
-  &&  “ (right_valid_target <= UINT_MAX) ” 
-  &&  “ ((unsigned_last_nbits (dest_valid_target) (32)) < 64) ” 
-  &&  “ (target_valid_target <> 0) ”
-  &&  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (cap_Class_pre * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_type")) # UInt  |->_)
-  **  (((( &( "OSCSpacePrioTbl" ) ) + (destTask_Prio_pre * sizeof(PTR)))) # Ptr  |-> target_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_content")) # UInt  |-> old_content_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_right")) # UInt  |-> old_right_valid_target)
-.
-
-Definition ucos_Grant_Cap_partial_solve_wit_4_valid_target := 
-forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (old_right_valid_target: Z) (old_content_valid_target: Z) (right_valid_target: Z) (class_valid_target: Z) (dest_valid_target: Z) (target_valid_target: Z) (PreH1 : (target_valid_target <> 0)) (PreH2 : (destTask_Prio_pre < 64)) (PreH3 : (cap_Class_pre <= 16)) (PreH4 : (0 <= cap_Class_pre)) (PreH5 : (destTask_Prio_pre = dest_valid_target)) (PreH6 : (cap_Class_pre = class_valid_target)) (PreH7 : (cap_Right_pre = right_valid_target)) (PreH8 : (0 <= dest_valid_target)) (PreH9 : (dest_valid_target <= 255)) (PreH10 : ((unsigned_last_nbits (dest_valid_target) (32)) = dest_valid_target)) (PreH11 : (0 <= class_valid_target)) (PreH12 : (class_valid_target <= 16)) (PreH13 : (0 <= right_valid_target)) (PreH14 : (right_valid_target <= UINT_MAX)) (PreH15 : ((unsigned_last_nbits (dest_valid_target) (32)) < 64)) (PreH16 : (target_valid_target <> 0)) ,
-  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (cap_Class_pre * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_type")) # UInt  |-> 1)
-  **  (((( &( "OSCSpacePrioTbl" ) ) + (destTask_Prio_pre * sizeof(PTR)))) # Ptr  |-> target_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_content")) # UInt  |-> old_content_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_right")) # UInt  |-> old_right_valid_target)
-|--
-  “ (target_valid_target <> 0) ” 
-  &&  “ (destTask_Prio_pre < 64) ” 
-  &&  “ (cap_Class_pre <= 16) ” 
-  &&  “ (0 <= cap_Class_pre) ” 
-  &&  “ (destTask_Prio_pre = dest_valid_target) ” 
-  &&  “ (cap_Class_pre = class_valid_target) ” 
-  &&  “ (cap_Right_pre = right_valid_target) ” 
-  &&  “ (0 <= dest_valid_target) ” 
-  &&  “ (dest_valid_target <= 255) ” 
-  &&  “ ((unsigned_last_nbits (dest_valid_target) (32)) = dest_valid_target) ” 
-  &&  “ (0 <= class_valid_target) ” 
-  &&  “ (class_valid_target <= 16) ” 
-  &&  “ (0 <= right_valid_target) ” 
-  &&  “ (right_valid_target <= UINT_MAX) ” 
-  &&  “ ((unsigned_last_nbits (dest_valid_target) (32)) < 64) ” 
-  &&  “ (target_valid_target <> 0) ”
-  &&  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (cap_Class_pre * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_content")) # UInt  |->_)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (cap_Class_pre * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_type")) # UInt  |-> 1)
-  **  (((( &( "OSCSpacePrioTbl" ) ) + (destTask_Prio_pre * sizeof(PTR)))) # Ptr  |-> target_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_right")) # UInt  |-> old_right_valid_target)
-.
-
-Definition ucos_Grant_Cap_partial_solve_wit_5_valid_target := 
-forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (old_right_valid_target: Z) (right_valid_target: Z) (class_valid_target: Z) (dest_valid_target: Z) (target_valid_target: Z) (PreH1 : (target_valid_target <> 0)) (PreH2 : (destTask_Prio_pre < 64)) (PreH3 : (cap_Class_pre <= 16)) (PreH4 : (0 <= cap_Class_pre)) (PreH5 : (destTask_Prio_pre = dest_valid_target)) (PreH6 : (cap_Class_pre = class_valid_target)) (PreH7 : (cap_Right_pre = right_valid_target)) (PreH8 : (0 <= dest_valid_target)) (PreH9 : (dest_valid_target <= 255)) (PreH10 : ((unsigned_last_nbits (dest_valid_target) (32)) = dest_valid_target)) (PreH11 : (0 <= class_valid_target)) (PreH12 : (class_valid_target <= 16)) (PreH13 : (0 <= right_valid_target)) (PreH14 : (right_valid_target <= UINT_MAX)) (PreH15 : ((unsigned_last_nbits (dest_valid_target) (32)) < 64)) (PreH16 : (target_valid_target <> 0)) ,
-  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (cap_Class_pre * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_content")) # UInt  |-> cap_Class_pre)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (cap_Class_pre * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_type")) # UInt  |-> 1)
-  **  (((( &( "OSCSpacePrioTbl" ) ) + (destTask_Prio_pre * sizeof(PTR)))) # Ptr  |-> target_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class_valid_target * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_right")) # UInt  |-> old_right_valid_target)
-|--
-  “ (target_valid_target <> 0) ” 
-  &&  “ (destTask_Prio_pre < 64) ” 
-  &&  “ (cap_Class_pre <= 16) ” 
-  &&  “ (0 <= cap_Class_pre) ” 
-  &&  “ (destTask_Prio_pre = dest_valid_target) ” 
-  &&  “ (cap_Class_pre = class_valid_target) ” 
-  &&  “ (cap_Right_pre = right_valid_target) ” 
-  &&  “ (0 <= dest_valid_target) ” 
-  &&  “ (dest_valid_target <= 255) ” 
-  &&  “ ((unsigned_last_nbits (dest_valid_target) (32)) = dest_valid_target) ” 
-  &&  “ (0 <= class_valid_target) ” 
-  &&  “ (class_valid_target <= 16) ” 
-  &&  “ (0 <= right_valid_target) ” 
-  &&  “ (right_valid_target <= UINT_MAX) ” 
-  &&  “ ((unsigned_last_nbits (dest_valid_target) (32)) < 64) ” 
-  &&  “ (target_valid_target <> 0) ”
-  &&  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (cap_Class_pre * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_right")) # UInt  |-> old_right_valid_target)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (cap_Class_pre * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_content")) # UInt  |-> cap_Class_pre)
-  **  ((&(((&((target_valid_target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (cap_Class_pre * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_type")) # UInt  |-> 1)
-  **  (((( &( "OSCSpacePrioTbl" ) ) + (destTask_Prio_pre * sizeof(PTR)))) # Ptr  |-> target_valid_target)
-.
 
 (*----- Function grant_cspace_cap -----*)
 
@@ -632,7 +278,7 @@ forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (target: Z) 
 .
 
 Definition grant_cspace_cap_safety_wit_15_callee_success := 
-forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (old_right: Z) (target: Z) (grant_right: Z) (parent: Z) (current_space: Z) (running: Z) (current_prio: Z) (current_tcb: Z) (right: Z) (class: Z) (dest: Z) (retval: Z) (PreH1 : (retval <> 0)) (PreH2 : (retval = 0)) (PreH3 : ((unsigned_last_nbits (running) (32)) = 0)) (PreH4 : (current_space <> 0)) (PreH5 : (destTask_Prio_pre < 63)) (PreH6 : (destTask_Prio_pre = dest)) (PreH7 : (cap_Class_pre = class)) (PreH8 : (cap_Right_pre = right)) (PreH9 : (0 <= dest)) (PreH10 : (dest <= 255)) (PreH11 : ((unsigned_last_nbits (dest) (32)) = dest)) (PreH12 : (0 <= class)) (PreH13 : (class <= UINT_MAX)) (PreH14 : (0 <= right)) (PreH15 : (right <= UINT_MAX)) (PreH16 : (dest < 63)) (PreH17 : (current_tcb <> 0)) (PreH18 : (0 <= current_prio)) (PreH19 : (current_prio < 64)) (PreH20 : (current_prio <> dest)) (PreH21 : (current_space <> target)) (PreH22 : (current_space <> 0)) (PreH23 : (class <= 16)) (PreH24 : (target <> 0)) ,
+forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (old_right: Z) (old_content: Z) (old_type: Z) (target: Z) (grant_right: Z) (parent: Z) (current_space: Z) (running: Z) (current_prio: Z) (current_tcb: Z) (right: Z) (class: Z) (dest: Z) (retval: Z) (PreH1 : (retval <> 0)) (PreH2 : (retval = 0)) (PreH3 : (grant_cap_transition retval class right old_type old_content old_right 1 class (Z.lor (Z.land old_right 4095) right) )) (PreH4 : ((unsigned_last_nbits (running) (32)) = 0)) (PreH5 : (current_space <> 0)) (PreH6 : (destTask_Prio_pre < 63)) (PreH7 : (destTask_Prio_pre = dest)) (PreH8 : (cap_Class_pre = class)) (PreH9 : (cap_Right_pre = right)) (PreH10 : (0 <= dest)) (PreH11 : (dest <= 255)) (PreH12 : ((unsigned_last_nbits (dest) (32)) = dest)) (PreH13 : (0 <= class)) (PreH14 : (class <= UINT_MAX)) (PreH15 : (0 <= right)) (PreH16 : (right <= UINT_MAX)) (PreH17 : (dest < 63)) (PreH18 : (current_tcb <> 0)) (PreH19 : (0 <= current_prio)) (PreH20 : (current_prio < 64)) (PreH21 : (current_prio <> dest)) (PreH22 : (current_space <> target)) (PreH23 : (current_space <> 0)) (PreH24 : (class <= 16)) (PreH25 : (target <> 0)) ,
   (((( &( "OSCSpacePrioTbl" ) ) + (dest * sizeof(PTR)))) # Ptr  |-> target)
   **  ((&(((&((target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_type")) # UInt  |-> 1)
   **  ((&(((&((target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_content")) # UInt  |-> class)
@@ -691,7 +337,7 @@ forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (target: Z) 
 .
 
 Definition grant_cspace_cap_safety_wit_18_callee_success := 
-forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (old_right: Z) (target: Z) (grant_right: Z) (parent: Z) (current_space: Z) (running: Z) (current_prio: Z) (current_tcb: Z) (right: Z) (class: Z) (dest: Z) (retval: Z) (PreH1 : (retval <> 0)) (PreH2 : (retval = 0)) (PreH3 : (parent = current_prio)) (PreH4 : ((Z.land grant_right 64) <> 0)) (PreH5 : ((unsigned_last_nbits (running) (32)) <> 0)) (PreH6 : (current_space <> 0)) (PreH7 : (destTask_Prio_pre < 63)) (PreH8 : (destTask_Prio_pre = dest)) (PreH9 : (cap_Class_pre = class)) (PreH10 : (cap_Right_pre = right)) (PreH11 : (0 <= dest)) (PreH12 : (dest <= 255)) (PreH13 : ((unsigned_last_nbits (dest) (32)) = dest)) (PreH14 : (0 <= class)) (PreH15 : (class <= UINT_MAX)) (PreH16 : (0 <= right)) (PreH17 : (right <= UINT_MAX)) (PreH18 : (dest < 63)) (PreH19 : (current_tcb <> 0)) (PreH20 : (0 <= current_prio)) (PreH21 : (current_prio < 64)) (PreH22 : (current_prio <> dest)) (PreH23 : (current_space <> target)) (PreH24 : (current_space <> 0)) (PreH25 : (class <= 16)) (PreH26 : (target <> 0)) ,
+forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (old_right: Z) (old_content: Z) (old_type: Z) (target: Z) (grant_right: Z) (parent: Z) (current_space: Z) (running: Z) (current_prio: Z) (current_tcb: Z) (right: Z) (class: Z) (dest: Z) (retval: Z) (PreH1 : (retval <> 0)) (PreH2 : (retval = 0)) (PreH3 : (grant_cap_transition retval class right old_type old_content old_right 1 class (Z.lor (Z.land old_right 4095) right) )) (PreH4 : (parent = current_prio)) (PreH5 : ((Z.land grant_right 64) <> 0)) (PreH6 : ((unsigned_last_nbits (running) (32)) <> 0)) (PreH7 : (current_space <> 0)) (PreH8 : (destTask_Prio_pre < 63)) (PreH9 : (destTask_Prio_pre = dest)) (PreH10 : (cap_Class_pre = class)) (PreH11 : (cap_Right_pre = right)) (PreH12 : (0 <= dest)) (PreH13 : (dest <= 255)) (PreH14 : ((unsigned_last_nbits (dest) (32)) = dest)) (PreH15 : (0 <= class)) (PreH16 : (class <= UINT_MAX)) (PreH17 : (0 <= right)) (PreH18 : (right <= UINT_MAX)) (PreH19 : (dest < 63)) (PreH20 : (current_tcb <> 0)) (PreH21 : (0 <= current_prio)) (PreH22 : (current_prio < 64)) (PreH23 : (current_prio <> dest)) (PreH24 : (current_space <> target)) (PreH25 : (current_space <> 0)) (PreH26 : (class <= 16)) (PreH27 : (target <> 0)) ,
   (((( &( "OSCSpacePrioTbl" ) ) + (dest * sizeof(PTR)))) # Ptr  |-> target)
   **  ((&(((&((target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_type")) # UInt  |-> 1)
   **  ((&(((&((target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_content")) # UInt  |-> class)
@@ -1177,7 +823,7 @@ forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (target: Z) 
 .
 
 Definition grant_cspace_cap_return_wit_11_callee_success := 
-forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (old_right: Z) (target: Z) (grant_right: Z) (parent: Z) (current_space: Z) (running: Z) (current_prio: Z) (current_tcb: Z) (right: Z) (class: Z) (dest: Z) (retval: Z) (PreH1 : (retval = 0)) (PreH2 : (retval = 0)) (PreH3 : ((unsigned_last_nbits (running) (32)) = 0)) (PreH4 : (current_space <> 0)) (PreH5 : (destTask_Prio_pre < 63)) (PreH6 : (destTask_Prio_pre = dest)) (PreH7 : (cap_Class_pre = class)) (PreH8 : (cap_Right_pre = right)) (PreH9 : (0 <= dest)) (PreH10 : (dest <= 255)) (PreH11 : ((unsigned_last_nbits (dest) (32)) = dest)) (PreH12 : (0 <= class)) (PreH13 : (class <= UINT_MAX)) (PreH14 : (0 <= right)) (PreH15 : (right <= UINT_MAX)) (PreH16 : (dest < 63)) (PreH17 : (current_tcb <> 0)) (PreH18 : (0 <= current_prio)) (PreH19 : (current_prio < 64)) (PreH20 : (current_prio <> dest)) (PreH21 : (current_space <> target)) (PreH22 : (current_space <> 0)) (PreH23 : (class <= 16)) (PreH24 : (target <> 0)) ,
+forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (old_right: Z) (old_content: Z) (old_type: Z) (target: Z) (grant_right: Z) (parent: Z) (current_space: Z) (running: Z) (current_prio: Z) (current_tcb: Z) (right: Z) (class: Z) (dest: Z) (retval: Z) (PreH1 : (retval = 0)) (PreH2 : (retval = 0)) (PreH3 : (grant_cap_transition retval class right old_type old_content old_right 1 class (Z.lor (Z.land old_right 4095) right) )) (PreH4 : ((unsigned_last_nbits (running) (32)) = 0)) (PreH5 : (current_space <> 0)) (PreH6 : (destTask_Prio_pre < 63)) (PreH7 : (destTask_Prio_pre = dest)) (PreH8 : (cap_Class_pre = class)) (PreH9 : (cap_Right_pre = right)) (PreH10 : (0 <= dest)) (PreH11 : (dest <= 255)) (PreH12 : ((unsigned_last_nbits (dest) (32)) = dest)) (PreH13 : (0 <= class)) (PreH14 : (class <= UINT_MAX)) (PreH15 : (0 <= right)) (PreH16 : (right <= UINT_MAX)) (PreH17 : (dest < 63)) (PreH18 : (current_tcb <> 0)) (PreH19 : (0 <= current_prio)) (PreH20 : (current_prio < 64)) (PreH21 : (current_prio <> dest)) (PreH22 : (current_space <> target)) (PreH23 : (current_space <> 0)) (PreH24 : (class <= 16)) (PreH25 : (target <> 0)) ,
   (((( &( "OSCSpacePrioTbl" ) ) + (dest * sizeof(PTR)))) # Ptr  |-> target)
   **  ((&(((&((target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_type")) # UInt  |-> 1)
   **  ((&(((&((target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_content")) # UInt  |-> class)
@@ -1229,7 +875,7 @@ forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (old_right: 
 .
 
 Definition grant_cspace_cap_return_wit_12_callee_success := 
-forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (old_right: Z) (target: Z) (grant_right: Z) (parent: Z) (current_space: Z) (running: Z) (current_prio: Z) (current_tcb: Z) (right: Z) (class: Z) (dest: Z) (retval: Z) (PreH1 : (retval = 0)) (PreH2 : (retval = 0)) (PreH3 : (parent = current_prio)) (PreH4 : ((Z.land grant_right 64) <> 0)) (PreH5 : ((unsigned_last_nbits (running) (32)) <> 0)) (PreH6 : (current_space <> 0)) (PreH7 : (destTask_Prio_pre < 63)) (PreH8 : (destTask_Prio_pre = dest)) (PreH9 : (cap_Class_pre = class)) (PreH10 : (cap_Right_pre = right)) (PreH11 : (0 <= dest)) (PreH12 : (dest <= 255)) (PreH13 : ((unsigned_last_nbits (dest) (32)) = dest)) (PreH14 : (0 <= class)) (PreH15 : (class <= UINT_MAX)) (PreH16 : (0 <= right)) (PreH17 : (right <= UINT_MAX)) (PreH18 : (dest < 63)) (PreH19 : (current_tcb <> 0)) (PreH20 : (0 <= current_prio)) (PreH21 : (current_prio < 64)) (PreH22 : (current_prio <> dest)) (PreH23 : (current_space <> target)) (PreH24 : (current_space <> 0)) (PreH25 : (class <= 16)) (PreH26 : (target <> 0)) ,
+forall (cap_Right_pre: Z) (cap_Class_pre: Z) (destTask_Prio_pre: Z) (old_right: Z) (old_content: Z) (old_type: Z) (target: Z) (grant_right: Z) (parent: Z) (current_space: Z) (running: Z) (current_prio: Z) (current_tcb: Z) (right: Z) (class: Z) (dest: Z) (retval: Z) (PreH1 : (retval = 0)) (PreH2 : (retval = 0)) (PreH3 : (grant_cap_transition retval class right old_type old_content old_right 1 class (Z.lor (Z.land old_right 4095) right) )) (PreH4 : (parent = current_prio)) (PreH5 : ((Z.land grant_right 64) <> 0)) (PreH6 : ((unsigned_last_nbits (running) (32)) <> 0)) (PreH7 : (current_space <> 0)) (PreH8 : (destTask_Prio_pre < 63)) (PreH9 : (destTask_Prio_pre = dest)) (PreH10 : (cap_Class_pre = class)) (PreH11 : (cap_Right_pre = right)) (PreH12 : (0 <= dest)) (PreH13 : (dest <= 255)) (PreH14 : ((unsigned_last_nbits (dest) (32)) = dest)) (PreH15 : (0 <= class)) (PreH16 : (class <= UINT_MAX)) (PreH17 : (0 <= right)) (PreH18 : (right <= UINT_MAX)) (PreH19 : (dest < 63)) (PreH20 : (current_tcb <> 0)) (PreH21 : (0 <= current_prio)) (PreH22 : (current_prio < 64)) (PreH23 : (current_prio <> dest)) (PreH24 : (current_space <> target)) (PreH25 : (current_space <> 0)) (PreH26 : (class <= 16)) (PreH27 : (target <> 0)) ,
   (((( &( "OSCSpacePrioTbl" ) ) + (dest * sizeof(PTR)))) # Ptr  |-> target)
   **  ((&(((&((target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_type")) # UInt  |-> 1)
   **  ((&(((&((target)  # "cspace" ->ₛ "cnode" .ₛ "slots") + (class * sizeof( "slot" ))))  # "slot" ->ₛ "capability" .ₛ "cap_content" .ₛ "category" .ₛ "category_content")) # UInt  |-> class)
@@ -1959,29 +1605,6 @@ Definition grant_cspace_cap_partial_solve_wit_9_callee_invalid := grant_cspace_c
 Module Type VC_Correct.
 
 
-Axiom proof_of_ucos_Grant_Cap_safety_wit_1_class_invalid : ucos_Grant_Cap_safety_wit_1_class_invalid.
-Axiom proof_of_ucos_Grant_Cap_safety_wit_2_prio_invalid : ucos_Grant_Cap_safety_wit_2_prio_invalid.
-Axiom proof_of_ucos_Grant_Cap_safety_wit_3_null_target : ucos_Grant_Cap_safety_wit_3_null_target.
-Axiom proof_of_ucos_Grant_Cap_safety_wit_4_valid_target : ucos_Grant_Cap_safety_wit_4_valid_target.
-Axiom proof_of_ucos_Grant_Cap_safety_wit_5_valid_target : ucos_Grant_Cap_safety_wit_5_valid_target.
-Axiom proof_of_ucos_Grant_Cap_safety_wit_6_null_target : ucos_Grant_Cap_safety_wit_6_null_target.
-Axiom proof_of_ucos_Grant_Cap_safety_wit_7_prio_invalid : ucos_Grant_Cap_safety_wit_7_prio_invalid.
-Axiom proof_of_ucos_Grant_Cap_safety_wit_8_class_invalid : ucos_Grant_Cap_safety_wit_8_class_invalid.
-Axiom proof_of_ucos_Grant_Cap_safety_wit_9_prio_invalid : ucos_Grant_Cap_safety_wit_9_prio_invalid.
-Axiom proof_of_ucos_Grant_Cap_safety_wit_10_null_target : ucos_Grant_Cap_safety_wit_10_null_target.
-Axiom proof_of_ucos_Grant_Cap_safety_wit_11_valid_target : ucos_Grant_Cap_safety_wit_11_valid_target.
-Axiom proof_of_ucos_Grant_Cap_safety_wit_12_null_target : ucos_Grant_Cap_safety_wit_12_null_target.
-Axiom proof_of_ucos_Grant_Cap_safety_wit_13_valid_target : ucos_Grant_Cap_safety_wit_13_valid_target.
-Axiom proof_of_ucos_Grant_Cap_safety_wit_14_valid_target : ucos_Grant_Cap_safety_wit_14_valid_target.
-Axiom proof_of_ucos_Grant_Cap_return_wit_1_valid_target : ucos_Grant_Cap_return_wit_1_valid_target.
-Axiom proof_of_ucos_Grant_Cap_return_wit_2_null_target : ucos_Grant_Cap_return_wit_2_null_target.
-Axiom proof_of_ucos_Grant_Cap_return_wit_3_prio_invalid : ucos_Grant_Cap_return_wit_3_prio_invalid.
-Axiom proof_of_ucos_Grant_Cap_return_wit_4_class_invalid : ucos_Grant_Cap_return_wit_4_class_invalid.
-Axiom proof_of_ucos_Grant_Cap_partial_solve_wit_1_null_target : ucos_Grant_Cap_partial_solve_wit_1_null_target.
-Axiom proof_of_ucos_Grant_Cap_partial_solve_wit_2_valid_target : ucos_Grant_Cap_partial_solve_wit_2_valid_target.
-Axiom proof_of_ucos_Grant_Cap_partial_solve_wit_3_valid_target : ucos_Grant_Cap_partial_solve_wit_3_valid_target.
-Axiom proof_of_ucos_Grant_Cap_partial_solve_wit_4_valid_target : ucos_Grant_Cap_partial_solve_wit_4_valid_target.
-Axiom proof_of_ucos_Grant_Cap_partial_solve_wit_5_valid_target : ucos_Grant_Cap_partial_solve_wit_5_valid_target.
 Axiom proof_of_grant_cspace_cap_safety_wit_1 : grant_cspace_cap_safety_wit_1.
 Axiom proof_of_grant_cspace_cap_safety_wit_2 : grant_cspace_cap_safety_wit_2.
 Axiom proof_of_grant_cspace_cap_safety_wit_3 : grant_cspace_cap_safety_wit_3.

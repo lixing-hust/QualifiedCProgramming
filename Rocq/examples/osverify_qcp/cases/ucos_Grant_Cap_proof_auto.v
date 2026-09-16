@@ -17,68 +17,72 @@ Local Open Scope sets.
 Local Open Scope string_scope.
 Local Open Scope list.
 Import naive_C_Rules.
+Require Import SimpleC.EE.osverify_qcp.cap_model.
 Local Open Scope sac.
 
-Lemma proof_of_ucos_Grant_Cap_safety_wit_1 : ucos_Grant_Cap_safety_wit_1.
+Lemma proof_of_ucos_Grant_Cap_safety_wit_1_class_invalid : ucos_Grant_Cap_safety_wit_1_class_invalid.
 Proof. Admitted. 
 
-Lemma proof_of_ucos_Grant_Cap_safety_wit_2 : ucos_Grant_Cap_safety_wit_2.
+Lemma proof_of_ucos_Grant_Cap_safety_wit_2_prio_invalid : ucos_Grant_Cap_safety_wit_2_prio_invalid.
 Proof. Admitted. 
 
-Lemma proof_of_ucos_Grant_Cap_safety_wit_3 : ucos_Grant_Cap_safety_wit_3.
+Lemma proof_of_ucos_Grant_Cap_safety_wit_3_null_target : ucos_Grant_Cap_safety_wit_3_null_target.
 Proof. Admitted. 
 
-Lemma proof_of_ucos_Grant_Cap_safety_wit_4 : ucos_Grant_Cap_safety_wit_4.
+Lemma proof_of_ucos_Grant_Cap_safety_wit_4_valid_target : ucos_Grant_Cap_safety_wit_4_valid_target.
 Proof. Admitted. 
 
-Lemma proof_of_ucos_Grant_Cap_safety_wit_5 : ucos_Grant_Cap_safety_wit_5.
+Lemma proof_of_ucos_Grant_Cap_safety_wit_5_valid_target : ucos_Grant_Cap_safety_wit_5_valid_target.
 Proof. Admitted. 
 
-Lemma proof_of_ucos_Grant_Cap_safety_wit_6 : ucos_Grant_Cap_safety_wit_6.
+Lemma proof_of_ucos_Grant_Cap_safety_wit_6_null_target : ucos_Grant_Cap_safety_wit_6_null_target.
 Proof. Admitted. 
 
-Lemma proof_of_ucos_Grant_Cap_safety_wit_7 : ucos_Grant_Cap_safety_wit_7.
+Lemma proof_of_ucos_Grant_Cap_safety_wit_7_prio_invalid : ucos_Grant_Cap_safety_wit_7_prio_invalid.
 Proof. Admitted. 
 
-Lemma proof_of_ucos_Grant_Cap_safety_wit_8 : ucos_Grant_Cap_safety_wit_8.
+Lemma proof_of_ucos_Grant_Cap_safety_wit_8_class_invalid : ucos_Grant_Cap_safety_wit_8_class_invalid.
 Proof. Admitted. 
 
-Lemma proof_of_ucos_Grant_Cap_safety_wit_9 : ucos_Grant_Cap_safety_wit_9.
+Lemma proof_of_ucos_Grant_Cap_safety_wit_9_prio_invalid : ucos_Grant_Cap_safety_wit_9_prio_invalid.
 Proof. Admitted. 
 
-Lemma proof_of_ucos_Grant_Cap_safety_wit_10 : ucos_Grant_Cap_safety_wit_10.
+Lemma proof_of_ucos_Grant_Cap_safety_wit_10_null_target : ucos_Grant_Cap_safety_wit_10_null_target.
 Proof. Admitted. 
 
-Lemma proof_of_ucos_Grant_Cap_safety_wit_11 : ucos_Grant_Cap_safety_wit_11.
+Lemma proof_of_ucos_Grant_Cap_safety_wit_11_valid_target : ucos_Grant_Cap_safety_wit_11_valid_target.
 Proof. Admitted. 
 
-Lemma proof_of_ucos_Grant_Cap_safety_wit_12 : ucos_Grant_Cap_safety_wit_12.
+Lemma proof_of_ucos_Grant_Cap_safety_wit_12_null_target : ucos_Grant_Cap_safety_wit_12_null_target.
 Proof. Admitted. 
 
-Lemma proof_of_ucos_Grant_Cap_safety_wit_13 : ucos_Grant_Cap_safety_wit_13.
+Lemma proof_of_ucos_Grant_Cap_safety_wit_13_valid_target : ucos_Grant_Cap_safety_wit_13_valid_target.
 Proof. Admitted. 
 
-Lemma proof_of_ucos_Grant_Cap_safety_wit_14 : ucos_Grant_Cap_safety_wit_14.
+Lemma proof_of_ucos_Grant_Cap_safety_wit_14_valid_target : ucos_Grant_Cap_safety_wit_14_valid_target.
 Proof. Admitted. 
 
-Lemma proof_of_ucos_Grant_Cap_entail_wit_1_1 : ucos_Grant_Cap_entail_wit_1_1.
+Lemma proof_of_ucos_Grant_Cap_return_wit_2_null_target : ucos_Grant_Cap_return_wit_2_null_target.
 Proof. Admitted. 
 
-Lemma proof_of_ucos_Grant_Cap_entail_wit_1_2 : ucos_Grant_Cap_entail_wit_1_2.
+Lemma proof_of_ucos_Grant_Cap_return_wit_3_prio_invalid : ucos_Grant_Cap_return_wit_3_prio_invalid.
 Proof. Admitted. 
 
-Lemma proof_of_ucos_Grant_Cap_return_wit_1 : ucos_Grant_Cap_return_wit_1.
+Lemma proof_of_ucos_Grant_Cap_return_wit_4_class_invalid : ucos_Grant_Cap_return_wit_4_class_invalid.
 Proof. Admitted. 
 
-Lemma proof_of_ucos_Grant_Cap_return_wit_2 : ucos_Grant_Cap_return_wit_2.
+Lemma proof_of_ucos_Grant_Cap_partial_solve_wit_1_null_target : ucos_Grant_Cap_partial_solve_wit_1_null_target.
 Proof. Admitted. 
 
-Lemma proof_of_ucos_Grant_Cap_return_wit_3 : ucos_Grant_Cap_return_wit_3.
+Lemma proof_of_ucos_Grant_Cap_partial_solve_wit_2_valid_target : ucos_Grant_Cap_partial_solve_wit_2_valid_target.
 Proof. Admitted. 
 
-Lemma proof_of_ucos_Grant_Cap_return_wit_4 : ucos_Grant_Cap_return_wit_4.
+Lemma proof_of_ucos_Grant_Cap_partial_solve_wit_3_valid_target : ucos_Grant_Cap_partial_solve_wit_3_valid_target.
 Proof. Admitted. 
 
-Lemma proof_of_ucos_Grant_Cap_return_wit_5 : ucos_Grant_Cap_return_wit_5.
+Lemma proof_of_ucos_Grant_Cap_partial_solve_wit_4_valid_target : ucos_Grant_Cap_partial_solve_wit_4_valid_target.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_Grant_Cap_partial_solve_wit_5_valid_target : ucos_Grant_Cap_partial_solve_wit_5_valid_target.
 Proof. Admitted. 
 

@@ -1,0 +1,18 @@
+{
+  "groups": [
+    {
+      "id": "grant-result",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_ucos_Grant_Cap_return_wit_1_valid_target",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_ucos_Grant_Cap_return_wit_1_valid_target_split_goal_1": "Introduce the generated binders, discharge the pure entailment, unfold grant_cap_transition and grant_slot_result, introduce slot and ptr, and close the resulting record/pair equality by reflexivity after projection reduction.",
+            "proof_of_ucos_Grant_Cap_return_wit_1_valid_target_split_goal_spatial": "Introduce binders and substitute destination, class, and right using PreH11, PreH12, and PreH13; cancel the four unchanged table/type/content/right resources after commutative separation reordering."
+          }
+        }
+      ]
+    }
+  ]
+}

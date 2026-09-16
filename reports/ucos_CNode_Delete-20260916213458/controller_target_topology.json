@@ -1,0 +1,15 @@
+{
+  "case": "ucos_CNode_Delete",
+  "run_id": "ucos_CNode_Delete-20260916213458",
+  "target_files": {
+    "active_case_theory": "SimpleC.EE.osverify_qcp.cases",
+    "c_file": "QCP_examples/osverify_qcp/cases/ucos_CNode_Delete.c",
+    "case_name": "ucos_CNode_Delete",
+    "formal_case_lib": "Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_lib.v",
+    "formal_directory": "Rocq/examples/osverify_qcp/cases",
+    "goal_check_file": "Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_goal_check.v",
+    "goal_file": "Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_goal.v",
+    "proof_auto_file": "Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_proof_auto.v",
+    "proof_manual_file": "Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_proof_manual.v"
+  }
+}

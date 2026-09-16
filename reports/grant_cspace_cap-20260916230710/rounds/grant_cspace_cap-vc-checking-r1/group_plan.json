@@ -1,0 +1,79 @@
+{
+  "groups": [
+    {
+      "id": "running-nonzero",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_grant_cspace_cap_return_wit_1",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_grant_cspace_cap_return_wit_1_split_goal_1": "Introduce the binders; if running were zero, substitution and computation would contradict PreH3, unsigned_last_nbits running 32 <> 0."
+          }
+        },
+        {
+          "name": "proof_of_grant_cspace_cap_return_wit_2",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_grant_cspace_cap_return_wit_2_split_goal_1": "Derive running <> 0 by substituting running = 0 into PreH3 and computing unsigned_last_nbits 0 32."
+          }
+        },
+        {
+          "name": "proof_of_grant_cspace_cap_return_wit_3",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_grant_cspace_cap_return_wit_3_split_goal_1": "Derive running <> 0 by contradiction from PreH3 after substituting zero; the class > 16 branch adds no required premise."
+          }
+        }
+      ]
+    },
+    {
+      "id": "permission-denied",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_grant_cspace_cap_return_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose the second RHS disjunct, whose grant-right mask equality is PreH1. Derive running <> 0 from PreH2 by substituting zero. Discharge dest/current-space/class facts from the existing premises and cancel the seven unchanged heap cells."
+        },
+        {
+          "name": "proof_of_grant_cspace_cap_return_wit_5",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose the second RHS disjunct for the zero grant-right mask. Use PreH2 to derive running <> 0, PreH22/PreH23 for class <= 16 and target <> 0, and preserve all eleven cells including the destination slot's old_type, old_content and old_right."
+        },
+        {
+          "name": "proof_of_grant_cspace_cap_return_wit_6",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose the second RHS disjunct using PreH1. Derive running <> 0 from PreH2; use class <= 16 and target = 0 from PreH22/PreH23. Cancel the eight identical heap resources including the destination table cell."
+        }
+      ]
+    },
+    {
+      "id": "stopped-errors",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_grant_cspace_cap_return_wit_7_callee_null",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Keep the OSRunning UChar cell while extracting its value range 0 <= running <= 255. This bounds running below 2^32, so unsigned_last_nbits running 32 = running; PreH3 gives running = 0. Choose the second RHS disjunct, rewrite target = 0, and reorder/cancel the destination-table cell and seven global/frame cells."
+        },
+        {
+          "name": "proof_of_grant_cspace_cap_return_wit_8_callee_invalid",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Extract running's unsigned-byte range from its owned OSRunning cell without consuming it. Reduce its 32-bit truncation to running, obtaining running = 0 from PreH3. Choose the fourth RHS disjunct, use PreH23 for class > 16, and cancel all seven unchanged cells; no target = 0 premise is needed."
+        }
+      ]
+    },
+    {
+      "id": "success-result",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_grant_cspace_cap_return_wit_11_callee_success",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Use the owned OSRunning UChar resource to obtain 0 <= running <= 255, identify unsigned_last_nbits running 32 with running, and infer running = 0 from PreH4. Select the second RHS disjunct. PreH24/PreH25 discharge class <= 16 and target <> 0. Reorder and cancel all eleven cells, preserving the callee's already-produced values 1, class, and Z.lor (Z.land old_right 4095) right exactly; the transition premise requires no extra bitwise theorem."
+        }
+      ]
+    }
+  ]
+}

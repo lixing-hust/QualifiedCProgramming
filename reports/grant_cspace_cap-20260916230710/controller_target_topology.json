@@ -1,0 +1,15 @@
+{
+  "case": "grant_cspace_cap",
+  "run_id": "grant_cspace_cap-20260916230710",
+  "target_files": {
+    "active_case_theory": "SimpleC.EE.osverify_qcp.cases",
+    "c_file": "QCP_examples/osverify_qcp/cases/grant_cspace_cap.c",
+    "case_name": "grant_cspace_cap",
+    "formal_case_lib": "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_lib.v",
+    "formal_directory": "Rocq/examples/osverify_qcp/cases",
+    "goal_check_file": "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_goal_check.v",
+    "goal_file": "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_goal.v",
+    "proof_auto_file": "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_proof_auto.v",
+    "proof_manual_file": "Rocq/examples/osverify_qcp/cases/grant_cspace_cap_proof_manual.v"
+  }
+}

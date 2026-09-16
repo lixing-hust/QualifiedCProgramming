@@ -1,0 +1,9 @@
+{
+  "source_goal_version": "a2d91bc7c58791d0ffade62973f9fe2630624f45f12fda189643842b36639665",
+  "proof_manual": "Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_proof_manual.v",
+  "formal_case_lib": "Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_lib.v",
+  "seed_sha256": {
+    "proof_manual": "7b0ea7e6db32dadb407c47a8c6216facee29aef46d4bd426bfc6c0e4d5bf2321",
+    "formal_case_lib": "78b47f7928a12e1c94cd8905f463bb5269eb76ad8b154674a80c41cfe3934164"
+  }
+}

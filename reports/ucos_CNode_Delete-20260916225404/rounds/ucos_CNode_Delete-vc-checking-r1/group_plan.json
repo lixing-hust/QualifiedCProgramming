@@ -1,0 +1,31 @@
+{
+  "groups": [
+    {
+      "id": "delete-results",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_ucos_CNode_Delete_return_wit_1_category_cap",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_ucos_CNode_Delete_return_wit_1_category_cap_split_goal_1": "Unfold the split definition, introduce binders, unfold delete_slot_transition and delete_slot_result, then cbn and reflexivity: category deletion clears both words and preserves the pointer."
+          }
+        },
+        {
+          "name": "proof_of_ucos_CNode_Delete_return_wit_2_object_cap",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_ucos_CNode_Delete_return_wit_2_object_cap_split_goal_1": "Unfold the split definition, introduce binders, unfold delete_slot_transition and delete_slot_result, then cbn and reflexivity: object deletion clears word0 and the pointer while preserving word1."
+          }
+        },
+        {
+          "name": "proof_of_ucos_CNode_Delete_return_wit_3_unsupported_cap",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_ucos_CNode_Delete_return_wit_3_unsupported_cap_split_goal_1": "Unfold the split definition, introduce binders, unfold delete_slot_transition and delete_slot_result and cbn. Destruct Z.eq_dec old_cap_unsupported_cap 1 and then Z.eq_dec old_cap_unsupported_cap 2; close equal branches by the existing disequalities and the remaining unchanged-state result by reflexivity."
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "groups": [
+    {
+      "id": "slot-transition",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_ucos_CNode_Delete_return_wit_1_category_cap",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_ucos_CNode_Delete_return_wit_1_category_cap_split_goal_1": "Introduce the quantified values and pure premises, unfold delete_slot_transition and delete_slot_result, and compute the cap-kind 1 branch. Reflexivity identifies return 0 and state (0,0,0,0,old_ptr)."
+          }
+        },
+        {
+          "name": "proof_of_ucos_CNode_Delete_return_wit_2_object_cap",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_ucos_CNode_Delete_return_wit_2_object_cap_split_goal_1": "Introduce the quantified values and pure premises, unfold delete_slot_transition and delete_slot_result, and compute the cap-kind 2 branch. Reflexivity identifies return 0 and state (0,0,0,old_word1,0)."
+          }
+        },
+        {
+          "name": "proof_of_ucos_CNode_Delete_return_wit_3_unsupported_cap",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_ucos_CNode_Delete_return_wit_3_unsupported_cap_split_goal_1": "Introduce the quantified values and pure premises; unfold delete_slot_transition and delete_slot_result and reduce record projections. Destruct the two Z.eq_dec tests; the equal branches contradict old_cap <> 1 and old_cap <> 2, while the remaining branch is reflexive with return 9 and the unchanged complete slot state."
+          }
+        }
+      ]
+    }
+  ]
+}

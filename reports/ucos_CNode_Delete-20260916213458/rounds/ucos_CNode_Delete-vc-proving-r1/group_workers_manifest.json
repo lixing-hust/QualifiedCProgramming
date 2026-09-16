@@ -1,0 +1,14 @@
+{
+  "base_manifest_sha256": "6704e6c7569e9c842e78a1e008a6c6f2da3a8b24a30b3b2b1d7faa5ced358696",
+  "group_plan": "rounds/ucos_CNode_Delete-vc-checking-r1/group_plan.json",
+  "group_plan_sha256": "48fc97c85f0b201a4ed4e5a112cc956798c1a6630cd1a2b3b8eede9ae52fddca",
+  "public_helper_snapshot_sha256": "d1dd6612ab2c2ca4fcb706e953f0d05ed1e858e7308c8a5d8dce3d87c228be6d",
+  "groups": [
+    {
+      "id": "slot-transition"
+    }
+  ],
+  "dispatch_order": [
+    "slot-transition"
+  ]
+}

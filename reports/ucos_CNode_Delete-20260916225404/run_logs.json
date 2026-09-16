@@ -1,0 +1,29 @@
+{"at": "2026-09-16T14:54:04.490787Z", "details": {"run_id": "ucos_CNode_Delete-20260916225404"}, "event": "run-initialized", "phase": "intake"}
+{"at": "2026-09-16T14:54:10.361289Z", "details": {"actions": ["spawn-ucos_CNode_Delete-annotation-r1-attempt-1"]}, "event": "controller-step", "phase": "annotation"}
+{"at": "2026-09-16T14:54:17.488475Z", "details": {"action": "spawn-ucos_CNode_Delete-annotation-r1-attempt-1", "attempt": "ucos_CNode_Delete-annotation-r1-attempt-1", "owner": "annotation/ucos_CNode_Delete-20260916225404"}, "event": "attempt-claimed", "phase": "annotation"}
+{"at": "2026-09-16T14:57:02.715361Z", "details": {"attempt": "ucos_CNode_Delete-annotation-r1-attempt-1", "owner": "annotation/ucos_CNode_Delete-20260916225404"}, "event": "delivery-finalized", "phase": "annotation"}
+{"at": "2026-09-16T14:57:02.771051Z", "details": {"attempt": "ucos_CNode_Delete-annotation-r1-attempt-1", "errors": [], "status": "ready-for-main-check"}, "event": "round-attempt-validated", "phase": "annotation"}
+{"at": "2026-09-16T14:57:08.191439Z", "details": {"actions": ["annotation-check-ucos_CNode_Delete-annotation-r1"]}, "event": "controller-step", "phase": "annotation"}
+{"at": "2026-09-16T14:57:16.676990Z", "details": {"round": "ucos_CNode_Delete-annotation-r1", "source_goal_version": "7bbffcac10882e092a4002fa1c21895a5727a2b99af3637a688b802be04c26f4"}, "event": "annotation-round-accepted", "phase": "annotation"}
+{"at": "2026-09-16T14:57:26.522783Z", "details": {"actions": ["dune-build"]}, "event": "controller-step", "phase": "dune-build"}
+{"at": "2026-09-16T14:57:34.046412Z", "details": {"source_goal_version": "7bbffcac10882e092a4002fa1c21895a5727a2b99af3637a688b802be04c26f4"}, "event": "dune-preparation-started", "phase": "dune-build"}
+{"at": "2026-09-16T14:57:35.521117Z", "details": {"dependency_count": 144, "snapshot_digest": "2d469522194c43e39facb5208ab8fabc1269dd0a43560059fb4d1a159df1aa6f"}, "event": "dune-preparation-passed", "phase": "dune-build"}
+{"at": "2026-09-16T14:57:49.940245Z", "details": {"actions": ["spawn-ucos_CNode_Delete-vc-checking-r1-attempt-1"]}, "event": "controller-step", "phase": "vc-checking"}
+{"at": "2026-09-16T14:58:01.050729Z", "details": {"action": "spawn-ucos_CNode_Delete-vc-checking-r1-attempt-1", "attempt": "ucos_CNode_Delete-vc-checking-r1-attempt-1", "owner": "vc-checking/ucos_CNode_Delete-vc-checking-r1-attempt-1"}, "event": "attempt-claimed", "phase": "vc-checking"}
+{"at": "2026-09-16T15:02:31.070383Z", "details": {"attempt": "ucos_CNode_Delete-vc-checking-r1-attempt-1", "owner": "vc-checking/ucos_CNode_Delete-vc-checking-r1-attempt-1"}, "event": "delivery-finalized", "phase": "vc-checking"}
+{"at": "2026-09-16T15:02:31.097256Z", "details": {"attempt": "ucos_CNode_Delete-vc-checking-r1-attempt-1", "errors": [], "status": "ready-for-main-check"}, "event": "round-attempt-validated", "phase": "vc-checking"}
+{"at": "2026-09-16T15:02:43.035289Z", "details": {"actions": ["vc-checking-check-ucos_CNode_Delete-vc-checking-r1"]}, "event": "controller-step", "phase": "vc-checking"}
+{"at": "2026-09-16T15:02:49.663420Z", "details": {"round": "ucos_CNode_Delete-vc-checking-r1"}, "event": "vc-checking-round-accepted", "phase": "vc-checking"}
+{"at": "2026-09-16T15:02:55.395884Z", "details": {"actions": ["vc-proving-preparing-ucos_CNode_Delete-vc-proving-r1"]}, "event": "controller-step", "phase": "vc-proving-preparing"}
+{"at": "2026-09-16T15:03:02.166628Z", "details": {"group_count": 1, "round": "ucos_CNode_Delete-vc-proving-r1"}, "event": "vc-proving-prepared", "phase": "vc-proving-preparing"}
+{"at": "2026-09-16T15:03:12.280599Z", "details": {"action": "spawn-ucos_CNode_Delete-vc-proving-r1-delete-results", "attempt": "ucos_CNode_Delete-vc-proving-r1:delete-results", "owner": "group-worker/ucos_CNode_Delete-vc-proving-r1/delete-results"}, "event": "attempt-claimed", "phase": "vc-proving-preparing"}
+{"at": "2026-09-16T15:05:58.048549Z", "details": {"attempt": "ucos_CNode_Delete-vc-proving-r1:delete-results", "owner": "group-worker/ucos_CNode_Delete-vc-proving-r1/delete-results"}, "event": "delivery-finalized", "phase": "vc-proving-preparing"}
+{"at": "2026-09-16T15:06:01.468695Z", "details": {"errors": [], "group_id": "delete-results", "status": "accepted"}, "event": "group-attempt-validated", "phase": "vc-proving-preparing"}
+{"at": "2026-09-16T15:06:11.251754Z", "details": {"actions": ["vc-proving-verify-ucos_CNode_Delete-vc-proving-r1"]}, "event": "controller-step", "phase": "vc-proving-preparing"}
+{"at": "2026-09-16T15:06:19.358151Z", "details": {"round": "ucos_CNode_Delete-vc-proving-r1"}, "event": "vc-proving-verified", "phase": "final-candidate-apply"}
+{"at": "2026-09-16T15:06:25.421390Z", "details": {"actions": ["final-candidate-apply"]}, "event": "controller-step", "phase": "final-candidate-apply"}
+{"at": "2026-09-16T15:06:34.341712Z", "details": {"transaction_id": "bf95e6b59f46452fb78dfc990449c352"}, "event": "final-apply-transaction-prepared", "phase": "final-candidate-apply"}
+{"at": "2026-09-16T15:06:34.374422Z", "details": {"transaction_id": "bf95e6b59f46452fb78dfc990449c352"}, "event": "final-apply-backups-sealed", "phase": "final-candidate-apply"}
+{"at": "2026-09-16T15:06:34.400108Z", "details": {"files": ["Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_proof_manual.v", "Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_lib.v"]}, "event": "final-candidate-applied", "phase": "final-check"}
+{"at": "2026-09-16T15:06:40.496335Z", "details": {"actions": ["final-check"]}, "event": "controller-step", "phase": "final-check"}
+{"at": "2026-09-16T15:06:48.819365Z", "details": {"failure_classes": []}, "event": "final-check-passed", "phase": "done"}

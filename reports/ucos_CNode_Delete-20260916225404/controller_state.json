@@ -1,0 +1,618 @@
+{
+  "generation": 45,
+  "run_id": "ucos_CNode_Delete-20260916225404",
+  "case": "ucos_CNode_Delete",
+  "phase": "done",
+  "main_root": "/home/lixing/projects/QualifiedCProgramming",
+  "run_root": "/home/lixing/projects/QualifiedCProgramming/verification_runs/ucos_CNode_Delete-20260916225404",
+  "report_root": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_CNode_Delete-20260916225404",
+  "target_files": {
+    "c_file": "QCP_examples/osverify_qcp/cases/ucos_CNode_Delete.c",
+    "formal_directory": "Rocq/examples/osverify_qcp/cases",
+    "formal_case_lib": "Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_lib.v",
+    "goal_file": "Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_goal.v",
+    "proof_auto_file": "Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_proof_auto.v",
+    "proof_manual_file": "Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_proof_manual.v",
+    "goal_check_file": "Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_goal_check.v",
+    "case_name": "ucos_CNode_Delete",
+    "active_case_theory": "SimpleC.EE.osverify_qcp.cases"
+  },
+  "public_helper_lemma_lib": {
+    "path": "/home/lixing/projects/QualifiedCProgramming/verification_runs/ucos_CNode_Delete-20260916225404/public_helper_lemma_lib.v",
+    "sha256": "d1dd6612ab2c2ca4fcb706e953f0d05ed1e858e7308c8a5d8dce3d87c228be6d",
+    "declaration_count": 0,
+    "helper_count": 0
+  },
+  "problem_context": {
+    "problem_statement": "Reverify the already proved sequential Delete leaf after a user-authorized structural refactor. Its executable body and all six contracts are unchanged; the C uses shared include/ios_cap_types.h with extern globals, and ucos_CNode_Delete_lib.v now exports SimpleC.EE.osverify_qcp.cap_model. The single shared cap_slot_state and delete_slot_result replace the old local definitions with the same field update and return behavior. Grant uses this same five-field model through grant_slot_result and grant_cap_transition, and has just completed its own independent run. Do not modify shared headers/model, do not duplicate or weaken any frozen contract, and do not change executable statements. Preserve the category pointer and object second integer; retain complete error branch coverage. This is sequential framed memory correctness, not global OSInv/concurrency refinement.",
+    "target_function": "ucos_CNode_Delete",
+    "reference_case_hints": [
+      "Original certiucos/code/ios_cap.v ucos_CNode_Delete_impl and proofs/capability/lib/CapSpec.v DeletePre/Post remain the semantic reference."
+    ]
+  },
+  "spec_freeze": {
+    "functions": [
+      "ucos_CNode_Delete"
+    ],
+    "baseline": {
+      "extern_coq": {
+        "delete_slot_transition": "Z -> Z -> Z -> Z -> Z -> Z -> Z -> Z -> Z -> Z -> Z -> Prop"
+      },
+      "import_coq": {
+        "SimpleC.EE.osverify_qcp.cases.ucos_CNode_Delete_lib": "SimpleC.EE.osverify_qcp.cases.ucos_CNode_Delete_lib"
+      },
+      "specs": {
+        "ucos_CNode_Delete::slot_invalid": "slot_invalid With (dest slot : Z) Require destTask_Prio == dest && func_capability == slot && 0 <= dest && dest <= 255 && unsigned_last_nbits(dest, 32) == dest && SLOT_NUM <= slot && slot <= UINT_MAX && emp Ensure __return == CNODE_DELETE_FAILURE && emp",
+        "ucos_CNode_Delete::prio_invalid": "prio_invalid With (dest slot : Z) Require destTask_Prio == dest && func_capability == slot && 64 <= dest && dest <= 255 && unsigned_last_nbits(dest, 32) == dest && 0 <= slot && slot < SLOT_NUM && emp Ensure __return == CNODE_DELETE_FAILURE && emp",
+        "ucos_CNode_Delete::null_target": "null_target With (dest slot : Z) Require destTask_Prio == dest && func_capability == slot && 0 <= dest && dest < 64 && unsigned_last_nbits(dest, 32) == dest && 0 <= slot && slot < SLOT_NUM && store(pointer_offset(&(OSCSpacePrioTbl), dest, sizeof(struct cspace *), struct cspace *), struct cspace *, 0) Ensure __return == CNODE_DELETE_FAILURE && store(pointer_offset(&(OSCSpacePrioTbl), dest, sizeof(struct cspace *), struct cspace *), struct cspace *, 0)",
+        "ucos_CNode_Delete::unsupported_cap": "unsupported_cap With (dest slot target old_slot old_cap word0 word1 ptr : Z) Require destTask_Prio == dest && func_capability == slot && 0 <= dest && dest < 64 && unsigned_last_nbits(dest, 32) == dest && 0 <= slot && slot < SLOT_NUM && target != 0 && old_cap != CAP_CATEGORY_TYPE && old_cap != CAP_OBJECT_TYPE && store(pointer_offset(&(OSCSpacePrioTbl), dest, sizeof(struct cspace *), struct cspace *), struct cspace *, target) * store(&(target->cnode.slots[slot].slot_type), unsigned int, old_slot) * store(&(target->cnode.slots[slot].capability.cap_type), unsigned int, old_cap) * store(&(target->cnode.slots[slot].capability.cap_content.category.category_content), unsigned int, word0) * store(&(target->cnode.slots[slot].capability.cap_content.category.category_right), unsigned int, word1) * store(&(target->cnode.slots[slot].capability.cap_content.category.Dummy_ptr), void *, ptr) Ensure __return == CNODE_DELETE_FAILURE && delete_slot_transition(__return, old_slot, old_cap, word0, word1, ptr, old_slot, old_cap, word0, word1, ptr) && store(pointer_offset(&(OSCSpacePrioTbl), dest, sizeof(struct cspace *), struct cspace *), struct cspace *, target) * store(&(target->cnode.slots[slot].slot_type), unsigned int, old_slot) * store(&(target->cnode.slots[slot].capability.cap_type), unsigned int, old_cap) * store(&(target->cnode.slots[slot].capability.cap_content.category.category_content), unsigned int, word0) * store(&(target->cnode.slots[slot].capability.cap_content.category.category_right), unsigned int, word1) * store(&(target->cnode.slots[slot].capability.cap_content.category.Dummy_ptr), void *, ptr)",
+        "ucos_CNode_Delete::category_cap": "category_cap With (dest slot target old_slot word0 word1 ptr : Z) Require destTask_Prio == dest && func_capability == slot && 0 <= dest && dest < 64 && unsigned_last_nbits(dest, 32) == dest && 0 <= slot && slot < SLOT_NUM && target != 0 && store(pointer_offset(&(OSCSpacePrioTbl), dest, sizeof(struct cspace *), struct cspace *), struct cspace *, target) * store(&(target->cnode.slots[slot].slot_type), unsigned int, old_slot) * store(&(target->cnode.slots[slot].capability.cap_type), unsigned int, CAP_CATEGORY_TYPE) * store(&(target->cnode.slots[slot].capability.cap_content.category.category_content), unsigned int, word0) * store(&(target->cnode.slots[slot].capability.cap_content.category.category_right), unsigned int, word1) * store(&(target->cnode.slots[slot].capability.cap_content.category.Dummy_ptr), void *, ptr) Ensure __return == CNODE_NONE_FAULT && delete_slot_transition(__return, old_slot, CAP_CATEGORY_TYPE, word0, word1, ptr, 0, 0, 0, 0, ptr) && store(pointer_offset(&(OSCSpacePrioTbl), dest, sizeof(struct cspace *), struct cspace *), struct cspace *, target) * store(&(target->cnode.slots[slot].slot_type), unsigned int, 0) * store(&(target->cnode.slots[slot].capability.cap_type), unsigned int, 0) * store(&(target->cnode.slots[slot].capability.cap_content.category.category_content), unsigned int, 0) * store(&(target->cnode.slots[slot].capability.cap_content.category.category_right), unsigned int, 0) * store(&(target->cnode.slots[slot].capability.cap_content.category.Dummy_ptr), void *, ptr)",
+        "ucos_CNode_Delete::object_cap": "object_cap With (dest slot target old_slot word0 word1 ptr : Z) Require destTask_Prio == dest && func_capability == slot && 0 <= dest && dest < 64 && unsigned_last_nbits(dest, 32) == dest && 0 <= slot && slot < SLOT_NUM && target != 0 && store(pointer_offset(&(OSCSpacePrioTbl), dest, sizeof(struct cspace *), struct cspace *), struct cspace *, target) * store(&(target->cnode.slots[slot].slot_type), unsigned int, old_slot) * store(&(target->cnode.slots[slot].capability.cap_type), unsigned int, CAP_OBJECT_TYPE) * store(&(target->cnode.slots[slot].capability.cap_content.object.object_right), unsigned int, word0) * store(&(target->cnode.slots[slot].capability.cap_content.object.Dummy_int), unsigned int, word1) * store(&(target->cnode.slots[slot].capability.cap_content.object.object_t), void *, ptr) Ensure __return == CNODE_NONE_FAULT && delete_slot_transition(__return, old_slot, CAP_OBJECT_TYPE, word0, word1, ptr, 0, 0, 0, word1, 0) && store(pointer_offset(&(OSCSpacePrioTbl), dest, sizeof(struct cspace *), struct cspace *), struct cspace *, target) * store(&(target->cnode.slots[slot].slot_type), unsigned int, 0) * store(&(target->cnode.slots[slot].capability.cap_type), unsigned int, 0) * store(&(target->cnode.slots[slot].capability.cap_content.object.object_right), unsigned int, 0) * store(&(target->cnode.slots[slot].capability.cap_content.object.Dummy_int), unsigned int, word1) * store(&(target->cnode.slots[slot].capability.cap_content.object.object_t), void *, 0)"
+      },
+      "lib": {
+        "declarations": {},
+        "imports": {}
+      }
+    }
+  },
+  "max_compact_attempts": 3,
+  "max_witnesses_per_group": 12,
+  "max_parallel_group_workers": 3,
+  "source_version": {
+    "digest": "c29a0d60781e08baa67cf36a9564298eb1c915b723f94feb040f4127fd877c02",
+    "files": [
+      {
+        "relative_path": "QCP_examples/osverify_qcp/cases/ucos_CNode_Delete.c",
+        "sha256": "d10eb061b67b66a057c70c3b2bbbd2a7ff0db37be3ad99a0ef24a5bb6bf053cf",
+        "state": "present",
+        "role": "target-c-annotated"
+      },
+      {
+        "relative_path": "Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_lib.v",
+        "sha256": "3547d12a36ce0c7d41a8ea52595a08099b3807fbd50853802831464284962621",
+        "state": "present",
+        "role": "formal-case-lib"
+      }
+    ]
+  },
+  "source_goal_version": {
+    "digest": "7bbffcac10882e092a4002fa1c21895a5727a2b99af3637a688b802be04c26f4",
+    "generated_files": [
+      {
+        "relative_path": "Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_goal.v",
+        "role": "goal_file",
+        "state": "present",
+        "sha256": "a768bf3f12aa3b1b88f30e425e38e54a079436482a86690bdb0b13cbf6ff419f"
+      },
+      {
+        "relative_path": "Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_proof_auto.v",
+        "role": "proof_auto_file",
+        "state": "present",
+        "sha256": "028e48355d9c45b5b8ab2434867b7104fbf436563bea04d92de251c3fa4d8155"
+      },
+      {
+        "relative_path": "Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_proof_manual.v",
+        "role": "proof_manual_file",
+        "state": "present",
+        "sha256": "7b0ea7e6db32dadb407c47a8c6216facee29aef46d4bd426bfc6c0e4d5bf2321"
+      },
+      {
+        "relative_path": "Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_goal_check.v",
+        "role": "goal_check_file",
+        "state": "present",
+        "sha256": "f05a3591f6d1b293c909c1998c63e47ce334329980fcb0683c693ac7412abd00"
+      }
+    ],
+    "target_witnesses": [
+      "proof_of_ucos_CNode_Delete_return_wit_1_category_cap",
+      "proof_of_ucos_CNode_Delete_return_wit_2_object_cap",
+      "proof_of_ucos_CNode_Delete_return_wit_3_unsupported_cap"
+    ],
+    "witness_statement_hashes": {
+      "proof_of_ucos_CNode_Delete_return_wit_1_category_cap": "b4452457eeb41dba21f874eb67e247a08a110bdd419d6c8214c613b0d50f818b",
+      "proof_of_ucos_CNode_Delete_return_wit_2_object_cap": "8b44122085c6931175cb31cf9cdc838890cca6efd1594eae0bcd43463f172ac9",
+      "proof_of_ucos_CNode_Delete_return_wit_3_unsupported_cap": "f472c7884ed2f29ee2faa04a4fb7b0835455a79d1f41ece80083e0d943375d64"
+    },
+    "witness_goal_definition_hashes": {
+      "proof_of_ucos_CNode_Delete_return_wit_1_category_cap": "8c3f0261770e0d92d6f22fa016537ef2861f94117ea94af53bec3e3a46e1dd55",
+      "proof_of_ucos_CNode_Delete_return_wit_2_object_cap": "e46810483aa32919e1066a2f02e191b78dd36bed5a265e8551752c614665fe91",
+      "proof_of_ucos_CNode_Delete_return_wit_3_unsupported_cap": "1b7a57c66e092d6ee5f3148593f666c8dd4d52614c7268ecbea5ec8f773b9f2a"
+    },
+    "split_goals": {
+      "proof_of_ucos_CNode_Delete_return_wit_1_category_cap": [
+        {
+          "name": "proof_of_ucos_CNode_Delete_return_wit_1_category_cap_split_goal_1",
+          "statement_hash": "29c22dbdd2560e831fb6c3c1a75d276e29d6cbc044d8123fdd8d5cb86b8ed758",
+          "goal_symbol": "ucos_CNode_Delete_return_wit_1_category_cap_split_goal_1",
+          "goal_definition_hash": "fe69ace2b547b7982fbbe48ede13b4145762ce965c37e7f1f7a75163fef6e816"
+        }
+      ],
+      "proof_of_ucos_CNode_Delete_return_wit_2_object_cap": [
+        {
+          "name": "proof_of_ucos_CNode_Delete_return_wit_2_object_cap_split_goal_1",
+          "statement_hash": "21f30fa966bfeaba983faa2fde884d24b16a5e566fb911fd66412be8e0a3d56a",
+          "goal_symbol": "ucos_CNode_Delete_return_wit_2_object_cap_split_goal_1",
+          "goal_definition_hash": "304dcc690ca04b27bdf307447bb528e338364748659df894ec6818dec310e529"
+        }
+      ],
+      "proof_of_ucos_CNode_Delete_return_wit_3_unsupported_cap": [
+        {
+          "name": "proof_of_ucos_CNode_Delete_return_wit_3_unsupported_cap_split_goal_1",
+          "statement_hash": "0e57cd93a5f27d3f738e3a2ea3e59be584507deb22b60d8fd6e9e3d264eeee64",
+          "goal_symbol": "ucos_CNode_Delete_return_wit_3_unsupported_cap_split_goal_1",
+          "goal_definition_hash": "d1a347783dfc861a648b11e691b197684873fdd01c836e0b34e9c5190e237d61"
+        }
+      ]
+    }
+  },
+  "dune_preparation": {
+    "status": "passed",
+    "build_mode": "makefile",
+    "source_goal_version": "7bbffcac10882e092a4002fa1c21895a5727a2b99af3637a688b802be04c26f4",
+    "target": "Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_goal_check.vo",
+    "build_root": ".",
+    "make_executable": "/usr/bin/make",
+    "coqc_executable": "/home/lixing/.opam/coq8201/bin/coqc",
+    "coqdep_executable": "/home/lixing/.opam/coq8201/bin/coqdep",
+    "run_makefile": "verification_runs/ucos_CNode_Delete-20260916225404/Makefile",
+    "run_makefile_sha256": "0af12bd85252a8cfb1e88fa8a3e449652551f9593af0e11348cbc4150279599b",
+    "snapshot": "verification_runs/ucos_CNode_Delete-20260916225404/makefile_dependency_snapshot.json",
+    "snapshot_sha256": "2d469522194c43e39facb5208ab8fabc1269dd0a43560059fb4d1a159df1aa6f",
+    "dependency_digest": "5dd5f0638fc00ed0d4721ead1b62657c14cfb81e808f72faf44a616a3ad99c06",
+    "source_digest": "a5cd96732455b6c3b4d04f17959956f6a394015b5137d7ccd8293f2df4b1a5ce",
+    "artifact_digest": "5e6a044bac6e395a96726ca10069f78b1ec789a3a60e4754dcf6c3bc921684d0",
+    "configuration_digest": "e168e3d3ec3ac6fc2a2a4a859a13ca33856035fba35d65747c60051798e550de",
+    "base_artifact_count": 144,
+    "current_source_count": 5,
+    "rebuilt_count": 0,
+    "dependency_metrics": {
+      "status": "resolved",
+      "strategy": "breadth-batched-coqdep",
+      "batch_count": 6,
+      "coqdep_process_count": 6,
+      "node_count": 149,
+      "source_count": 149,
+      "elapsed_seconds": 1.144207
+    },
+    "current_cleanup": {
+      "status": "passed",
+      "removed_count": 0,
+      "first_removed": null
+    },
+    "make_seconds": 0.002863,
+    "returncode": 0,
+    "elapsed_seconds": 1.446339
+  },
+  "rounds": {
+    "ucos_CNode_Delete-annotation-r1": {
+      "phase": "annotation",
+      "current_attempt": "ucos_CNode_Delete-annotation-r1-attempt-1"
+    },
+    "ucos_CNode_Delete-vc-checking-r1": {
+      "phase": "vc-checking",
+      "current_attempt": "ucos_CNode_Delete-vc-checking-r1-attempt-1"
+    },
+    "ucos_CNode_Delete-vc-proving-r1": {
+      "phase": "vc-proving-preparing",
+      "current_attempt": "ucos_CNode_Delete-vc-proving-r1"
+    }
+  },
+  "attempts": {
+    "ucos_CNode_Delete-annotation-r1-attempt-1": {
+      "attempt_id": "ucos_CNode_Delete-annotation-r1-attempt-1",
+      "round": "ucos_CNode_Delete-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "report_directory": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_CNode_Delete-20260916225404/annotation-attempts/annotation-attempt1",
+      "input": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_CNode_Delete-20260916225404/annotation-attempts/annotation-attempt1/agent_input.md",
+      "report": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_CNode_Delete-20260916225404/annotation-attempts/annotation-attempt1/agent_report.json",
+      "output": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_CNode_Delete-20260916225404/annotation-attempts/annotation-attempt1/agent_output.md",
+      "source_version": "22dbfca3a7eea9b56024c5cd0de658b468aec02b9cb5d437253d481f41cef02b",
+      "source_goal_version": null,
+      "allowed_write_paths": [
+        "QCP_examples/osverify_qcp/cases/ucos_CNode_Delete.c",
+        "Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_lib.v",
+        "Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_goal.v",
+        "Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_proof_auto.v",
+        "Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_proof_manual.v",
+        "Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_goal_check.v"
+      ],
+      "compact_attempt_index": 1,
+      "created_at": "2026-09-16T14:54:10.344215Z",
+      "annotation_history_directory": "/home/lixing/projects/QualifiedCProgramming/verification_runs/ucos_CNode_Delete-20260916225404/annotation_history/annotation-attempt1",
+      "annotation_iteration": 1,
+      "annotation_causal_retry_count": 0,
+      "feedback_sources": [],
+      "retry_reason": null,
+      "before_snapshot": {
+        "digest": "c426f80a0f7b73e6bba3f8df3a1d91b361404b313f1f659d8cc7417ac51ce7b2",
+        "file_count": 6,
+        "missing_count": 0
+      },
+      "input_sha256": "82c1910ed155236526603ac3c488f8f32492ffcf3e89ce0fe0be629fe85f4394",
+      "owner": "annotation/ucos_CNode_Delete-20260916225404",
+      "started_at": "2026-09-16T14:54:17.488446Z",
+      "delivery": {
+        "action_id": "spawn-ucos_CNode_Delete-annotation-r1-attempt-1",
+        "kind": "spawn-annotation-agent",
+        "owner": "annotation/ucos_CNode_Delete-20260916225404",
+        "claimed_at": "2026-09-16T14:54:17.488446Z",
+        "finalized_at": "2026-09-16T14:57:02.688193Z"
+      },
+      "timing": {
+        "symexec": [
+          {
+            "started_at": "2026-09-16T14:55:44.879974Z",
+            "finished_at": "2026-09-16T14:55:45.141974Z",
+            "elapsed_seconds": 0.262
+          },
+          {
+            "started_at": "2026-09-16T14:57:15.478295Z",
+            "finished_at": "2026-09-16T14:57:15.742295Z",
+            "elapsed_seconds": 0.264
+          }
+        ],
+        "formal-case-lib-coq-check": [
+          {
+            "started_at": "2026-09-16T14:55:54.296481Z",
+            "finished_at": "2026-09-16T14:55:54.741362Z",
+            "elapsed_seconds": 0.444881
+          },
+          {
+            "started_at": "2026-09-16T14:57:16.209326Z",
+            "finished_at": "2026-09-16T14:57:16.221407Z",
+            "elapsed_seconds": 0.012081
+          }
+        ],
+        "annotation-checking": [
+          {
+            "started_at": "2026-09-16T14:56:01.564584Z",
+            "finished_at": "2026-09-16T14:56:29.465358Z",
+            "elapsed_seconds": 27.900774
+          }
+        ],
+        "controller-validation": [
+          {
+            "started_at": "2026-09-16T14:57:02.667565Z",
+            "finished_at": "2026-09-16T14:57:02.788994Z",
+            "elapsed_seconds": 0.114845
+          }
+        ],
+        "clean-output-freshness": [
+          {
+            "started_at": "2026-09-16T14:57:16.423933Z",
+            "finished_at": "2026-09-16T14:57:16.676933Z",
+            "elapsed_seconds": 0.253
+          }
+        ],
+        "controller-acceptance-check": [
+          {
+            "started_at": "2026-09-16T14:57:15.463721Z",
+            "finished_at": "2026-09-16T14:57:16.696622Z",
+            "elapsed_seconds": 1.226529
+          }
+        ],
+        "dune-build": [
+          {
+            "started_at": "2026-09-16T14:57:34.037241Z",
+            "finished_at": "2026-09-16T14:57:35.538323Z",
+            "elapsed_seconds": 1.49538
+          }
+        ]
+      },
+      "returned_at": "2026-09-16T14:57:02.688193Z",
+      "artifact_sha256": {
+        "report": "0cb87b61f0afab118ac222a0af92bc06c579959aeea208461294d16becf11b39",
+        "output": "8451df80b9cf3d6ab7c75a359d390052b1d979c838d6d49c7b438726328e683b"
+      },
+      "after_snapshot": {
+        "digest": "798d7dcd4f0c09b7a39b861108d2a025289fbfd0095908a8190669d821d72169",
+        "file_count": 6,
+        "missing_count": 0
+      },
+      "changed_files": [
+        "Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_proof_manual.v"
+      ],
+      "finished_at": "2026-09-16T14:57:35.538323Z",
+      "main_check": {
+        "symexec": {
+          "status": "passed",
+          "returncode": 0
+        },
+        "formal_case_lib_contract": {
+          "status": "passed",
+          "skipped": false,
+          "errors": []
+        },
+        "formal_case_lib_dune": {
+          "status": "passed",
+          "build_mode": "makefile",
+          "target": "Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_lib.vo",
+          "returncode": 0,
+          "base_artifact_count": 1,
+          "current_source_count": 1,
+          "rebuilt_count": 0,
+          "dependency_metrics": {
+            "status": "resolved",
+            "strategy": "breadth-batched-coqdep",
+            "batch_count": 2,
+            "coqdep_process_count": 2,
+            "node_count": 2,
+            "source_count": 2,
+            "elapsed_seconds": 0.335267
+          },
+          "current_cleanup": {
+            "status": "passed",
+            "removed_count": 0,
+            "first_removed": null
+          },
+          "make_seconds": 0.001956,
+          "elapsed_seconds": 0.351268
+        },
+        "formal_case_lib_coqc": {
+          "status": "passed",
+          "returncode": 0
+        },
+        "clean_output_freshness": {
+          "status": "passed",
+          "source_goal_version": {
+            "reference": "7bbffcac10882e092a4002fa1c21895a5727a2b99af3637a688b802be04c26f4",
+            "fresh": "7bbffcac10882e092a4002fa1c21895a5727a2b99af3637a688b802be04c26f4"
+          }
+        }
+      }
+    },
+    "ucos_CNode_Delete-vc-checking-r1-attempt-1": {
+      "attempt_id": "ucos_CNode_Delete-vc-checking-r1-attempt-1",
+      "round": "ucos_CNode_Delete-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "report_directory": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_CNode_Delete-20260916225404/rounds/ucos_CNode_Delete-vc-checking-r1",
+      "input": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_CNode_Delete-20260916225404/rounds/ucos_CNode_Delete-vc-checking-r1/agent_input.md",
+      "report": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_CNode_Delete-20260916225404/rounds/ucos_CNode_Delete-vc-checking-r1/agent_report.json",
+      "output": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_CNode_Delete-20260916225404/rounds/ucos_CNode_Delete-vc-checking-r1/agent_output.md",
+      "source_version": "c29a0d60781e08baa67cf36a9564298eb1c915b723f94feb040f4127fd877c02",
+      "source_goal_version": "7bbffcac10882e092a4002fa1c21895a5727a2b99af3637a688b802be04c26f4",
+      "allowed_write_paths": [],
+      "compact_attempt_index": 1,
+      "created_at": "2026-09-16T14:57:49.940211Z",
+      "owner": "vc-checking/ucos_CNode_Delete-vc-checking-r1-attempt-1",
+      "started_at": "2026-09-16T14:58:01.050701Z",
+      "delivery": {
+        "action_id": "spawn-ucos_CNode_Delete-vc-checking-r1-attempt-1",
+        "kind": "spawn-attempt",
+        "owner": "vc-checking/ucos_CNode_Delete-vc-checking-r1-attempt-1",
+        "claimed_at": "2026-09-16T14:58:01.050701Z",
+        "finalized_at": "2026-09-16T15:02:31.070363Z"
+      },
+      "returned_at": "2026-09-16T15:02:31.070363Z",
+      "artifact_sha256": {
+        "report": "0cb87b61f0afab118ac222a0af92bc06c579959aeea208461294d16becf11b39",
+        "output": "b2950ac4bdd801ee858ecd2e9534c25c147a5e48adb8930a169ed53605307134"
+      },
+      "timing": {
+        "controller-validation": [
+          {
+            "started_at": "2026-09-16T15:02:31.061566Z",
+            "finished_at": "2026-09-16T15:02:31.118658Z",
+            "elapsed_seconds": 0.04928
+          }
+        ],
+        "controller-plan-check": [
+          {
+            "started_at": "2026-09-16T15:02:49.649599Z",
+            "finished_at": "2026-09-16T15:02:49.687836Z",
+            "elapsed_seconds": 0.029533
+          }
+        ]
+      },
+      "agent_output_metrics": {
+        "bytes": 3512,
+        "lines": 25,
+        "common_pattern_count": 0,
+        "vc_delta_count": 0
+      },
+      "finished_at": "2026-09-16T15:02:49.687836Z",
+      "group_plan": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_CNode_Delete-20260916225404/rounds/ucos_CNode_Delete-vc-checking-r1/group_plan.json",
+      "group_plan_sha256": "66118cd82cb57decb16f9d9249f2739119c46556f4090c1c55fd5d185cce903e"
+    },
+    "ucos_CNode_Delete-vc-proving-r1": {
+      "attempt_id": "ucos_CNode_Delete-vc-proving-r1",
+      "round": "ucos_CNode_Delete-vc-proving-r1",
+      "phase": "vc-proving-preparing",
+      "status": "verified",
+      "directory": "/home/lixing/projects/QualifiedCProgramming/verification_runs/ucos_CNode_Delete-20260916225404/ucos_CNode_Delete-vc-proving-r1",
+      "report_directory": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_CNode_Delete-20260916225404/rounds/ucos_CNode_Delete-vc-proving-r1",
+      "base_manifest": "/home/lixing/projects/QualifiedCProgramming/verification_runs/ucos_CNode_Delete-20260916225404/ucos_CNode_Delete-vc-proving-r1/base_manifest.json",
+      "group_workers_manifest": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_CNode_Delete-20260916225404/rounds/ucos_CNode_Delete-vc-proving-r1/group_workers_manifest.json",
+      "proving_merged_result": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_CNode_Delete-20260916225404/rounds/ucos_CNode_Delete-vc-proving-r1/proving_merged_result.json",
+      "groups": {
+        "delete-results": {
+          "status": "accepted",
+          "attempt_index": 1,
+          "owner": "group-worker/ucos_CNode_Delete-vc-proving-r1/delete-results",
+          "started_at": "2026-09-16T15:03:12.280563Z",
+          "delivery": {
+            "action_id": "spawn-ucos_CNode_Delete-vc-proving-r1-delete-results",
+            "kind": "spawn-group-worker",
+            "owner": "group-worker/ucos_CNode_Delete-vc-proving-r1/delete-results",
+            "claimed_at": "2026-09-16T15:03:12.280563Z",
+            "finalized_at": "2026-09-16T15:05:58.044388Z"
+          },
+          "timing_interval_index": 0,
+          "returned_at": "2026-09-16T15:05:58.044388Z",
+          "artifact_sha256": {
+            "report": "0cb87b61f0afab118ac222a0af92bc06c579959aeea208461294d16becf11b39",
+            "proof_manual": "c49d31fc5919c236050906d97a849ef516bec3c6c2d80dd72cb8771c60e2af44",
+            "group_worker_lib": "3547d12a36ce0c7d41a8ea52595a08099b3807fbd50853802831464284962621"
+          },
+          "group_check": {
+            "status": "passed",
+            "returncode": 0,
+            "source_goal_version": "7bbffcac10882e092a4002fa1c21895a5727a2b99af3637a688b802be04c26f4"
+          },
+          "public_helper_promotion": {
+            "status": "unchanged",
+            "appended_count": 0,
+            "skipped_count": 0,
+            "conflict_count": 0
+          },
+          "accepted_artifact_sha256": {
+            "report": "0cb87b61f0afab118ac222a0af92bc06c579959aeea208461294d16becf11b39",
+            "proof_manual": "c49d31fc5919c236050906d97a849ef516bec3c6c2d80dd72cb8771c60e2af44",
+            "group_worker_lib": "3547d12a36ce0c7d41a8ea52595a08099b3807fbd50853802831464284962621"
+          },
+          "accepted_at": "2026-09-16T15:06:01.455557Z"
+        }
+      },
+      "source_goal_version": "7bbffcac10882e092a4002fa1c21895a5727a2b99af3637a688b802be04c26f4",
+      "max_parallel_group_workers": 3,
+      "created_at": "2026-09-16T15:02:55.395863Z",
+      "reuse_source_snapshot": {
+        "status": "passed",
+        "source_goal_version": "7bbffcac10882e092a4002fa1c21895a5727a2b99af3637a688b802be04c26f4",
+        "digest": "9aba2db2f4f2c758d3e0c6f218fc1ab0754196e1b148688e67c1792a966a9156",
+        "file_count": 10,
+        "preparation_sha256": "ae96a614b9956c95fefaeec6a26fc5ba4f4950895a8a6f45070cc29c196d9a23"
+      },
+      "reuse_source_raw": {
+        "root": "/home/lixing/projects/QualifiedCProgramming/verification_runs/ucos_CNode_Delete-20260916225404/ucos_CNode_Delete-vc-proving-r1/reuse_source_raw",
+        "files": {
+          "goal_file": "a768bf3f12aa3b1b88f30e425e38e54a079436482a86690bdb0b13cbf6ff419f",
+          "proof_manual_file": "7b0ea7e6db32dadb407c47a8c6216facee29aef46d4bd426bfc6c0e4d5bf2321",
+          "formal_case_lib": "3547d12a36ce0c7d41a8ea52595a08099b3807fbd50853802831464284962621"
+        }
+      },
+      "base_manifest_sha256": "2b0c61fc3b58ba522e0cc0a4cf9d9d231ac0f26b9eb228bc0d105ee74cc834a3",
+      "group_workers_manifest_sha256": "0417db728e26752024425debac2049020b47f673c099446d8e5d0b18beb2f3bd",
+      "timing": {
+        "preparing": [
+          {
+            "started_at": "2026-09-16T15:03:01.824216Z",
+            "finished_at": "2026-09-16T15:03:02.192638Z",
+            "elapsed_seconds": 0.358955
+          }
+        ],
+        "group-work": [
+          {
+            "started_at": "2026-09-16T15:03:12.280563Z",
+            "finished_at": "2026-09-16T15:05:58.044388Z",
+            "elapsed_seconds": 165.763825
+          }
+        ],
+        "group-coq-check": [
+          {
+            "started_at": "2026-09-16T15:04:54.589029Z",
+            "finished_at": "2026-09-16T15:04:58.859913Z",
+            "elapsed_seconds": 4.270884
+          },
+          {
+            "started_at": "2026-09-16T15:05:20.648871Z",
+            "finished_at": "2026-09-16T15:05:30.065555Z",
+            "elapsed_seconds": 9.416684
+          }
+        ],
+        "group-validation": [
+          {
+            "started_at": "2026-09-16T15:05:58.026680Z",
+            "finished_at": "2026-09-16T15:06:01.495391Z",
+            "elapsed_seconds": 3.457759
+          }
+        ],
+        "parent-verify": [
+          {
+            "started_at": "2026-09-16T15:06:19.053108Z",
+            "finished_at": "2026-09-16T15:06:19.387502Z",
+            "elapsed_seconds": 0.322121
+          }
+        ]
+      },
+      "finished_at": "2026-09-16T15:06:19.387502Z",
+      "verified_result_sha256": "3bb096261b60c41902501a92c0320877f9f1dd1925c39997fd2950182b2816cf"
+    }
+  },
+  "annotation_session": {
+    "session_id": "ucos_CNode_Delete-annotation-agent",
+    "status": "idle",
+    "current_attempt": "ucos_CNode_Delete-annotation-r1-attempt-1",
+    "iteration_count": 1,
+    "owner": "annotation/ucos_CNode_Delete-20260916225404"
+  },
+  "accepted_rounds": {
+    "annotation": {
+      "round": "ucos_CNode_Delete-annotation-r1",
+      "attempt_id": "ucos_CNode_Delete-annotation-r1-attempt-1",
+      "annotation_history_directory": "/home/lixing/projects/QualifiedCProgramming/verification_runs/ucos_CNode_Delete-20260916225404/annotation_history/annotation-attempt1",
+      "source_version": "c29a0d60781e08baa67cf36a9564298eb1c915b723f94feb040f4127fd877c02",
+      "source_goal_version": "7bbffcac10882e092a4002fa1c21895a5727a2b99af3637a688b802be04c26f4"
+    },
+    "vc-checking": {
+      "round": "ucos_CNode_Delete-vc-checking-r1",
+      "attempt_id": "ucos_CNode_Delete-vc-checking-r1-attempt-1",
+      "group_plan": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_CNode_Delete-20260916225404/rounds/ucos_CNode_Delete-vc-checking-r1/group_plan.json",
+      "group_plan_sha256": "66118cd82cb57decb16f9d9249f2739119c46556f4090c1c55fd5d185cce903e",
+      "agent_output_metrics": {
+        "bytes": 3512,
+        "lines": 25,
+        "common_pattern_count": 0,
+        "vc_delta_count": 0
+      }
+    },
+    "vc-proving-preparing": {
+      "round": "ucos_CNode_Delete-vc-proving-r1",
+      "attempt_id": "ucos_CNode_Delete-vc-proving-r1",
+      "result_sha256": "3bb096261b60c41902501a92c0320877f9f1dd1925c39997fd2950182b2816cf"
+    }
+  },
+  "next_actions": [],
+  "waiting_for": [],
+  "current_blockers": [],
+  "final_candidate": {
+    "round": "ucos_CNode_Delete-vc-proving-r1",
+    "proving_merged_result": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_CNode_Delete-20260916225404/rounds/ucos_CNode_Delete-vc-proving-r1/proving_merged_result.json",
+    "result_sha256": "3bb096261b60c41902501a92c0320877f9f1dd1925c39997fd2950182b2816cf",
+    "proof_manual_sha256": "c49d31fc5919c236050906d97a849ef516bec3c6c2d80dd72cb8771c60e2af44",
+    "proving_merged_lib_sha256": "3547d12a36ce0c7d41a8ea52595a08099b3807fbd50853802831464284962621"
+  },
+  "final_apply": {
+    "status": "passed",
+    "transaction_id": "bf95e6b59f46452fb78dfc990449c352",
+    "applied_at": "2026-09-16T15:06:34.400007Z"
+  },
+  "final_check": {
+    "status": "passed",
+    "checked_at": "2026-09-16T15:06:48.819339Z",
+    "cleanup_removed_count": 0
+  },
+  "created_at": "2026-09-16T14:54:04.486578Z",
+  "updated_at": "2026-09-16T15:06:48.828513Z",
+  "final_apply_transaction": {
+    "transaction_id": "bf95e6b59f46452fb78dfc990449c352",
+    "status": "completed",
+    "source_goal_version": "7bbffcac10882e092a4002fa1c21895a5727a2b99af3637a688b802be04c26f4",
+    "records": [
+      {
+        "source": "/home/lixing/projects/QualifiedCProgramming/verification_runs/ucos_CNode_Delete-20260916225404/ucos_CNode_Delete-vc-proving-r1/proving_merged/ucos_CNode_Delete_proof_manual.v",
+        "source_sha256": "c49d31fc5919c236050906d97a849ef516bec3c6c2d80dd72cb8771c60e2af44",
+        "target": "/home/lixing/projects/QualifiedCProgramming/Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_proof_manual.v",
+        "relative_path": "Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_proof_manual.v",
+        "existed": true,
+        "before_sha256": "7b0ea7e6db32dadb407c47a8c6216facee29aef46d4bd426bfc6c0e4d5bf2321",
+        "backup": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_CNode_Delete-20260916225404/final-check/backup/bf95e6b59f46452fb78dfc990449c352/Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_proof_manual.v"
+      },
+      {
+        "source": "/home/lixing/projects/QualifiedCProgramming/verification_runs/ucos_CNode_Delete-20260916225404/ucos_CNode_Delete-vc-proving-r1/proving_merged/ucos_CNode_Delete_lib.v",
+        "source_sha256": "3547d12a36ce0c7d41a8ea52595a08099b3807fbd50853802831464284962621",
+        "target": "/home/lixing/projects/QualifiedCProgramming/Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_lib.v",
+        "relative_path": "Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_lib.v",
+        "existed": true,
+        "before_sha256": "3547d12a36ce0c7d41a8ea52595a08099b3807fbd50853802831464284962621",
+        "backup": "/home/lixing/projects/QualifiedCProgramming/reports/ucos_CNode_Delete-20260916225404/final-check/backup/bf95e6b59f46452fb78dfc990449c352/Rocq/examples/osverify_qcp/cases/ucos_CNode_Delete_lib.v"
+      }
+    ],
+    "prepared_at": "2026-09-16T15:06:34.341693Z",
+    "backed_up_at": "2026-09-16T15:06:34.374399Z",
+    "completed_at": "2026-09-16T15:06:34.399990Z"
+  },
+  "finished_at": "2026-09-16T15:06:48.819339Z"
+}

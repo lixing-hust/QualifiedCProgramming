@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "source_goal_version": "7bbffcac10882e092a4002fa1c21895a5727a2b99af3637a688b802be04c26f4",
+  "candidate": {
+    "proof_manual_sha256": "c49d31fc5919c236050906d97a849ef516bec3c6c2d80dd72cb8771c60e2af44",
+    "proving_merged_lib_sha256": "3547d12a36ce0c7d41a8ea52595a08099b3807fbd50853802831464284962621"
+  },
+  "group_count": 1,
+  "added_declarations": []
+}
