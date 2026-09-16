@@ -1,0 +1,6 @@
+(* Generated build-workspace-only group check wrapper. *)
+From SimpleC.EE.osverify_qcp.cases Require Import ucos_Grant_Cap_goal ucos_Grant_Cap_proof_auto ucos_Grant_Cap_proof_manual.
+
+Check proof_of_ucos_Grant_Cap_return_wit_1_valid_target.
+Check proof_of_ucos_Grant_Cap_return_wit_1_valid_target_split_goal_1.
+Check proof_of_ucos_Grant_Cap_return_wit_1_valid_target_split_goal_spatial.

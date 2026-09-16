@@ -1,0 +1,9 @@
+(* Generated build-workspace-only group check wrapper. *)
+From SimpleC.EE.osverify_qcp.cases Require Import ucos_CNode_Delete_goal ucos_CNode_Delete_proof_auto ucos_CNode_Delete_proof_manual.
+
+Check proof_of_ucos_CNode_Delete_return_wit_1_category_cap.
+Check proof_of_ucos_CNode_Delete_return_wit_2_object_cap.
+Check proof_of_ucos_CNode_Delete_return_wit_3_unsupported_cap.
+Check proof_of_ucos_CNode_Delete_return_wit_1_category_cap_split_goal_1.
+Check proof_of_ucos_CNode_Delete_return_wit_2_object_cap_split_goal_1.
+Check proof_of_ucos_CNode_Delete_return_wit_3_unsupported_cap_split_goal_1.

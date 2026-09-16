@@ -1,0 +1,9 @@
+(* Generated build-workspace-only group check wrapper. *)
+From SimpleC.EE.osverify_qcp.cases Require Import grant_cspace_cap_goal grant_cspace_cap_proof_auto grant_cspace_cap_proof_manual.
+
+Check proof_of_grant_cspace_cap_return_wit_1.
+Check proof_of_grant_cspace_cap_return_wit_2.
+Check proof_of_grant_cspace_cap_return_wit_3.
+Check proof_of_grant_cspace_cap_return_wit_1_split_goal_1.
+Check proof_of_grant_cspace_cap_return_wit_2_split_goal_1.
+Check proof_of_grant_cspace_cap_return_wit_3_split_goal_1.
