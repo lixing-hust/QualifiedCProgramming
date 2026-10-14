@@ -1,0 +1,271 @@
+Require Import Coq.ZArith.ZArith.
+Require Import Coq.Bool.Bool.
+Require Import Coq.Strings.String.
+Require Import Coq.Strings.Ascii.
+Require Import Coq.Lists.List.
+Require Import Coq.Classes.RelationClasses.
+Require Import Coq.Classes.Morphisms.
+Require Import Coq.micromega.Psatz.
+Require Import Coq.Sorting.Permutation.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
+Require Import SetsClass.SetsClass. Import SetsNotation.
+From SimpleC.SL Require Import Mem SeparationLogic.
+From SimpleC.EE.osverify_qcp.cases Require Import ucos_CNode_Mutate_goal.
+Require Import Logic.LogicGenerator.demo932.Interface.
+Local Open Scope Z_scope.
+Local Open Scope sets.
+Local Open Scope string_scope.
+Local Open Scope list.
+Import naive_C_Rules.
+Require Import SimpleC.EE.osverify_qcp.cases.ucos_CNode_Mutate_lib.
+Local Open Scope sac.
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_1_class_invalid : ucos_CNode_Mutate_safety_wit_1_class_invalid.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_2_prio_invalid : ucos_CNode_Mutate_safety_wit_2_prio_invalid.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_3_prio_invalid : ucos_CNode_Mutate_safety_wit_3_prio_invalid.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_4_null_same_priority : ucos_CNode_Mutate_safety_wit_4_null_same_priority.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_5_null_distinct_priorities : ucos_CNode_Mutate_safety_wit_5_null_distinct_priorities.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_6_null_distinct_priorities : ucos_CNode_Mutate_safety_wit_6_null_distinct_priorities.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_7_same_priority : ucos_CNode_Mutate_safety_wit_7_same_priority.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_8_shared_cspace : ucos_CNode_Mutate_safety_wit_8_shared_cspace.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_9_distinct_cspaces : ucos_CNode_Mutate_safety_wit_9_distinct_cspaces.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_10_distinct_cspaces : ucos_CNode_Mutate_safety_wit_10_distinct_cspaces.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_11_shared_cspace : ucos_CNode_Mutate_safety_wit_11_shared_cspace.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_12_same_priority : ucos_CNode_Mutate_safety_wit_12_same_priority.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_13_null_distinct_priorities : ucos_CNode_Mutate_safety_wit_13_null_distinct_priorities.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_14_null_distinct_priorities : ucos_CNode_Mutate_safety_wit_14_null_distinct_priorities.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_15_null_same_priority : ucos_CNode_Mutate_safety_wit_15_null_same_priority.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_16_prio_invalid : ucos_CNode_Mutate_safety_wit_16_prio_invalid.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_17_prio_invalid : ucos_CNode_Mutate_safety_wit_17_prio_invalid.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_18_class_invalid : ucos_CNode_Mutate_safety_wit_18_class_invalid.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_19_prio_invalid : ucos_CNode_Mutate_safety_wit_19_prio_invalid.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_20_null_same_priority : ucos_CNode_Mutate_safety_wit_20_null_same_priority.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_21_null_distinct_priorities : ucos_CNode_Mutate_safety_wit_21_null_distinct_priorities.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_22_null_distinct_priorities : ucos_CNode_Mutate_safety_wit_22_null_distinct_priorities.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_23_same_priority : ucos_CNode_Mutate_safety_wit_23_same_priority.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_24_shared_cspace : ucos_CNode_Mutate_safety_wit_24_shared_cspace.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_25_distinct_cspaces : ucos_CNode_Mutate_safety_wit_25_distinct_cspaces.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_26_distinct_cspaces : ucos_CNode_Mutate_safety_wit_26_distinct_cspaces.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_27_shared_cspace : ucos_CNode_Mutate_safety_wit_27_shared_cspace.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_28_same_priority : ucos_CNode_Mutate_safety_wit_28_same_priority.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_29_null_distinct_priorities : ucos_CNode_Mutate_safety_wit_29_null_distinct_priorities.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_30_null_distinct_priorities : ucos_CNode_Mutate_safety_wit_30_null_distinct_priorities.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_31_null_same_priority : ucos_CNode_Mutate_safety_wit_31_null_same_priority.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_32_prio_invalid : ucos_CNode_Mutate_safety_wit_32_prio_invalid.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_33_null_same_priority : ucos_CNode_Mutate_safety_wit_33_null_same_priority.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_34_null_distinct_priorities : ucos_CNode_Mutate_safety_wit_34_null_distinct_priorities.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_35_null_distinct_priorities : ucos_CNode_Mutate_safety_wit_35_null_distinct_priorities.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_36_same_priority : ucos_CNode_Mutate_safety_wit_36_same_priority.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_37_shared_cspace : ucos_CNode_Mutate_safety_wit_37_shared_cspace.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_38_distinct_cspaces : ucos_CNode_Mutate_safety_wit_38_distinct_cspaces.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_39_same_priority : ucos_CNode_Mutate_safety_wit_39_same_priority.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_40_shared_cspace : ucos_CNode_Mutate_safety_wit_40_shared_cspace.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_41_distinct_cspaces : ucos_CNode_Mutate_safety_wit_41_distinct_cspaces.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_42_distinct_cspaces : ucos_CNode_Mutate_safety_wit_42_distinct_cspaces.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_43_shared_cspace : ucos_CNode_Mutate_safety_wit_43_shared_cspace.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_44_same_priority : ucos_CNode_Mutate_safety_wit_44_same_priority.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_45_null_distinct_priorities : ucos_CNode_Mutate_safety_wit_45_null_distinct_priorities.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_46_distinct_cspaces : ucos_CNode_Mutate_safety_wit_46_distinct_cspaces.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_47_shared_cspace : ucos_CNode_Mutate_safety_wit_47_shared_cspace.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_48_same_priority : ucos_CNode_Mutate_safety_wit_48_same_priority.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_return_wit_13_null_distinct_priorities : ucos_CNode_Mutate_return_wit_13_null_distinct_priorities.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_return_wit_14_null_distinct_priorities : ucos_CNode_Mutate_return_wit_14_null_distinct_priorities.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_return_wit_15_null_same_priority : ucos_CNode_Mutate_return_wit_15_null_same_priority.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_return_wit_16_null_distinct_priorities : ucos_CNode_Mutate_return_wit_16_null_distinct_priorities.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_return_wit_17_prio_invalid : ucos_CNode_Mutate_return_wit_17_prio_invalid.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_return_wit_18_prio_invalid : ucos_CNode_Mutate_return_wit_18_prio_invalid.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_return_wit_19_prio_invalid : ucos_CNode_Mutate_return_wit_19_prio_invalid.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_return_wit_20_class_invalid : ucos_CNode_Mutate_return_wit_20_class_invalid.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_1_null_same_priority : ucos_CNode_Mutate_partial_solve_wit_1_null_same_priority.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_2_null_distinct_priorities : ucos_CNode_Mutate_partial_solve_wit_2_null_distinct_priorities.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_3_null_distinct_priorities : ucos_CNode_Mutate_partial_solve_wit_3_null_distinct_priorities.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_4_same_priority : ucos_CNode_Mutate_partial_solve_wit_4_same_priority.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_5_shared_cspace : ucos_CNode_Mutate_partial_solve_wit_5_shared_cspace.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_6_distinct_cspaces : ucos_CNode_Mutate_partial_solve_wit_6_distinct_cspaces.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_7_null_same_priority : ucos_CNode_Mutate_partial_solve_wit_7_null_same_priority.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_8_null_distinct_priorities : ucos_CNode_Mutate_partial_solve_wit_8_null_distinct_priorities.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_9_null_distinct_priorities : ucos_CNode_Mutate_partial_solve_wit_9_null_distinct_priorities.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_10_same_priority : ucos_CNode_Mutate_partial_solve_wit_10_same_priority.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_11_shared_cspace : ucos_CNode_Mutate_partial_solve_wit_11_shared_cspace.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_12_distinct_cspaces : ucos_CNode_Mutate_partial_solve_wit_12_distinct_cspaces.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_13_same_priority : ucos_CNode_Mutate_partial_solve_wit_13_same_priority.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_14_shared_cspace : ucos_CNode_Mutate_partial_solve_wit_14_shared_cspace.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_15_distinct_cspaces : ucos_CNode_Mutate_partial_solve_wit_15_distinct_cspaces.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_16_distinct_cspaces : ucos_CNode_Mutate_partial_solve_wit_16_distinct_cspaces.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_17_shared_cspace : ucos_CNode_Mutate_partial_solve_wit_17_shared_cspace.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_18_same_priority : ucos_CNode_Mutate_partial_solve_wit_18_same_priority.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_19_distinct_cspaces : ucos_CNode_Mutate_partial_solve_wit_19_distinct_cspaces.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_20_distinct_cspaces : ucos_CNode_Mutate_partial_solve_wit_20_distinct_cspaces.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_21_distinct_cspaces : ucos_CNode_Mutate_partial_solve_wit_21_distinct_cspaces.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_22_shared_cspace : ucos_CNode_Mutate_partial_solve_wit_22_shared_cspace.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_23_same_priority : ucos_CNode_Mutate_partial_solve_wit_23_same_priority.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_24_distinct_cspaces : ucos_CNode_Mutate_partial_solve_wit_24_distinct_cspaces.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_25_distinct_cspaces : ucos_CNode_Mutate_partial_solve_wit_25_distinct_cspaces.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_26_shared_cspace : ucos_CNode_Mutate_partial_solve_wit_26_shared_cspace.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_27_same_priority : ucos_CNode_Mutate_partial_solve_wit_27_same_priority.
+Proof. Admitted. 
+

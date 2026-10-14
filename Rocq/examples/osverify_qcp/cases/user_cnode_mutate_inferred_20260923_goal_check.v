@@ -1,0 +1,6 @@
+From SimpleC.EE.osverify_qcp.cases Require Import user_cnode_mutate_inferred_20260923_goal user_cnode_mutate_inferred_20260923_proof_auto user_cnode_mutate_inferred_20260923_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include user_cnode_mutate_inferred_20260923_proof_auto.
+  Include user_cnode_mutate_inferred_20260923_proof_manual.
+End VC_Correctness.

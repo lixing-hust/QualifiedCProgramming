@@ -1,0 +1,6 @@
+From SimpleC.EE.osverify_qcp.cases Require Import get_obj_slot_without_critical_inferred_20261013_goal get_obj_slot_without_critical_inferred_20261013_proof_auto get_obj_slot_without_critical_inferred_20261013_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include get_obj_slot_without_critical_inferred_20261013_proof_auto.
+  Include get_obj_slot_without_critical_inferred_20261013_proof_manual.
+End VC_Correctness.

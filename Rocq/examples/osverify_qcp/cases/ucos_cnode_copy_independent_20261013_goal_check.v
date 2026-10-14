@@ -1,0 +1,6 @@
+From SimpleC.EE.osverify_qcp.cases Require Import ucos_cnode_copy_independent_20261013_goal ucos_cnode_copy_independent_20261013_proof_auto ucos_cnode_copy_independent_20261013_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include ucos_cnode_copy_independent_20261013_proof_auto.
+  Include ucos_cnode_copy_independent_20261013_proof_manual.
+End VC_Correctness.

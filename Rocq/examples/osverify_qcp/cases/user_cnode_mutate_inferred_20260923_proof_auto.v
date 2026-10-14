@@ -1,0 +1,316 @@
+Require Import Coq.ZArith.ZArith.
+Require Import Coq.Bool.Bool.
+Require Import Coq.Strings.String.
+Require Import Coq.Strings.Ascii.
+Require Import Coq.Lists.List.
+Require Import Coq.Classes.RelationClasses.
+Require Import Coq.Classes.Morphisms.
+Require Import Coq.micromega.Psatz.
+Require Import Coq.Sorting.Permutation.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
+Require Import SetsClass.SetsClass. Import SetsNotation.
+From SimpleC.SL Require Import Mem SeparationLogic.
+From SimpleC.EE.osverify_qcp.cases Require Import user_cnode_mutate_inferred_20260923_goal.
+Require Import Logic.LogicGenerator.demo932.Interface.
+Local Open Scope Z_scope.
+Local Open Scope sets.
+Local Open Scope string_scope.
+Local Open Scope list.
+Import naive_C_Rules.
+Require Import SimpleC.EE.osverify_qcp.cases.user_cnode_mutate_inferred_20260923_lib.
+Local Open Scope sac.
+
+Lemma proof_of_mutate_inferred_enter_critical_return_wit_1 : mutate_inferred_enter_critical_return_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_mutate_inferred_exit_critical_return_wit_1 : mutate_inferred_exit_critical_return_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_1 : ucos_CNode_Mutate_safety_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_2 : ucos_CNode_Mutate_safety_wit_2.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_3 : ucos_CNode_Mutate_safety_wit_3.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_4 : ucos_CNode_Mutate_safety_wit_4.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_5_source_noncat : ucos_CNode_Mutate_safety_wit_5_source_noncat.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_6_source_distinct : ucos_CNode_Mutate_safety_wit_6_source_distinct.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_safety_wit_7_source_shared : ucos_CNode_Mutate_safety_wit_7_source_shared.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_1 : ucos_CNode_Mutate_partial_solve_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_2 : ucos_CNode_Mutate_partial_solve_wit_2.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_3 : ucos_CNode_Mutate_partial_solve_wit_3.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_4 : ucos_CNode_Mutate_partial_solve_wit_4.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_5 : ucos_CNode_Mutate_partial_solve_wit_5.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_6_source_shared : ucos_CNode_Mutate_partial_solve_wit_6_source_shared.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_7_source_shared : ucos_CNode_Mutate_partial_solve_wit_7_source_shared.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_8_source_distinct : ucos_CNode_Mutate_partial_solve_wit_8_source_distinct.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_9_source_shared : ucos_CNode_Mutate_partial_solve_wit_9_source_shared.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_10_source_distinct : ucos_CNode_Mutate_partial_solve_wit_10_source_distinct.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_11_source_shared_pure : ucos_CNode_Mutate_partial_solve_wit_11_source_shared_pure.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_11_source_shared : ucos_CNode_Mutate_partial_solve_wit_11_source_shared.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_12_source_distinct_pure : ucos_CNode_Mutate_partial_solve_wit_12_source_distinct_pure.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_12_source_distinct : ucos_CNode_Mutate_partial_solve_wit_12_source_distinct.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_13_source_shared : ucos_CNode_Mutate_partial_solve_wit_13_source_shared.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_14_source_distinct : ucos_CNode_Mutate_partial_solve_wit_14_source_distinct.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_15_copy_shared : ucos_CNode_Mutate_partial_solve_wit_15_copy_shared.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_16_copy_shared : ucos_CNode_Mutate_partial_solve_wit_16_copy_shared.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_17_copy_shared_pure : ucos_CNode_Mutate_partial_solve_wit_17_copy_shared_pure.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_17_copy_shared : ucos_CNode_Mutate_partial_solve_wit_17_copy_shared.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_18_copy_shared_pure : ucos_CNode_Mutate_partial_solve_wit_18_copy_shared_pure.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_18_copy_shared : ucos_CNode_Mutate_partial_solve_wit_18_copy_shared.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_19_copy_distinct_pure : ucos_CNode_Mutate_partial_solve_wit_19_copy_distinct_pure.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_19_copy_distinct : ucos_CNode_Mutate_partial_solve_wit_19_copy_distinct.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_20_copy_distinct_pure : ucos_CNode_Mutate_partial_solve_wit_20_copy_distinct_pure.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_20_copy_distinct : ucos_CNode_Mutate_partial_solve_wit_20_copy_distinct.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_21_copy_shared : ucos_CNode_Mutate_partial_solve_wit_21_copy_shared.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_22_copy_distinct : ucos_CNode_Mutate_partial_solve_wit_22_copy_distinct.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_23_copy_shared : ucos_CNode_Mutate_partial_solve_wit_23_copy_shared.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_24_copy_distinct : ucos_CNode_Mutate_partial_solve_wit_24_copy_distinct.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_25_copy_shared_pure : ucos_CNode_Mutate_partial_solve_wit_25_copy_shared_pure.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_25_copy_shared : ucos_CNode_Mutate_partial_solve_wit_25_copy_shared.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_26_copy_distinct_pure : ucos_CNode_Mutate_partial_solve_wit_26_copy_distinct_pure.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_26_copy_distinct : ucos_CNode_Mutate_partial_solve_wit_26_copy_distinct.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_27_copy_shared_pure : ucos_CNode_Mutate_partial_solve_wit_27_copy_shared_pure.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_27_copy_shared : ucos_CNode_Mutate_partial_solve_wit_27_copy_shared.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_28_copy_distinct_pure : ucos_CNode_Mutate_partial_solve_wit_28_copy_distinct_pure.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_28_copy_distinct : ucos_CNode_Mutate_partial_solve_wit_28_copy_distinct.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_29_copy_shared : ucos_CNode_Mutate_partial_solve_wit_29_copy_shared.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_30_copy_distinct : ucos_CNode_Mutate_partial_solve_wit_30_copy_distinct.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_31_copy_shared : ucos_CNode_Mutate_partial_solve_wit_31_copy_shared.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_32_copy_distinct : ucos_CNode_Mutate_partial_solve_wit_32_copy_distinct.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_33_copy_shared : ucos_CNode_Mutate_partial_solve_wit_33_copy_shared.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_34_copy_distinct : ucos_CNode_Mutate_partial_solve_wit_34_copy_distinct.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_35_copy_shared : ucos_CNode_Mutate_partial_solve_wit_35_copy_shared.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_36_copy_distinct : ucos_CNode_Mutate_partial_solve_wit_36_copy_distinct.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_37_source_noncat : ucos_CNode_Mutate_partial_solve_wit_37_source_noncat.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_38_source_shared : ucos_CNode_Mutate_partial_solve_wit_38_source_shared.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_39_source_shared : ucos_CNode_Mutate_partial_solve_wit_39_source_shared.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_40_source_distinct : ucos_CNode_Mutate_partial_solve_wit_40_source_distinct.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_41_source_distinct : ucos_CNode_Mutate_partial_solve_wit_41_source_distinct.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_42_copy_shared : ucos_CNode_Mutate_partial_solve_wit_42_copy_shared.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_43_copy_distinct : ucos_CNode_Mutate_partial_solve_wit_43_copy_distinct.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_44_copy_shared : ucos_CNode_Mutate_partial_solve_wit_44_copy_shared.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_45_copy_distinct : ucos_CNode_Mutate_partial_solve_wit_45_copy_distinct.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_46_copy_shared_pure : ucos_CNode_Mutate_partial_solve_wit_46_copy_shared_pure.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_46_copy_shared : ucos_CNode_Mutate_partial_solve_wit_46_copy_shared.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_47_copy_distinct_pure : ucos_CNode_Mutate_partial_solve_wit_47_copy_distinct_pure.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_47_copy_distinct : ucos_CNode_Mutate_partial_solve_wit_47_copy_distinct.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_48_copy_shared_pure : ucos_CNode_Mutate_partial_solve_wit_48_copy_shared_pure.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_48_copy_shared : ucos_CNode_Mutate_partial_solve_wit_48_copy_shared.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_49_copy_distinct_pure : ucos_CNode_Mutate_partial_solve_wit_49_copy_distinct_pure.
+Proof. Admitted. 
+
+Lemma proof_of_ucos_CNode_Mutate_partial_solve_wit_49_copy_distinct : ucos_CNode_Mutate_partial_solve_wit_49_copy_distinct.
+Proof. Admitted. 
+
+Lemma proof_of_user_cnode_mutate_safety_wit_1 : user_cnode_mutate_safety_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_user_cnode_mutate_safety_wit_2_guard_absent : user_cnode_mutate_safety_wit_2_guard_absent.
+Proof. Admitted. 
+
+Lemma proof_of_user_cnode_mutate_safety_wit_3_guard_present : user_cnode_mutate_safety_wit_3_guard_present.
+Proof. Admitted. 
+
+Lemma proof_of_user_cnode_mutate_safety_wit_4_guard_absent : user_cnode_mutate_safety_wit_4_guard_absent.
+Proof. Admitted. 
+
+Lemma proof_of_user_cnode_mutate_safety_wit_5_guard_present : user_cnode_mutate_safety_wit_5_guard_present.
+Proof. Admitted. 
+
+Lemma proof_of_user_cnode_mutate_partial_solve_wit_1 : user_cnode_mutate_partial_solve_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_user_cnode_mutate_partial_solve_wit_2 : user_cnode_mutate_partial_solve_wit_2.
+Proof. Admitted. 
+
+Lemma proof_of_user_cnode_mutate_partial_solve_wit_3 : user_cnode_mutate_partial_solve_wit_3.
+Proof. Admitted. 
+
+Lemma proof_of_user_cnode_mutate_partial_solve_wit_4 : user_cnode_mutate_partial_solve_wit_4.
+Proof. Admitted. 
+
+Lemma proof_of_user_cnode_mutate_partial_solve_wit_5_pure : user_cnode_mutate_partial_solve_wit_5_pure.
+Proof. Admitted. 
+
+Lemma proof_of_user_cnode_mutate_partial_solve_wit_5 : user_cnode_mutate_partial_solve_wit_5.
+Proof. Admitted. 
+
+Lemma proof_of_user_cnode_mutate_partial_solve_wit_6 : user_cnode_mutate_partial_solve_wit_6.
+Proof. Admitted. 
+
+Lemma proof_of_user_cnode_mutate_partial_solve_wit_7 : user_cnode_mutate_partial_solve_wit_7.
+Proof. Admitted. 
+
+Lemma proof_of_user_cnode_mutate_partial_solve_wit_8 : user_cnode_mutate_partial_solve_wit_8.
+Proof. Admitted. 
+
+Lemma proof_of_user_cnode_mutate_partial_solve_wit_9 : user_cnode_mutate_partial_solve_wit_9.
+Proof. Admitted. 
+
+Lemma proof_of_user_cnode_mutate_partial_solve_wit_10_guard_absent_pure : user_cnode_mutate_partial_solve_wit_10_guard_absent_pure.
+Proof. Admitted. 
+
+Lemma proof_of_user_cnode_mutate_partial_solve_wit_10_guard_absent : user_cnode_mutate_partial_solve_wit_10_guard_absent.
+Proof. Admitted. 
+
+Lemma proof_of_user_cnode_mutate_partial_solve_wit_11_guard_present_pure : user_cnode_mutate_partial_solve_wit_11_guard_present_pure.
+Proof. Admitted. 
+
+Lemma proof_of_user_cnode_mutate_partial_solve_wit_11_guard_present : user_cnode_mutate_partial_solve_wit_11_guard_present.
+Proof. Admitted. 
+
+Lemma proof_of_user_cnode_mutate_partial_solve_wit_12_guard_absent : user_cnode_mutate_partial_solve_wit_12_guard_absent.
+Proof. Admitted. 
+
+Lemma proof_of_user_cnode_mutate_partial_solve_wit_13_guard_present : user_cnode_mutate_partial_solve_wit_13_guard_present.
+Proof. Admitted. 
+
+Lemma proof_of_user_cnode_mutate_partial_solve_wit_14_guard_present_pure : user_cnode_mutate_partial_solve_wit_14_guard_present_pure.
+Proof. Admitted. 
+
+Lemma proof_of_user_cnode_mutate_partial_solve_wit_14_guard_present : user_cnode_mutate_partial_solve_wit_14_guard_present.
+Proof. Admitted. 
+
+Lemma proof_of_user_cnode_mutate_partial_solve_wit_15_guard_present : user_cnode_mutate_partial_solve_wit_15_guard_present.
+Proof. Admitted. 
+
+Lemma proof_of_user_cnode_mutate_partial_solve_wit_16_guard_present : user_cnode_mutate_partial_solve_wit_16_guard_present.
+Proof. Admitted. 
+
+Lemma proof_of_user_cnode_mutate_partial_solve_wit_17_guard_present : user_cnode_mutate_partial_solve_wit_17_guard_present.
+Proof. Admitted. 
+

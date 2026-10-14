@@ -81,6 +81,11 @@ instructions/
 system-report/
 sessiontrans-js2html/
 
+# Experiment and verification outputs
+/experiments/
+/verification_runs/
+/reports/
+
 # Skill regression tests live outside this Git worktree.
 .agents/skills/**/scripts/test/
 .agents/skills-en/**/scripts/test/
