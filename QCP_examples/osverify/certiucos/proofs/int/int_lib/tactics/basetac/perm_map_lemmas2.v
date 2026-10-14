@@ -1,0 +1,4 @@
+Require Export perm_map_lemmas_part1_2.
+Require Export perm_map_lemmas_part2_2.
+Require Export perm_map_lemmas_part3_2.
+Require Export perm_map_lemmas_part4_2.
